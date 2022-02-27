@@ -7,24 +7,6 @@
     </a>
 </p>
 
-<p align="center">
-    <a href="https://casterlabs.co/">
-      Website
-    </a>
-    &nbsp;&bull;&nbsp;
-    <a href="https://casterlabs.co/discord">
-      Discord
-    </a>
-    &nbsp;&bull;&nbsp;
-    <a href="https://casterlabs.co/terms-of-service">
-      Terms of Service
-    </a>
-    &nbsp;&bull;&nbsp;
-    <a href="https://casterlabs.co/privacy-policy">
-      Privacy Policy
-    </a>
-</p>
-
 <br />
 
 <p align="center">
