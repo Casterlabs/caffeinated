@@ -1,0 +1,9 @@
+.side-bar,
+#side-bar {
+    background-color: #fdfdfd;
+}
+
+.app-is-dark .side-bar,
+.app-is-dark #side-bar {
+    background-color: #171717 !important;
+}

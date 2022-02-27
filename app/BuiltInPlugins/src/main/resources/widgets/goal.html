@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Caffeinated Goal</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+        <style>
+            body {
+                margin: 0;
+            }
+
+            #text {
+                color: var(--text-color);
+            }
+
+            .hidden {
+                display: none;
+            }
+        </style>
+
+        <!-- Progress Bar -->
+        <style>
+            #goal-container {
+                color: var(--text-color);
+                /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); */
+                --border-size: 5px;
+            }
+
+            #goal-title {
+                text-align: center;
+                text-shadow: 0px 0px 10px #000;
+                margin: 0;
+                width: 100%;
+                z-index: 1;
+            }
+
+            #goal-bar {
+                /* border: 4px solid white; */
+                background-color: rgba(1, 1, 1, 0.5);
+                padding: 16px;
+                display: flex;
+                position: relative;
+                overflow: hidden;
+                height: 28px;
+                align-items: center;
+            }
+
+            #goal-progress-bar {
+                position: absolute;
+                max-width: calc(100% - (var(--border-size) * 2));
+                height: calc(100% - (var(--border-size) * 2));
+                background: var(--bar-color);
+                top: var(--border-size);
+                left: var(--border-size);
+                overflow: hidden;
+            }
+        </style>
+    </head>
+
+    <body>
+        <span id="text">
+            <!-- ... -->
+        </span>
+
+        <div id="goal-container" class="hidden">
+            <div style="position: relative">
+                <div id="goal-bar">
+                    <p id="goal-title">
+                        <span id="goal-title-text"></span>
+                        <span id="goal-title-count"></span>
+                    </p>
+                    <div id="goal-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <footer>
+        <script>
+            const textElement = document.getElementById("text");
+
+            const goalContainerElement = document.querySelector("#goal-container");
+            const goalTitleElement = document.querySelector("#goal-title");
+            const goalTitleTextElement = document.querySelector("#goal-title-text");
+            const goalTitleCountElement = document.querySelector("#goal-title-count");
+            const goalProgressElement = document.querySelector("#goal-progress-bar");
+
+            let currentCount = 0;
+
+            function changeFont(fontname) {
+                fontname = fontname || "Poppins";
+
+                document.documentElement.style = "font-family: '" + fontname + "';";
+
+                WebFont.load({
+                    google: {
+                        families: [fontname]
+                    }
+                });
+            }
+
+            changeFont("Poppins");
+
+            Widget.on("init", () => {
+                console.log("Init!");
+
+                // Manually trigger an update.
+                Widget.broadcast("update");
+            });
+
+            Widget.on("update", () => {
+                changeFont(Widget.getSetting("style.font"));
+
+                switch (Widget.getSetting("style.style")) {
+                    case "Progress Bar (With Text)": {
+                        goalContainerElement.classList.remove("hidden");
+                        textElement.classList.add("hidden");
+                        goalTitleElement.classList.remove("hidden");
+                        break;
+                    }
+
+                    case "Progress Bar (Without Text)": {
+                        goalContainerElement.classList.remove("hidden");
+                        textElement.classList.add("hidden");
+                        goalTitleElement.classList.add("hidden");
+                        break;
+                    }
+
+                    case "Text": {
+                        goalContainerElement.classList.add("hidden");
+                        textElement.classList.remove("hidden");
+                        break;
+                    }
+
+                }
+
+                if (Widget.getSetting("goal.add_numbers")) {
+                    goalTitleCountElement.classList.remove("hidden");
+                } else {
+                    goalTitleCountElement.classList.add("hidden");
+                }
+
+                document.body.style =
+                    `--bar-color: ${Widget.getSetting("goal.bar_color")};` +
+                    `--text-color: ${Widget.getSetting("style.text_color")};` +
+                    `font-size: ${Widget.getSetting("style.font_size")}px;` +
+                    `text-align: ${(Widget.getSetting("style.text_align") || "left").toLowerCase()};`;
+
+                render();
+            });
+
+            Widget.on("count", ({ count }) => {
+                currentCount = count;
+                render();
+            });
+
+            function render() {
+                let title = Widget.getSetting("goal.title");
+                const targetCount = Widget.getSetting("goal.target") || 0;
+
+                if (title.length > 0) {
+                    title += " "; // Add a space.
+                }
+
+                textElement.innerText = `${title}${currentCount}/${targetCount}`;
+
+                goalTitleTextElement.innerText = title;
+                goalTitleCountElement.innerText = `${currentCount}/${targetCount}`;
+
+                goalProgressElement.style.width = `${(currentCount / targetCount) * 100}%`;
+            }
+
+        </script>
+    </footer>
+
+</html>
