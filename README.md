@@ -2,11 +2,8 @@
 # Casterlabs Caffeinated
 
 <p align="center">
-    <a href="https://casterlabs.co/discord">
-        <img src="https://img.shields.io/discord/702178064075063427" />
-    </a>
-    <a href="#">
-        <img src="https://img.shields.io/badge/Hotel%3F-Trivago-green" />
+    <a href="https://casterlabs.co">
+        <img src="https://img.shields.io/badge/platforms-linux%20%7C%20windows%20%7C%20macos-lightgrey" />
     </a>
 </p>
 
