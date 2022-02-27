@@ -1,16 +1,9 @@
-
 # Casterlabs Caffeinated
-
-<p align="center">
-    <a href="https://casterlabs.co">
-        <img src="https://img.shields.io/badge/platforms-linux%20%7C%20windows%20%7C%20macos-lightgrey" />
-    </a>
-</p>
 
 <br />
 
 <p align="center">
-    <img width="80%" src="https://i.imgur.com/4xAITRA.png" />
+    <img width="65%" src="https://i.imgur.com/4xAITRA.png" />
 	<br />
 	<sup>In-development image</sup>
 </p>
