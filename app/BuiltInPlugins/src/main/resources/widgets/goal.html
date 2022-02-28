@@ -86,7 +86,7 @@
             const goalTitleCountElement = document.querySelector("#goal-title-count");
             const goalProgressElement = document.querySelector("#goal-progress-bar");
 
-            let currentCount = 0;
+            let currentCount = -1;
 
             function changeFont(fontname) {
                 fontname = fontname || "Poppins";
@@ -155,20 +155,34 @@
                 render();
             });
 
-            function render() {
+            async function render() {
+                if (currentCount == -1) {
+                    return;
+                }
+
                 let title = Widget.getSetting("goal.title");
-                const targetCount = Widget.getSetting("goal.target") || 0;
+                let targetCount = Widget.getSetting("goal.target") || 0;
 
                 if (title.length > 0) {
                     title += " "; // Add a space.
                 }
-
-                textElement.innerText = `${title}${currentCount}/${targetCount}`;
-
-                goalTitleTextElement.innerText = title;
-                goalTitleCountElement.innerText = `${currentCount}/${targetCount}`;
-
+            
                 goalProgressElement.style.width = `${(currentCount / targetCount) * 100}%`;
+                goalTitleTextElement.innerText = title;
+
+                console.debug(currentCount, targetCount);
+
+                // We need to adjust the text for the donation goal.
+                if (Widget.widgetData.namespace == "co.casterlabs.donation_goal") {
+                    let displayedCurrentCount = await Currencies.convertCurrency(currentCount, "USD", Widget.getSetting("money.currency"), true);
+                    let displayedTargetCount = await Currencies.convertCurrency(targetCount, "USD", Widget.getSetting("money.currency"), true);
+
+                    textElement.innerHTML = `${escapeHtml(title)}${displayedCurrentCount}/${displayedTargetCount}`;
+                    goalTitleCountElement.innerHTML = `${displayedCurrentCount}/${displayedTargetCount}`;
+                } else {
+                    textElement.innerText = `${title}${currentCount}/${targetCount}`;
+                    goalTitleCountElement.innerText = `${currentCount}/${targetCount}`;
+                }
             }
 
         </script>

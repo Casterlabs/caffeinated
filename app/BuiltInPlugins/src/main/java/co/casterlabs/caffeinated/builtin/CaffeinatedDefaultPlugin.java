@@ -17,6 +17,7 @@ import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.FollowAlert;
 import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.RaidAlert;
 import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.SubscriptionAlert;
 import co.casterlabs.caffeinated.builtin.widgets.goals.CustomGoal;
+import co.casterlabs.caffeinated.builtin.widgets.goals.generic.DonationGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.generic.FollowersGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.generic.SubscribersGoal;
 import co.casterlabs.caffeinated.builtin.widgets.labels.DonationTotalLabel;
@@ -71,7 +72,7 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
         this.getPlugins().registerWidget(this, FollowersGoal.DETAILS, FollowersGoal.class);
         this.getPlugins().registerWidget(this, SubscribersGoal.DETAILS, SubscribersGoal.class);
         this.getPlugins().registerWidget(this, CustomGoal.DETAILS, CustomGoal.class);
-        // TODO Donation Goal
+        this.getPlugins().registerWidget(this, DonationGoal.DETAILS, DonationGoal.class);
 
         // Alerts
         this.getPlugins().registerWidget(this, DonationAlert.DETAILS, DonationAlert.class);
@@ -105,7 +106,7 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
         InputStream in;
 
         if (CaffeinatedPlugin.isDevEnvironment()) {
-            in = new FileInputStream(new File("../../BuiltInPlugins/src/main/resources/widgets", path));
+            in = new FileInputStream(new File("../BuiltInPlugins/src/main/resources/widgets", path));
         } else {
             in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("widgets" + path);
         }

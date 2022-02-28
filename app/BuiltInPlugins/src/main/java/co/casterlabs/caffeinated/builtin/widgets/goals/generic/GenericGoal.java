@@ -119,6 +119,10 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
             }
 
+            if (this.enableValueSetting()) {
+                barGoal.addItem(WidgetSettingsItem.asNumber("value", "Value", 1, 1, 0, Integer.MAX_VALUE));
+            }
+
             layout.addSection(barGoal);
         }
 
@@ -197,6 +201,10 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
     protected boolean isMultiPlatform() {
         return Caffeinated.getInstance().getKoi().getUserStates().size() > 1;
+    }
+
+    protected boolean enableValueSetting() {
+        return false;
     }
 
 }

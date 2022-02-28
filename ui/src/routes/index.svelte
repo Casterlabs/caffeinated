@@ -10,21 +10,13 @@
     });
 
     let logo = "casterlabs";
-    let color = "white";
 
     onMount(async () => {
         document.title = "";
 
         const { icon } = (await Bridge.query("window")).data;
-        const { isDark } = (await Bridge.query("theme")).data;
 
         logo = icon;
-
-        if (isDark) {
-            color = "white";
-        } else {
-            color = "black";
-        }
 
         console.debug("[App]", "Signaling window:theme-loaded");
         window.Bridge.emit("ui:theme-loaded");
@@ -33,7 +25,8 @@
 
 <div class="has-text-centered">
     <div class="casterlabs-wordmark">
-        <img src="/img/wordmark/{logo}/{color}.svg" alt="Casterlabs Logo" />
+        <img class="light-show" src="/img/wordmark/{logo}/black.svg" alt="Casterlabs Logo" />
+        <img class="dark-show" src="/img/wordmark/{logo}/white.svg" alt="Casterlabs Logo" />
 
         <div class="loading-spinner">
             <LoadingSpinner />
