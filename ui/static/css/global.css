@@ -1,7 +1,7 @@
 @import "/css/scrollbar.css";
 
-html {
-	overflow: hidden;
+body {
+	margin: 0;
 }
 
 .hidden {
@@ -12,10 +12,22 @@ html {
 	display: block !important;
 }
 
+/* Fix scale on Android */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+
+	select:focus,
+	textarea:focus,
+	input:focus {
+		font-size: 16px;
+	}
+}
+
 /* Color changes */
 
 html {
+	overflow: auto;
 	background-color: var(--background-color) !important;
+	color: var(--text-color) !important;
 }
 
 /* Helpers */
