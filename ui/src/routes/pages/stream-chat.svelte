@@ -1,7 +1,7 @@
 <script>
     import { setPageProperties } from "../__layout.svelte";
 
-    import ChatViewer from "../../components/chat/chat-viewer.svelte";
+    import ChatViewer from "../../../../../ui-components/chat/chat-viewer.svelte";
 
     import { onMount, onDestroy } from "svelte";
 
