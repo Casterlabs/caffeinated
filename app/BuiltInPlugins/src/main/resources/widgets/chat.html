@@ -37,6 +37,10 @@
                 padding-left: .25ch;
             }
 
+            .hide-badges .badge {
+                display: none;
+            }
+
             /* Upvotes */
 
             .upvote-1 {
@@ -117,6 +121,12 @@
                     document.body.classList.add("right-align");
                 } else {
                     document.body.classList.remove("right-align");
+                }
+
+                if (Widget.getSetting("chat_style.show_user_badges")) {
+                    document.body.classList.remove("hide-badges");
+                } else {
+                    document.body.classList.add("hide-badges");
                 }
 
                 if (Widget.getSetting("chat_style.show_donations")) {
