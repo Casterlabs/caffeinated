@@ -25,7 +25,7 @@ body {
 /* Color changes */
 
 html {
-	overflow: auto;
+	overflow: auto !important;
 	background-color: var(--background-color) !important;
 	color: var(--text-color) !important;
 }
