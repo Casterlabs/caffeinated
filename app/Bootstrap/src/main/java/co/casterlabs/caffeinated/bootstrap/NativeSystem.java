@@ -5,6 +5,7 @@ import javax.swing.UIManager;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
+import co.casterlabs.kaimen.util.threading.MainThread;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -15,9 +16,11 @@ public abstract class NativeSystem {
     private static @Getter SystemPlaybackMusicProvider systemPlaybackMusicProvider = null;
 
     static {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {}
+        MainThread.submitTask(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception ignored) {}
+        });
     }
 
     @Deprecated
