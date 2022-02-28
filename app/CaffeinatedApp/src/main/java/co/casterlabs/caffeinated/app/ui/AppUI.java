@@ -151,7 +151,7 @@ public class AppUI {
 
         this.updateIcon();
 
-        ThemeManager.setTheme(event.getTheme(), "co.casterlabs.dark");
+        ThemeManager.setTheme(event.getTheme());
     }
 
     @EventListener

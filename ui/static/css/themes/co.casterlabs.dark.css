@@ -1,11 +1,7 @@
-@import "/css/bulma.min.css";
-@import "/css/bulma-prefers-dark.min.css";
-
 :root {
     --theme: #e94b4b;
 
     --background-color: #121212;
-
     --text-color: #dbdbdb;
     --title-bar-color: #070707;
     --title-bar-faded-color: #c8c8c8;

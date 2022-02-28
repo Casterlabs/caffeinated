@@ -20,32 +20,33 @@ public class ThemeManager {
     private static BridgeValue<Collection<Theme>> bridge_Themes = new BridgeValue<>("themes");
 
     public static void init() {
-        // Light theme
         ThemeManager.registerTheme(
-            new Theme("co.casterlabs.light", "Light")
-                .withCssFiles(false, "/css/bulma.min.css")
+            new Theme("system", "Follow System", Appearance.FOLLOW_SYSTEM, true),
+            new Theme("co.casterlabs.light", "Light", Appearance.LIGHT, false),
+            new Theme("co.casterlabs.dark", "Dark", Appearance.DARK, false)
         );
 
-        // Dark theme
-        ThemeManager.registerTheme(
-            new Theme("co.casterlabs.dark", "Dark")
-                .withCssFiles(false, "/css/bulma.min.css", "/css/bulma-prefers-dark.min.css")
-                .withClasses("bulma-dark-mode")
-                .withDark(true)
-        );
-
-        setTheme(CaffeinatedApp.getInstance().getUiPreferences().get().getTheme(), "co.casterlabs.dark");
+        setTheme(CaffeinatedApp.getInstance().getUiPreferences().get().getTheme());
 
         CaffeinatedApp.getInstance().getAppBridge().attachValue(bridge_Theme);
         CaffeinatedApp.getInstance().getAppBridge().attachValue(bridge_Themes);
     }
 
-    public static void registerTheme(@NonNull Theme theme) {
-        themes.put(theme.getId(), theme);
-        bridge_Themes.set(themes.values());
+    public static void registerTheme(@NonNull Theme... themes) {
+        for (Theme theme : themes) {
+            ThemeManager.themes.put(theme.getId(), theme);
+        }
+
+        bridge_Themes.set(ThemeManager.themes.values());
     }
 
-    public static void setTheme(@NonNull String id, @NonNull String defaultTheme) {
+    public static void setTheme(@NonNull String id) {
+        if ((currentTheme != null) && currentTheme.getId().equals(id)) {
+            return;
+        }
+
+        final String defaultTheme = "system";
+
         Theme theme = themes.get(id);
 
         if (theme == null) {
@@ -57,7 +58,7 @@ public class ThemeManager {
         currentTheme = theme;
         bridge_Theme.set(theme);
 
-        App.setAppearance(theme.isDark() ? Appearance.DARK : Appearance.LIGHT);
+        App.setAppearance(theme.getAppearance());
     }
 
 }
