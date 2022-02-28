@@ -79,6 +79,9 @@
             Widget.on("init", () => {
                 console.log("Init!");
 
+                // Manually trigger an update.
+                Widget.broadcast("update");
+
                 updateText();
             });
 
