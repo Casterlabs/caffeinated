@@ -225,26 +225,26 @@ export function init({ initHandler, disconnectHandler }) {
     Object.defineProperty(window, "Koi", {
         value: koiInstance,
         writable: false,
-        configurable: false
+        configurable: true
     });
     Object.defineProperty(window, "Widget", {
         value: widgetInstance,
         writable: false,
-        configurable: false
+        configurable: true
     });
     Object.defineProperty(window, "Music", {
         value: musicInstance,
         writable: false,
-        configurable: false
+        configurable: true
     });
     Object.defineProperty(window, "escapeHtml", {
         value: escapeHtml,
         writable: false,
-        configurable: false
+        configurable: true
     });
     Object.defineProperty(window, "Currencies", {
         value: Currencies,
         writable: false,
-        configurable: false
+        configurable: true
     });
 }
