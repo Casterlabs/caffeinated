@@ -1,18 +1,19 @@
 <script context="module">
-    let elementUpdateHandler = null;
-
-    let notifications = [];
-
     let pageAttributes = {
         showSideBar: false,
         allowNavigateBackwards: false
     };
 
-    function addNotification() {
-        // TODO
+    function applyPageAttributes() {
+        console.log(pageAttributes);
+        if (pageAttributes.showSideBar) {
+            document.body.classList.add("app-show-side-bar");
+        } else {
+            document.body.classList.remove("app-show-side-bar");
+        }
     }
 
-    function setPageProperties(val) {
+    export function setPageProperties(val) {
         pageAttributes = {
             showSideBar: false,
             allowNavigateBackwards: false,
@@ -21,16 +22,10 @@
             ...val
         };
 
-        if (elementUpdateHandler) {
-            elementUpdateHandler(pageAttributes);
-        }
-
         if (typeof window != "undefined") {
-            window.currentPageAttributes = pageAttributes;
+            applyPageAttributes();
         }
     }
-
-    export { addNotification, setPageProperties };
 </script>
 
 <script>
@@ -39,12 +34,8 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
-    elementUpdateHandler = update;
-
-    let currentPageAttributes = pageAttributes;
-
-    function update(val) {
-        currentPageAttributes = val;
+    function updateTheme(theme) {
+        __common.changeTheme(theme.id);
     }
 
     onMount(async () => {
@@ -57,26 +48,20 @@
 
             Bridge.on("goto", ({ path }) => goto(path));
 
-            // Bridge.on("theme:update", updateTheme);
-            // updateTheme((await Bridge.query("theme")).data);
+            Bridge.on("theme:update", updateTheme);
+            updateTheme((await Bridge.query("theme")).data);
         }
+
+        applyPageAttributes();
     });
 </script>
 
 <section id="notifications" class="no-select" />
 
 <section id="body-content" class="no-select">
-    {#if currentPageAttributes.showSideBar}
-        <div id="side-bar">
-            <SideBar />
-        </div>
-        <style>
-            :root {
-                --side-bar-width: 200px;
-            }
-        </style>
-    {/if}
-
+    <div id="side-bar">
+        <SideBar />
+    </div>
     <div class="svelte-container">
         <div id="svelte">
             <slot />
@@ -85,8 +70,13 @@
 </section>
 
 <style>
-    :root {
-        --title-bar-height: 0px;
+    :global(:root) {
+        --title-bar-height: 0;
+        --side-bar-width: 0;
+    }
+
+    :global(body.app-show-side-bar) {
+        --side-bar-width: 200px;
     }
 
     #side-bar {
