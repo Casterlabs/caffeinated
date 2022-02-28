@@ -1,4 +1,6 @@
-class Conn {
+import EventHandler from "./eventHandler.mjs";
+
+export default class Conn {
 
     constructor(address) {
         this.address = address;

@@ -1,5 +1,5 @@
 
-function EventHandler() {
+export default function EventHandler() {
     let listeners = {};
     let callbackIdCounter = 0;
 
