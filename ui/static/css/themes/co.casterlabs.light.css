@@ -1,3 +1,5 @@
+@import "/css/bulma.min.css";
+
 :root {
     --theme: #e94b4b;
 
@@ -8,6 +10,7 @@
     --title-bar-color: #d8d8d8;
     --title-bar-highlight: rgba(0, 0, 0, 0.1);
     --highlight-color: rgba(0.5, 0.5, 0.5, 0.15);
+    --step-color: #fdfdfd;
 
     --white-invert-factor: 0.8;
 }
@@ -19,5 +22,3 @@
 .light-show {
     display: unset;
 }
-
-@import url(/css/bulma.min.css);

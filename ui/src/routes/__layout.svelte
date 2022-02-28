@@ -90,6 +90,10 @@
     }
 
     #side-bar {
+        background-color: var(--step-color);
+    }
+
+    #side-bar {
         position: absolute;
         top: var(--title-bar-height);
         bottom: 0;

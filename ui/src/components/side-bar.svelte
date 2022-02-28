@@ -38,7 +38,7 @@
     .sidebar-container {
         width: 100%;
         height: 100%;
-        margin-top: 15px;
+        padding-top: 15px;
         overflow-y: auto;
     }
 
