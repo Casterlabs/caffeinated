@@ -1,0 +1,23 @@
+:root {
+    --theme: #e94b4b;
+
+    --background-color: #eaeaea;
+    --text-color: #363636;
+    --title-bar-text-color: #070707;
+    --title-bar-faded-color: #a0a0a0;
+    --title-bar-color: #d8d8d8;
+    --title-bar-highlight: rgba(0, 0, 0, 0.1);
+    --highlight-color: rgba(0.5, 0.5, 0.5, 0.15);
+
+    --white-invert-factor: 0.8;
+}
+
+.dark-show {
+    display: none;
+}
+
+.light-show {
+    display: unset;
+}
+
+@import url(/css/bulma.min.css);

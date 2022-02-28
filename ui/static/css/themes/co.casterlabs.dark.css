@@ -1,0 +1,25 @@
+:root {
+    --theme: #e94b4b;
+
+    --background-color: #121212;
+
+    --text-color: #dbdbdb;
+    --title-bar-color: #070707;
+    --title-bar-faded-color: #c8c8c8;
+    --title-bar-text-color: #e8e8e8;
+    --title-bar-highlight: rgba(255, 255, 255, 0.1);
+    --highlight-color: rgba(255, 255, 255, 0.15);
+
+    --white-invert-factor: 0.2;
+}
+
+.dark-show {
+    display: unset;
+}
+
+.light-show {
+    display: none;
+}
+
+@import url(/css/bulma.min.css);
+@import url(/css/bulma-prefers-dark.min.css);

@@ -47,51 +47,18 @@
         currentPageAttributes = val;
     }
 
-    function updateTheme(theme) {
-        let html = [];
-
-        for (const css of theme.css) {
-            if (theme.isInlineCss) {
-                html.push(`<style>${css}</style>`);
-            } else {
-                html.push(`<link rel="stylesheet" href="${css}" />`);
-            }
-        }
-
-        html = html.join("");
-
-        const documentElement = document.documentElement;
-
-        console.info("[__layout__] Updated theme:", theme, "\n", html);
-        documentElement.classList = theme.classes;
-        document.querySelector("#styles").innerHTML = html;
-
-        if (theme.isDark) {
-            documentElement.classList.add("app-is-dark");
-        } else {
-            documentElement.classList.add("app-is-light");
-        }
-    }
-
     onMount(async () => {
-        if (typeof Bridge == "undefined") {
-            updateTheme({
-                isDark: true,
-                css: ["/css/bulma.min.css", "/css/bulma-prefers-dark.min.css"],
-                classes: "bulma-dark-mode",
-                name: "Dark",
-                isInlineCss: false,
-                id: "co.casterlabs.dark"
-            });
-        } else {
+        if (!window.__common) {
+            window.__common = await import("$lib/__common.mjs");
+        }
+
+        if (window.Bridge) {
             window.goto = goto;
 
-            if (!location.pathname.startsWith("/popout")) {
-                Bridge.on("goto", ({ path }) => goto(path));
-            }
+            Bridge.on("goto", ({ path }) => goto(path));
 
-            Bridge.on("theme:update", updateTheme);
-            updateTheme((await Bridge.query("theme")).data);
+            // Bridge.on("theme:update", updateTheme);
+            // updateTheme((await Bridge.query("theme")).data);
         }
     });
 </script>
