@@ -35,7 +35,7 @@ export function escapeHtml(unsafe) {
     return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export function init(initHandler = null) {
+export function init({ initHandler, disconnectHandler }) {
     const conn = new Conn(`ws://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/realtime?authorization=${authorization}&mode=${widgetMode}`);
 
     // The `Widget` global.
@@ -178,12 +178,10 @@ export function init(initHandler = null) {
 
     // Listen for events on the conn, fire them off, yeah you get the idea.
     conn.on("init", () => {
-        if (!initHandler) {
+        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode })) {
             widgetInstance.broadcast("init");
             koiInstance.broadcast("koi_statics", koi_statics);
             conn.send("READY", {});
-        } else {
-            initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode });
         }
     });
 
@@ -213,9 +211,11 @@ export function init(initHandler = null) {
 
     // We completely reset the widget everytime it loses connection.
     conn.on("close", () => {
-        setTimeout(() => {
-            location.reload();
-        }, 2500);
+        if (!disconnectHandler || disconnectHandler()) {
+            setTimeout(() => {
+                location.reload();
+            }, 2500);
+        }
     });
 
     // Connect.
