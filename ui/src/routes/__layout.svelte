@@ -1,6 +1,6 @@
 <script context="module">
     let pageAttributes = {
-        showSideBar: false,
+        showSideBar: true,
         allowNavigateBackwards: false
     };
 
@@ -15,7 +15,7 @@
 
     export function setPageProperties(val) {
         pageAttributes = {
-            showSideBar: false,
+            showSideBar: true,
             allowNavigateBackwards: false,
 
             // Spread the `val` so we have these as defaults^
