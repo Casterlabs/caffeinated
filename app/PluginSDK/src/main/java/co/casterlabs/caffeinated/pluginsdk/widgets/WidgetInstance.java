@@ -53,6 +53,10 @@ public abstract class WidgetInstance implements Closeable {
         this.eventHandlers.put(type, handler);
     }
 
+    public void on(@NonNull String type, @NonNull Runnable handler) {
+        this.eventHandlers.put(type, (ignored) -> handler.run());
+    }
+
     public void onClose(@NonNull Runnable handler) {
         this.onCloseHandlers.add(handler);
     }
