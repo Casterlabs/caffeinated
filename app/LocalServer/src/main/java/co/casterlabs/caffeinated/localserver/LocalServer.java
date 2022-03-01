@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.localserver.apploopback.AppLoopbackPlugin;
 import co.casterlabs.caffeinated.localserver.handlers.RouteLocalServer;
 import co.casterlabs.caffeinated.localserver.handlers.RoutePluginApi;
 import co.casterlabs.caffeinated.localserver.handlers.RouteWidgetApi;
@@ -63,14 +62,6 @@ public class LocalServer implements Closeable, HttpProvider {
         this.framework
             .getSora()
             .register(new LocalServerPluginWrapper());
-    }
-
-    public String initLoopback() {
-        this.framework
-            .getSora()
-            .register(new AppLoopbackPlugin());
-
-        return String.format("http://app-loopback.widgets.casterlabs.co:%d", this.port);
     }
 
     private class LocalServerPluginWrapper extends SoraPlugin {
