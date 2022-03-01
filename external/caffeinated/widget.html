@@ -1,100 +1,103 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Just A Caffeinated Widget</title>
+        <style>
+            iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                border: none;
+            }
+        </style>
+    </head>
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Just A Caffeinated Widget</title>
-    <style>
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            border: none;
-        }
-    </style>
-</head>
+    <body></body>
 
-<body></body>
+    <footer>
+        <!-- type="module" helps isolate. -->
+        <script type="module">
+            import { init, deepFreeze, escapeHtml } from "./widget.mjs";
 
-<footer>
-    <!-- type="module" helps isolate. -->
-    <script type="module">
-        import { init, deepFreeze, escapeHtml } from "./widget.mjs";
+            let sandboxFrame;
 
-        let sandboxFrame;
+            function initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, AppContext }) {
+                sandboxFrame = document.createElement("iframe");
+                sandboxFrame.src = "./sandbox.html";
 
-        function initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode }) {
-            sandboxFrame = document.createElement("iframe");
-            sandboxFrame.src = "./sandbox.html";
+                let loadState = 0;
+                sandboxFrame.addEventListener("load", async () => {
+                    const { contentWindow, contentDocument } = sandboxFrame;
 
-            let loadState = 0;
-            sandboxFrame.addEventListener("load", async () => {
-                const { contentWindow, contentDocument } = sandboxFrame;
-
-                if (!contentWindow.Koi) {
-                    // Inject our f a v o r i t e globals.
-                    Object.defineProperty(contentWindow, "Koi", {
-                        value: koiInstance,
-                        writable: false,
-                        configurable: false
-                    });
-                    Object.defineProperty(contentWindow, "Widget", {
-                        value: widgetInstance,
-                        writable: false,
-                        configurable: false
-                    });
-                    Object.defineProperty(contentWindow, "Music", {
-                        value: musicInstance,
-                        writable: false,
-                        configurable: false
-                    });
-                    Object.defineProperty(contentWindow, "escapeHtml", {
-                        value: escapeHtml,
-                        writable: false,
-                        configurable: false
-                    });
-                    Object.defineProperty(contentWindow, "Currencies", {
-                        value: Currencies,
-                        writable: false,
-                        configurable: false
-                    });
-                }
-
-                if (loadState == 0) {
-                    loadState++;
-
-                    // Load the widget html.
-                    const response = await fetch(`http://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/html?authorization=${authorization}&mode=${widgetMode}`);
-
-                    if (response.status == 200) {
-                        const widgetHtml = await response.text();
-
-                        contentDocument.open();
-                        contentDocument.write(widgetHtml);
-                        contentDocument.close();
-                    } else {
-                        // We're dead.
-                        loadState = -1;
+                    if (!contentWindow.Koi) {
+                        // Inject our f a v o r i t e globals.
+                        Object.defineProperty(contentWindow, "Koi", {
+                            value: koiInstance,
+                            writable: false,
+                            configurable: false
+                        });
+                        Object.defineProperty(contentWindow, "Widget", {
+                            value: widgetInstance,
+                            writable: false,
+                            configurable: false
+                        });
+                        Object.defineProperty(contentWindow, "Music", {
+                            value: musicInstance,
+                            writable: false,
+                            configurable: false
+                        });
+                        Object.defineProperty(contentWindow, "escapeHtml", {
+                            value: escapeHtml,
+                            writable: false,
+                            configurable: false
+                        });
+                        Object.defineProperty(contentWindow, "Currencies", {
+                            value: Currencies,
+                            writable: false,
+                            configurable: false
+                        });
+                        Object.defineProperty(contentWindow, "AppContext", {
+                            value: AppContext,
+                            writable: false,
+                            configurable: false
+                        });
                     }
-                } else if (loadState == 1) {
-                    // The load event will be fired again after the widget html has loaded
-                    // and non-module javascript has executed.
-                    loadState++;
-                    widgetInstance.broadcast("init");
-                    koiInstance.broadcast("koi_statics", koi_statics);
-                    conn.send("READY", {});
-                }
-            });
 
-            document.body.appendChild(sandboxFrame);
-        }
+                    if (loadState == 0) {
+                        loadState++;
 
-        init({ initHandler });
-    </script>
-</footer>
+                        // Load the widget html.
+                        const response = await fetch(`http://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/html?authorization=${authorization}&mode=${widgetMode}`);
 
+                        if (response.status == 200) {
+                            const widgetHtml = await response.text();
+
+                            contentDocument.open();
+                            contentDocument.write(widgetHtml);
+                            contentDocument.close();
+                        } else {
+                            // We're dead.
+                            loadState = -1;
+                        }
+                    } else if (loadState == 1) {
+                        // The load event will be fired again after the widget html has loaded
+                        // and non-module javascript has executed.
+                        loadState++;
+                        widgetInstance.broadcast("init");
+                        koiInstance.broadcast("koi_statics", koi_statics);
+                        conn.send("READY", {});
+                    }
+                });
+
+                document.body.appendChild(sandboxFrame);
+            }
+
+            init({ initHandler });
+        </script>
+    </footer>
 </html>

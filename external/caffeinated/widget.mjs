@@ -12,6 +12,23 @@ const queryParams = (() => {
     return vars;
 })();
 
+let currentTheme = { appearance: "FOLLOW_SYSTEM", name: "System", isAuto: true, id: "system" };
+
+const AppContext = {
+    ...new EventHandler(),
+
+    get currentTheme() {
+        return currentTheme;
+    }
+};
+
+window.addEventListener("message", (event) => {
+    if (typeof event.data == "object" && event.data.call == "theme") {
+        currentTheme = event.data.value;
+        AppContext.broadcast("theme-update", currentTheme);
+    }
+}, false);
+
 const { pluginId, widgetId, authorization } = queryParams;
 const port = queryParams.port || "8092";
 const address = queryParams.address || "localhost";
@@ -36,6 +53,10 @@ export function escapeHtml(unsafe) {
 }
 
 export function init({ initHandler, disconnectHandler }) {
+    if (window.parent) {
+        window.parent.postMessage({ call: "init", value: widgetId }, "*");
+    }
+
     const conn = new Conn(`ws://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/realtime?authorization=${authorization}&mode=${widgetMode}`);
 
     // The `Widget` global.
@@ -178,7 +199,7 @@ export function init({ initHandler, disconnectHandler }) {
 
     // Listen for events on the conn, fire them off, yeah you get the idea.
     conn.on("init", () => {
-        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode })) {
+        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, AppContext })) {
             widgetInstance.broadcast("init");
             koiInstance.broadcast("koi_statics", koi_statics);
             conn.send("READY", {});
@@ -244,6 +265,11 @@ export function init({ initHandler, disconnectHandler }) {
     });
     Object.defineProperty(window, "Currencies", {
         value: Currencies,
+        writable: false,
+        configurable: true
+    });
+    Object.defineProperty(window, "AppContext", {
+        value: AppContext,
         writable: false,
         configurable: true
     });
