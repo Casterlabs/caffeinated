@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ProcessBuilder.Redirect;
+import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.updater.util.FileUtil;
@@ -24,7 +25,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
-    private static final int VERSION = 13;
+    private static final int VERSION = 14;
 
     // TODO replace "beta" with "stable" once the app is ready.
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/beta/";
@@ -50,8 +51,6 @@ public class Updater {
         switch (ConsoleUtil.getPlatform()) {
 
             case MAC:
-                // The .build_ok file will be located inside of the app bundle.
-                buildokFile = new File(appDirectory, "/Casterlabs-Caffeinated.app/Contents/Resources.build_ok");
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
                 REMOTE_ZIP_DOWNLOAD_URL += "caffeinated-macos.zip";
                 break;
@@ -146,6 +145,9 @@ public class Updater {
             {
                 dialog.setStatus("Installing updates...");
                 ZipUtil.unzip(updateFile, appDirectory);
+
+                String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
+                Files.writeString(new File(appDirectory, "commit.txt").toPath(), remoteCommit);
 
                 updateFile.delete();
 
