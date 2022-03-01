@@ -84,7 +84,7 @@
         settingsLayout = widget.settingsLayout || {};
         nameEditorTextContent = widget.name;
         widgetSections = {};
-        currentWidgetSection = currentWidgetSection || settingsLayout.sections[0]?.id || null;
+        currentWidgetSection = currentWidgetSection || (settingsLayout.sections && settingsLayout.sections[0]?.id) || null;
 
         for (const section of widget.settingsLayout?.sections || []) {
             widgetSections[section.id] = section;
@@ -247,7 +247,7 @@
         </button>
 
         <div class="widget-control-buttons is-inline-block are-small">
-            {#each settingsLayout.buttons as buttonLayout}
+            {#each settingsLayout.buttons || [] as buttonLayout}
                 <button on:click={() => clickButton(buttonLayout.id)} class="button" title={buttonLayout.iconTitle ? buttonLayout.iconTitle : ""}>
                     {#if buttonLayout.icon}
                         <i data-feather={buttonLayout.icon} aria-hidden="true" />
