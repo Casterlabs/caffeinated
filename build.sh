@@ -25,9 +25,8 @@ fi
 # Reset/clear the dist folder
 rm -rf dist/*
 mkdir -p dist
-mkdir dist/windows
-mkdir dist/linux
-mkdir dist/macos
+
+KAIMEN_VERSION="65f3f92"
 
 if [[ $@ != *"nodist"* ]]; then
     cp app/Bootstrap/target/classes/commit.txt dist
@@ -35,17 +34,14 @@ if [[ $@ != *"nodist"* ]]; then
     echo ""
     echo "Completing packaging of application."
     echo ""
-    
-    sh app/Build/Caffeinated-Windows/build.sh
-    cp dist/commit.txt dist/windows
+
+    java -jar ProjectBuilder.jar -os MACOSX -arch AMD64 -v 1.2 -n "Casterlabs Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -cp app/Bootstrap/target/Caffeinated.jar -i icon.icns -id co.casterlabs.caffeinated
     echo ""
 
-    sh app/Build/Caffeinated-Linux/build.sh
-    cp dist/commit.txt dist/linux
+    java -jar ProjectBuilder.jar -os WINDOWS -arch AMD64 -v 1.2 -n "Casterlabs Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -res app/WMC-JsonConsoleWrapper.exe -cp app/Bootstrap/target/Caffeinated.jar -i icon.ico
     echo ""
 
-    sh app/Build/Caffeinated-MacOS/build.sh
-    cp dist/commit.txt dist/macos
+    java -jar ProjectBuilder.jar -os LINUX -arch AMD64 -v 1.2 -n "Casterlabs Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -cp app/Bootstrap/target/Caffeinated.jar
     echo ""
 
 fi

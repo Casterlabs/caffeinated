@@ -13,8 +13,6 @@
 		<module>Koi</module>
 		<module>BuiltInPlugins</module>
 		<module>LocalServer</module>
-		<module>Build</module>
-		<module>Webview</module>
 	</modules>
 
 	<properties>
