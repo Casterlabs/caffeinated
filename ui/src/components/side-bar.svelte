@@ -1,4 +1,28 @@
 <script>
+    import { onMount, onDestroy } from "svelte";
+
+    let eventHandler;
+
+    let docks = [];
+
+    function render(data) {
+        docks = data.widgets
+            .filter((w) => w.details.type == "DOCK")
+            // We want to hide these because they're already available.
+            .filter((w) => !["co.casterlabs.dock.stream_viewers.dock", "co.casterlabs.dock.stream_chat.dock"].includes(w.id));
+
+        console.log(docks);
+    }
+
+    onDestroy(() => {
+        eventHandler?.destroy();
+    });
+
+    onMount(async () => {
+        eventHandler = Bridge.createThrowawayEventHandler();
+        eventHandler.on("plugins:update", render);
+        render((await Bridge.query("plugins")).data);
+    });
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
@@ -13,23 +37,27 @@
         <h1 class="title">Your Stream</h1>
 
         <a class="sidebar-category-button" href="/pages/stream-chat"> Chat </a>
-        <a class="sidebar-category-button hidden"> Analytics </a>
-        <a class="sidebar-category-button" href="/pages/widget-manager"> Widgets </a>
-        <a class="sidebar-category-button" href="/pages/dock-manager"> Docks </a>
+
+        {#each docks as dock}
+            <a class="sidebar-category-button" href="/pages/dock-viewer?dock={dock.id}"> {dock.details.friendlyName} </a>
+        {/each}
     </div>
 
     <!-- Channel -->
     <div class="sidebar-section hidden">
         <h1 class="title">Channel</h1>
 
+        <a class="sidebar-category-button hidden"> Analytics </a>
         <a class="sidebar-category-button"> Custom Emotes </a>
         <a class="sidebar-category-button"> Shako </a>
     </div>
 
     <!-- Other -->
     <div class="sidebar-section">
-        <h1 class="title">Other</h1>
+        <h1 class="title">Management</h1>
 
+        <a class="sidebar-category-button" href="/pages/widget-manager"> Widgets </a>
+        <a class="sidebar-category-button" href="/pages/dock-manager"> Docks </a>
         <a class="sidebar-category-button" href="/settings"> Settings </a>
     </div>
 </div>
