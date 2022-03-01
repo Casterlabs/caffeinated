@@ -19,10 +19,13 @@
     let _currentTheme = null;
 
     onDestroy(() => {
+        // window?.removeEventListener("message", onPostMessage);
         eventHandler?.destroy();
     });
 
     onMount(async () => {
+        window.addEventListener("message", onPostMessage);
+
         eventHandler = Bridge.createThrowawayEventHandler();
 
         Bridge.on("theme:update", updateTheme);
@@ -45,6 +48,12 @@
         document.title = `Casterlabs-Caffeinated - ${widget.details.friendlyName}`;
     });
 
+    function onPostMessage(event) {
+        if (typeof event.data == "object" && event.data.call == "init" && event.data.value == widget.id) {
+            sendFrameData(event.source);
+        }
+    }
+
     function updateTheme(d) {
         _currentTheme = d;
         if (frame) {
@@ -52,14 +61,14 @@
         }
     }
 
-    function sendFrameData() {
-        frame.contentWindow.postMessage({ call: "theme", value: _currentTheme });
+    function sendFrameData(t = frame.contentWindow) {
+        t.postMessage({ call: "theme", value: _currentTheme }, "*");
     }
 </script>
 
 {#if widget}
     <div id="widget-demo">
-        <iframe bind:this={frame} src={widget.url} title="" on:load={sendFrameData} />
+        <iframe bind:this={frame} src={widget.url} title="" />
     </div>
 {/if}
 
