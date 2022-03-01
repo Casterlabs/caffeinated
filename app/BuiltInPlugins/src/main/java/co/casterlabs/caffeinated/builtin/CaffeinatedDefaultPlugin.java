@@ -37,6 +37,8 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
     @Override
     public void onInit() {
+        CaffeinatedYoutubePlugin.init(this);
+
         // I spend way too long on this shit.
         this.getLogger().info(" _________________");
         this.getLogger().info("|       Hi!       |");

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Caffeinated Youtube</title>
+        <link rel="stylesheet" href="https://studio.casterlabs.co/css/bulma.min.css" />
+        <link rel="stylesheet" href="https://studio.casterlabs.co/css/bulma-prefers-dark.min.css" />
+        <style>
+            html {
+                overflow: auto;
+                background-color: transparent !important;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- ... -->
+        <iframe src="https://widgets.casterlabs.co/caffeinated/widget.html?pluginId=co.casterlabs.defaultwidgets&widgetId=co.casterlabs.youtube.dock&authorization=IlfliaNRx7hsk6RPrp48d2kcinw0c0SnZsRiUh4zfW2cDdAE388mO09KblG1n8ad&port=8092&mode=WIDGET"></iframe>
+        test!
+    </body>
+
+    <footer>
+        <script>
+            AppContext.on("theme-update", (theme) => {
+                if (theme.id == "co.casterlabs.dark") {
+                    document.documentElement.classList.add("bulma-dark-mode");
+                } else {
+                    document.documentElement.classList.remove("bulma-dark-mode");
+                }
+            });
+            AppContext.broadcast("theme-update", AppContext.currentTheme);
+
+            Widget.on("init", () => {});
+        </script>
+    </footer>
+</html>
