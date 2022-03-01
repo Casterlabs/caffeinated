@@ -89,7 +89,7 @@ public class Bootstrap implements Runnable {
 
     @AppEntry
     public static void main() throws Exception {
-        App.setName("Casterlabs-Caffeinated");
+        App.setName("Casterlabs Caffeinated");
 
         System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 

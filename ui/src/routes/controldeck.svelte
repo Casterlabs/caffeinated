@@ -11,7 +11,7 @@
     });
 
     onMount(() => {
-        document.title = "Casterlabs-Caffeinated - Control Deck";
+        document.title = "Casterlabs Caffeinated - Control Deck";
     });
 </script>
 
