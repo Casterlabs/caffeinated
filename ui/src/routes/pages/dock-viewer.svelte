@@ -68,7 +68,7 @@
 
 {#if widget}
     <div id="widget-demo">
-        <iframe bind:this={frame} src={widget.url} title="" />
+        <iframe bind:this={frame} src="{widget.url}&address=127.0.0.1" title="" />
     </div>
 {/if}
 

@@ -31,7 +31,7 @@ window.addEventListener("message", (event) => {
 
 const { pluginId, widgetId, authorization } = queryParams;
 const port = queryParams.port || "8092";
-const address = queryParams.address || "localhost";
+const address = queryParams.address || "127.0.0.1";
 const widgetMode = (queryParams.mode || "WIDGET").toUpperCase();
 
 export function deepFreeze(object) {
