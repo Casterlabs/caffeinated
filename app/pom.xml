@@ -16,7 +16,7 @@
 	</modules>
 
 	<properties>
-		<kaimen.version>20aeeb6</kaimen.version>
+		<kaimen.version>08a84c3</kaimen.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -85,6 +85,22 @@
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
 				<artifactId>MacOS-aarch64</artifactId>
+				<version>${kaimen.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>co.casterlabs.kaimen</groupId>
+				<artifactId>Linux-amd64</artifactId>
+				<version>${kaimen.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>co.casterlabs.kaimen</groupId>
+				<artifactId>Linux-x86</artifactId>
+				<version>${kaimen.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>co.casterlabs.kaimen</groupId>
+				<artifactId>Linux-aarch64</artifactId>
 				<version>${kaimen.version}</version>
 			</dependency>
 		</dependencies>
