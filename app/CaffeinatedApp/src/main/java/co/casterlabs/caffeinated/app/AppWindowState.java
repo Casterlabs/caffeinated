@@ -10,7 +10,7 @@ public class AppWindowState extends WebviewWindowState {
 
     @JsonSerializationMethod("icon")
     private JsonElement $serialize_icon() {
-        return new JsonString(/*App.getIconURL().toString()*/"casterlabs");
+        return new JsonString(CaffeinatedApp.getInstance().getUiPreferences().get().getIcon());
     }
 
     @Override

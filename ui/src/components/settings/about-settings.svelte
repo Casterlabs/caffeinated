@@ -13,7 +13,7 @@
         logo = (await Bridge.query("window")).data.icon;
         year = new Date().getFullYear();
 
-        if ((await Bridge.query("theme")).data.isDark) {
+        if ((await Bridge.query("theme")).data.appearance == "DARK") {
             color = "white";
         } else {
             color = "black";
