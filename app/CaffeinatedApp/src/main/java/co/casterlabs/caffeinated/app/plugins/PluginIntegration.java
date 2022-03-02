@@ -53,6 +53,8 @@ public class PluginIntegration {
 
     private BridgeValue<PluginsBridgeObject> bridge = new BridgeValue<>("plugins", new PluginsBridgeObject());
 
+    private boolean isLoading = true;
+
     @SuppressWarnings("unused")
     @JsonClass(exposeAll = true)
     private static class PluginsBridgeObject {
@@ -110,7 +112,7 @@ public class PluginIntegration {
                 String id = details.getId();
 
                 // Reconstruct the widget and ignore the applet and dock.
-                if (!id.equals("applet") && !id.equals("dock")) {
+                if (!id.contains("applet") && !id.contains("dock")) {
                     this.plugins.createWidget(details.getNamespace(), id, details.getName(), details.getSettings());
                 }
             } catch (AssertionError | SecurityException | NullPointerException | IllegalArgumentException e) {
@@ -126,21 +128,24 @@ public class PluginIntegration {
             }
         }
 
+        this.isLoading = false;
         this.save();
     }
 
     public void save() {
-        PreferenceFile<PluginIntegrationPreferences> prefs = CaffeinatedApp.getInstance().getPluginIntegrationPreferences();
+        if (!this.isLoading) {
+            PreferenceFile<PluginIntegrationPreferences> prefs = CaffeinatedApp.getInstance().getPluginIntegrationPreferences();
 
-        List<WidgetSettingsDetails> widgetSettings = new LinkedList<>();
-        for (WidgetHandle handle : this.plugins.getWidgetHandles()) {
-            widgetSettings.add(WidgetSettingsDetails.from(handle.widget));
+            List<WidgetSettingsDetails> widgetSettings = new LinkedList<>();
+            for (WidgetHandle handle : this.plugins.getWidgetHandles()) {
+                widgetSettings.add(WidgetSettingsDetails.from(handle.widget));
+            }
+
+            prefs.get().setWidgetSettings(widgetSettings);
+            prefs.save();
+
+            this.updateBridgeData();
         }
-
-        prefs.get().setWidgetSettings(widgetSettings);
-        prefs.save();
-
-        this.updateBridgeData();
     }
 
     @EventListener

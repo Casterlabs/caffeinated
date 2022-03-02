@@ -12,6 +12,7 @@ import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences.WidgetSettingsDetails;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugins;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -162,19 +163,30 @@ public class PluginsHandler implements CaffeinatedPlugins {
         this.widgetFactories.put(widgetDetails.getNamespace(), new Triple<>(plugin, widgetProducer, widgetDetails));
 
         // Automatically create the docks and applets when registered.
-        switch (widgetDetails.getType()) {
-            case APPLET:
-                this.createApplet(widgetDetails.getNamespace(), null);
-                break;
+        if ((widgetDetails.getType() == WidgetType.DOCK) || (widgetDetails.getType() == WidgetType.APPLET)) {
+            JsonObject settings = null;
 
-            case DOCK:
-                this.createDock(widgetDetails.getNamespace(), null);
-                break;
+            // Now we need to find the widget's settings (if they exist)
+            for (WidgetSettingsDetails otherDetails : CaffeinatedApp.getInstance().getPluginIntegrationPreferences().get().getWidgetSettings()) {
+                if (otherDetails.getNamespace().equals(widgetDetails.getNamespace())) {
+                    settings = otherDetails.getSettings();
+                    break;
+                }
+            }
 
-            case WIDGET:
-            default:
-                break;
+            switch (widgetDetails.getType()) {
+                case APPLET:
+                    this.createApplet(widgetDetails.getNamespace(), settings);
+                    break;
 
+                case DOCK:
+                    this.createDock(widgetDetails.getNamespace(), settings);
+                    break;
+
+                default:
+                    break;
+
+            }
         }
 
         return this;
