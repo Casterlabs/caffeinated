@@ -1,8 +1,9 @@
 package co.casterlabs.caffeinated.builtin;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.Nullable;
@@ -126,13 +127,15 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
     }
 
     public static class YoutubeDock extends YoutubeWidget /* We want the widget code */ {
-        private Deque<JsonObject> queue = new ArrayDeque<>();
+        private List<JsonObject> queue = new ArrayList<>();
         private boolean isPlaying = false;
         private boolean allowAutoplay = false;
 
         private int currentPlaybackId = -1;
 
         void addToQueue(JsonObject video) {
+            video.put("index_id", UUID.randomUUID().toString());
+
             this.queue.add(video);
             this.save();
 
@@ -170,7 +173,7 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
             {
                 int it = idx;
                 while (it >= 0) {
-                    video = this.queue.pop();
+                    video = this.queue.remove(it);
                     it--;
                 }
             }
@@ -186,9 +189,26 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
             this.save();
         }
 
+        void remove(String id) {
+            JsonObject target = null;
+
+            for (JsonObject jo : this.queue) {
+                if (jo.containsKey("index_id") && jo.getString("index_id").equals(id)) {
+                    target = jo;
+                    break;
+                }
+            }
+
+            if (target != null) {
+                this.queue.remove(target);
+                this.save();
+            }
+        }
+
         private void save() {
             this.settings().set("queue", Rson.DEFAULT.toJson(this.queue));
             this.settings().set("autoplay", this.allowAutoplay);
+            broadcastToAll("update", this.settings().getJson());
         }
 
         @Override
@@ -196,7 +216,7 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
             dock = this;
 
             try {
-                this.queue = Rson.DEFAULT.fromJson(this.settings().get("queue"), new TypeToken<Deque<JsonObject>>() {
+                this.queue = Rson.DEFAULT.fromJson(this.settings().get("queue"), new TypeToken<List<JsonObject>>() {
                 });
             } catch (Exception ignored) {}
 
@@ -211,8 +231,17 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
                 this.play(idx.getAsNumber().intValue());
             });
 
+            instance.on("remove", (id) -> {
+                this.remove(id.getAsString());
+            });
+
             instance.on("autoplay", (s) -> {
                 this.allowAutoplay = s.getAsBoolean();
+            });
+
+            instance.on("clear", () -> {
+                this.queue.clear();
+                this.save();
             });
         }
 

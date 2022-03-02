@@ -81,11 +81,13 @@
         const queueListElement = document.querySelector("#queue-list");
         const queueListTemplate = queueListElement.querySelector("template");
 
-        function updateList() {
+        Widget.on("update", (settings) => {
             queueListElement.innerHTML = "";
 
+            console.log(settings);
+
             let it_idx = 0;
-            for (const video of Widget.widgetData.settings.queue) {
+            for (const video of settings.queue) {
                 const elem = queueListTemplate.content.cloneNode(true);
                 const idx = it_idx;
 
@@ -93,18 +95,22 @@
                     .querySelector("span")
                     .innerHTML = escapeHtml(video.title).replace(/ /g, "&nbsp;");
 
-                elem.title = video.title;
+                elem
+                    .querySelector(".clicker")
+                    .title = video.title;
 
                 elem
                     .querySelector(".clicker")
                     .addEventListener("click", () => {
                         console.log("Play", idx);
+                        Widget.emit("play", idx);
                     });
 
                 elem
                     .querySelector(".remove")
                     .addEventListener("click", () => {
-                        console.log("Removed", idx);
+                        console.log("Removed", idx, video.index_id);
+                        Widget.emit("remove", video.index_id);
                     });
 
                 queueListElement.append(elem);
@@ -112,7 +118,7 @@
                 console.log(video);
                 it_idx++;
             }
-        }
+        });
 
         AppContext.on("theme-update", (theme) => {
             if (theme.id == "co.casterlabs.dark") {
@@ -124,7 +130,7 @@
         AppContext.broadcast("theme-update", AppContext.currentTheme);
 
         Widget.on("init", () => {
-            updateList();
+            Widget.broadcast("update", Widget.widgetData.settings);
         });
     </script>
 
@@ -151,7 +157,6 @@
                             // Widget.emit("seek", player.getCurrentTime());
                             Widget.emit("play-pause", false);
                         } else if (event.data == YT.PlayerState.UNSTARTED) {
-                            div.classList = "";
                             player.playVideo();
                             playing = true;
                             Widget.emit("play-start", currentPlaybackId);
