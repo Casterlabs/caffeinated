@@ -7,7 +7,8 @@
 
     function render(data) {
         docks = data.widgets
-            .filter((w) => w.details.type == "DOCK")
+            .filter((w) => w.details.type == "DOCK" || w.details.type == "APPLET")
+            //
             // We want to hide these because they're already available.
             .filter((w) => !["co.casterlabs.dock.stream_viewers.dock", "co.casterlabs.dock.stream_chat.dock"].includes(w.id));
 
