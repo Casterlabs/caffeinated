@@ -146,7 +146,8 @@
                 height: "100%",
                 playerVars: {
                     controls: 1,
-                    disablekb: 0
+                    disablekb: 0,
+                    fs: 0
                 },
                 events: {
                     onStateChange: (event) => {
@@ -177,6 +178,8 @@
                     }
                 }
             });
+
+            player.mute();
 
             // Time tracking starting here
             let lastTime = -1;
