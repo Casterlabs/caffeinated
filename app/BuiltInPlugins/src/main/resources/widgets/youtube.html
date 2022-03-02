@@ -107,8 +107,6 @@
         const progressBar = document.querySelector("#progress");
         const requestedBy = document.querySelector("#requested-by");
 
-        let config = {};
-
         function setBarProgress() {
             const progress = getPlaybackProgress();
 
@@ -127,22 +125,18 @@
             Widget.broadcast("update");
         });
 
-        Widget.on("update", (data) => {
-            console.debug(data);
+        Widget.on("update", () => {
+            progressBar.style.backgroundColor = Widget.getSetting("appearance.bar_color");
+            div.style.backgroundColor = Widget.getSetting("appearance.background_color");
 
-            config = data;
-
-            progressBar.style.backgroundColor = config.bar_color;
-            div.style.backgroundColor = config.background_color;
-
-            if (config.player_only) {
+            if (Widget.getSetting("player.video_only")) {
                 document.body.classList.add("player-only");
             } else {
                 document.body.classList.remove("player-only");
             }
 
             try {
-                player.setVolume(config.volume * 100);
+                player.setVolume(Widget.getSetting("player.volume") * 100);
             } catch (ignored) { }
         });
 
@@ -159,7 +153,8 @@
                 height: "100%",
                 playerVars: {
                     controls: 1,
-                    disablekb: 0
+                    disablekb: 0,
+                    fs: 0
                 },
                 events: {
                     onStateChange: (event) => {
@@ -191,6 +186,10 @@
                     }
                 }
             });
+
+            try {
+                player.setVolume(Widget.getSetting("player.volume") * 100);
+            } catch (ignored) { }
 
             // Time tracking starting here
             let lastTime = -1;

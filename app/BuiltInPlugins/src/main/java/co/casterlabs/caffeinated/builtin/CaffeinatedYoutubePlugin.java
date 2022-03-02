@@ -14,6 +14,9 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCa
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
@@ -40,6 +43,18 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
         .withIcon("youtube")
         .withType(WidgetType.DOCK)
         .withFriendlyName("Youtube Queue");
+
+    private static final WidgetSettingsLayout WIDGET_LAYOUT = new WidgetSettingsLayout()
+        .addSection(
+            new WidgetSettingsSection("appearance", "Appearance")
+                .addItem(WidgetSettingsItem.asColor("bar_color", "Progress Bar Color", "#7a7a7a"))
+                .addItem(WidgetSettingsItem.asColor("background_color", "Background Color", "#202020"))
+        )
+        .addSection(
+            new WidgetSettingsSection("player", "Player")
+                .addItem(WidgetSettingsItem.asRange("volume", "Volume", .5, .01, 0, 1))
+                .addItem(WidgetSettingsItem.asCheckbox("video_only", "Video Only", false))
+        );
 
     private static CaffeinatedDefaultPlugin plugin;
 
@@ -98,6 +113,11 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
     }
 
     public static class YoutubeWidget extends Widget {
+
+        @Override
+        public void onInit() {
+            this.setSettingsLayout(WIDGET_LAYOUT);
+        }
 
         @Override
         public void onNewInstance(@NonNull WidgetInstance instance) {
@@ -213,6 +233,8 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
 
         @Override
         public void onInit() {
+            // DO NOT CALL SUPER!
+
             dock = this;
 
             try {
