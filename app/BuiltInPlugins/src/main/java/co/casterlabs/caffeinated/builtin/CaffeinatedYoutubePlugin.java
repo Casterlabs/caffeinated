@@ -78,6 +78,24 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
         }
     }
 
+    private static boolean isActive() {
+//        if (!dock.getWidgetInstances().isEmpty()) {
+//            return true;
+//        }
+
+        // Search for an active youtube widget.
+        for (Widget w : plugin.getWidgets()) {
+            if (w.getNamespace().equals(WIDGET_DETAILS.getNamespace())) {
+                if (!w.getWidgetInstances().isEmpty()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    }
+
     public static class YoutubeWidget extends Widget {
 
         @Override
@@ -118,7 +136,7 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
             this.queue.add(video);
             this.save();
 
-            if (!this.isPlaying && this.allowAutoplay && !this.queue.isEmpty()) {
+            if (!this.isPlaying && this.allowAutoplay && isActive() && (this.queue.size() == 1)) {
                 this.play(0);
             }
         }
@@ -138,7 +156,7 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
 
                 FastLogger.logStatic("Finished video, autoPlay: %s", this.allowAutoplay);
 
-                if (this.allowAutoplay && !this.queue.isEmpty()) {
+                if (this.allowAutoplay && isActive() && !this.queue.isEmpty()) {
                     this.play(0);
                 }
             }
