@@ -133,12 +133,12 @@
 			<version>4.3.0</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>ConsoleUtil</artifactId>
-			<version>9d51c20</version> <!-- 1.4.0-EXPERIMENTAL -->
+			<version>9d51c20</version> 
 			<scope>compile</scope>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>EventApi</artifactId>
