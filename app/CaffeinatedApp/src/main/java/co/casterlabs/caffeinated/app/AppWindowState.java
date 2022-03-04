@@ -4,13 +4,18 @@ import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
+import co.casterlabs.rakurai.json.element.JsonNull;
 import co.casterlabs.rakurai.json.element.JsonString;
 
 public class AppWindowState extends WebviewWindowState {
 
     @JsonSerializationMethod("icon")
     private JsonElement $serialize_icon() {
-        return new JsonString(CaffeinatedApp.getInstance().getUiPreferences().get().getIcon());
+        try {
+            return new JsonString(CaffeinatedApp.getInstance().getUiPreferences().get().getIcon());
+        } catch (NullPointerException e) { // So many things can be null...
+            return JsonNull.INSTANCE;
+        }
     }
 
     @Override
