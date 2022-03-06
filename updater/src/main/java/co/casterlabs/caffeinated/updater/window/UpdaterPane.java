@@ -25,12 +25,13 @@ public class UpdaterPane extends JPanel {
             "DivideAConquer",
             "FallenWolf",
             "GeenoTV",
-            "Glitch3dPenguin"
+            "Glitch3dPenguin",
+            "sadshepherdgirl"
     };
 
     private @Setter @NonNull DialogAnimation currentAnimation = new BlankAnimation();
 
-    private String chosenStreamer = "DivideAConquer"; // Default is required for WindowBuilder.
+    private String chosenStreamer = "sadshepherdgirl"; // Default is required for WindowBuilder.
     private Image chosenStreamerImage;
 
     private @Getter UpdaterUI ui;
