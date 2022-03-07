@@ -3,16 +3,23 @@ package co.casterlabs.koi.api;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
+import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
+import co.casterlabs.koi.api.stream.KoiStreamConfigurationFeatures;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -137,20 +144,56 @@ public class KoiConnection implements Closeable {
             try {
                 JsonObject packet = Rson.DEFAULT.fromJson(raw, JsonObject.class);
 
-                switch (packet.get("type").getAsString()) {
-                    case "KEEP_ALIVE":
+                switch (packet.getString("type")) {
+                    case "KEEP_ALIVE": {
                         this.keepAlive(packet.get("nonce"));
                         return;
+                    }
 
-                    case "SERVER":
+                    case "FEATURES": {
+                        listener.onSupportedFeatures(
+                            Rson.DEFAULT.fromJson(
+                                packet.get("features"),
+                                new TypeToken<List<KoiIntegrationFeatures>>() {
+                                }
+                            )
+                        );
+                        return;
+                    }
+
+                    case "PLATFORM_CATEGORIES_LIST": {
+                        Map<String, String> categories = new HashMap<>();
+
+                        for (Entry<String, JsonElement> entry : packet.getObject("categories").entrySet()) {
+                            categories.put(entry.getKey(), entry.getValue().getAsString());
+                        }
+
+                        listener.onPlatformCategories(categories);
+                        return;
+                    }
+
+                    case "STREAM_CONFIGURATION_FEATURES": {
+                        listener.onSupportedStreamConfigurationFeatures(
+                            Rson.DEFAULT.fromJson(
+                                packet.get("supported"),
+                                new TypeToken<List<KoiStreamConfigurationFeatures>>() {
+                                }
+                            )
+                        );
+                        return;
+                    }
+
+                    case "SERVER": {
                         listener.onServerMessage(packet.get("server").getAsString());
                         return;
+                    }
 
-                    case "ERROR":
+                    case "ERROR": {
                         listener.onError(packet.get("error").getAsString());
                         return;
+                    }
 
-                    case "EVENT":
+                    case "EVENT": {
                         JsonObject eventJson = packet.getObject("event");
                         KoiEvent event = KoiEventType.get(eventJson);
 
@@ -159,7 +202,16 @@ public class KoiConnection implements Closeable {
                         } else {
                             KoiEventUtil.reflectInvoke(listener, event);
                         }
+                        return;
+                    }
 
+                    // We don't care about these, we already have them.
+                    case "CONTENT_RATINGS":
+                    case "LANGUAGES":
+                        return;
+
+                    default:
+                        FastLogger.logStatic(LogLevel.DEBUG, "Unknown message type: %s\n%s", packet.getString("type"), packet);
                         return;
                 }
             } catch (Exception e) {
@@ -232,6 +284,15 @@ public class KoiConnection implements Closeable {
             new JsonObject()
                 .put("type", "TEST")
                 .put("eventType", eventType.toUpperCase())
+                .toString()
+        );
+    }
+
+    public void sendStreamUpdate(@NonNull KoiStreamConfiguration config) {
+        this.socket.send(
+            new JsonObject()
+                .put("type", "UPDATE_STREAM")
+                .put("stream", Rson.DEFAULT.toJson(config))
                 .toString()
         );
     }

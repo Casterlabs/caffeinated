@@ -2,7 +2,9 @@ package co.casterlabs.caffeinated.app.auth;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -10,9 +12,12 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiConnection;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
+import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
+import co.casterlabs.koi.api.stream.KoiStreamConfigurationFeatures;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -38,6 +43,10 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     private @Getter @Nullable StreamStatusEvent streamData;
     private @Getter @Nullable List<User> viewers;
     private @Getter @Nullable RoomstateEvent roomstate;
+
+    private @Getter @Nullable List<KoiIntegrationFeatures> features;
+    private @Getter @Nullable Map<String, String> streamCategories;
+    private @Getter @Nullable List<KoiStreamConfigurationFeatures> streamConfigurationFeatures;
 
     public AuthInstance(String tokenId) {
         this.tokenId = tokenId;
@@ -97,9 +106,33 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     public void sendTest(@NonNull String eventType) {
         this.koi.sendTest(eventType);
     }
+
+    public void sendStreamUpdate(@NonNull KoiStreamConfiguration config) {
+        this.koi.sendStreamUpdate(config);
+    }
+
+    public boolean isStreamConfigurationSupported() {
+        return this.streamConfigurationFeatures != null && !this.streamConfigurationFeatures.isEmpty();
+    }
+
     /* ---------------- */
     /* Event Listeners  */
     /* ---------------- */
+
+    @Override
+    public void onSupportedFeatures(List<KoiIntegrationFeatures> features) {
+        this.features = Collections.unmodifiableList(features);
+    }
+
+    @Override
+    public void onPlatformCategories(Map<String, String> categories) {
+        this.streamCategories = Collections.unmodifiableMap(categories);
+    }
+
+    @Override
+    public void onSupportedStreamConfigurationFeatures(List<KoiStreamConfigurationFeatures> streamConfigFeatures) {
+        this.streamConfigurationFeatures = Collections.unmodifiableList(streamConfigFeatures);
+    }
 
     @SuppressWarnings("deprecation")
     @KoiEventHandler
