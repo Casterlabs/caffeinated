@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import co.casterlabs.koi.api.KoiChatterType;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -26,6 +27,8 @@ public abstract class Koi {
     public abstract Map<UserPlatform, StreamStatusEvent> getStreamStates();
 
     public abstract Map<UserPlatform, RoomstateEvent> getRoomStates();
+
+    public abstract Map<UserPlatform, List<KoiIntegrationFeatures>> getFeatures();
 
     public abstract void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter);
 

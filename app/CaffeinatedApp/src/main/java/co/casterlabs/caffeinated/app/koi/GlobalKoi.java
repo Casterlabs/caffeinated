@@ -23,6 +23,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.BridgeValue;
 import co.casterlabs.koi.api.KoiChatterType;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
@@ -70,11 +71,13 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
     private Map<UserPlatform, UserUpdateEvent> userStates = new ConcurrentHashMap<>();
     private Map<UserPlatform, StreamStatusEvent> streamStates = new ConcurrentHashMap<>();
     private Map<UserPlatform, RoomstateEvent> roomStates = new ConcurrentHashMap<>();
+    private Map<UserPlatform, List<KoiIntegrationFeatures>> features = new ConcurrentHashMap<>();
 
     private BridgeValue<Map<UserPlatform, List<User>>> viewersBridge = new BridgeValue<>("koi:viewers", Collections.unmodifiableMap(this.viewers));
     private BridgeValue<Map<UserPlatform, UserUpdateEvent>> userStatesBridge = new BridgeValue<>("koi:userStates", Collections.unmodifiableMap(this.userStates));
     private BridgeValue<Map<UserPlatform, StreamStatusEvent>> streamStatesBridge = new BridgeValue<>("koi:streamStates", Collections.unmodifiableMap(this.streamStates));
     private BridgeValue<Map<UserPlatform, RoomstateEvent>> roomStatesBridge = new BridgeValue<>("koi:roomStates", Collections.unmodifiableMap(this.roomStates));
+    private BridgeValue<Map<UserPlatform, List<KoiIntegrationFeatures>>> featuresBridge = new BridgeValue<>("koi:features", Collections.unmodifiableMap(this.features));
 
     public void init() {
         handler.register(this);
@@ -83,6 +86,7 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
         CaffeinatedApp.getInstance().getAppBridge().attachValue(this.userStatesBridge);
         CaffeinatedApp.getInstance().getAppBridge().attachValue(this.streamStatesBridge);
         CaffeinatedApp.getInstance().getAppBridge().attachValue(this.roomStatesBridge);
+        CaffeinatedApp.getInstance().getAppBridge().attachValue(this.featuresBridge);
 
         // We don't use it, so it'll just sit here in purgatory.
         CaffeinatedApp.getInstance().getAppBridge().attachValue(
@@ -108,6 +112,7 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
                 this.viewers.remove(key);
                 this.userStates.remove(key);
                 this.streamStates.remove(key);
+                this.features.remove(key);
             }
         }
 
@@ -115,26 +120,32 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
     }
 
     private void updateBridgeData() {
-        // History has updates disabled.
+        for (AuthInstance auth : CaffeinatedApp.getInstance().getAuth().getAuthInstances().values()) {
+            this.features.put(auth.getUserData().getPlatform(), Collections.unmodifiableList(auth.getFeatures()));
+        }
+
+        // The historyBridge has updates disabled.
         this.viewersBridge.update();
         this.userStatesBridge.update();
         this.streamStatesBridge.update();
         this.roomStatesBridge.update();
+        this.featuresBridge.update();
 
         // Send update to the widget instances.
         new AsyncTask(() -> {
-            JsonObject statistics = new JsonObject()
+            JsonObject statics = new JsonObject()
                 .put("history", Rson.DEFAULT.toJson(this.eventHistory))
                 .put("viewers", Rson.DEFAULT.toJson(this.viewers))
                 .put("userStates", Rson.DEFAULT.toJson(this.userStates))
                 .put("streamStates", Rson.DEFAULT.toJson(this.streamStates))
-                .put("roomStates", Rson.DEFAULT.toJson(this.roomStates));
+                .put("roomStates", Rson.DEFAULT.toJson(this.roomStates))
+                .put("features", Rson.DEFAULT.toJson(this.features));
 
             for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
                 for (Widget widget : plugin.getWidgets()) {
                     for (WidgetInstance instance : widget.getWidgetInstances()) {
                         try {
-                            instance.onKoiStaticsUpdate(statistics);
+                            instance.onKoiStaticsUpdate(statics);
                         } catch (IOException ignored) {}
                     }
                 }
@@ -326,6 +337,11 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
     @Override
     public Map<UserPlatform, RoomstateEvent> getRoomStates() {
         return Collections.unmodifiableMap(this.roomStates);
+    }
+
+    @Override
+    public Map<UserPlatform, List<KoiIntegrationFeatures>> getFeatures() {
+        return Collections.unmodifiableMap(this.features);
     }
 
 }

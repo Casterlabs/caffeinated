@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.app.auth;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     private @Getter @Nullable List<User> viewers;
     private @Getter @Nullable RoomstateEvent roomstate;
 
-    private @Getter @Nullable List<KoiIntegrationFeatures> features;
+    private @Getter @Nullable List<KoiIntegrationFeatures> features = new ArrayList<>();
     private @Getter @Nullable Map<String, String> streamCategories;
     private @Getter @Nullable List<KoiStreamConfigurationFeatures> streamConfigurationFeatures;
 
@@ -122,16 +123,19 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @Override
     public void onSupportedFeatures(List<KoiIntegrationFeatures> features) {
         this.features = Collections.unmodifiableList(features);
+        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
     }
 
     @Override
     public void onPlatformCategories(Map<String, String> categories) {
         this.streamCategories = Collections.unmodifiableMap(categories);
+        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
     }
 
     @Override
     public void onSupportedStreamConfigurationFeatures(List<KoiStreamConfigurationFeatures> streamConfigFeatures) {
         this.streamConfigurationFeatures = Collections.unmodifiableList(streamConfigFeatures);
+        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
     }
 
     @SuppressWarnings("deprecation")
