@@ -55,7 +55,6 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             .withFriendlyName("Stream Chat");
 
         private static final List<String> EVENT_TYPES = Arrays.asList(
-            "ui:save_chat_viewer_preferences",
             "koi:chat_send",
             "koi:chat_delete",
             "koi:chat_upvote",
@@ -79,9 +78,6 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
                     bridge.fireEvent(event, c);
                 });
             }
-
-            JsonElement chatViewerPreferences = bridge.getQueryData().get("ui:chatViewerPreferences").getAsJson();
-            this.broadcastToAll("ui:chatViewerPreferences:update", chatViewerPreferences);
         }
 
     }

@@ -18,8 +18,8 @@
 
         logo = icon;
 
-        console.debug("[App]", "Signaling window:theme-loaded");
-        window.Bridge.emit("ui:theme-loaded");
+        console.debug("[App]", "Signaling UI#themeLoaded()");
+        UI.onThemeLoaded();
     });
 </script>
 

@@ -12,7 +12,7 @@
     let themes = [];
 
     function sendUpdatedPreferences() {
-        Bridge.emit("ui:appearance-update", {
+        UI.updateChatPreferences({
             theme: appearanceTheme,
             icon: appearanceIcon,
             closeToTray: appearanceCloseToTray,
@@ -47,8 +47,8 @@
         eventHandler.on("theme:update", onThemeUpdate);
         onThemeUpdate((await Bridge.query("theme")).data);
 
-        eventHandler.on("pref-update:ui", loadPreferences);
-        loadPreferences((await Bridge.query("ui:preferences")).data);
+        // TODO eventHandler.on("pref-update:ui", loadPreferences);
+        loadPreferences(await UI.preferences);
     });
 </script>
 

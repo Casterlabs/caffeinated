@@ -12,7 +12,7 @@ public class AppWindowState extends WebviewWindowState {
     @JsonSerializationMethod("icon")
     private JsonElement $serialize_icon() {
         try {
-            return new JsonString(CaffeinatedApp.getInstance().getUiPreferences().get().getIcon());
+            return new JsonString(CaffeinatedApp.getInstance().getUI().getPreferences().getIcon());
         } catch (NullPointerException e) { // So many things can be null...
             return JsonNull.INSTANCE;
         }

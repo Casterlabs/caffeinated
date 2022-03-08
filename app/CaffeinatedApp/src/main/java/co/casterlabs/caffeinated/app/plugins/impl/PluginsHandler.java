@@ -22,23 +22,27 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.util.Producer;
 import co.casterlabs.caffeinated.util.Triple;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
+import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
+import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
-public class PluginsHandler implements CaffeinatedPlugins {
+public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugins {
     private static final FastLogger logger = new FastLogger();
 
     private Map<String, CaffeinatedPlugin> plugins = new HashMap<>();
     private Map<String, Triple<CaffeinatedPlugin, Producer<Widget>, WidgetDetails>> widgetFactories = new HashMap<>();
     private Map<String, WidgetHandle> widgetHandles = new HashMap<>();
 
+    @JavascriptFunction
     public List<CaffeinatedPlugin> getPlugins() {
         return new ArrayList<>(this.plugins.values());
     }
 
+    @JavascriptFunction
     public List<WidgetHandle> getWidgetHandles() {
         return new ArrayList<>(this.widgetHandles.values());
     }
@@ -47,6 +51,7 @@ public class PluginsHandler implements CaffeinatedPlugins {
         return this.widgetHandles.get(id);
     }
 
+    @JavascriptFunction
     public List<WidgetDetails> getCreatableWidgets() {
         List<WidgetDetails> details = new LinkedList<>();
 

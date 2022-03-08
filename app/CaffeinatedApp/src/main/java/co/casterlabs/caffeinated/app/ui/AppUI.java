@@ -4,10 +4,8 @@ import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,15 +19,16 @@ import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.preferences.PreferenceFile;
 import co.casterlabs.caffeinated.app.theming.ThemeManager;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
-import co.casterlabs.caffeinated.app.ui.events.AppUIAppearanceUpdateEvent;
 import co.casterlabs.caffeinated.app.ui.events.AppUIEventType;
-import co.casterlabs.caffeinated.app.ui.events.AppUIOpenLinkEvent;
-import co.casterlabs.caffeinated.app.ui.events.AppUISaveChatViewerPreferencesEvent;
-import co.casterlabs.caffeinated.app.ui.events.AppUIThemeLoadedEvent;
+import co.casterlabs.caffeinated.app.ui.events.ChatPreferencesUpdateEvent;
+import co.casterlabs.caffeinated.app.ui.events.AppearanceUpdateEvent;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.webview.bridge.BridgeValue;
+import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
+import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
+import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -44,7 +43,7 @@ import xyz.e3ndr.eventapi.listeners.EventListener;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class AppUI {
+public class AppUI extends JavascriptObject {
     private static final String GOOGLE_FONTS_API_KEY = "AIzaSyBuFeOYplWvsOlgbPeW8OfPUejzzzTCITM";
 
     private static final long TOAST_DURATION = 2250; // 2.25s
@@ -52,11 +51,20 @@ public class AppUI {
     private static EventHandler<AppUIEventType> handler = new EventHandler<>();
     private static BridgeValue<ChatViewerPreferences> bridge_ChatViewerPreferences = new BridgeValue<>("ui:chatViewerPreferences");
 
+    private PreferenceFile<UIPreferences> preferenceFile = new PreferenceFile<>("ui", UIPreferences.class).bridge();
+    private @Getter(onMethod = @__({
+            @JavascriptGetter("preferences")
+    })) UIPreferences preferences = this.preferenceFile.get();
+
     private @Getter boolean uiFinishedLoad = false;
 
     private @Getter List<String> systemFonts = Collections.emptyList();
     private @Getter List<String> googleFonts = Collections.emptyList();
-    private @Getter List<String> allFonts = Collections.emptyList();
+
+    @Getter(onMethod = @__({
+            @JavascriptGetter("allFonts") // Allow `x = UI.allFonts` but not `UI.allFonts = x`
+    }))
+    private List<String> allFonts = Collections.emptyList();
 
     public AppUI() {
         handler.register(this);
@@ -126,36 +134,38 @@ public class AppUI {
         });
 
         CaffeinatedApp.getInstance().getAppBridge().attachValue(bridge_ChatViewerPreferences);
+        CaffeinatedApp.getInstance().getAppBridge().defineObject("UI", this);
 
-        bridge_ChatViewerPreferences.set(CaffeinatedApp.getInstance().getUiPreferences().get().getChatViewerPreferences());
+        bridge_ChatViewerPreferences.set(this.getPreferences().getChatViewerPreferences());
     }
 
+    @JavascriptFunction
     @EventListener
-    public void onUISaveChatViewerPreferencesEvent(AppUISaveChatViewerPreferencesEvent event) {
+    public void updateChatPreferences(ChatPreferencesUpdateEvent event) {
         ChatViewerPreferences preferences = event.getPreferences();
 
         bridge_ChatViewerPreferences.set(preferences);
-        CaffeinatedApp.getInstance().getUiPreferences().get().setChatViewerPreferences(preferences);
-        CaffeinatedApp.getInstance().getUiPreferences().save();
+
+        this.getPreferences().setChatViewerPreferences(preferences);
+        this.preferenceFile.save();
     }
 
-    @EventListener
-    public void onUIAppearanceUpdateEvent(AppUIAppearanceUpdateEvent event) {
-        UIPreferences uiPrefs = CaffeinatedApp.getInstance().getUiPreferences().get();
+    @JavascriptFunction
+    public void updateAppearance(AppearanceUpdateEvent event) {
+        UIPreferences uiPrefs = this.getPreferences();
 
         uiPrefs.setIcon(event.getIcon());
         uiPrefs.setTheme(event.getTheme());
         uiPrefs.setCloseToTray(event.isCloseToTray());
-        uiPrefs.setMinimizeToTray(event.isMinimizeToTray());
-        CaffeinatedApp.getInstance().getUiPreferences().save();
+        this.preferenceFile.save();
 
         this.updateIcon();
 
         ThemeManager.setTheme(event.getTheme());
     }
 
-    @EventListener
-    public void onUIThemeLoadedEvent(AppUIThemeLoadedEvent event) {
+    @JavascriptFunction
+    public void onUILoaded() {
         this.uiFinishedLoad = true;
 
         PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
@@ -179,17 +189,15 @@ public class AppUI {
         }
     }
 
-    @EventListener
-    public void onUIOpenLinkEvent(AppUIOpenLinkEvent event) {
-        try {
-            Desktop
-                .getDesktop()
-                .browse(new URI(event.getLink()));
-        } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
-        }
+    @JavascriptFunction
+    @SneakyThrows
+    public void openLink(String link) {
+        Desktop
+            .getDesktop()
+            .browse(new URI(link));
     }
 
+    @JavascriptFunction
     public void showToast(@NonNull String message, @NonNull UIBackgroundColor background) {
         if (this.uiFinishedLoad) {
             String line = String.format(
@@ -235,7 +243,7 @@ public class AppUI {
 
     @SneakyThrows
     public void updateIcon() {
-        String path = String.format("assets/logo/%s.png", CaffeinatedApp.getInstance().getUiPreferences().get().getIcon());
+        String path = String.format("assets/logo/%s.png", this.getPreferences().getIcon());
         URL resource;
 
         if (CaffeinatedApp.getInstance().isDev()) {

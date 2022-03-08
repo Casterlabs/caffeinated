@@ -155,8 +155,8 @@
         eventHandler.on("auth:update", bridge_onAuthUpdate);
         bridge_onAuthUpdate((await Bridge.query("auth")).data);
 
-        eventHandler.on("ui:chatViewerPreferences:update", bridge_onChatViewerPreferencesUpdate);
-        bridge_onChatViewerPreferencesUpdate((await Bridge.query("ui:chatViewerPreferences")).data);
+        eventHandler.on("ui:preferences:update", bridge_onChatViewerPreferencesUpdate);
+        bridge_onChatViewerPreferencesUpdate((await UI.preferences).chatViewerPreferences);
 
         eventHandler.on("koi:event", bridge_processEvent);
         (await Bridge.query("koi:history")).data.forEach(bridge_processEvent);

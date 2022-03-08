@@ -17,15 +17,11 @@
         Bridge.emit("plugins:copy-widget-url", { id });
     }
 
-    async function render(bridgeData) {
-        widgets = Object.values(bridgeData.widgets);
-        feather.replace();
-    }
-
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - Docks";
 
-        render((await Bridge.query("plugins")).data);
+        widgets = await Plugins.getWidgetHandles();
+        feather.replace();
     });
 </script>
 

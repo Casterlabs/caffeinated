@@ -73,6 +73,7 @@ public class PluginIntegration {
     @SneakyThrows
     public void init() {
         CaffeinatedApp.getInstance().getAppBridge().attachValue(this.bridge);
+        CaffeinatedApp.getInstance().getAppBridge().defineObject("Plugins", this.plugins);
 
         // Load the built-in widgets.
         {

@@ -21,7 +21,9 @@
 
     let widgets = [];
 
-    async function renderCreationDisplay(creatableWidgets) {
+    async function renderCreationDisplay() {
+        const creatableWidgets = await Plugins.getCreatableWidgets();
+
         let _widgetCategories = {
             alerts: [],
             labels: [],
@@ -46,21 +48,13 @@
         widgetCategories = _widgetCategories;
     }
 
-    function renderWidgetTiles(loadedWidgets) {
-        widgets = Object.values(loadedWidgets);
-    }
-
-    async function render(bridgeData) {
-        await renderCreationDisplay(bridgeData.creatableWidgets);
-        renderWidgetTiles(bridgeData.widgets);
-
-        feather.replace();
-    }
-
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - Widgets";
 
-        render((await Bridge.query("plugins")).data);
+        widgets = await Plugins.getWidgetHandles();
+        await renderCreationDisplay();
+
+        feather.replace();
     });
 </script>
 

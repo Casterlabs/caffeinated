@@ -26,7 +26,7 @@ public class ThemeManager {
             new Theme("co.casterlabs.dark", "Dark", Appearance.DARK, false)
         );
 
-        setTheme(CaffeinatedApp.getInstance().getUiPreferences().get().getTheme());
+        setTheme(CaffeinatedApp.getInstance().getUI().getPreferences().getTheme());
 
         CaffeinatedApp.getInstance().getAppBridge().attachValue(bridge_Theme);
         CaffeinatedApp.getInstance().getAppBridge().attachValue(bridge_Themes);

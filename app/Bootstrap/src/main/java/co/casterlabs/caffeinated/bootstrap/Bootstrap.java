@@ -260,17 +260,6 @@ public class Bootstrap implements Runnable {
             @Override
             public void onMinimize() {
                 logger.debug("onMinimize");
-                new AsyncTask(() -> {
-                    if (CaffeinatedApp.getInstance().getUiPreferences().get().isMinimizeToTray()) {
-                        // See if the minimize to tray option is checked.
-                        // If so, make sure the app can close before closing the window.
-                        if (app.canCloseUI()) {
-                            webview.close();
-                        } else {
-                            webview.focus();
-                        }
-                    }
-                });
             }
 
             @Override
@@ -336,28 +325,6 @@ public class Bootstrap implements Runnable {
 
                 case "app:reset": {
                     shutdown(true, true, true);
-                    return;
-                }
-
-                case "ui:theme-loaded": {
-                    new AsyncTask(() -> {
-//                        JFrame frame = ApplicationUI.getWindow().getFrame();
-
-                        // If we enable osr, we want to only open the window when it's fully loaded.
-//                        if (webview.isOffScreenRenderingEnabled()) {
-//                            frame.setVisible(true);
-//                            frame.toFront();
-//                        }
-
-                        // We also want to wait a bit for the app to initialize further (and to make the
-                        // ux less jarring since it loads too fast.)
-                        try {
-                            TimeUnit.SECONDS.sleep(2);
-                        } catch (InterruptedException ignored) {}
-
-                        // Forward the event, after the timeout.
-                        CaffeinatedApp.getInstance().onBridgeEvent(type, data);
-                    });
                     return;
                 }
 

@@ -19,8 +19,8 @@ import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences;
 import co.casterlabs.caffeinated.app.preferences.PreferenceFile;
 import co.casterlabs.caffeinated.app.theming.ThemeManager;
 import co.casterlabs.caffeinated.app.ui.AppUI;
-import co.casterlabs.caffeinated.app.ui.UIPreferences;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
+import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.bridge.BridgeValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
@@ -68,7 +68,6 @@ public class CaffeinatedApp extends Caffeinated {
     private PreferenceFile<AppWindowState>               windowPreferences            = new PreferenceFile<>("window",  AppWindowState.class);
     private PreferenceFile<AuthPreferences>              authPreferences              = new PreferenceFile<>("auth",    AuthPreferences.class);
     private PreferenceFile<AppPreferences>               appPreferences               = new PreferenceFile<>("app",     AppPreferences.class).bridge();
-    private PreferenceFile<UIPreferences>                uiPreferences                = new PreferenceFile<>("ui",      UIPreferences.class).bridge();
     // @formatter:on
 
     private Map<String, List<Consumer<JsonObject>>> bridgeEventListeners = new HashMap<>();
@@ -92,30 +91,27 @@ public class CaffeinatedApp extends Caffeinated {
     }
 
     public void init() {
-        ThemeManager.init();
+        new AsyncTask(() -> {
+            ThemeManager.init();
 
-        this.UI.init();
-        this.api.init();
-        this.koi.init();
-        this.auth.init();
-        this.music.init();
-        this.plugins.init();
+            this.UI.init();
+            this.api.init();
+            this.koi.init();
+            this.auth.init();
+            this.music.init();
+            this.plugins.init();
 
-        this.appBridge.attachValue(bridge_AppPreferences);
-        bridge_AppPreferences.set(this.appPreferences.get());
-        this.appPreferences.addSaveListener((pref) -> {
-            bridge_AppPreferences.update();
+            this.appBridge.attachValue(bridge_AppPreferences);
+            bridge_AppPreferences.set(this.appPreferences.get());
+            this.appPreferences.addSaveListener((pref) -> {
+                bridge_AppPreferences.update();
+            });
+
+            // This doesn't updating, so we register it and leave it be.
+            new BridgeValue<BuildInfo>("build").set(this.buildInfo).attachGlobally();
+
+            this.appPreferences.save();
         });
-
-        CaffeinatedApp.getInstance().getAppBridge().attachValue(
-            // This doesn't update, so we register it and leave it be.
-            new BridgeValue<UIPreferences>("ui:preferences").set(this.uiPreferences.get())
-        );
-
-        // This doesn't updating, so we register it and leave it be.
-        new BridgeValue<BuildInfo>("build").set(this.buildInfo).attachGlobally();
-
-        this.appPreferences.save();
     }
 
     public boolean canCloseUI() {

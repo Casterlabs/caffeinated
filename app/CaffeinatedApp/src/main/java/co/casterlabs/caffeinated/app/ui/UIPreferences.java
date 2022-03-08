@@ -9,7 +9,6 @@ public class UIPreferences {
     private String icon = "casterlabs";
     private String theme = "co.casterlabs.dark";
     private boolean closeToTray = true;
-    private boolean minimizeToTray = false;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
 
     @Data

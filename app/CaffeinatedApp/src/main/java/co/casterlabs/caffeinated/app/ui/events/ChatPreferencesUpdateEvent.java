@@ -8,10 +8,10 @@ import xyz.e3ndr.eventapi.events.AbstractCancellableEvent;
 
 @Getter
 @JsonClass(exposeAll = true)
-public class AppUISaveChatViewerPreferencesEvent extends AbstractCancellableEvent<AppUIEventType> {
+public class ChatPreferencesUpdateEvent extends AbstractCancellableEvent<AppUIEventType> {
     private ChatViewerPreferences preferences;
 
-    public AppUISaveChatViewerPreferencesEvent() {
+    public ChatPreferencesUpdateEvent() {
         super(AppUIEventType.SAVE_CHAT_VIEWER_PREFERENCES);
     }
 
