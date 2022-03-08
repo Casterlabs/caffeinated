@@ -26,6 +26,8 @@ public interface KoiLifeCycleHandler {
 
     default void onPlatformCategories(Map<String, String> categories) {}
 
+    default void onPlatformTags(Map<String, String> tags) {}
+
     default void onSupportedStreamConfigurationFeatures(List<KoiStreamConfigurationFeatures> streamConfigFeatures) {}
 
 }

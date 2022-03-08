@@ -47,6 +47,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 
     private @Getter @Nullable List<KoiIntegrationFeatures> features = new ArrayList<>();
     private @Getter @Nullable Map<String, String> streamCategories;
+    private @Getter @Nullable Map<String, String> streamTags;
     private @Getter @Nullable List<KoiStreamConfigurationFeatures> streamConfigurationFeatures;
 
     public AuthInstance(String tokenId) {
@@ -129,6 +130,12 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @Override
     public void onPlatformCategories(Map<String, String> categories) {
         this.streamCategories = Collections.unmodifiableMap(categories);
+        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+    }
+
+    @Override
+    public void onPlatformTags(Map<String, String> tags) {
+        this.streamTags = Collections.unmodifiableMap(tags);
         CaffeinatedApp.getInstance().getAuth().updateBridgeData();
     }
 

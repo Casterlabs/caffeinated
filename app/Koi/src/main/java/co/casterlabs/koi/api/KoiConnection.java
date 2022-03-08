@@ -172,6 +172,17 @@ public class KoiConnection implements Closeable {
                         return;
                     }
 
+                    case "PLATFORM_TAGS_LIST": {
+                        Map<String, String> tags = new HashMap<>();
+
+                        for (Entry<String, JsonElement> entry : packet.getObject("tags").entrySet()) {
+                            tags.put(entry.getKey(), entry.getValue().getAsString());
+                        }
+
+                        listener.onPlatformTags(tags);
+                        return;
+                    }
+
                     case "STREAM_CONFIGURATION_FEATURES": {
                         listener.onSupportedStreamConfigurationFeatures(
                             Rson.DEFAULT.fromJson(
