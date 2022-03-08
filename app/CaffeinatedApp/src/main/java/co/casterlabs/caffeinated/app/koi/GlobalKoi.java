@@ -121,7 +121,9 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
 
     private void updateBridgeData() {
         for (AuthInstance auth : CaffeinatedApp.getInstance().getAuth().getAuthInstances().values()) {
-            this.features.put(auth.getUserData().getPlatform(), Collections.unmodifiableList(auth.getFeatures()));
+            if (auth.getUserData() != null) {
+                this.features.put(auth.getUserData().getPlatform(), Collections.unmodifiableList(auth.getFeatures()));
+            }
         }
 
         // The historyBridge has updates disabled.
