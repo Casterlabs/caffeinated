@@ -39,6 +39,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import xyz.e3ndr.consoleutil.ConsoleUtil;
 import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
+import xyz.e3ndr.fastloggingframework.LogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
@@ -70,6 +71,12 @@ public class Bootstrap implements Runnable {
             "--trace"
     }, description = "Enables trace logging.")
     private boolean enableTraceLogging;
+
+    @Option(names = {
+            "-dc",
+            "--disable-color"
+    }, description = "Disables colored output.")
+    private boolean disableColor = false;
 
     private static FastLogger logger = new FastLogger();
 
@@ -119,6 +126,10 @@ public class Bootstrap implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
+        if (this.disableColor) {
+            ReflectionLib.setStaticValue(LogHandler.class, "showingColor", false);
+        }
+
         instance = this;
 
         isDev = this.devAddress != null;
