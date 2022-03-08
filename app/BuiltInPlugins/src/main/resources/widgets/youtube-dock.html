@@ -1,242 +1,230 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Caffeinated Youtube</title>
+        <link rel="stylesheet" href="https://studio.casterlabs.co/css/bulma.min.css" />
+        <link rel="stylesheet" href="https://studio.casterlabs.co/css/bulma-prefers-dark.min.css" />
+        <style>
+            html {
+                overflow: auto;
+                background-color: transparent !important;
+            }
 
-<head>
-    <meta charset="utf-8" />
-    <title>Caffeinated Youtube</title>
-    <link rel="stylesheet" href="https://studio.casterlabs.co/css/bulma.min.css" />
-    <link rel="stylesheet" href="https://studio.casterlabs.co/css/bulma-prefers-dark.min.css" />
-    <style>
-        html {
-            overflow: auto;
-            background-color: transparent !important;
-        }
+            #page {
+                display: flex;
+                flex-direction: row;
+            }
 
-        #page {
-            display: flex;
-            flex-direction: row;
-        }
+            .video-container {
+                flex-grow: 1;
+                align-self: stretch;
+            }
 
-        .video-container {
-            flex-grow: 1;
-            align-self: stretch;
-        }
+            .queue-list-container {
+                align-self: stretch;
+                height: calc(100vh - 8px);
+                width: 275px;
+            }
 
-        .queue-list-container {
-            align-self: stretch;
-            height: 100vh;
-            width: 275px;
-        }
+            #queue-list li {
+                margin: 3px;
+                padding: 8px;
+            }
 
-        #queue-list li {
-            margin: 3px;
-            padding: 8px;
-        }
+            #queue-list li .clicker {
+                color: inherit;
+                width: 200px;
+                display: inline-block;
+                line-height: 1em;
+                text-overflow: ellipsis;
+            }
 
-        #queue-list li .clicker {
-            color: inherit;
-            width: 200px;
-            display: inline-block;
-            line-height: 1em;
-            text-overflow: ellipsis;
-        }
+            #queue-list li .remove {
+                color: inherit;
+                line-height: 18px;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
 
-        #queue-list li .remove {
-            color: inherit;
-            line-height: 18px;
-            vertical-align: middle;
-        }
-    </style>
-</head>
-
-<body>
-    <div id="page">
-        <div class="video-container">
-            <div id="video"></div>
+    <body>
+        <div id="page">
+            <div class="video-container">
+                <div id="video"></div>
+            </div>
+            <div class="queue-list-container">
+                <ul id="queue-list">
+                    <template>
+                        <li class="box">
+                            <a class="clicker" title="Video Title">
+                                <span> Video Title </span>
+                            </a>
+                            <a class="remove" title="Remove">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
         </div>
-        <div class="queue-list-container">
-            <ul id="queue-list">
-                <template>
-                    <li class="box">
-                        <a class="clicker" title="Video Title">
-                            <span>
-                                Video Title
-                            </span>
-                        </a>
-                        <a class="remove" title="Remove">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </a>
-                    </li>
-                </template>
-            </ul>
-        </div>
-    </div>
-</body>
+    </body>
 
-<footer>
-    <script>
-        const queueListElement = document.querySelector("#queue-list");
-        const queueListTemplate = queueListElement.querySelector("template");
+    <footer>
+        <script>
+            const queueListElement = document.querySelector("#queue-list");
+            const queueListTemplate = queueListElement.querySelector("template");
 
-        Widget.on("update", (settings) => {
-            queueListElement.innerHTML = "";
+            Widget.on("update", (settings) => {
+                queueListElement.innerHTML = "";
 
-            console.log(settings);
+                console.log(settings);
 
-            let it_idx = 0;
-            for (const video of settings.queue) {
-                const elem = queueListTemplate.content.cloneNode(true);
-                const idx = it_idx;
+                let it_idx = 0;
+                for (const video of settings.queue) {
+                    const elem = queueListTemplate.content.cloneNode(true);
+                    const idx = it_idx;
 
-                elem
-                    .querySelector("span")
-                    .innerHTML = escapeHtml(video.title).replace(/ /g, "&nbsp;");
+                    elem.querySelector("span").innerHTML = escapeHtml(video.title).replace(/ /g, "&nbsp;");
 
-                elem
-                    .querySelector(".clicker")
-                    .title = video.title;
+                    elem.querySelector(".clicker").title = video.title;
 
-                elem
-                    .querySelector(".clicker")
-                    .addEventListener("click", () => {
+                    elem.querySelector(".clicker").addEventListener("click", () => {
                         console.log("Play", idx);
                         Widget.emit("play", idx);
                     });
 
-                elem
-                    .querySelector(".remove")
-                    .addEventListener("click", () => {
+                    elem.querySelector(".remove").addEventListener("click", () => {
                         console.log("Removed", idx, video.index_id);
                         Widget.emit("remove", video.index_id);
                     });
 
-                queueListElement.append(elem);
+                    queueListElement.append(elem);
 
-                console.log(video);
-                it_idx++;
-            }
-        });
-
-        AppContext.on("theme-update", (theme) => {
-            if (theme.id == "co.casterlabs.dark") {
-                document.documentElement.classList.add("bulma-dark-mode");
-            } else {
-                document.documentElement.classList.remove("bulma-dark-mode");
-            }
-        });
-        AppContext.broadcast("theme-update", AppContext.currentTheme);
-
-        Widget.on("init", () => {
-            Widget.broadcast("update", Widget.widgetData.settings);
-        });
-    </script>
-
-    <script>
-        let currentPlaybackId = -1;
-
-        let playing = false;
-        let player;
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player("video", {
-                width: "100%",
-                height: "100%",
-                playerVars: {
-                    controls: 1,
-                    disablekb: 0,
-                    fs: 0
-                },
-                events: {
-                    onStateChange: (event) => {
-                        console.log("State: " + event.data);
-                        if (event.data == YT.PlayerState.PAUSED) {
-                            Widget.emit("play-pause", true);
-                        } else if (event.data == YT.PlayerState.PLAYING) {
-                            // Widget.emit("seek", player.getCurrentTime());
-                            Widget.emit("play-pause", false);
-                        } else if (event.data == YT.PlayerState.UNSTARTED) {
-                            player.playVideo();
-                            playing = true;
-                            Widget.emit("play-start", currentPlaybackId);
-                        } else if (event.data == YT.PlayerState.ENDED) {
-                            playing = false;
-                            Widget.emit("play-end", currentPlaybackId);
-                        }
-                    },
-                    onError: (event) => {
-                        console.log("Error: " + event.data);
-                        playing = false;
-                        Widget.emit("play-end", currentPlaybackId);
-                    },
-                    onApiChange: () => {
-                        if (config) {
-                            player.setVolume(config.volume * 100);
-                        }
-                    }
+                    console.log(video);
+                    it_idx++;
                 }
             });
 
-            player.mute();
+            AppContext.on("theme-update", (theme) => {
+                if (theme.id == "co.casterlabs.dark") {
+                    document.documentElement.classList.add("bulma-dark-mode");
+                } else {
+                    document.documentElement.classList.remove("bulma-dark-mode");
+                }
+            });
+            AppContext.broadcast("theme-update", AppContext.currentTheme);
 
-            // Time tracking starting here
-            let lastTime = -1;
+            Widget.on("init", () => {
+                Widget.broadcast("update", Widget.widgetData.settings);
+            });
+        </script>
 
-            setInterval(() => {
-                if (lastTime != -1) {
-                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-                        const t = player.getCurrentTime();
+        <script>
+            let currentPlaybackId = -1;
 
-                        // expecting 1 second interval, with 750 ms margin
-                        if (Math.abs(t - lastTime - 1) > 0.75) {
-                            console.log("seek", t);
-                            Widget.emit("seek", t);
+            let playing = false;
+            let player;
+
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player("video", {
+                    width: "100%",
+                    height: "100%",
+                    playerVars: {
+                        controls: 1,
+                        disablekb: 0,
+                        fs: 0
+                    },
+                    events: {
+                        onStateChange: (event) => {
+                            console.log("State: " + event.data);
+                            if (event.data == YT.PlayerState.PAUSED) {
+                                Widget.emit("play-pause", true);
+                            } else if (event.data == YT.PlayerState.PLAYING) {
+                                // Widget.emit("seek", player.getCurrentTime());
+                                Widget.emit("play-pause", false);
+                            } else if (event.data == YT.PlayerState.UNSTARTED) {
+                                player.playVideo();
+                                playing = true;
+                                Widget.emit("play-start", currentPlaybackId);
+                            } else if (event.data == YT.PlayerState.ENDED) {
+                                playing = false;
+                                Widget.emit("play-end", currentPlaybackId);
+                            }
+                        },
+                        onError: (event) => {
+                            console.log("Error: " + event.data);
+                            playing = false;
+                            Widget.emit("play-end", currentPlaybackId);
+                        },
+                        onApiChange: () => {
+                            if (config) {
+                                player.setVolume(config.volume * 100);
+                            }
                         }
                     }
-                }
+                });
 
-                lastTime = player.getCurrentTime();
-            }, 1000);
-        }
+                player.mute();
 
-        function getPlaybackProgress() {
-            if (playing) {
-                return ((player.getCurrentTime() / player.getDuration()) * 100).toFixed(2) + "%";
-            } else {
-                return "0%";
+                // Time tracking starting here
+                let lastTime = -1;
+
+                setInterval(() => {
+                    if (lastTime != -1) {
+                        if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                            const t = player.getCurrentTime();
+
+                            // expecting 1 second interval, with 750 ms margin
+                            if (Math.abs(t - lastTime - 1) > 0.75) {
+                                console.log("seek", t);
+                                Widget.emit("seek", t);
+                            }
+                        }
+                    }
+
+                    lastTime = player.getCurrentTime();
+                }, 1000);
             }
-        }
 
-        Widget.on("seek", (t) => {
-            player.seekTo(t);
-        });
-
-        Widget.on("play-pause", (shouldPause) => {
-            if (shouldPause) {
-                if (player.getPlayerState() != YT.PlayerState.BUFFERING) {
-                    player.pauseVideo();
+            function getPlaybackProgress() {
+                if (playing) {
+                    return ((player.getCurrentTime() / player.getDuration()) * 100).toFixed(2) + "%";
+                } else {
+                    return "0%";
                 }
-            } else {
-                player.playVideo();
             }
-        });
 
-        Widget.on("play", ({ video, currentPlaybackId: _currentPlaybackId }) => {
-            currentPlaybackId = _currentPlaybackId;
-            console.debug(video);
+            Widget.on("seek", (t) => {
+                player.seekTo(t);
+            });
 
-            const dummy = document.createElement("html");
+            Widget.on("play-pause", (shouldPause) => {
+                if (shouldPause) {
+                    if (player.getPlayerState() != YT.PlayerState.BUFFERING) {
+                        player.pauseVideo();
+                    }
+                } else {
+                    player.playVideo();
+                }
+            });
 
-            dummy.innerHTML = video.html;
+            Widget.on("play", ({ video, currentPlaybackId: _currentPlaybackId }) => {
+                currentPlaybackId = _currentPlaybackId;
+                console.debug(video);
 
-            const link = dummy.querySelector("iframe").src;
+                const dummy = document.createElement("html");
 
-            player.cueVideoByUrl(link);
-        });
-    </script>
-    <script src="https://www.youtube.com/iframe_api"></script>
-</footer>
+                dummy.innerHTML = video.html;
 
+                const link = dummy.querySelector("iframe").src;
+
+                player.cueVideoByUrl(link);
+            });
+        </script>
+        <script src="https://www.youtube.com/iframe_api"></script>
+    </footer>
 </html>
