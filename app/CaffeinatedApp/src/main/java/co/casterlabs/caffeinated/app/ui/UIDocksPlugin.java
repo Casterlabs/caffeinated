@@ -12,6 +12,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.kaimen.webview.bridge.BridgeValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
+import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -127,6 +128,11 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             // for (Widget w : getWidgets()) {
             // w.broadcastToAll("__eval", new JsonString(script));
             // }
+        }
+
+        @Override
+        protected void invokeCallback0(@NonNull String invokeId, @NonNull JsonArray arguments) {
+            // TODO
         }
 
     }
