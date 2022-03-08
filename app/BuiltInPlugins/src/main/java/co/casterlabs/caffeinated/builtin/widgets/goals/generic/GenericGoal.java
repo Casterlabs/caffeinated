@@ -23,6 +23,7 @@ import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public abstract class GenericGoal extends Widget implements KoiEventListener {
     private static String[] platforms;
@@ -80,7 +81,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
     protected WidgetSettingsLayout generateSettingsLayout() {
         WidgetSettingsLayout layout = new WidgetSettingsLayout();
 
-        String currentStyle = this.settings().has("style.style") ? this.settings().getString("style.style") : "Text";
+        String currentStyle = this.settings().has("style.style") ? this.settings().getString("style.style") : "Progress Bar (With Text)";
 
         {
             WidgetSettingsSection barStyle = new WidgetSettingsSection("style", "Style")
@@ -103,6 +104,8 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
         {
             WidgetSettingsSection barGoal = new WidgetSettingsSection("goal", "Goal");
+
+            FastLogger.logStatic(currentStyle);;
 
             if (currentStyle.equals("Progress Bar (Without Text)")) {
                 barGoal.addItem(WidgetSettingsItem.asColor("bar_color", "Bar Color", "#31f8ff"));

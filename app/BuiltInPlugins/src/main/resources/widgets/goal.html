@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
     <head>
         <meta charset="utf-8" />
         <title>Caffeinated Goal</title>
@@ -132,8 +131,9 @@
                         textElement.classList.remove("hidden");
                         break;
                     }
-
                 }
+
+                console.log(Widget.widgetData.settings);
 
                 if (Widget.getSetting("goal.add_numbers")) {
                     goalTitleCountElement.classList.remove("hidden");
@@ -141,10 +141,10 @@
                     goalTitleCountElement.classList.add("hidden");
                 }
 
-                document.body.style =
-                    `--bar-color: ${Widget.getSetting("goal.bar_color")};` +
-                    `--text-color: ${Widget.getSetting("style.text_color")};` +
-                    `font-size: ${Widget.getSetting("style.font_size")}px;` +
+                document.body.style = //
+                    `--bar-color: ${Widget.getSetting("goal.bar_color")};` + //
+                    `--text-color: ${Widget.getSetting("style.text_color")};` + //
+                    `font-size: ${Widget.getSetting("style.font_size")}px;` + //
                     `text-align: ${(Widget.getSetting("style.text_align") || "left").toLowerCase()};`;
 
                 render();
@@ -166,7 +166,7 @@
                 if (title.length > 0) {
                     title += " "; // Add a space.
                 }
-            
+
                 goalProgressElement.style.width = `${(currentCount / targetCount) * 100}%`;
                 goalTitleTextElement.innerText = title;
 
@@ -175,17 +175,15 @@
                 // We need to adjust the text for the donation goal.
                 if (Widget.widgetData.namespace == "co.casterlabs.donation_goal") {
                     let displayedCurrentCount = await Currencies.convertCurrency(currentCount, "USD", Widget.getSetting("money.currency"), true);
-                    let displayedTargetCount = await Currencies.convertCurrency(targetCount, "USD", Widget.getSetting("money.currency"), true);
+                    let displayedTargetCount = await Currencies.formatCurrency(targetCount, Widget.getSetting("money.currency"));
 
-                    textElement.innerHTML = `${escapeHtml(title)}${displayedCurrentCount}/${displayedTargetCount}`;
+                    textElement.innerHTML = `${escapeHtml(title)}&nbsp;&nbsp;${displayedCurrentCount}/${displayedTargetCount}`;
                     goalTitleCountElement.innerHTML = `${displayedCurrentCount}/${displayedTargetCount}`;
                 } else {
                     textElement.innerText = `${title}${currentCount}/${targetCount}`;
                     goalTitleCountElement.innerText = `${currentCount}/${targetCount}`;
                 }
             }
-
         </script>
     </footer>
-
 </html>

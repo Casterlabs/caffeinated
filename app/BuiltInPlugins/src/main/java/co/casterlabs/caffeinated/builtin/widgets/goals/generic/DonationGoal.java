@@ -41,6 +41,9 @@ public class DonationGoal extends GenericGoal {
 
     @Override
     protected void onSettingsUpdate() {
+        WidgetSettingsLayout layout = this.generateSettingsLayout();
+        this.setSettingsLayout(layout, true); // Preserve
+
         // If this fails then we don't care.
         try {
             this.donationTotal = this.settings().getNumber("goal.value").doubleValue();
