@@ -205,7 +205,9 @@ public class KoiConnection implements Closeable {
                         return;
                     }
 
-                    // We don't care about these, we already have them.
+                    // We don't care about these or we already have them.
+                    case "WELCOME":
+                    case "CLIENT_SCOPES":
                     case "CONTENT_RATINGS":
                     case "LANGUAGES":
                         return;
