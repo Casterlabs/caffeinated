@@ -7,7 +7,7 @@
     let conductorPort = "";
 
     onMount(async () => {
-        const prefs = (await Bridge.query("app:preferences")).data;
+        const prefs = await Caffeinated.appPreferences;
 
         developerApiKey = prefs.developerApiKey;
         conductorKey = prefs.conductorKey;

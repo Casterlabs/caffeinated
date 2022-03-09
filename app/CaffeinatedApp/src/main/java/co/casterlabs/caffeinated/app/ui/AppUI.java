@@ -14,8 +14,8 @@ import java.util.Set;
 
 import co.casterlabs.caffeinated.app.AppPreferences;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
-import co.casterlabs.caffeinated.app.preferences.PreferenceFile;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
 import co.casterlabs.caffeinated.app.ui.events.AppearanceUpdateEvent;
 import co.casterlabs.caffeinated.util.WebUtil;

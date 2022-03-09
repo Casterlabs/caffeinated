@@ -10,16 +10,16 @@
     let year = "";
 
     onMount(async () => {
-        logo = (await Bridge.query("window")).data.icon;
+        logo = (await Caffeinated.UI.preferences).icon;
         year = new Date().getFullYear();
 
-        if ((await Bridge.query("theme")).data.appearance == "DARK") {
+        if ((await Caffeinated.themeManager.currentTheme).appearance == "DARK") {
             color = "white";
         } else {
             color = "black";
         }
 
-        const buildInfo = (await Bridge.query("build")).data;
+        const buildInfo = await Caffeinated.buildInfo;
 
         if (buildInfo.isDev) {
             versionString = "Development Build";

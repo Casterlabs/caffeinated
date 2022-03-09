@@ -20,7 +20,7 @@
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - Docks";
 
-        widgets = await Plugins.getWidgetHandles();
+        widgets = await Caffeinated.plugins.widgets;
         feather.replace();
     });
 </script>

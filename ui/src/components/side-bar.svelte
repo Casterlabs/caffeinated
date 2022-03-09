@@ -1,28 +1,20 @@
 <script>
-    import { onMount, onDestroy } from "svelte";
-
-    let eventHandler;
+    import { onMount } from "svelte";
 
     let docks = [];
 
-    function render(data) {
-        docks = data.widgets
+    function render(widgets) {
+        docks = widgets
             .filter((w) => w.details.type == "DOCK" || w.details.type == "APPLET")
-            //
+            // .
             // We want to hide these because they're already available.
             .filter((w) => !["co.casterlabs.dock.stream_viewers.dock", "co.casterlabs.dock.stream_chat.dock"].includes(w.id));
 
         console.log(docks);
     }
 
-    onDestroy(() => {
-        eventHandler?.destroy();
-    });
-
     onMount(async () => {
-        eventHandler = Bridge.createThrowawayEventHandler();
-        eventHandler.on("plugins:update", render);
-        render((await Bridge.query("plugins")).data);
+        Caffeinated.plugins.mutate("widgets", render);
     });
 </script>
 

@@ -48,8 +48,7 @@
 
             Bridge.on("goto", ({ path }) => goto(path));
 
-            Bridge.on("theme:update", updateTheme);
-            updateTheme((await Bridge.query("theme")).data);
+            Caffeinated.themeManager.mutate("currentTheme", updateTheme);
         }
 
         applyPageAttributes();

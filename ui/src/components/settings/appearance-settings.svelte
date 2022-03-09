@@ -1,18 +1,15 @@
 <script>
-    import { onDestroy, onMount } from "svelte";
-
-    let eventHandler;
+    import { onMount } from "svelte";
 
     // let zoomValue;
     let appearanceTheme;
     let appearanceIcon;
     let appearanceCloseToTray;
-    let appearanceMinimizeToTray;
 
     let themes = [];
 
     function sendUpdatedPreferences() {
-        UI.updateChatPreferences({
+        Caffeinated.UI.updateAppearance({
             theme: appearanceTheme,
             icon: appearanceIcon,
             closeToTray: appearanceCloseToTray,
@@ -20,35 +17,14 @@
         });
     }
 
-    function loadPreferences(data) {
-        appearanceIcon = data.icon;
-        appearanceCloseToTray = data.closeToTray;
-        appearanceMinimizeToTray = data.minimizeToTray;
-    }
-
-    function onThemeUpdate(data) {
-        appearanceTheme = data.id;
-    }
-
-    function onThemesUpdate(t) {
-        themes = t;
-    }
-
-    onDestroy(() => {
-        eventHandler?.destroy();
-    });
-
     onMount(async () => {
-        eventHandler = Bridge.createThrowawayEventHandler();
+        themes = Object.values(await Caffeinated.themeManager.themes);
+        appearanceTheme = (await Caffeinated.themeManager.currentTheme).id;
 
-        eventHandler.on("themes:update", onThemesUpdate);
-        onThemesUpdate((await Bridge.query("themes")).data);
+        const uiPreferences = await Caffeinated.UI.preferences;
 
-        eventHandler.on("theme:update", onThemeUpdate);
-        onThemeUpdate((await Bridge.query("theme")).data);
-
-        // TODO eventHandler.on("pref-update:ui", loadPreferences);
-        loadPreferences(await UI.preferences);
+        appearanceIcon = uiPreferences.icon;
+        appearanceCloseToTray = uiPreferences.closeToTray;
     });
 </script>
 
@@ -88,12 +64,6 @@
         <label class="checkbox">
             <input type="checkbox" bind:checked={appearanceCloseToTray} on:change={sendUpdatedPreferences} />
             Close button sends to tray
-        </label>
-    </div>
-    <div>
-        <label class="checkbox">
-            <input type="checkbox" bind:checked={appearanceMinimizeToTray} on:change={sendUpdatedPreferences} />
-            Minimize to tray
         </label>
     </div>
 </div>

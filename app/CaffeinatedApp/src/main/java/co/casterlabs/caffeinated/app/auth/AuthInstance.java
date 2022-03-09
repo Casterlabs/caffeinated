@@ -25,6 +25,7 @@ import co.casterlabs.koi.api.types.events.StreamStatusEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.events.ViewerListEvent;
 import co.casterlabs.koi.api.types.user.User;
+import co.casterlabs.rakurai.json.annotating.JsonField;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -32,15 +33,15 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class AuthInstance implements KoiLifeCycleHandler, Closeable {
-    private @Getter String tokenId;
-    private @Getter String token;
+    private @JsonField @Getter String tokenId;
+    private @JsonField @Getter String token;
 
     private FastLogger logger;
     private KoiConnection koi;
 
     private boolean disposed = false;
 
-    private @Getter @Nullable User userData;
+    private @JsonField @Getter @Nullable User userData;
     private @Getter @Nullable StreamStatusEvent streamData;
     private @Getter @Nullable List<User> viewers;
     private @Getter @Nullable RoomstateEvent roomstate;

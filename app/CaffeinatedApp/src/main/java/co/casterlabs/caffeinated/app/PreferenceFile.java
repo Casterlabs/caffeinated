@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.preferences;
+package co.casterlabs.caffeinated.app;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonSerializer;
@@ -117,6 +116,8 @@ public class PreferenceFile<T> {
 }
 
 class PreferenceFileSerializer implements JsonSerializer<PreferenceFile<?>> {
+
+    public PreferenceFileSerializer() {} // For Rson.
 
     @Override
     public JsonElement serialize(@NonNull Object value, @NonNull Rson rson) {

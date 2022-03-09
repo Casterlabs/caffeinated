@@ -14,12 +14,10 @@
     onMount(async () => {
         document.title = "";
 
-        const { icon } = (await Bridge.query("window")).data;
-
-        logo = icon;
+        logo = (await Caffeinated.UI.preferences).icon;
 
         console.debug("[App]", "Signaling UI#themeLoaded()");
-        UI.onThemeLoaded();
+        Caffeinated.UI.onUILoaded();
     });
 </script>
 

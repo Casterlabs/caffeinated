@@ -7,7 +7,7 @@
     let isLoading = false;
     let kinoko;
 
-    let authData;
+    let authData = {};
 
     let pairingCode = "";
     let selectedPlatform = "";
@@ -48,7 +48,13 @@
     }
 
     onMount(async () => {
-        authData = (await Bridge.query("auth")).data.koiAuth;
+        const authInstances = await Caffeinated.auth.authInstances;
+
+        for (const inst of Object.values(authInstances)) {
+            if (inst.userData) {
+                authData[inst.platform] = inst;
+            }
+        }
 
         kinoko = new KinokoV1();
 

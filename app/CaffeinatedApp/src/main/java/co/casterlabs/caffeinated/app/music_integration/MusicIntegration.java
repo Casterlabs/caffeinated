@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider;
-import co.casterlabs.caffeinated.app.preferences.PreferenceFile;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.music.Music;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;

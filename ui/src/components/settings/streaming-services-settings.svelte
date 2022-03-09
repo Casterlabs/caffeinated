@@ -3,7 +3,7 @@
 
     import { onDestroy, onMount } from "svelte";
 
-    let eventHandler;
+    let mut_auth;
 
     let accounts = {
         caffeine: {},
@@ -13,7 +13,7 @@
         brime: {}
     };
 
-    function parseBridgeData({ koiAuth }) {
+    function parseBridgeData(koiAuth) {
         // Reset accounts object
         for (const account of Object.values(accounts)) {
             account.accountName = "";
@@ -24,27 +24,32 @@
         }
 
         // Parse data from bridge
-        for (const [platform, account] of Object.entries(koiAuth)) {
-            accounts[platform.toLowerCase()].accountName = account.userData.displayname;
-            accounts[platform.toLowerCase()].accountLink = account.userData.link;
-            accounts[platform.toLowerCase()].tokenId = account.tokenId;
-            account.isLoading = false;
-            accounts[platform.toLowerCase()].isSignedIn = true;
+        for (const account of Object.values(koiAuth)) {
+            if (account.userData) {
+                const platform = account.userData.platform.toLowerCase();
+
+                accounts[platform].accountName = account.userData.displayname;
+                accounts[platform].accountLink = account.userData.link;
+                accounts[platform].tokenId = account.tokenId;
+                account.isLoading = false;
+                accounts[platform].isSignedIn = true;
+            } else {
+                setTimeout(async () => {
+                    parseBridgeData(await Caffeinated.auth.authInstances);
+                }, 250);
+            }
         }
 
         accounts = accounts; // Update dom.
     }
 
-    onDestroy(() => {
-        eventHandler?.destroy();
+    onDestroy(async () => {
+        Caffeinated.auth.off(mut_auth);
     });
 
     onMount(async () => {
-        eventHandler = Bridge.createThrowawayEventHandler();
-        eventHandler.on("auth:update", parseBridgeData);
-        parseBridgeData((await Bridge.query("auth")).data);
-
-        Bridge.emit("auth:cancel-signin");
+        mut_auth = Caffeinated.auth.mutate("authInstances", parseBridgeData);
+        Caffeinated.auth.cancelSignin();
     });
 
     function signout(event) {
@@ -52,7 +57,7 @@
         const tokenId = accounts[platform].tokenId;
 
         if (tokenId) {
-            Bridge.emit("auth:signout", { tokenId: tokenId });
+            Caffeinated.auth.signout(tokenId);
         }
     }
 
@@ -60,7 +65,7 @@
         platform = platform.toLowerCase();
         accounts[platform].isLoading = true;
 
-        Bridge.emit("auth:request-oauth-signin", { platform: `caffeinated_${platform}`, isKoi: true, goBack: false });
+        Caffeinated.auth.requestOAuthSignin(`caffeinated_${platform}`, true, false);
     }
 </script>
 

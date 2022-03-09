@@ -3,29 +3,28 @@
 
     import { onMount, onDestroy } from "svelte";
 
-    let eventHandler;
+    let mut_playback;
+    let mut_providers;
 
     let systemData = null;
     let spotifyData = null;
     let pretzelData = null;
     let activePlayback = null;
 
-    function parseBridgeData(data) {
-        console.debug("[MusicServicesSettings]", data);
-        activePlayback = data.activePlayback;
-        systemData = data.musicServices.system;
-        spotifyData = data.musicServices.spotify;
-        pretzelData = data.musicServices.pretzel;
-    }
-
-    onDestroy(() => {
-        eventHandler?.destroy();
+    onDestroy(async () => {
+        Caffeinated.music.off(mut_playback);
+        Caffeinated.music.off(mut_providers);
     });
 
     onMount(async () => {
-        eventHandler = Bridge.createThrowawayEventHandler();
-        eventHandler.on("music:update", parseBridgeData);
-        parseBridgeData((await Bridge.query("music")).data);
+        mut_playback = Caffeinated.music.mutate("activePlayback", (data) => {
+            activePlayback = data;
+        });
+        mut_providers = Caffeinated.music.mutate("providers", (data) => {
+            systemData = data.system;
+            spotifyData = data.spotify;
+            pretzelData = data.pretzel;
+        });
     });
 
     function updatePretzel(e) {
@@ -57,7 +56,7 @@
     <p>
         {#if activePlayback}
             &nbsp;Now Playing:
-            <img src={activePlayback.currentTrack.albumArtUrl} class="active-playback-icon" />
+            <img src={activePlayback.currentTrack.albumArtUrl} class="active-playback-icon" alt="Current Song" />
             <span style="user-select: all !important;">
                 {activePlayback.currentTrack.title}
             </span>
