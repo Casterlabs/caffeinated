@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.kaimen.webview.bridge.BridgeValue;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.annotating.JsonSerializer;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.serialization.JsonParseException;
 import lombok.AccessLevel;
@@ -20,8 +21,8 @@ import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 @Getter
+@JsonClass(serializer = PreferenceFileSerializer.class)
 public class PreferenceFile<T> {
-
     private FastLogger logger;
     private Class<T> clazz;
     private File file;
@@ -30,8 +31,6 @@ public class PreferenceFile<T> {
 
     private String name;
     private @Getter(AccessLevel.NONE) T data;
-
-    private @Getter(AccessLevel.NONE) BridgeValue<T> bridge;
 
     /**
      * @param clazz required to deserialize from json.
@@ -47,13 +46,6 @@ public class PreferenceFile<T> {
         this.data = clazz.newInstance();
 
         this.load();
-    }
-
-    public PreferenceFile<T> bridge() {
-        this.bridge = new BridgeValue<T>(this.name)
-            .set(this.data);
-
-        return this;
     }
 
     public T get() {
@@ -81,10 +73,6 @@ public class PreferenceFile<T> {
     }
 
     public PreferenceFile<T> save() {
-        if (this.bridge != null) {
-            this.bridge.update();
-        }
-
         try {
             this.file.getParentFile().mkdirs();
             this.file.createNewFile();
@@ -119,6 +107,20 @@ public class PreferenceFile<T> {
     public PreferenceFile<T> removeSaveListener(Consumer<PreferenceFile<T>> listener) {
         this.saveListeners.remove(listener);
         return this;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.data == null ? 0 : this.data.hashCode();
+    }
+
+}
+
+class PreferenceFileSerializer implements JsonSerializer<PreferenceFile<?>> {
+
+    @Override
+    public JsonElement serialize(@NonNull Object value, @NonNull Rson rson) {
+        return JsonSerializer.super.serialize(((PreferenceFile<?>) value).get(), rson);
     }
 
 }

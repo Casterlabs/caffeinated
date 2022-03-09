@@ -2,7 +2,6 @@ package co.casterlabs.caffeinated.app.auth;
 
 import java.awt.Desktop;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -12,46 +11,29 @@ import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.auth.events.AppAuthCaffeineSigninEvent;
-import co.casterlabs.caffeinated.app.auth.events.AppAuthCancelSigninEvent;
-import co.casterlabs.caffeinated.app.auth.events.AppAuthEventType;
-import co.casterlabs.caffeinated.app.auth.events.AppAuthRequestOAuthSigninEvent;
-import co.casterlabs.caffeinated.app.auth.events.AppAuthSignoutEvent;
-import co.casterlabs.kaimen.webview.bridge.BridgeValue;
+import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
+import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.types.user.UserPlatform;
-import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.rakurai.json.serialization.JsonParseException;
 import lombok.Getter;
-import xyz.e3ndr.eventapi.EventHandler;
-import xyz.e3ndr.eventapi.listeners.EventListener;
+import lombok.NonNull;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class AppAuth {
-    private static EventHandler<AppAuthEventType> handler = new EventHandler<>();
-
     private FastLogger logger = new FastLogger();
 
     private @Getter Map<String, AuthInstance> authInstances = new HashMap<>();
     private AuthCallback currentAuthCallback;
 
-    private @Getter boolean isAuthorized = false;
-
-    private BridgeValue<JsonObject> bridge = new BridgeValue<>("auth");
-
-    public AppAuth() {
-        handler.register(this);
-    }
+    @Getter
+    @JavascriptValue
+    private boolean isAuthorized = false;
 
     public boolean isSignedIn() {
         return !this.authInstances.isEmpty();
     }
 
     public void init() {
-        CaffeinatedApp.getInstance().getAppBridge().attachValue(this.bridge);
-        this.updateBridgeData(); // Populate
-
         List<String> ids = CaffeinatedApp.getInstance().getAuthPreferences().get().getKoiTokenIds();
 
         for (String tokenId : ids) {
@@ -60,7 +42,7 @@ public class AppAuth {
     }
 
     public void shutdown() {
-        this.onCancelSigninEvent(null);
+        this.cancelSignin();
 
         for (AuthInstance inst : this.authInstances.values()) {
             try {
@@ -104,32 +86,6 @@ public class AppAuth {
     @SuppressWarnings("deprecation")
     public void updateBridgeData() {
         this.checkAuth();
-
-        JsonObject koiAuth = new JsonObject();
-
-        for (AuthInstance inst : this.authInstances.values()) {
-            if (inst.getUserData() != null) {
-                JsonElement userData = Rson.DEFAULT.toJson(inst.getUserData());
-                JsonElement streamData = Rson.DEFAULT.toJson(inst.getStreamData());
-
-                koiAuth.put(
-                    inst.getUserData().getPlatform().name(),
-                    new JsonObject()
-                        .put("tokenId", inst.getTokenId())
-                        .put("token", inst.getToken())
-                        .put("userData", userData)
-                        .put("streamData", streamData)
-                );
-            }
-        }
-
-        JsonObject bridgeData = new JsonObject()
-            .put("isAuthorized", this.isAuthorized)
-            .put("koiAuth", koiAuth);
-
-        this.bridge.set(bridgeData);
-
-        CaffeinatedApp.getInstance().emitAppEvent("auth:platforms", bridgeData);
         CaffeinatedApp.getInstance().getKoi().updateFromAuth();
     }
 
@@ -138,16 +94,16 @@ public class AppAuth {
         this.authInstances.put(tokenId, new AuthInstance(tokenId));
     }
 
-    @EventListener
-    public void onRequestOAuthSigninEvent(AppAuthRequestOAuthSigninEvent event) {
+    @JavascriptFunction
+    public void requestOAuthSignin(@NonNull String platform, boolean isKoi, boolean shouldNavigateBackwards) {
         try {
-            this.logger.info("Signin requested. (%s)", event.getPlatform());
+            this.logger.info("Signin requested. (%s)", platform);
 
             if (this.currentAuthCallback != null) {
-                this.onCancelSigninEvent(null);
+                this.cancelSignin();
             }
 
-            this.currentAuthCallback = this.authorize(event.getPlatform());
+            this.currentAuthCallback = this.authorize(platform);
 
             this.currentAuthCallback
                 .connect()
@@ -155,9 +111,9 @@ public class AppAuth {
                     this.currentAuthCallback = null;
 
                     if (token != null) {
-                        this.logger.info("Signin completed (%s)", event.getPlatform());
+                        this.logger.info("Signin completed (%s)", platform);
 
-                        if (event.isKoi()) {
+                        if (isKoi) {
                             String tokenId = CaffeinatedApp
                                 .getInstance()
                                 .getAuthPreferences()
@@ -170,17 +126,17 @@ public class AppAuth {
                                 .getInstance()
                                 .getAuthPreferences()
                                 .get()
-                                .addToken(event.getPlatform(), token);
+                                .addToken(platform, token);
 
                             CaffeinatedApp.getInstance().emitAppEvent(
                                 "auth:completion",
                                 new JsonObject()
-                                    .put("platform", event.getPlatform())
-                                    .put("tokenId", event.getPlatform())
+                                    .put("platform", platform)
+                                    .put("tokenId", platform)
                             );
                         }
 
-                        if (event.isGoBack()) {
+                        if (shouldNavigateBackwards) {
                             // Navigate backwards for the signin screen.
                             CaffeinatedApp.getInstance().getUI().goBack();
                         }
@@ -191,28 +147,28 @@ public class AppAuth {
         }
     }
 
-    @EventListener
-    public void onCaffeineSigninEvent(AppAuthCaffeineSigninEvent event) {
+    @JavascriptFunction
+    public void caffeineSignin(@NonNull String caffeineToken) {
         String tokenId = CaffeinatedApp
             .getInstance()
             .getAuthPreferences()
             .get()
-            .addKoiToken(event.getToken());
+            .addKoiToken(caffeineToken);
 
         this.startAuthInstance(tokenId);
     }
 
-    @EventListener
-    public void onSignoutEvent(AppAuthSignoutEvent event) {
-        AuthInstance inst = this.authInstances.remove(event.getTokenId());
+    @JavascriptFunction
+    public void signout(@NonNull String tokenId) {
+        AuthInstance inst = this.authInstances.remove(tokenId);
 
         if (inst != null) {
             inst.invalidate();
         }
     }
 
-    @EventListener
-    public void onCancelSigninEvent(AppAuthCancelSigninEvent event) {
+    @JavascriptFunction
+    public void cancelSignin() {
         this.logger.info("Signin cancelled (?)");
         if (this.currentAuthCallback != null) {
             this.currentAuthCallback.cancel();
@@ -238,17 +194,6 @@ public class AppAuth {
 
             return callback;
         }
-    }
-
-    public static void invokeEvent(JsonObject data, String nestedType) throws InvocationTargetException, JsonParseException {
-        handler.call(
-            Rson.DEFAULT.fromJson(
-                data,
-                AppAuthEventType
-                    .valueOf(nestedType)
-                    .getEventClass()
-            )
-        );
     }
 
     public @Nullable AuthInstance getAuthInstance(UserPlatform platform) {

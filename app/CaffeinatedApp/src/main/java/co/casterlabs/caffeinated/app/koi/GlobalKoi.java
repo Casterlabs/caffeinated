@@ -1,7 +1,6 @@
 package co.casterlabs.caffeinated.app.koi;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,16 +11,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.auth.AuthInstance;
-import co.casterlabs.caffeinated.app.koi.events.AppKoiChatDeleteEvent;
-import co.casterlabs.caffeinated.app.koi.events.AppKoiChatSendEvent;
-import co.casterlabs.caffeinated.app.koi.events.AppKoiChatUpvoteEvent;
-import co.casterlabs.caffeinated.app.koi.events.AppKoiEventType;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
-import co.casterlabs.kaimen.webview.bridge.BridgeValue;
+import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
+import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
@@ -39,10 +35,7 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.rakurai.json.serialization.JsonParseException;
 import lombok.NonNull;
-import xyz.e3ndr.eventapi.EventHandler;
-import xyz.e3ndr.eventapi.listeners.EventListener;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
@@ -62,37 +55,26 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
         KoiEventType.PLATFORM_MESSAGE
     );
 
-    private static EventHandler<AppKoiEventType> handler = new EventHandler<>();
-
     private List<KoiLifeCycleHandler> koiEventListeners = new LinkedList<>();
 
+    // Definition hell.
+    @JavascriptValue(allowSet = false)
     private List<KoiEvent> eventHistory = new LinkedList<>();
+
+    @JavascriptValue(allowSet = false)
     private Map<UserPlatform, List<User>> viewers = new ConcurrentHashMap<>();
+
+    @JavascriptValue(allowSet = false)
     private Map<UserPlatform, UserUpdateEvent> userStates = new ConcurrentHashMap<>();
+
+    @JavascriptValue(allowSet = false)
     private Map<UserPlatform, StreamStatusEvent> streamStates = new ConcurrentHashMap<>();
+
+    @JavascriptValue(allowSet = false)
     private Map<UserPlatform, RoomstateEvent> roomStates = new ConcurrentHashMap<>();
+
+    @JavascriptValue(allowSet = false)
     private Map<UserPlatform, List<KoiIntegrationFeatures>> features = new ConcurrentHashMap<>();
-
-    private BridgeValue<Map<UserPlatform, List<User>>> viewersBridge = new BridgeValue<>("koi:viewers", Collections.unmodifiableMap(this.viewers));
-    private BridgeValue<Map<UserPlatform, UserUpdateEvent>> userStatesBridge = new BridgeValue<>("koi:userStates", Collections.unmodifiableMap(this.userStates));
-    private BridgeValue<Map<UserPlatform, StreamStatusEvent>> streamStatesBridge = new BridgeValue<>("koi:streamStates", Collections.unmodifiableMap(this.streamStates));
-    private BridgeValue<Map<UserPlatform, RoomstateEvent>> roomStatesBridge = new BridgeValue<>("koi:roomStates", Collections.unmodifiableMap(this.roomStates));
-    private BridgeValue<Map<UserPlatform, List<KoiIntegrationFeatures>>> featuresBridge = new BridgeValue<>("koi:features", Collections.unmodifiableMap(this.features));
-
-    public void init() {
-        handler.register(this);
-
-        CaffeinatedApp.getInstance().getAppBridge().attachValue(this.viewersBridge);
-        CaffeinatedApp.getInstance().getAppBridge().attachValue(this.userStatesBridge);
-        CaffeinatedApp.getInstance().getAppBridge().attachValue(this.streamStatesBridge);
-        CaffeinatedApp.getInstance().getAppBridge().attachValue(this.roomStatesBridge);
-        CaffeinatedApp.getInstance().getAppBridge().attachValue(this.featuresBridge);
-
-        // We don't use it, so it'll just sit here in purgatory.
-        CaffeinatedApp.getInstance().getAppBridge().attachValue(
-            new BridgeValue<>("koi:history", Collections.unmodifiableList(this.eventHistory), false)
-        );
-    }
 
     /**
      * @deprecated Should <b>only</b> be called from AppAuth.
@@ -125,13 +107,6 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
                 this.features.put(auth.getUserData().getPlatform(), Collections.unmodifiableList(auth.getFeatures()));
             }
         }
-
-        // The historyBridge has updates disabled.
-        this.viewersBridge.update();
-        this.userStatesBridge.update();
-        this.streamStatesBridge.update();
-        this.roomStatesBridge.update();
-        this.featuresBridge.update();
 
         // Send update to the widget instances.
         new AsyncTask(() -> {
@@ -248,45 +223,24 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
         );
     }
 
-    @EventListener
-    public void onKoiChatSendEvent(AppKoiChatSendEvent event) {
-        if (event.getMessage().startsWith("/koi test ")) {
-            this.sendTest(
-                event.getPlatform(),
-                event.getMessage().substring("/koi test ".length())
-            );
-        } else {
-            this.sendChat(event.getPlatform(), event.getMessage(), KoiChatterType.CLIENT);
-        }
-    }
-
-    @EventListener
-    public void onKoiChatUpvoteEvent(AppKoiChatUpvoteEvent event) {
-        this.upvoteChat(event.getPlatform(), event.getMessageId());
-    }
-
-    @EventListener
-    public void onKoiChatDeleteEvent(AppKoiChatDeleteEvent event) {
-        this.deleteChat(event.getPlatform(), event.getMessageId());
-    }
-
+    @JavascriptFunction
     @Override
     public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter) {
-        AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
+        if (message.startsWith("/koi test ")) {
+            this.sendTest(
+                platform,
+                message.substring("/koi test ".length())
+            );
+        } else {
+            AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
 
-        if (inst != null) {
-            inst.sendChat(message, chatter);
+            if (inst != null) {
+                inst.sendChat(message, chatter);
+            }
         }
     }
 
-    public void sendTest(@NonNull UserPlatform platform, @NonNull String eventType) {
-        AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
-
-        if (inst != null) {
-            inst.sendTest(eventType);
-        }
-    }
-
+    @JavascriptFunction
     @Override
     public void upvoteChat(@NonNull UserPlatform platform, @NonNull String messageId) {
         AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
@@ -296,6 +250,7 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
         }
     }
 
+    @JavascriptFunction
     @Override
     public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId) {
         AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
@@ -305,15 +260,12 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
         }
     }
 
-    public static void invokeEvent(JsonObject data, String nestedType) throws InvocationTargetException, JsonParseException {
-        handler.call(
-            Rson.DEFAULT.fromJson(
-                data,
-                AppKoiEventType
-                    .valueOf(nestedType)
-                    .getEventClass()
-            )
-        );
+    public void sendTest(@NonNull UserPlatform platform, @NonNull String eventType) {
+        AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
+
+        if (inst != null) {
+            inst.sendTest(eventType);
+        }
     }
 
     @Override

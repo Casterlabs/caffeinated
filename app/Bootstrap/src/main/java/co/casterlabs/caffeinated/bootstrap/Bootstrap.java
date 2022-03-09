@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
-import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.app.BuildInfo;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
@@ -286,7 +285,7 @@ public class Bootstrap implements Runnable {
 
                 if (app.canCloseUI()) {
                     new AsyncTask(() -> {
-                        if (CaffeinatedApp.getInstance().getUiPreferences().get().isCloseToTray()) {
+                        if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray()) {
                             webview.close();
                         } else {
                             shutdown();
@@ -327,13 +326,6 @@ public class Bootstrap implements Runnable {
                     shutdown(true, true, true);
                     return;
                 }
-
-                default: {
-                    // Pass it to the app.
-                    CaffeinatedApp.getInstance().onBridgeEvent(type, data);
-                    return;
-                }
-
             }
         } catch (Throwable t) {
             logger.severe("Uncaught exception whilst processing bridge event:");

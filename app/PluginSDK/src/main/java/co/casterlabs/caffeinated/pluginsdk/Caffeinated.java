@@ -2,20 +2,18 @@ package co.casterlabs.caffeinated.pluginsdk;
 
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.music.Music;
-import lombok.Getter;
+import lombok.SneakyThrows;
+import xyz.e3ndr.reflectionlib.ReflectionLib;
 
-public abstract class Caffeinated {
+public interface Caffeinated {
 
-    private static @Getter Caffeinated instance;
-
-    public Caffeinated() {
-        assert instance == null : "Caffeinated has already been initialized, you sneaky sneakerton.";
-
-        instance = this;
+    @SneakyThrows
+    public static Caffeinated getInstance() {
+        return ReflectionLib.invokeStaticMethod(Class.forName("co.casterlabs.caffeinated.app.CaffeinatedApp"), "getInstance");
     }
 
-    public abstract Koi getKoi();
+    public Koi getKoi();
 
-    public abstract Music getMusic();
+    public Music getMusic();
 
 }
