@@ -3,6 +3,7 @@ package co.casterlabs.caffeinated.app.plugins;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -11,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences.WidgetSettingsDetails;
-import co.casterlabs.caffeinated.app.plugins.impl.PluginContext;
-import co.casterlabs.caffeinated.app.plugins.impl.PluginsHandler;
 import co.casterlabs.caffeinated.app.preferences.PreferenceFile;
 import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
@@ -24,6 +23,8 @@ import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
+import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
+import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
@@ -34,13 +35,22 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 @Getter
-public class PluginIntegration {
+public class PluginIntegration extends JavascriptObject {
     private static final File pluginsDir = new File(CaffeinatedApp.appDataDir, "plugins");
 
     private PluginsHandler plugins = new PluginsHandler();
     private List<PluginContext> contexts = new ArrayList<>();
 
     private boolean isLoading = true;
+
+    // Pointers to forward values from PluginsHandler.
+
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private final Collection<CaffeinatedPlugin> loadedPlugins = this.plugins.$loadedPlugins;
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private final Collection<WidgetDetails> creatableWidgets = this.plugins.$creatableWidgets;
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private final Collection<WidgetHandle> widgets = this.plugins.$widgetHandles;
 
     public PluginIntegration() {
         pluginsDir.mkdir();
@@ -140,7 +150,7 @@ public class PluginIntegration {
     }
 
     @JavascriptFunction
-    public void onPluginIntegrationDeleteWidgetEvent(@NonNull String widgetId) {
+    public void deleteWidget(@NonNull String widgetId) {
         this.plugins.destroyWidget(widgetId);
         this.save();
     }

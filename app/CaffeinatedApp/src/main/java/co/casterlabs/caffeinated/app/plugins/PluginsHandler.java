@@ -1,8 +1,9 @@
-package co.casterlabs.caffeinated.app.plugins.impl;
+package co.casterlabs.caffeinated.app.plugins;
 
 import java.io.Closeable;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,7 +23,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.util.Producer;
 import co.casterlabs.caffeinated.util.Triple;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -33,16 +33,19 @@ import xyz.e3ndr.reflectionlib.ReflectionLib;
 public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugins {
     private static final FastLogger logger = new FastLogger();
 
-    private Map<String, CaffeinatedPlugin> plugins = new HashMap<>();
     private Map<String, Triple<CaffeinatedPlugin, Producer<Widget>, WidgetDetails>> widgetFactories = new HashMap<>();
+    private Map<String, CaffeinatedPlugin> plugins = new HashMap<>();
     private Map<String, WidgetHandle> widgetHandles = new HashMap<>();
 
-    @JavascriptFunction
+    // Pointers.
+    final Collection<CaffeinatedPlugin> $loadedPlugins = this.plugins.values();
+    final Collection<WidgetHandle> $widgetHandles = this.widgetHandles.values();
+    final Collection<WidgetDetails> $creatableWidgets = new LinkedList<>();
+
     public List<CaffeinatedPlugin> getPlugins() {
         return new ArrayList<>(this.plugins.values());
     }
 
-    @JavascriptFunction
     public List<WidgetHandle> getWidgetHandles() {
         return new ArrayList<>(this.widgetHandles.values());
     }
@@ -51,7 +54,6 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         return this.widgetHandles.get(id);
     }
 
-    @JavascriptFunction
     public List<WidgetDetails> getCreatableWidgets() {
         List<WidgetDetails> details = new LinkedList<>();
 
@@ -166,6 +168,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         pluginWidgetNamespacesField.add(widgetDetails.getNamespace());
 
         this.widgetFactories.put(widgetDetails.getNamespace(), new Triple<>(plugin, widgetProducer, widgetDetails));
+        this.$creatableWidgets.add(widgetDetails);
 
         // Automatically create the docks and applets when registered.
         if ((widgetDetails.getType() == WidgetType.DOCK) || (widgetDetails.getType() == WidgetType.APPLET)) {
@@ -286,7 +289,8 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         List<String> pluginWidgetNamespacesField = ReflectionLib.getValue(plugin, "widgetNamespaces");
 
         for (String widgetNamespace : pluginWidgetNamespacesField) {
-            this.widgetFactories.remove(widgetNamespace);
+            Triple<CaffeinatedPlugin, Producer<Widget>, WidgetDetails> removed = this.widgetFactories.remove(widgetNamespace);
+            this.$creatableWidgets.remove(removed.c);
         }
 
         for (Widget widget : new ArrayList<>(pluginWidgetsField)) {

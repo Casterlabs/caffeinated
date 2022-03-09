@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
+import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -19,7 +20,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class AppAuth {
+public class AppAuth extends JavascriptObject {
     private FastLogger logger = new FastLogger();
 
     private @Getter Map<String, AuthInstance> authInstances = new HashMap<>();

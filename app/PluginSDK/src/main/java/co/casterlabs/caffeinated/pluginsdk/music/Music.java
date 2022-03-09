@@ -7,17 +7,17 @@ import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonNull;
 import co.casterlabs.rakurai.json.element.JsonObject;
 
-public abstract class Music {
+public interface Music {
 
-    public abstract Map<String, MusicProvider> getProviders();
+    public Map<String, MusicProvider> getProviders();
 
-    public abstract MusicProvider getActivePlayback();
+    public MusicProvider getActivePlayback();
 
     /**
      * @deprecated This is used internally.
      */
     @Deprecated
-    public JsonObject toJson() {
+    default JsonObject toJson() {
         JsonElement _activePlayback;
 
         if (this.getActivePlayback() == null) {

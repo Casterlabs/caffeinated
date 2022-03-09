@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.music_integration.events.AppMusicIntegrationEventType;
 import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider;
 import co.casterlabs.caffeinated.app.preferences.PreferenceFile;
@@ -18,34 +17,26 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
+import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.SneakyThrows;
-import xyz.e3ndr.eventapi.EventHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 @Getter
-public class MusicIntegration extends Music {
-    private static EventHandler<AppMusicIntegrationEventType> handler = new EventHandler<>();
-
+public class MusicIntegration extends JavascriptObject implements Music {
     private static InternalMusicProvider<?> systemPlaybackMusicProvider = null;
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<String, InternalMusicProvider<?>> providers = new HashMap<>();
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private InternalMusicProvider<?> activePlayback;
 
     private boolean loaded = false;
-
-    @SneakyThrows
-    public MusicIntegration() {
-        handler.register(this);
-    }
 
     @SuppressWarnings("unchecked")
     @Override

@@ -44,7 +44,7 @@ public class AppUI extends JavascriptObject {
     private PreferenceFile<UIPreferences> preferenceFile = new PreferenceFile<>("ui", UIPreferences.class);
 
     @Getter
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private UIPreferences preferences = this.preferenceFile.get();
 
     private @Getter boolean uiFinishedLoad = false;

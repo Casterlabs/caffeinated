@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.plugins.impl;
+package co.casterlabs.caffeinated.app.plugins;
 
 import java.io.Closeable;
 import java.io.File;
@@ -17,7 +17,6 @@ import java.util.jar.JarFile;
 
 import org.reflections8.Reflections;
 
-import co.casterlabs.caffeinated.app.plugins.GlobalPluginClassLoader;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPluginImplementation;
 import lombok.NonNull;

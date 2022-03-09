@@ -16,31 +16,31 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
 
-public abstract class Koi {
+public interface Koi {
 
-    public abstract List<KoiEvent> getEventHistory();
+    public List<KoiEvent> getEventHistory();
 
-    public abstract Map<UserPlatform, List<User>> getViewers();
+    public Map<UserPlatform, List<User>> getViewers();
 
-    public abstract Map<UserPlatform, UserUpdateEvent> getUserStates();
+    public Map<UserPlatform, UserUpdateEvent> getUserStates();
 
-    public abstract Map<UserPlatform, StreamStatusEvent> getStreamStates();
+    public Map<UserPlatform, StreamStatusEvent> getStreamStates();
 
-    public abstract Map<UserPlatform, RoomstateEvent> getRoomStates();
+    public Map<UserPlatform, RoomstateEvent> getRoomStates();
 
-    public abstract Map<UserPlatform, List<KoiIntegrationFeatures>> getFeatures();
+    public Map<UserPlatform, List<KoiIntegrationFeatures>> getFeatures();
 
-    public abstract void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter);
+    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter);
 
-    public abstract void upvoteChat(@NonNull UserPlatform platform, @NonNull String messageId);
+    public void upvoteChat(@NonNull UserPlatform platform, @NonNull String messageId);
 
-    public abstract void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId);
+    public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId);
 
     /**
      * @deprecated This is used internally.
      */
     @Deprecated
-    public JsonObject toJson() {
+    default JsonObject toJson() {
         return new JsonObject()
             .put("history", Rson.DEFAULT.toJson(this.getEventHistory()))
             .put("viewers", Rson.DEFAULT.toJson(this.getViewers()))
@@ -49,19 +49,19 @@ public abstract class Koi {
             .put("roomStates", Rson.DEFAULT.toJson(this.getRoomStates()));
     }
 
-    public List<UserPlatform> getSignedInPlatforms() {
+    default List<UserPlatform> getSignedInPlatforms() {
         return new LinkedList<>(this.getUserStates().keySet());
     }
 
-    public boolean isMultiUserMode() {
+    default boolean isMultiUserMode() {
         return this.getUserStates().size() > 1;
     }
 
-    public boolean isSignedOut() {
+    default boolean isSignedOut() {
         return this.getUserStates().size() == 0;
     }
 
-    public int getMaxMessageLength(@NonNull UserPlatform platform) {
+    default int getMaxMessageLength(@NonNull UserPlatform platform) {
         switch (platform) {
             case CAFFEINE:
                 return 80;
@@ -89,7 +89,7 @@ public abstract class Koi {
      * 
      * @throws IndexOutOfBoundsException if no user is signed in.
      */
-    public UserPlatform getFirstSignedInPlatform() {
+    default UserPlatform getFirstSignedInPlatform() {
         return this.getSignedInPlatforms().get(0);
     }
 

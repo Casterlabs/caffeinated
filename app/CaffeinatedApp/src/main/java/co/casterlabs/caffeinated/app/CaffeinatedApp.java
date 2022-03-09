@@ -48,8 +48,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     private static @Getter CaffeinatedApp instance;
 
-    private final @JavascriptValue BuildInfo buildInfo;
-    private final @JavascriptValue boolean isDev;
+    private final @JavascriptValue(allowSet = false) BuildInfo buildInfo;
+    private final @JavascriptValue(allowSet = false) boolean isDev;
 
     private @Setter WebviewBridge appBridge;
     private @Setter Webview webview;

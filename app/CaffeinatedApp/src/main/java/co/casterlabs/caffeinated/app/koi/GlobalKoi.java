@@ -17,6 +17,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
+import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
@@ -40,7 +41,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @SuppressWarnings("deprecation")
-public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
+public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHandler {
     private static final List<KoiEventType> KEPT_EVENTS = Arrays.asList(
         KoiEventType.FOLLOW,
         KoiEventType.CHAT,
@@ -61,19 +62,19 @@ public class GlobalKoi extends Koi implements KoiLifeCycleHandler {
     @JavascriptValue(allowSet = false)
     private List<KoiEvent> eventHistory = new LinkedList<>();
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, List<User>> viewers = new ConcurrentHashMap<>();
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, UserUpdateEvent> userStates = new ConcurrentHashMap<>();
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, StreamStatusEvent> streamStates = new ConcurrentHashMap<>();
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, RoomstateEvent> roomStates = new ConcurrentHashMap<>();
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, List<KoiIntegrationFeatures>> features = new ConcurrentHashMap<>();
 
     /**

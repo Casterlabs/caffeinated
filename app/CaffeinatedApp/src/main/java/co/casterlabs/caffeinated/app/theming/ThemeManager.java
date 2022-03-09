@@ -6,17 +6,18 @@ import java.util.Map;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.app.App.Appearance;
+import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class ThemeManager {
+public class ThemeManager extends JavascriptObject {
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<String, Theme> themes = new HashMap<>();
 
-    @JavascriptValue(allowSet = false)
+    @JavascriptValue(allowSet = false, watchForMutate = true)
     private @Getter Theme currentTheme;
 
     public void init() {
