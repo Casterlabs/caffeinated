@@ -19,7 +19,6 @@ import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
-import co.casterlabs.caffeinated.util.async.Promise;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.app.AppBootstrap;
 import co.casterlabs.kaimen.app.AppEntry;
@@ -246,14 +245,13 @@ public class Bootstrap implements Runnable {
                 app.setAppBridge(webview.getBridge());
                 app.setWebview(webview);
                 app.setAppUrl(appUrl);
-                app.init();
 
-                try {
-                    new Promise<>(() -> {
-                        TrayHandler.tryCreateTray(webview);
-                        return null;
-                    }).await();
-                } catch (Throwable ignored) {}
+                webview.getBridge().defineObject("Caffeinated", app);
+
+                new AsyncTask(() -> {
+                    TrayHandler.tryCreateTray(webview);
+                    app.init();
+                });
             }
 
             @Override

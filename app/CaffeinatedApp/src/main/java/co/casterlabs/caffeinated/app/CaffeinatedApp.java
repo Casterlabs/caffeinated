@@ -19,7 +19,6 @@ import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences;
 import co.casterlabs.caffeinated.app.theming.ThemeManager;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
@@ -92,19 +91,15 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     }
 
     public void init() {
-        new AsyncTask(() -> {
-            this.themeManager.init();
-            this.UI.init();
-            this.api.init();
+        this.themeManager.init();
+        this.UI.init();
+        this.api.init();
 //            this.koi.init();
-            this.auth.init();
-            this.music.init();
-            this.plugins.init();
+        this.auth.init();
+        this.music.init();
+        this.plugins.init();
 
-            this.appBridge.defineObject("Caffeinated", this);
-
-            this.appPreferences.save();
-        });
+        this.appPreferences.save();
     }
 
     public boolean canCloseUI() {

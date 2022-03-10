@@ -43,12 +43,17 @@
             window.__common = await import("$lib/__common.mjs");
         }
 
-        if (window.Bridge) {
+        window.onBridgeInit = () => {
             window.goto = goto;
 
             Bridge.on("goto", ({ path }) => goto(path));
 
             Caffeinated.themeManager.mutate("currentTheme", updateTheme);
+            Caffeinated.UI.onUILoaded();
+        };
+
+        if (typeof window.Caffeinated != "undefined") {
+            window.onBridgeInit();
         }
 
         applyPageAttributes();

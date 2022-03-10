@@ -11,22 +11,9 @@
 
     let logo = "casterlabs";
 
-    onMount(() => {
+    onMount(async () => {
         document.title = "";
-
-        window.onBridgeInit = () => {
-            setTimeout(async () => {
-                logo = (await Caffeinated.UI.preferences).icon;
-
-                console.debug("[App]", "Signaling UI#onUILoaded()");
-
-                Caffeinated.UI.onUILoaded();
-            }, 1000);
-        };
-
-        if (typeof window.Caffeinated != "undefined") {
-            window.onBridgeInit();
-        }
+        logo = (await window.Caffeinated.UI.preferences).icon;
     });
 </script>
 

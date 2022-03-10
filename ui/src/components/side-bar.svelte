@@ -11,8 +11,6 @@
             // .
             // We want to hide these because they're already available.
             .filter((w) => !["co.casterlabs.dock.stream_viewers.dock", "co.casterlabs.dock.stream_chat.dock"].includes(w.id));
-
-        console.log(docks);
     }
 
     onDestroy(() => {
@@ -24,9 +22,7 @@
     });
 
     onMount(() => {
-        setTimeout(() => {
-            unregister.push(Caffeinated.plugins.mutate("widgets", render));
-        }, 500);
+        unregister.push(Caffeinated.plugins.mutate("widgets", render));
     });
 </script>
 
