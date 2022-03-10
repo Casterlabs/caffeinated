@@ -1,33 +1,124 @@
 <script>
-    import { onMount } from "svelte";
+    import StreamConfiguration from "../components/stream-configuration.svelte";
 
+    import { onMount, onDestroy } from "svelte";
     import { setPageProperties } from "./__layout.svelte";
 
+    const unregister = [];
+
+    let accounts = [];
+    let streamConfigurationComponent;
+
     let buildInfo = {};
+
+    let name = "";
+    let hourString = 0;
+
+    function parseBridgeData(authInstances) {
+        let newAccounts = [];
+
+        // We try to figure out the user's preffered name by tallying up the names.
+        let names = {};
+
+        // Parse data from bridge
+        for (const inst of Object.values(authInstances)) {
+            if (inst.userData) {
+                if (names[inst.userData.displayname]) {
+                    names[inst.userData.displayname] += 1;
+                } else {
+                    names[inst.userData.displayname] = 1;
+                }
+
+                newAccounts.push(inst);
+            } else {
+                setTimeout(async () => {
+                    parseBridgeData(await Caffeinated.auth.authInstances);
+                }, 250);
+            }
+        }
+
+        accounts = newAccounts.filter((account) => {
+            return account.streamConfigurationFeatures && account.streamConfigurationFeatures.length > 0 && account.userData && account.streamData;
+        });
+
+        streamConfigurationComponent?.render(accounts);
+
+        {
+            // Get the most popular name.
+            let mostPopular = "";
+            let mostPopularCount = 0;
+
+            for (const [name, count] of Object.entries(names)) {
+                if (count > mostPopularCount) {
+                    mostPopular = name;
+                    mostPopularCount = count;
+                }
+            }
+
+            name = mostPopular;
+        }
+    }
 
     setPageProperties({
         showSideBar: true,
         allowNavigateBackwards: false
     });
 
+    onDestroy(() => {
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
+    });
+
     onMount(async () => {
         document.title = "";
+
+        const hours = new Date().getHours();
+
+        if (hours < 12) {
+            hourString = "morning";
+        } else if (hours < 14) {
+            hourString = "day";
+        } else if (hours < 18) {
+            hourString = "afternoon";
+        } else {
+            hourString = "evening";
+        }
+
+        unregister.push(Caffeinated.auth.mutate("authInstances", parseBridgeData));
+
         buildInfo = await Caffeinated.buildInfo;
     });
 </script>
 
-<div class="has-text-centered">
-    <br />
-    <h1 class="title">Welcome to Caffeinated!</h1>
-    <h2 class="subtitle">
-        {#if buildInfo.isDev}
-            (Developer Build)
+<div class="has-text-centered welcome-wagon">
+    <h1 class="title">
+        Good {hourString}{#if name}
+            , {name}.
         {:else}
-            (Beta {buildInfo.version}-{buildInfo.commit})
+            !
+        {/if}
+    </h1>
+    <h2 class="subtitle">
+        {#if buildInfo.buildChannel && buildInfo.buildChannel != "stable"}
+            {#if buildInfo.isDev}
+                (Developer Build)
+            {:else}
+                ({buildInfo.version}-{buildInfo.commit}-{buildInfo.buildChannel})
+            {/if}
+        {:else}
+            &nbsp; <!-- Retains spacing -->
         {/if}
     </h2>
 </div>
 
-<div class="has-text-centered" style="position: absolute; bottom: 2em; width: 100%;">
-    <a href="https://casterlabs.co" rel="external">casterlabs</a>
-</div>
+<StreamConfiguration bind:this={streamConfigurationComponent} {accounts} />
+
+<style>
+    .welcome-wagon {
+        margin-top: 3.25em;
+        margin-bottom: 2.5em;
+    }
+</style>

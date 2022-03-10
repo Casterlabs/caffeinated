@@ -1,6 +1,5 @@
 package co.casterlabs.koi.api.stream;
 
-import java.util.Base64;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -8,11 +7,9 @@ import org.jetbrains.annotations.Nullable;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
-import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.annotating.JsonSerializer;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -23,25 +20,14 @@ public class KoiStreamConfiguration {
     private String category;
     private KoiStreamLanguage language;
     private List<String> tags;
-    private @Nullable byte[] thumbnail;
+    private @Nullable String thumbnail;
     private @JsonField("content_rating") KoiStreamContentRating contentRating;
-
-    @JsonSerializationMethod("thumbnail")
-    private JsonElement $serialize_thumbnail() {
-        if (this.thumbnail == null) {
-            return null;
-        } else {
-            return new JsonString(
-                Base64
-                    .getMimeEncoder()
-                    .encodeToString(this.thumbnail)
-            );
-        }
-    }
 
 }
 
 class KoiStreamConfigurationSerializer implements JsonSerializer<KoiStreamConfiguration> {
+
+    public KoiStreamConfigurationSerializer() {} // For Rson.
 
     @Override
     public JsonElement serialize(@NonNull Object value, @NonNull Rson rson) {

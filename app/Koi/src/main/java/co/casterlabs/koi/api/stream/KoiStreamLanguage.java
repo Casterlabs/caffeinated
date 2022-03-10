@@ -1,5 +1,9 @@
 package co.casterlabs.koi.api.stream;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +23,7 @@ public enum KoiStreamLanguage {
     AZ("Azerbaijani"),
     BA("Bashkir"),
     EU("Basque"),
-    BN("Bengali, Bangla"),
+    BN("Bengali"),
     DZ("Bhutani"),
     BH("Bihari"),
     BI("Bislama"),
@@ -35,7 +39,7 @@ public enum KoiStreamLanguage {
     CS("Czech"),
     DA("Danish"),
     NL("Dutch"),
-    EN("English, American"),
+    EN("English"),
     EO("Esperanto"),
     ET("Estonian"),
     FO("Faeroese"),
@@ -74,7 +78,7 @@ public enum KoiStreamLanguage {
     KU("Kurdish"),
     LO("Laothian"),
     LA("Latin"),
-    LV("Latvian, Lettish"),
+    LV("Latvian"),
     LN("Lingala"),
     LT("Lithuanian"),
     MK("Macedonian"),
@@ -91,8 +95,8 @@ public enum KoiStreamLanguage {
     NO("Norwegian"),
     OC("Occitan"),
     OR("Oriya"),
-    OM("Oromo, Afan"),
-    PS("Pashto, Pushto"),
+    OM("Oromo"),
+    PS("Pashto"),
     FA("Persian"),
     PL("Polish"),
     PT("Portuguese"),
@@ -145,6 +149,17 @@ public enum KoiStreamLanguage {
     ZU("Zulu"),
 
     OTHER("Other");
+
+    public static final Map<KoiStreamLanguage, String> LANG;
+
+    static {
+        Map<KoiStreamLanguage, String> map = new HashMap<>();
+        LANG = Collections.unmodifiableMap(map);
+
+        for (KoiStreamLanguage l : values()) {
+            map.put(l, l.lang);
+        }
+    }
 
     private String lang;
 

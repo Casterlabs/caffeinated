@@ -19,6 +19,8 @@ import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
 import co.casterlabs.koi.api.stream.KoiStreamConfigurationFeatures;
+import co.casterlabs.koi.api.stream.KoiStreamContentRating;
+import co.casterlabs.koi.api.stream.KoiStreamLanguage;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -42,14 +44,18 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     private boolean disposed = false;
 
     private @JsonField @Getter @Nullable User userData;
-    private @Getter @Nullable StreamStatusEvent streamData;
-    private @Getter @Nullable List<User> viewers;
-    private @Getter @Nullable RoomstateEvent roomstate;
+    private @JsonField @Getter @Nullable StreamStatusEvent streamData;
+    private @JsonField @Getter @Nullable List<User> viewers;
+    private @JsonField @Getter @Nullable RoomstateEvent roomstate;
 
-    private @Getter @Nullable List<KoiIntegrationFeatures> features = new ArrayList<>();
-    private @Getter @Nullable Map<String, String> streamCategories;
-    private @Getter @Nullable Map<String, String> streamTags;
-    private @Getter @Nullable List<KoiStreamConfigurationFeatures> streamConfigurationFeatures;
+    private @JsonField @Getter @Nullable List<KoiIntegrationFeatures> features = new ArrayList<>();
+    private @JsonField @Getter @Nullable Map<String, String> streamCategories;
+    private @JsonField @Getter @Nullable Map<String, String> streamTags;
+    private @JsonField @Getter @Nullable List<KoiStreamConfigurationFeatures> streamConfigurationFeatures;
+
+    // This is the most convenient way to expose these to the UI.
+    private final @JsonField Map<KoiStreamLanguage, String> languages = KoiStreamLanguage.LANG;
+    private final @JsonField Map<KoiStreamContentRating, String> contentRatings = KoiStreamContentRating.LANG;
 
     public AuthInstance(String tokenId) {
         this.tokenId = tokenId;
@@ -216,9 +222,9 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @SneakyThrows
     @Override
     public void onClose(boolean remote) {
-        if (!this.disposed) {
+        if (!this.disposed && remote) {
             this.logger.info("Reconnecting to Koi.");
-            Thread.sleep(2000);
+            Thread.sleep(5000);
             this.reconnect();
         }
     }

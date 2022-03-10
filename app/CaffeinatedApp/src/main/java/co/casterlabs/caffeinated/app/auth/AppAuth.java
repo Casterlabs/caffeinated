@@ -15,6 +15,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
+import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
@@ -106,6 +107,17 @@ public class AppAuth extends JavascriptObject {
         this.authInstances.put(tokenId, new AuthInstance(tokenId));
     }
 
+    @JavascriptFunction
+    public void updateStream(@NonNull String targetChannelUPID, @NonNull KoiStreamConfiguration config) {
+        for (AuthInstance inst : this.authInstances.values()) {
+            if (inst.getUserData().getUpid().equals(targetChannelUPID)) {
+                inst.sendStreamUpdate(config);
+                return;
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
     @JavascriptFunction
     public void requestOAuthSignin(@NonNull String platform, boolean isKoi, boolean shouldNavigateBackwards) {
         try {
