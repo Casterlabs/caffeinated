@@ -14,7 +14,7 @@
     let widgets = [];
 
     function copyWidgetUrl(id) {
-        Bridge.emit("plugins:copy-widget-url", { id });
+        Caffeinated.plugin.copyWidgetUrl(id);
     }
 
     onMount(async () => {

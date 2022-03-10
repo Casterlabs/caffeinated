@@ -3,7 +3,7 @@
 
     import { onDestroy, onMount } from "svelte";
 
-    let mut_auth;
+    const unregister = [];
 
     let accounts = {
         caffeine: {},
@@ -43,12 +43,16 @@
         accounts = accounts; // Update dom.
     }
 
-    onDestroy(async () => {
-        Caffeinated.auth.off(mut_auth);
+    onDestroy(() => {
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
     });
 
     onMount(async () => {
-        mut_auth = Caffeinated.auth.mutate("authInstances", parseBridgeData);
+        unregister.push(Caffeinated.auth.mutate("authInstances", parseBridgeData));
         Caffeinated.auth.cancelSignin();
     });
 

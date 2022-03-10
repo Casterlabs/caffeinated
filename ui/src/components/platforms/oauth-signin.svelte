@@ -7,11 +7,11 @@
 
     onMount(() => {
         plausible("Sign In", { props: { platform: platform } });
-        Bridge.emit("auth:request-oauth-signin", { platform: platform, isKoi: isKoi });
+        Caffeinated.auth.requestOAuthSignin(platform, isKoi, false);
     });
 
     function cancelAuth() {
-        Bridge.emit("auth:cancel-signin");
+        Caffeinated.auth.cancelSignin();
         history.back();
     }
 </script>

@@ -151,7 +151,7 @@
                 try {
                     const token = await signinCaffeine(usernameInput.value, passwordInput.value, mfaInput.value);
 
-                    Bridge.emit("auth:caffeine_signin", { token: token });
+                    Caffeinated.auth.caffeineSignin(token);
                 } catch (e) {
                     if (e == "CAFFEINE_MFA") {
                         clearError();

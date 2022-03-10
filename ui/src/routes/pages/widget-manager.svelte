@@ -22,7 +22,7 @@
     let widgets = [];
 
     async function renderCreationDisplay() {
-        const creatableWidgets = await Plugins.getCreatableWidgets();
+        const creatableWidgets = await Caffeinated.plugins.creatableWidgets;
 
         let _widgetCategories = {
             alerts: [],
@@ -38,7 +38,7 @@
                 _widgetCategories[creatable.category.toLowerCase()].push({
                     name: creatable.friendlyName,
                     create: () => {
-                        Bridge.emit("plugins:create-widget", { namespace: creatable.namespace, name: `${creatable.friendlyName} (New)` });
+                        Caffeinated.plugins.createNewWidget(creatable.namespace, `${creatable.friendlyName} (New)`);
                     }
                 });
             }
@@ -51,7 +51,7 @@
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - Widgets";
 
-        widgets = await Plugins.getWidgetHandles();
+        widgets = await Caffeinated.plugins.widgets;
         await renderCreationDisplay();
 
         feather.replace();

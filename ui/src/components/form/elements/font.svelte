@@ -61,7 +61,7 @@
     }
 
     onMount(async () => {
-        fonts = (await Bridge.query("ui:fonts")).data;
+        fonts = await Caffeinated.UI.fonts;
     });
 </script>
 

@@ -44,11 +44,7 @@
         clearTimeout(inputDebounce);
         inputDebounce = -1;
 
-        Bridge.emit("plugins:edit-widget-settings", {
-            id: widget.id,
-            key: settingsKey,
-            newValue: value
-        });
+        Caffeinated.plugins.editWidgetSettingsItem(widget.id, settingsKey, value);
     }
 
     // Avert your eyes, children!

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
@@ -61,6 +62,11 @@ public abstract class Widget {
             this.conductorKey = conductorKey;
             this.conductorPort = conductorPort;
             this.widgetSettings = new WidgetSettings(this.widget);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.namespace, this.id, this.name, this.details, this.settingsLayout, this.settings);
         }
 
         public String getUrl() {

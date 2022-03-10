@@ -3,52 +3,53 @@
 
     import { onMount, onDestroy } from "svelte";
 
-    let mut_playback;
-    let mut_providers;
+    const unregister = [];
 
     let systemData = null;
     let spotifyData = null;
     let pretzelData = null;
     let activePlayback = null;
 
-    onDestroy(async () => {
-        Caffeinated.music.off(mut_playback);
-        Caffeinated.music.off(mut_providers);
+    onDestroy(() => {
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
     });
 
     onMount(async () => {
-        mut_playback = Caffeinated.music.mutate("activePlayback", (data) => {
-            activePlayback = data;
-        });
-        mut_providers = Caffeinated.music.mutate("providers", (data) => {
-            systemData = data.system;
-            spotifyData = data.spotify;
-            pretzelData = data.pretzel;
-        });
+        unregister.push(
+            Caffeinated.music.mutate("activePlayback", (data) => {
+                activePlayback = data;
+            })
+        );
+
+        unregister.push(
+            Caffeinated.music.mutate("providers", (data) => {
+                systemData = data.system;
+                spotifyData = data.spotify;
+                pretzelData = data.pretzel;
+            })
+        );
     });
 
     function updatePretzel(e) {
         const enabled = e.target.checked;
-        Bridge.emit("music:settings-update", {
-            platform: "pretzel",
-            settings: {
-                enabled: enabled
-            }
+        Caffeinated.music.updateMusicProviderSettings("pretzel", {
+            enabled: enabled
         });
     }
 
     function updateSystem(e) {
         const enabled = e.target.checked;
-        Bridge.emit("music:settings-update", {
-            platform: "system",
-            settings: {
-                enabled: enabled
-            }
+        Caffeinated.music.updateMusicProviderSettings("system", {
+            enabled: enabled
         });
     }
 
     function signOutSpotify() {
-        Bridge.emit("music:signout", { platform: "spotify" });
+        Caffeinated.music.signoutMusicProvider("spotify");
     }
 </script>
 

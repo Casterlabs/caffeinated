@@ -11,13 +11,22 @@
 
     let logo = "casterlabs";
 
-    onMount(async () => {
+    onMount(() => {
         document.title = "";
 
-        logo = (await Caffeinated.UI.preferences).icon;
+        window.onBridgeInit = () => {
+            setTimeout(async () => {
+                logo = (await Caffeinated.UI.preferences).icon;
 
-        console.debug("[App]", "Signaling UI#themeLoaded()");
-        Caffeinated.UI.onUILoaded();
+                console.debug("[App]", "Signaling UI#onUILoaded()");
+
+                Caffeinated.UI.onUILoaded();
+            }, 1000);
+        };
+
+        if (typeof window.Caffeinated != "undefined") {
+            window.onBridgeInit();
+        }
     });
 </script>
 

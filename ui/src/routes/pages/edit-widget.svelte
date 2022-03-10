@@ -5,7 +5,7 @@
 
     import { onMount, onDestroy } from "svelte";
 
-    let eventHandler;
+    const unregister = [];
 
     setPageProperties({
         showSideBar: false,
@@ -17,20 +17,20 @@
     let nameEditor;
 
     function editName() {
-        Bridge.emit("plugins:rename-widget", { id: widget.id, newName: nameEditorTextContent });
+        Caffeinated.plugin.renameWidget(widget.id, nameEditorTextContent);
     }
 
     function clickButton(buttonId) {
-        Bridge.emit("plugins:click-widget-settings-button", { id: widget.id, buttonId: buttonId });
+        Caffeinated.plugin.clickWidgetSettingsButton(widget.id, buttonId);
     }
 
     function deleteWidget() {
-        Bridge.emit("plugins:delete-widget", { id: widget.id });
+        Caffeinated.plugin.deleteWidget(widget.id);
         history.back();
     }
 
     function copyWidgetUrl() {
-        Bridge.emit("plugins:copy-widget-url", { id: widget.id });
+        Caffeinated.plugin.copyWidgetUrl(widget.id);
     }
 
     function fixEditableDiv(elem) {
@@ -60,7 +60,7 @@
         }, 50);
     }
 
-    function parseBridgeData({ widgets }) {
+    function parseBridgeData(widgets) {
         const widgetId = location.href.split("?widget=")[1];
 
         for (const w of widgets) {
@@ -96,15 +96,17 @@
     }
 
     onDestroy(() => {
-        eventHandler?.destroy();
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
     });
 
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - Widget Editor";
 
-        eventHandler = Bridge.createThrowawayEventHandler();
-        eventHandler.on("plugins:update", parseBridgeData);
-        parseBridgeData((await Bridge.query("plugins")).data);
+        unregister.push(Caffeinated.plugins.mutate("widgets", parseBridgeData));
     });
 
     // https://stackoverflow.com/a/6713782

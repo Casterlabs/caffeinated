@@ -23,6 +23,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.util.Producer;
 import co.casterlabs.caffeinated.util.Triple;
 import co.casterlabs.caffeinated.util.async.AsyncTask;
+import co.casterlabs.caffeinated.util.collections.IdentityCollection;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -38,8 +39,8 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
     private Map<String, WidgetHandle> widgetHandles = new HashMap<>();
 
     // Pointers.
-    final Collection<CaffeinatedPlugin> $loadedPlugins = this.plugins.values();
-    final Collection<WidgetHandle> $widgetHandles = this.widgetHandles.values();
+    final Collection<CaffeinatedPlugin> $loadedPlugins = new IdentityCollection<>(this.plugins.values());
+    final Collection<WidgetHandle> $widgetHandles = new IdentityCollection<>(this.widgetHandles.values());
     final Collection<WidgetDetails> $creatableWidgets = new LinkedList<>();
 
     public List<CaffeinatedPlugin> getPlugins() {

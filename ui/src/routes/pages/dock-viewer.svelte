@@ -6,7 +6,7 @@
 
     import { onMount, onDestroy } from "svelte";
 
-    let eventHandler;
+    const unregister = [];
 
     setPageProperties({
         showSideBar: true,
@@ -19,20 +19,20 @@
     let _currentTheme = null;
 
     onDestroy(() => {
-        // window?.removeEventListener("message", onPostMessage);
-        eventHandler?.destroy();
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
     });
 
     onMount(async () => {
         window.addEventListener("message", onPostMessage);
 
-        eventHandler = Bridge.createThrowawayEventHandler();
-
-        Bridge.on("theme:update", updateTheme);
-        updateTheme((await Bridge.query("theme")).data);
+        unregister.push(Caffeinated.themeManager.mutate("currentTheme", updateTheme));
 
         {
-            const widgets = (await Bridge.query("plugins")).data.widgets;
+            const widgets = await Caffeinated.plugins.widgets;
             const widgetId = location.href.split("?dock=")[1];
 
             for (const w of widgets) {

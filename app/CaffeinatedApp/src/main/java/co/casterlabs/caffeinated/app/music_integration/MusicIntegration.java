@@ -93,12 +93,12 @@ public class MusicIntegration extends JavascriptObject implements Music {
     }
 
     @JavascriptFunction
-    public void onMusicIntegrationSignoutEvent(@NonNull String platform) {
+    public void signoutMusicProvider(@NonNull String platform) {
         this.providers.get(platform).signout();
     }
 
     @JavascriptFunction
-    public void onMusicIntegrationSettingsUpdateEvent(@NonNull String platform, @NonNull JsonObject settings) {
+    public void updateMusicProviderSettings(@NonNull String platform, @NonNull JsonObject settings) {
         this.providers.get(platform).updateSettingsFromJson(settings);
     }
 

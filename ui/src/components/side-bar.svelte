@@ -1,5 +1,7 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
+
+    const unregister = [];
 
     let docks = [];
 
@@ -13,8 +15,18 @@
         console.log(docks);
     }
 
-    onMount(async () => {
-        Caffeinated.plugins.mutate("widgets", render);
+    onDestroy(() => {
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
+    });
+
+    onMount(() => {
+        setTimeout(() => {
+            unregister.push(Caffeinated.plugins.mutate("widgets", render));
+        }, 500);
     });
 </script>
 

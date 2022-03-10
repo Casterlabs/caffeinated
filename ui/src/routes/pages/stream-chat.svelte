@@ -5,7 +5,8 @@
 
     import { onMount, onDestroy } from "svelte";
 
-    let eventHandler;
+    const unregister = [];
+
     let viewerElement = {};
 
     setPageProperties({
@@ -22,7 +23,7 @@
     }
 
     function bridge_onAuthUpdate(data) {
-        viewerElement.onAuthUpdate(data);
+        viewerElement.onAuthUpdate({ koiAuth: data });
     }
 
     function bridge_onChatViewerPreferencesUpdate(data) {
@@ -34,13 +35,13 @@
     /* ---------------- */
 
     function onSavePreferences({ detail: data }) {
-        Bridge.emit("ui:save_chat_viewer_preferences", {
-            preferences: data
-        });
+        Caffeinated.UI.chatPreferences = data;
     }
 
     function onChatSend({ detail: data }) {
-        Bridge.emit("koi:chat_send", data);
+        const { platform, message } = data;
+
+        Caffeinated.koi.sendChat(platform, message, "CLIENT");
     }
 
     function onModAction({ detail: modAction }) {
@@ -50,10 +51,7 @@
         console.log("[StreamChat]", `onModAction(${type}, ${platform})`);
 
         function sendCommand(command) {
-            Bridge.emit("koi:chat_send", {
-                message: command,
-                platform: platform
-            });
+            Caffeinated.koi.sendChat(platform, command, "CLIENT");
         }
 
         switch (type) {
@@ -96,20 +94,14 @@
 
             case "delete": {
                 if (["TWITCH", "BRIME", "TROVO"].includes(platform)) {
-                    Bridge.emit("koi:chat_delete", {
-                        messageId: event.id,
-                        platform: platform
-                    });
+                    Caffeinated.koi.upvoteChat(platform, event.id);
                 }
                 return;
             }
 
             case "upvote": {
                 if (platform == "CAFFEINE") {
-                    Bridge.emit("koi:chat_upvote", {
-                        messageId: event.id,
-                        platform: platform
-                    });
+                    Caffeinated.koi.upvoteChat(platform, event.id);
                 }
                 return;
             }
@@ -144,24 +136,23 @@
     /* ---------------- */
 
     onDestroy(() => {
-        eventHandler?.destroy();
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
     });
 
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - Stream Chat";
 
-        eventHandler = Bridge.createThrowawayEventHandler();
+        bridge_onAuthUpdate(await Caffeinated.auth.authInstances);
+        bridge_onChatViewerPreferencesUpdate(await Caffeinated.UI.chatPreferences);
 
-        eventHandler.on("auth:update", bridge_onAuthUpdate);
-        bridge_onAuthUpdate((await Bridge.query("auth")).data);
+        unregister.push(["koi:event", Bridge.on("koi:event", bridge_processEvent)]);
+        (await Caffeinated.koi.eventHistory).forEach(bridge_processEvent);
 
-        eventHandler.on("ui:preferences:update", bridge_onChatViewerPreferencesUpdate);
-        bridge_onChatViewerPreferencesUpdate((await UI.preferences).chatViewerPreferences);
-
-        eventHandler.on("koi:event", bridge_processEvent);
-        (await Bridge.query("koi:history")).data.forEach(bridge_processEvent);
-
-        for (const [platform, viewers] of Object.entries((await Bridge.query("koi:viewers")).data)) {
+        for (const [platform, viewers] of Object.entries(await Caffeinated.koi.viewers)) {
             bridge_processEvent({
                 streamer: {
                     platform: platform
