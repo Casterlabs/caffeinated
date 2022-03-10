@@ -41,7 +41,6 @@ public class AppApi implements KinokoV1Listener {
 
     @Override
     public void onOpen() {
-        this.sendSong();
         this.connection.getLogger().setCurrentLevel(LogLevel.INFO);
     }
 
