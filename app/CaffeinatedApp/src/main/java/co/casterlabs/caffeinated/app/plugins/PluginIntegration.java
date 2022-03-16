@@ -1,5 +1,6 @@
 package co.casterlabs.caffeinated.app.plugins;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.PreferenceFile;
+import co.casterlabs.caffeinated.app.plugins.PluginContext.ContextType;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences.WidgetSettingsDetails;
 import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
@@ -39,7 +41,7 @@ public class PluginIntegration extends JavascriptObject {
     private static final File pluginsDir = new File(CaffeinatedApp.appDataDir, "plugins");
 
     private PluginsHandler plugins = new PluginsHandler();
-    private List<PluginContext> contexts = new ArrayList<>();
+    private @JavascriptValue(allowSet = false, watchForMutate = true) List<PluginContext> contexts = new ArrayList<>();
 
     private boolean isLoading = true;
 
@@ -61,9 +63,10 @@ public class PluginIntegration extends JavascriptObject {
         // Load the built-in widgets.
         {
             CaffeinatedPlugin defaultPlugin = new CaffeinatedDefaultPlugin();
-
             ReflectionLib.setValue(defaultPlugin, "plugins", this.plugins);
-            this.contexts.add(this.plugins.unsafe_loadPlugins(Arrays.asList(defaultPlugin), "Caffeinated"));
+            PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(defaultPlugin), "Caffeinated");
+            ctx.setPluginType(ContextType.INTERNAL);
+            this.contexts.add(ctx);
         }
 
 //        {
@@ -79,15 +82,7 @@ public class PluginIntegration extends JavascriptObject {
             if (file.isFile() &&
                 fileName.endsWith(".jar") &&
                 !fileName.startsWith("__")) {
-                try {
-                    this.contexts.add(
-                        this.plugins.loadPluginsFromFile(file)
-                    );
-                    FastLogger.logStatic(LogLevel.INFO, "Loaded %s", fileName);
-                } catch (Exception e) {
-                    FastLogger.logStatic(LogLevel.SEVERE, "Unable to load %s as a plugin, make sure that it's *actually* a plugin!", fileName);
-                    FastLogger.logException(e);
-                }
+                this.loadFile(file);
             }
         }
 
@@ -128,6 +123,74 @@ public class PluginIntegration extends JavascriptObject {
             prefs.get().setWidgetSettings(widgetSettings);
             prefs.save();
         }
+    }
+
+    @SneakyThrows
+    @JavascriptFunction
+    public void openPluginsDir() {
+        Desktop.getDesktop().browse(pluginsDir.toURI());
+    }
+
+    @JavascriptFunction
+    public List<String> listFiles() throws Exception {
+        List<File> files = new LinkedList<>(
+            Arrays.asList(
+                pluginsDir.listFiles()
+            )
+        );
+
+        // Remove the files that belong to already loaded contexts.
+        for (PluginContext ctx : this.contexts) {
+            if (ctx.getFile() != null) {
+                files.remove(ctx.getFile());
+            }
+        }
+
+        // Grab the file names.
+        List<String> names = new ArrayList<>(files.size());
+
+        files.forEach(f -> names.add(f.getName()));
+
+        return names;
+    }
+
+    @JavascriptFunction
+    public void load(@NonNull String file) throws Exception {
+        this.loadFile(new File(pluginsDir, file));
+    }
+
+    private void loadFile(@NonNull File file) {
+        try {
+            this.contexts.add(
+                this.plugins.loadPluginsFromFile(file)
+            );
+
+            FastLogger.logStatic(LogLevel.INFO, "Loaded %s", file.getName());
+        } catch (Exception e) {
+            FastLogger.logStatic(LogLevel.SEVERE, "Unable to load %s as a plugin, make sure that it's *actually* a plugin!", file.getName());
+            FastLogger.logException(e);
+        }
+    }
+
+    @JavascriptFunction
+    public void unload(@NonNull String ctxId) {
+        PluginContext ctx = null;
+
+        for (PluginContext c : this.contexts) {
+            if (c.getId().equals(ctxId)) {
+                ctx = c;
+                break;
+            }
+        }
+
+        assert ctx != null;
+        assert ctx.getPluginType() == ContextType.PLUGIN : "You cannot unload this plugin.";
+
+        for (String id : ctx.getPluginIds()) {
+            this.plugins.unregisterPlugin(id);
+        }
+
+        this.contexts.remove(ctx);
     }
 
     @JavascriptFunction

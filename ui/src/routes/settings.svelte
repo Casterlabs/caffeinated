@@ -12,6 +12,7 @@
     import AboutSettings from "../components/settings/about-settings.svelte";
     import DeveloperStuff from "../components/settings/developer-stuff.svelte";
     import PairADevice from "../components/settings/pair-a-device.svelte";
+    import PluginsSettings from "../components/settings/plugins-settings.svelte";
 
     setPageProperties({
         showSideBar: false,
@@ -29,14 +30,9 @@
             component: AppearanceSettings
         },
         {
-            name: "About",
+            name: "Plugins",
             type: "category",
-            component: AboutSettings
-        },
-        {
-            name: "Developer Stuff",
-            type: "category",
-            component: DeveloperStuff
+            component: PluginsSettings
         },
         {
             name: "Accounts",
@@ -56,13 +52,27 @@
             name: "Pair a Device",
             type: "category",
             component: PairADevice
-        }
+        },
         // {
         //     name: "Status Integration",
         //     id: "status_integration",
         //     type: "category",
         //     component: StatusIntegrationSettings
-        // }
+        // },
+        {
+            name: "Misc",
+            type: "section"
+        },
+        {
+            name: "Developer Stuff",
+            type: "category",
+            component: DeveloperStuff
+        },
+        {
+            name: "About",
+            type: "category",
+            component: AboutSettings
+        }
     ];
 </script>
 
