@@ -33,7 +33,7 @@ class KoiStreamConfigurationSerializer implements JsonSerializer<KoiStreamConfig
     public JsonElement serialize(@NonNull Object value, @NonNull Rson rson) {
         JsonObject result = (JsonObject) DEFAULT.serialize(value, rson);
 
-        if (result.get("thumbnail").isJsonNull()) {
+        if (result.get("thumbnail").isJsonNull() || result.getString("thumbnail").startsWith("https://")) {
             result.remove("thumbnail");
         }
 

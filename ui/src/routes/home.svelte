@@ -114,11 +114,11 @@
     </h2>
 </div>
 
-<StreamConfiguration bind:this={streamConfigurationComponent} {accounts} />
-
+<!-- 
+<StreamConfiguration bind:this={streamConfigurationComponent} {accounts} /> -->
 <style>
     .welcome-wagon {
-        margin-top: 3.25em;
+        margin-top: 1.5em;
         margin-bottom: 2.5em;
     }
 </style>
