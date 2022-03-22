@@ -3,6 +3,7 @@ package co.casterlabs.koi.api.types.events;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @JsonClass(exposeAll = true)
+@EqualsAndHashCode(callSuper = true)
 public class RoomstateEvent extends KoiEvent {
 
     @Deprecated

@@ -4,12 +4,14 @@ import java.util.List;
 
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
 @JsonClass(exposeAll = true)
+@EqualsAndHashCode(callSuper = true)
 public class DonationEvent extends ChatEvent {
     private List<Donation> donations;
 
@@ -20,6 +22,7 @@ public class DonationEvent extends ChatEvent {
 
     @Getter
     @ToString
+    @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class Donation {
         @JsonField("animated_image")

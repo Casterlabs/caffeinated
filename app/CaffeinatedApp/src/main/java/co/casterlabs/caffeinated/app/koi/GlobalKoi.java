@@ -149,7 +149,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                 }
             }
         } else {
-            if (KEPT_EVENTS.contains(e.getType())) {
+            if (KEPT_EVENTS.contains(e.getType()) && !this.eventHistory.contains(e)) {
                 this.eventHistory.add(e);
             }
 

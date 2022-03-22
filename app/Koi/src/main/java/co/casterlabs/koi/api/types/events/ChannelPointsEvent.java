@@ -5,12 +5,14 @@ import java.time.Instant;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
 @JsonClass(exposeAll = true)
+@EqualsAndHashCode(callSuper = true)
 public class ChannelPointsEvent extends KoiEvent {
     private User sender;
     private ChannelPointsReward reward;
@@ -30,6 +32,7 @@ public class ChannelPointsEvent extends KoiEvent {
 
     @Getter
     @ToString
+    @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class ChannelPointsReward {
 
@@ -81,6 +84,7 @@ public class ChannelPointsEvent extends KoiEvent {
 
     @Getter
     @ToString
+    @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class ChannelPointsMaxPerStream {
 
@@ -94,6 +98,7 @@ public class ChannelPointsEvent extends KoiEvent {
 
     @Getter
     @ToString
+    @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class ChannelPointsMaxPerUserPerStream {
 
@@ -107,6 +112,7 @@ public class ChannelPointsEvent extends KoiEvent {
 
     @Getter
     @ToString
+    @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class ChannelPointsCooldown {
 

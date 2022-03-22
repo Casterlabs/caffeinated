@@ -5,12 +5,14 @@ import java.util.List;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
 @JsonClass(exposeAll = true)
+@EqualsAndHashCode(callSuper = true)
 public class ChatEvent extends KoiEvent {
 //    private Map<String, String> emotes;
     private List<Mention> mentions;
@@ -33,6 +35,7 @@ public class ChatEvent extends KoiEvent {
 
     @Getter
     @ToString
+    @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class Mention {
         private String target;

@@ -7,12 +7,14 @@ import co.casterlabs.koi.api.stream.KoiStreamContentRating;
 import co.casterlabs.koi.api.stream.KoiStreamLanguage;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
 @JsonClass(exposeAll = true)
+@EqualsAndHashCode(callSuper = true)
 public class StreamStatusEvent extends KoiEvent {
     @JsonField("is_live")
     private boolean live;
