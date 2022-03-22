@@ -30,7 +30,7 @@
     }
 
     function copyWidgetUrl() {
-        Caffeinated.plugin.copyWidgetUrl(widget.id);
+        Caffeinated.plugins.copyWidgetUrl(widget.id);
     }
 
     function fixEditableDiv(elem) {
