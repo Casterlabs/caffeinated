@@ -9,7 +9,9 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.util.Pair;
+import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.io.http.websocket.Websocket;
 import co.casterlabs.rakurai.io.http.websocket.WebsocketCloseCode;
 import co.casterlabs.rakurai.io.http.websocket.WebsocketListener;
@@ -99,8 +101,33 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                 }
 
                 case "KOI": {
-                    // TODO proxy koi calls.
-                    return;
+                    JsonObject data = message.getObject("data");
+                    String koiType = data.getString("type");
+
+                    UserPlatform platform = Rson.DEFAULT.fromJson(data.get("platform"), UserPlatform.class);
+
+                    switch (koiType) {
+                        case "UPVOTE": {
+                            String messageId = data.getString("messageId");
+                            Caffeinated.getInstance().getKoi().upvoteChat(platform, messageId);
+                            return;
+                        }
+
+                        case "DELETE": {
+                            String messageId = data.getString("messageId");
+                            Caffeinated.getInstance().getKoi().deleteChat(platform, messageId);
+                            return;
+                        }
+
+                        case "MESSAGE": {
+                            KoiChatterType chatter = Rson.DEFAULT.fromJson(data.get("chatter"), KoiChatterType.class);
+                            Caffeinated.getInstance().getKoi().sendChat(platform, data.getString("message"), chatter);
+                            return;
+                        }
+
+                        default:
+                            return;
+                    }
                 }
 
                 case "EMISSION": {

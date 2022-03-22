@@ -114,36 +114,30 @@ export function init({ initHandler, disconnectHandler }) {
             return koi_statics.roomStates;
         },
 
-        // upvote(messageId) {
-        //     if (this.isAlive()) {
-        //         this.ws.send(JSON.stringify({
-        //             type: "UPVOTE",
-        //             message_id: messageId
-        //         }));
-        //     }
-        // },
+        upvoteChat(platform, messageId) {
+            conn.send("KOI", {
+                type: "UPVOTE",
+                platform: platform,
+                messageId: messageId
+            });
+        },
 
-        // sendMessage(message, event = CAFFEINATED.userdata, chatter = "CLIENT") {
-        //     if (message.startsWith("/caffeinated")) {
-        //         this.broadcast("x_caffeinated_command", { text: message });
-        //     } else {
-        //         if (!CAFFEINATED.puppetToken) {
-        //             chatter = "CLIENT";
-        //         }
+        deleteChat(platform, messageId) {
+            conn.send("KOI", {
+                type: "DELETE",
+                platform: platform,
+                messageId: messageId
+            });
+        },
 
-        //         if (this.isAlive() && event) {
-        //             if (event.streamer.platform !== "CAFFEINE") {
-        //                 message = message.replace(/\n/gm, " ");
-        //             }
-
-        //             this.ws.send(JSON.stringify({
-        //                 type: "CHAT",
-        //                 message: message.substring(0, this.getMaxLength(event)),
-        //                 chatter: chatter
-        //             }));
-        //         }
-        //     }
-        // },
+        sendChat(platform, message, chatter = "CLIENT") {
+            conn.send("KOI", {
+                type: "MESSAGE",
+                platform: platform,
+                message: message,
+                chatter: chatter
+            });
+        },
 
         getMaxLength(platform) {
             switch (platform) {
