@@ -11,6 +11,7 @@ import co.casterlabs.caffeinated.util.async.AsyncTask;
 import co.casterlabs.caffeinated.util.async.Promise;
 import xyz.e3ndr.consoleutil.ipc.IpcChannel;
 import xyz.e3ndr.consoleutil.ipc.MemoryMappedIpc;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class InstanceManager {
     private static File ipcDir = new File(CaffeinatedApp.appDataDir, "/ipc/");
@@ -23,39 +24,34 @@ public class InstanceManager {
     private static RandomAccessFile randomAccessFile;
     private static FileLock fileLock;
 
+    private static boolean hostStarted = false;
+
     public static boolean isSingleInstance() {
-        if (!lockFile.exists()) {
-            try {
-                randomAccessFile = new RandomAccessFile(lockFile, "rw");
-                fileLock = randomAccessFile.getChannel().tryLock();
+        try {
+            lockFile.createNewFile();
 
-                if (fileLock != null) {
-                    Runtime.getRuntime().addShutdownHook(new Thread() {
-                        @Override
-                        public void run() {
-                            cleanShutdown();
-                        }
-                    });
+            randomAccessFile = new RandomAccessFile(lockFile, "rw");
+            fileLock = randomAccessFile.getChannel().tryLock();
 
-                    startIpcHost();
-                }
-
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (fileLock == null) {
+                // We could not lock the file, therefore another instance has already locked it.
+                return false;
             }
-        }
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    cleanShutdown();
+                }
+            });
 
-        return false;
+            return true;
+        } catch (Exception e) {
+            FastLogger.logException(e);
+            return true; // It's probably safe to continue.
+        }
     }
 
     public static void cleanShutdown() {
-        if (lockFile != null) {
-            try {
-                lockFile.delete();
-            } catch (Exception e) {}
-        }
-
         if (fileLock != null) {
             try {
                 fileLock.release();
@@ -74,7 +70,7 @@ public class InstanceManager {
     }
 
     public static void closeOtherInstance() {
-        childIpcComms("CLOSE");
+        childIpcComms("SHUTDOWN");
     }
 
     private static boolean childIpcComms(String command) {
@@ -100,6 +96,8 @@ public class InstanceManager {
 
                 while (true) {
                     String line = ipc.read();
+
+                    FastLogger.logStatic("IPC (CHILD): %s", line);
 
                     if (line.equals("OK")) {
                         commsPromise.fulfill(null);
@@ -130,7 +128,13 @@ public class InstanceManager {
     // > SUMMON
     // < OK
     // <END>
-    private static void startIpcHost() {
+    public static void startIpcHost() {
+        if (hostStarted) {
+            return;
+        } else {
+            hostStarted = false;
+        }
+
         Promise<Void> commsPromise = new Promise<>();
 
         new AsyncTask(() -> {
@@ -152,8 +156,12 @@ public class InstanceManager {
                 while (true) {
                     String line = ipc.read();
 
+                    FastLogger.logStatic("IPC (HOST): %s", line);
+
                     if (line.equals("SUMMON")) {
-                        Bootstrap.getWebview().open(CaffeinatedApp.getInstance().getAppUrl());
+                        if (!Bootstrap.getWebview().isOpen()) {
+                            Bootstrap.getWebview().open(CaffeinatedApp.getInstance().getAppUrl());
+                        }
                         Bootstrap.getWebview().focus();
                     } else if (line.equals("SHUTDOWN")) {
                         Bootstrap.shutdown();

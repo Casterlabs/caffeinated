@@ -51,7 +51,7 @@ public class InstanceManager {
     }
 
     public static void closeOtherInstance() {
-        childIpcComms("CLOSE");
+        childIpcComms("SHUTDOWN");
     }
 
     private static boolean childIpcComms(String command) {

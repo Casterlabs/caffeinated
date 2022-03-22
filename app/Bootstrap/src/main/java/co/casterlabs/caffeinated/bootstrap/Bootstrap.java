@@ -148,6 +148,7 @@ public class Bootstrap implements Runnable {
                 logger.info("App is already running, summoning it now.");
 
                 if (InstanceManager.trySummonInstance()) {
+                    System.exit(0);
                     return;
                 } else {
                     logger.warn("Summon failed, launching anyways.");
@@ -156,6 +157,8 @@ public class Bootstrap implements Runnable {
         } else {
             logger.info("Starting app.");
         }
+
+        InstanceManager.startIpcHost();
 
         // We do this down here because of the IPC.
         if (this.enableTraceLogging) {
