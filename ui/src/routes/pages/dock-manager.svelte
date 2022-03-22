@@ -14,7 +14,7 @@
     let widgets = [];
 
     function copyWidgetUrl(id) {
-        Caffeinated.plugin.copyWidgetUrl(id);
+        Caffeinated.plugins.copyWidgetUrl(id);
     }
 
     onMount(async () => {
