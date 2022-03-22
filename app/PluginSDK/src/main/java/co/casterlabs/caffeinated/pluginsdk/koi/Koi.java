@@ -41,12 +41,33 @@ public interface Koi {
      */
     @Deprecated
     default JsonObject toJson() {
+        int previous = Math.min(75, this.getEventHistory().size());
+        List<KoiEvent> history = this.getEventHistory().subList(this.getEventHistory().size() - previous, this.getEventHistory().size());
+
+        return new JsonObject()
+            .put("history", Rson.DEFAULT.toJson(history))
+            .put("viewers", Rson.DEFAULT.toJson(this.getViewers()))
+            .put("userStates", Rson.DEFAULT.toJson(this.getUserStates()))
+            .put("streamStates", Rson.DEFAULT.toJson(this.getStreamStates()))
+            .put("roomStates", Rson.DEFAULT.toJson(this.getRoomStates()))
+            .put("features", Rson.DEFAULT.toJson(this.getFeatures()));
+    }
+
+    /**
+     * @deprecated This is used internally.
+     * 
+     * @implNote   The difference between this and {@link #toJson()} is that this
+     *             version give the full event history.
+     */
+    @Deprecated
+    default JsonObject toJsonExtended() {
         return new JsonObject()
             .put("history", Rson.DEFAULT.toJson(this.getEventHistory()))
             .put("viewers", Rson.DEFAULT.toJson(this.getViewers()))
             .put("userStates", Rson.DEFAULT.toJson(this.getUserStates()))
             .put("streamStates", Rson.DEFAULT.toJson(this.getStreamStates()))
-            .put("roomStates", Rson.DEFAULT.toJson(this.getRoomStates()));
+            .put("roomStates", Rson.DEFAULT.toJson(this.getRoomStates()))
+            .put("features", Rson.DEFAULT.toJson(this.getFeatures()));
     }
 
     default List<UserPlatform> getSignedInPlatforms() {

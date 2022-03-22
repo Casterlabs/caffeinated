@@ -111,19 +111,24 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
         // Send update to the widget instances.
         new AsyncTask(() -> {
-            JsonObject statics = new JsonObject()
-                .put("history", Rson.DEFAULT.toJson(this.eventHistory))
-                .put("viewers", Rson.DEFAULT.toJson(this.viewers))
-                .put("userStates", Rson.DEFAULT.toJson(this.userStates))
-                .put("streamStates", Rson.DEFAULT.toJson(this.streamStates))
-                .put("roomStates", Rson.DEFAULT.toJson(this.roomStates))
-                .put("features", Rson.DEFAULT.toJson(this.features));
+            JsonObject statics = this.toJson();
+            JsonObject extendedStatics = this.toJsonExtended();
 
             for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
                 for (Widget widget : plugin.getWidgets()) {
                     for (WidgetInstance instance : widget.getWidgetInstances()) {
                         try {
-                            instance.onKoiStaticsUpdate(statics);
+                            switch (instance.getInstanceMode()) {
+                                case APPLET:
+                                case DOCK:
+                                    instance.onKoiStaticsUpdate(extendedStatics);
+                                    break;
+
+                                case DEMO:
+                                case WIDGET:
+                                    instance.onKoiStaticsUpdate(statics);
+                                    break;
+                            }
                         } catch (IOException ignored) {}
                     }
                 }
@@ -144,12 +149,12 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             for (JsonElement element : catchUp.getEvents()) {
                 KoiEvent cEvent = KoiEventType.get(element.getAsObject());
 
-                if (cEvent != null) {
+                if ((cEvent != null) && !this.eventHistory.contains(e)) {
                     this.onEvent(cEvent);
                 }
             }
         } else {
-            if (KEPT_EVENTS.contains(e.getType()) && !this.eventHistory.contains(e)) {
+            if (KEPT_EVENTS.contains(e.getType())) {
                 this.eventHistory.add(e);
             }
 
@@ -230,7 +235,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         if (message.startsWith("/koi test ")) {
             this.sendTest(
                 platform,
-                message.substring("/koi test ".length())
+                message.substring("/koi test ".length()).trim()
             );
         } else {
             AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);

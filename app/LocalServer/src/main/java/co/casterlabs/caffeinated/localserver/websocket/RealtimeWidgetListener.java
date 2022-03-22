@@ -51,9 +51,23 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
         this.handle.widgetInstances.add(this.wInstance);
         this.handle.widget.onNewInstance(this.wInstance);
 
+        JsonObject statics = null;
+
+        switch (this.mode) {
+            case APPLET:
+            case DOCK:
+                statics = Caffeinated.getInstance().getKoi().toJsonExtended();
+                break;
+
+            case DEMO:
+            case WIDGET:
+                statics = Caffeinated.getInstance().getKoi().toJson();
+                break;
+        }
+
         this.sendMessage(
             "KOI_STATICS",
-            Caffeinated.getInstance().getKoi().toJson()
+            statics
         );
 
         this.sendMessage(
