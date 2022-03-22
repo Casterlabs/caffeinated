@@ -16,6 +16,7 @@ import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.plugins.PluginContext.ContextType;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences.WidgetSettingsDetails;
 import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
+import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
@@ -69,12 +70,15 @@ public class PluginIntegration extends JavascriptObject {
             this.contexts.add(ctx);
         }
 
-//        {
-//            CaffeinatedPlugin uiDocksPlugin = new UIDocksPlugin();
-//
-//            ReflectionLib.setValue(uiDocksPlugin, "plugins", this.plugins);
-//            this.contexts.add(this.plugins.unsafe_loadPlugins(Arrays.asList(uiDocksPlugin), "Caffeinated"));
-//        }
+        // Load the UI Docks
+        {
+            CaffeinatedPlugin uiDocksPlugin = new UIDocksPlugin();
+
+            ReflectionLib.setValue(uiDocksPlugin, "plugins", this.plugins);
+            PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(uiDocksPlugin), "Caffeinated");
+            ctx.setPluginType(ContextType.INTERNAL);
+            this.contexts.add(ctx);
+        }
 
         for (File file : pluginsDir.listFiles()) {
             String fileName = file.getName();
