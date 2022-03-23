@@ -63,6 +63,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
             case DEMO:
             case WIDGET:
+            case WIDGET_ALT:
                 statics = Caffeinated.getInstance().getKoi().toJson();
                 break;
         }

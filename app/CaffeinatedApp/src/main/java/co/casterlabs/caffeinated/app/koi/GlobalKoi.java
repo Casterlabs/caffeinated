@@ -126,6 +126,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
                                 case DEMO:
                                 case WIDGET:
+                                case WIDGET_ALT:
                                     instance.onKoiStaticsUpdate(statics);
                                     break;
                             }
