@@ -22,7 +22,7 @@
             goto("/welcome/step1");
         };
 
-        Caffeinated.app.cancelSignin();
+        Caffeinated.auth.cancelSignin();
     });
 </script>
 

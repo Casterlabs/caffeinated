@@ -17,15 +17,15 @@
     let nameEditor;
 
     function editName() {
-        Caffeinated.plugin.renameWidget(widget.id, nameEditorTextContent);
+        Caffeinated.plugins.renameWidget(widget.id, nameEditorTextContent);
     }
 
     function clickButton(buttonId) {
-        Caffeinated.plugin.clickWidgetSettingsButton(widget.id, buttonId);
+        Caffeinated.plugins.clickWidgetSettingsButton(widget.id, buttonId);
     }
 
     function deleteWidget() {
-        Caffeinated.plugin.deleteWidget(widget.id);
+        Caffeinated.plugins.deleteWidget(widget.id);
         history.back();
     }
 
