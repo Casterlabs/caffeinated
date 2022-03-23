@@ -2,16 +2,12 @@ package co.casterlabs.caffeinated.builtin.widgets.goals;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.Nullable;
-
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.builtin.widgets.goals.generic.GenericGoal;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 
 public class CustomGoal extends GenericGoal {
     public static final WidgetDetails DETAILS = new WidgetDetails()
@@ -27,17 +23,14 @@ public class CustomGoal extends GenericGoal {
         if (this.settings().has("goal.value")) {
             this.update(this.settings().getNumber("goal.value").doubleValue());
         }
+
+        super.renderSettingsLayout();
     }
 
     @Override
     protected void onSettingsUpdate() {
+        super.onSettingsUpdate();
         this.update(this.settings().getNumber("goal.value").doubleValue());
-    }
-
-    @SneakyThrows
-    @Override
-    public @Nullable String getWidgetHtml() {
-        return CaffeinatedDefaultPlugin.resolveResource("/goal.html");
     }
 
     @Override

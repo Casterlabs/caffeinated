@@ -11,6 +11,7 @@ import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
@@ -49,14 +50,14 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
     @Override
     public void onInit() {
-        this.renderSettingsLayout();
-
         this.addKoiListener(this);
 
         // We don't care if this fails.
         try {
             this.count = this.settings().getNumber("count").doubleValue();
         } catch (Exception ignored) {}
+
+        this.renderSettingsLayout();
     }
 
     private void save() {
@@ -69,7 +70,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
         this.renderSettingsLayout();
     }
 
-    private void renderSettingsLayout() {
+    protected void renderSettingsLayout() {
         WidgetSettingsLayout layout = this.generateSettingsLayout();
 
         this.setSettingsLayout(layout, true); // Preserve
@@ -129,6 +130,65 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
             layout.addSection(barGoal);
         }
 
+        {
+            WidgetSettingsSection alert = new WidgetSettingsSection("alert", "Alert")
+                .addItem(WidgetSettingsItem.asCheckbox("enabled", "Enabled", false));
+
+            if (this.settings().getBoolean("alert.enabled", false)) {
+                layout.addButton(
+                    new WidgetSettingsButton(
+                        "copy-alert-url",
+                        "bell",
+                        "Copy Alert URL",
+                        "Copy Alert URL",
+                        () -> {
+                            Caffeinated.getInstance().copyText(
+                                this.getUrl().replace("=WIDGET", "=WIDGET_ALT"),
+                                null
+                            );
+                        }
+                    )
+                );
+
+                alert
+                    .addItem(WidgetSettingsItem.asNumber("duration", "Duration (Seconds)", 15, 1, 0, 60))
+                    .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
+                    .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128))
+                    .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"))
+                    .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
+                    .addItem(WidgetSettingsItem.asColor("highlight_color", "Highlight Color", "#5bf599"))
+                    .addItem(WidgetSettingsItem.asText("text", "Text", "We did it!", ""));
+
+                layout.addSection(alert);
+
+                {
+                    WidgetSettingsSection audioSection = new WidgetSettingsSection("alert.audio", "Alert Audio")
+                        .addItem(WidgetSettingsItem.asCheckbox("enabled", "Play Audio", true));
+
+                    if (this.settings().getBoolean("audio.enabled", true)) {
+                        audioSection
+                            .addItem(WidgetSettingsItem.asFile("file", "Audio File", "audio"))
+                            .addItem(WidgetSettingsItem.asRange("volume", "Volume", .5, .01, 0, 1));
+                    }
+
+                    layout.addSection(audioSection);
+                }
+
+                {
+                    WidgetSettingsSection imageSection = new WidgetSettingsSection("alert.image", "Alert Image")
+                        .addItem(WidgetSettingsItem.asCheckbox("enabled", "Show Image", true));
+
+                    if (this.settings().getBoolean("image.enabled", true)) {
+                        imageSection.addItem(WidgetSettingsItem.asFile("file", "Image File", "image", "video"));
+                    }
+
+                    layout.addSection(imageSection);
+                }
+            } else {
+                layout.addSection(alert);
+            }
+        }
+
         if (this.enablePlatformOption() && this.isMultiPlatform()) {
             layout.addSection(
                 new WidgetSettingsSection("platform", "Platform")
@@ -145,8 +205,12 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
     @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml() {
-        return CaffeinatedDefaultPlugin.resolveResource("/goal.html");
+    public @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
+        if (mode == WidgetInstanceMode.WIDGET_ALT) {
+            return CaffeinatedDefaultPlugin.resolveResource("/goal_alert.html");
+        } else {
+            return CaffeinatedDefaultPlugin.resolveResource("/goal.html");
+        }
     }
 
     @KoiEventHandler

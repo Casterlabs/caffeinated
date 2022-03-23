@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.Nullable;
+
 import co.casterlabs.caffeinated.app.api.AppApi;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.auth.AuthPreferences;
@@ -18,7 +20,9 @@ import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences;
 import co.casterlabs.caffeinated.app.theming.ThemeManager;
 import co.casterlabs.caffeinated.app.ui.AppUI;
+import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
+import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
@@ -135,6 +139,16 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
                 .get(type)
                 .forEach((c) -> c.accept(data));
         }
+    }
+
+    @Override
+    public void copyText(@NonNull String text, @Nullable String toastText) {
+        if (toastText == null) {
+            toastText = "Copied link to clipboard";
+        }
+
+        ClipboardUtil.copy(text);
+        this.UI.showToast(toastText, UIBackgroundColor.PRIMARY);
     }
 
 }

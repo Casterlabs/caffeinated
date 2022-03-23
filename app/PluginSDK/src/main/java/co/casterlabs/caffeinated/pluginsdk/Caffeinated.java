@@ -1,7 +1,10 @@
 package co.casterlabs.caffeinated.pluginsdk;
 
+import org.jetbrains.annotations.Nullable;
+
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.music.Music;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
@@ -15,5 +18,7 @@ public interface Caffeinated {
     public Koi getKoi();
 
     public Music getMusic();
+
+    public void copyText(@NonNull String text, @Nullable String toastText);
 
 }
