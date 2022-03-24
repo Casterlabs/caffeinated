@@ -103,11 +103,12 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public void init() {
         this.themeManager.init();
         this.UI.init();
+        this.chatbot.init();
         this.api.init();
+        this.plugins.init();
 //            this.koi.init();
         this.auth.init();
         this.music.init();
-        this.plugins.init();
 
         this.appPreferences.save();
     }

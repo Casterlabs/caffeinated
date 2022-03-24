@@ -39,6 +39,8 @@
 
         <a class="sidebar-category-button" href="/pages/stream-chat"> Chat </a>
 
+        <a class="sidebar-category-button" href="/pages/chatbot-manager"> Chat Bot </a>
+
         {#each docks as dock}
             <a class="sidebar-category-button" href="/pages/dock-viewer?dock={dock.id}"> {dock.details.friendlyName} </a>
         {/each}

@@ -45,7 +45,7 @@ public class AppChatbot extends JavascriptObject {
 
         int timerIntervalSeconds = this.preferences.get().getTimerIntervalSeconds();
 
-        if (timerIntervalSeconds > 0) {
+        if ((timerIntervalSeconds > 0) && !this.preferences.get().getTimers().isEmpty()) {
             this.timerTask = new AsyncTask(() -> {
                 while (true) {
                     try {
@@ -115,13 +115,7 @@ public class AppChatbot extends JavascriptObject {
                 }
 
                 if ((shout.getPlatform() == null) || (shout.getPlatform() == target.getPlatform())) {
-                    String message;
-
-                    if (this.preferences.get().isMentionInReply()) {
-                        message = String.format("@%s %s", target.getDisplayname(), shout.getText());
-                    } else {
-                        message = shout.getText();
-                    }
+                    String message = String.format("@%s %s", target.getDisplayname(), shout.getText());
 
                     CaffeinatedApp.getInstance().getKoi().sendChat(target.getPlatform(), message, this.preferences.get().getChatter());
                     break; // We still want to try to process it as a command.
