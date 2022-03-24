@@ -13,6 +13,7 @@ import co.casterlabs.caffeinated.app.api.AppApi;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.auth.AuthPreferences;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
+import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegrationPreferences;
@@ -57,21 +58,26 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private @Setter Webview webview;
     private @Setter String appUrl;
 
+    // @formatter:off
+
     // Integrations
     private PluginIntegration plugins = new PluginIntegration();
-    private MusicIntegration music = new MusicIntegration();
-    private ThemeManager themeManager = new ThemeManager();
-    private AppChatbot chatbot = new AppChatbot();
-    private GlobalKoi koi = new GlobalKoi();
-    private AppAuth auth = new AppAuth();
-    private AppApi api = new AppApi();
-    private AppUI UI = new AppUI();
+    private MusicIntegration  music = new MusicIntegration();
+    private ThemeManager      themeManager = new ThemeManager();
+    private AppChatbot        chatbot = new AppChatbot();
+    private GlobalKoi         koi = new GlobalKoi();
+    private AppAuth           auth = new AppAuth();
+    private AppApi            api = new AppApi();
+    private AppUI             UI = new AppUI();
 
     // Preferences
     private PreferenceFile<PluginIntegrationPreferences> pluginIntegrationPreferences = new PreferenceFile<>("plugins", PluginIntegrationPreferences.class);
-    private PreferenceFile<MusicIntegrationPreferences> musicIntegrationPreferences = new PreferenceFile<>("music", MusicIntegrationPreferences.class);
-    private PreferenceFile<WebviewWindowState> windowPreferences = new PreferenceFile<>("window", WebviewWindowState.class);
-    private PreferenceFile<AuthPreferences> authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
+    private PreferenceFile<MusicIntegrationPreferences>  musicIntegrationPreferences = new PreferenceFile<>("music", MusicIntegrationPreferences.class);
+    private PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
+    private PreferenceFile<WebviewWindowState>           windowPreferences = new PreferenceFile<>("window", WebviewWindowState.class);
+    private PreferenceFile<AuthPreferences>              authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
+
+    // @formatter:on
 
     @JavascriptValue(allowSet = false)
     private PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);

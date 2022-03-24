@@ -51,6 +51,11 @@ public class PreferenceFile<T> {
         return this.data;
     }
 
+    public void set(@NonNull T data) {
+        this.data = data;
+        this.save();
+    }
+
     public PreferenceFile<T> load() {
         try {
             if (this.file.exists()) {

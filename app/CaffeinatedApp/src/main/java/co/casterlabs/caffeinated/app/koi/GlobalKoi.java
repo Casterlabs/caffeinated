@@ -159,6 +159,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                 this.eventHistory.add(e);
             }
 
+            CaffeinatedApp.getInstance().getChatbot().processEvent(e);
+
             switch (e.getType()) {
 
                 case VIEWER_LIST: {
