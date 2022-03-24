@@ -148,8 +148,10 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 
     @Override
     public void onSupportedStreamConfigurationFeatures(List<KoiStreamConfigurationFeatures> streamConfigFeatures) {
-        this.streamConfigurationFeatures = Collections.unmodifiableList(streamConfigFeatures);
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+        if (streamConfigFeatures != null) {
+            this.streamConfigurationFeatures = Collections.unmodifiableList(streamConfigFeatures);
+            CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+        }
     }
 
     @SuppressWarnings("deprecation")

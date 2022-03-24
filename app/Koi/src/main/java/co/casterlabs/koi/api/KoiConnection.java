@@ -98,7 +98,7 @@ public class KoiConnection implements Closeable {
         public KoiSocket(URI uri) {
             super(uri);
 
-            this.setConnectionLostTimeout(5 /* Seconds */);
+            this.setConnectionLostTimeout(60 /* Seconds */);
             this.addHeader("User-Agent", "Casterlabs");
             this.setTcpNoDelay(true);
         }
@@ -238,7 +238,7 @@ public class KoiConnection implements Closeable {
             if (remote) {
                 logger.info("Lost connection to Koi.");
             } else {
-                logger.info("Disconnected from Koi.");
+                logger.info("Disconnected from Koi. (%s)", reason);
             }
 
             this.fireCloseEvent(remote);
