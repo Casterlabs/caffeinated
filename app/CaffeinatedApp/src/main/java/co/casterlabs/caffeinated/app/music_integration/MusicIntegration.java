@@ -15,7 +15,7 @@ import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;

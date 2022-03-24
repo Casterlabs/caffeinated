@@ -20,6 +20,12 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>co.casterlabs.kaimen</groupId>
+			<artifactId>Util</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
 		<!-- Utilities -->
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>

@@ -12,7 +12,7 @@ import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.caffeinated.util.Pair;
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonElement;

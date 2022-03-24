@@ -14,7 +14,7 @@ import co.casterlabs.caffeinated.localserver.handlers.RoutePluginApi;
 import co.casterlabs.caffeinated.localserver.handlers.RouteWidgetApi;
 import co.casterlabs.caffeinated.localserver.websocket.RealtimeConnection;
 import co.casterlabs.caffeinated.util.Pair;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.rakurai.impl.http.undertow.UndertowHttpServer;
 import co.casterlabs.rakurai.io.http.HttpMethod;
 import co.casterlabs.rakurai.io.http.server.HttpServerImplementation;

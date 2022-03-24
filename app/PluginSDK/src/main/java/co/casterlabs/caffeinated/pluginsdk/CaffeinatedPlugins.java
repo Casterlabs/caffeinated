@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
-import co.casterlabs.caffeinated.util.Producer;
+import co.casterlabs.kaimen.util.functional.Producer;
 import lombok.NonNull;
 
 public interface CaffeinatedPlugins {

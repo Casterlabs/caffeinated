@@ -10,7 +10,7 @@ import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiConnection;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;

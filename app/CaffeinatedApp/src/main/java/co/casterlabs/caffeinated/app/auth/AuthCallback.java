@@ -5,8 +5,8 @@ import java.util.concurrent.TimeUnit;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
 import co.casterlabs.caffeinated.util.Crypto;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
-import co.casterlabs.caffeinated.util.async.Promise;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.kaimen.util.threading.Promise;
 import lombok.Getter;
 import lombok.SneakyThrows;
 

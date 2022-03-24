@@ -53,9 +53,15 @@
 
 	<dependencyManagement>
 		<dependencies>
+		
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
 				<artifactId>App</artifactId>
+				<version>${kaimen.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>co.casterlabs.kaimen</groupId>
+				<artifactId>Util</artifactId>
 				<version>${kaimen.version}</version>
 			</dependency>
 
