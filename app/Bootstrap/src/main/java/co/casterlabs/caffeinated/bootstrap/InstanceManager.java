@@ -7,8 +7,8 @@ import java.nio.channels.FileLock;
 import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
-import co.casterlabs.caffeinated.util.async.Promise;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.kaimen.util.threading.Promise;
 import xyz.e3ndr.consoleutil.ipc.IpcChannel;
 import xyz.e3ndr.consoleutil.ipc.MemoryMappedIpc;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;

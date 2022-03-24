@@ -17,7 +17,7 @@ import co.casterlabs.caffeinated.bootstrap.NativeSystem.SystemPlaybackMusicProvi
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.caffeinated.util.Pair;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.io.http.MimeTypes;
 import lombok.SneakyThrows;

@@ -19,7 +19,7 @@ import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.types.Media
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.types.PlaybackStatus;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.caffeinated.util.Pair;
-import co.casterlabs.caffeinated.util.async.AsyncTask;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.SneakyThrows;
