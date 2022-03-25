@@ -21,8 +21,8 @@ public class ChatbotPreferences {
     private Set<Command> commands = new HashSet<>();
     private Set<Shout> shouts = new HashSet<>();
 
-    private int timerIntervalSeconds = 90;
-    private boolean mentionInReply = false;
+    private int timerIntervalSeconds = 300;
+    private boolean mentionInReply = true;
 
     private KoiChatterType chatter = KoiChatterType.CLIENT;
 

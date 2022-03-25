@@ -114,10 +114,16 @@ public class AppChatbot extends JavascriptObject {
                         continue;
                 }
 
-                if ((shout.getPlatform() == null) || (shout.getPlatform() == target.getPlatform())) {
+                UserPlatform platform = target.getPlatform();
+
+                if (platform == UserPlatform.CASTERLABS_SYSTEM) {
+                    platform = CaffeinatedApp.getInstance().getKoi().getFirstSignedInPlatform();
+                }
+
+                if ((shout.getPlatform() == null) || (shout.getPlatform() == platform)) {
                     String message = String.format("@%s %s", target.getDisplayname(), shout.getText());
 
-                    CaffeinatedApp.getInstance().getKoi().sendChat(target.getPlatform(), message, this.preferences.get().getChatter());
+                    CaffeinatedApp.getInstance().getKoi().sendChat(platform, message, this.preferences.get().getChatter());
                     break; // We still want to try to process it as a command.
                 }
             }
@@ -131,7 +137,13 @@ public class AppChatbot extends JavascriptObject {
                     continue;
                 }
 
-                if ((command.getPlatform() == null) || (command.getPlatform() == chatEvent.getSender().getPlatform())) {
+                UserPlatform platform = chatEvent.getSender().getPlatform();
+
+                if (platform == UserPlatform.CASTERLABS_SYSTEM) {
+                    platform = CaffeinatedApp.getInstance().getKoi().getFirstSignedInPlatform();
+                }
+
+                if ((command.getPlatform() == null) || (command.getPlatform() == platform)) {
                     boolean send = false;
 
                     switch (command.getType()) {
@@ -158,7 +170,7 @@ public class AppChatbot extends JavascriptObject {
                             message = command.getResponse();
                         }
 
-                        CaffeinatedApp.getInstance().getKoi().sendChat(chatEvent.getSender().getPlatform(), message, this.preferences.get().getChatter());
+                        CaffeinatedApp.getInstance().getKoi().sendChat(platform, message, this.preferences.get().getChatter());
                         return; // Break the loop.
                     }
                 }

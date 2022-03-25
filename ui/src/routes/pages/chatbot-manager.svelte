@@ -20,58 +20,58 @@
         ["DONATION", "Donates"],
         ["FOLLOW", "Follows"],
         ["RAID", "Raids"],
-        ["Subscription", "Subscribes"]
+        ["SUBSCRIPTION", "Subscribes"]
     ];
 
     let currentTab = "COMMANDS";
 
     let mentionSenderInReply = true;
-
-    let commands = [
-        {
-            platform: null, // Null means all platforms
-            trigger: "discord",
-            response: "Join up @ discord.gg/example",
-            type: "CONTAINS"
-        },
-        {
-            platform: "CAFFEINE",
-            trigger: "casterlabs",
-            response: "Checkout casterlabs.co!",
-            type: "COMMAND"
-        }
-    ];
-
-    let shouts = [
-        {
-            platform: null, // Null means all platforms
-            eventType: "FOLLOW",
-            text: "Thank you for the follow!"
-        }
-    ];
-
-    let timers = ["Checkout casterlabs.co for some sick widgets and alerts!"];
-
+    let commands = [];
+    let shouts = [];
+    let timers = [];
     let timerInterval = 90;
+
+    function updatePreferences() {
+        const preferences = {
+            mentionInReply: mentionSenderInReply,
+            commands: commands,
+            shouts: shouts,
+            timers: timers,
+            timerInterval: timerInterval,
+            chatter: "CLIENT" // TODO
+        };
+
+        Caffeinated.chatbot.preferences = preferences;
+        console.log(preferences);
+    }
 
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - Chat Bot";
+
+        const preferences = await Caffeinated.chatbot.preferences;
+
+        commands = preferences.commands;
+        shouts = preferences.shouts;
+        timers = preferences.timers;
+        timerInterval = preferences.timerIntervalSeconds;
+        mentionSenderInReply = preferences.mentionInReply;
+        // chatter = preferences.chatter;
     });
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
-<div style="margin: 15px;">
+<div style="margin: 15px;" on:change={updatePreferences}>
     <div class="tabs">
         <ul style="justify-content: center !important;">
             {#each ["COMMANDS", "SHOUTS", "TIMERS"] as tab}
                 {#if currentTab == tab}
-                    <li class="is-active">
+                    <li class="is-active no-bottom">
                         <a>
                             {tab}
                         </a>
                     </li>
                 {:else}
-                    <li>
+                    <li class="no-bottom">
                         <a on:click={() => (currentTab = tab)}>
                             {tab}
                         </a>
@@ -83,6 +83,14 @@
 
     {#if currentTab == "COMMANDS"}
         <!-- <Commands> -->
+        <label class="checkbox">
+            Mention sender when replying to commands:
+            <input type="checkbox" bind:checked={mentionSenderInReply} />
+        </label>
+
+        <br />
+        <br />
+
         <ul>
             {#each commands as command}
                 <li class="box">
@@ -128,6 +136,7 @@
                         on:click={() => {
                             commands.splice(commands.indexOf(command), 1);
                             commands = commands; // Trigger update.
+                            updatePreferences();
                         }}
                     >
                         <svg
@@ -153,18 +162,18 @@
                     class="highlight-on-hover"
                     style="width: 100%; color: inherit; display: block; font-size: 1.5em;"
                     on:click={() => {
-                        shouts.push({
+                        commands.push({
                             platform: null,
-                            eventType: "FOLLOW",
-                            text: "Thank you for the follow!"
+                            trigger: "casterlabs",
+                            response: "Checkout casterlabs.co!",
+                            type: "COMMAND"
                         });
-                        shouts = shouts; // Trigger update
+                        commands = commands; // Trigger update.
+                        updatePreferences();
                     }}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -172,7 +181,7 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         class="feather feather-plus"
-                        style="vertical-align: text-bottom;"
+                        style="width: 24px; height: 24px; margin-top: 10px;"
                     >
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
@@ -212,6 +221,7 @@
                         on:click={() => {
                             shouts.splice(shouts.indexOf(shout), 1);
                             shouts = shouts; // Trigger update.
+                            updatePreferences();
                         }}
                     >
                         <svg
@@ -237,20 +247,17 @@
                     class="highlight-on-hover"
                     style="width: 100%; color: inherit; display: block; font-size: 1.5em;"
                     on:click={() => {
-                        console.log("test", commands);
-                        commands.push({
+                        shouts.push({
                             platform: null,
-                            trigger: "casterlabs",
-                            response: "Checkout casterlabs.co!",
-                            type: "COMMAND"
+                            eventType: "FOLLOW",
+                            text: "Thank you for the follow!"
                         });
-                        commands = commands; // Trigger update
+                        shouts = shouts; // Trigger update.
+                        updatePreferences();
                     }}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -258,7 +265,7 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         class="feather feather-plus"
-                        style="vertical-align: text-bottom;"
+                        style="width: 24px; height: 24px; margin-top: 10px;"
                     >
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
@@ -271,7 +278,6 @@
         <!-- <Timers> -->
         Every <input class="input" type="number" bind:value={timerInterval} style="width: 75px;" /> seconds, send one of the following:
         <br />
-        <br />
         <ul>
             {#each timers as text}
                 <li>
@@ -282,6 +288,7 @@
                         on:click={() => {
                             timers.splice(timers.indexOf(text), 1);
                             timers = timers; // Trigger update.
+                            updatePreferences();
                         }}
                     >
                         <svg
@@ -308,13 +315,12 @@
                     style="width: 100%; color: inherit; display: block; font-size: 1.5em;"
                     on:click={() => {
                         timers.push("Checkout casterlabs.co for some sick widgets and alerts!");
-                        timers = timers; // Trigger update
+                        timers = timers; // Trigger update.
+                        updatePreferences();
                     }}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -322,7 +328,7 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         class="feather feather-plus"
-                        style="vertical-align: text-bottom;"
+                        style="width: 24px; height: 24px; margin-top: 10px;"
                     >
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
@@ -331,15 +337,25 @@
             </li>
         </ul>
         <!-- </Timers> -->
+    {:else if currentTab == "SETTINGS"}
+        <!-- <Settings> -->
+
+        <!-- ... TODO ... -->
+
+        <!-- </Settings> -->
     {/if}
 </div>
 
 <style>
-    input {
+    .input {
         height: 32px !important;
         vertical-align: middle;
         display: inline-block;
         width: auto;
+    }
+
+    textarea {
+        margin-top: 10px;
     }
 
     .select {
@@ -347,9 +363,10 @@
         font-size: 13.25px !important;
     }
 
-    li {
+    li:not(.no-bottom) {
         font-size: 1em !important;
         position: relative;
+        margin-bottom: 16px !important;
     }
 
     .item-delete {
