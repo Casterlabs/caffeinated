@@ -53,7 +53,13 @@
 
 	<dependencyManagement>
 		<dependencies>
-		
+			<dependency>
+				<groupId>jline</groupId>
+				<artifactId>jline</artifactId>
+				<version>2.14.2</version>
+				<scope>compile</scope>
+			</dependency>
+
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
 				<artifactId>App</artifactId>
