@@ -45,9 +45,9 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             String newFormat;
 
             if (CaffeinatedApp.getInstance().isDev()) {
-                newFormat = "https://studio.casterlabs.co";
-            } else {
                 newFormat = "http://localhost:3001";
+            } else {
+                newFormat = "https://studio.casterlabs.co";
             }
 
             newFormat += "/popout/stream-chat?pluginId=%s&widgetId=%s&authorization=%s&port=%d&mode=%s";
