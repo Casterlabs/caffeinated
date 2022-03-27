@@ -26,6 +26,7 @@ import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.WebviewWindowState;
+import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
@@ -148,6 +149,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
     }
 
+    @JavascriptFunction
     @Override
     public void copyText(@NonNull String text, @Nullable String toastText) {
         if (toastText == null) {
