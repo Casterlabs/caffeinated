@@ -172,17 +172,6 @@ public class AppAuth extends JavascriptObject {
     }
 
     @JavascriptFunction
-    public void caffeineSignin(@NonNull String caffeineToken) {
-        String tokenId = CaffeinatedApp
-            .getInstance()
-            .getAuthPreferences()
-            .get()
-            .addKoiToken(caffeineToken);
-
-        this.startAuthInstance(tokenId);
-    }
-
-    @JavascriptFunction
     public void signout(@NonNull String tokenId) {
         AuthInstance inst = this.authInstances.remove(tokenId);
 
@@ -198,6 +187,28 @@ public class AppAuth extends JavascriptObject {
             this.currentAuthCallback.cancel();
             this.currentAuthCallback = null;
         }
+    }
+
+    /**
+     * @implSpec IllegalStateException means MFA prompt.
+     */
+    @JavascriptFunction
+    public void loginCaffeine(@NonNull String username, @NonNull String password, @Nullable String mfa) throws IOException, IllegalStateException, IllegalArgumentException {
+        FastLogger.logStatic("test");
+
+        String koiToken = CaffeineHelper.login(username, password, mfa);
+
+        FastLogger.logStatic(koiToken);
+
+        String tokenId = CaffeinatedApp
+            .getInstance()
+            .getAuthPreferences()
+            .get()
+            .addKoiToken(koiToken);
+
+        FastLogger.logStatic(tokenId);
+
+        this.startAuthInstance(tokenId);
     }
 
     public AuthCallback authorize(String type) throws IOException {

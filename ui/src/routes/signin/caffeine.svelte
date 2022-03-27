@@ -11,49 +11,6 @@
 
     let errorMessage = null;
 
-    function signinCaffeine() {
-        return new Promise((resolve, reject) => {
-            const loginPayload = {
-                account: {
-                    username: usernameInput,
-                    password: passwordInput
-                },
-                mfa: {
-                    otp: mfaInput
-                }
-            };
-
-            fetch("https://api.caffeine.tv/v1/account/signin", {
-                method: "POST",
-                body: JSON.stringify(loginPayload),
-                headers: new Headers({
-                    "Content-Type": "application/json"
-                })
-            })
-                .then((result) => result.json())
-                .then((response) => {
-                    if (response.hasOwnProperty("next")) {
-                        reject("CAFFEINE_MFA");
-                    } else if (response.errors) {
-                        reject(response.errors);
-                    } else {
-                        const refreshToken = response.refresh_token;
-
-                        fetch(`https://api.casterlabs.co/v2/natsukashii/create?platform=CAFFEINE&token=${refreshToken}`)
-                            .then((nResult) => nResult.json())
-                            .then((nResponse) => {
-                                if (nResponse.data) {
-                                    resolve(nResponse.data.token);
-                                } else {
-                                    reject(response.errors);
-                                }
-                            });
-                    }
-                })
-                .catch(reject);
-        });
-    }
-
     async function submit(e) {
         if (!e.code || e.code == "Enter") {
             if (isLoading) {
@@ -63,14 +20,19 @@
             errorMessage = "";
             isLoading = true;
 
-            try {
-                const token = await signinCaffeine();
+            console.debug("submit", usernameInput, passwordInput, mfaInput);
 
-                Caffeinated.auth.caffeineSignin(token);
-            } catch (e) {
-                if (e == "CAFFEINE_MFA") {
+            try {
+                await Caffeinated.auth.loginCaffeine(usernameInput, passwordInput, mfaInput);
+                // Success!
+            } catch (ex) {
+                console.error(ex);
+
+                if (ex.includes("MFA")) {
                     isMfaPrompt = true;
                 } else {
+                    const e = JSON.parse(ex.substring(ex.indexOf("{")));
+
                     if (e.otp) {
                         errorMessage = "The Two Factor code is expired or incorrect.";
                     } else if (e._error) {
@@ -119,10 +81,12 @@
         <br />
         <input id="password-input" class="input" type="password" placeholder="Password" bind:value={passwordInput} on:keydown={submit} />
         <br />
-        <div class="hidden">
-            <br />
-            <input id="mfa-input" class="input is-success" type="text" placeholder="Two Factor Code" bind:value={mfaInput} on:keydown={submit} />
-            <br />
+        <div>
+            {#if isMfaPrompt}
+                <br />
+                <input id="mfa-input" class="input is-success" type="text" placeholder="Two Factor Code" bind:value={mfaInput} on:keydown={submit} />
+                <br />
+            {/if}
         </div>
         <br />
         <span id="error-message" class="is-6 is-danger">
