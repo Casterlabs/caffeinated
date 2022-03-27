@@ -194,8 +194,6 @@ public class AppAuth extends JavascriptObject {
      */
     @JavascriptFunction
     public void loginCaffeine(@NonNull String username, @NonNull String password, @Nullable String mfa) throws IOException, IllegalStateException, IllegalArgumentException {
-        FastLogger.logStatic("test");
-
         String koiToken = CaffeineHelper.login(username, password, mfa);
 
         FastLogger.logStatic(koiToken);
@@ -205,8 +203,6 @@ public class AppAuth extends JavascriptObject {
             .getAuthPreferences()
             .get()
             .addKoiToken(koiToken);
-
-        FastLogger.logStatic(tokenId);
 
         this.startAuthInstance(tokenId);
     }

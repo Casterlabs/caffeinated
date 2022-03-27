@@ -12,7 +12,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class CaffeineHelper {
     private static OkHttpClient client = new OkHttpClient();
@@ -35,8 +34,6 @@ public class CaffeineHelper {
                 JsonObject.singleton("otp", mfa)
             );
         }
-
-        FastLogger.logStatic(payload);
 
         String caffeineToken = sendAuth(payload);
         String koiToken = exchangeToken(caffeineToken);
@@ -64,8 +61,6 @@ public class CaffeineHelper {
                 throw new IllegalStateException(body);
             } else {
                 JsonObject json = Rson.DEFAULT.fromJson(body, JsonObject.class);
-
-                FastLogger.logStatic(json);
 
                 if (json.containsKey("next")) {
                     throw new IllegalStateException("MFA");

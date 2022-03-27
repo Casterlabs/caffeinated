@@ -20,31 +20,27 @@
             errorMessage = "";
             isLoading = true;
 
-            console.debug("submit", usernameInput, passwordInput, mfaInput);
-
             try {
                 await Caffeinated.auth.loginCaffeine(usernameInput, passwordInput, mfaInput);
                 // Success!
             } catch (ex) {
-                console.error(ex);
-
                 if (ex.includes("MFA")) {
                     isMfaPrompt = true;
                 } else {
-                    const e = JSON.parse(ex.substring(ex.indexOf("{")));
+                    const error = JSON.parse(ex.substring(ex.indexOf("{"), ex.lastIndexOf("}") + 1));
 
-                    if (e.otp) {
+                    if (error.otp) {
                         errorMessage = "The Two Factor code is expired or incorrect.";
-                    } else if (e._error) {
-                        switch (e._error[0]) {
+                    } else if (error._error) {
+                        switch (error._error[0]) {
                             case "The username or password provided is incorrect": {
                                 errorMessage = "The username or password provided is incorrect.";
                                 break;
                             }
                         }
                     } else {
-                        errorMessage = JSON.stringify(e);
-                        console.error(e);
+                        errorMessage = JSON.stringify(error);
+                        console.error(error);
                     }
                 }
             } finally {
