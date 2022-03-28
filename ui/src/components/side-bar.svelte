@@ -38,22 +38,16 @@
         <h1 class="title">Your Stream</h1>
 
         <a class="sidebar-category-button" href="/pages/stream-chat"> Chat </a>
+        <a class="sidebar-category-button hidden"> Analytics </a>
+        <a class="sidebar-category-button" disabled title="Coming Very Soon!" style="filter: opacity(.65);"> Custom Emotes </a>
+        <a class="sidebar-category-button hidden"> Shako </a>
 
         {#each docks as dock}
             <a class="sidebar-category-button" href="/pages/dock-viewer?dock={dock.id}"> {dock.details.friendlyName} </a>
         {/each}
     </div>
 
-    <!-- Channel -->
-    <div class="sidebar-section hidden">
-        <h1 class="title">Channel</h1>
-
-        <a class="sidebar-category-button hidden"> Analytics </a>
-        <a class="sidebar-category-button"> Custom Emotes </a>
-        <a class="sidebar-category-button"> Shako </a>
-    </div>
-
-    <!-- Other -->
+    <!-- Management -->
     <div class="sidebar-section">
         <h1 class="title">Management</h1>
 
