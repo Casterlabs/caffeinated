@@ -22,10 +22,13 @@ public class DonationGoal extends GenericGoal {
         .withFriendlyName("Donation Goal");
 
     private double donationTotal = 0;
+    private String lastCurrency;
 
     @Override
     public void onInit() {
         super.onInit();
+
+        this.lastCurrency = this.settings().getString("money.currency", Currencies.baseCurrency);
 
         this.addKoiListener(this);
 
@@ -35,8 +38,14 @@ public class DonationGoal extends GenericGoal {
     }
 
     private void save() {
-        this.settings()
-            .set("goal.value", this.donationTotal);
+        Currencies.convertCurrency(
+            this.donationTotal,
+            Currencies.baseCurrency,
+            this.settings().getString("money.currency", Currencies.baseCurrency)
+        ).then((amount) -> {
+            this.settings()
+                .set("goal.value", amount);
+        });
     }
 
     @Override
@@ -44,11 +53,26 @@ public class DonationGoal extends GenericGoal {
         WidgetSettingsLayout layout = this.generateSettingsLayout();
         this.setSettingsLayout(layout, true); // Preserve
 
-        // If this fails then we don't care.
-        try {
-            this.donationTotal = this.settings().getNumber("goal.value").doubleValue();
-            this.update(this.donationTotal);
-        } catch (Exception ignored) {}
+        String currency = this.settings().getString("money.currency", Currencies.baseCurrency);
+
+        if (this.lastCurrency.equals(currency)) {
+            // If this fails then we don't care.
+            try {
+                double currencyValue = this.settings().getNumber("goal.value").doubleValue();
+
+                Currencies.convertCurrency(
+                    currencyValue,
+                    currency,
+                    Currencies.baseCurrency
+                ).then((amount) -> {
+                    this.donationTotal = amount;
+                    this.update(this.donationTotal);
+                });
+            } catch (Exception ignored) {}
+        } else {
+            this.lastCurrency = currency;
+            this.save();
+        }
     }
 
     @Override
@@ -57,7 +81,7 @@ public class DonationGoal extends GenericGoal {
 
         layout.addSection(
             new WidgetSettingsSection("money", "Money")
-                .addItem(WidgetSettingsItem.asCurrency("currency", "Currency", "USD", false))
+                .addItem(WidgetSettingsItem.asCurrency("currency", "Currency", Currencies.baseCurrency, false))
         );
 
         return layout;
