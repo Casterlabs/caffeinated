@@ -87,6 +87,12 @@
 		<!-- Kaimen -->
 		<dependency>
 			<groupId>co.casterlabs.kaimen</groupId>
+			<artifactId>AllWebview-Impls</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>co.casterlabs.kaimen</groupId>
 			<artifactId>Windows-amd64</artifactId>
 			<scope>provided</scope>
 		</dependency>
