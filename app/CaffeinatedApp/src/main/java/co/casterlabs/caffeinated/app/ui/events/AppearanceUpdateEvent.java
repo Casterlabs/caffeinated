@@ -10,6 +10,7 @@ public class AppearanceUpdateEvent {
     private String theme;
     private String icon;
     private boolean closeToTray;
+    private boolean mikeysMode;
 
     @JsonValidate
     private void validate() {

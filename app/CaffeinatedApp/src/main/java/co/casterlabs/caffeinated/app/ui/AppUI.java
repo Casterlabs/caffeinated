@@ -121,6 +121,7 @@ public class AppUI extends JavascriptObject {
         uiPrefs.setIcon(event.getIcon());
         uiPrefs.setTheme(event.getTheme());
         uiPrefs.setCloseToTray(event.isCloseToTray());
+        uiPrefs.setMikeysMode(event.isMikeysMode());
         this.preferenceFile.save();
 
         this.updateIcon();

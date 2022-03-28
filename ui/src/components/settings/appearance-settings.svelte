@@ -5,6 +5,7 @@
     let appearanceTheme;
     let appearanceIcon;
     let appearanceCloseToTray;
+    let appearanceMikeysMode;
 
     let themes = [];
 
@@ -13,7 +14,7 @@
             theme: appearanceTheme,
             icon: appearanceIcon,
             closeToTray: appearanceCloseToTray,
-            minimizeToTray: appearanceMinimizeToTray
+            mikeysMode: appearanceMikeysMode
         });
     }
 
@@ -25,6 +26,7 @@
 
         appearanceIcon = uiPreferences.icon;
         appearanceCloseToTray = uiPreferences.closeToTray;
+        appearanceMikeysMode = uiPreferences.mikeysMode;
     });
 </script>
 
@@ -65,5 +67,12 @@
             <input type="checkbox" bind:checked={appearanceCloseToTray} on:change={sendUpdatedPreferences} />
             Close button sends to tray
         </label>
+    </div>
+    <br />
+    <div>
+        <span class="checkbox">
+            <input type="checkbox" bind:checked={appearanceMikeysMode} on:change={sendUpdatedPreferences} />
+        </span>
+        <a href="https://twitter.com/Casterlabs/status/1508475284944736268" rel="external">Mikey's mode</a>
     </div>
 </div>

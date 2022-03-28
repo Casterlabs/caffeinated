@@ -43,13 +43,16 @@
             window.__common = await import("$lib/__common.mjs");
         }
 
-        window.onBridgeInit = () => {
+        window.onBridgeInit = async () => {
             window.goto = goto;
 
             Bridge.on("goto", ({ path }) => goto(path));
 
             Caffeinated.themeManager.mutate("currentTheme", updateTheme);
-            Caffeinated.UI.onUILoaded();
+
+            const { mikeysMode } = await window.Caffeinated.UI.preferences;
+
+            setTimeout(Caffeinated.UI.onUILoaded, mikeysMode ? (120 + 15) * 1000 /* 2m15s */ : 150);
         };
 
         if (typeof window.Caffeinated != "undefined") {

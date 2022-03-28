@@ -10,21 +10,33 @@
     });
 
     let logo = "casterlabs";
+    let mikeysModeEnabled = false;
 
     onMount(async () => {
         document.title = "";
-        logo = (await window.Caffeinated.UI.preferences).icon;
+        const { icon, mikeysMode } = await window.Caffeinated.UI.preferences;
+
+        logo = icon;
+        mikeysModeEnabled = mikeysMode;
     });
 </script>
 
 <div class="has-text-centered">
     <div class="casterlabs-wordmark">
-        <img class="light-show" src="/img/wordmark/{logo}/black.svg" alt="Casterlabs Logo" />
-        <img class="dark-show" src="/img/wordmark/{logo}/white.svg" alt="Casterlabs Logo" />
+        {#if mikeysModeEnabled}
+            <img src="/img/mikeys.png" alt="Mikey's Logo" style="margin-bottom: 50px;" />
+        {:else}
+            <img class="light-show" src="/img/wordmark/{logo}/black.svg" alt="Casterlabs Logo" />
+            <img class="dark-show" src="/img/wordmark/{logo}/white.svg" alt="Casterlabs Logo" />
+        {/if}
 
         <div class="loading-spinner">
             <LoadingSpinner />
         </div>
+
+        {#if mikeysModeEnabled}
+            <div id="mikeys">Enjoy your <a href="https://eatmikeys.com/" rel="external">Mikey's</a> :^)</div>
+        {/if}
     </div>
 </div>
 
@@ -42,5 +54,12 @@
         width: 50px;
         height: 50px;
         margin: auto;
+    }
+
+    #mikeys {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -5em;
     }
 </style>

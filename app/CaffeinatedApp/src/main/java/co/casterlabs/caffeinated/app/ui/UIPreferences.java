@@ -11,6 +11,8 @@ public class UIPreferences {
     private boolean closeToTray = true;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
 
+    private boolean mikeysMode = false; // https://twitter.com/Casterlabs/status/1508475284944736268
+
     @Data
     @JsonClass(exposeAll = true)
     public static class ChatViewerPreferences {
