@@ -87,7 +87,7 @@
 		<!-- Kaimen -->
 		<dependency>
 			<groupId>co.casterlabs.kaimen</groupId>
-			<artifactId>AllWebview-Impls</artifactId>
+			<artifactId>AllWebviewImpls</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		
