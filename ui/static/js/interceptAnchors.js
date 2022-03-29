@@ -1,10 +1,8 @@
 
 new MutationObserver(() => {
     for (const anchor of document.querySelectorAll("a")) {
-        const rel = anchor.getAttribute("rel");
-
-        // Intercept all rel="external" anchors and add a click listener.
-        if (rel == "external" && !anchor.getAttribute("dest")) {
+        // Intercept all rel="external" and target="_blank" anchors and add a click listener.
+        if ((anchor.rel == "external" || anchor.target == "_blank") && !anchor.getAttribute("dest")) {
             anchor.setAttribute("dest", anchor.href);
             anchor.href = "#"; // Clear the property incase it tries to open the link.
 
