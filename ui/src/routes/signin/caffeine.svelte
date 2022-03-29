@@ -21,9 +21,11 @@
             isLoading = true;
 
             try {
-                await Caffeinated.auth.loginCaffeine(usernameInput, passwordInput, mfaInput);
+                await Caffeinated.auth.loginCaffeine(usernameInput, passwordInput, mfaInput, location.href.includes("?fromSettings"));
                 // Success!
             } catch (ex) {
+                isLoading = false;
+
                 if (ex.includes("MFA")) {
                     isMfaPrompt = true;
                 } else {
@@ -43,8 +45,6 @@
                         console.error(error);
                     }
                 }
-            } finally {
-                isLoading = false;
             }
         }
     }

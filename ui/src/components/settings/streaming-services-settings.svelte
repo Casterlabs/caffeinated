@@ -78,7 +78,7 @@
         <AccountBox
             platform="caffeine"
             platformName="Caffeine"
-            signInLink="/signin/caffeine"
+            signInLink="/signin/caffeine?fromSettings"
             bind:accountName={accounts.caffeine.accountName}
             bind:accountLink={accounts.caffeine.accountLink}
             bind:isSignedIn={accounts.caffeine.isSignedIn}
