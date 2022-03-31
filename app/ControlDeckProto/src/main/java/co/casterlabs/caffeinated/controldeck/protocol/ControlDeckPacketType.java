@@ -27,6 +27,8 @@ public enum ControlDeckPacketType {
     PAIR_FAIL(4),
 
     VOLUME(4),
+    DISPLAY_UPDATE(5),
+    DISPLAY_TOUCH(6),
 
     ;
 

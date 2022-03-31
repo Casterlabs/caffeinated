@@ -1,6 +1,5 @@
 package co.casterlabs.caffeinated.controldeck.protocol.packets;
 
-import co.casterlabs.caffeinated.controldeck.protocol.ControlDeckModel;
 import co.casterlabs.caffeinated.controldeck.protocol.ControlDeckPacketType;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -11,7 +10,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @JsonClass(exposeAll = true)
 public class CD_PacketDeckInit implements ControlDeckPacket {
-    private ControlDeckModel model;
+    private int volumeItemsCount;
+    private @Accessors(fluent = true) boolean hasDisplay;
+
+    private int displayWidth;
+    private int displayHeight;
+
     private String deckId;
 
     private boolean userGpioEnabled; // Unused.
