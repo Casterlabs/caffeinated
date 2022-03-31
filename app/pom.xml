@@ -13,6 +13,7 @@
 		<module>Koi</module>
 		<module>BuiltInPlugins</module>
 		<module>LocalServer</module>
+		<module>ControlDeckProto</module>
 	</modules>
 
 	<properties>
