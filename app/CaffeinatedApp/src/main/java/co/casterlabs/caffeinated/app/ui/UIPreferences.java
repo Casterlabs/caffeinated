@@ -1,17 +1,29 @@
 package co.casterlabs.caffeinated.app.ui;
 
+import co.casterlabs.caffeinated.util.MiscUtil;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Data;
 
 @Data
 @JsonClass(exposeAll = true)
 public class UIPreferences {
+    private static final String CURRENT_SKITTLE = MiscUtil.random("green_skittle", "orange_skittle", "purple_skittle", "red_skittle", "yellow_skittle");
+
     private String icon = "casterlabs";
     private String theme = "co.casterlabs.dark";
     private boolean closeToTray = true;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
 
     private boolean mikeysMode = false; // https://twitter.com/Casterlabs/status/1508475284944736268
+
+    public String getIcon() {
+        if ("skittles".equals(this.icon)) {
+            return CURRENT_SKITTLE; // Randomize the skittle shown in the taskbar.
+                                    // https://twitter.com/Skittles/status/1510008458489249796
+        } else {
+            return this.icon;
+        }
+    }
 
     @Data
     @JsonClass(exposeAll = true)

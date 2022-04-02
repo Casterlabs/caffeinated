@@ -57,6 +57,7 @@
                     <option value="casterlabs">Casterlabs</option>
                     <option value="pride">Pride</option>
                     <option value="moonlabs">Moonlabs</option>
+                    <option value="skittles">Skittles</option>
                 </select>
             </div>
         </label>
