@@ -4,12 +4,14 @@ import co.casterlabs.caffeinated.controldeck.protocol.ControlDeckPacketType;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
 @JsonClass(exposeAll = true)
-public class CD_PacketDeckInit implements ControlDeckPacket {
+@EqualsAndHashCode(callSuper = false)
+public class CD_PacketDeckInit extends ControlDeckPacket {
     private int volumeItemsCount;
     private @Accessors(fluent = true) boolean hasDisplay;
 

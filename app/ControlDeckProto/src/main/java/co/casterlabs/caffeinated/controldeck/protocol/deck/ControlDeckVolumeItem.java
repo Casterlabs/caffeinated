@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 public class ControlDeckVolumeItem {
-    private int id;
+    private int index;
     private ControlDeck deck;
 
     private boolean muted;
@@ -16,8 +16,8 @@ public class ControlDeckVolumeItem {
 
     private @Setter Consumer<ControlDeckVolumeItem> onUpdate;
 
-    ControlDeckVolumeItem(int id, ControlDeck deck) {
-        this.id = id;
+    ControlDeckVolumeItem(int index, ControlDeck deck) {
+        this.index = index;
         this.deck = deck;
     }
 
@@ -36,7 +36,7 @@ public class ControlDeckVolumeItem {
 
         this.deck.conn.sendPacket(
             new CD_PacketVolume()
-                .setHardwareItem((byte) id)
+                .setHardwareItemIndex((byte) index)
                 .setMuted(muted)
                 .setVolume(volume)
         );

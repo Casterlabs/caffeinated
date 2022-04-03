@@ -9,10 +9,12 @@ import co.casterlabs.caffeinated.controldeck.protocol.packets.CD_PacketPCInit;
 import co.casterlabs.caffeinated.controldeck.protocol.packets.CD_PacketReady;
 import co.casterlabs.caffeinated.controldeck.protocol.packets.CD_PacketVolume;
 import co.casterlabs.caffeinated.controldeck.protocol.packets.ControlDeckPacket;
+import co.casterlabs.rakurai.json.Rson;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 @Getter
 public class ControlDeck implements Closeable {
@@ -43,6 +45,8 @@ public class ControlDeck implements Closeable {
     }
 
     public void processPacket(ControlDeckPacket packet) {
+        FastLogger.logStatic("\u2193 %s", Rson.DEFAULT.toJson(packet));
+
         if (this.initState == 1) {
             CD_PacketDeckInit deckInit = (CD_PacketDeckInit) packet;
 
@@ -66,29 +70,34 @@ public class ControlDeck implements Closeable {
 
             this.initState = 2;
         } else if (this.initState == 2) {
-            // READY.
-            this.initState = -1;
+            if (packet instanceof CD_PacketReady) {
+                // READY.
+                this.initState = -1;
 
-            conn.onInit();
+                conn.onInit();
 
-            for (int idx = 0; idx < this.volumeItems.length; idx++) {
-                ControlDeckVolumeItem item = this.volumeItems[idx];
+                for (int idx = 0; idx < this.volumeItems.length; idx++) {
+                    ControlDeckVolumeItem item = this.volumeItems[idx];
 
-                conn.sendPacket(
-                    new CD_PacketVolume()
-                        .setHardwareItem((byte) idx)
-                        .setMuted(item.isMuted())
-                        .setVolume(item.getVolume())
-                );
+                    conn.sendPacket(
+                        new CD_PacketVolume()
+                            .setHardwareItemIndex((byte) idx)
+                            .setMuted(item.isMuted())
+                            .setVolume(item.getVolume())
+                    );
+                }
+
+                this.conn.sendPacket(new CD_PacketReady());
+            } else {
+                // Connection failed. (CD_PairFail)
+                this.initState = -2;
             }
-
-            this.conn.sendPacket(new CD_PacketReady());
         } else {
             switch (packet.getType()) {
                 case VOLUME:
                     CD_PacketVolume volumePacket = (CD_PacketVolume) packet;
 
-                    this.volumeItems[volumePacket.getHardwareItem()].update(volumePacket);
+                    this.volumeItems[volumePacket.getHardwareItemIndex()].update(volumePacket);
                     break;
 
                 case DISPLAY_TOUCH:
