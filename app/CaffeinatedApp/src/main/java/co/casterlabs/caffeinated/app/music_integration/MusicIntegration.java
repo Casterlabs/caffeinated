@@ -138,7 +138,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
                     }
                 }
 
-                CaffeinatedApp.getInstance().getApi().sendSong();
+                CaffeinatedApp.getInstance().getApi().musicApi.sendSong();
             } catch (Exception e) {
                 e.printStackTrace();
             }
