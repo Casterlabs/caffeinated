@@ -14,6 +14,7 @@ import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.auth.AuthPreferences;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
+import co.casterlabs.caffeinated.app.controldeck.AppControlDeck;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegrationPreferences;
@@ -64,6 +65,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // Integrations
     private PluginIntegration plugins = new PluginIntegration();
     private MusicIntegration  music = new MusicIntegration();
+    private AppControlDeck    controlDeck = new AppControlDeck();
     private ThemeManager      themeManager = new ThemeManager();
     private AppChatbot        chatbot = new AppChatbot();
     private GlobalKoi         koi = new GlobalKoi();
@@ -104,6 +106,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public void init() {
         this.themeManager.init();
         this.UI.init();
+        this.controlDeck.init();
         this.chatbot.init();
         this.api.init();
         this.plugins.init();
