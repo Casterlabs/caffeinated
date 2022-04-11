@@ -147,7 +147,7 @@ public class Updater {
                 ZipUtil.unzip(updateFile, appDirectory);
 
                 String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
-                Files.writeString(new File(appDirectory, "commit").toPath(), remoteCommit);
+                Files.writeString(commitFile.toPath(), remoteCommit);
 
                 updateFile.delete();
 
