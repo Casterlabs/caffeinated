@@ -26,7 +26,8 @@ public class UpdaterPane extends JPanel {
             "FallenWolf",
             "GeenoTV",
             "Glitch3dPenguin",
-            "sadshepherdgirl"
+            "sadshepherdgirl",
+            "Fargassier"
     };
 
     private @Setter @NonNull DialogAnimation currentAnimation = new BlankAnimation();

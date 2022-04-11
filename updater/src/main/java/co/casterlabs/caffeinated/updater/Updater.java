@@ -25,7 +25,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
-    private static final int VERSION = 16;
+    private static final int VERSION = 17;
 
     // TODO replace "beta" with "stable" once the app is ready.
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/beta/";
