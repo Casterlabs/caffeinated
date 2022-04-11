@@ -18,6 +18,8 @@
 
         logo = icon;
         mikeysModeEnabled = mikeysMode;
+
+        setTimeout(Caffeinated.UI.onUILoaded, mikeysMode ? (120 + 15) * 1000 /* 2m15s */ : 150);
     });
 </script>
 
