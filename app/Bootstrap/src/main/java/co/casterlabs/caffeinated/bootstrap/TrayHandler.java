@@ -19,6 +19,8 @@ import javax.swing.SwingUtilities;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.kaimen.app.App;
+import co.casterlabs.kaimen.util.platform.OperatingSystem;
+import co.casterlabs.kaimen.util.platform.Platform;
 import co.casterlabs.kaimen.webview.Webview;
 import lombok.NonNull;
 
@@ -29,73 +31,73 @@ public class TrayHandler {
     private static Image lastImage;
     private static TrayIcon icon;
 
-    public static void tryCreateTray(Webview webview) {
+    public static boolean tryCreateTray(Webview webview) {
         if (tray == null) {
-            SwingUtilities.invokeLater(() -> {
-                // Check the SystemTray support
-                if (!SystemTray.isSupported()) {
-                    return;
+            // Check the SystemTray support
+            if (!SystemTray.isSupported() || (Platform.os == OperatingSystem.MACOSX)) {
+                return false;
+            }
+
+            tray = SystemTray.getSystemTray();
+            PopupMenu popup = new PopupMenu();
+
+            // Create the popup menu components
+            showCheckbox = new CheckboxMenuItem("Show");
+            MenuItem itemExit = new MenuItem("Exit");
+
+            showCheckbox.setState(webview.isOpen());
+
+            // Add components to popup menu
+            popup.add(showCheckbox);
+            popup.addSeparator();
+            popup.add(itemExit);
+
+            showCheckbox.addItemListener((ItemEvent e) -> {
+                if (webview.isOpen()) {
+                    webview.close();
+                } else {
+                    webview.open(CaffeinatedApp.getInstance().getAppUrl());
                 }
+            });
 
-                tray = SystemTray.getSystemTray();
-                PopupMenu popup = new PopupMenu();
+            itemExit.addActionListener((ActionEvent e) -> {
+                Bootstrap.shutdown();
+            });
 
-                // Create the popup menu components
-                showCheckbox = new CheckboxMenuItem("Show");
-                MenuItem itemExit = new MenuItem("Exit");
+            // Setup the tray icon.
+            icon = new TrayIcon(new ImageIcon(App.getIconURL(), "Casterlabs Logo").getImage());
+            App.appIconChangeEvent.on(TrayHandler::changeTrayIcon);
 
-                showCheckbox.setState(webview.isOpen());
+            icon.setImageAutoSize(true);
+            icon.setPopupMenu(popup);
 
-                // Add components to popup menu
-                popup.add(showCheckbox);
-                popup.addSeparator();
-                popup.add(itemExit);
+            icon.addMouseListener(new MouseListener() {
 
-                showCheckbox.addItemListener((ItemEvent e) -> {
-                    if (webview.isOpen()) {
-                        webview.close();
-                    } else {
+                @Override
+                public void mouseClicked(MouseEvent e) {}
+
+                @Override
+                public void mousePressed(MouseEvent e) {}
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (!e.isPopupTrigger()) {
                         webview.open(CaffeinatedApp.getInstance().getAppUrl());
                     }
-                });
+                }
 
-                itemExit.addActionListener((ActionEvent e) -> {
-                    Bootstrap.shutdown();
-                });
+                @Override
+                public void mouseEntered(MouseEvent e) {}
 
-                // Setup the tray icon.
-                icon = new TrayIcon(new ImageIcon(App.getIconURL(), "Casterlabs Logo").getImage());
-                App.appIconChangeEvent.on(TrayHandler::changeTrayIcon);
-
-                icon.setImageAutoSize(true);
-                icon.setPopupMenu(popup);
-
-                icon.addMouseListener(new MouseListener() {
-
-                    @Override
-                    public void mouseClicked(MouseEvent e) {}
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {}
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        if (!e.isPopupTrigger()) {
-                            webview.open(CaffeinatedApp.getInstance().getAppUrl());
-                        }
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {}
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {}
-                });
-
-                try {
-                    tray.add(icon);
-                } catch (AWTException e) {}
+                @Override
+                public void mouseExited(MouseEvent e) {}
             });
+
+            try {
+                tray.add(icon);
+            } catch (AWTException e) {}
+
+            return true;
         } else {
             throw new IllegalStateException("Tray handler is already initialized.");
         }

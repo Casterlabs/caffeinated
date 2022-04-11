@@ -7,6 +7,8 @@
     let appearanceCloseToTray;
     let appearanceMikeysMode;
 
+    let isTraySupported = false;
+
     let themes = [];
 
     function sendUpdatedPreferences() {
@@ -22,10 +24,12 @@
         themes = Object.values(await Caffeinated.themeManager.themes);
         appearanceTheme = (await Caffeinated.themeManager.currentTheme).id;
 
+        isTraySupported = await Caffeinated.isTraySupported;
+
         const uiPreferences = await Caffeinated.UI.preferences;
 
         appearanceIcon = uiPreferences.icon;
-        appearanceCloseToTray = uiPreferences.closeToTray;
+        appearanceCloseToTray = isTraySupported ? uiPreferences.closeToTray : false;
         appearanceMikeysMode = uiPreferences.mikeysMode;
     });
 </script>
@@ -65,7 +69,7 @@
     <br />
     <div>
         <label class="checkbox">
-            <input type="checkbox" bind:checked={appearanceCloseToTray} on:change={sendUpdatedPreferences} />
+            <input type="checkbox" bind:checked={appearanceCloseToTray} on:change={sendUpdatedPreferences} disabled={!isTraySupported} />
             Close button sends to tray
         </label>
     </div>

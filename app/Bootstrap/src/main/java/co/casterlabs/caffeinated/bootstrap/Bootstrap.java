@@ -238,6 +238,7 @@ public class Bootstrap implements Runnable {
 
         // Register the lifecycle listener.
         WebviewLifeCycleListener uiLifeCycleListener = new WebviewLifeCycleListener() {
+            private boolean traySupported = false;
 
             @Override
             public void onBrowserPreLoad() {
@@ -249,11 +250,12 @@ public class Bootstrap implements Runnable {
                 app.setWebview(webview);
                 app.setAppUrl(appUrl);
 
-                webview.getBridge().defineObject("Caffeinated", app);
-
                 new AsyncTask(() -> {
-                    TrayHandler.tryCreateTray(webview);
-                    app.init();
+                    webview.getBridge().defineObject("Caffeinated", app);
+
+                    this.traySupported = TrayHandler.tryCreateTray(webview);
+
+                    app.init(this.traySupported);
                 });
             }
 
@@ -265,13 +267,19 @@ public class Bootstrap implements Runnable {
             @Override
             public void onBrowserOpen() {
                 logger.debug("onWindowOpen");
-                TrayHandler.updateShowCheckbox(true);
+
+                if (this.traySupported) {
+                    TrayHandler.updateShowCheckbox(true);
+                }
             }
 
             @Override
             public void onBrowserClose() {
                 logger.debug("onBrowserClose");
-                TrayHandler.updateShowCheckbox(false);
+
+                if (this.traySupported) {
+                    TrayHandler.updateShowCheckbox(false);
+                }
             }
 
             @Override
@@ -286,7 +294,7 @@ public class Bootstrap implements Runnable {
 
                 if (app.canCloseUI()) {
                     new AsyncTask(() -> {
-                        if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray()) {
+                        if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray() && this.traySupported) {
                             webview.close();
                         } else {
                             shutdown();

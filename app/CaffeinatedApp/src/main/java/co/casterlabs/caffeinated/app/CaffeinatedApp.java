@@ -61,6 +61,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private @Setter Webview webview;
     private @Setter String appUrl;
 
+    private @JavascriptValue(allowSet = false) boolean isTraySupported;
+
     // @formatter:off
 
     // Integrations
@@ -105,7 +107,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.UI.updateIcon();
     }
 
-    public void init() {
+    public void init(boolean traySupported) {
+        this.isTraySupported = traySupported;
+
         this.themeManager.init();
         this.UI.init();
         this.controlDeck.init();
