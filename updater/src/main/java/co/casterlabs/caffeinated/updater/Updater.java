@@ -29,13 +29,13 @@ public class Updater {
 
     // TODO replace "beta" with "stable" once the app is ready.
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/beta/";
-    private static final String REMOTE_COMMIT_URL = "https://cdn.casterlabs.co/dist/beta/commit.txt";
-    private static final String LAUNCHER_VERSION_URL = "https://cdn.casterlabs.co/dist/beta/updater-version.txt";
+    private static final String REMOTE_COMMIT_URL = "https://cdn.casterlabs.co/dist/beta/commit";
+    private static final String LAUNCHER_VERSION_URL = "https://cdn.casterlabs.co/dist/beta/updater-version";
 
     public static String appDataDirectory = AppDirsFactory.getInstance().getUserDataDir("casterlabs-caffeinated", null, null, true);
     private static File appDirectory = new File(appDataDirectory, "app");
     private static File updateFile = new File(appDirectory, "update.zip");
-    private static File commitFile = new File(appDirectory, "commit.txt");
+    private static File commitFile = new File(appDirectory, ".commit");
     private static File buildokFile = new File(appDirectory, ".build_ok");
 
     private static @Getter boolean isLauncherOutOfDate = false;
@@ -147,7 +147,7 @@ public class Updater {
                 ZipUtil.unzip(updateFile, appDirectory);
 
                 String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
-                Files.writeString(new File(appDirectory, "commit.txt").toPath(), remoteCommit);
+                Files.writeString(new File(appDirectory, "commit").toPath(), remoteCommit);
 
                 updateFile.delete();
 
