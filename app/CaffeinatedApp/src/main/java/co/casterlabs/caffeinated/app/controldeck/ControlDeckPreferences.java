@@ -16,7 +16,6 @@ import co.casterlabs.rakurai.json.validation.JsonValidationException;
 import lombok.Data;
 
 @Data
-@JsonClass(exposeAll = true)
 public class ControlDeckPreferences {
     private Map<String, DeckConfig> decks = new HashMap<>();
 
