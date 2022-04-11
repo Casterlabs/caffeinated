@@ -63,10 +63,6 @@ public class AppControlDeck extends JavascriptObject {
     private class ApiListener implements KinokoV2Listener {
         private Map<String, ControlDeck> instances = new HashMap<>();
 
-        public ApiListener() {
-            this.onClose(true);
-        }
-
         private void sendTransportMessage(String type, JsonObject data, @Nullable String sender) {
             connection.send(
                 new JsonObject()
