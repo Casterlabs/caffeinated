@@ -1,6 +1,7 @@
 package co.casterlabs.caffeinated.controldeck.protocol.deck;
 
 import java.io.Closeable;
+import java.util.Objects;
 
 import co.casterlabs.caffeinated.controldeck.protocol.ControlDeckConnection;
 import co.casterlabs.caffeinated.controldeck.protocol.packets.CD_PacketDeckInit;
@@ -117,6 +118,11 @@ public class ControlDeck implements Closeable {
     @Override
     public void close() {
         this.display.close();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.hasDisplay, this.deckId, this.volumeItems);
     }
 
 }

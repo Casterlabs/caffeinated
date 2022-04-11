@@ -1,17 +1,24 @@
 package co.casterlabs.caffeinated.controldeck.protocol.deck;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import co.casterlabs.caffeinated.controldeck.protocol.packets.CD_PacketVolume;
+import co.casterlabs.rakurai.json.annotating.JsonField;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 public class ControlDeckVolumeItem {
-    private int index;
     private ControlDeck deck;
 
+    @JsonField
+    private int index;
+
+    @JsonField
     private boolean muted;
+
+    @JsonField
     private float volume;
 
     private @Setter Consumer<ControlDeckVolumeItem> onUpdate;
@@ -44,6 +51,11 @@ public class ControlDeckVolumeItem {
         if (this.onUpdate != null) {
             this.onUpdate.accept(this);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.index, this.deck, this.muted, this.volume);
     }
 
 }
