@@ -52,17 +52,17 @@ public class Updater {
 
             case MAC:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
-                REMOTE_ZIP_DOWNLOAD_URL += "caffeinated-macos.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "macOS-amd64.zip";
                 break;
 
             case UNIX:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated";
-                REMOTE_ZIP_DOWNLOAD_URL += "caffeinated-linux.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "Linx-amd64.zip";
                 break;
 
             case WINDOWS:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.exe";
-                REMOTE_ZIP_DOWNLOAD_URL += "caffeinated-windows.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "Windows-amd64.zip";
                 break;
 
             default:
