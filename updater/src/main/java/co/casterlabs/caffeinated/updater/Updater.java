@@ -30,7 +30,7 @@ public class Updater {
     // TODO replace "beta" with "stable" once the app is ready.
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/beta/";
     private static final String REMOTE_COMMIT_URL = "https://cdn.casterlabs.co/dist/beta/commit";
-    private static final String LAUNCHER_VERSION_URL = "https://cdn.casterlabs.co/dist/beta/updater-version";
+    private static final String LAUNCHER_VERSION_URL = "https://cdn.casterlabs.co/dist/updater-version";
 
     public static String appDataDirectory = AppDirsFactory.getInstance().getUserDataDir("casterlabs-caffeinated", null, null, true);
     private static File appDirectory = new File(appDataDirectory, "app");
