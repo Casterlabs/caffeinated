@@ -24,14 +24,19 @@
                 Bridge.off(un[0], un[1]);
             } catch (ignored) {}
         }
+
+        window.removeEventListener("message", onPostMessage);
     });
 
-    onMount(async () => {
+    onMount(() => {
         window.addEventListener("message", onPostMessage);
 
         unregister.push(Caffeinated.themeManager.mutate("currentTheme", updateTheme));
 
-        {
+        setTimeout(async () => {
+            // Wait for the URL change to be fired.
+            console.log(location.href);
+
             const widgets = await Caffeinated.plugins.widgets;
             const widgetId = location.href.split("?dock=")[1];
 
@@ -43,13 +48,13 @@
             }
 
             console.debug(widget);
-        }
 
-        document.title = `Casterlabs-Caffeinated - ${widget.details.friendlyName}`;
+            document.title = `Casterlabs-Caffeinated - ${widget.details.friendlyName}`;
+        }, 100);
     });
 
     function onPostMessage(event) {
-        if (typeof event.data == "object" && event.data.call == "init" && event.data.value == widget.id) {
+        if (typeof event.data == "object" && event.data.call == "init" && event.data.value == widget?.id) {
             sendFrameData(event.source);
         }
     }
