@@ -102,20 +102,17 @@
         {/if}
     </h1>
     <h2 class="subtitle">
-        {#if buildInfo.buildChannel && buildInfo.buildChannel != "stable"}
-            {#if buildInfo.isDev}
-                (Developer Build)
-            {:else}
-                ({buildInfo.version}-{buildInfo.commit}-{buildInfo.buildChannel})
-            {/if}
+        {#if buildInfo.isDev}
+            (Developer Build)
+        {:else if buildInfo.buildChannel && buildInfo.buildChannel != "stable"}
+            ({buildInfo.version}-{buildInfo.commit}-{buildInfo.buildChannel})
         {:else}
             &nbsp; <!-- Retains spacing -->
         {/if}
     </h2>
 </div>
 
-<!-- 
-<StreamConfiguration bind:this={streamConfigurationComponent} {accounts} /> -->
+<!-- <StreamConfiguration bind:this={streamConfigurationComponent} {accounts} /> -->
 <style>
     .welcome-wagon {
         margin-top: 1.5em;
