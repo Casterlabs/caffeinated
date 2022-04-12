@@ -9,6 +9,7 @@ import lombok.Getter;
 public class AppearanceUpdateEvent {
     private String theme;
     private String icon;
+    private String emojiProvider;
     private boolean closeToTray;
     private boolean mikeysMode;
 
@@ -16,6 +17,7 @@ public class AppearanceUpdateEvent {
     private void validate() {
         assert this.theme != null;
         assert this.icon != null;
+        assert this.emojiProvider != null;
     }
 
 }

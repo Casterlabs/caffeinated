@@ -1,4 +1,6 @@
 <script>
+    import TextSnippet from "../text-snippet.svelte";
+
     import { onMount } from "svelte";
 
     // let zoomValue;
@@ -6,6 +8,7 @@
     let appearanceIcon;
     let appearanceCloseToTray;
     let appearanceMikeysMode;
+    let appearanceEmojis;
 
     let isTraySupported = false;
 
@@ -16,7 +19,8 @@
             theme: appearanceTheme,
             icon: appearanceIcon,
             closeToTray: appearanceCloseToTray,
-            mikeysMode: appearanceMikeysMode
+            mikeysMode: appearanceMikeysMode,
+            emojiProvider: appearanceEmojis
         });
     }
 
@@ -31,6 +35,7 @@
         appearanceIcon = uiPreferences.icon;
         appearanceCloseToTray = isTraySupported ? uiPreferences.closeToTray : false;
         appearanceMikeysMode = uiPreferences.mikeysMode;
+        appearanceEmojis = uiPreferences.emojiProvider;
     });
 </script>
 
@@ -41,7 +46,7 @@
             Theme
             <br />
             <div class="select">
-                <select id="appearance-theme" bind:value={appearanceTheme} on:change={sendUpdatedPreferences}>
+                <select bind:value={appearanceTheme} on:change={sendUpdatedPreferences}>
                     {#each themes as theme}
                         <option value={theme.id}>{theme.name}</option>
                     {/each}
@@ -57,7 +62,7 @@
             Icon
             <br />
             <div class="select">
-                <select id="appearance-icon" bind:value={appearanceIcon} on:change={sendUpdatedPreferences}>
+                <select bind:value={appearanceIcon} on:change={sendUpdatedPreferences}>
                     <option value="casterlabs">Casterlabs</option>
                     <option value="pride">Pride</option>
                     <option value="moonlabs">Moonlabs</option>
@@ -68,7 +73,24 @@
     </div>
     <br />
     <div>
-        <label class="checkbox">
+        <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>
+            Emojis <TextSnippet>😀</TextSnippet>
+            <br />
+            <div class="select">
+                <select bind:value={appearanceEmojis} on:change={sendUpdatedPreferences}>
+                    <option value="system">System</option>
+                    <option value="noto-emoji">Noto Emoji</option>
+                    <option value="twemoji">Twemoji</option>
+                    <option value="openmoji">OpenMoji</option>
+                    <!-- <option value="sensa-emoji">Sensa Emoji</option> -->
+                </select>
+            </div>
+        </label>
+    </div>
+    <br />
+    <div>
+        <label class="checkbox" disabled={!isTraySupported}>
             <input type="checkbox" bind:checked={appearanceCloseToTray} on:change={sendUpdatedPreferences} disabled={!isTraySupported} />
             Close button sends to tray
         </label>

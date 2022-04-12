@@ -9,6 +9,7 @@ import lombok.Data;
 public class UIPreferences {
     private static final String CURRENT_SKITTLE = MiscUtil.random("green_skittle", "orange_skittle", "purple_skittle", "red_skittle", "yellow_skittle");
 
+    private String emojiProvider = "system";
     private String icon = "casterlabs";
     private String theme = "co.casterlabs.dark";
     private boolean closeToTray = true;
