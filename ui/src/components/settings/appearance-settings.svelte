@@ -1,5 +1,5 @@
 <script>
-    import TextSnippet from "../text-snippet.svelte";
+    import TextSnippet from "$lib/TextSnippet.svelte";
 
     import { onMount } from "svelte";
 
