@@ -10,6 +10,15 @@ export default [
     { name: 'Prettier', url: 'https://prettier.io/', license: 'MIT', licenseUrl: 'https://github.com/prettier/prettier/blob/main/LICENSE' },
 
     //---------------------------------------------------------------------------------------------
+    // Emoji
+    //---------------------------------------------------------------------------------------------
+
+    { name: 'Twemoji', url: 'https://twemoji.twitter.com/', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/' },
+    { name: 'OpenMoji', url: 'https://openmoji.org/', license: 'CC BY-SA 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/' },
+    { name: 'Google\'s Noto Emoji', url: 'https://github.com/googlefonts/noto-emoji', license: 'SIL OFL 1.1 & Others', licenseUrl: 'https://github.com/googlefonts/noto-emoji/blob/main/fonts/LICENSE' },
+    { name: 'Sensa\'s Emoji Set', url: 'https://sensa.co/emoji/', license: null, licenseUrl: null },
+
+    //---------------------------------------------------------------------------------------------
     // Build Tools
     //---------------------------------------------------------------------------------------------
 
