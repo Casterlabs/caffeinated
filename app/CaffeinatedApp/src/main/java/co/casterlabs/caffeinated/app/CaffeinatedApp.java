@@ -110,6 +110,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public void init(boolean traySupported) {
         this.isTraySupported = traySupported;
 
+        this.auth.init();
         this.themeManager.init();
         this.UI.init();
         this.controlDeck.init();
@@ -117,7 +118,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.api.init();
         this.plugins.init();
 //            this.koi.init();
-        this.auth.init();
         this.music.init();
 
         this.appPreferences.save();
