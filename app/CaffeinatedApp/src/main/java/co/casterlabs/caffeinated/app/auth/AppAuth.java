@@ -12,6 +12,7 @@ import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
@@ -38,9 +39,37 @@ public class AppAuth extends JavascriptObject {
 
     private AuthCallback currentAuthCallback;
 
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private boolean isKoiAlive = true;
+
     @Getter
     @JavascriptValue
     private boolean isAuthorized = false;
+
+    void checkStatus() {
+        boolean isAlive = false;
+
+        if (this.authInstances.isEmpty()) {
+            isAlive = true; // Sure.
+            return;
+        } else {
+            for (AuthInstance inst : this.authInstances.values()) {
+                if (inst.isConnected()) {
+                    isAlive = true;
+                    return;
+                }
+            }
+        }
+
+        if (this.isKoiAlive != isAlive) {
+            if (!isAlive) {
+                // Show an error to the user.
+                CaffeinatedApp.getInstance().getUI().showToast("Lost connection to Casterlabs, reconnecting.", UIBackgroundColor.DANGER);
+            }
+        }
+
+        this.isKoiAlive = true;
+    }
 
     public boolean isSignedIn() {
         return !this.authInstances.isEmpty();
