@@ -29,6 +29,7 @@ import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
+import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
@@ -167,6 +168,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         ClipboardUtil.copy(text);
         this.UI.showToast(toastText, UIBackgroundColor.PRIMARY);
+    }
+
+    @JavascriptGetter("enableStupidlyUnsafeSettings")
+    public boolean enableStupidlyUnsafeSettings() {
+        return this.UI.getPreferences().isEnableStupidlyUnsafeSettings();
     }
 
 }

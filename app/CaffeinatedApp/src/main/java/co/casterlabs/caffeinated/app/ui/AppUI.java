@@ -123,6 +123,7 @@ public class AppUI extends JavascriptObject {
         uiPrefs.setCloseToTray(event.isCloseToTray());
         uiPrefs.setMikeysMode(event.isMikeysMode());
         uiPrefs.setEmojiProvider(event.getEmojiProvider());
+        uiPrefs.setEnableStupidlyUnsafeSettings(event.isEnableStupidlyUnsafeSettings());
         this.preferenceFile.save();
 
         this.updateIcon();

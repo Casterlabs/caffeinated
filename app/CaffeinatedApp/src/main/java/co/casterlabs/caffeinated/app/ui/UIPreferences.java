@@ -14,6 +14,7 @@ public class UIPreferences {
     private String theme = "co.casterlabs.dark";
     private boolean closeToTray = true;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
+    private boolean enableStupidlyUnsafeSettings = false;
 
     private boolean mikeysMode = false; // https://twitter.com/Casterlabs/status/1508475284944736268
 

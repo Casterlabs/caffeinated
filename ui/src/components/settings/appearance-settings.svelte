@@ -1,41 +1,27 @@
 <script>
-    import TextSnippet from "$lib/TextSnippet.svelte";
+    import TextSnippet from "$lib/components/TextSnippet.svelte";
 
     import { onMount } from "svelte";
 
-    // let zoomValue;
-    let appearanceTheme;
-    let appearanceIcon;
-    let appearanceCloseToTray;
-    let appearanceMikeysMode;
-    let appearanceEmojis;
-
     let isTraySupported = false;
-
     let themes = [];
 
-    function sendUpdatedPreferences() {
+    let theme;
+    let uiPreferences = {};
+
+    function sendUpdatedUIPreferences() {
         Caffeinated.UI.updateAppearance({
-            theme: appearanceTheme,
-            icon: appearanceIcon,
-            closeToTray: appearanceCloseToTray,
-            mikeysMode: appearanceMikeysMode,
-            emojiProvider: appearanceEmojis
+            ...uiPreferences,
+            theme: theme
         });
     }
 
     onMount(async () => {
         themes = Object.values(await Caffeinated.themeManager.themes);
-        appearanceTheme = (await Caffeinated.themeManager.currentTheme).id;
+        theme = (await Caffeinated.themeManager.currentTheme).id;
 
         isTraySupported = await Caffeinated.isTraySupported;
-
-        const uiPreferences = await Caffeinated.UI.preferences;
-
-        appearanceIcon = uiPreferences.icon;
-        appearanceCloseToTray = isTraySupported ? uiPreferences.closeToTray : false;
-        appearanceMikeysMode = uiPreferences.mikeysMode;
-        appearanceEmojis = uiPreferences.emojiProvider;
+        uiPreferences = await Caffeinated.UI.preferences;
     });
 </script>
 
@@ -46,7 +32,7 @@
             Theme
             <br />
             <div class="select">
-                <select bind:value={appearanceTheme} on:change={sendUpdatedPreferences}>
+                <select bind:value={theme} on:change={sendUpdatedUIPreferences}>
                     {#each themes as theme}
                         <option value={theme.id}>{theme.name}</option>
                     {/each}
@@ -62,7 +48,7 @@
             Icon
             <br />
             <div class="select">
-                <select bind:value={appearanceIcon} on:change={sendUpdatedPreferences}>
+                <select bind:value={uiPreferences.icon} on:change={sendUpdatedUIPreferences}>
                     <option value="casterlabs">Casterlabs</option>
                     <option value="pride">Pride</option>
                     <option value="moonlabs">Moonlabs</option>
@@ -78,12 +64,15 @@
             Emojis <TextSnippet>😀</TextSnippet>
             <br />
             <div class="select">
-                <select bind:value={appearanceEmojis} on:change={sendUpdatedPreferences}>
+                <select bind:value={uiPreferences.emojiProvider} on:change={sendUpdatedUIPreferences}>
                     <option value="system">System</option>
                     <option value="noto-emoji">Noto Emoji</option>
                     <option value="twemoji">Twemoji</option>
                     <option value="openmoji">OpenMoji</option>
-                    <!-- <option value="sensa-emoji">Sensa Emoji</option> -->
+
+                    {#if uiPreferences.enableStupidlyUnsafeSettings}
+                        <option value="sensa-emoji">Sensa Emoji</option>
+                    {/if}
                 </select>
             </div>
         </label>
@@ -91,14 +80,14 @@
     <br />
     <div>
         <label class="checkbox" disabled={!isTraySupported}>
-            <input type="checkbox" bind:checked={appearanceCloseToTray} on:change={sendUpdatedPreferences} disabled={!isTraySupported} />
+            <input type="checkbox" bind:checked={uiPreferences.closeToTray} on:change={sendUpdatedUIPreferences} disabled={!isTraySupported} />
             Close button sends to tray
         </label>
     </div>
     <br />
     <div>
         <span class="checkbox">
-            <input type="checkbox" bind:checked={appearanceMikeysMode} on:change={sendUpdatedPreferences} />
+            <input type="checkbox" bind:checked={uiPreferences.mikeysMode} on:change={sendUpdatedUIPreferences} />
         </span>
         <a href="https://twitter.com/Casterlabs/status/1508475284944736268" rel="external">Mikey's mode</a>
     </div>

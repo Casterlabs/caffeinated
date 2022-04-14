@@ -6,12 +6,20 @@
     let conductorKey = "";
     let conductorPort = "";
 
+    let uiPreferences = {};
+
+    function sendUpdatedUIPreferences() {
+        Caffeinated.UI.updateAppearance(uiPreferences);
+    }
+
     onMount(async () => {
         const prefs = await Caffeinated.appPreferences;
 
         developerApiKey = prefs.developerApiKey;
         conductorKey = prefs.conductorKey;
         conductorPort = prefs.conductorPort;
+
+        uiPreferences = await Caffeinated.UI.preferences;
     });
 </script>
 
@@ -24,6 +32,13 @@
         <div class="control">
             <input class="input" type="input" readonly value={conductorPort} />
         </div>
+    </div>
+    <br />
+    <div>
+        <label class="checkbox">
+            <input type="checkbox" bind:checked={uiPreferences.enableStupidlyUnsafeSettings} on:change={sendUpdatedUIPreferences} />
+            Enable Stupidly Unsafe Settings
+        </label>
     </div>
 </div>
 
