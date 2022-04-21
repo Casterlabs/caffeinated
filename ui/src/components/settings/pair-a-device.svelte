@@ -12,6 +12,7 @@
     let pairingCode = "";
     let selectedPlatform = "";
     let deviceType = "";
+    let requestedInfo = "";
 
     function submitCode() {
         if (!isLoading && pairingCode.length == 8) {
@@ -35,15 +36,34 @@
         state = "SUCCESS";
     }
 
-    function confirmDevice() {
-        const keys = Object.keys(authData);
+    async function confirmDevice() {
+        switch (requestedInfo) {
+            case "PLATFORM_AUTH": {
+                const keys = Object.keys(authData);
 
-        selectedPlatform = keys[0];
+                selectedPlatform = keys[0];
 
-        if (keys.length == 1) {
-            sendToken();
-        } else {
-            state = "SELECT_ACCOUNT";
+                if (keys.length == 1) {
+                    sendToken();
+                } else {
+                    state = "SELECT_ACCOUNT";
+                }
+                break;
+            }
+
+            case "API": {
+                const { developerApiKey } = await Caffeinated.appPreferences;
+
+                kinoko.send(`token:${developerApiKey}`, false);
+                kinoko.disconnect();
+                state = "SUCCESS";
+                break;
+            }
+
+            case "CASTERLABS_ACCOUNT": {
+                // TODO, duh.
+                break;
+            }
         }
     }
 
@@ -73,7 +93,10 @@
 
         kinoko.on("message", ({ message }) => {
             if (message.startsWith("what:")) {
-                deviceType = message.substring("what:".length);
+                const [_deviceType, _requestedInfo] = message.substring("what:".length).split(":");
+
+                deviceType = _deviceType;
+                requestedInfo = _requestedInfo || "PLATFORM_AUTH";
                 state = "CONFIRM_DEVICE";
                 isLoading = false;
             } else if (message == "success") {
