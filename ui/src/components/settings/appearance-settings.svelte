@@ -79,8 +79,8 @@
     </div>
     <br />
     <div>
-        <label class="checkbox" disabled={!isTraySupported}>
-            <input type="checkbox" bind:checked={uiPreferences.closeToTray} on:change={sendUpdatedUIPreferences} disabled={!isTraySupported} />
+        <label class="checkbox" disabled={!isTraySupported || null}>
+            <input type="checkbox" bind:checked={uiPreferences.closeToTray} on:change={sendUpdatedUIPreferences} disabled={!isTraySupported || null} />
             Close button sends to tray
         </label>
     </div>
