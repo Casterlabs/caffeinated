@@ -131,32 +131,31 @@ public class AppUI extends JavascriptObject {
         CaffeinatedApp.getInstance().getThemeManager().setTheme(event.getTheme());
     }
 
-    @SneakyThrows
     @JavascriptFunction
     public void onUILoaded() {
         this.uiFinishedLoad = true;
 
-        CaffeinatedApp.getInstance().getInitPromise().await();
+        CaffeinatedApp.getInstance().getInitPromise().then((aVoid) -> {
+            PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
 
-        PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
+            if (prefs.get().isNew()) {
+                prefs.get().setNew(false);
+                prefs.save();
 
-        if (prefs.get().isNew()) {
-            prefs.get().setNew(false);
-            prefs.save();
-
-            this.navigate("/welcome/step1");
-        } else {
-            AppAuth auth = CaffeinatedApp.getInstance().getAuth();
-
-            if (!auth.isSignedIn()) {
-                this.navigate("/signin");
-            } else if (auth.isAuthorized()) {
-                this.navigate("/home");
+                this.navigate("/welcome/step1");
             } else {
-                // Otherwise AppAuth will automagically move us there :D
-                FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (theme-loaded)");
+                AppAuth auth = CaffeinatedApp.getInstance().getAuth();
+
+                if (!auth.isSignedIn()) {
+                    this.navigate("/signin");
+                } else if (auth.isAuthorized()) {
+                    this.navigate("/home");
+                } else {
+                    // Otherwise AppAuth will automagically move us there :D
+                    FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (theme-loaded)");
+                }
             }
-        }
+        });
     }
 
     @JavascriptFunction
