@@ -2,9 +2,9 @@
     // Meta
     import { setPageProperties } from "./__layout.svelte";
 
+    // Settings Content
     import SettingsContainer from "../components/settings/settings-container.svelte";
 
-    // Settings Content
     import StreamingServicesSettings from "../components/settings/streaming-services-settings.svelte";
     import MusicServicesSettings from "../components/settings/music-services-settings.svelte";
     import AppearanceSettings from "../components/settings/appearance-settings.svelte";
@@ -35,6 +35,11 @@
             component: PluginsSettings
         },
         {
+            name: "About",
+            type: "category",
+            component: AboutSettings
+        },
+        {
             name: "Accounts",
             type: "section"
         },
@@ -60,18 +65,15 @@
         //     component: StatusIntegrationSettings
         // },
         {
-            name: "Misc",
-            type: "section"
+            name: "Unsafe",
+            type: "section",
+            unsafe: true
         },
         {
             name: "Developer Stuff",
             type: "category",
-            component: DeveloperStuff
-        },
-        {
-            name: "About",
-            type: "category",
-            component: AboutSettings
+            component: DeveloperStuff,
+            unsafe: true
         }
     ];
 </script>

@@ -1,10 +1,37 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
 
     export let categories;
     export let updateTitle = true;
 
+    const unregister = [];
+    let unsafeEnabled = false;
+
     let currentCategory = {};
+
+    onDestroy(() => {
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
+    });
+
+    onMount(() => {
+        // Select the first category.
+        for (const category of categories) {
+            if (category.type == "category") {
+                switchCategory(category);
+                break;
+            }
+        }
+
+        unregister.push(
+            Caffeinated.UI.mutate("preferences", ({ enableStupidlyUnsafeSettings }) => {
+                unsafeEnabled = enableStupidlyUnsafeSettings;
+            })
+        );
+    });
 
     function switchCategory(category) {
         if (currentCategory !== category) {
@@ -15,39 +42,31 @@
             }
         }
     }
-
-    onMount(() => {
-        // Select the first category.
-        for (const category of categories) {
-            if (category.type == "category") {
-                switchCategory(category);
-                break;
-            }
-        }
-    });
 </script>
 
 <div class="settings-container">
     <div class="settings-navigate side-bar has-text-left">
         {#each categories as category}
-            {#if category.type == "section"}
-                <h1 class="settings-section title is-6">
-                    {category.name}
-                </h1>
-            {:else if category.type == "category"}
-                <!-- svelte-ignore a11y-missing-attribute -->
-                <a
-                    class="
+            {#if !category.unsafe || unsafeEnabled}
+                {#if category.type == "section"}
+                    <h1 class="settings-section title is-6">
+                        {category.name}
+                    </h1>
+                {:else if category.type == "category"}
+                    <!-- svelte-ignore a11y-missing-attribute -->
+                    <a
+                        class="
                         settings-category-button 
                         is-6 
                         {currentCategory == category ? 'is-selected' : ''}
                     "
-                    on:click={() => switchCategory(category)}
-                >
-                    <span>
-                        {category.name}
-                    </span>
-                </a>
+                        on:click={() => switchCategory(category)}
+                    >
+                        <span>
+                            {category.name}
+                        </span>
+                    </a>
+                {/if}
             {/if}
         {/each}
     </div>

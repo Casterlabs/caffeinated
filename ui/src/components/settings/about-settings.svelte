@@ -9,7 +9,15 @@
     let versionString = "";
     let year = "";
 
+    let uiPreferences = {};
+
+    function sendUpdatedUIPreferences() {
+        Caffeinated.UI.updateAppearance(uiPreferences);
+    }
+
     onMount(async () => {
+        uiPreferences = await Caffeinated.UI.preferences;
+
         logo = (await Caffeinated.UI.preferences).icon;
         year = new Date().getFullYear();
 
@@ -179,6 +187,14 @@
         <p>Made with ♥ by Casterlabs.</p>
         <br />
         <p>Copyright {year} Casterlabs. All rights reserved.</p>
+    </div>
+
+    <br />
+    <div>
+        <label class="checkbox">
+            <input type="checkbox" bind:checked={uiPreferences.enableStupidlyUnsafeSettings} on:change={sendUpdatedUIPreferences} />
+            Enable Stupidly Unsafe Settings
+        </label>
     </div>
 </div>
 
