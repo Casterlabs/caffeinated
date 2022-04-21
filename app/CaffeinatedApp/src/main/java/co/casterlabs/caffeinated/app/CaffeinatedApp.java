@@ -26,6 +26,7 @@ import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
+import co.casterlabs.kaimen.util.threading.Promise;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
@@ -37,6 +38,7 @@ import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
 import xyz.e3ndr.consoleutil.ConsoleUtil;
@@ -94,6 +96,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // Event stuff
     private Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
 
+    private @Getter Promise<Void> initPromise = new Promise<>();
+
     static {
         AppDirs appDirs = AppDirsFactory.getInstance();
         appDataDir = appDirs.getUserDataDir("casterlabs-caffeinated", null, null, true);
@@ -123,6 +127,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.music.init();
 
         this.appPreferences.save();
+
+        this.initPromise.fulfill(null);
     }
 
     public boolean canCloseUI() {

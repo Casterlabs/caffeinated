@@ -131,9 +131,12 @@ public class AppUI extends JavascriptObject {
         CaffeinatedApp.getInstance().getThemeManager().setTheme(event.getTheme());
     }
 
+    @SneakyThrows
     @JavascriptFunction
     public void onUILoaded() {
         this.uiFinishedLoad = true;
+
+        CaffeinatedApp.getInstance().getInitPromise().await();
 
         PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
 
