@@ -25,6 +25,8 @@
             <input class="input" type="input" readonly value={conductorPort} />
         </div>
     </div>
+    <div class="field">
+        <button on:click={() => Caffeinated.unsafe_restartWithConsole()}>Restart app with console window</button>
     </div>
 </div>
 
