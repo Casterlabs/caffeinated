@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.app.music_integration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -138,6 +139,11 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
         }
 
         return new Pair<>(title, artists);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.serviceId, this.currentTrack);
     }
 
 }
