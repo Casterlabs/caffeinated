@@ -23,7 +23,7 @@
     }
 
     function bridge_onAuthUpdate(data) {
-        viewerElement.onAuthUpdate({ koiAuth: data });
+        viewerElement.onAuthUpdate(Object.keys(data));
     }
 
     function bridge_onChatViewerPreferencesUpdate(data) {
