@@ -3,6 +3,8 @@
     import { setPageProperties } from "../__layout.svelte";
     import { onMount } from "svelte";
 
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     setPageProperties({
         showSideBar: false,
         allowNavigateBackwards: false
@@ -16,20 +18,20 @@
 
     const settingsContainerContents = [
         {
-            name: "App",
+            name: "settings.app",
             type: "section"
         },
         {
-            name: "Appearance",
+            name: "settings.appearance",
             type: "category",
             component: AppearanceSettings
         },
         {
-            name: "Accounts",
+            name: "settings.accounts",
             type: "section"
         },
         {
-            name: "Music Services",
+            name: "settings.music_services",
             type: "category",
             component: MusicServicesSettings
         }
@@ -52,7 +54,9 @@
 
 <div class="welcome-contents">
     <div class="welcome-title has-text-centered">
-        <h1 class="title is-4">Let's customize Caffeinated.</h1>
+        <h1 class="title is-4">
+            <LocalizedText key="ui.welcome.customize" />
+        </h1>
     </div>
 
     <div class="welcome-settings">
@@ -60,7 +64,8 @@
     </div>
 
     <a id="next-page-button" class="button" href="/signin">
-        Next <svg
+        <LocalizedText key="generic.next" />
+        <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"

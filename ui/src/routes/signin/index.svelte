@@ -1,6 +1,8 @@
 <script>
     import { setPageProperties } from "../__layout.svelte";
 
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     import TwitchButton from "../../components/platforms/signin-buttons/twitch.svelte";
     import TrovoButton from "../../components/platforms/signin-buttons/trovo.svelte";
     import CaffeineButton from "../../components/platforms/signin-buttons/caffeine.svelte";
@@ -30,7 +32,9 @@
     <br />
     <br />
     <br />
-    <h1 class="title is-4">Sign into your favorite platform.</h1>
+    <h1 class="title is-4">
+        <LocalizedText key="accounts.signin" />
+    </h1>
     <br />
     <div class="signin-buttons">
         <TwitchButton />
@@ -44,11 +48,7 @@
     <br />
     <div class="service-disclaimer">
         <span>
-            By signing in, you agree to our
-            <a href="https://casterlabs.co/terms-of-service" class="fade-on-hover" rel="external">Terms of Service</a>
-            and acknowledge that our
-            <a href="https://casterlabs.co/privacy-policy" class="fade-on-hover" rel="external">Privacy Policy</a>
-            applies to you.
+            <LocalizedText key="app.service_disclaimer" />
         </span>
     </div>
 </div>
@@ -59,7 +59,7 @@
         margin: auto;
     }
 
-    .service-disclaimer a {
+    .service-disclaimer :global(a) {
         color: var(--theme);
     }
 </style>

@@ -1,6 +1,8 @@
 <script>
     import { onMount, onDestroy } from "svelte";
 
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     const unregister = [];
     let fileWatcherId;
 
@@ -43,7 +45,9 @@
 
 <div class="plugins no-select">
     {#if currentlyLoadedContexts.length > 0}
-        <h1 class="title is-6">Loaded Plugins:</h1>
+        <h1 class="title is-6">
+            <LocalizedText key="settings.plugins.loaded" />
+        </h1>
         <ul>
             {#each currentlyLoadedContexts as context}
                 <li class="box">
@@ -77,7 +81,9 @@
         <div class="control is-expanded">
             <div class="select is-fullwidth">
                 <select bind:value={targetFileToLoad}>
-                    <option value="" disabled selected>Select a file to load</option>
+                    <option value="" disabled selected>
+                        <LocalizedText key="settings.plugins.select_a_file" />
+                    </option>
                     {#each filesInPluginsDir as file}
                         <option>{file}</option>
                     {/each}
@@ -85,10 +91,14 @@
             </div>
         </div>
         <div class="control">
-            <button class="button" on:click={() => window.Caffeinated.plugins.openPluginsDir()}> Open Plugins Folder </button>
+            <button class="button" on:click={() => window.Caffeinated.plugins.openPluginsDir()}>
+                <LocalizedText key="settings.plugins.open_folder" />
+            </button>
         </div>
         <div class="control">
-            <button class="button" on:click={loadFile} style="width: 100px;"> Load </button>
+            <button class="button" on:click={loadFile} style="width: 100px;">
+                <LocalizedText key="settings.plugins.load" />
+            </button>
         </div>
     </div>
 </div>

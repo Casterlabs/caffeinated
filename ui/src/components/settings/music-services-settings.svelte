@@ -1,5 +1,6 @@
 <script>
     import AccountBox from "./account-settings/account-box.svelte";
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
 
     import { onMount, onDestroy } from "svelte";
 
@@ -56,7 +57,7 @@
 <div class="no-select">
     <p>
         {#if activePlayback}
-            &nbsp;Now Playing:
+            &nbsp;<LocalizedText key="settings.music_services.now_playing" />
             <img src={activePlayback.currentTrack.albumArtUrl} class="active-playback-icon" alt="Current Song" />
             <span style="user-select: all !important;">
                 {activePlayback.currentTrack.title}
@@ -73,10 +74,10 @@
     <div id="accounts">
         <!-- These are in order of preference btw -->
         {#if systemData}
-            <AccountBox platform="system_music" platformName="System" showSignin={false}>
+            <AccountBox platform="system_music" platformName="settings.music_services.service.system" showSignin={false}>
                 <label class="checkbox">
                     <input type="checkbox" bind:checked={systemData.settings.enabled} on:change={updateSystem} />
-                    Enabled
+                    <LocalizedText key="generic.enabled" />
                 </label>
             </AccountBox>
         {/if}
@@ -104,7 +105,7 @@
                 {#if pretzelData.isSignedIn}
                     <label class="checkbox">
                         <input type="checkbox" bind:checked={pretzelData.settings.enabled} on:change={updatePretzel} />
-                        Enabled
+                        <LocalizedText key="generic.enabled" />
                     </label>
                 {/if}
             </AccountBox>

@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import Credits from "../credits.mjs";
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
 
     let creditsSectionOpen = false;
 
@@ -75,7 +76,7 @@
     <hr />
 
     <a href="https://casterlabs.co/terms-of-service" rel="external" class="is-block highlight-on-hover" style="line-height: 3em;">
-        Terms of Service
+        <LocalizedText key="app.terms_of_service" />
         <span style="float: right;">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +100,7 @@
     <hr />
 
     <a href="https://casterlabs.co/privacy-policy" rel="external" class="is-block highlight-on-hover" style="line-height: 3em;">
-        Privacy Policy
+        <LocalizedText key="app.privacy_policy" />
         <span style="float: right;">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +125,7 @@
 
     <!-- svelte-ignore a11y-missing-attribute -->
     <a on:click={() => (creditsSectionOpen = !creditsSectionOpen)} class="is-block highlight-on-hover" style="line-height: 3em;">
-        Credits
+        <LocalizedText key="settings.about.credits" />
         <span style="float: right;">
             {#if creditsSectionOpen}
                 <svg
@@ -184,16 +185,14 @@
 
     <div>
         <br />
-        <p>Made with ♥ by Casterlabs.</p>
-        <br />
-        <p>Copyright {year} Casterlabs. All rights reserved.</p>
+        <LocalizedText key="app.footer" opts={{ year }} />
     </div>
 
     <br />
     <div>
         <label class="checkbox">
             <input type="checkbox" bind:checked={uiPreferences.enableStupidlyUnsafeSettings} on:change={sendUpdatedUIPreferences} />
-            Enable Stupidly Unsafe Settings
+            <LocalizedText key="settings.about.enable_stupidly_unsafe_settings" />
         </label>
     </div>
 </div>

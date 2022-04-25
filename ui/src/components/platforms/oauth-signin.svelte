@@ -2,6 +2,8 @@
     import { onMount } from "svelte";
     import LoadingSpinner from "../loading-spinner.svelte";
 
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     export let platform;
     export let isKoi = false;
 
@@ -27,5 +29,7 @@
     <br />
     <br />
     <br />
-    <a on:click={cancelAuth} style="color: var(--theme);"> Want to go back? </a>
+    <a on:click={cancelAuth} style="color: var(--theme);">
+        <LocalizedText key="ui.want_to_go_back" />
+    </a>
 </div>

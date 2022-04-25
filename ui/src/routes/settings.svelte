@@ -21,40 +21,40 @@
 
     const settingsContainerContents = [
         {
-            name: "App",
+            name: "settings.app",
             type: "section"
         },
         {
-            name: "Appearance",
+            name: "settings.appearance",
             type: "category",
             component: AppearanceSettings
         },
         {
-            name: "Plugins",
+            name: "settings.plugins",
             type: "category",
             component: PluginsSettings
         },
         {
-            name: "About",
+            name: "settings.about",
             type: "category",
             component: AboutSettings
         },
         {
-            name: "Accounts",
+            name: "settings.accounts",
             type: "section"
         },
         {
-            name: "Streaming Services",
+            name: "settings.streaming_services",
             type: "category",
             component: StreamingServicesSettings
         },
         {
-            name: "Music Services",
+            name: "settings.music_services",
             type: "category",
             component: MusicServicesSettings
         },
         {
-            name: "Pair a Device",
+            name: "settings.pair_a_device",
             type: "category",
             component: PairADevice
         },

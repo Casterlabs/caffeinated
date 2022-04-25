@@ -1,6 +1,8 @@
 <script>
     import StreamConfiguration from "../components/stream-configuration.svelte";
 
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     import { onMount, onDestroy } from "svelte";
     import { setPageProperties } from "./__layout.svelte";
 
@@ -12,7 +14,7 @@
     let buildInfo = {};
 
     let name = "";
-    let hourString = 0;
+    let hourLang = 0;
 
     function parseBridgeData(authInstances) {
         let newAccounts = [];
@@ -37,11 +39,11 @@
             }
         }
 
-        accounts = newAccounts.filter((account) => {
-            return account.streamConfigurationFeatures && account.streamConfigurationFeatures.length > 0 && account.userData && account.streamData;
-        });
+        // accounts = newAccounts.filter((account) => {
+        //     return account.streamConfigurationFeatures && account.streamConfigurationFeatures.length > 0 && account.userData && account.streamData;
+        // });
 
-        streamConfigurationComponent?.render(accounts);
+        // streamConfigurationComponent?.render(accounts);
 
         {
             // Get the most popular name.
@@ -78,13 +80,13 @@
         const hours = new Date().getHours();
 
         if (hours < 12) {
-            hourString = "morning";
+            hourLang = "ui.greeting.good_morning";
         } else if (hours < 14) {
-            hourString = "day";
+            hourLang = "ui.greeting.good_day";
         } else if (hours < 18) {
-            hourString = "afternoon";
+            hourLang = "ui.greeting.good_afternoon";
         } else {
-            hourString = "evening";
+            hourLang = "ui.greeting.good_evening";
         }
 
         unregister.push(Caffeinated.auth.mutate("authInstances", parseBridgeData));
@@ -95,11 +97,7 @@
 
 <div class="has-text-centered welcome-wagon">
     <h1 class="title">
-        Good {hourString}{#if name}
-            , {name}.
-        {:else}
-            !
-        {/if}
+        <LocalizedText key={hourLang} opts={{ name }} />
     </h1>
     <h2 class="subtitle">
         {#if buildInfo.isDev}

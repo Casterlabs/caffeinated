@@ -1,6 +1,9 @@
 <script>
     import { onMount, onDestroy } from "svelte";
 
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+    import translate from "$lib/translate.mjs";
+
     export let categories;
     export let updateTitle = true;
 
@@ -33,12 +36,17 @@
         );
     });
 
-    function switchCategory(category) {
+    async function switchCategory(category) {
         if (currentCategory !== category) {
             currentCategory = category;
 
             if (updateTitle) {
-                document.title = `Casterlabs-Caffeinated - Settings - ${currentCategory.name}`;
+                const { language } = await Caffeinated.UI.preferences;
+
+                const settingsLang = translate(language, "settings");
+                const categoryLang = translate(language, currentCategory.name);
+
+                document.title = `Casterlabs-Caffeinated - ${settingsLang} - ${categoryLang}`;
             }
         }
     }
@@ -50,7 +58,7 @@
             {#if !category.unsafe || unsafeEnabled}
                 {#if category.type == "section"}
                     <h1 class="settings-section title is-6">
-                        {category.name}
+                        <LocalizedText key={category.name} />
                     </h1>
                 {:else if category.type == "category"}
                     <!-- svelte-ignore a11y-missing-attribute -->
@@ -63,7 +71,7 @@
                         on:click={() => switchCategory(category)}
                     >
                         <span>
-                            {category.name}
+                            <LocalizedText key={category.name} />
                         </span>
                     </a>
                 {/if}
@@ -77,6 +85,10 @@
 </div>
 
 <style>
+    :root {
+        --sidebar-width: 200px;
+    }
+
     .settings-container {
         position: absolute;
         top: 0;
@@ -90,7 +102,7 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 175px;
+        width: var(--sidebar-width);
         height: 100%;
         padding-left: 10px;
         padding-right: 10px;
@@ -100,7 +112,7 @@
     .settings-content {
         position: absolute;
         top: 0;
-        left: 175px;
+        left: var(--sidebar-width);
         right: 0;
         height: 100%;
         margin-left: 20px;

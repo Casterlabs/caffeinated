@@ -3,6 +3,8 @@
 
     import { KinokoV1 } from "../../components/kinoko.mjs";
 
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     let state = "INSERT_CODE";
     let isLoading = false;
     let kinoko;
@@ -117,7 +119,9 @@
 <!-- svelte-ignore a11y-label-has-associated-control -->
 <div class="no-select pair-a-device has-text-centered">
     {#if state == "INSERT_CODE"}
-        <h1 class="title is-5">Insert the eight digit code shown on your device</h1>
+        <h1 class="title is-5">
+            <LocalizedText key="settings.pair_a_device.insert_code" />
+        </h1>
 
         <br />
 
@@ -163,18 +167,24 @@
         </div>
     {:else if state == "CONFIRM_DEVICE"}
         <h1 class="title is-5">
-            Are you sure you want to pair with <i>{deviceType}</i>?
+            <LocalizedText key="settings.pair_a_device.confirm" opts={{ deviceType }} />
         </h1>
 
         <br />
 
         <div class="has-text-centered">
-            <button class="button" on:click={cancelSignin}> No </button>
+            <button class="button" on:click={cancelSignin}>
+                <LocalizedText key="generic.no" />
+            </button>
             &nbsp; &nbsp; &nbsp;
-            <button class="button" on:click={confirmDevice}> Yes </button>
+            <button class="button" on:click={confirmDevice}>
+                <LocalizedText key="generic.yes" />
+            </button>
         </div>
     {:else if state == "SELECT_ACCOUNT"}
-        <h1 class="title is-5">Which account do you want to use?</h1>
+        <h1 class="title is-5">
+            <LocalizedText key="settings.pair_a_device.select_account" />
+        </h1>
 
         <br />
 
@@ -209,12 +219,18 @@
             </p>
         </div>
     {:else if state == "SUCCESS"}
-        <h1 class="title is-5">Success!</h1>
-        <p>You've successfully paired your device.</p>
+        <h1 class="title is-5">
+            <LocalizedText key="settings.pair_a_device.success" />
+        </h1>
+        <p>
+            <LocalizedText key="settings.pair_a_device.success.description" opts={{ deviceType }} />
+        </p>
         <br />
         <br />
         <!-- svelte-ignore a11y-missing-attribute -->
-        <a on:click={cancelSignin}> Pair another? </a>
+        <a on:click={cancelSignin}>
+            <LocalizedText key="settings.pair_a_device.again" />
+        </a>
     {/if}
 </div>
 

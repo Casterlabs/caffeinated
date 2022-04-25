@@ -12,6 +12,7 @@ public class UIPreferences {
     private String emojiProvider = "system";
     private String icon = "casterlabs";
     private String theme = "co.casterlabs.dark";
+    private String language = "en-US";
     private boolean closeToTray = true;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
     private boolean enableStupidlyUnsafeSettings = false;

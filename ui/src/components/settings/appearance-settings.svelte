@@ -1,5 +1,6 @@
 <script>
     import TextSnippet from "$lib/components/TextSnippet.svelte";
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
 
     import { onMount } from "svelte";
 
@@ -29,7 +30,7 @@
     <div>
         <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>
-            Theme
+            <LocalizedText key="settings.appearance.theme" />
             <br />
             <div class="select">
                 <select bind:value={theme} on:change={sendUpdatedUIPreferences}>
@@ -45,7 +46,7 @@
     <div>
         <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>
-            Icon
+            <LocalizedText key="settings.appearance.icon" />
             <br />
             <div class="select">
                 <select bind:value={uiPreferences.icon} on:change={sendUpdatedUIPreferences}>
@@ -61,11 +62,12 @@
     <div>
         <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>
-            Emojis <TextSnippet>😀</TextSnippet>
+            <LocalizedText key="settings.appearance.emojis" />
+            <TextSnippet>😀</TextSnippet>
             <br />
             <div class="select">
                 <select bind:value={uiPreferences.emojiProvider} on:change={sendUpdatedUIPreferences}>
-                    <option value="system">System</option>
+                    <option value="system"><LocalizedText key="settings.appearance.emojis.system" /></option>
                     <option value="noto-emoji">Noto Emoji</option>
                     <option value="twemoji">Twemoji</option>
                     <option value="openmoji">OpenMoji</option>
@@ -81,7 +83,7 @@
     <div>
         <label class="checkbox" disabled={!isTraySupported || null}>
             <input type="checkbox" bind:checked={uiPreferences.closeToTray} on:change={sendUpdatedUIPreferences} disabled={!isTraySupported || null} />
-            Close button sends to tray
+            <LocalizedText key="settings.appearance.close_to_tray" />
         </label>
     </div>
     <br />
@@ -89,6 +91,8 @@
         <span class="checkbox">
             <input type="checkbox" bind:checked={uiPreferences.mikeysMode} on:change={sendUpdatedUIPreferences} />
         </span>
-        <a href="https://twitter.com/Casterlabs/status/1508475284944736268" rel="external">Mikey's mode</a>
+        <a href="https://twitter.com/Casterlabs/status/1508475284944736268" rel="external">
+            <LocalizedText key="settings.appearance.mikeys_mode" />
+        </a>
     </div>
 </div>

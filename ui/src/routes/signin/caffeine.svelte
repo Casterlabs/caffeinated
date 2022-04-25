@@ -2,6 +2,8 @@
     import { setPageProperties } from "../__layout.svelte";
     import { onMount } from "svelte";
 
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     let usernameInput = "";
     let passwordInput = "";
     let mfaInput = "";
@@ -95,7 +97,9 @@
         <br />
         <br />
         <!-- svelte-ignore a11y-missing-attribute -->
-        <a onclick="history.back()" style="color: var(--theme);"> Want to go back? </a>
+        <a onclick="history.back()" style="color: var(--theme);">
+            <LocalizedText key="ui.want_to_go_back" />
+        </a>
     </div>
 </div>
 
