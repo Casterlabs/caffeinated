@@ -34,21 +34,36 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
-    function updateTheme(theme) {
-        __common.changeTheme(theme.id);
-    }
+    import App from "$lib/app.mjs";
 
     onMount(async () => {
         if (!window.__common) {
             window.__common = await import("$lib/__common.mjs");
         }
 
+        // Common listeners
+        window.App = App;
+
+        App.on("theme", ({ id }) => {
+            __common.changeTheme(id);
+        });
+
+        // Bridge
         window.onBridgeInit = async () => {
             window.goto = goto;
 
             Bridge.on("goto", ({ path }) => goto(path));
 
-            Caffeinated.themeManager.mutate("currentTheme", updateTheme);
+            Caffeinated.UI.mutate("preferences", (preferences) => {
+                const { language, emojiProvider } = preferences;
+
+                App.mutate("language", language);
+                App.mutate("emojiProvider", emojiProvider);
+            });
+
+            Caffeinated.themeManager.mutate("currentTheme", (theme) => {
+                App.mutate("theme", theme);
+            });
         };
 
         if (typeof window.Caffeinated != "undefined") {
