@@ -1,5 +1,5 @@
 <script>
-    import TextSnippet from "$lib/components/TextSnippet.svelte";
+    import EmojiText from "$lib/components/EmojiText.svelte";
     import LocalizedText from "$lib/components/LocalizedText.svelte";
 
     import { onMount } from "svelte";
@@ -63,7 +63,7 @@
         <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>
             <LocalizedText key="settings.appearance.emojis" />
-            <TextSnippet>😀</TextSnippet>
+            <EmojiText>😀</EmojiText>
             <br />
             <div class="select">
                 <select bind:value={uiPreferences.emojiProvider} on:change={sendUpdatedUIPreferences}>
