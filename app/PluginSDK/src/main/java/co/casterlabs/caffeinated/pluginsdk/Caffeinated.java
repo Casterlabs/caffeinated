@@ -21,4 +21,6 @@ public interface Caffeinated {
 
     public void copyText(@NonNull String text, @Nullable String toastText);
 
+    public String getLocale();
+
 }

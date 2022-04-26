@@ -131,6 +131,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.initPromise.fulfill(null);
     }
 
+    @Override
+    public String getLocale() {
+        return this.UI.getPreferences().getLanguage();
+    }
+
     public boolean canCloseUI() {
         // We can prevent ui closure if needed.
         // Maybe during plugin installs?

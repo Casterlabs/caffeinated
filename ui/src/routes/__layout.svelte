@@ -35,6 +35,7 @@
     import { onMount } from "svelte";
 
     import App from "$lib/app.mjs";
+    import { defineExternalLocale } from "$lib/translate.mjs";
 
     onMount(async () => {
         if (!window.__common) {
@@ -64,6 +65,12 @@
             Caffeinated.themeManager.mutate("currentTheme", (theme) => {
                 if (theme) {
                     App.mutate("theme", theme);
+                }
+            });
+
+            Caffeinated.plugins.mutate("loadedPlugins", (plugins) => {
+                for (const plugin of plugins) {
+                    defineExternalLocale(plugin.id, plugin.lang);
                 }
             });
         };
