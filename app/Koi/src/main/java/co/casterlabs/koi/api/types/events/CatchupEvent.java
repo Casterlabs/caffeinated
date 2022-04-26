@@ -4,6 +4,7 @@ import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
@@ -12,6 +13,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class CatchupEvent extends KoiEvent {
     private JsonArray events;
+    private @Setter boolean isFresh;
 
     @Override
     public KoiEventType getType() {

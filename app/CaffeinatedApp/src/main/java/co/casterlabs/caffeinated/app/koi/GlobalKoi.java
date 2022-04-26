@@ -145,13 +145,20 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             // Loop through the catchup events,
             // Convert them to an event,
             // Check to make sure that conversion succeeded,
+            // Ensure that we're not spamming the user,
             // Broadcast that event.
             // (We need to do these in order)
             for (JsonElement element : catchUp.getEvents()) {
                 KoiEvent cEvent = KoiEventType.get(element.getAsObject());
 
                 if ((cEvent != null) && !this.eventHistory.contains(e)) {
-                    this.onEvent(cEvent);
+                    if (catchUp.isFresh()) {
+                        if (KEPT_EVENTS.contains(cEvent.getType())) {
+                            this.eventHistory.add(cEvent);
+                        }
+                    } else {
+                        this.onEvent(cEvent);
+                    }
                 }
             }
         } else {

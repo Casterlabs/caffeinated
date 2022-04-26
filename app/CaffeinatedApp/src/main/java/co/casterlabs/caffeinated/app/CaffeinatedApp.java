@@ -166,6 +166,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
     }
 
+    @Override
+    public void openLink(String url) {
+        this.UI.openLink(url);
+    }
+
     @JavascriptFunction
     @Override
     public void copyText(@NonNull String text, @Nullable String toastText) {

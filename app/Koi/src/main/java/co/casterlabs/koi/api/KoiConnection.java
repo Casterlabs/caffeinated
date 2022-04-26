@@ -15,6 +15,7 @@ import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
 import co.casterlabs.koi.api.stream.KoiStreamConfigurationFeatures;
+import co.casterlabs.koi.api.types.events.CatchupEvent;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -37,6 +38,8 @@ public class KoiConnection implements Closeable {
     private URI uri;
 
     private JsonObject request;
+
+    private boolean isFresh = true;
 
     @SneakyThrows
     public KoiConnection(@NonNull String url, @NonNull FastLogger logger, @NonNull KoiLifeCycleHandler listener, String clientId) {
@@ -211,6 +214,11 @@ public class KoiConnection implements Closeable {
                         if (event == null) {
                             logger.warn("Unsupported event type: %s", eventJson.getString("event_type"));
                         } else {
+                            if ((event instanceof CatchupEvent) && isFresh) {
+                                ((CatchupEvent) event).setFresh(true);
+                                isFresh = false;
+                            }
+
                             KoiEventUtil.reflectInvoke(listener, event);
                         }
                         return;
