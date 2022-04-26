@@ -62,7 +62,9 @@
             });
 
             Caffeinated.themeManager.mutate("currentTheme", (theme) => {
-                App.mutate("theme", theme);
+                if (theme) {
+                    App.mutate("theme", theme);
+                }
             });
         };
 
