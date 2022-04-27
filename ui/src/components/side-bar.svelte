@@ -1,5 +1,6 @@
 <script>
     import { onMount, onDestroy } from "svelte";
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
 
     const unregister = [];
 
@@ -30,31 +31,49 @@
 <div class="sidebar-container has-text-left">
     <!-- Your Stream -->
     <div class="sidebar-section">
-        <a class="sidebar-category-button" href="/home"> Home </a>
+        <a class="sidebar-category-button" href="/home">
+            <LocalizedText key="sidebar.home" />
+        </a>
     </div>
 
     <!-- Your Stream -->
     <div class="sidebar-section">
-        <h1 class="title">Your Stream</h1>
+        <h1 class="title">
+            <LocalizedText key="sidebar.your_stream" />
+        </h1>
 
-        <a class="sidebar-category-button" href="/pages/stream-chat"> Chat </a>
-        <a class="sidebar-category-button hidden"> Analytics </a>
-        <a class="sidebar-category-button" disabled title="Coming Very Soon!" style="filter: opacity(.65);"> Custom Emotes </a>
-        <a class="sidebar-category-button hidden"> Shako </a>
+        <a class="sidebar-category-button" href="/pages/stream-chat">
+            <LocalizedText key="chat.viewer" />
+        </a>
+        <!-- <a class="sidebar-category-button"> Analytics </a> -->
+        <!-- <a class="sidebar-category-button" disabled title="Coming Very Soon!" style="filter: opacity(.65);"> Custom Emotes </a> -->
+        <!-- <a class="sidebar-category-button hidden"> Shako </a> -->
 
         {#each docks as dock}
-            <a class="sidebar-category-button" href="/pages/dock-viewer?dock={dock.id}"> {dock.details.friendlyName} </a>
+            <a class="sidebar-category-button" href="/pages/dock-viewer?dock={dock.id}">
+                <LocalizedText key={dock.details.friendlyName} />
+            </a>
         {/each}
     </div>
 
     <!-- Management -->
     <div class="sidebar-section">
-        <h1 class="title">Management</h1>
+        <h1 class="title">
+            <LocalizedText key="sidebar.management" />
+        </h1>
 
-        <a class="sidebar-category-button" href="/pages/chatbot-manager"> Chat Bot </a>
-        <a class="sidebar-category-button" href="/pages/widget-manager"> Widgets </a>
-        <a class="sidebar-category-button" href="/pages/dock-manager"> Docks </a>
-        <a class="sidebar-category-button" href="/settings"> Settings </a>
+        <a class="sidebar-category-button" href="/pages/chatbot-manager">
+            <LocalizedText key="chatbot_manager" />
+        </a>
+        <a class="sidebar-category-button" href="/pages/widget-manager">
+            <LocalizedText key="widget_manager" />
+        </a>
+        <a class="sidebar-category-button" href="/pages/dock-manager">
+            <LocalizedText key="dock_manager" />
+        </a>
+        <a class="sidebar-category-button" href="/settings">
+            <LocalizedText key="settings" />
+        </a>
     </div>
 </div>
 

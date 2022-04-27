@@ -10,6 +10,7 @@ public class AppearanceUpdateEvent {
     private String theme;
     private String icon;
     private String emojiProvider;
+    private String language;
     private boolean closeToTray;
     private boolean enableStupidlyUnsafeSettings = false;
     private boolean mikeysMode;
@@ -19,6 +20,7 @@ public class AppearanceUpdateEvent {
         assert this.theme != null;
         assert this.icon != null;
         assert this.emojiProvider != null;
+        assert this.language != null;
     }
 
 }

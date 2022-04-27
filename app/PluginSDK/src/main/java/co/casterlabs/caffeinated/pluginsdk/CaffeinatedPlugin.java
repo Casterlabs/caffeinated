@@ -22,6 +22,7 @@ import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
+import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rakurai.json.validation.JsonValidate;
 import co.casterlabs.rakurai.json.validation.JsonValidationException;
 import lombok.Getter;
@@ -66,6 +67,11 @@ public abstract class CaffeinatedPlugin implements Closeable {
     @JsonSerializationMethod("id")
     private JsonElement $serialize_id() {
         return Rson.DEFAULT.toJson(this.getId());
+    }
+
+    @JsonSerializationMethod("lang")
+    private JsonElement $serialize_lang() {
+        return Rson.DEFAULT.toJson(this.getLang());
     }
 
     @JsonValidate
@@ -129,6 +135,10 @@ public abstract class CaffeinatedPlugin implements Closeable {
      * @return              null if no data is found.
      */
     public @Nullable byte[] getResource(@NonNull String resourceId) {
+        return null;
+    }
+
+    public @Nullable JsonObject getLang() {
         return null;
     }
 

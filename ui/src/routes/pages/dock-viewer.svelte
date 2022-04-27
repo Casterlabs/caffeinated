@@ -6,6 +6,9 @@
 
     import { onMount, onDestroy } from "svelte";
 
+    import translate from "$lib/translate.mjs";
+    import App from "$lib/app.mjs";
+
     const unregister = [];
 
     setPageProperties({
@@ -33,24 +36,24 @@
 
         unregister.push(Caffeinated.themeManager.mutate("currentTheme", updateTheme));
 
-        setTimeout(async () => {
-            // Wait for the URL change to be fired.
-            console.log(location.href);
+        async function waitForLoad() {
+            if (location.href.includes("?dock=")) {
+                const widgets = await Caffeinated.plugins.widgets;
+                const widgetId = location.href.split("?dock=")[1];
 
-            const widgets = await Caffeinated.plugins.widgets;
-            const widgetId = location.href.split("?dock=")[1];
-
-            for (const w of widgets) {
-                if (w.id == widgetId) {
-                    widget = w;
-                    break;
+                for (const w of widgets) {
+                    if (w.id == widgetId) {
+                        widget = w;
+                        break;
+                    }
                 }
+
+                document.title = "Casterlabs-Caffeinated - " + translate(App.get("language"), widget.details.friendlyName);
+            } else {
+                setTimeout(waitForLoad, 100);
             }
-
-            console.debug(widget);
-
-            document.title = `Casterlabs-Caffeinated - ${widget.details.friendlyName}`;
-        }, 100);
+        }
+        waitForLoad();
     });
 
     function onPostMessage(event) {

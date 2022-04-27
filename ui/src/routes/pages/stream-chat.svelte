@@ -23,7 +23,15 @@
     }
 
     function bridge_onAuthUpdate(data) {
-        viewerElement.onAuthUpdate(Object.keys(data));
+        const platforms = [];
+
+        for (const user of Object.values(data)) {
+            if (user.userData) {
+                platforms.push(user.userData.platform);
+            }
+        }
+
+        viewerElement.onAuthUpdate(platforms);
     }
 
     function bridge_onChatViewerPreferencesUpdate(data) {

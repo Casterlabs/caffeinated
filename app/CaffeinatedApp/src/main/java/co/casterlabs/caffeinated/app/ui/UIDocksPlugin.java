@@ -64,6 +64,10 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
 
                 Caffeinated.getInstance().openLink(url);
             });
+            
+            instance.on("savePreferences", (data) -> {
+                this.settings().set("preferences", data);
+            });
         }
 
     }

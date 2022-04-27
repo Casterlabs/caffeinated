@@ -1,5 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
 
     export let platform;
     export let platformName;
@@ -48,21 +49,25 @@
 
     {#if isSignedIn && accountName}
         <a href={accountLink} class="platform-name open-channel" rel="external">
-            {platformName}
+            <LocalizedText key={platformName} />
         </a>
 
         <span class="tag streamer-name" style="user-select: all !important;"> {accountName} </span>
 
         {#if canSignOut}
-            <a on:click={sendSignout} class="tag is-danger signout-button"> Unlink </a>
+            <a on:click={sendSignout} class="tag is-danger signout-button">
+                <LocalizedText key="accounts.unlink" />
+            </a>
         {/if}
     {:else}
         <span class="platform-name">
-            {platformName}
+            <LocalizedText key={platformName} />
         </span>
 
         {#if showSignin}
-            <button on:click={signin} class="button tag signin-button is-success is-text {isLoading ? 'is-loading' : ''}"> Link </button>
+            <button on:click={signin} class="button tag signin-button is-success is-text {isLoading ? 'is-loading' : ''}">
+                <LocalizedText key="accounts.link" />
+            </button>
         {/if}
     {/if}
 
@@ -113,7 +118,6 @@
         position: absolute;
         top: 50%;
         right: 1.5em;
-        width: 55px;
         line-height: 0.75em;
         text-decoration: none;
         transform: translateY(-50%);
@@ -125,7 +129,6 @@
         position: absolute;
         top: 50%;
         right: 1.5em;
-        width: 55px;
         transform: translateY(-50%);
         text-align: center;
     }

@@ -34,21 +34,45 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
-    function updateTheme(theme) {
-        __common.changeTheme(theme.id);
-    }
+    import App from "$lib/app.mjs";
+    import { defineExternalLocale } from "$lib/translate.mjs";
 
     onMount(async () => {
         if (!window.__common) {
             window.__common = await import("$lib/__common.mjs");
         }
 
+        // Common listeners
+        window.App = App;
+
+        App.on("theme", ({ id }) => {
+            __common.changeTheme(id);
+        });
+
+        // Bridge
         window.onBridgeInit = async () => {
             window.goto = goto;
 
             Bridge.on("goto", ({ path }) => goto(path));
 
-            Caffeinated.themeManager.mutate("currentTheme", updateTheme);
+            Caffeinated.UI.mutate("preferences", (preferences) => {
+                const { language, emojiProvider } = preferences;
+
+                App.mutate("language", language);
+                App.mutate("emojiProvider", emojiProvider);
+            });
+
+            Caffeinated.themeManager.mutate("currentTheme", (theme) => {
+                if (theme) {
+                    App.mutate("theme", theme);
+                }
+            });
+
+            Caffeinated.plugins.mutate("loadedPlugins", (plugins) => {
+                for (const plugin of plugins) {
+                    defineExternalLocale(plugin.id, plugin.lang);
+                }
+            });
         };
 
         if (typeof window.Caffeinated != "undefined") {
