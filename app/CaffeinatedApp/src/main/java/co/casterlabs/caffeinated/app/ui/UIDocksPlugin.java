@@ -4,6 +4,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -53,6 +54,13 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             newFormat += "/popout/stream-chat?pluginId=%s&widgetId=%s&authorization=%s&port=%d&mode=%s";
 
             ReflectionLib.setValue(handle, "urlFormat", newFormat);
+        }
+
+        @Override
+        public void onNewInstance(@NonNull WidgetInstance instance) {
+            instance.on("savePreferences", (data) -> {
+                this.settings().set("preferences", data);
+            });
         }
 
     }
