@@ -4,6 +4,10 @@
 
     import { onMount } from "svelte";
 
+    import translate from "$lib/translate.mjs";
+    import App from "$lib/app.mjs";
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     setPageProperties({
         showSideBar: true,
         allowNavigateBackwards: true
@@ -49,7 +53,7 @@
     }
 
     onMount(async () => {
-        document.title = "Casterlabs Caffeinated - Widgets";
+        document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "widgets.manager");
 
         widgets = await Caffeinated.plugins.widgets;
         await renderCreationDisplay();
@@ -66,7 +70,7 @@
                 <a class="button widget-tile" href="/pages/edit-widget?widget={widget.id}" title={widget.name}>
                     <i data-feather={widget.details.icon || DEFAULT_MODULE_ICON} aria-hidden="true" />
                     <p class="widget-name">
-                        {widget.name}
+                        <LocalizedText key={widget.name} />
                     </p>
                 </a>
                 <script>
@@ -101,11 +105,11 @@
                     {#if widgetCategories.alerts.length > 0}
                         <!-- "Alerts" Dropdown -->
                         <div class="dropdown-item">
-                            <CreationDropdownCategory name="Alerts" icon="bell">
+                            <CreationDropdownCategory id="alerts" icon="bell">
                                 {#each widgetCategories.alerts as item}
                                     <div class="dropdown-item">
                                         <button class="button ghost-button" on:click={item.create} style="width: 11rem;">
-                                            {item.name}
+                                            <LocalizedText key={item.name} />
                                         </button>
                                     </div>
                                 {/each}
@@ -117,11 +121,11 @@
                     {#if widgetCategories.labels.length > 0}
                         <!-- "Labels" Dropdown -->
                         <div class="dropdown-item">
-                            <CreationDropdownCategory name="Labels" icon="type">
+                            <CreationDropdownCategory id="labels" icon="type">
                                 {#each widgetCategories.labels as item}
                                     <div class="dropdown-item">
                                         <button class="button ghost-button" on:click={item.create} style="width: 11rem;">
-                                            {item.name}
+                                            <LocalizedText key={item.name} />
                                         </button>
                                     </div>
                                 {/each}
@@ -133,11 +137,11 @@
                     {#if widgetCategories.interaction.length > 0}
                         <!-- "Interaction" Dropdown -->
                         <div class="dropdown-item">
-                            <CreationDropdownCategory name="Interaction" icon="message-circle">
+                            <CreationDropdownCategory id="interaction" icon="message-circle">
                                 {#each widgetCategories.interaction as item}
                                     <div class="dropdown-item">
                                         <button class="button ghost-button" on:click={item.create} style="width: 11rem;">
-                                            {item.name}
+                                            <LocalizedText key={item.name} />
                                         </button>
                                     </div>
                                 {/each}
@@ -149,11 +153,11 @@
                     {#if widgetCategories.goals.length > 0}
                         <!-- "Goals" Dropdown -->
                         <div class="dropdown-item">
-                            <CreationDropdownCategory name="Goals" icon="bar-chart">
+                            <CreationDropdownCategory id="goals" icon="bar-chart">
                                 {#each widgetCategories.goals as item}
                                     <div class="dropdown-item">
                                         <button class="button ghost-button" on:click={item.create} style="width: 11rem;">
-                                            {item.name}
+                                            <LocalizedText key={item.name} />
                                         </button>
                                     </div>
                                 {/each}
@@ -165,11 +169,11 @@
                     {#if widgetCategories.other.length > 0}
                         <!-- "Other" Dropdown -->
                         <div class="dropdown-item">
-                            <CreationDropdownCategory name="Other" icon="droplet">
+                            <CreationDropdownCategory id="other" icon="droplet">
                                 {#each widgetCategories.other as item}
                                     <div class="dropdown-item">
                                         <button class="button ghost-button" on:click={item.create} style="width: 11rem;">
-                                            {item.name}
+                                            <LocalizedText key={item.name} />
                                         </button>
                                     </div>
                                 {/each}

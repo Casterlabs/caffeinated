@@ -1,17 +1,19 @@
 <script>
-    export let name;
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
+    export let id;
     export let icon;
 </script>
 
 <div class="dropdown is-hoverable">
     <div class="dropdown-trigger">
-        <button class="button ghost-button" aria-haspopup="true" aria-controls="{name}-dropdown">
+        <button class="button ghost-button" aria-haspopup="true" aria-controls="{id}-dropdown">
             <span class="icon-text">
                 <span class="icon is-small">
                     <i data-feather={icon} aria-hidden="true" />
                 </span>
                 <span>
-                    {name}
+                    <LocalizedText key="widgets.manager.{id}" />
                 </span>
             </span>
             <span class="icon is-small right-chevron">
@@ -30,7 +32,7 @@
             </span>
         </button>
     </div>
-    <div class="dropdown-menu" id="{name}-dropdown" role="menu">
+    <div class="dropdown-menu" id="{id}-dropdown" role="menu">
         <div class="dropdown-content">
             <slot />
         </div>
