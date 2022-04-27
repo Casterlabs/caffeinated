@@ -3,6 +3,7 @@
     import LocalizedText from "$lib/components/LocalizedText.svelte";
 
     import { onMount } from "svelte";
+    import { supportedLanguages } from "$lib/translate.mjs";
 
     let isTraySupported = false;
     let themes = [];
@@ -75,6 +76,23 @@
                     {#if uiPreferences.enableStupidlyUnsafeSettings}
                         <option value="sensa-emoji">Sensa Emoji</option>
                     {/if}
+                </select>
+            </div>
+        </label>
+    </div>
+    <br />
+    <div>
+        <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label>
+            <LocalizedText key="settings.appearance.language" />
+            <br />
+            <div class="select">
+                <select bind:value={uiPreferences.language} on:change={sendUpdatedUIPreferences}>
+                    {#each supportedLanguages as language}
+                        <option value={language.code}>
+                            {language.name}
+                        </option>
+                    {/each}
                 </select>
             </div>
         </label>
