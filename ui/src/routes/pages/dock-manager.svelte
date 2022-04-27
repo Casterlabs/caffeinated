@@ -1,8 +1,9 @@
 <script>
-    import CreationDropdownCategory from "../../components/widget-manager/creation-dropdown-category.svelte";
     import { setPageProperties } from "../__layout.svelte";
-
     import { onMount } from "svelte";
+
+    import translate from "$lib/translate.mjs";
+    import App from "$lib/app.mjs";
 
     setPageProperties({
         showSideBar: true,
@@ -18,7 +19,7 @@
     }
 
     onMount(async () => {
-        document.title = "Casterlabs Caffeinated - Docks";
+        document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "sidebar.dock_manager");
 
         widgets = await Caffeinated.plugins.widgets;
         feather.replace();

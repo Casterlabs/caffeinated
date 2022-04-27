@@ -6,6 +6,9 @@
 
     import { onMount, onDestroy } from "svelte";
 
+    import translate from "$lib/translate.mjs";
+    import App from "$lib/app.mjs";
+
     const unregister = [];
 
     setPageProperties({
@@ -49,7 +52,7 @@
 
             console.debug(widget);
 
-            document.title = `Casterlabs-Caffeinated - ${widget.details.friendlyName}`;
+            document.title = "Casterlabs-Caffeinated - " + translate(App.get("language"), widget.details.friendlyName);
         }, 100);
     });
 
