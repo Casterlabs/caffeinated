@@ -1,9 +1,13 @@
 <script>
     import { setPageProperties } from "../__layout.svelte";
+    import { onMount, onDestroy } from "svelte";
 
     import FormElement from "../../components/form/form-element.svelte";
 
-    import { onMount, onDestroy } from "svelte";
+    import translate from "$lib/translate.mjs";
+    import App from "$lib/app.mjs";
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+    import { get } from "svelte/store";
 
     const unregister = [];
 
@@ -104,7 +108,7 @@
     });
 
     onMount(async () => {
-        document.title = "Casterlabs Caffeinated - Widget Editor";
+        document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "widgets.editor");
 
         unregister.push(Caffeinated.plugins.mutate("widgets", parseBridgeData));
     });
@@ -170,7 +174,7 @@
                         </svg>
                     </span>
                     <p class="subtitle is-7" style="user-select: text;">
-                        {widget.details.friendlyName}
+                        <LocalizedText key={widget.details.friendlyName} />
                     </p>
                 </div>
             </div>
@@ -184,13 +188,13 @@
                         {#if widgetSection.id == currentWidgetSection}
                             <li class="is-active">
                                 <a>
-                                    {widgetSection.name}
+                                    <LocalizedText key={widgetSection.name} />
                                 </a>
                             </li>
                         {:else}
                             <li>
                                 <a on:click={switchCategory(widgetSection.id)}>
-                                    {widgetSection.name}
+                                    <LocalizedText key={widgetSection.name} />
                                 </a>
                             </li>
                         {/if}
@@ -211,7 +215,7 @@
                     <div style="display: flex; margin-bottom: 1em;">
                         <div class="has-text-right" style="flex: 1; margin-right: 1.5em;">
                             <span class="has-text-weight-medium">
-                                {widgetSettingsOption.name}
+                                <LocalizedText key={widgetSettingsOption.name} />
                             </span>
                         </div>
 
@@ -227,7 +231,7 @@
             {#if widget.details.showDemo && widget.url}
                 <div class="widget-demo-container">
                     <div class="widget-demo" style="padding-bottom: {widget.details.demoAspectRatio * 100}%;">
-                        <iframe src={widget.url.replace(/&mode=.*/, "&mode=DEMO")} title="Preview" />
+                        <iframe src={widget.url.replace(/&mode=.*/, "&mode=DEMO")} title={translate(App.get("language"), "widgets.editor.preview")} />
                     </div>
                 </div>
             {/if}
@@ -244,8 +248,11 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg
+                class="feather feather-arrow-left"
             >
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+            </svg>
         </button>
 
         <div class="widget-control-buttons is-inline-block are-small">
@@ -258,7 +265,7 @@
                         </script>
                     {/if}
                     {#if buttonLayout.text}
-                        {buttonLayout.text}
+                        <LocalizedText key={buttonLayout.text} />
                     {/if}
                 </button>
             {/each}
@@ -273,8 +280,11 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg
+                    class="feather feather-copy"
                 >
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
             </button>
             <button on:click={deleteWidget} class="button is-danger">
                 <svg
@@ -288,13 +298,12 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     class="feather feather-trash-2"
-                    ><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line
-                        x1="10"
-                        y1="11"
-                        x2="10"
-                        y2="17"
-                    /><line x1="14" y1="11" x2="14" y2="17" /></svg
                 >
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    <line x1="10" y1="11" x2="10" y2="17" />
+                    <line x1="14" y1="11" x2="14" y2="17" />
+                </svg>
             </button>
         </div>
     </div>
