@@ -75,7 +75,6 @@
         }
 
         if (!widget) {
-            console.log(widgetId, location.href);
             return;
         }
 
@@ -88,7 +87,7 @@
             }, 75);
         }
 
-        console.log(widget);
+        document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "widgets.editor") + " - " + widget.name;
 
         settingsLayout = widget.settingsLayout || {};
         nameEditorTextContent = widget.name;
