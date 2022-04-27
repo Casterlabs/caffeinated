@@ -19,7 +19,7 @@
     }
 
     onMount(async () => {
-        document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "sidebar.dock_manager");
+        document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "dock_manager");
 
         widgets = await Caffeinated.plugins.widgets;
         feather.replace();

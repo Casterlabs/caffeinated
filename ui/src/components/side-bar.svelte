@@ -63,13 +63,13 @@
         </h1>
 
         <a class="sidebar-category-button" href="/pages/chatbot-manager">
-            <LocalizedText key="sidebar.chatbot_manager" />
+            <LocalizedText key="chatbot_manager" />
         </a>
         <a class="sidebar-category-button" href="/pages/widget-manager">
-            <LocalizedText key="sidebar.widget_manager" />
+            <LocalizedText key="widget_manager" />
         </a>
         <a class="sidebar-category-button" href="/pages/dock-manager">
-            <LocalizedText key="sidebar.dock_manager" />
+            <LocalizedText key="dock_manager" />
         </a>
         <a class="sidebar-category-button" href="/settings">
             <LocalizedText key="settings" />

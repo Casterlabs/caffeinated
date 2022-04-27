@@ -2,6 +2,11 @@
     import { setPageProperties } from "../__layout.svelte";
     import { onMount } from "svelte";
 
+    import translate from "$lib/translate.mjs";
+    import App from "$lib/app.mjs";
+
+    import LocalizedText from "$lib/components/LocalizedText.svelte";
+
     setPageProperties({
         showSideBar: true,
         allowNavigateBackwards: true
@@ -16,12 +21,7 @@
         ["BRIME", "Brime"]
     ];
 
-    const SHOUT_EVENT_TYPES = [
-        ["DONATION", "Donates"],
-        ["FOLLOW", "Follows"],
-        ["RAID", "Raids"],
-        ["SUBSCRIPTION", "Subscribes"]
-    ];
+    const SHOUT_EVENT_TYPES = ["DONATION", "FOLLOW", "RAID", "SUBSCRIPTION"];
 
     let currentTab = "COMMANDS";
 
@@ -46,7 +46,7 @@
     }
 
     onMount(async () => {
-        document.title = "Casterlabs Caffeinated - Chat Bot";
+        document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "chatbot_manager");
 
         const preferences = await Caffeinated.chatbot.preferences;
 
@@ -67,13 +67,13 @@
                 {#if currentTab == tab}
                     <li class="is-active no-bottom">
                         <a>
-                            {tab}
+                            <LocalizedText key="chatbot_manager.tab.{tab}" />
                         </a>
                     </li>
                 {:else}
                     <li class="no-bottom">
                         <a on:click={() => (currentTab = tab)}>
-                            {tab}
+                            <LocalizedText key="chatbot_manager.tab.{tab}" />
                         </a>
                     </li>
                 {/if}
@@ -83,9 +83,11 @@
 
     {#if currentTab == "COMMANDS"}
         <!-- <Commands> -->
+        <!-- svelte-ignore a11y-label-has-associated-control -->
         <label class="checkbox">
-            Mention sender when replying to commands:
-            <input type="checkbox" bind:checked={mentionSenderInReply} />
+            <LocalizedText key="chatbot_manager.commands.mention" slotMapping={["checkbox"]}>
+                <input slot="0" type="checkbox" bind:checked={mentionSenderInReply} />
+            </LocalizedText>
         </label>
 
         <br />
@@ -94,42 +96,35 @@
         <ul>
             {#each commands as command}
                 <li class="box">
-                    When someone from &nbsp;
-                    <div class="select">
-                        <select bind:value={command.platform}>
-                            {#each PLATFORMS as platform}
-                                <option value={platform[0]}>{platform[1]}</option>
-                            {/each}
-                        </select>
-                    </div>
-                    &nbsp;
-                    <div class="select">
-                        <select bind:value={command.type}>
-                            <option value="COMMAND">runs</option>
-                            <option value="CONTAINS">mentions</option>
-                        </select>
-                    </div>
-                    &nbsp;
-                    <span class="inline-children">
-                        {#if command.type == "COMMAND"}
-                            !
-                        {:else}
-                            &quot;
-                        {/if}
-                        <input class="input" type="text" bind:value={command.trigger} style="width: 200px" />
-                        {#if command.type != "COMMAND"}
-                            &quot;
-                        {/if}
-                        &nbsp;
-                    </span>
-                    {#if mentionSenderInReply}
-                        reply with:
-                    {:else}
-                        say:
-                    {/if}
+                    <LocalizedText key="chatbot_manager.commands.format.{command.type}" slotMapping={["platform", "action", "action_target", "message"]}>
+                        <div class="select" slot="0">
+                            <select bind:value={command.platform}>
+                                {#each PLATFORMS as platform}
+                                    <option value={platform[0]}>{platform[1]}</option>
+                                {/each}
+                            </select>
+                        </div>
 
-                    <br />
-                    <textarea class="textarea" bind:value={command.response} rows={2} />
+                        <div class="select" slot="1">
+                            <select bind:value={command.type}>
+                                <option value="COMMAND">
+                                    <LocalizedText key="chatbot_manager.commands.runs" />
+                                </option>
+                                <option value="CONTAINS">
+                                    <LocalizedText key="chatbot_manager.commands.mentions" />
+                                </option>
+                            </select>
+                        </div>
+
+                        <span slot="2">
+                            <input class="input" type="text" bind:value={command.trigger} style="width: 200px" />
+                        </span>
+
+                        <span slot="3">
+                            <br />
+                            <textarea class="textarea" bind:value={command.response} rows={2} />
+                        </span>
+                    </LocalizedText>
 
                     <a
                         class="item-delete has-text-danger"
@@ -165,7 +160,7 @@
                         commands.push({
                             platform: null,
                             trigger: "casterlabs",
-                            response: "Checkout casterlabs.co!",
+                            response: translate(App.get("language"), "chatbot_manager.example.command"),
                             type: "COMMAND"
                         });
                         commands = commands; // Trigger update.
@@ -195,26 +190,30 @@
         <ul>
             {#each shouts as shout}
                 <li class="box">
-                    When someone from &nbsp;
-                    <div class="select">
-                        <select bind:value={shout.platform}>
-                            {#each PLATFORMS as platform}
-                                <option value={platform[0]}>{platform[1]}</option>
-                            {/each}
-                        </select>
-                    </div>
-                    &nbsp;
-                    <div class="select">
-                        <select bind:value={shout.eventType}>
-                            {#each SHOUT_EVENT_TYPES as eventType}
-                                <option value={eventType[0]}>{eventType[1]}</option>
-                            {/each}
-                        </select>
-                    </div>
-                    &nbsp; say:
+                    <LocalizedText key="chatbot_manager.shouts.format" slotMapping={["platform", "action", "message"]}>
+                        <div class="select" slot="0">
+                            <select bind:value={shout.platform}>
+                                {#each PLATFORMS as platform}
+                                    <option value={platform[0]}>{platform[1]}</option>
+                                {/each}
+                            </select>
+                        </div>
 
-                    <br />
-                    <textarea class="textarea" bind:value={shout.text} rows={2} />
+                        <div class="select" slot="1">
+                            <select bind:value={shout.eventType}>
+                                {#each SHOUT_EVENT_TYPES as eventType}
+                                    <option value={eventType}>
+                                        <LocalizedText key="chatbot_manager.shouts.{eventType}" />
+                                    </option>
+                                {/each}
+                            </select>
+                        </div>
+
+                        <span slot="2">
+                            <br />
+                            <textarea class="textarea" bind:value={shout.text} rows={2} />
+                        </span>
+                    </LocalizedText>
 
                     <a
                         class="item-delete has-text-danger"
@@ -250,7 +249,7 @@
                         shouts.push({
                             platform: null,
                             eventType: "FOLLOW",
-                            text: "Thank you for the follow!"
+                            text: translate(App.get("language"), "chatbot_manager.example.shout")
                         });
                         shouts = shouts; // Trigger update.
                         updatePreferences();
@@ -276,7 +275,10 @@
         <!-- </Shouts> -->
     {:else if currentTab == "TIMERS"}
         <!-- <Timers> -->
-        Every <input class="input" type="number" bind:value={timerInterval} style="width: 75px;" /> seconds, send one of the following:
+
+        <LocalizedText key="chatbot_manager.timers.format" slotMapping={["seconds"]}>
+            <input slot="0" class="input" type="number" bind:value={timerInterval} style="width: 75px;" />
+        </LocalizedText>
         <br />
         <ul>
             {#each timers as text}
@@ -314,7 +316,7 @@
                     class="highlight-on-hover"
                     style="width: 100%; color: inherit; display: block; font-size: 1.5em;"
                     on:click={() => {
-                        timers.push("Checkout casterlabs.co for some sick widgets and alerts!");
+                        timers.push(translate(App.get("language"), "chatbot_manager.example.timer"));
                         timers = timers; // Trigger update.
                         updatePreferences();
                     }}
