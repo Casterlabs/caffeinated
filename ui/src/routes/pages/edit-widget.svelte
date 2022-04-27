@@ -74,6 +74,11 @@
             }
         }
 
+        if (!widget) {
+            console.log(widgetId, location.href);
+            return;
+        }
+
         if (!objectEquals(settingsLayout, widget.settingsLayout)) {
             blanking = true;
             console.info("[Widget Editor]", "Settings layout changed, blanking.");
@@ -110,7 +115,14 @@
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "widgets.editor");
 
-        unregister.push(Caffeinated.plugins.mutate("widgets", parseBridgeData));
+        function waitForLoad() {
+            if (location.href.includes("?widget=")) {
+                unregister.push(Caffeinated.plugins.mutate("widgets", parseBridgeData));
+            } else {
+                setTimeout(waitForLoad, 100);
+            }
+        }
+        waitForLoad();
     });
 
     // https://stackoverflow.com/a/6713782
