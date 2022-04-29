@@ -22,7 +22,9 @@ public interface Caffeinated {
     public void copyText(@NonNull String text, @Nullable String toastText);
 
     public void openLink(String url);
-    
+
     public String getLocale();
+
+    public @Nullable CasterlabsAccount getCasterlabsAccount();
 
 }

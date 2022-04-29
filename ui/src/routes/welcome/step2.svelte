@@ -15,6 +15,7 @@
     import AppearanceSettings from "../../components/settings/appearance-settings.svelte";
     import MusicServicesSettings from "../../components/settings/music-services-settings.svelte";
     // import StatusIntegrationSettings from "../../components/settings/status-integration-settings.svelte";
+    import CasterlabsAccountSettings from "../components/settings/casterlabs-account-settings.svelte";
 
     const settingsContainerContents = [
         {
@@ -29,6 +30,11 @@
         {
             name: "settings.accounts",
             type: "section"
+        },
+        {
+            name: "settings.casterlabs_account",
+            type: "category",
+            component: CasterlabsAccountSettings
         },
         {
             name: "settings.music_services",

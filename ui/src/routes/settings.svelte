@@ -13,6 +13,7 @@
     import DeveloperStuff from "../components/settings/developer-stuff.svelte";
     import PairADevice from "../components/settings/pair-a-device.svelte";
     import PluginsSettings from "../components/settings/plugins-settings.svelte";
+    import CasterlabsAccountSettings from "../components/settings/casterlabs-account-settings.svelte";
 
     setPageProperties({
         showSideBar: false,
@@ -42,6 +43,11 @@
         {
             name: "settings.accounts",
             type: "section"
+        },
+        {
+            name: "settings.casterlabs_account",
+            type: "category",
+            component: CasterlabsAccountSettings
         },
         {
             name: "settings.streaming_services",

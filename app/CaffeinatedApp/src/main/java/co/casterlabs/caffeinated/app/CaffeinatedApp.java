@@ -25,6 +25,7 @@ import co.casterlabs.caffeinated.app.theming.ThemeManager;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
+import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.kaimen.util.threading.Promise;
 import co.casterlabs.kaimen.webview.Webview;
@@ -196,6 +197,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @JavascriptFunction
     public void unsafe_restartWithConsole() {
         ConsoleUtil.summonConsoleWindow();
+    }
+
+    @Override
+    public @Nullable CasterlabsAccount getCasterlabsAccount() {
+        return this.auth.getCasterlabsAccount();
     }
 
 }

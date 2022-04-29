@@ -8,6 +8,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NonNull;
 import lombok.ToString;
 
@@ -15,6 +16,7 @@ import lombok.ToString;
 @ToString
 @JsonClass(exposeAll = true)
 public class AuthPreferences {
+    private @Setter String casterlabsAuthToken;
     private JsonObject tokens = new JsonObject();
     private JsonObject koiTokens = new JsonObject();
 
