@@ -134,7 +134,7 @@ public abstract class CaffeinatedPlugin implements Closeable {
      * 
      * @return              null if no data is found.
      */
-    public @Nullable byte[] getResource(@NonNull String resourceId) {
+    public @Nullable String getResource(@NonNull String resourceId) {
         return null;
     }
 

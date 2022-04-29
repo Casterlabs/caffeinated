@@ -30,7 +30,7 @@ public class RoutePluginApi implements HttpProvider, RouteHelper {
                     return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
                 }
 
-                byte[] response = owningPlugin.getResource(resourceId);
+                String response = owningPlugin.getResource(resourceId);
 
                 if (response == null) {
                     return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);

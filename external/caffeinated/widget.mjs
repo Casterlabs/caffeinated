@@ -22,12 +22,16 @@ const AppContext = {
     }
 };
 
-window.addEventListener("message", (event) => {
-    if (typeof event.data == "object" && event.data.call == "theme") {
-        currentTheme = event.data.value;
-        AppContext.broadcast("theme-update", currentTheme);
-    }
-}, false);
+window.addEventListener(
+    "message",
+    (event) => {
+        if (typeof event.data == "object" && event.data.call == "theme") {
+            currentTheme = event.data.value;
+            AppContext.broadcast("theme-update", currentTheme);
+        }
+    },
+    false
+);
 
 const { pluginId, widgetId, authorization } = queryParams;
 const port = queryParams.port || "8092";
@@ -80,12 +84,19 @@ export function init({ initHandler, disconnectHandler }) {
         },
 
         emit(type, data) {
+            if (type.startsWith("__internal:")) {
+                throw "__internal is a reserved prefix.";
+            }
+
             conn.emit(type, data);
+        },
+
+        getResource(resourceId) {
+            return new Promise((resolve) => {
+                this.once(`__internal:resource_poll:${resourceId}`, resolve);
+                conn.emit("__internal:resource_poll", resourceId);
+            });
         }
-
-        // getResource(resourceId) {
-
-        // }
     };
 
     // The `Koi` global.

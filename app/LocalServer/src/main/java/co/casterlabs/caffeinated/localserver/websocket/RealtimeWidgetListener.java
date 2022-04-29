@@ -191,7 +191,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
     private class WidgetInstanceProvider extends WidgetInstance {
 
         public WidgetInstanceProvider() {
-            super(mode, connectionId);
+            super(mode, connectionId, handle.widget);
         }
 
         /* ---------------- */
@@ -213,7 +213,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
         /* ---------------- */
 
         @Override
-        public void emit(@NonNull String type, @NonNull JsonElement message) throws IOException {
+        protected void emit0(@NonNull String type, @NonNull JsonElement message) throws IOException {
             sendMessage(
                 "EMISSION",
                 new JsonObject()
