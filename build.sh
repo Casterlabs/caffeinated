@@ -14,7 +14,10 @@ if [[ $@ != *"nocompile"* ]]; then
     
     # Copy output to app/Bootstrap/src/main/resources/app
     cd ..
-    cp -r ui/build app/Bootstrap/src/main/resources/app
+    mkdir app/Bootstrap/src/main/resources/app
+    cd ui/build
+    cp -r * ../../app/Bootstrap/src/main/resources/app
+    cd ../..
     
     # Compile the maven project
 	cd app
