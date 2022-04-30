@@ -28,7 +28,7 @@
             } catch (ignored) {}
         }
 
-        window.removeEventListener("message", onPostMessage);
+        // window?.removeEventListener("message", onPostMessage);
     });
 
     onMount(() => {
