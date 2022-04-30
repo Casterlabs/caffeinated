@@ -15,7 +15,6 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonNull;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.Getter;
 import lombok.NonNull;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -57,8 +56,10 @@ public abstract class WidgetInstance implements Closeable {
                     }
 
                     try {
-                        this.emit0("__internal:resource_poll:" + resourceId, new JsonString(result));
+                        this.emit0("__internal:resource_poll:" + resourceId, Rson.DEFAULT.toJson(result));
                     } catch (IOException ignored) {}
+
+                    break;
                 }
 
                 default:
