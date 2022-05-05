@@ -17,7 +17,7 @@ import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.FollowAlert;
 import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.RaidAlert;
 import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.SubscriptionAlert;
 import co.casterlabs.caffeinated.builtin.widgets.goals.CustomGoal;
-import co.casterlabs.caffeinated.builtin.widgets.goals.generic.DonationGoal;
+import co.casterlabs.caffeinated.builtin.widgets.goals.DonationGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.generic.FollowersGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.generic.SubscribersGoal;
 import co.casterlabs.caffeinated.builtin.widgets.labels.DonationTotalLabel;

@@ -1,7 +1,8 @@
-package co.casterlabs.caffeinated.builtin.widgets.goals.generic;
+package co.casterlabs.caffeinated.builtin.widgets.goals;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.builtin.widgets.goals.generic.GenericGoal;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
@@ -22,19 +23,13 @@ public class DonationGoal extends GenericGoal {
         .withFriendlyName("Donation Goal");
 
     private double donationTotal = 0;
-    private String lastCurrency;
+    private String lastCurrency = null;
 
     @Override
     public void onInit() {
         super.onInit();
 
-        this.lastCurrency = this.settings().getString("money.currency", Currencies.baseCurrency);
-
         this.addKoiListener(this);
-
-        this.onSettingsUpdate();
-
-        this.update(this.donationTotal);
     }
 
     private void save() {
@@ -55,10 +50,11 @@ public class DonationGoal extends GenericGoal {
 
         String currency = this.settings().getString("money.currency", Currencies.baseCurrency);
 
-        if (this.lastCurrency.equals(currency)) {
+        if ((this.lastCurrency == null) || this.lastCurrency.equals(currency)) {
             // If this fails then we don't care.
             try {
                 double currencyValue = this.settings().getNumber("goal.value").doubleValue();
+                this.lastCurrency = currency;
 
                 Currencies.convertCurrency(
                     currencyValue,
