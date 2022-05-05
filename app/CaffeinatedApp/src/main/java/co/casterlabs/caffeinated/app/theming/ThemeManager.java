@@ -27,7 +27,13 @@ public class ThemeManager extends JavascriptObject {
             new Theme("co.casterlabs.dark", "Dark", Appearance.DARK, false)
         );
 
-        setTheme(CaffeinatedApp.getInstance().getUI().getPreferences().getTheme());
+        String theme = CaffeinatedApp.getInstance().getUI().getPreferences().getTheme();
+
+        if (theme != null) {
+            setTheme(theme);
+        } else {
+            setTheme("system");
+        }
     }
 
     public void registerTheme(@NonNull Theme... themes) {

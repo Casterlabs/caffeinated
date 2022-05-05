@@ -117,11 +117,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public void init(boolean traySupported) {
         this.isTraySupported = traySupported;
 
-        this.auth.init();
-        this.themeManager.init();
-        this.UI.init();
-        this.controlDeck.init();
         this.chatbot.init();
+        this.UI.init();
+        this.themeManager.init();
+        this.auth.init();
+        this.controlDeck.init();
         this.api.init();
         this.plugins.init();
 //            this.koi.init();
