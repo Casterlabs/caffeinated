@@ -49,6 +49,18 @@
         </span>
     </LocalizedText>
     <br />
+    <!-- svelte-ignore a11y-missing-attribute -->
+    <LocalizedText key="casterlabs_account.has_casterlabs_plus" slotMapping={["tickbox", "manage"]}>
+        <input slot="0" type="checkbox" checked={account.hasCasterlabsPlus} onclick="return false" /><span slot="1">
+            <!--{#if account.hasCasterlabsPlus}
+                ... manage
+            {:else}
+                ... learn more
+            {/if}-->
+        </span>
+    </LocalizedText>
+    <br />
+    <br />
     <br />
     <button
         class="button is-link"

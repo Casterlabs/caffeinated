@@ -15,6 +15,7 @@
         account = await Account.getMyAccount();
 
         if (account) {
+            console.log(account);
             currentScreen = "ME";
         } else {
             currentScreen = "LOGIN";
