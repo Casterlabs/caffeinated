@@ -29,7 +29,7 @@
     <br />
     <!-- svelte-ignore a11y-missing-attribute -->
     <LocalizedText key="casterlabs_account.email_verified" slotMapping={["tickbox", "verify"]}>
-        <input slot="0" type="checkbox" class="is-static" bind:checked={account.emailVerified} readonly /><span slot="1">
+        <input slot="0" type="checkbox" checked={account.emailVerified} onclick="return false" /><span slot="1">
             {#if !account.emailVerified}
                 <a
                     on:click={() => {
