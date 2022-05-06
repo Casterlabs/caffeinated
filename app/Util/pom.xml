@@ -30,19 +30,19 @@
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.13.0</version>
+			<version>1.13.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>
 			<artifactId>Util</artifactId>
-			<version>1.13.0</version>
+			<version>1.13.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>FastLoggingFramework</artifactId>
-			<version>1.7.3</version>
+			<version>1.8.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

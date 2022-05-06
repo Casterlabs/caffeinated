@@ -28,25 +28,25 @@
 					<dotGitDirectory>${project.basedir}/../../.git</dotGitDirectory>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>Caffeinated</finalName>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                            <appendAssemblyId>false</appendAssemblyId>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>Caffeinated</finalName>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -64,6 +64,12 @@
 	</repositories>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.fusesource.jansi</groupId>
+			<artifactId>jansi</artifactId>
+			<version>1.18</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>co.casterlabs</groupId>
@@ -90,7 +96,7 @@
 			<artifactId>AllWebviewImpls</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>co.casterlabs.kaimen</groupId>
 			<artifactId>Windows-amd64</artifactId>
@@ -142,6 +148,7 @@
 		<dependency>
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>ConsoleUtil</artifactId>
+			<version>1.4.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
