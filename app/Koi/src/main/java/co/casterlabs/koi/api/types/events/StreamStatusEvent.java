@@ -6,7 +6,11 @@ import java.util.List;
 import co.casterlabs.koi.api.stream.KoiStreamContentRating;
 import co.casterlabs.koi.api.stream.KoiStreamLanguage;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
 import co.casterlabs.rakurai.json.annotating.JsonField;
+import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
+import co.casterlabs.rakurai.json.element.JsonElement;
+import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -21,7 +25,6 @@ public class StreamStatusEvent extends KoiEvent {
 
     private String title;
 
-    @JsonField("start_time")
     private Instant startTime;
 
     private List<String> tags;
@@ -35,6 +38,16 @@ public class StreamStatusEvent extends KoiEvent {
     private String thumbnailUrl;
 
     private KoiStreamLanguage language;
+
+    @JsonDeserializationMethod("start_time")
+    private void $deserialize_start_time(JsonElement e) {
+        this.startTime = Instant.parse(e.getAsString());
+    }
+
+    @JsonSerializationMethod("start_time")
+    private JsonElement $serialize_start_time() {
+        return new JsonString(this.startTime.toString());
+    }
 
     @Override
     public KoiEventType getType() {
