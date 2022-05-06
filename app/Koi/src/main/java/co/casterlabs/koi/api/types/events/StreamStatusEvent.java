@@ -10,6 +10,7 @@ import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
 import co.casterlabs.rakurai.json.annotating.JsonField;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
+import co.casterlabs.rakurai.json.element.JsonNull;
 import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -41,12 +42,18 @@ public class StreamStatusEvent extends KoiEvent {
 
     @JsonDeserializationMethod("start_time")
     private void $deserialize_start_time(JsonElement e) {
-        this.startTime = Instant.parse(e.getAsString());
+        if (e.isJsonString()) {
+            this.startTime = Instant.parse(e.getAsString());
+        }
     }
 
     @JsonSerializationMethod("start_time")
     private JsonElement $serialize_start_time() {
-        return new JsonString(this.startTime.toString());
+        if (this.startTime == null) {
+            return JsonNull.INSTANCE;
+        } else {
+            return new JsonString(this.startTime.toString());
+        }
     }
 
     @Override
