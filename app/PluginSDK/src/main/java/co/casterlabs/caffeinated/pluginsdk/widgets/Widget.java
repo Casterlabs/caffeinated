@@ -265,35 +265,23 @@ public abstract class Widget {
     /* ---------------- */
 
     public final synchronized <T extends Widget> T setSettingsLayout(@NonNull WidgetSettingsLayout newSettingsLayout) {
-        return this.setSettingsLayout(newSettingsLayout, false);
-    }
-
-    public final synchronized <T extends Widget> T setSettingsLayout(@NonNull WidgetSettingsLayout newSettingsLayout, boolean preserveExtraSettings) {
         $handle.settingsLayout = newSettingsLayout;
 
         JsonObject oldSettings = this.settings().getJson();
-        JsonObject newSettings = preserveExtraSettings ? this.settings().getJson() : new JsonObject(); // Clone.
+        JsonObject newSettings = this.settings().getJson();
 
         for (WidgetSettingsSection section : $handle.settingsLayout.getSections()) {
             for (WidgetSettingsItem item : section.getItems()) {
                 String key = String.format("%s.%s", section.getId(), item.getId());
 
-                if (preserveExtraSettings) {
-                    JsonElement existingValue = oldSettings.get(key);
+                JsonElement existingValue = oldSettings.get(key);
 
-                    if (existingValue == null) {
-                        JsonElement defaultValue = item.getDefaultValue();
+                if (existingValue == null) {
+                    JsonElement defaultValue = item.getDefaultValue();
 
-                        newSettings.put(key, defaultValue);
-                    } else {
-                        newSettings.put(key, existingValue);
-                    }
+                    newSettings.put(key, defaultValue);
                 } else {
-                    if (!newSettings.containsKey(key)) {
-                        JsonElement defaultValue = item.getDefaultValue();
-
-                        newSettings.put(key, defaultValue);
-                    }
+                    newSettings.put(key, existingValue);
                 }
             }
         }
@@ -302,6 +290,15 @@ public abstract class Widget {
         $handle.onSettingsUpdate();
 
         return (T) this;
+    }
+
+    /**
+     * @deprecated the preserveExtraSettings option no longer does anything, use
+     *             {@link #setSettingsLayout(WidgetSettingsLayout)} instead.
+     */
+    @Deprecated
+    public final synchronized <T extends Widget> T setSettingsLayout(@NonNull WidgetSettingsLayout newSettingsLayout, boolean preserveExtraSettings) {
+        return this.setSettingsLayout(newSettingsLayout);
     }
 
     /* ---------------- */

@@ -21,8 +21,6 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
 
     @Override
     public void onInit() {
-        super.onInit();
-
         this.addKoiListener(this);
     }
 

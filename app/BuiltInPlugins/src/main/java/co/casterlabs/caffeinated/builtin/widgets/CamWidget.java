@@ -57,7 +57,7 @@ public class CamWidget extends Widget implements KinokoV1Listener {
             }
         });
 
-        this.setSettingsLayout(LAYOUT, true);
+        this.setSettingsLayout(LAYOUT);
 
         if (this.settings().has("cam.id")) {
             this.channelId = this.settings().getString("cam.id");

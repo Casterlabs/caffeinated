@@ -18,8 +18,6 @@ public class SubscribersGoal extends GenericGoal {
 
     @Override
     public void onInit() {
-        super.onInit();
-
         this.addKoiListener(this);
         this.onUserUpdate(null);
     }

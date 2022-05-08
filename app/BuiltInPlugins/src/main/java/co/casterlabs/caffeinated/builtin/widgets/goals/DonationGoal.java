@@ -46,7 +46,7 @@ public class DonationGoal extends GenericGoal {
     @Override
     protected void onSettingsUpdate() {
         WidgetSettingsLayout layout = this.generateSettingsLayout();
-        this.setSettingsLayout(layout, true); // Preserve
+        this.setSettingsLayout(layout); // Preserve
 
         String currency = this.settings().getString("money.currency", Currencies.baseCurrency);
 

@@ -56,8 +56,6 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
         try {
             this.count = this.settings().getNumber("count").doubleValue();
         } catch (Exception ignored) {}
-
-        this.renderSettingsLayout();
     }
 
     private void save() {
@@ -73,7 +71,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
     protected void renderSettingsLayout() {
         WidgetSettingsLayout layout = this.generateSettingsLayout();
 
-        this.setSettingsLayout(layout, true); // Preserve
+        this.setSettingsLayout(layout); // Preserve
     }
 
     /**

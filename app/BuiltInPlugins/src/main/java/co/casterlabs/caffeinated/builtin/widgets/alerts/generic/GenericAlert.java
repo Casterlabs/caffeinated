@@ -24,11 +24,6 @@ import lombok.SneakyThrows;
 public abstract class GenericAlert extends Widget {
 
     @Override
-    public void onInit() {
-        this.renderSettingsLayout();
-    }
-
-    @Override
     protected void onSettingsUpdate() {
         this.renderSettingsLayout();
     }
@@ -36,7 +31,7 @@ public abstract class GenericAlert extends Widget {
     private void renderSettingsLayout() {
         WidgetSettingsLayout layout = this.generateSettingsLayout();
 
-        this.setSettingsLayout(layout, true); // Preserve
+        this.setSettingsLayout(layout);
     }
 
     /**

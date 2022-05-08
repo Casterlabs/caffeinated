@@ -16,8 +16,6 @@ public class SubscriptionAlert extends GenericAlert implements KoiEventListener 
 
     @Override
     public void onInit() {
-        super.onInit();
-
         this.addKoiListener(this);
     }
 

@@ -113,12 +113,14 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         pluginWidgetsField.add(handle.widget);
 
         new AsyncTask(() -> {
+            // Set the settings.
             if (settings != null) {
                 handle.settings = settings;
             }
 
             handle.widget.onInit();
             handle.widget.onNameUpdate();
+            handle.onSettingsUpdate(settings); // Call an update.
         });
 
         return handle;

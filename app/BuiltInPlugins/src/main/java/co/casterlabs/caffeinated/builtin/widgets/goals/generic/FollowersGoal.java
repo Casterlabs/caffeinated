@@ -18,8 +18,6 @@ public class FollowersGoal extends GenericGoal {
 
     @Override
     public void onInit() {
-        super.onInit();
-
         this.addKoiListener(this);
         this.onUserUpdate(null);
     }
