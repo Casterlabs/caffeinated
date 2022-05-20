@@ -222,7 +222,7 @@
 
         <div class="widget-settings allow-select has-text-left">
             {#if !blanking}
-                {#each (widgetSections[currentWidgetSection] || []).items as widgetSettingsOption}
+                {#each (widgetSections[currentWidgetSection] || []).items || [] as widgetSettingsOption}
                     <div style="display: flex; margin-bottom: 1em;">
                         <div class="has-text-right" style="flex: 1; margin-right: 1.5em;">
                             <span class="has-text-weight-medium">

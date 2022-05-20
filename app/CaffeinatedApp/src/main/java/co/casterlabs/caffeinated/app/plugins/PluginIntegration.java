@@ -199,6 +199,8 @@ public class PluginIntegration extends JavascriptObject {
     public void createNewWidget(@NonNull String namespace, @NonNull String name) {
         WidgetHandle handle = this.plugins.createWidget(namespace, UUID.randomUUID().toString(), name, null);
 
+        handle.onSettingsUpdate(new JsonObject());
+
         this.save();
         CaffeinatedApp.getInstance().getUI().navigate("/pages/edit-widget?widget=" + handle.id);
     }
