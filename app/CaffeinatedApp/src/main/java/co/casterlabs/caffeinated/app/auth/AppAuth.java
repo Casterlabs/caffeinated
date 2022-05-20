@@ -280,7 +280,7 @@ public class AppAuth extends JavascriptObject {
                 this.cancelSignin();
             }
 
-            this.currentAuthCallback = this.authorize(platform);
+            this.currentAuthCallback = this.authorize(platform, isKoi);
 
             this.currentAuthCallback
                 .connect()
@@ -363,13 +363,13 @@ public class AppAuth extends JavascriptObject {
         }
     }
 
-    public AuthCallback authorize(String type) throws IOException {
+    private AuthCallback authorize(String type, boolean isKoi) throws IOException {
         String oauthLink = CaffeinatedApp.AUTH_URLS.getString(type);
 
         if (oauthLink == null) {
             throw new IllegalArgumentException("Type '" + type + "' does not have an oauth link associated with it.");
         } else {
-            AuthCallback callback = new AuthCallback(type);
+            AuthCallback callback = new AuthCallback(type, isKoi);
 
             try {
                 Desktop

@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.app.auth;
 
 import java.util.concurrent.TimeUnit;
 
+import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
 import co.casterlabs.caffeinated.util.Crypto;
@@ -21,11 +22,15 @@ public class AuthCallback {
     private Promise<String> authPromise;
     private AsyncTask timeoutWatcher;
 
-    public AuthCallback(String type) {
+    public AuthCallback(String type, boolean isKoi) {
         this.connection = new KinokoV1Connection(new Listener());
         this.type = type;
 
         this.stateString = String.format("auth_redirect:%s:%s", new String(Crypto.generateSecureRandomKey()), this.type);
+
+        if (isKoi) {
+            this.stateString += ':' + CaffeinatedApp.caffeinatedClientId;
+        }
     }
 
     public Promise<String> connect() {

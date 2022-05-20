@@ -6,6 +6,7 @@ public enum UserPlatform {
     TROVO,
     GLIMESH,
     BRIME,
+    YOUTUBE,
     CASTERLABS_SYSTEM;
 
 }

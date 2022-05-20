@@ -50,12 +50,15 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public static final String appDataDir;
 
     // I chose JsonObject because of the builder syntax.
+    // @formatter:off
     public static final JsonObject AUTH_URLS = new JsonObject()
         .put("caffeinated_spotify", "https://casterlabs.co/auth/redirect/spotify")
-        .put("caffeinated_twitch", "https://casterlabs.co/auth/redirect/twitch")
-        .put("caffeinated_trovo", "https://casterlabs.co/auth/redirect/trovo")
-        .put("caffeinated_glimesh", "https://casterlabs.co/auth/redirect/glimesh")
-        .put("caffeinated_brime", "https://casterlabs.co/auth/redirect/brime");
+        .put("caffeinated_twitch",  "https://casterlabs.co/auth/redirect")
+        .put("caffeinated_trovo",   "https://casterlabs.co/auth/redirect")
+        .put("caffeinated_glimesh", "https://casterlabs.co/auth/redirect")
+        .put("caffeinated_brime",   "https://casterlabs.co/auth/redirect")
+        .put("caffeinated_youtube", "https://casterlabs.co/auth/redirect");
+    // @formatter:on
 
     private static @Getter CaffeinatedApp instance;
 
