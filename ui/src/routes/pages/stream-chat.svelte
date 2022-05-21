@@ -101,16 +101,12 @@
             }
 
             case "delete": {
-                if (["TWITCH", "BRIME", "TROVO"].includes(platform)) {
-                    Caffeinated.koi.upvoteChat(platform, event.id);
-                }
+                Caffeinated.koi.deleteChat(platform, event.id);
                 return;
             }
 
             case "upvote": {
-                if (platform == "CAFFEINE") {
-                    Caffeinated.koi.upvoteChat(platform, event.id);
-                }
+                Caffeinated.koi.upvoteChat(platform, event.id);
                 return;
             }
 
