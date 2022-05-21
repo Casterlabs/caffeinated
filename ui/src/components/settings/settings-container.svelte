@@ -107,6 +107,7 @@
         padding-left: 10px;
         padding-right: 10px;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .settings-content {
