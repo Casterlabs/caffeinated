@@ -3,7 +3,7 @@
         <div class="platform-logo">
             <img src="/img/services/youtube/icon.svg" alt="Youtube Logo" />
         </div>
-        <span> Youtube </span>
+        <span> Youtube (BETA) </span>
     </a>
 </div>
 

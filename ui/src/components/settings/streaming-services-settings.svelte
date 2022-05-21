@@ -10,7 +10,8 @@
         twitch: {},
         trovo: {},
         glimesh: {},
-        brime: {}
+        brime: {},
+        youtube: {}
     };
 
     function parseBridgeData(koiAuth) {
@@ -122,6 +123,16 @@
             bind:accountLink={accounts.brime.accountLink}
             bind:isSignedIn={accounts.brime.isSignedIn}
             bind:isLoading={accounts.brime.isLoading}
+            on:signout={signout}
+        />
+        <AccountBox
+            platform="youtube"
+            platformName="YouTube (BETA)"
+            signInHandler={signin}
+            bind:accountName={accounts.youtube.accountName}
+            bind:accountLink={accounts.youtube.accountLink}
+            bind:isSignedIn={accounts.youtube.isSignedIn}
+            bind:isLoading={accounts.youtube.isLoading}
             on:signout={signout}
         />
     </div>
