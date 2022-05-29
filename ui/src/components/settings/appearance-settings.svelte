@@ -50,7 +50,7 @@
             <LocalizedText key="settings.appearance.icon" />
             <br />
             <div class="select">
-                <select bind:value={uiPreferences.icon} on:change={sendUpdatedUIPreferences}>
+                <select bind:value={uiPreferences.icon} on:change={sendUpdatedUIPreferences} disabled={new Date().getMonth() == 5}>
                     <option value="casterlabs">Casterlabs</option>
                     <option value="pride">Pride</option>
                     <option value="moonlabs">Moonlabs</option>
