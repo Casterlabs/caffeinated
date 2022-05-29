@@ -37,7 +37,7 @@ public class UpdaterPane extends JPanel {
 
     private @Getter UpdaterUI ui;
 
-    public UpdaterPane(UpdaterDialog dialog) throws IOException {
+    public UpdaterPane(UpdaterDialog dialog, DialogAnimation animation) throws IOException {
         try {
             this.chosenStreamer = STREAMERS[(int) Math.floor(Math.random() * STREAMERS.length)];
             this.chosenStreamerImage = new ImageIcon(FileUtil.loadResourceAsUrl(String.format("assets/streamers/%s.png", this.chosenStreamer))).getImage();
@@ -46,13 +46,15 @@ public class UpdaterPane extends JPanel {
             FastLogger.logException(e);
         }
 
+        this.currentAnimation = animation;
+
         SpringLayout layout = new SpringLayout();
         this.setLayout(layout);
 
         this.setBackground(UpdaterDialog.TRANSPARENT_COLOR);
         this.setOpaque(false);
 
-        this.ui = new UpdaterUI(dialog);
+        this.ui = new UpdaterUI(dialog, animation);
         layout.putConstraint(SpringLayout.NORTH, ui, 0, SpringLayout.NORTH, this);
         layout.putConstraint(SpringLayout.WEST, ui, 0, SpringLayout.WEST, this);
         layout.putConstraint(SpringLayout.SOUTH, ui, 0, SpringLayout.SOUTH, this);

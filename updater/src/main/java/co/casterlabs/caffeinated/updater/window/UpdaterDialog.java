@@ -17,6 +17,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 
+import co.casterlabs.caffeinated.updater.animations.DialogAnimation;
 import co.casterlabs.caffeinated.updater.util.FileUtil;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -36,10 +37,10 @@ public class UpdaterDialog extends JDialog implements Closeable {
     private @Getter UpdaterPane pane;
     private @Getter UpdaterUI ui;
 
-    public UpdaterDialog() throws IOException {
+    public UpdaterDialog(DialogAnimation animation) throws IOException {
         super((Dialog) null); // Makes the app appear in the taskbar.
 
-        this.pane = new UpdaterPane(this);
+        this.pane = new UpdaterPane(this, animation);
         this.ui = this.pane.getUi();
 
         this.getContentPane().add(this.pane);
@@ -93,7 +94,7 @@ public class UpdaterDialog extends JDialog implements Closeable {
 
         // Set the icon.
         try {
-            URL iconUrl = FileUtil.loadResourceAsUrl("assets/icon.png");
+            URL iconUrl = FileUtil.loadResourceAsUrl("assets/" + animation.getIcon());
             ImageIcon img = new ImageIcon(iconUrl);
 
             this.setIconImage(img.getImage());

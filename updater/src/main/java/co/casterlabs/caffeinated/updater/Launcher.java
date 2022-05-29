@@ -11,7 +11,10 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.UIManager;
 
+import co.casterlabs.caffeinated.updater.animations.BlankAnimation;
+import co.casterlabs.caffeinated.updater.animations.DialogAnimation;
 import co.casterlabs.caffeinated.updater.animations.KamihinokinaiAnimation;
+import co.casterlabs.caffeinated.updater.animations.PrideAnimation;
 import co.casterlabs.caffeinated.updater.animations.ValentinesAnimation;
 import co.casterlabs.caffeinated.updater.animations.WinterSeasonAnimation;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
@@ -32,7 +35,7 @@ public class Launcher {
     }
 
     public static void main(String[] args) throws Exception {
-        UpdaterDialog dialog = new UpdaterDialog();
+        DialogAnimation animation = new BlankAnimation();
 
         {
             Calendar calendar = Calendar.getInstance();
@@ -47,7 +50,7 @@ public class Launcher {
                 boolean isJanuaryTimeframe = (calendarMonth == Calendar.JANUARY) && (calendarDate <= 15);
 
                 if (isDecember || isNovemberTimeframe || isJanuaryTimeframe) {
-                    dialog.getPane().setCurrentAnimation(new WinterSeasonAnimation());
+                    animation = new WinterSeasonAnimation();
                 }
             }
 
@@ -57,7 +60,7 @@ public class Launcher {
                 boolean isTheTenth = calendarDate == 10;
 
                 if (isFeburay && isTheTenth) {
-                    dialog.getPane().setCurrentAnimation(new KamihinokinaiAnimation());
+                    animation = new KamihinokinaiAnimation();
                 }
             }
 
@@ -67,10 +70,21 @@ public class Launcher {
                 boolean isTheFourteenth = calendarDate == 14;
 
                 if (isFeburay && isTheFourteenth) {
-                    dialog.getPane().setCurrentAnimation(new ValentinesAnimation());
+                    animation = new ValentinesAnimation();
+                }
+            }
+
+            // Enable the Pride month animation during June.
+            {
+                boolean isJune = calendarMonth == Calendar.JUNE;
+
+                if (isJune) {
+                    animation = new PrideAnimation();
                 }
             }
         }
+
+        UpdaterDialog dialog = new UpdaterDialog(animation);
 
         dialog.setStatus("");
         dialog.setVisible(true);

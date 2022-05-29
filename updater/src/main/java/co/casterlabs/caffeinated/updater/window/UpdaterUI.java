@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
+import co.casterlabs.caffeinated.updater.animations.DialogAnimation;
 import lombok.NonNull;
 
 public class UpdaterUI extends JPanel {
@@ -17,7 +18,7 @@ public class UpdaterUI extends JPanel {
 
     private LoadingSpinner loadingSpinner;
 
-    public UpdaterUI(UpdaterDialog dialog) throws IOException {
+    public UpdaterUI(UpdaterDialog dialog, DialogAnimation animation) throws IOException {
         SpringLayout layout = new SpringLayout();
 
         this.setBackground(UpdaterDialog.BACKGROUND_COLOR);
@@ -56,12 +57,14 @@ public class UpdaterUI extends JPanel {
         layout.putConstraint(SpringLayout.EAST, closeButton, -10, SpringLayout.EAST, this);
         this.add(closeButton);
 
-        ImageButton casterlabsBanner = new ImageButton("banner.png", null);
-        layout.putConstraint(SpringLayout.NORTH, casterlabsBanner, 10, SpringLayout.NORTH, this);
-        layout.putConstraint(SpringLayout.WEST, casterlabsBanner, 10, SpringLayout.WEST, this);
-        layout.putConstraint(SpringLayout.SOUTH, casterlabsBanner, 93, SpringLayout.NORTH, this);
-        layout.putConstraint(SpringLayout.EAST, casterlabsBanner, 265, SpringLayout.WEST, this);
-        add(casterlabsBanner);
+        if (animation.shouldShowCasterlabsBanner()) {
+            ImageButton casterlabsBanner = new ImageButton("banner_white.png", null);
+            layout.putConstraint(SpringLayout.NORTH, casterlabsBanner, 10, SpringLayout.NORTH, this);
+            layout.putConstraint(SpringLayout.WEST, casterlabsBanner, 10, SpringLayout.WEST, this);
+            layout.putConstraint(SpringLayout.SOUTH, casterlabsBanner, 93, SpringLayout.NORTH, this);
+            layout.putConstraint(SpringLayout.EAST, casterlabsBanner, 265, SpringLayout.WEST, this);
+            this.add(casterlabsBanner);
+        }
 
     }
 

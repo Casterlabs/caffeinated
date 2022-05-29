@@ -14,4 +14,12 @@ public abstract class DialogAnimation {
 
     public void paintOnBackground(Graphics2D g2d) {}
 
+    public boolean shouldShowCasterlabsBanner() {
+        return true;
+    }
+
+    public String getIcon() {
+        return "icon.png";
+    }
+
 }
