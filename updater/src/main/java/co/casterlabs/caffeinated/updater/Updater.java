@@ -145,6 +145,8 @@ public class Updater {
                 dialog.setStatus("Installing updates...");
                 ZipUtil.unzip(updateFile, appDirectory);
 
+                commitFile.createNewFile();
+
                 String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
                 Files.writeString(commitFile.toPath(), remoteCommit);
 
