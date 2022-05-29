@@ -1,5 +1,11 @@
 package co.casterlabs.caffeinated.updater;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -8,7 +14,12 @@ import javax.swing.UIManager;
 import co.casterlabs.caffeinated.updater.animations.KamihinokinaiAnimation;
 import co.casterlabs.caffeinated.updater.animations.ValentinesAnimation;
 import co.casterlabs.caffeinated.updater.animations.WinterSeasonAnimation;
+import co.casterlabs.caffeinated.updater.util.WebUtil;
 import co.casterlabs.caffeinated.updater.window.UpdaterDialog;
+import co.casterlabs.rakurai.io.IOUtil;
+import okhttp3.Request;
+import okhttp3.Response;
+import xyz.e3ndr.consoleutil.ConsoleUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
@@ -74,11 +85,74 @@ public class Launcher {
 
         if (Updater.isLauncherOutOfDate()) {
             TimeUnit.SECONDS.sleep(1);
+
+            switch (ConsoleUtil.getPlatform()) {
+                case WINDOWS: {
+                    try {
+                        updateUpdaterWindows(dialog);
+                        return;
+                    } catch (Exception e) {
+                        FastLogger.logStatic("Couldn't automagically update the updater (defaulting to the normal message):\n%s", e);
+                    }
+                }
+
+                default: {
+                    break;
+                }
+            }
+
             // TODO display this message better and give a button to download.
             dialog.setLoading(false);
             dialog.setStatus("Your launcher is out of date! (Download from casterlabs.co)");
+
+            Desktop.getDesktop().browse(new URI("https://casterlabs.co"));
         } else {
             checkForUpdates(dialog);
+        }
+    }
+
+    private static void updateUpdaterWindows(UpdaterDialog dialog) throws Exception {
+        try (Response response = WebUtil.sendRawHttpRequest(new Request.Builder().url("https://cdn.casterlabs.co/dist/Caffeinated-Installer.exe"))) {
+            final File tempInstaller = new File(System.getProperty("java.io.tmpdir"), "Caffeinated-Installer.exe");
+
+            tempInstaller.delete();
+            tempInstaller.createNewFile();
+
+            dialog.setStatus("Downloading installer...");
+
+            InputStream source = response.body().byteStream();
+            OutputStream dest = new FileOutputStream(tempInstaller);
+
+            double totalSize = response.body().contentLength();
+            int totalRead = 0;
+
+            byte[] buffer = new byte[IOUtil.DEFAULT_BUFFER_SIZE];
+            int read = 0;
+
+            while ((read = source.read(buffer)) != -1) {
+                dest.write(buffer, 0, read);
+                totalRead += read;
+
+                double progress = totalRead / totalSize;
+
+                dialog.setStatus(String.format("Downloading installer... (%.0f%%)", progress * 100));
+                dialog.setProgress(progress);
+            }
+
+            dest.flush();
+
+            source.close();
+            dest.close();
+
+            dialog.setProgress(-1);
+
+            Runtime.getRuntime().exec(new String[] {
+                    "powershell",
+                    "-Command",
+                    "\"Start-Process '" + tempInstaller.getCanonicalPath() + "' -Verb RunAs\""
+            });
+            TimeUnit.SECONDS.sleep(2);
+            System.exit(0);
         }
     }
 
