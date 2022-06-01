@@ -17,7 +17,7 @@
 	</modules>
 
 	<properties>
-		<kaimen.version>912b77b</kaimen.version>
+		<kaimen.version>64f25cd</kaimen.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
