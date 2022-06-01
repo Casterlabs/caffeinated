@@ -35,9 +35,10 @@
                 account.isLoading = false;
                 accounts[platform].isSignedIn = true;
             } else {
+                console.warn("Miss.");
                 setTimeout(async () => {
                     parseBridgeData(await Caffeinated.auth.authInstances);
-                }, 250);
+                }, 50);
             }
         }
 

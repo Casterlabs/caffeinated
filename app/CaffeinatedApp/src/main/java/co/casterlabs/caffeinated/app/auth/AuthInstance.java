@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -18,9 +17,6 @@ import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
-import co.casterlabs.koi.api.stream.KoiStreamConfigurationFeatures;
-import co.casterlabs.koi.api.stream.KoiStreamContentRating;
-import co.casterlabs.koi.api.stream.KoiStreamLanguage;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -48,14 +44,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     private @JsonField @Getter @Nullable List<User> viewers;
     private @JsonField @Getter @Nullable RoomstateEvent roomstate;
 
-    private @JsonField @Getter @Nullable List<KoiIntegrationFeatures> features = new ArrayList<>();
-    private @JsonField @Getter @Nullable Map<String, String> streamCategories;
-    private @JsonField @Getter @Nullable Map<String, String> streamTags;
-    private @JsonField @Getter @Nullable List<KoiStreamConfigurationFeatures> streamConfigurationFeatures;
-
-    // This is the most convenient way to expose these to the UI.
-    private final @JsonField Map<KoiStreamLanguage, String> languages = KoiStreamLanguage.LANG;
-    private final @JsonField Map<KoiStreamContentRating, String> contentRatings = KoiStreamContentRating.LANG;
+    private @Getter @Nullable List<KoiIntegrationFeatures> features = new ArrayList<>();
 
     public AuthInstance(String tokenId) {
         this.tokenId = tokenId;
@@ -120,10 +109,6 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         this.koi.sendStreamUpdate(config);
     }
 
-    public boolean isStreamConfigurationSupported() {
-        return this.streamConfigurationFeatures != null && !this.streamConfigurationFeatures.isEmpty();
-    }
-
     /* ---------------- */
     /* Event Listeners  */
     /* ---------------- */
@@ -134,25 +119,25 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         CaffeinatedApp.getInstance().getAuth().updateBridgeData();
     }
 
-    @Override
-    public void onPlatformCategories(Map<String, String> categories) {
-        this.streamCategories = Collections.unmodifiableMap(categories);
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
-    }
-
-    @Override
-    public void onPlatformTags(Map<String, String> tags) {
-        this.streamTags = Collections.unmodifiableMap(tags);
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
-    }
-
-    @Override
-    public void onSupportedStreamConfigurationFeatures(List<KoiStreamConfigurationFeatures> streamConfigFeatures) {
-        if (streamConfigFeatures != null) {
-            this.streamConfigurationFeatures = Collections.unmodifiableList(streamConfigFeatures);
-            CaffeinatedApp.getInstance().getAuth().updateBridgeData();
-        }
-    }
+//    @Override
+//    public void onPlatformCategories(Map<String, String> categories) {
+//        this.streamCategories = Collections.unmodifiableMap(categories);
+//        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+//    }
+//
+//    @Override
+//    public void onPlatformTags(Map<String, String> tags) {
+//        this.streamTags = Collections.unmodifiableMap(tags);
+//        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+//    }
+//
+//    @Override
+//    public void onSupportedStreamConfigurationFeatures(List<KoiStreamConfigurationFeatures> streamConfigFeatures) {
+//        if (streamConfigFeatures != null) {
+//            this.streamConfigurationFeatures = Collections.unmodifiableList(streamConfigFeatures);
+//            CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+//        }
+//    }
 
     @SuppressWarnings("deprecation")
     @KoiEventHandler

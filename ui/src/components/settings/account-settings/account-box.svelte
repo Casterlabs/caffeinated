@@ -5,11 +5,11 @@
     export let platform;
     export let platformName;
 
-    export let signInLink;
-    export let signInHandler;
+    export let signInLink = null;
+    export let signInHandler = null;
 
-    export let accountName;
-    export let accountLink;
+    export let accountName = null;
+    export let accountLink = null;
 
     export let showSignin = true;
     export let isSignedIn = false;

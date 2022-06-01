@@ -1,5 +1,5 @@
 <script>
-    import StreamConfiguration from "../components/stream-configuration.svelte";
+    // import StreamConfiguration from "../components/stream-configuration.svelte";
 
     import LocalizedText from "$lib/components/LocalizedText.svelte";
 
