@@ -208,7 +208,7 @@
     }
 
     .about {
-        width: 550px;
+        width: 500px;
         margin: auto;
         margin-top: 25px;
         padding-left: 0;
