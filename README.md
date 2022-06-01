@@ -13,49 +13,14 @@
 ##  The one-stop shop for stream widgets & alerts.
 Casterlabs is a simple to use, free, and feature-rich application for streamers.
 
-**CURRENTLY IN BETA**
-
-
 
 ## Thank-yous
  - [v1p3rhax](https://twitch.tv/v1p3r_hax): Spent many hours debugging Linux support and provided some early MacOS builds.
  - [Redd56](https://twitch.tv/redd_ztone): Put a lot of work into researching some deeper system-level integrations on Linux and helped test a lot of builds.
 
 
-
 ## Depdendencies and Tools Used
-
-### UI
- - [SvelteKit](https://kit.svelte.dev)
- - [Bulma](https://bulma.io)
- - [ESLint](https://eslint.org)
- - [Prettier](https://prettier.io)
-
-### Build Tools
- - [Apache Maven](https://maven.apache.org)
- - [Adoptium OpenJDK](https://adoptium.net)
- - [NodeJS & NPM](https://nodejs.org)
- - [Project Lombok](https://projectlombok.org)
- - [JetBrains' Annotations Library](https://www.jetbrains.com/help/idea/annotating-source-code.html)
- - [Jitpack](https://jitpack.io)
-
-### Libraries
- - [Chromium Embedded Framework](https://bitbucket.org/chromiumembedded/cef)
- - [JCEF Maven](https://github.com/jcefmaven/jcefmaven)
- - [Eclipse SWT](https://www.eclipse.org/swt/) (Provided by [maven-eclipse](https://github.com/maven-eclipse/maven-eclipse.github.io))(MacOS Only)
- - [OkHttp](https://square.github.io/okhttp)
- - [Appdirs](https://github.com/harawata/appdirs)
- - [Apache Commons Collections 4](https://commons.apache.org/proper/commons-collections)
- - [Java-Websocket](https://github.com/TooTallNate/Java-WebSocket)
- - [Reflections8](https://github.com/aschoerk/reflections8)
- - [picocli](https://github.com/aschoerk/reflections8)
- - [Undertow](https://undertow.io)
- - [playerctl](https://github.com/altdesktop/playerctl) (Linux Only, not bundled but is used if installed)
- - [Java Native Access](https://github.com/java-native-access/jna)
- - [WindowsMediaController](https://github.com/DubyaDude/WindowsMediaController) (Windows Only)
- - Various Libraries from @Casterlabs (Hey, that's us :D )
- - Various Libraries from @e3ndr (Too many to list, lol)
-
+See in the app, Settings > About > Credits.
 
 
 ## For developers
