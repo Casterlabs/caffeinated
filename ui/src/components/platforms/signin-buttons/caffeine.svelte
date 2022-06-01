@@ -2,7 +2,6 @@
     import { goto } from "$app/navigation";
 
     function go() {
-        plausible("Sign In", { props: { platform: "CAFFEINE" } });
         goto("/signin/caffeine");
     }
 </script>

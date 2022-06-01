@@ -30,8 +30,6 @@
         e.target.blur();
 
         if (!isLoading) {
-            plausible("Sign In", { props: { platform: platform } });
-
             if (signInLink) {
                 goto(`${signInLink}?homeGoBack=1`);
             } else if (signInHandler) {

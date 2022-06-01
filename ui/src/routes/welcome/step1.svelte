@@ -17,7 +17,6 @@
 
         document.title = "";
         console.log(supportedLanguages);
-        plausible("Fresh Install");
     });
 
     async function updateLanguage() {
