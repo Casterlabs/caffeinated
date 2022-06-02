@@ -25,7 +25,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
-    private static final int VERSION = 19;
+    private static final int VERSION = 20;
 
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/stable/";
     private static final String REMOTE_COMMIT_URL = "https://cdn.casterlabs.co/dist/stable/commit";
