@@ -3,6 +3,7 @@ package co.casterlabs.caffeinated.updater;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -20,10 +21,15 @@ import co.casterlabs.caffeinated.updater.animations.WinterSeasonAnimation;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
 import co.casterlabs.caffeinated.updater.window.UpdaterDialog;
 import co.casterlabs.rakurai.io.IOUtil;
+import lombok.Getter;
+import lombok.Setter;
 import okhttp3.Request;
 import okhttp3.Response;
 import xyz.e3ndr.consoleutil.ConsoleUtil;
+import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
+import xyz.e3ndr.fastloggingframework.LogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogColor;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Launcher {
@@ -32,9 +38,48 @@ public class Launcher {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {}
+
+        final File logsDir = new File(Updater.appDataDirectory, "logs");
+        final File updaterLogFile = new File(logsDir, "updater.log");
+
+        try {
+            logsDir.mkdirs();
+            updaterLogFile.createNewFile();
+
+            @SuppressWarnings("resource")
+            final FileOutputStream logOut = new FileOutputStream(updaterLogFile);
+
+            FastLoggingFramework.setLogHandler(new LogHandler() {
+                @Override
+                protected void log(String name, LogLevel level, String formatted) {
+                    System.out.println(LogColor.translateToAnsi(formatted));
+
+                    String stripped = LogColor.strip(formatted);
+
+                    try {
+                        logOut.write(stripped.getBytes());
+                        logOut.write('\n');
+                        logOut.flush();
+                    } catch (IOException e) {
+                        FastLogger.logException(e);
+                    }
+                }
+            });
+
+            FastLogger.logStatic(LogLevel.INFO, "App Directory: %s", Updater.appDataDirectory);
+            FastLogger.logStatic("Log file: %s", updaterLogFile);
+        } catch (IOException e) {
+            FastLogger.logException(e);
+        }
     }
 
+    private static @Getter Thread updaterThread;
+    private static UpdaterDialog dialog;
+    private static @Setter UpdaterMode mode = UpdaterMode.NORMAL;
+
     public static void main(String[] args) throws Exception {
+        updaterThread = Thread.currentThread();
+
         DialogAnimation animation = new BlankAnimation();
 
         {
@@ -84,7 +129,7 @@ public class Launcher {
             }
         }
 
-        UpdaterDialog dialog = new UpdaterDialog(animation);
+        dialog = new UpdaterDialog(animation);
 
         dialog.setStatus("");
         dialog.setVisible(true);
@@ -93,8 +138,38 @@ public class Launcher {
             FastLogger.logStatic("App already running, goodbye!");
             dialog.close();
             return;
+        } else {
+            String[] kill;
+
+            switch (ConsoleUtil.getPlatform()) {
+                case WINDOWS: {
+                    kill = new String[] {
+                            "taskkill",
+                            "/F",
+                            "/IM",
+                            "Casterlabs-Caffeinated.exe"
+                    };
+                    break;
+                }
+
+                default: {
+                    kill = new String[] {
+                            "pkill",
+                            "-f",
+                            "Casterlabs-Caffeinated"
+                    };
+                    break;
+                }
+            }
+
+            FastLogger.logStatic("App isn't responding (or isn't open), attempting to kill it.");
+            Runtime.getRuntime().exec(kill);
         }
 
+        doChecks();
+    }
+
+    public static void doChecks() throws Exception {
         dialog.setStatus("Checking for updates...");
 
         if (Updater.isLauncherOutOfDate()) {
@@ -103,7 +178,7 @@ public class Launcher {
             switch (ConsoleUtil.getPlatform()) {
                 case WINDOWS: {
                     try {
-                        updateUpdaterWindows(dialog);
+                        updateUpdaterWindows();
                         return;
                     } catch (Exception e) {
                         FastLogger.logStatic("Couldn't automagically update the updater (defaulting to the normal message):\n%s", e);
@@ -121,11 +196,11 @@ public class Launcher {
 
             Desktop.getDesktop().browse(new URI("https://casterlabs.co"));
         } else {
-            checkForUpdates(dialog);
+            checkForUpdates();
         }
     }
 
-    private static void updateUpdaterWindows(UpdaterDialog dialog) throws Exception {
+    private static void updateUpdaterWindows() throws Exception {
         try (Response response = WebUtil.sendRawHttpRequest(new Request.Builder().url("https://cdn.casterlabs.co/dist/Caffeinated-Installer.exe"))) {
             final File tempInstaller = new File(System.getProperty("java.io.tmpdir"), "Caffeinated-Installer.exe");
 
@@ -170,15 +245,17 @@ public class Launcher {
         }
     }
 
-    private static void checkForUpdates(UpdaterDialog dialog) throws Exception {
+    private static void checkForUpdates() throws Exception {
         try {
-            if (Updater.needsUpdate()) {
+            if (Updater.needsUpdate() || (mode == UpdaterMode.FORCE)) {
+                FastLogger.logStatic("Downloading updates.");
                 Updater.downloadAndInstallUpdate(dialog);
                 dialog.setStatus("Done!");
                 // Artificial delay added because it'd be too jarring otherwise.
                 // Heh, JARring, haha.
                 TimeUnit.SECONDS.sleep(2);
             } else {
+                FastLogger.logStatic("You are up to date!");
                 TimeUnit.SECONDS.sleep(1);
                 dialog.setStatus("You are up to date!");
             }
@@ -194,7 +271,7 @@ public class Launcher {
                 case LAUNCH_FAILED:
                     Updater.borkInstall();
                     TimeUnit.SECONDS.sleep(5);
-                    checkForUpdates(dialog);
+                    checkForUpdates();
                     return;
 
                 default:

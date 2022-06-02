@@ -45,8 +45,6 @@ public class Updater {
     static {
         appDirectory.mkdirs();
 
-        FastLogger.logStatic(LogLevel.INFO, "App Directory: %s", appDirectory);
-
         switch (ConsoleUtil.getPlatform()) {
 
             case MAC:
