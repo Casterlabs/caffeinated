@@ -56,7 +56,7 @@ public class Updater {
 
             case UNIX:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated";
-                REMOTE_ZIP_DOWNLOAD_URL += "Linx-amd64.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "Linux-amd64.zip";
                 break;
 
             case WINDOWS:
