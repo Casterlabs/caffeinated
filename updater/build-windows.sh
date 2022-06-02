@@ -14,7 +14,7 @@ fi
 java -jar "packr.jar" \
      --platform windows64 \
      --jdk windows_runtime.zip \
-     --executable Casterlabs-Caffeinated \
+     --executable Casterlabs-Caffeinated-Updater \
      --classpath target/Casterlabs-Caffeinated-Updater.jar \
      --mainclass $MAIN_CLASS \
      --output dist/windows

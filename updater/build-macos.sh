@@ -15,7 +15,7 @@ fi
 java -jar "packr.jar" \
      --platform mac \
      --jdk macos_runtime.tar.gz \
-     --executable Casterlabs-Caffeinated \
+     --executable Casterlabs-Caffeinated-Updater \
      --icon app_icon.icns \
      --bundle co.casterlabs.caffeinated \
      --classpath target/Casterlabs-Caffeinated-Updater.jar \

@@ -15,7 +15,7 @@ fi
 java -jar "packr.jar" \
      --platform linux64 \
      --jdk linux_runtime.tar.gz \
-     --executable Casterlabs-Caffeinated \
+     --executable Casterlabs-Caffeinated-Updater \
      --classpath target/Casterlabs-Caffeinated-Updater.jar \
      --mainclass $MAIN_CLASS \
      --output dist/linux
