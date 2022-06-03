@@ -202,13 +202,13 @@ public class Bootstrap implements Runnable {
     }
 
     private void startApp() throws Exception {
-        CaffeinatedApp app = new CaffeinatedApp(buildInfo);
+        CaffeinatedApp app = new CaffeinatedApp(buildInfo, isDev);
 
         logger.info("Entry                        | Value", buildInfo.getVersionString());
         logger.info("-----------------------------+-------------------------");
         logger.info("buildInfo.versionString      | %s", buildInfo.getVersionString());
         logger.info("buildInfo.author             | %s", buildInfo.getAuthor());
-        logger.info("buildInfo.isDev              | %b", buildInfo.isDev());
+        logger.info("buildInfo.isDev              | %b", isDev);
         logger.info("system.platform              | %s", ConsoleUtil.getPlatform().name());
         logger.info("bootstrap.args               | %s", System.getProperty("sun.java.command"));
         logger.info("");
