@@ -46,7 +46,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             WidgetHandle handle = ReflectionLib.getValue(this, "$handle");
             String newFormat;
 
-            if (CaffeinatedApp.getInstance().isDev()) {
+            if (CaffeinatedApp.getInstance().getBuildInfo().isDev()) {
                 newFormat = "http://localhost:3001";
             } else {
                 newFormat = "https://studio.casterlabs.co";
@@ -64,7 +64,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
 
                 Caffeinated.getInstance().openLink(url);
             });
-            
+
             instance.on("savePreferences", (data) -> {
                 this.settings().set("preferences", data);
             });

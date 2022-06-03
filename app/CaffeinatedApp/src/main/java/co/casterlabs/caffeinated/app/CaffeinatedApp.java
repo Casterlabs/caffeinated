@@ -62,8 +62,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     private static @Getter CaffeinatedApp instance;
 
-    private final @JavascriptValue(allowSet = false) BuildInfo buildInfo;
-    private final @JavascriptValue(allowSet = false) boolean isDev;
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private final BuildInfo buildInfo;
 
     private @Setter WebviewBridge appBridge;
     private @Setter Webview webview;
@@ -100,7 +100,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // Event stuff
     private Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
 
-    private @Getter Promise<Void> initPromise = new Promise<>();
+    private Promise<Void> initPromise = new Promise<>();
 
     static {
         AppDirs appDirs = AppDirsFactory.getInstance();
@@ -109,9 +109,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         new File(appDataDir, "preferences").mkdirs();
     }
 
-    public CaffeinatedApp(@NonNull BuildInfo buildInfo, boolean isDev) {
+    public CaffeinatedApp(@NonNull BuildInfo buildInfo) {
         this.buildInfo = buildInfo;
-        this.isDev = isDev;
         instance = this;
 
         this.UI.updateIcon();

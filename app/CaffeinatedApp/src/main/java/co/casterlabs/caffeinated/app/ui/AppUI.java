@@ -205,7 +205,7 @@ public class AppUI extends JavascriptObject {
         String path = String.format("assets/logo/%s.png", this.getPreferences().getIcon());
         URL resource;
 
-        if (CaffeinatedApp.getInstance().isDev()) {
+        if (CaffeinatedApp.getInstance().getBuildInfo().isDev()) {
             resource = new File("./src/main/resources/", path).toURI().toURL();
         } else {
             resource = AppUI.class.getClassLoader().getResource(path);
