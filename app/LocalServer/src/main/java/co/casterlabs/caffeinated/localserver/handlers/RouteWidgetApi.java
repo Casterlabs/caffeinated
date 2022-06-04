@@ -24,13 +24,12 @@ import co.casterlabs.sora.api.websockets.annotations.WebsocketEndpoint;
 
 public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHelper {
 
-    @HttpEndpoint(uri = "/api/plugin/:pluginId/widget/:widgetId/webappurl")
-    public HttpResponse onGetWidgetWebAppRequest(SoraHttpSession session) {
+    @HttpEndpoint(uri = "/api/plugin/:pluginId/widget/:widgetId/html")
+    public HttpResponse onGetWidgetHtmlRequest(SoraHttpSession session) {
         try {
             if (authorize(session)) {
                 String pluginId = session.getUriParameters().get("pluginId");
                 String widgetId = session.getUriParameters().get("widgetId");
-
                 WidgetInstanceMode mode = WidgetInstanceMode.valueOf(
                     session
                         .getQueryParameters()
@@ -46,20 +45,16 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
 
                 for (Widget widget : owningPlugin.getWidgets()) {
                     if (widget.getId().equals(widgetId)) {
-                        // http://password.127-0-0-1.sslip.io ->
-                        // http://mode.plugin.widget.password.127-0-0-1.sslip.io
-                        String url = String.format(
-                            "http://%s.%s.%s.%s/cl-cgi/widget.html",
-                            mode.name().toLowerCase(),
-                            pluginId.replace(".", "-"),
-                            widgetId,
-                            CaffeinatedApp.getInstance().getInternalAppUrl().substring("http://".length()) // http://password.127-0-0-1.sslip.io -> password.127-0-0-1.sslip.io
-                        );
+                        String html = widget.getWidgetHtml(mode);
 
-                        return this.addCors(
-                            session,
-                            newResponse(StandardHttpStatus.OK, JsonObject.singleton("url", url))
-                        );
+                        if (html == null) {
+                            return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);
+                        } else {
+                            return this.addCors(
+                                session, HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, html)
+                                    .setMimeType("text/html")
+                            );
+                        }
                     }
                 }
 

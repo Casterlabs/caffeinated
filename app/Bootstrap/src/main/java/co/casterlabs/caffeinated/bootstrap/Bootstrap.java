@@ -246,7 +246,6 @@ public class Bootstrap implements Runnable {
                 app.setAppBridge(webview.getBridge());
                 app.setWebview(webview);
                 app.setAppUrl(appUrl);
-                app.setInternalAppUrl(uiServer.getAddress());
 
                 new AsyncTask(() -> {
                     webview.getBridge().defineObject("Caffeinated", app);
