@@ -16,6 +16,7 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.caffeinated.util.Pair;
 import co.casterlabs.kaimen.util.functional.ConsumingProducer;
 import co.casterlabs.kaimen.util.reflection.Reflective;
 import co.casterlabs.kaimen.util.threading.Promise;
@@ -61,7 +62,7 @@ public abstract class Widget {
         public String conductorKey;
         public int conductorPort;
 
-        private Map<WidgetInstanceMode, ConsumingProducer<HttpSession, HttpResponse>> webAppHandlers = new HashMap<>();
+        private Map<WidgetInstanceMode, Pair<ConsumingProducer<HttpSession, HttpResponse>, String>> webAppHandlers = new HashMap<>();
 
         private String urlFormat = "https://widgets.casterlabs.co/caffeinated/widget.html?pluginId=%s&widgetId=%s&authorization=%s&port=%d&mode=%s";
 
@@ -153,11 +154,27 @@ public abstract class Widget {
     @Deprecated
     public HttpResponse handle(WidgetInstanceMode mode, HttpSession session) throws InterruptedException {
         if ($handle.webAppHandlers.containsKey(mode)) {
-            return $handle.webAppHandlers.get(mode).produce(session);
+            Pair<ConsumingProducer<HttpSession, HttpResponse>, String> handler = $handle.webAppHandlers.get(mode);
+
+            return handler.a.produce(session);
         } else {
             String result = this.getWidgetHtml(mode);
 
             return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, result);
+        }
+    }
+
+    /**
+     * @deprecated This is used internally.
+     */
+    @Deprecated
+    public String getHandleKickStart(WidgetInstanceMode mode) throws InterruptedException {
+        if ($handle.webAppHandlers.containsKey(mode)) {
+            Pair<ConsumingProducer<HttpSession, HttpResponse>, String> handler = $handle.webAppHandlers.get(mode);
+
+            return handler.b;
+        } else {
+            return "/";
         }
     }
 
@@ -171,8 +188,8 @@ public abstract class Widget {
      * 
      * @See {@link co.casterlabs.caffeinated.pluginsdk.ui.CaffeinatedWebAppHandler}
      */
-    protected void setWebAppHandler(@NonNull WidgetInstanceMode mode, @NonNull ConsumingProducer<HttpSession, HttpResponse> handler) {
-        $handle.webAppHandlers.put(mode, handler);
+    protected void setWebAppHandler(@NonNull WidgetInstanceMode mode, @NonNull ConsumingProducer<HttpSession, HttpResponse> handler, @NonNull String index) {
+        $handle.webAppHandlers.put(mode, new Pair<>(handler, index));
     }
 
     public String getUrl() {
