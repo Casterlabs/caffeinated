@@ -118,7 +118,7 @@ public class AppSchemeHandler implements ConsumingProducer<HttpSession, HttpResp
         }
 
         try {
-            byte[] content = FileUtil.loadResourceBytes(uri.substring(1) /* Remove the leading '/' */);
+            byte[] content = FileUtil.loadResourceBytes(uri);
             String mimeType = "application/octet-stream";
 
             String[] split = uri.split("\\.");
