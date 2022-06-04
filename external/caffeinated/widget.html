@@ -1,103 +1,79 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Just A Caffeinated Widget</title>
-        <style>
-            iframe {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                border: none;
-            }
-        </style>
-    </head>
 
-    <body></body>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Just A Caffeinated Widget</title>
+    <style>
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+        }
+    </style>
+</head>
 
-    <footer>
-        <!-- type="module" helps isolate. -->
-        <script type="module">
-            import { init, deepFreeze, escapeHtml } from "./widget.mjs";
+<body></body>
 
-            let sandboxFrame;
+<footer>
+    <script>
+        const queryParams = (() => {
+            let vars = {};
 
-            function initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, AppContext }) {
-                sandboxFrame = document.createElement("iframe");
-                sandboxFrame.src = "./sandbox.html";
+            location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
+                vars[key] = value;
+            });
 
-                let loadState = 0;
-                sandboxFrame.addEventListener("load", async () => {
-                    const { contentWindow, contentDocument } = sandboxFrame;
+            return vars;
+        })();
 
-                    if (!contentWindow.Koi) {
-                        // Inject our f a v o r i t e globals.
-                        Object.defineProperty(contentWindow, "Koi", {
-                            value: koiInstance,
-                            writable: false,
-                            configurable: false
-                        });
-                        Object.defineProperty(contentWindow, "Widget", {
-                            value: widgetInstance,
-                            writable: false,
-                            configurable: false
-                        });
-                        Object.defineProperty(contentWindow, "Music", {
-                            value: musicInstance,
-                            writable: false,
-                            configurable: false
-                        });
-                        Object.defineProperty(contentWindow, "escapeHtml", {
-                            value: escapeHtml,
-                            writable: false,
-                            configurable: false
-                        });
-                        Object.defineProperty(contentWindow, "Currencies", {
-                            value: Currencies,
-                            writable: false,
-                            configurable: false
-                        });
-                        Object.defineProperty(contentWindow, "AppContext", {
-                            value: AppContext,
-                            writable: false,
-                            configurable: false
-                        });
-                    }
+        const {
+            pluginId,
+            widgetId,
+            authorization
+        } = queryParams;
+        const port = queryParams.port || "8092";
+        const address = queryParams.address || "127.0.0.1";
+        const widgetMode = (queryParams.mode || "WIDGET").toUpperCase();
 
-                    if (loadState == 0) {
-                        loadState++;
+        const sandboxFrame = document.createElement("iframe");
 
-                        // Load the widget html.
-                        const response = await fetch(`http://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/html?authorization=${authorization}&mode=${widgetMode}`);
+        window.addEventListener(
+            "message",
+            (event) => {
+                if (event.data.call == "reload") {
+                    location.reload();
+                }
+            },
+            false
+        );
 
-                        if (response.status == 200) {
-                            const widgetHtml = await response.text();
+        (async() => {
+            try {
+                const response = await fetch(`http://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/webappurl?authorization=${authorization}&mode=${widgetMode}`);
 
-                            contentDocument.open();
-                            contentDocument.write(widgetHtml);
-                            contentDocument.close();
-                        } else {
-                            // We're dead.
-                            loadState = -1;
-                        }
-                    } else if (loadState == 1) {
-                        // The load event will be fired again after the widget html has loaded
-                        // and non-module javascript has executed.
-                        loadState++;
-                        widgetInstance.broadcast("init");
-                        koiInstance.broadcast("koi_statics", koi_statics);
-                        conn.send("READY", {});
-                    }
-                });
+                const {
+                    data
+                } = await response.json();
+
+                if (data) {
+                    sandboxFrame.src = `${data.url}${location.search}`;
+                } else {
+                    setTimeout(() => location.reload(), 2500);
+                }
 
                 document.body.appendChild(sandboxFrame);
+            } catch (e) {
+                console.error(e);
+                setTimeout(() => location.reload(), 2500);
             }
+        })();
+    </script>
+</footer>
 
-            init({ initHandler });
-        </script>
-    </footer>
 </html>

@@ -67,7 +67,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     private @Setter WebviewBridge appBridge;
     private @Setter Webview webview;
+
     private @Setter String appUrl;
+    private @Setter String internalAppUrl;
 
     private @JavascriptValue(allowSet = false) boolean isTraySupported;
 

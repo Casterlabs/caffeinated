@@ -239,7 +239,7 @@ export function init({ initHandler, disconnectHandler }) {
     conn.on("close", () => {
         if (!disconnectHandler || disconnectHandler()) {
             setTimeout(() => {
-                location.reload();
+                window.parent.postMessage({ call: "reload", value: null }, "*");
             }, 2500);
         }
     });

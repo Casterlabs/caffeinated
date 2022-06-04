@@ -2,9 +2,11 @@ package co.casterlabs.caffeinated.pluginsdk.widgets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,11 +16,15 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.kaimen.util.functional.ConsumingProducer;
 import co.casterlabs.kaimen.util.reflection.Reflective;
 import co.casterlabs.kaimen.util.threading.Promise;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.rakurai.io.http.HttpResponse;
+import co.casterlabs.rakurai.io.http.HttpSession;
+import co.casterlabs.rakurai.io.http.StandardHttpStatus;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonField;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
@@ -54,6 +60,8 @@ public abstract class Widget {
 
         public String conductorKey;
         public int conductorPort;
+
+        private Map<WidgetInstanceMode, ConsumingProducer<HttpSession, HttpResponse>> webAppHandlers = new HashMap<>();
 
         private String urlFormat = "https://widgets.casterlabs.co/caffeinated/widget.html?pluginId=%s&widgetId=%s&authorization=%s&port=%d&mode=%s";
 
@@ -139,9 +147,33 @@ public abstract class Widget {
         return Rson.DEFAULT.toJson($handle).getAsObject();
     }
 
+    /**
+     * @deprecated This is used internally.
+     */
+    @Deprecated
+    public HttpResponse handle(WidgetInstanceMode mode, HttpSession session) throws InterruptedException {
+        if ($handle.webAppHandlers.containsKey(mode)) {
+            return $handle.webAppHandlers.get(mode).produce(session);
+        } else {
+            String result = this.getWidgetHtml(mode);
+
+            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, result);
+        }
+    }
+
     /* ---------------- */
     /* Framework        */
     /* ---------------- */
+
+    /**
+     * This is to be used for serving full web apps for widgets. If you just want a
+     * simple handler then implement {@link #getWidgetHtml(WidgetInstanceMode)}.
+     * 
+     * @See {@link co.casterlabs.caffeinated.pluginsdk.ui.CaffeinatedWebAppHandler}
+     */
+    protected void setWebAppHandler(@NonNull WidgetInstanceMode mode, @NonNull ConsumingProducer<HttpSession, HttpResponse> handler) {
+        $handle.webAppHandlers.put(mode, handler);
+    }
 
     public String getUrl() {
         return $handle.getUrl();
@@ -228,7 +260,7 @@ public abstract class Widget {
         return null;
     }
 
-    public @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
+    protected @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
         return this.getWidgetHtml();
     }
 
