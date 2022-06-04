@@ -24,8 +24,7 @@ import co.casterlabs.sora.api.websockets.annotations.WebsocketEndpoint;
 
 public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHelper {
 
-    @SuppressWarnings("deprecation")
-    @HttpEndpoint(uri = "/api/plugin/:pluginId/widget/:widgetId/webapp")
+    @HttpEndpoint(uri = "/api/plugin/:pluginId/widget/:widgetId/webappurl")
     public HttpResponse onGetWidgetWebAppRequest(SoraHttpSession session) {
         try {
             if (authorize(session)) {
@@ -59,12 +58,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
 
                         return this.addCors(
                             session,
-                            newResponse(
-                                StandardHttpStatus.OK,
-                                new JsonObject()
-                                    .put("url", url)
-                                    .put("kickstart", widget.getHandleKickStart(mode))
-                            )
+                            newResponse(StandardHttpStatus.OK, JsonObject.singleton("url", url))
                         );
                     }
                 }

@@ -72,17 +72,7 @@
                         loadState++;
 
                         // Load the widget html.
-                        const { kickstart } = (() => {
-                            let vars = {};
-
-                            location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
-                                vars[key] = value;
-                            });
-
-                            return vars;
-                        })();
-                        
-                        const response = await fetch(`http://${location.host}${kickstart}`);
+                        const response = await fetch(`http://${location.host}/index.html`);
 
                         if (response.status == 200) {
                             const widgetHtml = await response.text();

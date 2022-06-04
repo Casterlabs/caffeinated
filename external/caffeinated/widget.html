@@ -55,14 +55,14 @@
 
         (async() => {
             try {
-                const response = await fetch(`http://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/webapp?authorization=${authorization}&mode=${widgetMode}`);
+                const response = await fetch(`http://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/webappurl?authorization=${authorization}&mode=${widgetMode}`);
 
                 const {
                     data
                 } = await response.json();
 
                 if (data) {
-                    sandboxFrame.src = `${data.url}${location.search}&kickstart=${data.kickstart}`;
+                    sandboxFrame.src = `${data.url}${location.search}`;
                 } else {
                     setTimeout(() => location.reload(), 2500);
                 }
