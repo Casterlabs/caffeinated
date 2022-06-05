@@ -227,7 +227,7 @@ public class Bootstrap implements Runnable {
         uiServer.setHandler(new AppSchemeHandler());
         uiServer.start();
 
-        String appUrl = isDev ? this.devAddress : uiServer.getAddress();
+        String appUrl = isDev ? this.devAddress : uiServer.getLocalAddress();
 
         // Setup the webview.
         logger.info("Initializing UI (this may take some time)");
