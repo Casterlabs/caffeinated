@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <title>Caffeinated Youtube</title>
     <style>
-        :root {
+         :root {
             --base-height: 90vh;
             --base-width: calc(var(--base-height) / 0.68);
             --margin: calc(var(--base-width) * 0.025);
         }
-
+        
         #div {
             width: var(--base-width);
             height: var(--base-height);
@@ -19,16 +19,16 @@
             position: relative;
             margin: auto;
         }
-
+        
         body {
             overflow: hidden;
             font-family: "Trebuchet MS", Helvetica, sans-serif;
         }
-
+        
         .hide {
             display: none !important;
         }
-
+        
         #video-container {
             position: absolute;
             left: var(--margin);
@@ -36,7 +36,7 @@
             top: var(--margin);
             height: calc(var(--base-height) * 0.79);
         }
-
+        
         .progress-bar-container {
             position: absolute;
             bottom: var(--margin);
@@ -44,7 +44,7 @@
             right: var(--margin);
             height: 10%;
         }
-
+        
         .progress-bar {
             background-color: rgba(1, 1, 1, 0.5);
             display: flex;
@@ -54,7 +54,7 @@
             height: 100%;
             width: 100%;
         }
-
+        
         #requested-by {
             margin: 0;
             font-family: Roboto, sans-serif;
@@ -65,7 +65,7 @@
             color: white;
             transform: translate(5%, 25%);
         }
-
+        
         #progress {
             position: absolute;
             max-width: calc(100% - 8px);
@@ -76,11 +76,11 @@
             overflow: hidden;
             width: 0;
         }
-
+        
         .player-only #div {
             background-color: transparent !important;
         }
-
+        
         .player-only .progress-bar-container {
             display: none !important;
         }
@@ -137,9 +137,8 @@
 
             try {
                 player.setVolume(Widget.getSetting("player.volume") * 100);
-            } catch (ignored) { }
+            } catch (ignored) {}
         });
-
     </script>
     <script>
         let currentPlaybackId = -1;
@@ -157,6 +156,9 @@
                     fs: 0
                 },
                 events: {
+                    onReady: () => {
+                        player.setVolume(Widget.getSetting("player.volume") * 100);
+                    },
                     onStateChange: (event) => {
                         console.log("State: " + event.data);
                         if (event.data == YT.PlayerState.PAUSED) {
@@ -178,37 +180,9 @@
                         console.log("Error: " + event.data);
                         playing = false;
                         Widget.emit("play-end", currentPlaybackId);
-                    },
-                    onApiChange: () => {
-                        if (config) {
-                            player.setVolume(config.volume * 100);
-                        }
                     }
                 }
             });
-
-            try {
-                player.setVolume(Widget.getSetting("player.volume") * 100);
-            } catch (ignored) { }
-
-            // Time tracking starting here
-            let lastTime = -1;
-
-            setInterval(() => {
-                if (lastTime != -1) {
-                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-                        const t = player.getCurrentTime();
-
-                        // expecting 1 second interval, with 750 ms margin
-                        if (Math.abs(t - lastTime - 1) > 0.75) {
-                            console.log("seek", t);
-                            Widget.emit("seek", t);
-                        }
-                    }
-                }
-
-                lastTime = player.getCurrentTime();
-            }, 1000);
         }
 
         function getPlaybackProgress() {
@@ -233,7 +207,10 @@
             }
         });
 
-        Widget.on("play", ({ video, currentPlaybackId: _currentPlaybackId }) => {
+        Widget.on("play", ({
+            video,
+            currentPlaybackId: _currentPlaybackId
+        }) => {
             currentPlaybackId = _currentPlaybackId;
             console.debug(video);
 

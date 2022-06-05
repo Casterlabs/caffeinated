@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
@@ -29,6 +30,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 public class CaffeinatedYoutubePlugin implements KoiEventListener {
     public static final WidgetDetails WIDGET_DETAILS = new WidgetDetails()
@@ -63,41 +65,28 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
     static void init(CaffeinatedDefaultPlugin pl) {
         plugin = pl;
 
-        plugin.getPlugins().registerWidget(pl, WIDGET_DETAILS, YoutubeWidget.class);
+//        plugin.getPlugins().registerWidget(pl, WIDGET_DETAILS, YoutubeWidget.class);
         plugin.getPlugins().registerWidget(pl, DOCK_DETAILS, YoutubeDock.class);
 
         plugin.addKoiListener(new CaffeinatedYoutubePlugin());
     }
 
-    @KoiEventHandler
-    public void onChat(ChatEvent e) {
-        try {
-            String result = WebUtil.sendHttpRequest(
-                new Request.Builder()
-                    .url("https://www.youtube.com/oembed?format=json&url=" + WebUtil.escapeHtml(e.getMessage()))
-            );
+    private static void updateVolume(double volume) {
+        dock.settings().set("volume", volume);
+        dock.broadcastToAll("update", dock.settings().getJson());
 
-            if (!result.equals("Not Found")) {
-                dock.addToQueue(Rson.DEFAULT.fromJson(result, JsonObject.class));
-            }
-        } catch (IOException ignored) {}
-
-    }
-
-    private static void broadcastToWidget(String type, JsonElement d) {
-        dock.broadcastToAll(type, d);
-
-        for (Widget w : plugin.getWidgets()) {
-            if (w.getNamespace().equals(WIDGET_DETAILS.getNamespace())) {
-                w.broadcastToAll(type, d);
+        for (Widget widget : plugin.getWidgets()) {
+            if (widget.getNamespace().equals(WIDGET_DETAILS.getNamespace())) {
+                widget.settings().set("player.volume", volume);
+                widget.broadcastToAll("update", widget.settings().getJson());
             }
         }
     }
 
     private static boolean isActive() {
-//        if (!dock.getWidgetInstances().isEmpty()) {
-//            return true;
-//        }
+        if (!dock.getWidgetInstances().isEmpty()) {
+            return true;
+        }
 
         // Search for an active youtube widget.
         for (Widget w : plugin.getWidgets()) {
@@ -112,6 +101,30 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
 
     }
 
+    @KoiEventHandler
+    public void onChat(ChatEvent e) {
+        try {
+            String result = WebUtil.sendHttpRequest(
+                new Request.Builder()
+                    .url("https://www.youtube.com/oembed?format=json&url=" + WebUtil.escapeHtml(e.getMessage()))
+            );
+
+            if (!result.equals("Not Found")) {
+                dock.addToQueue(Rson.DEFAULT.fromJson(result, JsonObject.class));
+            }
+        } catch (IOException ignored) {}
+    }
+
+    private static void broadcastAll(String type, JsonElement d) {
+        dock.broadcastToAll(type, d);
+
+        for (Widget w : plugin.getWidgets()) {
+            if (w.getNamespace().equals(WIDGET_DETAILS.getNamespace())) {
+                w.broadcastToAll(type, d);
+            }
+        }
+    }
+
     public static class YoutubeWidget extends Widget {
 
         @Override
@@ -122,11 +135,11 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
         @Override
         public void onNewInstance(@NonNull WidgetInstance instance) {
             instance.on("seek", (timestamp) -> {
-                broadcastToWidget("seek", timestamp);
+                broadcastAll("seek", timestamp);
             });
 
             instance.on("play-pause", (state) -> {
-                broadcastToWidget("play-pause", state);
+                broadcastAll("play-pause", state);
             });
 
             instance.on("play-start", (id) -> {
@@ -161,6 +174,9 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
 
             if (!this.isPlaying && this.allowAutoplay && isActive() && (this.queue.size() == 1)) {
                 this.play(0);
+                plugin.getLogger().debug("Attempting to autoplay: %s", video);
+            } else {
+                plugin.getLogger().debug("Queued: %s", video);
             }
         }
 
@@ -189,18 +205,18 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
             JsonObject video = null;
 
             // Pop everything before idx off.
-            // Get idx.
+            // Basically gets the value at [idx].
             {
                 int it = idx;
-                while (it >= 0) {
+                do {
                     video = this.queue.remove(it);
                     it--;
-                }
+                } while (it > 0);
             }
 
             this.currentPlaybackId = ThreadLocalRandom.current().nextInt();
 
-            broadcastToWidget(
+            broadcastAll(
                 "play",
                 new JsonObject()
                     .put("video", video)
@@ -228,9 +244,10 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
         private void save() {
             this.settings().set("queue", Rson.DEFAULT.toJson(this.queue));
             this.settings().set("autoplay", this.allowAutoplay);
-            broadcastToAll("update", this.settings().getJson());
+            this.broadcastToAll("update", this.settings().getJson());
         }
 
+        @SneakyThrows
         @Override
         public void onInit() {
             // DO NOT CALL SUPER!
@@ -242,28 +259,69 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
                 });
             } catch (Exception ignored) {}
 
+            if (!this.settings().has("volume")) {
+                this.settings().set("volume", .5);
+            }
+
+            this.settings().set("shouldMute", false);
+
             this.allowAutoplay = this.settings().getBoolean("autoplay", true);
+
+            // NEVER do this.
+            WidgetHandle handle = ReflectionLib.getValue(this, "$handle");
+            String newFormat;
+
+            if (CaffeinatedPlugin.isDevEnvironment()) {
+                newFormat = "http://localhost:3001";
+            } else {
+                newFormat = "https://studio.casterlabs.co";
+            }
+
+            newFormat += "/popout/youtube-queue?pluginId=%s&widgetId=%s&authorization=%s&port=%d&mode=%s";
+
+            ReflectionLib.setValue(handle, "urlFormat", newFormat);
         }
 
         @Override
         public void onNewInstance(@NonNull WidgetInstance instance) {
             super.onNewInstance(instance);
 
+            instance.on("queue", (e) -> {
+                try {
+                    String result = WebUtil.sendHttpRequest(
+                        new Request.Builder()
+                            .url("https://www.youtube.com/oembed?format=json&url=" + WebUtil.escapeHtml(e.getAsString()))
+                    );
+
+                    if (!result.equals("Not Found")) {
+                        dock.addToQueue(Rson.DEFAULT.fromJson(result, JsonObject.class));
+                    }
+                } catch (IOException ignored) {}
+            });
+
             instance.on("play", (idx) -> {
                 this.play(idx.getAsNumber().intValue());
+                throw new RuntimeException(); // ??????
             });
 
             instance.on("remove", (id) -> {
                 this.remove(id.getAsString());
             });
 
-            instance.on("autoplay", (s) -> {
-                this.allowAutoplay = s.getAsBoolean();
+            instance.on("autoplay", (e) -> {
+                this.allowAutoplay = e.getAsBoolean();
+                this.save();
             });
 
             instance.on("clear", () -> {
                 this.queue.clear();
                 this.save();
+            });
+
+            instance.on("volume-update", (e) -> {
+                double volume = e.getAsNumber().doubleValue();
+
+                updateVolume(volume);
             });
         }
 
