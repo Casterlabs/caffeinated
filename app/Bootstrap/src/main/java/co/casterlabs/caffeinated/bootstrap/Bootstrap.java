@@ -22,6 +22,7 @@ import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.app.AppBootstrap;
 import co.casterlabs.kaimen.app.AppEntry;
 import co.casterlabs.kaimen.app.ui.UIServer;
+import co.casterlabs.kaimen.util.platform.OperatingSystem;
 import co.casterlabs.kaimen.util.platform.Platform;
 import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.kaimen.webview.Webview;
@@ -227,7 +228,15 @@ public class Bootstrap implements Runnable {
         uiServer.setHandler(new AppSchemeHandler());
         uiServer.start();
 
-        String appUrl = isDev ? this.devAddress : uiServer.getLocalAddress();
+        String uiServerAddress;
+
+        if (Platform.os == OperatingSystem.MACOSX) {
+            uiServerAddress = uiServer.getLocalAddress();
+        } else {
+            uiServerAddress = uiServer.getAddress();
+        }
+
+        String appUrl = isDev ? this.devAddress : uiServerAddress;
 
         // Setup the webview.
         logger.info("Initializing UI (this may take some time)");
