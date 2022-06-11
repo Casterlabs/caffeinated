@@ -45,19 +45,31 @@
         <BrimeButton />
         <YouTubeButton />
     </div>
-    <br />
-    <br />
-    <br />
+
     <div class="service-disclaimer">
         <span>
-            <LocalizedText key="app.service_disclaimer" />
+            <LocalizedText key="app.service_disclaimer" slotMapping={["tos", "privacy"]}>
+                <a slot="0" href="https://casterlabs.co/terms-of-service" class="fade-on-hover" rel="external">
+                    <LocalizedText key="app.terms_of_service" />
+                </a>
+                <a slot="1" href="https://casterlabs.com/privacy-policy" target="_blank">
+                    <LocalizedText key="app.privacy_policy" />
+                </a>
+            </LocalizedText>
         </span>
     </div>
 </div>
 
 <style>
     .service-disclaimer {
-        width: 370px;
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+    }
+
+    .service-disclaimer span {
+        display: block;
+        width: 340px;
         margin: auto;
     }
 
