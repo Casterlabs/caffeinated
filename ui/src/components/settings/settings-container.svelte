@@ -52,8 +52,8 @@
     }
 </script>
 
-<div class="settings-container">
-    <div class="settings-navigate side-bar has-text-left">
+<div class="settings-container columns">
+    <div class="settings-navigate side-bar has-text-left column is-narrow">
         {#each categories as category}
             {#if !category.unsafe || unsafeEnabled}
                 {#if category.type == "section"}
@@ -79,16 +79,12 @@
         {/each}
     </div>
 
-    <div class="settings-content has-text-left">
+    <div class="settings-content has-text-left column">
         <svelte:component this={currentCategory.component} />
     </div>
 </div>
 
 <style>
-    :root {
-        --sidebar-width: 200px;
-    }
-
     .settings-container {
         position: absolute;
         top: 0;
@@ -96,13 +92,12 @@
         left: 0;
         right: 0;
         overflow: hidden;
+        margin: 2px;
     }
 
     .settings-navigate {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: var(--sidebar-width);
+        display: inline-block;
+        width: fit-content;
         height: 100%;
         padding-left: 10px;
         padding-right: 10px;
@@ -111,10 +106,6 @@
     }
 
     .settings-content {
-        position: absolute;
-        top: 0;
-        left: var(--sidebar-width);
-        right: 0;
         height: 100%;
         margin-left: 20px;
         overflow-y: auto;

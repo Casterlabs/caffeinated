@@ -89,15 +89,14 @@
 <style>
     .welcome-settings {
         position: absolute;
-        top: 0;
+        top: 50px;
         bottom: 0;
         left: 0;
         right: 0;
     }
 
     .welcome-title {
-        margin-top: 3.5em;
-        margin-left: 175px;
+        margin-top: 1.25em;
     }
 
     /* Pad out the settings page */
