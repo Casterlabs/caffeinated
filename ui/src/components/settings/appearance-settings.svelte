@@ -113,4 +113,9 @@
             <LocalizedText key="settings.appearance.mikeys_mode" />
         </a>
     </div>
+    <div style="position: absolute; bottom: 40px;">
+        <i>
+            <LocalizedText key="meta.translators" />
+        </i>
+    </div>
 </div>
