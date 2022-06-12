@@ -42,8 +42,11 @@ public class UIPreferences {
         private boolean showBadges = false;
         private boolean showViewers = false;
         private boolean showViewersList = true;
-        private int viewersListX = 205;
-        private int viewersListY = 5;
+
+        private double viewersX = .8;
+        private double viewersY = .02;
+        private double viewersWidth = .15;
+        private double viewersHeight = .65;
 
     }
 
