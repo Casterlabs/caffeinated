@@ -21,7 +21,6 @@ import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
-import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
@@ -261,13 +260,6 @@ public class AppAuth extends JavascriptObject {
     }
 
     @JavascriptFunction
-    public void updateStream(@NonNull String targetChannelUPID, @NonNull KoiStreamConfiguration config) {
-        for (AuthInstance inst : this.authInstances.values()) {
-            if (inst.getUserData().getUpid().equals(targetChannelUPID)) {
-                inst.sendStreamUpdate(config);
-                return;
-            }
-        }
     }
 
     @SuppressWarnings("deprecation")

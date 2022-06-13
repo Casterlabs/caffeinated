@@ -3,18 +3,13 @@ package co.casterlabs.koi.api;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
-import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
-import co.casterlabs.koi.api.stream.KoiStreamConfigurationFeatures;
 import co.casterlabs.koi.api.types.events.CatchupEvent;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
@@ -164,39 +159,6 @@ public class KoiConnection implements Closeable {
                         return;
                     }
 
-                    case "PLATFORM_CATEGORIES_LIST": {
-                        Map<String, String> categories = new HashMap<>();
-
-                        for (Entry<String, JsonElement> entry : packet.getObject("categories").entrySet()) {
-                            categories.put(entry.getKey(), entry.getValue().getAsString());
-                        }
-
-                        listener.onPlatformCategories(categories);
-                        return;
-                    }
-
-                    case "PLATFORM_TAGS_LIST": {
-                        Map<String, String> tags = new HashMap<>();
-
-                        for (Entry<String, JsonElement> entry : packet.getObject("tags").entrySet()) {
-                            tags.put(entry.getKey(), entry.getValue().getAsString());
-                        }
-
-                        listener.onPlatformTags(tags);
-                        return;
-                    }
-
-                    case "STREAM_CONFIGURATION_FEATURES": {
-                        listener.onSupportedStreamConfigurationFeatures(
-                            Rson.DEFAULT.fromJson(
-                                packet.get("supported"),
-                                new TypeToken<List<KoiStreamConfigurationFeatures>>() {
-                                }
-                            )
-                        );
-                        return;
-                    }
-
                     case "SERVER": {
                         listener.onServerMessage(packet.get("server").getAsString());
                         return;
@@ -227,8 +189,6 @@ public class KoiConnection implements Closeable {
                     // We don't care about these or we already have them.
                     case "WELCOME":
                     case "CLIENT_SCOPES":
-                    case "CONTENT_RATINGS":
-                    case "LANGUAGES":
                         return;
 
                     default:
@@ -305,15 +265,6 @@ public class KoiConnection implements Closeable {
             new JsonObject()
                 .put("type", "TEST")
                 .put("eventType", eventType.toUpperCase())
-                .toString()
-        );
-    }
-
-    public void sendStreamUpdate(@NonNull KoiStreamConfiguration config) {
-        this.socket.send(
-            new JsonObject()
-                .put("type", "UPDATE_STREAM")
-                .put("stream", Rson.DEFAULT.toJson(config))
                 .toString()
         );
     }

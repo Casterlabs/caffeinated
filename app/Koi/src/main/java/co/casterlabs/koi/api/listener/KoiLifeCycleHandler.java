@@ -1,10 +1,8 @@
 package co.casterlabs.koi.api.listener;
 
 import java.util.List;
-import java.util.Map;
 
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
-import co.casterlabs.koi.api.stream.KoiStreamConfigurationFeatures;
 
 /**
  * @implNote This listener is also a valid subsitute for KoiEventListener and is
@@ -23,11 +21,5 @@ public interface KoiLifeCycleHandler {
     }
 
     default void onSupportedFeatures(List<KoiIntegrationFeatures> features) {}
-
-    default void onPlatformCategories(Map<String, String> categories) {}
-
-    default void onPlatformTags(Map<String, String> tags) {}
-
-    default void onSupportedStreamConfigurationFeatures(List<KoiStreamConfigurationFeatures> streamConfigFeatures) {}
 
 }

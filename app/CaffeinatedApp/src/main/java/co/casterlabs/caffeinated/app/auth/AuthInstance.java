@@ -16,7 +16,6 @@ import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
-import co.casterlabs.koi.api.stream.KoiStreamConfiguration;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -103,10 +102,6 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 
     public void sendTest(@NonNull String eventType) {
         this.koi.sendTest(eventType);
-    }
-
-    public void sendStreamUpdate(@NonNull KoiStreamConfiguration config) {
-        this.koi.sendStreamUpdate(config);
     }
 
     /* ---------------- */
