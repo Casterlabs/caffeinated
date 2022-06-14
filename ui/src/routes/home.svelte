@@ -1,5 +1,5 @@
 <script>
-    // import StreamConfiguration from "../components/stream-configuration.svelte";
+    import StreamConfiguration from "../components/stream-configuration/index.svelte";
 
     import LocalizedText from "$lib/components/LocalizedText.svelte";
 
@@ -39,12 +39,6 @@
             }
         }
 
-        // accounts = newAccounts.filter((account) => {
-        //     return account.streamConfigurationFeatures && account.streamConfigurationFeatures.length > 0 && account.userData && account.streamData;
-        // });
-
-        // streamConfigurationComponent?.render(accounts);
-
         {
             // Get the most popular name.
             let mostPopular = "";
@@ -59,6 +53,9 @@
 
             name = mostPopular;
         }
+
+        accounts = newAccounts;
+        streamConfigurationComponent?.render(accounts);
     }
 
     setPageProperties({
@@ -110,7 +107,8 @@
     </h2>
 </div>
 
-<!-- <StreamConfiguration bind:this={streamConfigurationComponent} {accounts} /> -->
+<StreamConfiguration bind:this={streamConfigurationComponent} {accounts} />
+
 <style>
     .welcome-wagon {
         margin-top: 1.5em;

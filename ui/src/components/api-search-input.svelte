@@ -1,16 +1,19 @@
 <script>
     export let defaultValue;
-    export let entries = [];
+    export let lookup = (value) => {
+        return ["1", "2", "3"];
+    };
     export let value;
 
     import { createEventDispatcher } from "svelte";
-
-    const MAX_SEARCH_RESULTS = Number.MAX_SAFE_INTEGER;
 
     let hasFocus = false;
 
     let searchOpen = false;
     let searchResults = [];
+
+    let isLoading = false;
+    let inputDebounce = 0;
 
     if (!value) {
         value = defaultValue || "";
@@ -30,20 +33,29 @@
         onChange();
     }
 
-    function updateList() {
+    async function updateList(e) {
+        const target = e.target;
+
         hasFocus = true;
-        let newSearchResults = entries;
 
-        newSearchResults = newSearchResults.filter((v) => {
-            return v.toLowerCase().startsWith(value.toLowerCase());
-        });
+        if (target instanceof HTMLInputElement) {
+            target.type = "text"; // Hide the X
+            isLoading = true;
 
-        if (newSearchResults.length > MAX_SEARCH_RESULTS) {
-            newSearchResults.length = MAX_SEARCH_RESULTS;
+            clearTimeout(inputDebounce);
+            inputDebounce = setTimeout(async () => {
+                searchResults = await lookup(value);
+                searchOpen = true;
+                isLoading = false;
+
+                if (target instanceof HTMLInputElement) {
+                    target.type = "search"; // Show the X
+                }
+            }, 300);
+        } else {
+            searchResults = await lookup(value);
+            searchOpen = true;
         }
-
-        searchResults = newSearchResults;
-        searchOpen = true;
     }
 
     function onBlur() {
@@ -53,7 +65,7 @@
             if (!hasFocus) {
                 searchOpen = false;
 
-                if (!entries.includes(value)) {
+                if (!searchResults.includes(value)) {
                     setValue(defaultValue);
                 }
             }
@@ -67,7 +79,9 @@
         a proper dropdown whilst still retaining the functionality of an input -->
     {#if searchOpen}
         <!-- svelte-ignore a11y-autofocus -->
-        <input class="input" type="search" placeholder={defaultValue} bind:value on:input={updateList} on:focus={updateList} on:blur={onBlur} autofocus />
+        <div class="control" class:is-loading={isLoading}>
+            <input class="input" type="search" placeholder={defaultValue} bind:value on:input={updateList} on:focus={updateList} on:blur={onBlur} autofocus />
+        </div>
     {:else}
         <div class="select" style="width: 100%;">
             <select on:focus={updateList} style="width: 100%;">
@@ -101,6 +115,10 @@
 
     .input {
         z-index: 12;
+    }
+
+    .control .input::after {
+        z-index: 15;
     }
 
     .select::after {
