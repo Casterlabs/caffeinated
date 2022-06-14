@@ -7,6 +7,7 @@
     import InputCategory from "./input-category.svelte";
     import InputLanguage from "./input-language.svelte";
     import InputContentRating from "./input-content-rating.svelte";
+    import InputThumbnail from "./input-thumbnail.svelte";
 
     const PLATFORMS = ["CAFFEINE", "TWITCH", "TROVO"]; // The only ones supported.
 
@@ -84,40 +85,66 @@
         currentInputData = inputs[currentPlatform];
     }
 
-    function submit() {
-        // let languageEnum = null;
-        // for (const [language, lang] of Object.entries(selectedAccount.languages)) {
-        //     if (lang == languageInput) {
-        //         languageEnum = language;
-        //         break;
-        //     }
-        // }
-        // // TODO lookup the input for the category and get the ID.
-        // const streamUpdatePayload = {
-        //     title: titleInput,
-        //     category: categoryInput,
-        //     language: languageEnum,
-        //     tags: tagsInput,
-        //     content_rating: contentRatingInput
-        // };
-        // fetch("https://api.casterlabs.co/v2/koi/stream/update", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         Authorization: "Koi " + selectedAccount.token
-        //     },
-        //     body: JSON.stringify(streamUpdatePayload)
-        // });
-        // if (thumbnailFile) {
-        //     fetch("https://api.casterlabs.co/v2/koi/stream/thumbnail/update", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             Authorization: "Koi " + selectedAccount.token
-        //         },
-        //         body: thumbnailFile
-        //     });
-        // }
+    async function submit() {
+        let languageEnum = null;
+        for (const [language, lang] of Object.entries(languages)) {
+            if (lang == currentInputData.language) {
+                languageEnum = language;
+                break;
+            }
+        }
+
+        let categoryId = null;
+        {
+            let query = currentInputData.category;
+
+            if (query == "Entertainment" && currentPlatform == "CAFFEINE") {
+                categoryId = "79";
+            } else {
+                // Lookup category id from name.
+                // TODO Make this more error resitant.
+                const response = await //
+                (await fetch(`https://api.casterlabs.co/v2/koi/stream/${currentPlatform}/categories/search?q=${encodeURIComponent(query)}`)) //
+                    .json();
+
+                const result = Object.entries(response.data.result);
+
+                console.log(result);
+                categoryId = result[0][0];
+            }
+        }
+
+        const streamUpdatePayload = {
+            title: currentInputData.title,
+            category: categoryId,
+            language: languageEnum,
+            tags: currentInputData.tags,
+            content_rating: currentInputData.contentRating
+        };
+
+        console.debug("Update:", streamUpdatePayload, currentInputData.thumbnailFile);
+
+        fetch("https://api.casterlabs.co/v2/koi/stream/update", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Client-ID": "LmHG2ux992BxqQ7w9RJrfhkW",
+                Authorization: "Koi " + selectedAccount.token
+            },
+            body: JSON.stringify(streamUpdatePayload)
+        });
+
+        if (currentInputData.thumbnailFile) {
+            fetch("https://api.casterlabs.co/v2/koi/stream/thumbnail/update", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Client-ID": "LmHG2ux992BxqQ7w9RJrfhkW",
+                    Authorization: "Koi " + selectedAccount.token
+                },
+                body: currentInputData.thumbnailFile
+            });
+        }
     }
 
     onMount(async () => {
@@ -171,13 +198,19 @@
 
         <InputContentRating {selectedAccount} {features} {contentRatings} {currentInputData} />
 
-        <!-- TODO TAGS & THUMBNAIL -->
+        <!-- TODO TAGS  -->
+
+        <InputThumbnail {selectedAccount} {features} {currentInputData} />
 
         <a on:click={submit} class="button is-fullwidth" style="margin-top: 25px;">
             <img class="nav-icon" src="/img/services/{selectedAccount.userData.platform.toLowerCase()}/icon.svg" alt={selectedAccount.userData.platform} />
             &nbsp;&nbsp;
             <LocalizedText key="stream.update_info" />
         </a>
+
+        <br />
+        <br />
+        <br />
     </div>
 {/if}
 
