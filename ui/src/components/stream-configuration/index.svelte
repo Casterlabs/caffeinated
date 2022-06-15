@@ -11,7 +11,7 @@
 
     const PLATFORMS = ["CAFFEINE", "TWITCH", "TROVO"]; // The only ones supported.
 
-    export let accounts = [];
+    let accounts = [];
 
     // Current
     let selectedAccount = null;
@@ -43,6 +43,8 @@
 
     export function render(newAccounts) {
         if (newAccounts) accounts = newAccounts;
+
+        accounts = accounts.filter((account) => PLATFORMS.includes(account.userData.platform));
 
         if (!selectedAccount && accounts[0]) {
             select(accounts[0]);
@@ -76,8 +78,6 @@
             }
         }
     }
-
-    render(accounts); // Select a default.
 
     function select(account) {
         selectedAccount = account;

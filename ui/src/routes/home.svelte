@@ -8,7 +8,6 @@
 
     const unregister = [];
 
-    let accounts = [];
     let streamConfigurationComponent;
 
     let buildInfo = {};
@@ -17,7 +16,7 @@
     let hourLang = 0;
 
     function parseBridgeData(authInstances) {
-        let newAccounts = [];
+        let accounts = [];
 
         // We try to figure out the user's preffered name by tallying up the names.
         let names = {};
@@ -31,7 +30,7 @@
                     names[inst.userData.displayname] = 1;
                 }
 
-                newAccounts.push(inst);
+                accounts.push(inst);
             } else {
                 setTimeout(async () => {
                     parseBridgeData(await Caffeinated.auth.authInstances);
@@ -54,7 +53,6 @@
             name = mostPopular;
         }
 
-        accounts = newAccounts;
         streamConfigurationComponent?.render(accounts);
     }
 
@@ -107,7 +105,7 @@
     </h2>
 </div>
 
-<StreamConfiguration bind:this={streamConfigurationComponent} {accounts} />
+<StreamConfiguration bind:this={streamConfigurationComponent} />
 
 <style>
     .welcome-wagon {
