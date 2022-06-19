@@ -332,6 +332,11 @@ public class Bootstrap implements Runnable {
                     shutdown(true, true, true);
                     return;
                 }
+
+                case "app:restart": {
+                    shutdown(true, true, false);
+                    return;
+                }
             }
         } catch (Throwable t) {
             logger.severe("Uncaught exception whilst processing bridge event:");

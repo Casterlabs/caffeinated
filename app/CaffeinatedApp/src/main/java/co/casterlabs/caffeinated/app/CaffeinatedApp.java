@@ -39,10 +39,8 @@ import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
-import xyz.e3ndr.consoleutil.ConsoleUtil;
 
 @Getter
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
@@ -194,12 +192,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @JavascriptGetter("enableStupidlyUnsafeSettings")
     public boolean enableStupidlyUnsafeSettings() {
         return this.UI.getPreferences().isEnableStupidlyUnsafeSettings();
-    }
-
-    @SneakyThrows
-    @JavascriptFunction
-    public void unsafe_restartWithConsole() {
-        ConsoleUtil.summonConsoleWindow();
     }
 
     @Override

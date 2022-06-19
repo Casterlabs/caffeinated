@@ -13,6 +13,10 @@
         conductorKey = prefs.conductorKey;
         conductorPort = prefs.conductorPort;
     });
+
+    function restart() {
+        Bridge.emit("app:restart");
+    }
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -26,7 +30,7 @@
         </div>
     </div>
     <div class="field">
-        <button class="button is-fullwidth" on:click={() => Caffeinated.unsafe_restartWithConsole()}>Restart app with console window</button>
+        <button class="button is-fullwidth" on:click={restart}>Restart app with console window</button>
     </div>
 </div>
 
