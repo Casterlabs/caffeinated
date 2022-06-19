@@ -45,14 +45,13 @@ public class Updater {
     static {
         appDirectory.mkdirs();
 
-        switch (ConsoleUtil.getPlatform()) {
-
-            case MAC:
+        switch (Platform.os) {
+            case MACOSX:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
                 REMOTE_ZIP_DOWNLOAD_URL += "macOS-amd64.zip";
                 break;
 
-            case UNIX:
+            case LINUX:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated";
                 REMOTE_ZIP_DOWNLOAD_URL += "Linux-amd64.zip";
                 break;
@@ -66,7 +65,6 @@ public class Updater {
                 launchCommand = null;
                 isPlatformSupported = false;
                 break;
-
         }
 
         try {
@@ -151,7 +149,7 @@ public class Updater {
                 updateFile.delete();
 
                 // Make the executable... executable on Linux.
-                if (ConsoleUtil.getPlatform() == JavaPlatform.UNIX) {
+                if (Platform.os == OperatingSystem.LINUX) {
                     String executable = appDirectory.getAbsolutePath() + "/Casterlabs-Caffeinated";
 
                     new ProcessBuilder()
@@ -166,7 +164,7 @@ public class Updater {
                 } else
 
                     // Unquarantine the app on MacOS.
-                    if (ConsoleUtil.getPlatform() == JavaPlatform.MAC) {
+                    if (Platform.os == OperatingSystem.MACOSX) {
                         String app = '"' + appDirectory.getAbsolutePath() + "/Casterlabs-Caffeinated.app" + '"';
                         String command = "xattr -rd com.apple.quarantine " + app + " && chmod -R u+x " + app;
 
