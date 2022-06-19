@@ -26,9 +26,10 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
     private static final int VERSION = 20;
+    private static final String CHANNEL = "stable";
 
-    private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/stable/";
-    private static final String REMOTE_COMMIT_URL = "https://cdn.casterlabs.co/dist/stable/commit";
+    private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/";
+    private static final String REMOTE_COMMIT_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/commit";
     private static final String LAUNCHER_VERSION_URL = "https://cdn.casterlabs.co/dist/updater-version";
 
     public static String appDataDirectory = AppDirsFactory.getInstance().getUserDataDir("casterlabs-caffeinated", null, null, true);
