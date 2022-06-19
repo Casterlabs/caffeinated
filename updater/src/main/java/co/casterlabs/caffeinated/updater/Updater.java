@@ -6,21 +6,31 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ProcessBuilder.Redirect;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.updater.util.FileUtil;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
 import co.casterlabs.caffeinated.updater.util.ZipUtil;
 import co.casterlabs.caffeinated.updater.util.async.AsyncTask;
+import co.casterlabs.caffeinated.updater.util.platform.OperatingSystem;
+import co.casterlabs.caffeinated.updater.util.platform.Platform;
 import co.casterlabs.caffeinated.updater.window.UpdaterDialog;
 import co.casterlabs.rakurai.io.IOUtil;
+import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.element.JsonArray;
+import co.casterlabs.rakurai.json.element.JsonObject;
+import jnr.posix.POSIX;
+import jnr.posix.POSIXFactory;
 import lombok.Getter;
 import net.harawata.appdirs.AppDirsFactory;
 import okhttp3.Request;
 import okhttp3.Response;
-import xyz.e3ndr.consoleutil.ConsoleUtil;
-import xyz.e3ndr.consoleutil.platform.JavaPlatform;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
@@ -37,6 +47,9 @@ public class Updater {
     private static File updateFile = new File(appDirectory, "update.zip");
     private static File commitFile = new File(appDirectory, ".commit");
     private static File buildokFile = new File(appDirectory, ".build_ok");
+
+    private static final List<OperatingSystem> INLINE_PLATFORMS = Arrays.asList(
+    );
 
     private static @Getter boolean isLauncherOutOfDate = false;
     private static @Getter boolean isPlatformSupported = true;
@@ -191,21 +204,62 @@ public class Updater {
 
     public static void launch(UpdaterDialog dialog) throws UpdaterException {
         try {
-            // TODO wait for .build_ok to show up.
-            // (We will need to start bundling cef rather than having it downloaded)
+            if (INLINE_PLATFORMS.contains(Platform.os)) {
+                // Here's where the fun starts, we load all the jars and run the in the same
+                // process 👀
 
-            ProcessBuilder pb = new ProcessBuilder()
-                .directory(appDirectory)
-                .command(launchCommand);
+                // Change directory to the app dir, otherwise the app will pollute the updater's
+                // installation directory.
+                POSIX posix = POSIXFactory.getPOSIX();
+                posix.chdir(appDirectory.getAbsolutePath());
+                System.setProperty("user.dir", appDirectory.getAbsolutePath());
 
-            if (ConsoleUtil.getPlatform() == JavaPlatform.MAC) {
-                // On MacOS we do not want to keep the updater process open as it'll stick in
-                // the dock. So we start the process and kill the updater to make sure that
-                // doesn't happen.
-                FastLogger.logStatic(LogLevel.INFO, "The process will now exit, this is so the updater's icon doesn't stick in the dock.");
-                pb.start();
-                dialog.close();
+                // Load and parse the manifest.
+                String manifestContent = FileUtil.readFile(new File(appDirectory, "Casterlabs-Caffeinated.json"))
+                    .replace("\n", "");
+
+                JsonObject manifest = Rson.DEFAULT.fromJson(
+                    manifestContent,
+                    JsonObject.class
+                );
+
+                JsonArray classpathDecl = manifest.getArray("classPath");
+
+                URL[] classpath = new URL[classpathDecl.size()];
+                String mainClassName = manifest.getString("mainClass");
+                String[] args = new String[0];
+
+                for (int idx = 0; idx < classpath.length; idx++) {
+                    classpath[idx] = new File(appDirectory, classpathDecl.getString(idx))
+                        .toURI()
+                        .toURL();
+                }
+
+                // Load the app's classpath but keep it separated from the updater's
+                ClassLoader loader = new URLClassLoader(classpath, ClassLoader.getPlatformClassLoader());
+                Class<?> mainClass = Class.forName(mainClassName, true, loader);
+                Method mainMethod = mainClass.getMethod("main", String[].class);
+
+                // Hide the updater dialog, invoke the main method, and pray.
+                dialog.dispose();
+                mainMethod.invoke(null, (Object) args);
             } else {
+                ProcessBuilder pb = new ProcessBuilder()
+                    .directory(appDirectory)
+                    .command(launchCommand);
+
+                // TODO wait for .build_ok to show up.
+
+                if (Platform.os == OperatingSystem.MACOSX) {
+                    // On MacOS we do not want to keep the updater process open as it'll stick in
+                    // the dock. So we start the process and kill the updater to make sure that
+                    // doesn't happen.
+                    FastLogger.logStatic(LogLevel.INFO, "The process will now exit, this is so the updater's icon doesn't stick in the dock.");
+                    pb.start();
+                    dialog.close();
+                    return;
+                }
+
                 Process process = pb
                     .redirectOutput(Redirect.PIPE)
                     .redirectError(Redirect.INHERIT)
