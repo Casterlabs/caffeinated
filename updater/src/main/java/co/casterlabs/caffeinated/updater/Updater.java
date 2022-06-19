@@ -25,8 +25,6 @@ import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import jnr.posix.POSIX;
-import jnr.posix.POSIXFactory;
 import lombok.Getter;
 import net.harawata.appdirs.AppDirsFactory;
 import okhttp3.Request;
@@ -49,6 +47,7 @@ public class Updater {
     private static File buildokFile = new File(appDirectory, ".build_ok");
 
     private static final List<OperatingSystem> INLINE_PLATFORMS = Arrays.asList(
+        OperatingSystem.WINDOWS
     );
 
     private static @Getter boolean isLauncherOutOfDate = false;
@@ -209,10 +208,8 @@ public class Updater {
                 // process 👀
 
                 // Change directory to the app dir, otherwise the app will pollute the updater's
-                // installation directory.
-                POSIX posix = POSIXFactory.getPOSIX();
-                posix.chdir(appDirectory.getAbsolutePath());
-                System.setProperty("user.dir", appDirectory.getAbsolutePath());
+                // installation directory and the world would melt.
+                ChangeDir.changeProcessDir(appDirectory);
 
                 // Load and parse the manifest.
                 String manifestContent = FileUtil.readFile(new File(appDirectory, "Casterlabs-Caffeinated.json"))
