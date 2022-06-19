@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>co.casterlabs.caffeinated</groupId>
 	<artifactId>Casterlabs-Caffeinated-Updater</artifactId>
@@ -55,8 +53,7 @@
 					<shadedArtifactAttached>true</shadedArtifactAttached>
 					<finalName>${project.artifactId}</finalName>
 					<transformers>
-						<transformer
-							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 							<mainClass>co.casterlabs.caffeinated.updater.Launcher</mainClass>
 						</transformer>
 					</transformers>
@@ -81,7 +78,8 @@
 			<version>1.18.22</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency> <!-- For Eclipse users -->
+		<dependency>
+			<!-- For Eclipse users -->
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
 			<version>19.0.0</version>
@@ -92,13 +90,13 @@
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.11.1</version>
+			<version>1.14.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>
 			<artifactId>Util</artifactId>
-			<version>1.11.1</version>
+			<version>1.14.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
