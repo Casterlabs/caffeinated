@@ -1,7 +1,6 @@
 package co.casterlabs.caffeinated.updater.window;
 
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -38,7 +37,7 @@ public class UpdaterDialog extends JDialog implements Closeable {
     private @Getter UpdaterUI ui;
 
     public UpdaterDialog(DialogAnimation animation) throws IOException {
-        super((Dialog) null); // Makes the app appear in the taskbar.
+//        super((Window) null);
 
         this.pane = new UpdaterPane(this, animation);
         this.ui = this.pane.getUi();
@@ -46,7 +45,7 @@ public class UpdaterDialog extends JDialog implements Closeable {
         this.getContentPane().add(this.pane);
 
         this.setTitle("Caffeinated Updater");
-        this.setAlwaysOnTop(true);
+        this.setAlwaysOnTop(false);
         this.setUndecorated(true);
 
         // Colors.
@@ -118,6 +117,7 @@ public class UpdaterDialog extends JDialog implements Closeable {
         super.setVisible(visible);
 
         if (visible) {
+            this.toFront();
             this.createBufferStrategy(2);
         }
     }
