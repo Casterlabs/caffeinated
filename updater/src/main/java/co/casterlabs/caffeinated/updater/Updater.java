@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -17,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 import co.casterlabs.caffeinated.updater.util.FileUtil;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
 import co.casterlabs.caffeinated.updater.util.ZipUtil;
-import co.casterlabs.caffeinated.updater.util.async.AsyncTask;
 import co.casterlabs.caffeinated.updater.util.platform.OperatingSystem;
 import co.casterlabs.caffeinated.updater.util.platform.Platform;
 import co.casterlabs.caffeinated.updater.window.UpdaterDialog;
@@ -257,29 +255,15 @@ public class Updater {
                     return;
                 }
 
-                Process process = pb
-                    .redirectOutput(Redirect.PIPE)
-                    .redirectError(Redirect.INHERIT)
-                    .redirectInput(Redirect.INHERIT)
-                    .start();
-
-                // Input stream pipe.
-                new AsyncTask(() -> {
-                    try {
-                        IOUtil.writeInputStreamToOutputStream(process.getInputStream(), System.out);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+                pb.start();
 
                 // TODO look for "Starting the UI" before we close the dialog.
                 // TODO look for the .build_ok file before trusting the process. (kill & let the
                 // user know it's dead)
 
                 TimeUnit.SECONDS.sleep(2);
-                dialog.dispose();
-
-                System.exit(process.waitFor());
+                dialog.close();
+                System.exit(0);
             }
         } catch (Exception e) {
             throw new UpdaterException(UpdaterException.Error.LAUNCH_FAILED, "Could not launch update :(", e);
