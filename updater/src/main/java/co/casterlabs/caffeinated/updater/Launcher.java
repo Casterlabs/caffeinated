@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -40,14 +41,14 @@ public class Launcher {
         } catch (Exception ignored) {}
 
         final File logsDir = new File(Updater.appDataDirectory, "logs");
-        final File updaterLogFile = new File(logsDir, "updater.log");
+        final File logFile = new File(logsDir, "updater.log");
 
         try {
             logsDir.mkdirs();
-            updaterLogFile.createNewFile();
+            logFile.createNewFile();
 
             @SuppressWarnings("resource")
-            final FileOutputStream logOut = new FileOutputStream(updaterLogFile);
+            final FileOutputStream logOut = new FileOutputStream(logFile, true);
 
             FastLoggingFramework.setLogHandler(new LogHandler() {
                 @Override
@@ -66,8 +67,13 @@ public class Launcher {
                 }
             });
 
+            logOut.write(
+                String.format("\n\n---------- %s ----------\n", Instant.now().toString())
+                    .getBytes()
+            );
+
             FastLogger.logStatic(LogLevel.INFO, "App Directory: %s", Updater.appDataDirectory);
-            FastLogger.logStatic("Log file: %s", updaterLogFile);
+            FastLogger.logStatic("Log file: %s", logFile);
         } catch (IOException e) {
             FastLogger.logException(e);
         }
