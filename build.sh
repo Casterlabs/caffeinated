@@ -29,7 +29,7 @@ fi
 rm -rf dist/*
 mkdir -p dist
 
-KAIMEN_VERSION="5ac3b82"
+KAIMEN_VERSION="b67ece9"
 
 if [[ $@ != *"nodist"* ]]; then
     cp app/Bootstrap/target/classes/commit.txt dist
