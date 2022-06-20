@@ -177,7 +177,12 @@
         <ul class="pagination-list">
             {#each accounts as account}
                 <li>
-                    <a on:click={() => select(account)} class="pagination-link {selectedAccount == account ? 'is-current' : ''}" aria-label={account.userData.platform}>
+                    <a
+                        on:click={() => select(account)}
+                        class="pagination-link"
+                        class:is-current={currentPlatform == account.userData.platform}
+                        aria-label={account.userData.platform}
+                    >
                         <img class="nav-icon" src="/img/services/{account.userData.platform.toLowerCase()}/icon.svg" alt={account.userData.platform} />
                     </a>
                 </li>

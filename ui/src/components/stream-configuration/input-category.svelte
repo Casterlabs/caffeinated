@@ -32,7 +32,7 @@
             <LocalizedText key="stream.category" />
         </label>
         <div class="control">
-            <ApiSearchInput bind:value={currentInputData.category} defaultValue={selectedAccount.streamData.category} lookup={categorySearch} />
+            <ApiSearchInput bind:value={currentInputData.category} defaultValue={selectedAccount.streamData?.category || ""} lookup={categorySearch} />
         </div>
     </div>
 {/if}

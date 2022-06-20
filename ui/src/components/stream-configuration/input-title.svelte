@@ -14,7 +14,7 @@
             <LocalizedText key="stream.title" />
         </label>
         <div class="control">
-            <input class="input" type="text" placeholder={selectedAccount.streamData.title} bind:value={currentInputData.title} />
+            <input class="input" type="text" placeholder={selectedAccount.streamData.title || ""} bind:value={currentInputData.title} />
         </div>
     </div>
 {/if}

@@ -18,7 +18,7 @@
             <LocalizedText key="stream.language" />
         </label>
         <div class="control">
-            <SearchInput bind:value={currentInputData.language} defaultValue={languages[selectedAccount.streamData.language]} entries={Object.values(languages)} />
+            <SearchInput bind:value={currentInputData.language} defaultValue={languages[selectedAccount.streamData?.language || "OTHER"]} entries={Object.values(languages)} />
         </div>
     </div>
 {/if}
