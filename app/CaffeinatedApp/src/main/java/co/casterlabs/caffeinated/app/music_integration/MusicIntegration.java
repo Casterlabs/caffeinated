@@ -1,7 +1,9 @@
 package co.casterlabs.caffeinated.app.music_integration;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -122,6 +124,32 @@ public class MusicIntegration extends JavascriptObject implements Music {
             this.activePlayback = null;
         }
 
+        final File musicApiDir = new File(CaffeinatedApp.appDataDir, "api/music");
+        musicApiDir.mkdirs();
+
+        // Write some cute files for the end user to mess with :^)
+        new AsyncTask(() -> {
+            try {
+                Files.writeString(
+                    new File(musicApiDir, "current_playback.json").toPath(),
+                    Rson.DEFAULT.toJsonString(this.activePlayback)
+                );
+
+                Files.writeString(
+                    new File(musicApiDir, "current_playback.txt").toPath(),
+                    this.activePlayback == null ? ""
+                        : String.format(
+                            "%s • %s",
+                            this.activePlayback.getCurrentTrack().getTitle(),
+                            String.join(", ", this.activePlayback.getCurrentTrack().getArtists())
+                        )
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Broadcast to the plugins & the music api.
         new AsyncTask(() -> {
             try {
                 @SuppressWarnings("deprecation")
