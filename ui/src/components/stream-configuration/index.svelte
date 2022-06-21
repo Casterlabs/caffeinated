@@ -51,30 +51,32 @@
         }
 
         for (let account of accounts) {
-            const inputData = inputs[account.userData.platform];
+            if (account.streamData) {
+                const inputData = inputs[account.userData.platform];
 
-            if (!inputData.title) {
-                inputData.title = account.streamData.title;
-            }
+                if (!inputData.title) {
+                    inputData.title = account.streamData.title;
+                }
 
-            if (!inputData.category) {
-                inputData.category = account.streamData.category;
-            }
+                if (!inputData.category) {
+                    inputData.category = account.streamData.category;
+                }
 
-            if (!inputData.language && languages) {
-                inputData.language = languages[account.streamData.language];
-            }
+                if (!inputData.language && languages) {
+                    inputData.language = languages[account.streamData.language];
+                }
 
-            if (!inputData.contentRating) {
-                inputData.contentRating = account.streamData.content_rating;
-            }
+                if (!inputData.contentRating) {
+                    inputData.contentRating = account.streamData.content_rating;
+                }
 
-            if (!inputData.tags) {
-                inputData.tags = account.streamData.tags;
-            }
+                if (!inputData.tags) {
+                    inputData.tags = account.streamData.tags;
+                }
 
-            if (!inputData.thumbnailUrl) {
-                inputData.thumbnailUrl = account.streamData.thumbnail_url;
+                if (!inputData.thumbnailUrl) {
+                    inputData.thumbnailUrl = account.streamData.thumbnail_url;
+                }
             }
         }
     }
