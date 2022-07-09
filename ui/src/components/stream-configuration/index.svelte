@@ -44,7 +44,10 @@
     export function render(newAccounts) {
         if (newAccounts) accounts = newAccounts;
 
-        accounts = accounts.filter((account) => PLATFORMS.includes(account.userData.platform));
+        accounts = accounts
+            .filter((account) => account.userData)
+            .filter((account) => account.streamData)
+            .filter((account) => PLATFORMS.includes(account.userData.platform));
 
         if (!selectedAccount && accounts[0]) {
             select(accounts[0]);
