@@ -5,6 +5,7 @@
     let developerApiKey = "";
     let conductorKey = "";
     let conductorPort = "";
+    let useBetaKoiPath = false;
 
     onMount(async () => {
         const prefs = await Caffeinated.appPreferences;
@@ -12,7 +13,13 @@
         developerApiKey = prefs.developerApiKey;
         conductorKey = prefs.conductorKey;
         conductorPort = prefs.conductorPort;
+        useBetaKoiPath = await Caffeinated.useBetaKoiPath;
     });
+
+    function setUseBetaKoiPath() {
+        Caffeinated.useBetaKoiPath = useBetaKoiPath;
+        Caffeinated.UI.showToast("Restart the app for the setting to take effect.", "INFO");
+    }
 
     function restart() {
         Bridge.emit("app:restart");
@@ -30,7 +37,18 @@
         </div>
     </div>
     <div class="field">
-        <button class="button is-fullwidth" on:click={restart}>Restart app with console window</button>
+        <div class="control">
+            <label class="checkbox label">
+                Use Beta Koi Path
+                <input type="checkbox" bind:checked={useBetaKoiPath} on:change={setUseBetaKoiPath} />
+            </label>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="field">
+        <button class="button is-fullwidth is-danger" on:click={restart}>Try to restart app with console window</button>
     </div>
 </div>
 

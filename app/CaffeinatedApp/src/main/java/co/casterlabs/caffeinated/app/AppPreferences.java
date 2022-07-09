@@ -12,6 +12,8 @@ public class AppPreferences {
 
     private boolean isNew = true;
 
+    private boolean useBetaKoiPath = false;
+
     private String developerApiKey = new String(Crypto.generateSecureRandomKey());
 
 }

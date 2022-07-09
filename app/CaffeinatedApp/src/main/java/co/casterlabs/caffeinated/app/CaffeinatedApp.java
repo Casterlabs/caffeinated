@@ -36,6 +36,7 @@ import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
+import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -232,6 +233,17 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         ClipboardUtil.copy(text);
         this.UI.showToast(toastText, UIBackgroundColor.PRIMARY);
+    }
+
+    @JavascriptGetter("useBetaKoiPath")
+    public boolean isUseBetaKoiPath() {
+        return this.appPreferences.get().isUseBetaKoiPath();
+    }
+
+    @JavascriptSetter("useBetaKoiPath")
+    public void setUseBetaKoiPath(boolean val) {
+        this.appPreferences.get().setUseBetaKoiPath(val);
+        this.appPreferences.save();
     }
 
     @JavascriptGetter("enableStupidlyUnsafeSettings")
