@@ -74,7 +74,7 @@
 
         for (const inst of Object.values(authInstances)) {
             if (inst.userData) {
-                authData[inst.platform] = inst;
+                authData[inst.userData.platform] = inst;
             }
         }
 
