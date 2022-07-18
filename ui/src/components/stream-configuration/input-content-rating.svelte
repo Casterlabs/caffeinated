@@ -6,6 +6,10 @@
     export let contentRatings;
 
     export let currentInputData;
+
+    function markModified() {
+        currentInputData.hasBeenModified = true;
+    }
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -17,7 +21,7 @@
         </label>
         <div class="control">
             <div class="select is-fullwidth">
-                <select bind:value={currentInputData.contentRating}>
+                <select bind:value={currentInputData.contentRating} on:change={markModified}>
                     {#each contentRatings[selectedAccount.userData.platform] as rating}
                         <option value={rating}>
                             <LocalizedText key="stream.content_rating.{rating}" />

@@ -24,6 +24,7 @@
                 currentInputData.thumbnailFile = file;
                 filePreview = reader.result;
                 isReadingFile = false;
+                markModified();
             };
 
             reader.onerror = () => {
@@ -37,6 +38,10 @@
     function clear() {
         currentInputData.thumbnailFile = null;
         filePreview = null;
+    }
+
+    function markModified() {
+        currentInputData.hasBeenModified = true;
     }
 </script>
 

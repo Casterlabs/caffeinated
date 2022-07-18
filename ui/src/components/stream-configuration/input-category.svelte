@@ -23,6 +23,10 @@
 
         return result;
     }
+
+    function markModified() {
+        currentInputData.hasBeenModified = true;
+    }
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -32,7 +36,7 @@
             <LocalizedText key="stream.category" />
         </label>
         <div class="control">
-            <ApiSearchInput bind:value={currentInputData.category} defaultValue={selectedAccount.streamData?.category || ""} lookup={categorySearch} />
+            <ApiSearchInput on:change={markModified} bind:value={currentInputData.category} defaultValue={selectedAccount.streamData?.category || ""} lookup={categorySearch} />
         </div>
     </div>
 {/if}

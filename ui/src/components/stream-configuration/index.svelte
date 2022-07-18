@@ -35,7 +35,8 @@
             contentRating: null,
             tags: null,
             thumbnailFile: null,
-            thumbnailUrl: null
+            thumbnailUrl: null,
+            hasBeenModified: false
         };
         features[platform] = [];
         contentRatings[platform] = [];
@@ -90,10 +91,16 @@
         currentInputData = inputs[currentPlatform];
     }
 
-    async function submit() {
+    async function submit(platform = currentPlatform) {
+        let inputData = inputs[currentPlatform];
+
+        if (!inputData.hasBeenModified) {
+            return;
+        }
+
         let languageEnum = null;
         for (const [language, lang] of Object.entries(languages)) {
-            if (lang == currentInputData.language) {
+            if (lang == inputData.language) {
                 languageEnum = language;
                 break;
             }
@@ -101,15 +108,15 @@
 
         let categoryId = null;
         {
-            let query = currentInputData.category;
+            let query = inputData.category;
 
-            if (query == "Entertainment" && currentPlatform == "CAFFEINE") {
+            if (query == "Entertainment" && platform == "CAFFEINE") {
                 categoryId = "79";
             } else {
                 // Lookup category id from name.
                 // TODO Make this more error resitant.
                 const response = await //
-                (await fetch(`https://api.casterlabs.co/v2/koi/stream/${currentPlatform}/categories/search?q=${encodeURIComponent(query)}`)) //
+                (await fetch(`https://api.casterlabs.co/v2/koi/stream/${platform}/categories/search?q=${encodeURIComponent(query)}`)) //
                     .json();
 
                 const result = Object.entries(response.data.result);
@@ -120,14 +127,14 @@
         }
 
         const streamUpdatePayload = {
-            title: currentInputData.title,
+            title: inputData.title,
             category: categoryId,
             language: languageEnum,
-            tags: currentInputData.tags,
-            content_rating: currentInputData.contentRating
+            tags: inputData.tags,
+            content_rating: inputData.contentRating
         };
 
-        console.debug("Update:", streamUpdatePayload, currentInputData.thumbnailFile);
+        console.debug("Update:", streamUpdatePayload, inputData.thumbnailFile);
 
         fetch("https://api.casterlabs.co/v2/koi/stream/update", {
             method: "POST",
@@ -139,7 +146,7 @@
             body: JSON.stringify(streamUpdatePayload)
         });
 
-        if (currentInputData.thumbnailFile) {
+        if (inputData.thumbnailFile) {
             fetch("https://api.casterlabs.co/v2/koi/stream/thumbnail/update", {
                 method: "POST",
                 headers: {
@@ -147,7 +154,7 @@
                     "Client-ID": "LmHG2ux992BxqQ7w9RJrfhkW",
                     Authorization: "Koi " + selectedAccount.token
                 },
-                body: currentInputData.thumbnailFile
+                body: inputData.thumbnailFile
             });
         }
     }

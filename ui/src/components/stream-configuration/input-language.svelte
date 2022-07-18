@@ -8,6 +8,10 @@
     export let languages;
 
     export let currentInputData;
+
+    function markModified() {
+        currentInputData.hasBeenModified = true;
+    }
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -18,7 +22,12 @@
             <LocalizedText key="stream.language" />
         </label>
         <div class="control">
-            <SearchInput bind:value={currentInputData.language} defaultValue={languages[selectedAccount.streamData?.language || "OTHER"]} entries={Object.values(languages)} />
+            <SearchInput
+                bind:value={currentInputData.language}
+                on:change={markModified}
+                defaultValue={languages[selectedAccount.streamData?.language || "OTHER"]}
+                entries={Object.values(languages)}
+            />
         </div>
     </div>
 {/if}
