@@ -10,16 +10,24 @@
     let filePickerElement;
     let filePreview = null;
 
+    let isReadingFile = false;
+
     function onPick(event) {
+        isReadingFile = true;
         // Take the first file, convert to b64 and set currentInputData.thumbnailFile to the file.
         const file = filePickerElement.files[0];
 
         if (file) {
             const reader = new FileReader();
 
-            reader.onload = function () {
+            reader.onload = () => {
                 currentInputData.thumbnailFile = file;
                 filePreview = reader.result;
+                isReadingFile = false;
+            };
+
+            reader.onerror = () => {
+                isReadingFile = false;
             };
 
             reader.readAsDataURL(file);
@@ -59,7 +67,7 @@
                                 <line x1="6" y1="6" x2="18" y2="18" />
                             </svg>
                         </button>
-                        <button class="button" iid="pick-button" aria-controls="#pick-file" on:click={() => filePickerElement.click()}>
+                        <button class="button" class:is-loading={isReadingFile} id="pick-button" aria-controls="#pick-file" on:click={() => filePickerElement.click()}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
