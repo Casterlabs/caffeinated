@@ -1,5 +1,7 @@
 <script>
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
+
+    const unregister = [];
 
     import LocalizedText from "$lib/components/LocalizedText.svelte";
 
@@ -55,33 +57,36 @@
         }
 
         for (let account of accounts) {
-            if (account.streamData) {
-                const inputData = inputs[account.userData.platform];
+            console.log(account.streamData);
+            fillDefaults(account.userData.platform, account.streamData);
+        }
+    }
 
-                if (!inputData.title) {
-                    inputData.title = account.streamData.title;
-                }
+    function fillDefaults(platform, streamData) {
+        const inputData = inputs[platform];
 
-                if (!inputData.category) {
-                    inputData.category = account.streamData.category;
-                }
+        if (!inputData.title) {
+            inputData.title = streamData.title;
+        }
 
-                if (!inputData.language && languages) {
-                    inputData.language = languages[account.streamData.language];
-                }
+        if (!inputData.category) {
+            inputData.category = streamData.category;
+        }
 
-                if (!inputData.contentRating) {
-                    inputData.contentRating = account.streamData.content_rating;
-                }
+        if (!inputData.language && languages) {
+            inputData.language = languages[streamData.language];
+        }
 
-                if (!inputData.tags) {
-                    inputData.tags = account.streamData.tags;
-                }
+        if (!inputData.contentRating) {
+            inputData.contentRating = streamData.content_rating;
+        }
 
-                if (!inputData.thumbnailUrl) {
-                    inputData.thumbnailUrl = account.streamData.thumbnail_url;
-                }
-            }
+        if (!inputData.tags) {
+            inputData.tags = streamData.tags;
+        }
+
+        if (!inputData.thumbnailUrl) {
+            inputData.thumbnailUrl = streamData.thumbnail_url;
         }
     }
 
@@ -150,14 +155,29 @@
             fetch("https://api.casterlabs.co/v2/koi/stream/thumbnail/update", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/octet-stream",
                     "Client-ID": "LmHG2ux992BxqQ7w9RJrfhkW",
                     Authorization: "Koi " + selectedAccount.token
                 },
                 body: inputData.thumbnailFile
             });
         }
+
+        // UI update.
+        inputData.hasBeenModified = false;
     }
+
+    /* ---------------- */
+    /* Life Cycle   */
+    /* ---------------- */
+
+    onDestroy(() => {
+        for (const un of unregister) {
+            try {
+                Bridge.off(un[0], un[1]);
+            } catch (ignored) {}
+        }
+    });
 
     onMount(async () => {
         languages = await Caffeinated.auth.getLanguages();
@@ -179,6 +199,32 @@
                 }
             })();
         }
+
+        unregister.push([
+            "koi:event",
+
+            Bridge.on("koi:event:stream_status", (e) => {
+                console.debug("Got event!", e);
+
+                const platform = e.streamer.platform;
+
+                if (PLATFORMS.includes(platform)) {
+                    const inputData = inputs[platform];
+
+                    if (inputData.hasBeenModified) {
+                        // Try to submit the changes as soon as the streamer goes live.
+                        // This is for platforms like Caffeine which create a new broadcast
+                        // api object which won't absorb the previous broadcast's info.
+                        if (e.is_live) {
+                            submit(platform);
+                        }
+                    } else {
+                        // Grab some fresh defaults from the event.
+                        fillDefaults(platform, e);
+                    }
+                }
+            })
+        ]);
     });
 </script>
 
@@ -219,7 +265,7 @@
 
         <InputThumbnail {selectedAccount} {features} {currentInputData} />
 
-        <a on:click={submit} class="button is-fullwidth" style="margin-top: 25px;">
+        <a on:click={() => submit()} class="button is-fullwidth" style="margin-top: 25px;">
             <img class="nav-icon" src="/img/services/{selectedAccount.userData.platform.toLowerCase()}/icon.svg" alt={selectedAccount.userData.platform} />
             &nbsp;&nbsp;
             <LocalizedText key="stream.update_info" />
