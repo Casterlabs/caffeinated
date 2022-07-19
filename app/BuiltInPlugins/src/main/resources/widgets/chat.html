@@ -1,305 +1,316 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <meta charset="utf-8" />
-        <style>
-            img {
-                height: 2ex;
-                width: auto;
-                vertical-align: middle;
-            }
+<head>
+    <meta charset="utf-8" />
+    <style>
+        img {
+            height: 2ex;
+            width: auto;
+            vertical-align: middle;
+        }
+        
+        body {
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            width: 100%;
+            overflow: hidden;
+            text-shadow: 1.5px 1.5px rgba(0, 0, 0, 0.3);
+            overflow-wrap: break-word;
+        }
+        
+        .right-align {
+            text-align: right;
+            padding-right: 15px;
+        }
+        
+        .hide-donations .donation {
+            display: none;
+        }
+        
+        .message {
+            padding-left: 0.5ch;
+        }
+        
+        .badge {
+            padding-left: 0.25ch;
+        }
+        
+        .hide-badges .badge {
+            display: none;
+        }
+        /* Upvotes */
+        
+        .upvote-1 {
+            /* 1+ */
+            color: #ff00ff;
+        }
+        
+        .upvote-2 {
+            /* 10+ */
+            color: #00ff00;
+        }
+        
+        .upvote-3 {
+            /* 100+ */
+            color: #ffff00;
+        }
+        
+        .upvote-4 {
+            /* 1000+ */
+            color: #ffffff;
+        }
+    </style>
+    <title>Caffeinated Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+</head>
 
-            body {
-                position: absolute;
-                left: 0px;
-                bottom: 0px;
-                width: 100%;
-                overflow: hidden;
-                text-shadow: 1.5px 1.5px rgba(0, 0, 0, 0.3);
-                overflow-wrap: break-word;
-            }
+<body>
+    <div id="div"></div>
+</body>
 
-            .right-align {
-                text-align: right;
-                padding-right: 15px;
-            }
+<footer>
+    <script>
+        const chatDiv = document.getElementById("div");
+        let oldConfig = {};
 
-            .hide-donations .donation {
-                display: none;
-            }
+        function changeFont(fontname) {
+            fontname = fontname || "Poppins";
 
-            .message {
-                padding-left: .5ch;
-            }
+            document.documentElement.style = "font-family: '" + fontname + "';";
 
-            .badge {
-                padding-left: .25ch;
-            }
-
-            .hide-badges .badge {
-                display: none;
-            }
-
-            /* Upvotes */
-
-            .upvote-1 {
-                /* 1+ */
-                color: #FF00FF;
-            }
-
-            .upvote-2 {
-                /* 10+ */
-                color: #00FF00;
-            }
-
-            .upvote-3 {
-                /* 100+ */
-                color: #FFFF00;
-            }
-
-            .upvote-4 {
-                /* 1000+ */
-                color: #FFFFFF;
-            }
-        </style>
-        <title>Caffeinated Chat</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
-    </head>
-
-    <body>
-        <div id="div"></div>
-    </body>
-
-    <footer>
-        <script>
-            const chatDiv = document.getElementById("div");
-            let oldConfig = {};
-
-            function changeFont(fontname) {
-                fontname = fontname || "Poppins";
-
-                document.documentElement.style = "font-family: '" + fontname + "';";
-
-                WebFont.load({
-                    google: {
-                        families: [fontname]
-                    }
-                });
-            }
-
-            changeFont("Poppins");
-
-            Widget.on("init", () => {
-                console.log("Init!");
-
-                // Manually trigger an update
-                // This'll also cause the widget to re-render the history since it think's the config changed.
-                Widget.broadcast("update");
-            });
-
-            Widget.on("update", () => {
-                let shouldRedraw = false;
-
-                if (oldConfig["chat_style.chat_animation"] != Widget.getSetting("chat_style.chat_animation")) {
-                    chatDiv.innerHTML = "";
-                }
-
-                if (oldConfig["chat_style.chat_direction"] != Widget.getSetting("chat_style.chat_direction")) {
-                    shouldRedraw = true;
-                }
-
-                oldConfig = Widget.widgetData.settings;
-
-                changeFont(Widget.getSetting("chat_style.font"));
-
-                chatDiv.style.color = Widget.getSetting("chat_style.text_color");
-                chatDiv.style.fontSize = Widget.getSetting("chat_style.font_size") + "px";
-
-                if (Widget.getSetting("chat_style.text_align").toLowerCase() == "right") {
-                    document.body.classList.add("right-align");
-                } else {
-                    document.body.classList.remove("right-align");
-                }
-
-                if (Widget.getSetting("chat_style.show_user_badges")) {
-                    document.body.classList.remove("hide-badges");
-                } else {
-                    document.body.classList.add("hide-badges");
-                }
-
-                if (Widget.getSetting("chat_style.show_donations")) {
-                    document.body.classList.remove("hide-donations");
-                } else {
-                    document.body.classList.add("hide-donations");
-                }
-
-                if (shouldRedraw) {
-                    chatDiv.innerHTML = "";
-                    Koi.eventHistory.forEach(onEvent);
+            WebFont.load({
+                google: {
+                    families: [fontname]
                 }
             });
+        }
 
-            Koi.on("*", (type, event) => onEvent(event));
+        changeFont("Poppins");
 
-            function onEvent(event) {
-                let div;
+        Widget.on("init", () => {
+            console.log("Init!");
 
-                switch (event.event_type) {
-                    case "DONATION":
-                    case "CHAT":
-                        div = createChatMessageElement(event);
-                        break;
+            // Manually trigger an update
+            // This'll also cause the widget to re-render the history since it think's the config changed.
+            Widget.broadcast("update");
+        });
 
-                    case "META": {
+        Widget.on("update", () => {
+            let shouldRedraw = false;
+
+            if (oldConfig["chat_style.disappearing"] != Widget.getSetting("chat_style.disappearing")) {
+                chatDiv.innerHTML = "";
+            }
+
+            if (oldConfig["chat_style.chat_direction"] != Widget.getSetting("chat_style.chat_direction")) {
+                shouldRedraw = true;
+            }
+
+            oldConfig = Widget.widgetData.settings;
+
+            changeFont(Widget.getSetting("chat_style.font"));
+
+            chatDiv.style.color = Widget.getSetting("chat_style.text_color");
+            chatDiv.style.fontSize = Widget.getSetting("chat_style.font_size") + "px";
+
+            if (Widget.getSetting("chat_style.text_align").toLowerCase() == "right") {
+                document.body.classList.add("right-align");
+            } else {
+                document.body.classList.remove("right-align");
+            }
+
+            if (Widget.getSetting("chat_style.show_user_badges")) {
+                document.body.classList.remove("hide-badges");
+            } else {
+                document.body.classList.add("hide-badges");
+            }
+
+            if (Widget.getSetting("chat_style.show_donations")) {
+                document.body.classList.remove("hide-donations");
+            } else {
+                document.body.classList.add("hide-donations");
+            }
+
+            if (shouldRedraw) {
+                chatDiv.innerHTML = "";
+                Koi.eventHistory.forEach(onEvent);
+            }
+        });
+
+        Koi.on("*", (type, event) => onEvent(event));
+
+        function onEvent(event) {
+            let div;
+
+            switch (event.event_type) {
+                case "DONATION":
+                case "CHAT":
+                    div = createChatMessageElement(event);
+                    break;
+
+                case "META":
+                    {
                         messageMeta(event);
                         return;
                     }
 
-                    case "STATUS":
-                        // Prevent duplicates
-                        if (!event.id || !document.querySelector("[message_id='" + event.id + "']")) {
-                            div = createStatusMessageElement(event);
-                        } else {
-                            return;
-                        }
-
-                    default:
-                        return;
-
-                }
-
-                switch (Widget.getSetting("chat_style.chat_animation")) {
-                    case "Slide": animateSlide(div); break;
-
-                    case "Slide (Disappearing)": animateSlide(div); disappear(div); break;
-
-                    case "Disappearing": disappear(div); break;
-                }
-
-                if (Widget.getSetting("chat_style.chat_direction").toUpperCase() == "UP") {
-                    document.body.style = "top: 0px;";
-                    chatDiv.insertBefore(div, chatDiv.firstChild);
-                } else {
-                    document.body.style = "bottom: 0px;";
-                    chatDiv.appendChild(div);
-                }
-            }
-
-            function messageMeta(event) {
-                const element = document.querySelector("[message_id='" + event.id + "']");
-
-                if (element) {
-                    if (event.is_visible) {
-                        element.innerText = event.upvotes;
-
-                        if (event.upvotes >= 1000) {
-                            element.classList = "upvote-4";
-                        } else if (event.upvotes >= 100) {
-                            element.classList = "upvote-3";
-                        } else if (event.upvotes >= 10) {
-                            element.classList = "upvote-2";
-                        } else if (event.upvotes >= 1) {
-                            element.classList = "upvote-1";
-                        }
+                case "STATUS":
+                    // Prevent duplicates
+                    if (!event.id || !document.querySelector("[message_id='" + event.id + "']")) {
+                        div = createStatusMessageElement(event);
                     } else {
-                        element.remove();
+                        return;
                     }
-                }
+
+                default:
+                    return;
             }
 
-            function createChatMessageElement(event) {
-                const div = document.createElement("div");
-                const msg = document.createElement("span");
-                const user = document.createElement("span");
-                const counter = document.createElement("sup");
+            switch (Widget.getSetting("chat_style.chat_animation")) {
+                case "Slide in from the left":
+                    animateSlide(div, true);
+                    break;
 
-                user.innerText = event.sender.displayname;
-                user.classList = "username";
-                user.style = "color: " + event.sender.color + ";";
+                case "Slide in from the right":
+                    animateSlide(div, false);
+                    break;
+            }
 
-                event.message = escapeHtml(event.message);
+            if (Widget.getSetting("chat_style.disappearing")) {
+                disappear(div);
+            }
 
-                for (const [name, link] of Object.entries(event.emotes)) {
-                    event.message = event.message.split(name).join(`<img title="${name}" src="${link}" />`);
+            if (Widget.getSetting("chat_style.chat_direction").toUpperCase() == "UP") {
+                document.body.style = "top: 0px;";
+                chatDiv.insertBefore(div, chatDiv.firstChild);
+            } else {
+                document.body.style = "bottom: 0px;";
+                chatDiv.appendChild(div);
+            }
+        }
+
+        function messageMeta(event) {
+            const element = document.querySelector("[message_id='" + event.id + "']");
+
+            if (element) {
+                if (event.is_visible) {
+                    element.innerText = event.upvotes;
+
+                    if (event.upvotes >= 1000) {
+                        element.classList = "upvote-4";
+                    } else if (event.upvotes >= 100) {
+                        element.classList = "upvote-3";
+                    } else if (event.upvotes >= 10) {
+                        element.classList = "upvote-2";
+                    } else if (event.upvotes >= 1) {
+                        element.classList = "upvote-1";
+                    }
+                } else {
+                    element.remove();
                 }
+            }
+        }
 
-                msg.classList = "message";
-                msg.innerHTML = event.message + " ";
+        function createChatMessageElement(event) {
+            const div = document.createElement("div");
+            const msg = document.createElement("span");
+            const user = document.createElement("span");
+            const counter = document.createElement("sup");
 
-                counter.setAttribute("message_id", event.id);
+            user.innerText = event.sender.displayname;
+            user.classList = "username";
+            user.style = "color: " + event.sender.color + ";";
 
-                div.appendChild(user);
+            event.message = escapeHtml(event.message);
 
-                event.sender.badges.forEach((badge) => {
-                    let badgeIcon = document.createElement("img");
+            for (const [name, link] of Object.entries(event.emotes)) {
+                event.message = event.message.split(name).join(`<img title="${name}" src="${link}" />`);
+            }
 
-                    badgeIcon.src = badge;
-                    badgeIcon.classList = "badge";
+            msg.classList = "message";
+            msg.innerHTML = event.message + " ";
 
-                    div.appendChild(badgeIcon);
+            counter.setAttribute("message_id", event.id);
+
+            div.appendChild(user);
+
+            event.sender.badges.forEach((badge) => {
+                let badgeIcon = document.createElement("img");
+
+                badgeIcon.src = badge;
+                badgeIcon.classList = "badge";
+
+                div.appendChild(badgeIcon);
+            });
+
+            div.appendChild(msg);
+            div.appendChild(counter);
+
+            if (event.donations) {
+                div.classList.add("donation");
+
+                event.donations.forEach((donation) => {
+                    // TODO Trovo, when we figure that out.
+                    if (donation.type === "CAFFEINE_PROP") {
+                        const img = document.createElement("img");
+
+                        img.src = donation.animated_image;
+
+                        div.appendChild(img);
+                    }
                 });
-
-                div.appendChild(msg);
-                div.appendChild(counter);
-
-                if (event.donations) {
-                    div.classList.add("donation");
-
-                    event.donations.forEach((donation) => {
-                        // TODO Trovo, when we figure that out.
-                        if (donation.type === "CAFFEINE_PROP") {
-                            const img = document.createElement("img");
-
-                            img.src = donation.animated_image;
-
-                            div.appendChild(img);
-                        }
-                    });
-                }
-
-                return div;
             }
 
-            function createStatusMessageElement(event) {
-                const div = document.createElement("div");
+            return div;
+        }
 
-                div.innerHTML = event.lang;
-                div.setAttribute("message_id", event.id);
+        function createStatusMessageElement(event) {
+            const div = document.createElement("div");
 
-                return div;
-            }
+            div.innerHTML = event.lang;
+            div.setAttribute("message_id", event.id);
 
-            function disappear(elem) {
-                setTimeout(() => {
-                    anime({
-                        targets: elem,
-                        opacity: 0,
-                        easing: "easeOutExpo"
-                    }).finished.then(() => {
-                        elem.remove();
-                    });
-                }, 30 * 1000); // 30s, disappear
-            }
+            return div;
+        }
 
-            function animateSlide(elem) {
-                let offset = window.innerWidth;
-
-                if (Widget.getSetting("chat_style.text_align") == "Left") {
-                    offset *= -1;
-                }
-
-                elem.style.transform = "translateX(" + offset + "px)";
-
+        function disappear(elem) {
+            setTimeout(() => {
                 anime({
                     targets: elem,
-                    translateX: 0,
+                    opacity: 0,
                     easing: "easeOutExpo"
+                }).finished.then(() => {
+                    elem.remove();
                 });
+            }, 30 * 1000); // 30s, disappear
+        }
+
+        function animateSlide(elem, fromTheLet) {
+            let offset = window.innerWidth;
+
+            if (fromTheLet) {
+                offset *= -1;
             }
 
-        </script>
-    </footer>
+            let elemOffset = 0;
+
+            if (fromTheLet != (Widget.getSetting("chat_style.text_align") == "Left")) {
+                // Add some additional offset to make sure the entire message spawns off screen.
+                elemOffset = 100;
+            }
+
+            elem.style.transform = `translateX(calc(${offset}px + ${elemOffset}%))`;
+
+            anime({
+                targets: elem,
+                translateX: 0,
+                easing: "easeOutExpo"
+            });
+        }
+    </script>
+</footer>
 
 </html>

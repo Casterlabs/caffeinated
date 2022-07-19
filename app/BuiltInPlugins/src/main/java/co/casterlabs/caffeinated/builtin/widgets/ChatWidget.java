@@ -22,7 +22,8 @@ public class ChatWidget extends Widget {
         .addSection(
             new WidgetSettingsSection("chat_style", "Style")
                 .addItem(WidgetSettingsItem.asDropdown("chat_direction", "Chat Direction", "Down", "Down", "Up"))
-                .addItem(WidgetSettingsItem.asDropdown("chat_animation", "Chat Animation", "None", "None", "Slide", "Slide (Disappearing)", "Disappearing"))
+                .addItem(WidgetSettingsItem.asDropdown("chat_animation", "Chat Animation", "None", "None", "Slide in from the left", "Slide in from the right"))
+                .addItem(WidgetSettingsItem.asCheckbox("disappearing", "Make messages disappear", false))
                 .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
                 .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128))
                 .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
