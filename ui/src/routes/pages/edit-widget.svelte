@@ -276,6 +276,7 @@
                         </script>
                     {/if}
                     {#if buttonLayout.text}
+                        &nbsp;
                         <LocalizedText key={buttonLayout.text} />
                     {/if}
                 </button>
