@@ -1,16 +1,10 @@
 package co.casterlabs.caffeinated.app.ui;
 
 import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import co.casterlabs.caffeinated.app.AppPreferences;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
@@ -18,27 +12,20 @@ import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
 import co.casterlabs.caffeinated.app.ui.events.AppearanceUpdateEvent;
-import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
-import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.element.JsonArray;
-import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class AppUI extends JavascriptObject {
-    private static final String GOOGLE_FONTS_API_KEY = "AIzaSyBuFeOYplWvsOlgbPeW8OfPUejzzzTCITM";
     private static final long TOAST_DURATION = 2250; // 2.25s
 
     private PreferenceFile<UIPreferences> preferenceFile = new PreferenceFile<>("ui", UIPreferences.class);
@@ -51,56 +38,10 @@ public class AppUI extends JavascriptObject {
 
     @Getter
     @JavascriptValue(allowSet = false)
-    private List<String> fonts = Collections.emptyList();
+    private List<String> fonts = FontProvider.listFonts();
 
     public void init() {
-        new AsyncTask(() -> {
-            Set<String> systemFonts = new HashSet<>();
-            Set<String> googleFonts = new HashSet<>();
-
-            try {
-                GraphicsEnvironment ge = GraphicsEnvironment
-                    .getLocalGraphicsEnvironment();
-
-                Font[] allFonts = ge.getAllFonts();
-
-                for (Font font : allFonts) {
-                    systemFonts.add(font.getFontName().trim());
-                }
-            } catch (Exception e) {
-                FastLogger.logException(e);
-            }
-
-            try {
-                JsonObject response = Rson.DEFAULT.fromJson(
-                    WebUtil.sendHttpRequest(new Request.Builder().url("https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=" + GOOGLE_FONTS_API_KEY)),
-                    JsonObject.class
-                );
-
-                if (response.containsKey("items")) {
-                    JsonArray items = response.getArray("items");
-
-                    for (JsonElement e : items) {
-                        JsonObject font = e.getAsObject();
-
-                        googleFonts.add(font.getString("family").trim());
-                    }
-                }
-            } catch (Exception e) {
-                FastLogger.logException(e);
-            }
-
-            Set<String> combined = new HashSet<>(systemFonts.size() + googleFonts.size());
-
-            combined.addAll(systemFonts);
-            combined.addAll(googleFonts);
-
-            List<String> allFonts = new ArrayList<>(combined);
-
-            Collections.sort(allFonts);
-
-            this.fonts = Collections.unmodifiableList(allFonts);
-        });
+        // Unused, for now.
     }
 
     @JavascriptGetter("chatPreferences")
