@@ -24,49 +24,52 @@
         <script>
             const videoElement = document.querySelector("video");
 
-            const peer = new Peer({
-                config: {
-                    iceServers: [
-                        //
-                        { urls: "stun:stun.l.google.com:19302" },
-                        { urls: "turn:ovh-2b116f94.casterlabs.co:3478", username: "casterlabs", password: "rox" }
-                    ],
-                    sdpSemantics: "unified-plan"
-                }
-            });
-            let currentCall;
+            let peer;
 
-            let fakeStream;
+            fetch("https://cdn.casterlabs.co/api.json")
+                .then((response) => response.json())
+                .then((apiInfo) => {
+                    peer = new Peer({
+                        config: {
+                            iceServers: apiInfo.ice_servers,
+                            sdpSemantics: "unified-plan"
+                        }
+                    });
+                    let currentCall;
 
-            videoElement.addEventListener("loadedmetadata", () => {
-                videoElement.style.opacity = 1;
-                videoElement.play();
-            });
+                    let fakeStream;
 
-            peer.on("call", (call) => {
-                if (currentCall) currentCall.close();
+                    videoElement.addEventListener("loadedmetadata", () => {
+                        videoElement.style.opacity = 1;
+                        videoElement.play();
+                    });
 
-                currentCall = call;
-                console.log("Call", call);
+                    peer.on("call", (call) => {
+                        if (currentCall) currentCall.close();
 
-                call.on("close", () => {
-                    console.log("Closed", call);
-                    videoElement.style.opacity = 0;
-                    currentCall = null;
-                });
+                        currentCall = call;
+                        console.log("Call", call);
 
-                currentCall.on("stream", (mediaStream) => {
-                    console.debug("Video: " + mediaStream);
-                    videoElement.style.opacity = 1;
-                    videoElement.srcObject = mediaStream;
-                });
+                        call.on("close", () => {
+                            console.log("Closed", call);
+                            videoElement.style.opacity = 0;
+                            currentCall = null;
+                        });
 
-                call.answer();
-            });
+                        currentCall.on("stream", (mediaStream) => {
+                            console.debug("Video: " + mediaStream);
+                            videoElement.style.opacity = 1;
+                            videoElement.srcObject = mediaStream;
+                        });
 
-            peer.on("open", (id) => {
-                Widget.emit("caller-id", id);
-            });
+                        call.answer();
+                    });
+
+                    peer.on("open", (id) => {
+                        Widget.emit("caller-id", id);
+                    });
+                })
+                .catch(location.reload);
         </script>
     </footer>
 </html>
