@@ -65,7 +65,7 @@ public class AppUI extends JavascriptObject {
                 Font[] allFonts = ge.getAllFonts();
 
                 for (Font font : allFonts) {
-                    systemFonts.add(font.getFamily().trim());
+                    systemFonts.add(font.getFontName().trim());
                 }
             } catch (Exception e) {
                 FastLogger.logException(e);
