@@ -24,7 +24,6 @@ import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public abstract class GenericGoal extends Widget implements KoiEventListener {
     private static String[] platforms;
@@ -104,10 +103,17 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
         {
             WidgetSettingsSection barGoal = new WidgetSettingsSection("goal", "Goal");
 
-            FastLogger.logStatic(currentStyle);;
+            boolean isRounded = this.settings().has("goal.rounded_edges") ? this.settings().getBoolean("goal.rounded_edges") : false;
 
             if (currentStyle.equals("Progress Bar (Without Text)")) {
-                barGoal.addItem(WidgetSettingsItem.asColor("bar_color", "Bar Color", "#31f8ff"));
+                barGoal
+                    .addItem(WidgetSettingsItem.asCheckbox("rounded_edges", "Rounded Edges", false))
+                    .addItem(WidgetSettingsItem.asColor("bar_color", "Bar Color", "#31f8ff"));
+
+                if (isRounded) {
+                    barGoal
+                        .addItem(WidgetSettingsItem.asNumber("roundness", "Roundess (px)", 20, 1, 0, 30));
+                }
             } else {
                 barGoal
                     .addItem(WidgetSettingsItem.asText("title", "Title", "", ""))
@@ -115,10 +121,15 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
                 if (currentStyle.equals("Progress Bar (With Text)")) {
                     barGoal
+                        .addItem(WidgetSettingsItem.asCheckbox("rounded_edges", "Rounded Edges", false))
                         .addItem(WidgetSettingsItem.asCheckbox("add_numbers", "Add Numbers", true))
                         .addItem(WidgetSettingsItem.asColor("bar_color", "Bar Color", "#31f8ff"));
-                }
 
+                    if (isRounded) {
+                        barGoal
+                            .addItem(WidgetSettingsItem.asNumber("roundness", "Roundess (px)", 20, 1, 0, 30));
+                    }
+                }
             }
 
             if (this.enableValueSetting()) {

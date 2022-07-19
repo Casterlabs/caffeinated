@@ -24,6 +24,7 @@
                 color: var(--text-color);
                 /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); */
                 --border-size: 5px;
+                border-radius: var(--roundness);
             }
 
             #goal-title {
@@ -43,6 +44,7 @@
                 overflow: hidden;
                 height: 28px;
                 align-items: center;
+                border-radius: var(--roundness);
             }
 
             #goal-progress-bar {
@@ -140,10 +142,17 @@
                 } else {
                     goalTitleCountElement.classList.add("hidden");
                 }
+                
+                let roundness = 0;
+                
+                if (Widget.getSetting("goal.rounded_edges")) {
+                    roundness = Widget.getSetting("goal.roundness");
+                }
 
                 document.body.style = //
                     `--bar-color: ${Widget.getSetting("goal.bar_color")};` + //
                     `--text-color: ${Widget.getSetting("style.text_color")};` + //
+                    `--roundness: ${roundness}px;` + //
                     `font-size: ${Widget.getSetting("style.font_size")}px;` + //
                     `text-align: ${(Widget.getSetting("style.text_align") || "left").toLowerCase()};`;
 
