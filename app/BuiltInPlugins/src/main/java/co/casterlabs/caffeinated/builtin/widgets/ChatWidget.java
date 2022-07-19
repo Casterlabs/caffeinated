@@ -6,6 +6,7 @@ import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
@@ -18,7 +19,7 @@ public class ChatWidget extends Widget {
         .withCategory(WidgetDetailsCategory.INTERACTION)
         .withFriendlyName("Chat Widget");
 
-    private static final WidgetSettingsLayout LAYOUT = new WidgetSettingsLayout()
+    private final WidgetSettingsLayout LAYOUT = new WidgetSettingsLayout()
         .addSection(
             new WidgetSettingsSection("chat_style", "Style")
                 .addItem(WidgetSettingsItem.asDropdown("chat_direction", "Chat Direction", "Down", "Down", "Up"))
@@ -30,12 +31,23 @@ public class ChatWidget extends Widget {
                 .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right"))
                 .addItem(WidgetSettingsItem.asCheckbox("show_user_badges", "Show User Badges", true))
                 .addItem(WidgetSettingsItem.asCheckbox("show_donations", "Show Donations", true))
-        );
+        )
 //        .addSection(
 //            new WidgetSettingsSection("moderation", "Moderation")
 //                .addItem(WidgetSettingsItem.asCheckbox("hide_bots", "Hide Bots", true))
 //                .addItem(WidgetSettingsItem.asCheckbox("hide_naughty_language", "Hide Naughty Language", true))
 //        );
+        .addButton(
+            new WidgetSettingsButton(
+                "clear-chat",
+                "x-circle",
+                "Clear Chat",
+                "Clear Chat",
+                () -> {
+                    this.broadcastToAll("clear");
+                }
+            )
+        );
 
     @Override
     public void onInit() {

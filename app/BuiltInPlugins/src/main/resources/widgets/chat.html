@@ -98,6 +98,10 @@
             Widget.broadcast("update");
         });
 
+        Widget.on("clear", () => {
+            chatDiv.innerHTML = "";
+        });
+
         Widget.on("update", () => {
             let shouldRedraw = false;
 
