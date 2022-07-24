@@ -428,15 +428,15 @@ public class Bootstrap implements Runnable {
         } else {
             switch (Platform.os) {
                 case LINUX:
-                    command = CaffeinatedApp.appDataDir + "/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
+                    command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
                     break;
 
                 case MACOSX:
-                    command = CaffeinatedApp.appDataDir + "/Casterlabs-Caffeinated";
+                    command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated";
                     break;
 
                 case WINDOWS:
-                    command = CaffeinatedApp.appDataDir + "/Casterlabs-Caffeinated.exe";
+                    command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated.exe";
                     break;
 
                 default:
