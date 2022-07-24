@@ -25,6 +25,8 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import lombok.NonNull;
 
 public class AppChatbot extends JavascriptObject {
+    public static final char SYMBOL = '!';
+
     @JavascriptValue(allowSet = false)
     private PreferenceFile<ChatbotPreferences> preferences;
 
@@ -160,7 +162,7 @@ public class AppChatbot extends JavascriptObject {
 
                     switch (command.getType()) {
                         case COMMAND:
-                            if (chatEvent.getMessage().startsWith('!' + command.getTrigger())) {
+                            if (chatEvent.getMessage().startsWith(SYMBOL + command.getTrigger())) {
                                 send = true;
                             }
                             break;
