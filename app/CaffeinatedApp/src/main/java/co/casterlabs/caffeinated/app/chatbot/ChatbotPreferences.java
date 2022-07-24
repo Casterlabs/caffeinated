@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -30,14 +31,13 @@ public class ChatbotPreferences {
     private KoiChatterType chatter = KoiChatterType.SYSTEM;
 
     public KoiChatterType getRealChatter() {
-        return KoiChatterType.SYSTEM; // TODO Temporary.
-//        boolean hasCasterlabsPlus = CaffeinatedApp.getInstance().hasCasterlabsPlus();
-//
-//        if (hasCasterlabsPlus) {
-//            return this.chatter;
-//        } else {
-//            return KoiChatterType.SYSTEM;
-//        }
+        boolean hasCasterlabsPlus = CaffeinatedApp.getInstance().hasCasterlabsPlus();
+
+        if (hasCasterlabsPlus) {
+            return this.chatter;
+        } else {
+            return KoiChatterType.SYSTEM;
+        }
     }
 
     @Data
