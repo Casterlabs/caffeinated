@@ -29,6 +29,10 @@
         Bridge.emit("app:restart");
     }
 
+    function restartWithConsole() {
+        Bridge.emit("app:restart_with_console");
+    }
+
     function prettifyString(str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
@@ -59,7 +63,10 @@
     </div>
     <br />
     <div class="field">
-        <button class="button is-fullwidth is-danger" on:click={restart}>Try to restart app with console window</button>
+        <button class="button is-fullwidth is-danger" on:click={restart}>Try to restart app</button>
+    </div>
+    <div class="field">
+        <button class="button is-fullwidth is-danger" on:click={restartWithConsole}>Try to restart app with console window</button>
     </div>
 </div>
 

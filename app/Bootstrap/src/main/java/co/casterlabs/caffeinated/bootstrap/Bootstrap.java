@@ -75,6 +75,8 @@ public class Bootstrap implements Runnable {
     }, description = "Disables colored output.")
     private boolean disableColor = false;
 
+    private static boolean restartWithConsole = false;
+
     private static FastLogger logger = new FastLogger();
 
     private static @Getter BuildInfo buildInfo;
@@ -337,6 +339,12 @@ public class Bootstrap implements Runnable {
                     shutdown(true, true, false);
                     return;
                 }
+
+                case "app:restart_with_console": {
+                    restartWithConsole = true;
+                    shutdown(true, true, false);
+                    return;
+                }
             }
         } catch (Throwable t) {
             logger.severe("Uncaught exception whilst processing bridge event:");
@@ -399,23 +407,50 @@ public class Bootstrap implements Runnable {
 
     @SneakyThrows
     private static void relaunch() {
-        String jvmArgs = String.join(" ", ManagementFactory.getRuntimeMXBean().getInputArguments());
-        String entry = System.getProperty("sun.java.command"); // Tested, present in OpenJDK and Oracle
-        String classpath = System.getProperty("java.class.path");
-        String javaHome = System.getProperty("java.home");
+        String command;
 
-        String[] args = entry.split(" ");
-        File entryFile = new File(args[0]);
+        if (buildInfo.isDev()) {
+            String jvmArgs = String.join(" ", ManagementFactory.getRuntimeMXBean().getInputArguments());
+            String entry = System.getProperty("sun.java.command"); // Tested, present in OpenJDK and Oracle
+            String classpath = System.getProperty("java.class.path");
+            String javaHome = System.getProperty("java.home");
 
-        if (entryFile.exists()) { // If the entry is a file, not a main method.
-            args[0] = '"' + entryFile.getCanonicalPath() + '"'; // Use raw file path.
+            String[] args = entry.split(" ");
+            File entryFile = new File(args[0]);
 
-            Runtime.getRuntime().exec(String.format("\"%s/bin/java\" %s -cp \"%s\" -jar %s", javaHome, jvmArgs, classpath, String.join(" ", args)));
+            if (entryFile.exists()) { // If the entry is a file, not a main method.
+                args[0] = '"' + entryFile.getCanonicalPath() + '"'; // Use raw file path.
+
+                command = String.format("\"%s/bin/java\" %s -cp \"%s\" -jar %s", javaHome, jvmArgs, classpath, String.join(" ", args));
+            } else {
+                command = String.format("\"%s/bin/java\" %s -cp \"%s\" %s", javaHome, jvmArgs, classpath, entry);
+            }
         } else {
-            Runtime.getRuntime().exec(String.format("\"%s/bin/java\" %s -cp \"%s\" %s", javaHome, jvmArgs, classpath, entry));
+            switch (Platform.os) {
+                case LINUX:
+                    command = CaffeinatedApp.appDataDir + "/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
+                    break;
+
+                case MACOSX:
+                    command = CaffeinatedApp.appDataDir + "/Casterlabs-Caffeinated";
+                    break;
+
+                case WINDOWS:
+                    command = CaffeinatedApp.appDataDir + "/Casterlabs-Caffeinated.exe";
+                    break;
+
+                default:
+                    return; // Compiler.
+            }
         }
 
-        FastLogger.logStatic("Relaunching!");
+        if (restartWithConsole) {
+            ConsoleUtil.startConsoleWindow(command);
+        } else {
+            Runtime.getRuntime().exec(command);
+        }
+
+        FastLogger.logStatic("Relaunching with command: %s", command);
         System.exit(0);
     }
 
