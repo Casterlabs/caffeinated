@@ -141,12 +141,14 @@ export function init({ initHandler, disconnectHandler }) {
             });
         },
 
-        sendChat(platform, message, chatter = "CLIENT") {
+        sendChat(platform, message, chatter = "CLIENT", replyTarget = null, isUserGesture = true) {
             conn.send("KOI", {
                 type: "MESSAGE",
                 platform: platform,
                 message: message,
-                chatter: chatter
+                chatter: chatter,
+                replyTarget: replyTarget,
+                isUserGesture: isUserGesture
             });
         },
 

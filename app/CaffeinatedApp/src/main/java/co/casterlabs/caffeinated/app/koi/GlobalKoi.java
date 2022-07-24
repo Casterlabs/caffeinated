@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.jetbrains.annotations.Nullable;
+
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.auth.AuthInstance;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
@@ -241,7 +243,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
     @JavascriptFunction
     @Override
-    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter) {
+    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
         if (message.startsWith("/koi test ")) {
             this.sendTest(
                 platform,
@@ -251,7 +253,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
 
             if (inst != null) {
-                inst.sendChat(message, chatter);
+                inst.sendChat(message, chatter, replyTarget, isUserGesture);
             }
         }
     }

@@ -85,9 +85,9 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         CaffeinatedApp.getInstance().getAuth().updateBridgeData();
     }
 
-    public void sendChat(@NonNull String message, @NonNull KoiChatterType chatter) {
+    public void sendChat(@NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
         if (this.isConnected()) {
-            this.koi.sendChat(message, chatter);
+            this.koi.sendChat(message, chatter, replyTarget, isUserGesture);
         }
     }
 

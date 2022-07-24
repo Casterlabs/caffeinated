@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.Nullable;
+
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.types.events.KoiEvent;
@@ -30,7 +32,7 @@ public interface Koi {
 
     public Map<UserPlatform, List<KoiIntegrationFeatures>> getFeatures();
 
-    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter);
+    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture);
 
     public void upvoteChat(@NonNull UserPlatform platform, @NonNull String messageId);
 

@@ -136,7 +136,8 @@ public class CamWidget extends Widget implements KinokoV1Listener {
             case "CHAT": {
                 UserPlatform platform = UserPlatform.valueOf(message.getString("platform"));
                 String text = message.getString("message");
-                Caffeinated.getInstance().getKoi().sendChat(platform, text, KoiChatterType.CLIENT);
+                String replyTarget = message.getString("replyTarget");
+                Caffeinated.getInstance().getKoi().sendChat(platform, text, KoiChatterType.CLIENT, replyTarget, true);
             }
 
             case "UPVOTE": {

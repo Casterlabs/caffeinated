@@ -47,9 +47,9 @@
     }
 
     function onChatSend({ detail: data }) {
-        const { platform, message } = data;
+        const { platform, message, replyTarget } = data;
 
-        Caffeinated.koi.sendChat(platform, message, "CLIENT");
+        Caffeinated.koi.sendChat(platform, message, "CLIENT", replyTarget, true);
     }
 
     function onModAction({ detail: modAction }) {

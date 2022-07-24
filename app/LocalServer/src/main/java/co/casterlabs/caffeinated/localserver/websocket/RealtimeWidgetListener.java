@@ -122,7 +122,16 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
                         case "MESSAGE": {
                             KoiChatterType chatter = Rson.DEFAULT.fromJson(data.get("chatter"), KoiChatterType.class);
-                            Caffeinated.getInstance().getKoi().sendChat(platform, data.getString("message"), chatter);
+                            String replyTarget = data.getString("replyTarget");
+                            boolean isUserGesture = data.getBoolean("isUserGesture");
+
+                            Caffeinated.getInstance().getKoi().sendChat(
+                                platform,
+                                data.getString("message"),
+                                chatter,
+                                replyTarget,
+                                isUserGesture
+                            );
                             return;
                         }
 

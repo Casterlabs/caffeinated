@@ -24,7 +24,7 @@ public class ChatbotPreferences {
     private int timerIntervalSeconds = 300;
     private boolean mentionInReply = true;
 
-    private KoiChatterType chatter = KoiChatterType.CLIENT;
+    private KoiChatterType chatter = KoiChatterType.SYSTEM;
 
     @Data
     @EqualsAndHashCode

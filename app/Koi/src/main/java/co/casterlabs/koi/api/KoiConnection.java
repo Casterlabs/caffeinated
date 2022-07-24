@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
@@ -232,12 +233,14 @@ public class KoiConnection implements Closeable {
 
     }
 
-    public void sendChat(@NonNull String message, @NonNull KoiChatterType chatter) {
+    public void sendChat(@NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
         this.socket.send(
             new JsonObject()
                 .put("type", "CHAT")
                 .put("message", message)
                 .put("chatter", chatter.name())
+                .put("replyTarget", replyTarget)
+                .put("isUserGesture", isUserGesture)
                 .toString()
         );
     }

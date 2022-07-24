@@ -66,7 +66,13 @@ public class AppChatbot extends JavascriptObject {
                         Koi koi = CaffeinatedApp.getInstance().getKoi();
 
                         for (UserPlatform platform : koi.getSignedInPlatforms()) {
-                            koi.sendChat(platform, text, this.preferences.get().getChatter());
+                            koi.sendChat(
+                                platform,
+                                text,
+                                this.preferences.get().getChatter(),
+                                null,
+                                false
+                            );
                         }
                     }
                 }
@@ -123,7 +129,13 @@ public class AppChatbot extends JavascriptObject {
                 if ((shout.getPlatform() == null) || (shout.getPlatform() == platform)) {
                     String message = String.format("@%s %s", target.getDisplayname(), shout.getText());
 
-                    CaffeinatedApp.getInstance().getKoi().sendChat(platform, message, this.preferences.get().getChatter());
+                    CaffeinatedApp.getInstance().getKoi().sendChat(
+                        platform,
+                        message,
+                        this.preferences.get().getChatter(),
+                        null,
+                        false
+                    );
                     break; // We still want to try to process it as a command.
                 }
             }
@@ -170,7 +182,13 @@ public class AppChatbot extends JavascriptObject {
                             message = command.getResponse();
                         }
 
-                        CaffeinatedApp.getInstance().getKoi().sendChat(platform, message, this.preferences.get().getChatter());
+                        CaffeinatedApp.getInstance().getKoi().sendChat(
+                            platform,
+                            message,
+                            this.preferences.get().getChatter(),
+                            chatEvent.getId(),
+                            false
+                        );
                         return; // Break the loop.
                     }
                 }
