@@ -251,6 +251,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         return this.UI.getPreferences().isEnableStupidlyUnsafeSettings();
     }
 
+    @JavascriptGetter("clientId")
+    private String caffeinatedClientId() {
+        return caffeinatedClientId;
+    }
+
     @Override
     public @Nullable CasterlabsAccount getCasterlabsAccount() {
         return this.auth.getCasterlabsAccount();

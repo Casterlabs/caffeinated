@@ -6,6 +6,8 @@
     let conductorKey = "";
     let conductorPort = "";
     let useBetaKoiPath = false;
+    let authInstances = [];
+    let caffeinatedClientId = "";
 
     onMount(async () => {
         const prefs = await Caffeinated.appPreferences;
@@ -14,6 +16,8 @@
         conductorKey = prefs.conductorKey;
         conductorPort = prefs.conductorPort;
         useBetaKoiPath = await Caffeinated.useBetaKoiPath;
+        caffeinatedClientId = await Caffeinated.clientId;
+        authInstances = Object.values(await Caffeinated.auth.authInstances);
     });
 
     function setUseBetaKoiPath() {
@@ -24,18 +28,27 @@
     function restart() {
         Bridge.emit("app:restart");
     }
+
+    function prettifyString(str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    }
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
 <div class="no-select developer-stuff">
-    <HiddenInput label="Api Key" bind:value={developerApiKey} />
-    <HiddenInput label="Conductor Key" bind:value={conductorKey} />
+    <HiddenInput label="Caffeinated Koi client ID" bind:value={caffeinatedClientId} />
+    <HiddenInput label="Your API key" bind:value={developerApiKey} />
+    <HiddenInput label="Widget key" bind:value={conductorKey} />
     <div class="field">
-        <label class="label">Conductor port</label>
+        <label class="label">Widget port</label>
         <div class="control">
             <input class="input" type="input" readonly value={conductorPort} />
         </div>
     </div>
+    {#each authInstances as auth}
+        <HiddenInput label={prettifyString(auth.userData.platform) + " token"} value={auth.token} />
+    {/each}
+    <br />
     <div class="field">
         <div class="control">
             <label class="checkbox label">
@@ -44,8 +57,6 @@
             </label>
         </div>
     </div>
-    <br />
-    <br />
     <br />
     <div class="field">
         <button class="button is-fullwidth is-danger" on:click={restart}>Try to restart app with console window</button>
