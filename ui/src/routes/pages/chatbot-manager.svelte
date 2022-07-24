@@ -24,23 +24,9 @@
     const SHOUT_EVENT_TYPES = ["DONATION", "FOLLOW", "RAID", "SUBSCRIPTION"];
 
     let currentTab = "COMMANDS";
-
-    let mentionSenderInReply = true;
-    let commands = [];
-    let shouts = [];
-    let timers = [];
-    let timerInterval = 90;
+    let preferences = null;
 
     function updatePreferences() {
-        const preferences = {
-            mentionInReply: mentionSenderInReply,
-            commands: commands,
-            shouts: shouts,
-            timers: timers,
-            timerInterval: timerInterval,
-            chatter: "CLIENT" // TODO
-        };
-
         Caffeinated.chatbot.preferences = preferences;
         console.log(preferences);
     }
@@ -48,14 +34,7 @@
     onMount(async () => {
         document.title = "Casterlabs Caffeinated - " + translate(App.get("language"), "chatbot_manager");
 
-        const preferences = await Caffeinated.chatbot.preferences;
-
-        commands = preferences.commands;
-        shouts = preferences.shouts;
-        timers = preferences.timers;
-        timerInterval = preferences.timerIntervalSeconds;
-        mentionSenderInReply = preferences.mentionInReply;
-        // chatter = preferences.chatter;
+        preferences = await Caffeinated.chatbot.preferences;
     });
 </script>
 
@@ -63,7 +42,7 @@
 <div style="margin: 15px;" on:change={updatePreferences}>
     <div class="tabs">
         <ul style="justify-content: center !important;">
-            {#each ["COMMANDS", "SHOUTS", "TIMERS"] as tab}
+            {#each ["COMMANDS", "SHOUTS", "TIMERS", "SETTINGS"] as tab}
                 {#if currentTab == tab}
                     <li class="is-active no-bottom">
                         <a>
@@ -84,17 +63,8 @@
     {#if currentTab == "COMMANDS"}
         <!-- <Commands> -->
         <!-- svelte-ignore a11y-label-has-associated-control -->
-        <label class="checkbox">
-            <LocalizedText key="chatbot_manager.commands.mention" slotMapping={["checkbox"]}>
-                <input slot="0" type="checkbox" bind:checked={mentionSenderInReply} />
-            </LocalizedText>
-        </label>
-
-        <br />
-        <br />
-
         <ul>
-            {#each commands as command}
+            {#each preferences.commands as command}
                 <li class="box">
                     <LocalizedText key="chatbot_manager.commands.format.{command.type}" slotMapping={["platform", "action", "action_target", "message"]}>
                         <div class="select" slot="0">
@@ -129,8 +99,8 @@
                     <a
                         class="item-delete has-text-danger"
                         on:click={() => {
-                            commands.splice(commands.indexOf(command), 1);
-                            commands = commands; // Trigger update.
+                            preferences.commands.splice(preferences.commands.indexOf(command), 1);
+                            preferences.commands = preferences.commands; // Trigger update.
                             updatePreferences();
                         }}
                     >
@@ -157,13 +127,13 @@
                     class="highlight-on-hover"
                     style="width: 100%; color: inherit; display: block; font-size: 1.5em;"
                     on:click={() => {
-                        commands.push({
+                        preferences.commands.push({
                             platform: null,
                             trigger: "casterlabs",
                             response: translate(App.get("language"), "chatbot_manager.example.command"),
                             type: "COMMAND"
                         });
-                        commands = commands; // Trigger update.
+                        preferences.commands = preferences.commands; // Trigger update.
                         updatePreferences();
                     }}
                 >
@@ -188,7 +158,7 @@
     {:else if currentTab == "SHOUTS"}
         <!-- <Shouts> -->
         <ul>
-            {#each shouts as shout}
+            {#each preferences.shouts as shout}
                 <li class="box">
                     <LocalizedText key="chatbot_manager.shouts.format" slotMapping={["platform", "action", "message"]}>
                         <div class="select" slot="0">
@@ -218,8 +188,8 @@
                     <a
                         class="item-delete has-text-danger"
                         on:click={() => {
-                            shouts.splice(shouts.indexOf(shout), 1);
-                            shouts = shouts; // Trigger update.
+                            preferences.shouts.splice(preferences.shouts.indexOf(shout), 1);
+                            preferences.shouts = preferences.shouts; // Trigger update.
                             updatePreferences();
                         }}
                     >
@@ -246,12 +216,12 @@
                     class="highlight-on-hover"
                     style="width: 100%; color: inherit; display: block; font-size: 1.5em;"
                     on:click={() => {
-                        shouts.push({
+                        preferences.shouts.push({
                             platform: null,
                             eventType: "FOLLOW",
                             text: translate(App.get("language"), "chatbot_manager.example.shout")
                         });
-                        shouts = shouts; // Trigger update.
+                        preferences.shouts = preferences.shouts; // Trigger update.
                         updatePreferences();
                     }}
                 >
@@ -277,19 +247,19 @@
         <!-- <Timers> -->
 
         <LocalizedText key="chatbot_manager.timers.format" slotMapping={["seconds"]}>
-            <input slot="0" class="input" type="number" bind:value={timerInterval} style="width: 75px;" />
+            <input slot="0" class="input" type="number" bind:value={preferences.timerInterval} style="width: 75px;" />
         </LocalizedText>
         <br />
         <ul>
-            {#each timers as text}
+            {#each preferences.timers as text}
                 <li>
                     <textarea class="textarea" bind:value={text} rows={2} />
 
                     <a
                         class="item-delete has-text-danger"
                         on:click={() => {
-                            timers.splice(timers.indexOf(text), 1);
-                            timers = timers; // Trigger update.
+                            preferences.timers.splice(preferences.timers.indexOf(text), 1);
+                            preferences.timers = preferences.timers; // Trigger update.
                             updatePreferences();
                         }}
                     >
@@ -316,8 +286,8 @@
                     class="highlight-on-hover"
                     style="width: 100%; color: inherit; display: block; font-size: 1.5em;"
                     on:click={() => {
-                        timers.push(translate(App.get("language"), "chatbot_manager.example.timer"));
-                        timers = timers; // Trigger update.
+                        preferences.timers.push(translate(App.get("language"), "chatbot_manager.example.timer"));
+                        preferences.timers = preferences.timers; // Trigger update.
                         updatePreferences();
                     }}
                 >
