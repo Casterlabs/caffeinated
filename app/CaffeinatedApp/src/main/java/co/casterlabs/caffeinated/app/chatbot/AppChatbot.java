@@ -174,13 +174,7 @@ public class AppChatbot extends JavascriptObject {
                     }
 
                     if (send) {
-                        String message;
-
-                        if (this.preferences.get().isMentionInReply()) {
-                            message = String.format("@%s %s", chatEvent.getSender().getDisplayname(), command.getResponse());
-                        } else {
-                            message = command.getResponse();
-                        }
+                        String message = command.getResponse();
 
                         CaffeinatedApp.getInstance().getKoi().sendChat(
                             platform,

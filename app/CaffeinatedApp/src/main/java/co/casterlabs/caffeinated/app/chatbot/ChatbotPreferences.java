@@ -22,7 +22,6 @@ public class ChatbotPreferences {
     private Set<Shout> shouts = new HashSet<>();
 
     private int timerIntervalSeconds = 300;
-    private boolean mentionInReply = true;
 
     private KoiChatterType chatter = KoiChatterType.SYSTEM;
 
