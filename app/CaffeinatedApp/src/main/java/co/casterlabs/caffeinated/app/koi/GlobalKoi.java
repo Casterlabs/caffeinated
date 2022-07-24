@@ -7,12 +7,15 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.auth.AuthInstance;
+import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
+import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -27,6 +30,7 @@ import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.events.CatchupEvent;
+import co.casterlabs.koi.api.types.events.ChatEvent;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
@@ -164,11 +168,53 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                 }
             }
         } else {
+            boolean chatBotResultedInAction = CaffeinatedApp.getInstance().getChatbot().processEvent(e);
+
+            // We don't want to silence donations. That's why we're not using instanceof
+            if (e.getType() == KoiEventType.CHAT) {
+                ChatbotPreferences prefs = CaffeinatedApp.getInstance().getChatbotPreferences().get();
+                ChatEvent event = (ChatEvent) e;
+
+                if (prefs.isHideCommandsFromChat()) {
+                    // Hide all command response messages.
+                    {
+                        Set<Command> commands = prefs.getCommands();
+
+                        for (ChatbotPreferences.Command command : commands) {
+                            if (command.getResponse().equals(event.getMessage())) {
+                                return;
+                            }
+                        }
+                    }
+
+                    // Hide !commands and "commands".
+                    if (chatBotResultedInAction) {
+                        return;
+                    }
+                }
+
+                // We want to hide all messages from listed chatbots.
+                {
+                    List<String> chatbots = prefs.getChatbots();
+
+                    for (String chatbot : chatbots) {
+                        if (chatbot.equals(event.getSender().getDisplayname())) {
+                            return;
+                        }
+                    }
+                }
+
+                if (prefs.isHideTimersFromChat()) {
+                    // Hide all timer messages.
+                    if (prefs.getTimers().contains(event.getMessage())) {
+                        return;
+                    }
+                }
+            }
+
             if (KEPT_EVENTS.contains(e.getType())) {
                 this.eventHistory.add(e);
             }
-
-            CaffeinatedApp.getInstance().getChatbot().processEvent(e);
 
             switch (e.getType()) {
 

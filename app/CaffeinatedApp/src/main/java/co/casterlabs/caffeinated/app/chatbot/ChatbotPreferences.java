@@ -23,7 +23,22 @@ public class ChatbotPreferences {
 
     private int timerIntervalSeconds = 300;
 
+    private List<String> chatbots = new ArrayList<>();
+    private boolean hideCommandsFromChat = false;
+    private boolean hideTimersFromChat = false;
+
     private KoiChatterType chatter = KoiChatterType.SYSTEM;
+
+    public KoiChatterType getRealChatter() {
+        return KoiChatterType.SYSTEM; // TODO Temporary.
+//        boolean hasCasterlabsPlus = CaffeinatedApp.getInstance().hasCasterlabsPlus();
+//
+//        if (hasCasterlabsPlus) {
+//            return this.chatter;
+//        } else {
+//            return KoiChatterType.SYSTEM;
+//        }
+    }
 
     @Data
     @EqualsAndHashCode

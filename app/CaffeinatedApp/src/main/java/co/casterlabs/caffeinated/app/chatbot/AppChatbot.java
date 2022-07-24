@@ -71,7 +71,7 @@ public class AppChatbot extends JavascriptObject {
                             koi.sendChat(
                                 platform,
                                 text,
-                                this.preferences.get().getChatter(),
+                                this.preferences.get().getRealChatter(),
                                 null,
                                 false
                             );
@@ -90,7 +90,9 @@ public class AppChatbot extends JavascriptObject {
     }
 
     // Accessed from Koi.
-    public void processEvent(KoiEvent e) {
+    public boolean processEvent(KoiEvent e) {
+        boolean resultedInAnAction = false;
+
         Set<Shout> shouts = this.preferences.get().getShouts();
 
         for (Shout shout : shouts) {
@@ -134,10 +136,12 @@ public class AppChatbot extends JavascriptObject {
                     CaffeinatedApp.getInstance().getKoi().sendChat(
                         platform,
                         message,
-                        this.preferences.get().getChatter(),
+                        this.preferences.get().getRealChatter(),
                         null,
                         false
                     );
+
+                    resultedInAnAction = true;
                     break; // We still want to try to process it as a command.
                 }
             }
@@ -181,15 +185,18 @@ public class AppChatbot extends JavascriptObject {
                         CaffeinatedApp.getInstance().getKoi().sendChat(
                             platform,
                             message,
-                            this.preferences.get().getChatter(),
+                            this.preferences.get().getRealChatter(),
                             chatEvent.getId(),
                             false
                         );
-                        return; // Break the loop.
+                        resultedInAnAction = true;
+                        break;
                     }
                 }
             }
         }
+
+        return resultedInAnAction;
     }
 
 }

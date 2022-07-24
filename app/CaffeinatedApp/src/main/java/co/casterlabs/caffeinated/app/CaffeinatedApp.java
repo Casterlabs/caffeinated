@@ -261,4 +261,15 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         return this.auth.getCasterlabsAccount();
     }
 
+    @JavascriptGetter("hasCasterlabsPlus")
+    public boolean hasCasterlabsPlus() {
+        CasterlabsAccount account = this.auth.getCasterlabsAccount();
+
+        if (account == null) {
+            return false;
+        }
+
+        return account.isHasCasterlabsPlus();
+    }
+
 }
