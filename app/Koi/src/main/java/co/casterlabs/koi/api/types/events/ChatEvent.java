@@ -4,6 +4,7 @@ import java.util.List;
 
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.annotating.JsonField;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,20 +14,22 @@ import lombok.ToString;
 @ToString
 @JsonClass(exposeAll = true)
 @EqualsAndHashCode(callSuper = true)
-public class ChatEvent extends KoiEvent {
-//    private Map<String, String> emotes;
+public class ChatEvent extends MessageMeta {
     private List<Mention> mentions;
     private List<String> links;
     private User sender;
     private String message;
     private String id;
+    @JsonField("meta_id")
+    private String metaId;
+//    private Map<String, String> emotes;
+//    @JsonField("external_emotes")
 //    private Map<String, Map<String, ExternalEmote>> externalEmotes;
 
     // TODO patch this.
     private JsonObject emotes;
+    @JsonField("external_emotes")
     private JsonObject externalEmotes;
-
-    private int upvotes = 0;
 
     @Override
     public KoiEventType getType() {

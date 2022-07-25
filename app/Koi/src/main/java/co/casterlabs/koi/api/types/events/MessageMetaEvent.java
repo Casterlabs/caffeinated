@@ -10,13 +10,9 @@ import lombok.ToString;
 @ToString
 @JsonClass(exposeAll = true)
 @EqualsAndHashCode(callSuper = true)
-public class MessageMetaEvent extends KoiEvent {
-    private String id;
-
-    @JsonField("is_visible")
-    private boolean visible = true;
-
-    private int upvotes;
+public class MessageMetaEvent extends MessageMeta {
+    @JsonField("meta_id")
+    private String metaId;
 
     @Override
     public KoiEventType getType() {
