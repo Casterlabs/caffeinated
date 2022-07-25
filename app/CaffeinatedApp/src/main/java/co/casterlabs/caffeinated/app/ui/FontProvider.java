@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.kaimen.util.platform.OperatingSystem;
 import co.casterlabs.kaimen.util.platform.Platform;
 import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.rakurai.io.IOUtil;
@@ -94,16 +93,30 @@ class SystemFontsProvider implements Provider {
         + "[void] [System.Reflection.Assembly]::LoadWithPartialName('System.Drawing'); "
         + "ConvertTo-Json (New-Object System.Drawing.Text.InstalledFontCollection).Families";
 
+    private static final String macCmd = "system_profiler SPFontsDataType | grep 'Full Name:'";
+
     @Override
     public List<String> listFonts() {
-        if (Platform.os == OperatingSystem.WINDOWS) {
-            try {
-                FastLogger.logStatic("Loading Windows System fonts.");
-                return this.listWindowsFonts();
-            } catch (Exception e) {
-                FastLogger.logException(e);
-                // Fall through and use Java's listing.
+        switch (Platform.os) {
+            case MACOSX: {
+                return this.listMacFonts();
             }
+
+            case WINDOWS: {
+
+                try {
+                    FastLogger.logStatic("Loading Windows System fonts.");
+                    return this.listWindowsFonts();
+                } catch (Exception e) {
+                    FastLogger.logException(e);
+                    // Fall through and use Java's listing.
+                    break;
+                }
+            }
+
+            default:
+                break;
+
         }
 
         List<String> fonts = new LinkedList<>();
@@ -121,6 +134,32 @@ class SystemFontsProvider implements Provider {
             }
         } catch (Exception e) {
             FastLogger.logException(e);
+        }
+
+        return fonts;
+    }
+
+    @SneakyThrows
+    private List<String> listMacFonts() {
+        List<String> fonts = new LinkedList<>();
+
+        String[] list = IOUtil.readInputStreamString(
+            Runtime
+                .getRuntime()
+                .exec(new String[] {
+                        "bash",
+                        "-c",
+                        macCmd
+                })
+                .getInputStream(),
+            StandardCharsets.UTF_8
+        )
+            .split("\n");
+
+        for (String item : list) {
+            String name = item.split("Full Name:")[1].trim();
+
+            fonts.add(name);
         }
 
         return fonts;
