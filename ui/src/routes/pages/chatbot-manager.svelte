@@ -23,6 +23,7 @@
 
     const SHOUT_EVENT_TYPES = ["DONATION", "FOLLOW", "RAID", "SUBSCRIPTION"];
     const CHATTERS = ["CLIENT", "SYSTEM"];
+    const FREE_CHATTER = "CLIENT"; // TODO Change to SYSTEM once Koi supports it.
 
     let currentTab = "COMMANDS";
 
@@ -327,18 +328,18 @@
                         on:click={() => {
                             // Disabled elements don't fire mouse events, but they do bubble.
                             if (!hasCasterlabsPlus) {
-                                window.Caffeinated.UI.showToast(translate(App.get("language"), "casterlabs_account.upgrade"), "PRIMARY");
+                                // window.Caffeinated.UI.showToast(translate(App.get("language"), "casterlabs_account.upgrade"), "PRIMARY"); // TODO Koi
                             }
                         }}
                     >
                         <select
                             bind:value={preferences.realChatter}
                             disabled={!hasCasterlabsPlus}
-                            title={hasCasterlabsPlus ? "" : translate(App.get("language"), "casterlabs_account.upgrade")}
+                            data-todo-title={hasCasterlabsPlus ? "" : translate(App.get("language"), "casterlabs_account.upgrade")}
                         >
                             {#each CHATTERS as chatter}
                                 <option value={chatter}>
-                                    <LocalizedText key="chatbot_manager.settings.sender.{hasCasterlabsPlus ? chatter : 'SYSTEM'}" />
+                                    <LocalizedText key="chatbot_manager.settings.sender.{hasCasterlabsPlus ? chatter : FREE_CHATTER}" />
                                 </option>
                             {/each}
                         </select>
