@@ -149,7 +149,7 @@ public class CamWidget extends Widget implements KinokoV1Listener {
             case "DELETE": {
                 UserPlatform platform = UserPlatform.valueOf(message.getString("platform"));
                 String messageId = message.getString("messageId");
-                Caffeinated.getInstance().getKoi().deleteChat(platform, messageId);
+                Caffeinated.getInstance().getKoi().deleteChat(platform, messageId, true);
             }
 
         }

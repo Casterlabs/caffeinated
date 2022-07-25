@@ -116,7 +116,8 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
                         case "DELETE": {
                             String messageId = data.getString("messageId");
-                            Caffeinated.getInstance().getKoi().deleteChat(platform, messageId);
+                            boolean isUserGesture = data.getBoolean("isUserGesture");
+                            Caffeinated.getInstance().getKoi().deleteChat(platform, messageId, isUserGesture);
                             return;
                         }
 

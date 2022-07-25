@@ -239,8 +239,8 @@ public class KoiConnection implements Closeable {
                 .put("type", "CHAT")
                 .put("message", message)
                 .put("chatter", chatter.name())
-                .put("replyTarget", replyTarget)
-                .put("isUserGesture", isUserGesture)
+                .put("reply_target", replyTarget)
+                .put("is_user_gesture", isUserGesture)
                 .toString()
         );
     }
@@ -254,11 +254,12 @@ public class KoiConnection implements Closeable {
         );
     }
 
-    public void deleteChat(@NonNull String messageId) {
+    public void deleteChat(@NonNull String messageId, boolean isUserGesture) {
         this.socket.send(
             new JsonObject()
                 .put("type", "DELETE")
                 .put("message_id", messageId)
+                .put("is_user_gesture", isUserGesture)
                 .toString()
         );
     }

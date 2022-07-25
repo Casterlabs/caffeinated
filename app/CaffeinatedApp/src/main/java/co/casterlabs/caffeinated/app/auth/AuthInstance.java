@@ -97,9 +97,9 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         }
     }
 
-    public void deleteChat(@NonNull String messageId) {
+    public void deleteChat(@NonNull String messageId, boolean isUserGesture) {
         if (this.isConnected()) {
-            this.koi.deleteChat(messageId);
+            this.koi.deleteChat(messageId, isUserGesture);
         }
     }
 

@@ -36,7 +36,7 @@ public interface Koi {
 
     public void upvoteChat(@NonNull UserPlatform platform, @NonNull String messageId);
 
-    public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId);
+    public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId, boolean isUserGesture);
 
     /**
      * @deprecated This is used internally.

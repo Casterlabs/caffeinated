@@ -133,11 +133,12 @@ export function init({ initHandler, disconnectHandler }) {
             });
         },
 
-        deleteChat(platform, messageId) {
+        deleteChat(platform, messageId, isUserGesture = true) {
             conn.send("KOI", {
                 type: "DELETE",
                 platform: platform,
-                messageId: messageId
+                messageId: messageId,
+                isUserGesture: isUserGesture
             });
         },
 

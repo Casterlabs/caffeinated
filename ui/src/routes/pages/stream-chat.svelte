@@ -101,7 +101,7 @@
             }
 
             case "delete": {
-                Caffeinated.koi.deleteChat(platform, event.id);
+                Caffeinated.koi.deleteChat(platform, event.id, true);
                 return;
             }
 

@@ -316,11 +316,11 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
     @JavascriptFunction
     @Override
-    public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId) {
+    public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId, boolean isUserGesture) {
         AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
 
         if (inst != null) {
-            inst.deleteChat(messageId);
+            inst.deleteChat(messageId, isUserGesture);
         }
     }
 
