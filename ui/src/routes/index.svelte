@@ -11,6 +11,12 @@
 
     let logo = "casterlabs";
     let mikeysModeEnabled = false;
+    let hasBetaKoiEnabled = false;
+
+    function disableBetaKoi() {
+        Caffeinated.useBetaKoiPath = false;
+        Bridge.emit("app:restart");
+    }
 
     onMount(async () => {
         document.title = "";
@@ -18,6 +24,7 @@
 
         logo = icon;
         mikeysModeEnabled = mikeysMode;
+        hasBetaKoiEnabled = await Caffeinated.useBetaKoiPath;
 
         setTimeout(Caffeinated.UI.onUILoaded, mikeysMode ? (120 + 15) * 1000 /* 2m15s */ : 150);
     });
@@ -38,6 +45,12 @@
 
         {#if mikeysModeEnabled}
             <div id="mikeys">Enjoy your <a href="https://eatmikeys.com/" rel="external">Mikey's</a> :^)</div>
+        {/if}
+
+        {#if hasBetaKoiEnabled}
+            <br />
+            <!-- svelte-ignore a11y-missing-attribute -->
+            <small> Having connection issues? Try <a on:click={disableBetaKoi}>disabling the Koi beta.</a></small>
         {/if}
     </div>
 </div>
