@@ -23,7 +23,7 @@
 
     const SHOUT_EVENT_TYPES = ["DONATION", "FOLLOW", "RAID", "SUBSCRIPTION"];
     const CHATTERS = ["CLIENT", "SYSTEM"];
-    const FREE_CHATTER = "CLIENT"; // TODO Change to SYSTEM once Koi supports it.
+    const FREE_CHATTER = "SYSTEM";
 
     let currentTab = "COMMANDS";
 
