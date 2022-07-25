@@ -34,7 +34,9 @@ public class TrayHandler {
     public static boolean tryCreateTray(Webview webview) {
         if (tray == null) {
             // Check the SystemTray support
-            if (!SystemTray.isSupported() || (Platform.os == OperatingSystem.MACOSX)) {
+            if ((Platform.os == OperatingSystem.MACOSX) || !SystemTray.isSupported()) {
+                // Note that calling SystemTray will cause an AWT thread lock. So we always need
+                // to be diligent and check for platform before compat.
                 return false;
             }
 
