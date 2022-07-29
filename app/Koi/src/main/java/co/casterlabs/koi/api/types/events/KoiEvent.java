@@ -1,6 +1,6 @@
 package co.casterlabs.koi.api.types.events;
 
-import co.casterlabs.koi.api.types.user.User;
+import co.casterlabs.koi.api.types.user.SimpleProfile;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
 import lombok.EqualsAndHashCode;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @JsonClass(exposeAll = true)
 public abstract class KoiEvent {
-    protected User streamer;
+    protected SimpleProfile streamer;
 
     @JsonField("event_type")
     protected final KoiEventType type = this.getType(); // For RSON.

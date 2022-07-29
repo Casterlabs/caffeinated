@@ -14,9 +14,15 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class RoomstateEvent extends KoiEvent {
 
+    /**
+     * This is for the deserializer.
+     */
     @Deprecated
     public RoomstateEvent() {}
 
+    /**
+     * Used internally to populate a blank roomstate.
+     */
     @Deprecated
     public RoomstateEvent(@NonNull User user) {
         this.streamer = user;

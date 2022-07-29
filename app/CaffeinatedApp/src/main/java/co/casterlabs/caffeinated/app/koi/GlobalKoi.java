@@ -283,7 +283,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             LogLevel.DEBUG,
             "Processed %s event for %s.",
             e.getType().name().toLowerCase().replace('_', ' '),
-            e.getStreamer().getDisplayname()
+            e.getStreamer().getUPID()
         );
     }
 

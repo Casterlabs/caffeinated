@@ -10,12 +10,10 @@ import lombok.ToString;
 @Getter
 @ToString
 @JsonClass(exposeAll = true)
-public class User {
+public class User extends SimpleProfile {
     private List<UserRoles> roles;
 
     private List<String> badges;
-
-    private UserPlatform platform;
 
     private String color;
 
@@ -25,15 +23,7 @@ public class User {
 
     private String bio;
 
-    private String id;
-
-    @JsonField("UPID")
-    private String upid;
-
     private String link;
-
-    @JsonField("channel_id")
-    private String channelId = "";
 
     @JsonField("image_link")
     private String imageLink;
@@ -43,10 +33,6 @@ public class User {
 
     @JsonField("subscriber_count")
     private long subCount = -1;
-
-    public SimpleProfile getSimpleProfile() {
-        return new SimpleProfile(this.id, this.channelId, this.platform);
-    }
 
     public static enum UserRoles {
         BROADCASTER,
