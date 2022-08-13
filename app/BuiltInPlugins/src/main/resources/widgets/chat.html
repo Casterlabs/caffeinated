@@ -33,11 +33,21 @@
             padding-left: 0.5ch;
         }
         
-        .badge {
+        .badge-before,
+        .badge-after {
             padding-left: 0.25ch;
         }
         
-        .hide-badges .badge {
+        .hide-badges .badge-before,
+        .hide-badges .badge-after {
+            display: none;
+        }
+        
+        .show-badges-before .badge-after {
+            display: none;
+        }
+        
+        body:not(.show-badges-before) .badge-before {
             display: none;
         }
         /* Upvotes */
@@ -126,10 +136,20 @@
                 document.body.classList.remove("right-align");
             }
 
-            if (Widget.getSetting("chat_style.show_user_badges")) {
-                document.body.classList.remove("hide-badges");
-            } else {
-                document.body.classList.add("hide-badges");
+            switch (Widget.getSetting("chat_style.badges").toLowerCase()) {
+                case "hidden":
+                    document.body.classList.add("hide-badges");
+                    break;
+
+                case "before username":
+                    document.body.classList.remove("hide-badges");
+                    document.body.classList.add("show-badges-before");
+                    break;
+
+                case "after username":
+                    document.body.classList.remove("hide-badges");
+                    document.body.classList.remove("show-badges-before");
+                    break;
             }
 
             if (Widget.getSetting("chat_style.show_donations")) {
@@ -220,30 +240,44 @@
         function createChatMessageElement(event) {
             const div = document.createElement("div");
 
+            // User
             const user = document.createElement("span");
             user.innerText = event.sender.displayname;
             user.classList = "username";
             user.style = "color: " + event.sender.color + ";";
+
+            event.sender.badges.forEach((badge) => {
+                let badgeIcon = document.createElement("img");
+
+                badgeIcon.src = badge;
+                badgeIcon.classList = "badge-before";
+
+                div.appendChild(badgeIcon);
+            });
+
             div.appendChild(user);
 
             event.sender.badges.forEach((badge) => {
                 let badgeIcon = document.createElement("img");
 
                 badgeIcon.src = badge;
-                badgeIcon.classList = "badge";
+                badgeIcon.classList = "badge-after";
 
                 div.appendChild(badgeIcon);
             });
 
+            // Message Contents
             const msg = document.createElement("span");
             msg.classList = "message";
             msg.innerHTML = event.html;
             div.appendChild(msg);
 
+            // Upvotes
             const counter = document.createElement("sup");
             counter.setAttribute("data-meta-id", event.meta_id);
             div.appendChild(counter);
 
+            // Donations
             if (event.donations.length > 0) {
                 div.classList.add("donation");
 
