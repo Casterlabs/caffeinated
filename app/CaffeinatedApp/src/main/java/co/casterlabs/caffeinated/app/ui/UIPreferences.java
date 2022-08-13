@@ -3,6 +3,8 @@ package co.casterlabs.caffeinated.app.ui;
 import java.util.Calendar;
 
 import co.casterlabs.caffeinated.util.MiscUtil;
+import co.casterlabs.kaimen.util.platform.OperatingSystem;
+import co.casterlabs.kaimen.util.platform.Platform;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Data;
 
@@ -12,7 +14,7 @@ public class UIPreferences {
     private static final String CURRENT_SKITTLE = MiscUtil.random("green_skittle", "orange_skittle", "purple_skittle", "red_skittle", "yellow_skittle");
     private static final boolean IS_PRIDE_MONTH = Calendar.getInstance().get(Calendar.MONTH) == Calendar.JUNE;
 
-    private String emojiProvider = "system";
+    private String emojiProvider = Platform.os == OperatingSystem.MACOSX ? "system" : "twemoji"; // Use system emojis by default on macOS, Twemoji elsewhere.
     private String icon = "casterlabs";
     private String theme = "co.casterlabs.dark";
     private String language = "en-US";
