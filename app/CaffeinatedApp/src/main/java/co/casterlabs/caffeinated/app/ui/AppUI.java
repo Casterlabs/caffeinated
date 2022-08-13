@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.app.ui;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
@@ -12,12 +13,17 @@ import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
 import co.casterlabs.caffeinated.app.ui.events.AppearanceUpdateEvent;
+import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.kaimen.app.App;
+import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
+import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
@@ -67,6 +73,26 @@ public class AppUI extends JavascriptObject {
         uiPrefs.setLanguage(event.getLanguage());
         uiPrefs.setEnableStupidlyUnsafeSettings(event.isEnableStupidlyUnsafeSettings());
         this.preferenceFile.save();
+
+        // Broadcast to the plugins.
+        new AsyncTask(() -> {
+            try {
+                JsonObject preferences = (JsonObject) Rson.DEFAULT.toJson(this.preferences);
+
+                // Send the events to the widget instances.
+                for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPlugins().getLoadedPlugins()) {
+                    for (Widget widget : plugin.getWidgets()) {
+                        for (WidgetInstance instance : widget.getWidgetInstances()) {
+                            try {
+                                instance.onAppearanceUpdate(preferences);
+                            } catch (IOException ignored) {}
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         this.updateIcon();
 

@@ -1,5 +1,6 @@
 import Currencies from "./currencies.mjs";
 import Conn from "./conn.mjs";
+import App from "./app.mjs";
 import EventHandler from "./eventHandler.mjs";
 
 const queryParams = (() => {
@@ -11,27 +12,6 @@ const queryParams = (() => {
 
     return vars;
 })();
-
-let currentTheme = { appearance: "FOLLOW_SYSTEM", name: "System", isAuto: true, id: "system" };
-
-const AppContext = {
-    ...new EventHandler(),
-
-    get currentTheme() {
-        return currentTheme;
-    }
-};
-
-window.addEventListener(
-    "message",
-    (event) => {
-        if (typeof event.data == "object" && event.data.call == "theme") {
-            currentTheme = event.data.value;
-            AppContext.broadcast("theme-update", currentTheme);
-        }
-    },
-    false
-);
 
 const { pluginId, widgetId, authorization } = queryParams;
 const port = queryParams.port || "8092";
@@ -207,7 +187,8 @@ export function init({ initHandler, disconnectHandler }) {
 
     // Listen for events on the conn, fire them off, yeah you get the idea.
     conn.on("init", () => {
-        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, AppContext })) {
+        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App })) {
+            App.init();
             widgetInstance.broadcast("init");
             koiInstance.broadcast("koi_statics", koi_statics);
             conn.send("READY", {});
@@ -236,6 +217,12 @@ export function init({ initHandler, disconnectHandler }) {
         deepFreeze(music);
         music_data = music;
         musicInstance.broadcast("music", music_data);
+    });
+
+    conn.on("appearance", ({ language, emojiProvider, theme }) => {
+        App.mutate("language", language);
+        App.mutate("emojiProvider", emojiProvider);
+        App.mutate("theme", theme);
     });
 
     // We completely reset the widget everytime it loses connection.
@@ -276,8 +263,8 @@ export function init({ initHandler, disconnectHandler }) {
         writable: false,
         configurable: true
     });
-    Object.defineProperty(window, "AppContext", {
-        value: AppContext,
+    Object.defineProperty(window, "App", {
+        value: App,
         writable: false,
         configurable: true
     });

@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.localserver.websocket;
 
 import java.io.IOException;
 
+import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -76,6 +77,11 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
         this.sendMessage(
             "MUSIC",
             Caffeinated.getInstance().getMusic().toJson()
+        );
+
+        this.sendMessage(
+            "APPEARANCE",
+            (JsonObject) Rson.DEFAULT.toJson(CaffeinatedApp.getInstance().getUI().getPreferences())
         );
 
         this.sendMessage(
@@ -269,6 +275,14 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
             sendMessage(
                 "MUSIC",
                 music
+            );
+        }
+
+        @Override
+        public void onAppearanceUpdate(@NonNull JsonObject preferences) throws IOException {
+            sendMessage(
+                "APPEARANCE",
+                preferences
             );
         }
 

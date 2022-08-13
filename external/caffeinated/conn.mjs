@@ -1,7 +1,6 @@
 import EventHandler from "./eventHandler.mjs";
 
 export default class Conn {
-
     constructor(address) {
         this.address = address;
 
@@ -15,10 +14,12 @@ export default class Conn {
 
     send(type, payload) {
         if (this.isAlive()) {
-            this.ws.send(JSON.stringify({
-                type: type,
-                data: payload
-            }));
+            this.ws.send(
+                JSON.stringify({
+                    type: type,
+                    data: payload
+                })
+            );
         }
     }
 
@@ -37,7 +38,7 @@ export default class Conn {
 
             this.ws.onerror = () => {
                 this.broadcast("close");
-            }
+            };
 
             this.ws.onopen = () => {
                 this.broadcast("open");
@@ -47,53 +48,66 @@ export default class Conn {
                 this.broadcast("close");
             };
 
-            this.ws.onmessage = async (raw) => {
+            this.ws.onmessage = async(raw) => {
                 const payload = JSON.parse(raw.data);
 
                 switch (payload.type) {
-                    case "ERROR": {
-                        this.broadcast("error", payload);
-                        return;
-                    }
+                    case "ERROR":
+                        {
+                            this.broadcast("error", payload);
+                            return;
+                        }
 
-                    case "PING": {
-                        this.send("PONG", {});
-                        return;
-                    }
+                    case "PING":
+                        {
+                            this.send("PONG", {});
+                            return;
+                        }
 
-                    case "INIT": {
-                        this.connectionId = payload.data.connectionId;
-                        this.widgetData = payload.data.widget;
-                        this.broadcast("init");
-                        return;
-                    }
+                    case "INIT":
+                        {
+                            this.connectionId = payload.data.connectionId;
+                            this.widgetData = payload.data.widget;
+                            this.broadcast("init");
+                            return;
+                        }
 
-                    case "UPDATE": {
-                        this.widgetData = payload.data.widget;
-                        this.broadcast("update");
-                        return;
-                    }
+                    case "UPDATE":
+                        {
+                            this.widgetData = payload.data.widget;
+                            this.broadcast("update");
+                            return;
+                        }
 
-                    case "EMISSION": {
-                        this.broadcast("emission", payload.data);
-                        return;
-                    }
+                    case "EMISSION":
+                        {
+                            this.broadcast("emission", payload.data);
+                            return;
+                        }
 
-                    case "KOI_STATICS": {
-                        this.broadcast("koi_statics", payload.data);
-                        return;
-                    }
+                    case "KOI_STATICS":
+                        {
+                            this.broadcast("koi_statics", payload.data);
+                            return;
+                        }
 
-                    case "KOI": {
-                        this.broadcast("koi", payload.data);
-                        return;
-                    }
+                    case "KOI":
+                        {
+                            this.broadcast("koi", payload.data);
+                            return;
+                        }
 
-                    case "MUSIC": {
-                        this.broadcast("music", payload.data);
-                        return;
-                    }
+                    case "MUSIC":
+                        {
+                            this.broadcast("music", payload.data);
+                            return;
+                        }
 
+                    case "APPEARANCE":
+                        {
+                            this.broadcast("appearance", payload.data);
+                            return;
+                        }
                 }
             };
         } catch (e) {
@@ -102,7 +116,7 @@ export default class Conn {
     }
 
     isAlive() {
-        return this.ws && (this.ws.readyState == WebSocket.OPEN);
+        return this.ws && this.ws.readyState == WebSocket.OPEN;
     }
 
     close() {
@@ -110,5 +124,4 @@ export default class Conn {
             this.ws.close();
         }
     }
-
 }

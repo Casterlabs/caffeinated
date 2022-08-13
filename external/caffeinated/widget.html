@@ -26,7 +26,7 @@
 
             let sandboxFrame;
 
-            function initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, AppContext }) {
+            function initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App }) {
                 sandboxFrame = document.createElement("iframe");
                 sandboxFrame.src = "./sandbox.html";
 
@@ -61,8 +61,8 @@
                             writable: false,
                             configurable: false
                         });
-                        Object.defineProperty(contentWindow, "AppContext", {
-                            value: AppContext,
+                        Object.defineProperty(contentWindow, "App", {
+                            value: App,
                             writable: false,
                             configurable: false
                         });
@@ -88,6 +88,7 @@
                         // The load event will be fired again after the widget html has loaded
                         // and non-module javascript has executed.
                         loadState++;
+                        App.init(contentDocument);
                         widgetInstance.broadcast("init");
                         koiInstance.broadcast("koi_statics", koi_statics);
                         conn.send("READY", {});
