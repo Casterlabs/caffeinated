@@ -11,7 +11,7 @@
     import InputContentRating from "./input-content-rating.svelte";
     import InputThumbnail from "./input-thumbnail.svelte";
 
-    const PLATFORMS = ["CAFFEINE", "TWITCH", "TROVO"]; // The only ones supported.
+    const PLATFORMS = ["CAFFEINE", "TROVO"]; // The only ones supported.
 
     let accounts = [];
 
