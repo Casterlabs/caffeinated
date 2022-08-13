@@ -17,9 +17,6 @@
     });
 
     let widget = null;
-    let frame = null;
-
-    let _currentTheme = null;
 
     onDestroy(() => {
         for (const un of unregister) {
@@ -27,15 +24,9 @@
                 Bridge.off(un[0], un[1]);
             } catch (ignored) {}
         }
-
-        // window?.removeEventListener("message", onPostMessage);
     });
 
     onMount(() => {
-        window.addEventListener("message", onPostMessage);
-
-        unregister.push(Caffeinated.themeManager.mutate("currentTheme", updateTheme));
-
         async function waitForLoad() {
             if (location.href.includes("?dock=")) {
                 const widgets = await Caffeinated.plugins.widgets;
@@ -55,28 +46,11 @@
         }
         waitForLoad();
     });
-
-    function onPostMessage(event) {
-        if (typeof event.data == "object" && event.data.call == "init" && event.data.value == widget?.id) {
-            sendFrameData(event.source);
-        }
-    }
-
-    function updateTheme(d) {
-        _currentTheme = d;
-        if (frame) {
-            sendFrameData();
-        }
-    }
-
-    function sendFrameData(t = frame.contentWindow) {
-        t.postMessage({ call: "theme", value: _currentTheme }, "*");
-    }
 </script>
 
 {#if widget}
     <div id="widget-demo">
-        <iframe bind:this={frame} src="{widget.url}&address=127.0.0.1" title="" />
+        <iframe src="{widget.url}&address=127.0.0.1" title="" />
     </div>
 {/if}
 
