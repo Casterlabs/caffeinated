@@ -10,6 +10,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * @Deprecated use {@link RichMessageEvent}
+ */
+@Deprecated
 @Getter
 @ToString
 @JsonClass(exposeAll = true)

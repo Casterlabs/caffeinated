@@ -10,7 +10,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSectio
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.DonationEvent;
-import co.casterlabs.koi.api.types.events.DonationEvent.Donation;
+import co.casterlabs.koi.api.types.events.rich.Donation;
 
 public class DonationAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()

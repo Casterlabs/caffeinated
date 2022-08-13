@@ -7,6 +7,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @AllArgsConstructor
+@SuppressWarnings("deprecation")
 public enum KoiEventType {
     // @formatter:off
     FOLLOW               (FollowEvent.class),
@@ -24,7 +25,9 @@ public enum KoiEventType {
     CATCHUP              (CatchupEvent.class),
     CLEARCHAT            (ClearChatEvent.class),
     ROOMSTATE            (RoomstateEvent.class),
-    PLATFORM_MESSAGE     (PlatformMessageEvent.class);
+    PLATFORM_MESSAGE     (PlatformMessageEvent.class), 
+    RICH_MESSAGE         (RichMessageEvent.class),
+    ;
     // @formatter:on
 
     private Class<? extends KoiEvent> eventClass;

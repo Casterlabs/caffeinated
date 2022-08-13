@@ -20,7 +20,7 @@ import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.DonationEvent;
-import co.casterlabs.koi.api.types.events.DonationEvent.Donation;
+import co.casterlabs.koi.api.types.events.rich.Donation;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;

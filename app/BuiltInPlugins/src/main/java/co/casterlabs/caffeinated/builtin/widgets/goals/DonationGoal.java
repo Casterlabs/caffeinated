@@ -12,7 +12,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSectio
 import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.DonationEvent;
-import co.casterlabs.koi.api.types.events.DonationEvent.Donation;
+import co.casterlabs.koi.api.types.events.rich.Donation;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class DonationGoal extends GenericGoal {

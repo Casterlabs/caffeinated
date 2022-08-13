@@ -26,6 +26,7 @@ import co.casterlabs.rakurai.json.annotating.JsonField;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
@@ -61,7 +62,13 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
             "wss://api.casterlabs.co/beta/v2/koi" : "wss://api.casterlabs.co/v2/koi";
 
         FastLogger koiLogger = new FastLogger("AuthInstance Koi");
-        koiLogger.setCurrentLevel(LogLevel.INFO);
+
+        if (FastLoggingFramework.getDefaultLevel() == LogLevel.TRACE) {
+            koiLogger.setCurrentLevel(LogLevel.TRACE);
+        } else {
+            koiLogger.setCurrentLevel(LogLevel.INFO);
+        }
+
         this.koi = new KoiConnection(
             koiUrl,
             koiLogger,

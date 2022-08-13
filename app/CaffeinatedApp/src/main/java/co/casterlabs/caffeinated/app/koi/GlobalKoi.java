@@ -50,8 +50,6 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHandler {
     private static final List<KoiEventType> KEPT_EVENTS = Arrays.asList(
         KoiEventType.FOLLOW,
-        KoiEventType.CHAT,
-        KoiEventType.DONATION,
         KoiEventType.SUBSCRIPTION,
         KoiEventType.META,
         KoiEventType.VIEWER_JOIN,
@@ -59,7 +57,12 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         KoiEventType.RAID,
         KoiEventType.CHANNEL_POINTS,
         KoiEventType.CLEARCHAT,
-        KoiEventType.PLATFORM_MESSAGE
+        KoiEventType.PLATFORM_MESSAGE,
+        KoiEventType.RICH_MESSAGE,
+
+        // Deprecated
+        KoiEventType.CHAT,
+        KoiEventType.DONATION
     );
 
     private List<KoiLifeCycleHandler> koiEventListeners = new LinkedList<>();
