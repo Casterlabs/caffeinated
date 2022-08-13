@@ -150,8 +150,7 @@
             let div;
 
             switch (event.event_type) {
-                case "DONATION":
-                case "CHAT":
+                case "RICH_MESSAGE":
                     div = createChatMessageElement(event);
                     break;
 
@@ -220,25 +219,11 @@
 
         function createChatMessageElement(event) {
             const div = document.createElement("div");
-            const msg = document.createElement("span");
-            const user = document.createElement("span");
-            const counter = document.createElement("sup");
 
+            const user = document.createElement("span");
             user.innerText = event.sender.displayname;
             user.classList = "username";
             user.style = "color: " + event.sender.color + ";";
-
-            event.message = escapeHtml(event.message);
-
-            for (const [name, link] of Object.entries(event.emotes)) {
-                event.message = event.message.split(name).join(`<img title="${name}" src="${link}" />`);
-            }
-
-            msg.classList = "message";
-            msg.innerHTML = event.message + " ";
-
-            counter.setAttribute("data-meta-id", event.meta_id);
-
             div.appendChild(user);
 
             event.sender.badges.forEach((badge) => {
@@ -250,10 +235,16 @@
                 div.appendChild(badgeIcon);
             });
 
+            const msg = document.createElement("span");
+            msg.classList = "message";
+            msg.innerHTML = event.html;
             div.appendChild(msg);
+
+            const counter = document.createElement("sup");
+            counter.setAttribute("data-meta-id", event.meta_id);
             div.appendChild(counter);
 
-            if (event.donations) {
+            if (event.donations.length > 0) {
                 div.classList.add("donation");
 
                 event.donations.forEach((donation) => {
