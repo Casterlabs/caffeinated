@@ -11,6 +11,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.util.Crypto;
 import co.casterlabs.koi.api.KoiChatterType;
@@ -31,8 +32,6 @@ public class CamWidget extends Widget implements KinokoV1Listener {
         .withCategory(WidgetDetailsCategory.OTHER)
         .withShowDemo(true, 3 / 4d)
         .withFriendlyName("Cam Widget");
-
-    private static final WidgetSettingsLayout LAYOUT = new WidgetSettingsLayout();
 
     private KinokoV1Connection kinoko = new KinokoV1Connection(this);
     private String channelId;
@@ -57,7 +56,20 @@ public class CamWidget extends Widget implements KinokoV1Listener {
             }
         });
 
-        this.setSettingsLayout(LAYOUT);
+        this.setSettingsLayout(
+            new WidgetSettingsLayout()
+                .addButton(
+                    new WidgetSettingsButton("copy-link")
+                        .withIcon("video")
+                        .withIconTitle("Copy Camera Link")
+                        .withOnClick(() -> {
+                            Caffeinated.getInstance().copyText(
+                                String.format("https://studio.casterlabs.co/tools/cam?id=%s", this.settings().getString("cam.id")),
+                                null
+                            );
+                        })
+                )
+        );
 
         if (this.settings().has("cam.id")) {
             this.channelId = this.settings().getString("cam.id");
