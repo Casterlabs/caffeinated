@@ -5,7 +5,7 @@ const eventHandler = new EventHandler();
 let store = {
     language: "en-US",
     emojiProvider: "system",
-    theme: { appearance: "FOLLOW_SYSTEM", name: "System", isAuto: true, id: "system" }
+    theme: "system"
 };
 
 let appStyleElement;
