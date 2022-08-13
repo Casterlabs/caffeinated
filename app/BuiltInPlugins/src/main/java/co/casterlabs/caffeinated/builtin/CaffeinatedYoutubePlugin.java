@@ -66,9 +66,9 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
         plugin = pl;
 
 //        plugin.getPlugins().registerWidget(pl, WIDGET_DETAILS, YoutubeWidget.class);
-        plugin.getPlugins().registerWidget(pl, DOCK_DETAILS, YoutubeDock.class);
+//        plugin.getPlugins().registerWidget(pl, DOCK_DETAILS, YoutubeDock.class);
 
-        plugin.addKoiListener(new CaffeinatedYoutubePlugin());
+//        plugin.addKoiListener(new CaffeinatedYoutubePlugin());
     }
 
     private static void updateVolume(double volume) {
