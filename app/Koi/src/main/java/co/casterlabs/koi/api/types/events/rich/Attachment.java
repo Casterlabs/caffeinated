@@ -9,6 +9,7 @@ import lombok.Data;
 public class Attachment {
     private Attachment.AttachmentType type;
     private JsonElement content;
+    private String html;
 
     public static enum AttachmentType {
         GIF;
