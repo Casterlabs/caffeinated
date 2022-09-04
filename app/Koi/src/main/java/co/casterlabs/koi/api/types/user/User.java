@@ -39,7 +39,8 @@ public class User extends SimpleProfile {
         SUBSCRIBER,
         FOLLOWER,
         MODERATOR,
-        STAFF;
+        STAFF,
+        VIP;
     }
 
 }
