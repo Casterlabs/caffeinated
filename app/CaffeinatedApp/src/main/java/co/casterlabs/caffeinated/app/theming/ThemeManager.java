@@ -60,7 +60,11 @@ public class ThemeManager extends JavascriptObject {
 
         currentTheme = theme;
 
-        App.setAppearance(theme.getAppearance());
+        try {
+            App.setAppearance(theme.getAppearance());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

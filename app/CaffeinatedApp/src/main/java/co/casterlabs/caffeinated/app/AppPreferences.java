@@ -1,6 +1,7 @@
 package co.casterlabs.caffeinated.app;
 
 import co.casterlabs.caffeinated.util.Crypto;
+import co.casterlabs.kaimen.webview.WebviewRenderer;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Data;
 
@@ -15,5 +16,11 @@ public class AppPreferences {
     private boolean useBetaKoiPath = false;
 
     private String developerApiKey = new String(Crypto.generateSecureRandomKey());
+
+    private WebviewRenderer[] rendererPreference = {
+            WebviewRenderer.WEBKIT,
+            WebviewRenderer.CHROMIUM_EMBEDDED_FRAMEWORK,
+            WebviewRenderer.WEBVIEW_PROJECT
+    };
 
 }

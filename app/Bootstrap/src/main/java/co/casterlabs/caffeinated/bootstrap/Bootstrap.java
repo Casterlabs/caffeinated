@@ -232,8 +232,10 @@ public class Bootstrap implements Runnable {
         String appUrl = isDev ? this.devAddress : uiServer.getLocalAddress();
 
         // Setup the webview.
+        WebviewFactory factory = WebviewFactory.get(app.getAppPreferences().get().getRendererPreference());
+
         logger.info("Initializing UI (this may take some time)");
-        webview = WebviewFactory.get().produce();
+        webview = factory.produce();
 
         // Register the lifecycle listener.
         WebviewLifeCycleListener uiLifeCycleListener = new WebviewLifeCycleListener() {
