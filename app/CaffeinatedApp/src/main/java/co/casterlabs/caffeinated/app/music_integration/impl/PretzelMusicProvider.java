@@ -28,15 +28,14 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
     private String channelId;
     private MusicTrack currentTrackCache;
 
+    @SuppressWarnings("deprecation")
     public PretzelMusicProvider(@NonNull MusicIntegration musicIntegration) {
         super("Pretzel", "pretzel", PretzelSettings.class);
         musicIntegration.getProviders().put(this.getServiceId(), this);
 
         CaffeinatedApp.getInstance().onAppEvent("auth:platforms", (JsonObject data) -> {
-            JsonObject koiAuth = data.getObject("koiAuth");
-
-            if (koiAuth.containsKey("TWITCH")) {
-                JsonObject twitchUserData = koiAuth
+            if (data.containsKey("TWITCH")) {
+                JsonObject twitchUserData = data
                     .getObject("TWITCH")
                     .getObject("userData");
 

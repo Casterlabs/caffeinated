@@ -252,6 +252,24 @@ public class AppAuth extends JavascriptObject {
     @SuppressWarnings("deprecation")
     public void updateBridgeData() {
         this.checkAuth();
+
+        // This is just a temp fix, the real one will come later with some architectural
+        // improvements.
+        JsonObject platforms = new JsonObject();
+        this.authInstances.forEach((__, v) -> {
+            if (v.getUserData() != null) {
+                platforms.put(
+                    v.getUserData().getPlatform().name(),
+                    new JsonObject()
+                        .put("userData", Rson.DEFAULT.toJson(v))
+                );
+            }
+        });
+        CaffeinatedApp.getInstance().emitAppEvent(
+            "auth:platforms",
+            platforms
+        );
+
         CaffeinatedApp.getInstance().getKoi().updateFromAuth();
     }
 
