@@ -40,6 +40,7 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.swetrix.Swetrix;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -53,6 +54,8 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
+    private static final String ANALYTICS_ID = "uC69hShzxhbQ";
+
     public static final String caffeinatedClientId = "LmHG2ux992BxqQ7w9RJrfhkW";
     public static final String appDataDir;
 
@@ -77,6 +80,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private @Setter String appUrl;
 
     private @JavascriptValue(allowSet = false) boolean isTraySupported;
+
+    private Swetrix analytics;
 
     // @formatter:off
 
@@ -159,6 +164,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         instance = this;
 
         this.UI.updateIcon();
+
+        this.analytics = Swetrix.builder(ANALYTICS_ID)
+            .withDebugEnabled(isDev)
+            .withAnalyticsDisabled(isDev)
+            .build();
     }
 
     public void init(boolean traySupported) {
@@ -175,6 +185,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.music.init();
 
         this.appPreferences.save();
+
+        this.analytics.trackPageView("/", this.UI.getPreferences().getLanguage());
+        this.analytics.startHeartbeat();
 
         this.initPromise.fulfill(null);
     }

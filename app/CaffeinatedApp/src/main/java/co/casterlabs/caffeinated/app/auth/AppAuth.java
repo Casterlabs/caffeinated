@@ -350,6 +350,7 @@ public class AppAuth extends JavascriptObject {
             .get()
             .addKoiToken(koiToken);
 
+        CaffeinatedApp.getInstance().getAnalytics().track("AUTH__caffeinated_caffeine", true);
         this.startAuthInstance(tokenId);
 
         if (shouldNavigateBackwards) {
@@ -364,6 +365,8 @@ public class AppAuth extends JavascriptObject {
         if (oauthLink == null) {
             throw new IllegalArgumentException("Type '" + type + "' does not have an oauth link associated with it.");
         } else {
+            CaffeinatedApp.getInstance().getAnalytics().track("AUTH__" + type, true);
+
             AuthCallback callback = new AuthCallback(type, isKoi);
 
             try {

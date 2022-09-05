@@ -107,6 +107,8 @@ public class AppUI extends JavascriptObject {
             PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
 
             if (prefs.get().isNew()) {
+                CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
+
                 prefs.get().setNew(false);
                 prefs.save();
 
