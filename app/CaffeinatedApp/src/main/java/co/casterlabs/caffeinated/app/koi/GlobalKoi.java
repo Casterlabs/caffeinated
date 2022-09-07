@@ -30,9 +30,9 @@ import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.events.CatchupEvent;
-import co.casterlabs.koi.api.types.events.ChatEvent;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
@@ -174,9 +174,9 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             boolean chatBotResultedInAction = CaffeinatedApp.getInstance().getChatbot().processEvent(e);
 
             // We don't want to silence donations. That's why we're not using instanceof
-            if (e.getType() == KoiEventType.CHAT) {
+            if (e.getType() == KoiEventType.RICH_MESSAGE) {
                 ChatbotPreferences prefs = CaffeinatedApp.getInstance().getChatbotPreferences().get();
-                ChatEvent event = (ChatEvent) e;
+                RichMessageEvent event = (RichMessageEvent) e;
 
                 if (prefs.isHideCommandsFromChat()) {
                     // Hide all command response messages.
@@ -184,7 +184,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                         Set<Command> commands = prefs.getCommands();
 
                         for (ChatbotPreferences.Command command : commands) {
-                            if (command.getResponse().equals(event.getMessage())) {
+                            if (command.getResponse().equals(event.getRaw())) {
                                 return;
                             }
                         }
@@ -201,7 +201,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                     List<String> chatbots = prefs.getChatbots();
 
                     for (String chatbot : chatbots) {
-                        if (chatbot.equals(event.getSender().getDisplayname())) {
+                        if (chatbot.equalsIgnoreCase(event.getSender().getDisplayname())) {
                             return;
                         }
                     }
@@ -209,7 +209,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
                 if (prefs.isHideTimersFromChat()) {
                     // Hide all timer messages.
-                    if (prefs.getTimers().contains(event.getMessage())) {
+                    if (prefs.getTimers().contains(event.getRaw())) {
                         return;
                     }
                 }
