@@ -50,7 +50,7 @@
         </div>
     </div>
     {#each authInstances as auth}
-        <HiddenInput label={prettifyString(auth.userData.platform) + " token"} value={auth.token} />
+        <HiddenInput label={prettifyString(auth.userData?.platform || "Unknown") + " token"} value={auth.token} />
     {/each}
     <br />
     <div class="field">
