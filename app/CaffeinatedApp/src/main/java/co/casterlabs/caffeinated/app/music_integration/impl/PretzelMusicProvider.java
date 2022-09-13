@@ -34,31 +34,35 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
         musicIntegration.getProviders().put(this.getServiceId(), this);
 
         CaffeinatedApp.getInstance().onAppEvent("auth:platforms", (JsonObject data) -> {
-            if (data.containsKey("TWITCH")) {
-                JsonObject twitchUserData = data
-                    .getObject("TWITCH")
-                    .getObject("userData");
+            try {
+                if (data.containsKey("TWITCH")) {
+                    JsonObject twitchUserData = data
+                        .getObject("TWITCH")
+                        .getObject("userData");
 
-                String id = twitchUserData.getString("channel_id");
+                    String id = twitchUserData.getString("channel_id");
 
-                if ((this.channelId == null) || !this.channelId.equals(id)) {
-                    this.logger.info("Now signed in as: %s", twitchUserData.getString("displayname"));
+                    if ((this.channelId == null) || !this.channelId.equals(id)) {
+                        this.logger.info("Now signed in as: %s", twitchUserData.getString("displayname"));
 
-                    this.channelId = id;
+                        this.channelId = id;
 
-                    this.setAccountData(
-                        true,
-                        String.format("Twitch: %s", twitchUserData.getString("displayname")),
-                        "https://play.pretzel.rocks"
-                    );
+                        this.setAccountData(
+                            true,
+                            String.format("Twitch: %s", twitchUserData.getString("displayname")),
+                            "https://play.pretzel.rocks"
+                        );
 
-                    new AsyncTask(() -> {
-                        this.pollPretzel();
-                    });
+                        new AsyncTask(() -> {
+                            this.pollPretzel();
+                        });
+                    }
+                } else {
+                    this.channelId = null;
+                    this.setAccountData(false, null, null);
                 }
-            } else {
-                this.channelId = null;
-                this.setAccountData(false, null, null);
+            } catch (Exception e) {
+                FastLogger.logException(e);
             }
         });
 

@@ -261,7 +261,7 @@ public class AppAuth extends JavascriptObject {
                 platforms.put(
                     v.getUserData().getPlatform().name(),
                     new JsonObject()
-                        .put("userData", Rson.DEFAULT.toJson(v))
+                        .put("userData", Rson.DEFAULT.toJson(v.getUserData()))
                 );
             }
         });
