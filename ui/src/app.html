@@ -32,6 +32,30 @@
                 };
             }
 
+            function replaceIcon( /** @type {HTMLElement} */ element) {
+                if (element.hasAttribute('data-replaced')) return;
+
+                const icon = element.getAttribute('data-icon');
+                element.setAttribute('data-replaced', 'true');
+
+                fetch(`/icons/${icon}.svg`)
+                    .then((res) => {
+                        if (res.ok) {
+                            return res.text();
+                        } else {
+                            throw 'Error status: ' + res.status;
+                        }
+                    })
+                    .then((svg) => {
+                        element.innerHTML = svg;
+                        console.debug('Loaded icon:', icon, element);
+                    })
+                    .catch((e) => {
+                        console.error('Could not load icon', icon, 'due to an error:');
+                        console.error(e);
+                    });
+            }
+
             new MutationObserver((records) => {
                 for (const record of records) {
                     if (record.addedNodes.length > 0) {
@@ -51,6 +75,10 @@
                     // SvelteKit likes to undo all of our hard work. Let's prevent that.
                     const element = record.target;
                     switch (element.nodeName.toLowerCase()) {
+                        case 'icon':
+                            replaceIcon(element);
+                            break;
+
                         case 'a':
                             interceptAnchor(element);
                             break;
@@ -62,6 +90,7 @@
             });
 
             document.querySelectorAll('a').forEach(interceptAnchor);
+            document.querySelectorAll('icon').forEach(replaceIcon);
         });
     </script>
 
