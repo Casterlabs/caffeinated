@@ -4,3 +4,33 @@
 
 /* - */
 
+#css-intermediate {
+    --link: var(--blue10);
+    --nqp: #ea4c4c;
+    --peach-echo: #f7786b;
+}
+
+.text-link {
+    color: var(--link);
+}
+
+.text-peachecho {
+    color: var(--peach-echo);
+}
+
+.bg-peachecho {
+    background-color: var(--peach-echo);
+}
+
+.text-nqp {
+    color: var(--nqp);
+}
+
+.bg-nqp {
+    background-color: var(--nqp);
+}
+
+icon>svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}

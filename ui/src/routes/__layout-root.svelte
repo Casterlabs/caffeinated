@@ -1,0 +1,80 @@
+<script>
+	import '$lib/css/app.css';
+
+	import '$lib/css/colors/tomato.css';
+	import '$lib/css/colors/red.css';
+	import '$lib/css/colors/crimson.css';
+	import '$lib/css/colors/pink.css';
+	import '$lib/css/colors/plum.css';
+	import '$lib/css/colors/purple.css';
+	import '$lib/css/colors/violet.css';
+	import '$lib/css/colors/indigo.css';
+	import '$lib/css/colors/blue.css';
+	import '$lib/css/colors/cyan.css';
+	import '$lib/css/colors/teal.css';
+	import '$lib/css/colors/green.css';
+	import '$lib/css/colors/grass.css';
+	import '$lib/css/colors/orange.css';
+	import '$lib/css/colors/brown.css';
+	import '$lib/css/colors/sky.css';
+	import '$lib/css/colors/mint.css';
+	import '$lib/css/colors/lime.css';
+	import '$lib/css/colors/yellow.css';
+	import '$lib/css/colors/amber.css';
+	import '$lib/css/colors/gray.css';
+	import '$lib/css/colors/mauve.css';
+	import '$lib/css/colors/slate.css';
+	import '$lib/css/colors/sage.css';
+	import '$lib/css/colors/olive.css';
+	import '$lib/css/colors/sand.css';
+	import '$lib/css/colors/gold.css';
+	import '$lib/css/colors/bronze.css';
+	import '$lib/css/colors/overlay-black.css';
+	import '$lib/css/colors/overlay-white.css';
+
+	import { dev } from '$app/env';
+
+	let darkTheme = true;
+	let hideDevButton = false;
+
+	// Stupid ass workaround... Basically, we don't want to load the
+	// dark css at all if we're in light mode and vice-versa.
+	// So we need to dynamically import a component that has the css
+	// we want. This could be solved if <style> elements resolved things
+	// in $lib, but noooooooooooo.
+	let themeComponent = null;
+	$: darkTheme,
+		(darkTheme
+			? import('../components/layout/Theme_Dark.svelte')
+			: import('../components/layout/Theme_Light.svelte')
+		).then((c) => (themeComponent = c.default));
+</script>
+
+<svelte:component this={themeComponent} />
+
+<div
+	id="css-intermediate"
+	class="w-full h-full bg-mauve-1 text-gray-12"
+	class:dark-theme={darkTheme}
+>
+	<slot />
+
+	{#if dev && !hideDevButton}
+		<button
+			class="fixed top-2 right-2 bg-gray-4 p-1.5 rounded-md"
+			title="Quick Theme Switch"
+			on:click={() => (darkTheme = !darkTheme)}
+			on:contextmenu={(e) => {
+				e.preventDefault();
+				hideDevButton = true;
+				setTimeout(() => (hideDevButton = false), 2000);
+			}}
+		>
+			{#if darkTheme}
+				<icon data-icon="moon" />
+			{:else}
+				<icon data-icon="sun" />
+			{/if}
+		</button>
+	{/if}
+</div>
