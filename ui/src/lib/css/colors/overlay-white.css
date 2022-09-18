@@ -1,0 +1,123 @@
+
+    @import "@radix-ui/colors/whiteA.css";
+    
+            /* whiteA 1 */
+            .text-overlay-white-1,
+            .hover\:text-overlay-white-1:hover {
+                color: var(--whiteA1)
+            }
+            .bg-overlay-white-1,
+            .hover\:.bg-overlay-white-1:hover {
+                background-color: var(--whiteA1)
+            }
+        
+            /* whiteA 2 */
+            .text-overlay-white-2,
+            .hover\:text-overlay-white-2:hover {
+                color: var(--whiteA2)
+            }
+            .bg-overlay-white-2,
+            .hover\:.bg-overlay-white-2:hover {
+                background-color: var(--whiteA2)
+            }
+        
+            /* whiteA 3 */
+            .text-overlay-white-3,
+            .hover\:text-overlay-white-3:hover {
+                color: var(--whiteA3)
+            }
+            .bg-overlay-white-3,
+            .hover\:.bg-overlay-white-3:hover {
+                background-color: var(--whiteA3)
+            }
+        
+            /* whiteA 4 */
+            .text-overlay-white-4,
+            .hover\:text-overlay-white-4:hover {
+                color: var(--whiteA4)
+            }
+            .bg-overlay-white-4,
+            .hover\:.bg-overlay-white-4:hover {
+                background-color: var(--whiteA4)
+            }
+        
+            /* whiteA 5 */
+            .text-overlay-white-5,
+            .hover\:text-overlay-white-5:hover {
+                color: var(--whiteA5)
+            }
+            .bg-overlay-white-5,
+            .hover\:.bg-overlay-white-5:hover {
+                background-color: var(--whiteA5)
+            }
+        
+            /* whiteA 6 */
+            .text-overlay-white-6,
+            .hover\:text-overlay-white-6:hover {
+                color: var(--whiteA6)
+            }
+            .bg-overlay-white-6,
+            .hover\:.bg-overlay-white-6:hover {
+                background-color: var(--whiteA6)
+            }
+        
+            /* whiteA 7 */
+            .text-overlay-white-7,
+            .hover\:text-overlay-white-7:hover {
+                color: var(--whiteA7)
+            }
+            .bg-overlay-white-7,
+            .hover\:.bg-overlay-white-7:hover {
+                background-color: var(--whiteA7)
+            }
+        
+            /* whiteA 8 */
+            .text-overlay-white-8,
+            .hover\:text-overlay-white-8:hover {
+                color: var(--whiteA8)
+            }
+            .bg-overlay-white-8,
+            .hover\:.bg-overlay-white-8:hover {
+                background-color: var(--whiteA8)
+            }
+        
+            /* whiteA 9 */
+            .text-overlay-white-9,
+            .hover\:text-overlay-white-9:hover {
+                color: var(--whiteA9)
+            }
+            .bg-overlay-white-9,
+            .hover\:.bg-overlay-white-9:hover {
+                background-color: var(--whiteA9)
+            }
+        
+            /* whiteA 10 */
+            .text-overlay-white-10,
+            .hover\:text-overlay-white-10:hover {
+                color: var(--whiteA10)
+            }
+            .bg-overlay-white-10,
+            .hover\:.bg-overlay-white-10:hover {
+                background-color: var(--whiteA10)
+            }
+        
+            /* whiteA 11 */
+            .text-overlay-white-11,
+            .hover\:text-overlay-white-11:hover {
+                color: var(--whiteA11)
+            }
+            .bg-overlay-white-11,
+            .hover\:.bg-overlay-white-11:hover {
+                background-color: var(--whiteA11)
+            }
+        
+            /* whiteA 12 */
+            .text-overlay-white-12,
+            .hover\:text-overlay-white-12:hover {
+                color: var(--whiteA12)
+            }
+            .bg-overlay-white-12,
+            .hover\:.bg-overlay-white-12:hover {
+                background-color: var(--whiteA12)
+            }
+        

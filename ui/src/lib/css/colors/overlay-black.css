@@ -1,0 +1,123 @@
+
+    @import "@radix-ui/colors/blackA.css";
+    
+            /* blackA 1 */
+            .text-overlay-black-1,
+            .hover\:text-overlay-black-1:hover {
+                color: var(--blackA1)
+            }
+            .bg-overlay-black-1,
+            .hover\:.bg-overlay-black-1:hover {
+                background-color: var(--blackA1)
+            }
+        
+            /* blackA 2 */
+            .text-overlay-black-2,
+            .hover\:text-overlay-black-2:hover {
+                color: var(--blackA2)
+            }
+            .bg-overlay-black-2,
+            .hover\:.bg-overlay-black-2:hover {
+                background-color: var(--blackA2)
+            }
+        
+            /* blackA 3 */
+            .text-overlay-black-3,
+            .hover\:text-overlay-black-3:hover {
+                color: var(--blackA3)
+            }
+            .bg-overlay-black-3,
+            .hover\:.bg-overlay-black-3:hover {
+                background-color: var(--blackA3)
+            }
+        
+            /* blackA 4 */
+            .text-overlay-black-4,
+            .hover\:text-overlay-black-4:hover {
+                color: var(--blackA4)
+            }
+            .bg-overlay-black-4,
+            .hover\:.bg-overlay-black-4:hover {
+                background-color: var(--blackA4)
+            }
+        
+            /* blackA 5 */
+            .text-overlay-black-5,
+            .hover\:text-overlay-black-5:hover {
+                color: var(--blackA5)
+            }
+            .bg-overlay-black-5,
+            .hover\:.bg-overlay-black-5:hover {
+                background-color: var(--blackA5)
+            }
+        
+            /* blackA 6 */
+            .text-overlay-black-6,
+            .hover\:text-overlay-black-6:hover {
+                color: var(--blackA6)
+            }
+            .bg-overlay-black-6,
+            .hover\:.bg-overlay-black-6:hover {
+                background-color: var(--blackA6)
+            }
+        
+            /* blackA 7 */
+            .text-overlay-black-7,
+            .hover\:text-overlay-black-7:hover {
+                color: var(--blackA7)
+            }
+            .bg-overlay-black-7,
+            .hover\:.bg-overlay-black-7:hover {
+                background-color: var(--blackA7)
+            }
+        
+            /* blackA 8 */
+            .text-overlay-black-8,
+            .hover\:text-overlay-black-8:hover {
+                color: var(--blackA8)
+            }
+            .bg-overlay-black-8,
+            .hover\:.bg-overlay-black-8:hover {
+                background-color: var(--blackA8)
+            }
+        
+            /* blackA 9 */
+            .text-overlay-black-9,
+            .hover\:text-overlay-black-9:hover {
+                color: var(--blackA9)
+            }
+            .bg-overlay-black-9,
+            .hover\:.bg-overlay-black-9:hover {
+                background-color: var(--blackA9)
+            }
+        
+            /* blackA 10 */
+            .text-overlay-black-10,
+            .hover\:text-overlay-black-10:hover {
+                color: var(--blackA10)
+            }
+            .bg-overlay-black-10,
+            .hover\:.bg-overlay-black-10:hover {
+                background-color: var(--blackA10)
+            }
+        
+            /* blackA 11 */
+            .text-overlay-black-11,
+            .hover\:text-overlay-black-11:hover {
+                color: var(--blackA11)
+            }
+            .bg-overlay-black-11,
+            .hover\:.bg-overlay-black-11:hover {
+                background-color: var(--blackA11)
+            }
+        
+            /* blackA 12 */
+            .text-overlay-black-12,
+            .hover\:text-overlay-black-12:hover {
+                color: var(--blackA12)
+            }
+            .bg-overlay-black-12,
+            .hover\:.bg-overlay-black-12:hover {
+                background-color: var(--blackA12)
+            }
+        
