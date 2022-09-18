@@ -32,10 +32,22 @@
 	import '$lib/css/colors/overlay-black.css';
 	import '$lib/css/colors/overlay-white.css';
 
-	import { dev } from '$app/env';
+	// Little helper to allow us to access the
+	// stores but prevent SSR from erroring out.
+	if (typeof global == 'undefined') {
+		window.st = false;
+	} else {
+		global.st = {
+			subscribe(callback) {
+				callback(null);
+				return () => {};
+			},
+			set() {} // No-OP
+		};
+	}
 
-	let darkTheme = true;
-	let hideDevButton = false;
+	const currentTheme = st || Caffeinated.themeManager.svelte('currentTheme');
+	$: useLightTheme = $currentTheme?.appearance == 'LIGHT';
 
 	// Stupid ass workaround... Basically, we don't want to load the
 	// dark css at all if we're in light mode and vice-versa.
@@ -43,10 +55,11 @@
 	// we want. This could be solved if <style> elements resolved things
 	// in $lib, but noooooooooooo.
 	let themeComponent = null;
-	$: darkTheme,
-		(darkTheme
-			? import('../components/layout/Theme_Dark.svelte')
-			: import('../components/layout/Theme_Light.svelte')
+
+	$: useLightTheme,
+		(useLightTheme
+			? import('../components/layout/Theme_Light.svelte')
+			: import('../components/layout/Theme_Dark.svelte')
 		).then((c) => (themeComponent = c.default));
 </script>
 
@@ -55,26 +68,7 @@
 <div
 	id="css-intermediate"
 	class="w-full h-full bg-mauve-1 text-gray-12"
-	class:dark-theme={darkTheme}
+	class:dark-theme={!useLightTheme}
 >
 	<slot />
-
-	{#if dev && !hideDevButton}
-		<button
-			class="fixed top-2 right-2 bg-gray-4 p-1.5 rounded-md"
-			title="Quick Theme Switch"
-			on:click={() => (darkTheme = !darkTheme)}
-			on:contextmenu={(e) => {
-				e.preventDefault();
-				hideDevButton = true;
-				setTimeout(() => (hideDevButton = false), 2000);
-			}}
-		>
-			{#if darkTheme}
-				<icon data-icon="moon" />
-			{:else}
-				<icon data-icon="sun" />
-			{/if}
-		</button>
-	{/if}
 </div>
