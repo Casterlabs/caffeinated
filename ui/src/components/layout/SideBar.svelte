@@ -7,34 +7,34 @@
 		[
 			{
 				href: '/home',
-				name: 'Home',
+				name: 'page.home',
 				useStartsWith: false
 			},
 			{
 				href: '/chat',
-				name: 'Chat',
+				name: 'page.chat',
 				useStartsWith: false
 			}
 		],
 		[
 			{
 				href: '/chat-bot',
-				name: 'Chat Bot',
+				name: 'page.chat_bot',
 				useStartsWith: false
 			},
 			{
 				href: '/widgets',
-				name: 'Widgets',
+				name: 'page.widgets',
 				useStartsWith: true
 			},
 			{
 				href: '/docks',
-				name: 'Docks',
+				name: 'page.docks',
 				useStartsWith: false
 			},
 			{
 				href: '/settings',
-				name: 'Settings',
+				name: 'page.settings',
 				useStartsWith: false
 			}
 		]

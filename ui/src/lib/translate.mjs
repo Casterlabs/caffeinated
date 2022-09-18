@@ -1,31 +1,11 @@
-export const FALLBACK_LANGUAGE = 'en-US';
+export const FALLBACK_LANGUAGE = 'en';
 
-// English
-import enUS from './lang/en-US.mjs';
-import enGB from './lang/en-GB.mjs';
-import enAU from './lang/en-AU.mjs';
-import enThorn from './lang/en-Thorn.mjs';
-
-// French
-import fr from './lang/fr.mjs';
-
-// Spanish
-import esLA from './lang/es-LA.mjs';
-
-// Jokes
-import enShakespearean from './lang/en-Shakespearean.mjs';
+// Languages
+import en from './lang/en.mjs';
 
 // prettier-ignore
 const languages = {
-    "en": enGB,
-    "en-US": enUS,
-    "en-AU": enAU,
-    "en-Thorn": enThorn,
-    "en-Shakespear": enShakespearean,
-
-    "fr": fr,
-
-    "es-LA": esLA
+    "en": en
 };
 
 // ----------------------------------------------------------------
