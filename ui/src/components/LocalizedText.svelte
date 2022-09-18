@@ -1,6 +1,6 @@
 <script>
 	import ConsoleHelper from '$lib/console-helper.mjs';
-	import { languages } from '$lib/app.mjs';
+	import { language } from '$lib/app.mjs';
 	import { translate } from '$lib/translate.mjs';
 	import { tick } from 'svelte';
 
@@ -14,7 +14,7 @@
 
 	let contents = [];
 
-	async function render({ lang }) {
+	async function render(lang) {
 		if (!lang) return;
 
 		const { result, usedFallback } = translate(lang, key, opts, false);
@@ -57,10 +57,10 @@
 	}
 
 	// Rerender on change
-	$: key, render($languages);
-	$: opts, render($languages);
-	$: slotContents, render($languages);
-	languages.subscribe(render);
+	$: key, render($language);
+	$: opts, render($language);
+	$: slotContents, render($language);
+	language.subscribe(render);
 </script>
 
 <div style="display: none;" aria-hidden="true">
