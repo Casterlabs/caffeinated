@@ -17,5 +17,14 @@ export default {
     'page.chat_bot': 'Chat Bot',
     'page.widgets': 'Home',
     'page.docks': 'Docks',
-    'page.settings': 'Settings'
+
+    /* ------------------------ */
+    /* Settings                 */
+    /* ------------------------ */
+
+    'page.settings': 'Settings',
+    'page.settings.appearance': 'Appearance',
+    'page.settings.plugins': 'Plugins',
+    'page.settings.accounts': 'Accounts',
+    'page.settings.about': 'About'
 };

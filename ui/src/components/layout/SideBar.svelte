@@ -35,7 +35,7 @@
 			{
 				href: '/settings',
 				name: 'page.settings',
-				useStartsWith: false
+				useStartsWith: true
 			}
 		]
 	];
