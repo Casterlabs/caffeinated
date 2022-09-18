@@ -45,7 +45,7 @@
 	<div class="flex flex-grow flex-col overflow-y-auto bg-mauve-2 pb-4">
 		<!-- <div class="flex flex-shrink-0 items-center px-4 pt-5 mb-3">
 			<svg
-				class="h-auto w-full text-gray-12"
+				class="h-auto w-full text-mauve-12"
 				xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
 				xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
 				xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +166,7 @@
 							class:hover:bg-mauve-4={!isSelected}
 							class:bg-mauve-5={isSelected}
 						>
-							<span class="text-gray-12">
+							<span class="text-mauve-12">
 								<LocalizedText key={item.name} />
 							</span>
 						</a>
