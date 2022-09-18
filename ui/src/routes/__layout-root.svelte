@@ -32,6 +32,9 @@
 	import '$lib/css/colors/overlay-black.css';
 	import '$lib/css/colors/overlay-white.css';
 
+	import { dev } from '$app/env';
+	let hideDevButton = false;
+
 	// Little helper to allow us to access the
 	// stores but prevent SSR from erroring out.
 	if (typeof global == 'undefined') {
@@ -71,4 +74,29 @@
 	class:dark-theme={!useLightTheme}
 >
 	<slot />
+
+	{#if dev && !hideDevButton}
+		<!-- svelte-ignore missing-declaration -->
+		<button
+			class="fixed top-2 right-2 bg-gray-4 p-1.5 rounded-md"
+			title="Quick Theme Switch"
+			on:click={async () => {
+				Caffeinated.UI.updateAppearance({
+					...(await Caffeinated.UI.preferences),
+					theme: useLightTheme ? 'co.casterlabs.dark' : 'co.casterlabs.light'
+				});
+			}}
+			on:contextmenu={(e) => {
+				e.preventDefault();
+				hideDevButton = true;
+				setTimeout(() => (hideDevButton = false), 2000);
+			}}
+		>
+			{#if useLightTheme}
+				<icon data-icon="sun" />
+			{:else}
+				<icon data-icon="moon" />
+			{/if}
+		</button>
+	{/if}
 </div>
