@@ -45,7 +45,7 @@ public class Updater {
     private static File buildokFile = new File(appDirectory, ".build_ok");
 
     private static final List<OperatingSystem> INLINE_PLATFORMS = Arrays.asList(
-        OperatingSystem.WINDOWS
+//        OperatingSystem.WINDOWS
     );
 
     private static @Getter boolean isLauncherOutOfDate = false;
