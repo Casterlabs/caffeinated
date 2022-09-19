@@ -30,7 +30,13 @@
     background-color: var(--nqp);
 }
 
-icon>svg {
+icon {
+    display: block;
     width: 1.5rem;
     height: 1.5rem;
+}
+
+icon>svg {
+    width: 100%;
+    height: 100%;
 }
