@@ -161,7 +161,6 @@ public class Launcher {
                 default: {
                     kill = new String[] {
                             "pkill",
-                            "-f",
                             "Casterlabs-Caffeinated"
                     };
                     break;
