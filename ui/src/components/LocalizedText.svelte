@@ -1,10 +1,10 @@
 <script>
-	import ConsoleHelper from '$lib/console-helper.mjs';
+	import createConsole from '$lib/console-helper.mjs';
 	import { language } from '$lib/app.mjs';
 	import { translate } from '$lib/translate.mjs';
 	import { tick } from 'svelte';
 
-	const console = ConsoleHelper('LocalizedText');
+	const console = createConsole('LocalizedText');
 
 	export let opts = {};
 	export let key;
