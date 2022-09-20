@@ -21,6 +21,7 @@
                 if (element.target != '_blank' || element.hasAttribute('data-dest')) return;
 
                 element.setAttribute('data-dest', element.href);
+                element.setAttribute('title', element.href);
                 element.href = '#/extern';
 
                 // On click we prevent the navigation and openLink with the href.
