@@ -4,6 +4,7 @@ import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
+import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.serialization.JsonParseException;
 import co.casterlabs.rakurai.json.validation.JsonValidationException;
@@ -23,6 +24,11 @@ public class UserUpdateEvent extends KoiEvent {
     @JsonDeserializationMethod("streamer")
     private void $deserialize_streamer(JsonElement e) throws JsonValidationException, JsonParseException {
         this.streamer = Rson.DEFAULT.fromJson(e, User.class);
+    }
+
+    @JsonSerializationMethod("streamer")
+    private JsonElement $serialize_streamer() {
+        return Rson.DEFAULT.toJson(this.streamer);
     }
 
     @Override
