@@ -1,5 +1,8 @@
 <script>
 	import SelectMenu from '../../components/ui/SelectMenu.svelte';
+
+	const currentTheme = st || Caffeinated.themeManager.svelte('currentTheme');
+	const themes = st || Caffeinated.themeManager.svelte('themes');
 </script>
 
 <ul class="divide-y divide-gray-200">
@@ -7,11 +10,14 @@
 		<div class="col-span-6 w-full">
 			<SelectMenu
 				title="Theme"
-				value="co.casterlabs.light"
-				options={{
-					'co.casterlabs.dark': 'Dark',
-					'co.casterlabs.light': 'Light',
-					'co.casterlabs.auto': 'Follow System'
+				value={$currentTheme?.id}
+				options={Object.values($themes || {}) //
+					.reduce((obj, curr) => ({ ...obj, [curr.id]: curr.name }), {})}
+				on:value={async ({ detail: newTheme }) => {
+					window.Caffeinated.UI.updateAppearance({
+						...(await window.Caffeinated.UI.preferences),
+						theme: newTheme
+					});
 				}}
 			/>
 		</div>

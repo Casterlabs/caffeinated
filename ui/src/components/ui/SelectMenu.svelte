@@ -2,7 +2,10 @@
 	import LocalizedText from '../LocalizedText.svelte';
 	import FocusListener from '../interaction/FocusListener.svelte';
 
+	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
+
+	const dispatch = createEventDispatcher();
 
 	export let title = 'Assigned to';
 	export let value = 'tim-cook';
@@ -15,6 +18,11 @@
 	let highlighted = null;
 
 	$: open, open && (highlighted = value);
+
+	function select(id) {
+		value = id;
+		dispatch('value', id);
+	}
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -28,7 +36,7 @@
 			if (e.code == 'Enter') {
 				// Handle the enter key if the user has a highlighted option.
 				if (highlighted) {
-					value = highlighted;
+					select(highlighted);
 				}
 			} else if (e.code == 'ArrowDown' || e.code == 'ArrowUp') {
 				// ArrowDown: 1, ArrowUp: -1.
@@ -103,7 +111,7 @@
 						}}
 						on:mouseenter={() => (highlighted = id)}
 					>
-						<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => (value = id)}>
+						<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => select(id)}>
 							<span class="block truncate" class:font-semibold={isSelected}>
 								<LocalizedText key={name} />
 							</span>
