@@ -49,45 +49,71 @@ const misc = [
 ];
 
 for (const color of colors) {
+    const name = color;
     let css = '';
 
     for (let idx = 1; idx < 13; idx++) {
         css += `
-            /* ${color} ${idx} */
-            .text-${color}-${idx},
-            .hover\\:text-${color}-${idx}:hover {
+            /* ${name} ${idx} */
+            .text-${name}-${idx},
+            .hover\\:text-${name}-${idx}:hover,
+            .focus\\:text-${name}-${idx}:focus {
                 color: var(--${color}${idx})
             }
-            .bg-${color}-${idx},
-            .hover\\:bg-${color}-${idx}:hover {
+            .border-${name}-${idx},
+            .hover\\:border-${name}-${idx}:hover,
+            .focus\\:border-${name}-${idx}:focus {
+                border-color: var(--${color}${idx})
+            }
+            .ring-${name}-${idx},
+            .hover\\:ring-${name}-${idx}:hover,
+            .focus\\:ring-${name}-${idx}:focus {
+                --tw-ring-color: var(--${color}${idx})
+            }
+            .bg-${name}-${idx},
+            .hover\\:bg-${name}-${idx}:hover,
+            .focus\\:bg-${name}-${idx}:focus {
                 background-color: var(--${color}${idx})
             }
         `;
     }
 
-    fs.writeFile(`./${color}.css`, css, () => {});
+    fs.writeFile(`./${name}.css`, css, () => {});
 }
 
 for (const color of misc) {
+    const name = 'overlay-' + color.substring(0, color.length - 1);
     let css = `
     @import "@radix-ui/colors/${color}.css";
     `;
 
     for (let idx = 1; idx < 13; idx++) {
         css += `
-            /* ${color} ${idx} */
-            .text-overlay-${color.substring(0, color.length - 1)}-${idx},
-            .hover\\:text-overlay-${color.substring(0, color.length - 1)}-${idx}:hover {
+            /* ${name} ${idx} */
+            .text-${name}-${idx},
+            .hover\\:text-${name}-${idx}:hover,
+            .focus\\:text-${name}-${idx}:focus {
                 color: var(--${color}${idx})
             }
-            .bg-overlay-${color.substring(0, color.length - 1)}-${idx},
-            .hover\\:.bg-overlay-${color.substring(0, color.length - 1)}-${idx}:hover {
+            .border-${name}-${idx},
+            .hover\\:border-${name}-${idx}:hover,
+            .focus\\:border-${name}-${idx}:focus {
+                border-color: var(--${color}${idx})
+            }
+            .ring-${name}-${idx},
+            .hover\\:ring-${name}-${idx}:hover,
+            .focus\\:ring-${name}-${idx}:focus {
+                --tw-ring-color: var(--${color}${idx})
+            }
+            .bg-${name}-${idx},
+            .hover\\:bg-${name}-${idx}:hover,
+            .focus\\:bg-${name}-${idx}:focus {
                 background-color: var(--${color}${idx})
             }
         `;
     }
 
-    fs.writeFile(`./overlay-${color.substring(0, color.length - 1)}.css`, css, () => {});
+    fs.writeFile(`./${name}.css`, css, () => {});
 }
 
 {
