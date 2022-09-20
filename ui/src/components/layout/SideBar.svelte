@@ -18,14 +18,14 @@
 		],
 		[
 			{
-				href: '/chat-bot',
-				name: 'page.chat_bot',
-				useStartsWith: false
-			},
-			{
 				href: '/widgets',
 				name: 'page.widgets',
 				useStartsWith: true
+			},
+			{
+				href: '/chat-bot',
+				name: 'page.chat_bot',
+				useStartsWith: false
 			},
 			{
 				href: '/docks',

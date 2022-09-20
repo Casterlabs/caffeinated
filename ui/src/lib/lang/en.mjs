@@ -12,10 +12,13 @@ export default {
     // All keys prefixed with `sr.` are for screen readers only.
     // They will not be shown to end-users.
 
+    'app.love': 'Made with ♥ by Casterlabs',
+    'app.copyright': 'Copyright © {year} Casterlabs. All rights reserved.',
+
     'page.home': 'Home',
     'page.chat': 'Chat',
+    'page.widgets': 'Widgets & Alerts',
     'page.chat_bot': 'Chat Bot',
-    'page.widgets': 'Home',
     'page.docks': 'Docks',
 
     /* ------------------------ */
@@ -40,5 +43,7 @@ export default {
 
     'page.settings.plugins': 'Plugins',
     'page.settings.accounts': 'Accounts',
-    'page.settings.about': 'About'
+
+    'page.settings.about': 'About',
+    'page.settings.about.enable_unsafe': 'Enable Stupidly Unsafe Settings'
 };
