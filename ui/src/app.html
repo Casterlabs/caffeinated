@@ -44,24 +44,24 @@
 
                 if (iconCache[icon]) {
                     element.innerHTML = iconCache[icon];
-                    console.debug('Loaded icon from cache:', icon);
+                    console.debug('[app.html]', 'Loaded icon from cache:', icon);
                 } else {
                     fetch(`/icons/${icon}.svg`)
                         .then((res) => {
                             if (res.ok) {
                                 return res.text();
                             } else {
-                                throw 'Error status: ' + res.status;
+                                throw 'Status: ' + res.status;
                             }
                         })
                         .then((svg) => {
                             element.innerHTML = iconCache[icon] = svg;
-                            console.debug('Loaded icon:', icon);
+                            console.debug('[app.html]', 'Loaded icon:', icon);
                         })
                         .catch((e) => {
                             element.innerHTML = iconCache[icon] =
                                 '<div class="bg-red-500 h-full w-full text-white" title="MISSING ICON">X</div>'; // Visual error.
-                            console.error('Could not load icon', icon, 'due to an error:');
+                            console.error('[app.html]', 'Could not load icon', icon, 'due to an error:');
                             console.error(e);
                         })
                         .finally((val) => {});
