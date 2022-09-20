@@ -26,6 +26,8 @@
 			newContents = [
 				`<span style="background: red" title="NO TRANSLATION: ${key}">${result}</span>`
 			];
+		} else if (!result) {
+			newContents = [];
 		} else {
 			newContents = result.split(/(%\w+%)/g);
 		}
