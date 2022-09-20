@@ -88,7 +88,7 @@
 		{#if open}
 			<!-- svelte-ignore a11y-autofocus -->
 			<ul
-				class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-mauve-1 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm"
+				class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-mauve-1 py-1 shadow-lg ring-1 ring-mauve-6 ring-opacity-5 focus:outline-none text-sm"
 				role="listbox"
 				tabindex="-1"
 				transition:fade|local={{ duration: 75 }}
