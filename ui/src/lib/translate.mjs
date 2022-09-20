@@ -58,9 +58,11 @@ export function translate(locale, key, opts = {}, simpleResponse = true) {
         result = languages[FALLBACK_LANGUAGE][key] || key;
 
         if (result != key) {
-            console.error(
-                `Missing translation for key: ${key} in locale ${locale}, defaulting to English.`
-            );
+            if (simpleResponse) {
+                console.error(
+                    `Missing translation for key: ${key} in locale ${locale}, defaulting to English.`
+                );
+            }
             usedFallback = true;
         }
     }
@@ -93,7 +95,7 @@ export function translate(locale, key, opts = {}, simpleResponse = true) {
         result = key;
     }
 
-    if (result == key) {
+    if (result == key && simpleResponse) {
         console.warn('Missing translation key:', key, `(${locale})`);
     }
 
