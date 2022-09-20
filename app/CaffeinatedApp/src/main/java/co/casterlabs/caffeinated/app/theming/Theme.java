@@ -11,7 +11,6 @@ import lombok.NonNull;
 @JsonClass(exposeAll = true)
 public class Theme {
     private @NonNull String id;
-    private @NonNull String name;
     private @NonNull Appearance appearance;
     private boolean isAuto;
 

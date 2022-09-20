@@ -49,8 +49,8 @@
 		};
 	}
 
-	const currentTheme = st || Caffeinated.themeManager.svelte('currentTheme');
-	$: useLightTheme = $currentTheme?.appearance == 'LIGHT';
+	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
+	$: useLightTheme = $effectiveTheme?.appearance == 'LIGHT';
 
 	// Stupid ass workaround... Basically, we don't want to load the
 	// dark css at all if we're in light mode and vice-versa.
@@ -58,6 +58,9 @@
 	// we want. This could be solved if <style> elements resolved things
 	// in $lib, but noooooooooooo.
 	let themeComponent = null;
+
+	$: effectiveTheme,
+		$effectiveTheme && console.info('[Layout]', 'Switching to (effective) theme:', $effectiveTheme);
 
 	$: useLightTheme,
 		(useLightTheme
@@ -84,7 +87,7 @@
 			on:click={async () => {
 				Caffeinated.UI.updateAppearance({
 					...(await Caffeinated.UI.preferences),
-					theme: useLightTheme ? 'co.casterlabs.dark' : 'co.casterlabs.light'
+					theme: useLightTheme ? 'CASTERLABS_DARK' : 'CASTERLABS_LIGHT'
 				});
 			}}
 			on:contextmenu={(e) => {

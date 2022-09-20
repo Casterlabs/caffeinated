@@ -15,7 +15,7 @@
 				.reduce(
 					(obj, curr) => ({
 						...obj,
-						[curr.id]: `page.settings.appearance.theme.${curr.name}`
+						[curr.id]: `page.settings.appearance.theme.${curr.id}`
 					}),
 					{}
 				)}

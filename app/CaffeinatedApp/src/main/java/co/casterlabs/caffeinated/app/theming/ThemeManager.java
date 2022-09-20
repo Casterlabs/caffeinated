@@ -11,8 +11,12 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import lombok.Getter;
 import lombok.NonNull;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class ThemeManager extends JavascriptObject {
+    private static final String FALLBACK = "SYSTEM";
+    private static final String EFF_LIGHT = "CASTERLABS_LIGHT";
+    private static final String EFF_DARK = "CASTERLABS_DARK";
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<String, Theme> themes = new HashMap<>();
@@ -20,19 +24,38 @@ public class ThemeManager extends JavascriptObject {
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private @Getter Theme currentTheme;
 
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private @Getter Theme effectiveTheme;
+
     public void init() {
         this.registerTheme(
-            new Theme("system", "SYSTEM", Appearance.FOLLOW_SYSTEM, true),
-            new Theme("co.casterlabs.light", "CASTERLABS_LIGHT", Appearance.LIGHT, false),
-            new Theme("co.casterlabs.dark", "CASTERLABS_DARK", Appearance.DARK, false)
+            new Theme("SYSTEM", Appearance.FOLLOW_SYSTEM, true),
+            new Theme("CASTERLABS_LIGHT", Appearance.LIGHT, false),
+            new Theme("CASTERLABS_DARK", Appearance.DARK, false)
         );
 
         String theme = CaffeinatedApp.getInstance().getUI().getPreferences().getTheme();
 
-        if (theme != null) {
+        try {
             setTheme(theme);
+        } catch (Throwable e) {
+            FastLogger.logStatic("Falling back onto default theme, error: %s", e.getMessage());
+            setTheme(FALLBACK);
+        }
+
+        App.systemThemeChangeEvent.on(this::calculateEffectiveTheme);
+    }
+
+    private void calculateEffectiveTheme(Appearance appearance) {
+        if (!this.currentTheme.isAuto()) {
+            this.effectiveTheme = this.currentTheme;
+            return;
+        }
+
+        if (appearance == Appearance.LIGHT) {
+            this.effectiveTheme = this.themes.get(EFF_LIGHT);
         } else {
-            setTheme("system");
+            this.effectiveTheme = this.themes.get(EFF_DARK);
         }
     }
 
@@ -44,24 +67,18 @@ public class ThemeManager extends JavascriptObject {
 
     @JavascriptSetter("theme")
     public void setTheme(@NonNull String id) {
-        if ((currentTheme != null) && currentTheme.getId().equals(id)) {
+        if ((this.currentTheme != null) && this.currentTheme.getId().equals(id)) {
             return;
         }
 
-        final String defaultTheme = "system";
+        Theme theme = this.themes.get(id);
+        assert theme != null : "There is no theme registered with an id of '" + id + "'";
 
-        Theme theme = themes.get(id);
-
-        if (theme == null) {
-            theme = themes.get(defaultTheme);
-        }
-
-        assert theme != null : "There is no theme registered with an id of '" + id + "' or '" + defaultTheme + "'";
-
-        currentTheme = theme;
+        this.currentTheme = theme;
 
         try {
             App.setAppearance(theme.getAppearance());
+            this.calculateEffectiveTheme(theme.getAppearance());
         } catch (Exception e) {
             e.printStackTrace();
         }
