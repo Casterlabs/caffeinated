@@ -86,49 +86,50 @@
 		</button>
 
 		{#if open}
-			<!-- svelte-ignore a11y-autofocus -->
-			<ul
-				class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-mauve-1 py-1 shadow-lg ring-1 ring-mauve-6 ring-opacity-5 focus:outline-none text-sm"
-				role="listbox"
-				tabindex="-1"
-				transition:fade|local={{ duration: 75 }}
-			>
-				{#each Object.entries(options) as [id, name]}
-					{@const isSelected = value == id}
-					{@const isHighlighted = highlighted == id}
+			<div class="absolute z-10 mt-1 max-h-60 w-full shadow-lg rounded-md bg-mauve-1">
+				<ul
+					class="overflow-auto rounded-md py-1 ring-1 ring-mauve-8 ring-opacity-5 focus:outline-none text-sm"
+					role="listbox"
+					tabindex="-1"
+					transition:fade|local={{ duration: 75 }}
+				>
+					{#each Object.entries(options) as [id, name]}
+						{@const isSelected = value == id}
+						{@const isHighlighted = highlighted == id}
 
-					<li
-						class="font-normal relative cursor-default select-none"
-						class:text-mauve-12={!isHighlighted}
-						class:bg-crimson-9={isHighlighted}
-						class:text-mauve-1={isHighlighted}
-						role="option"
-						aria-selected={isSelected}
-						on:mouseleave={() => {
-							if (isHighlighted) {
-								highlighted = null;
-							}
-						}}
-						on:mouseenter={() => (highlighted = id)}
-					>
-						<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => select(id)}>
-							<span class="block truncate" class:font-semibold={isSelected}>
-								<LocalizedText key={name} />
-							</span>
-
-							{#if isSelected}
-								<span
-									class="absolute inset-y-0 right-0 flex items-center pr-4"
-									class:text-crimson-9={!isHighlighted}
-									class:text-mauve-1={isHighlighted}
-								>
-									<icon class="h-5 w-5" data-icon="check" />
-								</span>
-							{/if}</button
+						<li
+							class="font-normal relative cursor-default select-none"
+							class:text-mauve-12={!isHighlighted}
+							class:bg-crimson-9={isHighlighted}
+							class:text-white={isHighlighted}
+							role="option"
+							aria-selected={isSelected}
+							on:mouseleave={() => {
+								if (isHighlighted) {
+									highlighted = null;
+								}
+							}}
+							on:mouseenter={() => (highlighted = id)}
 						>
-					</li>
-				{/each}
-			</ul>
+							<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => select(id)}>
+								<span class="block truncate" class:font-semibold={isSelected}>
+									<LocalizedText key={name} />
+								</span>
+
+								{#if isSelected}
+									<span
+										class="absolute inset-y-0 right-0 flex items-center pr-4"
+										class:text-crimson-9={!isHighlighted}
+										class:text-white={isHighlighted}
+									>
+										<icon class="h-5 w-5" data-icon="check" />
+									</span>
+								{/if}</button
+							>
+						</li>
+					{/each}
+				</ul>
+			</div>
 		{/if}
 	</div>
 </FocusListener>
