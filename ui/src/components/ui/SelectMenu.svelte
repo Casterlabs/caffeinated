@@ -22,6 +22,7 @@
 
 	function select(id) {
 		value = id;
+		open = false;
 		dispatch('value', id);
 	}
 </script>
