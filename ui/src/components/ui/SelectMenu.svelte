@@ -29,6 +29,7 @@
 <label class="block text-sm font-medium text-mauve-12">
 	<LocalizedText key={title} />
 </label>
+<div class="w-full">
 
 <FocusListener class="relative mt-1" on:lostfocus={() => (open = false)}>
 	<div
@@ -133,3 +134,4 @@
 		{/if}
 	</div>
 </FocusListener>
+</div>
