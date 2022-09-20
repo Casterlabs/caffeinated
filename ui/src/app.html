@@ -34,28 +34,38 @@
                 };
             }
 
+            const iconCache = {};
+
             function replaceIcon( /** @type {HTMLElement} */ element) {
                 if (element.hasAttribute('data-replaced')) return;
 
                 const icon = element.getAttribute('data-icon');
                 element.setAttribute('data-replaced', 'true');
 
-                fetch(`/icons/${icon}.svg`)
-                    .then((res) => {
-                        if (res.ok) {
-                            return res.text();
-                        } else {
-                            throw 'Error status: ' + res.status;
-                        }
-                    })
-                    .then((svg) => {
-                        element.innerHTML = svg;
-                        console.debug('Loaded icon:', icon, element);
-                    })
-                    .catch((e) => {
-                        console.error('Could not load icon', icon, 'due to an error:');
-                        console.error(e);
-                    });
+                if (iconCache[icon]) {
+                    element.innerHTML = iconCache[icon];
+                    console.debug('Loaded icon from cache:', icon);
+                } else {
+                    fetch(`/icons/${icon}.svg`)
+                        .then((res) => {
+                            if (res.ok) {
+                                return res.text();
+                            } else {
+                                throw 'Error status: ' + res.status;
+                            }
+                        })
+                        .then((svg) => {
+                            element.innerHTML = iconCache[icon] = svg;
+                            console.debug('Loaded icon:', icon);
+                        })
+                        .catch((e) => {
+                            element.innerHTML = iconCache[icon] =
+                                '<div class="bg-red-500 h-full w-full text-white" title="MISSING ICON">X</div>'; // Visual error.
+                            console.error('Could not load icon', icon, 'due to an error:');
+                            console.error(e);
+                        })
+                        .finally((val) => {});
+                }
             }
 
             new MutationObserver((records) => {
