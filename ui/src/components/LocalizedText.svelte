@@ -47,7 +47,7 @@
 
 		let emojiMatchPromises = [];
 		for (const content of newContents) {
-			if (typeof content == 'string') {
+			if (typeof content == 'string' && typeof window != 'undefined') {
 				emojiMatchPromises.push(Caffeinated.emojis.matchAndReturnHTML(content, false));
 			} else {
 				emojiMatchPromises.push(Promise.resolve(content));
