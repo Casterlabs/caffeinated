@@ -30,7 +30,7 @@ export default {
     'page.settings.appearance.theme.CASTERLABS_DARK': 'Dark',
     'page.settings.appearance.theme.SYSTEM': 'Follow System',
     'page.settings.appearance.icon': 'Icon',
-    'page.settings.appearance.emojis': 'Emojis',
+    'page.settings.appearance.emojis': 'Emojis 😀',
     'page.settings.appearance.emojis.SYSTEM': 'System',
     'page.settings.appearance.language': 'Language',
     'page.settings.appearance.close_to_tray': 'Close button sends to tray',

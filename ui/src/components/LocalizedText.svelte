@@ -45,7 +45,16 @@
 			console.debug('Localized with slots:', key, slotMapping, slotContents, result, newContents);
 		}
 
-		contents = newContents;
+		let emojiMatchPromises = [];
+		for (const content of newContents) {
+			if (typeof content == 'string') {
+				emojiMatchPromises.push(Caffeinated.emojis.matchAndReturnHTML(content, false));
+			} else {
+				emojiMatchPromises.push(Promise.resolve(content));
+			}
+		}
+
+		contents = await Promise.all(emojiMatchPromises);
 
 		await tick();
 
