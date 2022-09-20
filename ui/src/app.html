@@ -18,7 +18,7 @@
     <script>
         window.addEventListener('load', () => {
             function interceptAnchor( /** @type {HTMLAnchorElement} */ element) {
-                if (element.target != '_blank' || element.href == '#/extern') return;
+                if (element.target != '_blank' || element.hasAttribute('data-dest')) return;
 
                 element.setAttribute('data-dest', element.href);
                 element.href = '#/extern';
