@@ -28,7 +28,8 @@
 </script>
 
 <div class="w-full">
-	<label class="block text-sm font-medium text-mauve-12" for={ID}>
+	<!-- svelte-ignore a11y-label-has-associated-control -->
+	<label id={ID} class="block text-sm font-medium text-mauve-12">
 		<LocalizedText key={title} />
 	</label>
 
@@ -73,12 +74,12 @@
 			}}
 		>
 			<button
-				id={ID}
 				type="button"
 				role="listbox"
 				class="relative w-full h-[2.375rem] cursor-pointer rounded-md border border-mauve-7 bg-mauve-1 py-2 pl-3 pr-10 text-left shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7 text-sm"
 				aria-haspopup="listbox"
 				aria-expanded={open}
+				aria-labelledby={ID}
 				on:click={() => (open = !open)}
 			>
 				<span class="block truncate text-mauve-12">
