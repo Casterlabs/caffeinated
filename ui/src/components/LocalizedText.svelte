@@ -6,6 +6,8 @@
 
 	const console = createConsole('LocalizedText');
 
+	const preferences = st || Caffeinated.UI.svelte('preferences');
+
 	export let opts = {};
 	export let key;
 
@@ -18,8 +20,6 @@
 		if (!lang) return;
 
 		const { result, usedFallback } = translate(lang, key, opts, false);
-
-		contents = []; // !!Required!!
 		let newContents;
 
 		if (usedFallback) {
@@ -71,6 +71,7 @@
 	$: key, render($language);
 	$: opts, render($language);
 	$: slotContents, render($language);
+	$: $preferences, render($language);
 	language.subscribe(render);
 </script>
 
