@@ -75,10 +75,11 @@
 >
 	<slot />
 
-	{#if dev && !hideDevButton}
+	{#if dev}
 		<!-- svelte-ignore missing-declaration -->
 		<button
 			class="fixed top-2 right-2 bg-gray-4 p-1.5 rounded-md"
+			class:opacity-0={hideDevButton}
 			title="Quick Theme Switch"
 			on:click={async () => {
 				Caffeinated.UI.updateAppearance({
@@ -88,8 +89,7 @@
 			}}
 			on:contextmenu={(e) => {
 				e.preventDefault();
-				hideDevButton = true;
-				setTimeout(() => (hideDevButton = false), 2000);
+				hideDevButton = !hideDevButton;
 			}}
 		>
 			{#if useLightTheme}
