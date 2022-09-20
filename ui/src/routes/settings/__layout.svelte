@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 
 	const tabs = [
-		['page.settings.appearance', '/settings'],
+		['page.settings.appearance', '/settings/appearance'],
 		['page.settings.plugins', '/settings/plugins'],
 		['page.settings.accounts', '/settings/accounts'],
 		['page.settings.about', '/settings/about']

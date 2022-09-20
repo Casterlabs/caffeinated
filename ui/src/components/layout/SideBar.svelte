@@ -33,7 +33,7 @@
 				useStartsWith: false
 			},
 			{
-				href: '/settings',
+				href: '/settings/appearance',
 				name: 'page.settings',
 				useStartsWith: true
 			}
