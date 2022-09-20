@@ -22,9 +22,9 @@ public class ThemeManager extends JavascriptObject {
 
     public void init() {
         this.registerTheme(
-            new Theme("system", "Follow System", Appearance.FOLLOW_SYSTEM, true),
-            new Theme("co.casterlabs.light", "Light", Appearance.LIGHT, false),
-            new Theme("co.casterlabs.dark", "Dark", Appearance.DARK, false)
+            new Theme("system", "SYSTEM", Appearance.FOLLOW_SYSTEM, true),
+            new Theme("co.casterlabs.light", "CASTERLABS_LIGHT", Appearance.LIGHT, false),
+            new Theme("co.casterlabs.dark", "CASTERLABS_DARK", Appearance.DARK, false)
         );
 
         String theme = CaffeinatedApp.getInstance().getUI().getPreferences().getTheme();

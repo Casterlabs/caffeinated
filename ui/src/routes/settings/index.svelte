@@ -10,10 +10,16 @@
 	<li class="flex items-center justify-between py-4">
 		<div class="col-span-6 w-full">
 			<SelectMenu
-				title="Theme"
+				title="page.settings.appearance.theme"
 				value={$currentTheme?.id}
 				options={Object.values($themes || {}) //
-					.reduce((obj, curr) => ({ ...obj, [curr.id]: curr.name }), {})}
+					.reduce(
+						(obj, curr) => ({
+							...obj,
+							[curr.id]: `page.settings.appearance.theme.${curr.name}`
+						}),
+						{}
+					)}
 				on:value={async ({ detail: newTheme }) => {
 					window.Caffeinated.UI.updateAppearance({
 						...(await window.Caffeinated.UI.preferences),
@@ -25,23 +31,15 @@
 	</li>
 	<li class="flex items-center justify-between py-4">
 		<Switch
-			title="Close button sends to tray"
-			description="Makes Caffeinated cozy up in the background when you close it."
+			title="page.settings.appearance.close_button_tray"
+			description="page.settings.appearance.close_button_tray.description"
 			checked={true}
 		/>
 	</li>
 	<li class="flex items-center justify-between py-4">
 		<Switch
-			title="Mikey's Mode"
-			description={`
-				<a
-					class="text-link"
-					href="https://twitter.com/Casterlabs/status/1508475284944736268"
-					target="_blank"
-				>
-					For those of you who need more time to cook your pockets :^)
-				</a>
-			`}
+			title="page.settings.appearance.mikeys_mode"
+			description="page.settings.appearance.mikeys_mode.description"
 			checked={true}
 		/>
 	</li>
