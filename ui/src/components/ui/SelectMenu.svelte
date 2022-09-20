@@ -72,7 +72,7 @@
 	>
 		<button
 			type="button"
-			class="relative w-full cursor-default rounded-md border border-gray-300 bg-mauve-1 py-2 pl-3 pr-10 text-left shadow-sm focus:border-current focus:outline-none focus:ring-1 focus:ring-current text-crimson-7 text-sm"
+			class="relative w-full cursor-pointer rounded-md border border-mauve-7 bg-mauve-1 py-2 pl-3 pr-10 text-left shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7 text-sm"
 			aria-haspopup="listbox"
 			aria-expanded={open}
 			on:click={() => (open = !open)}
@@ -81,7 +81,7 @@
 				<LocalizedText key={options[value]} />
 			</span>
 			<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-				<icon class="h-5 w-5  text-mauve-10" data-icon="chevron-up-down" />
+				<icon class="h-5 w-5 text-mauve-10" data-icon="chevron-up-down" />
 			</span>
 		</button>
 
