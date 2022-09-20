@@ -29,9 +29,9 @@
 	</li>
 	<li class="py-4">
 		<Switch
-			title="page.settings.appearance.close_button_tray"
-			description="page.settings.appearance.close_button_tray.description"
 			checked={true}
+			title="page.settings.appearance.close_to_tray"
+			description="page.settings.appearance.close_to_tray.description"
 		/>
 	</li>
 	<li class="py-4">
