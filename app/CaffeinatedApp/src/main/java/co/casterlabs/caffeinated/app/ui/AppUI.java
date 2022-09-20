@@ -9,6 +9,7 @@ import java.util.List;
 
 import co.casterlabs.caffeinated.app.AppPreferences;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
@@ -47,7 +48,11 @@ public class AppUI extends JavascriptObject {
     private List<String> fonts = FontProvider.listFonts();
 
     public void init() {
-        // Unused, for now.
+        this.updateEmojiProvider();
+    }
+
+    private void updateEmojiProvider() {
+        EmojisObj.setEmojiProvider(this.preferences.getEmojiProvider());
     }
 
     @JavascriptGetter("chatPreferences")
@@ -63,16 +68,16 @@ public class AppUI extends JavascriptObject {
 
     @JavascriptFunction
     public void updateAppearance(@NonNull AppearanceUpdateEvent event) {
-        UIPreferences uiPrefs = this.getPreferences();
-
-        uiPrefs.setIcon(event.getIcon());
-        uiPrefs.setTheme(event.getTheme());
-        uiPrefs.setCloseToTray(event.isCloseToTray());
-        uiPrefs.setMikeysMode(event.isMikeysMode());
-        uiPrefs.setEmojiProvider(event.getEmojiProvider());
-        uiPrefs.setLanguage(event.getLanguage());
-        uiPrefs.setEnableStupidlyUnsafeSettings(event.isEnableStupidlyUnsafeSettings());
+        this.preferences.setIcon(event.getIcon());
+        this.preferences.setTheme(event.getTheme());
+        this.preferences.setCloseToTray(event.isCloseToTray());
+        this.preferences.setMikeysMode(event.isMikeysMode());
+        this.preferences.setEmojiProvider(event.getEmojiProvider());
+        this.preferences.setLanguage(event.getLanguage());
+        this.preferences.setEnableStupidlyUnsafeSettings(event.isEnableStupidlyUnsafeSettings());
         this.preferenceFile.save();
+
+        this.updateEmojiProvider();
 
         // Broadcast to the plugins.
         new AsyncTask(() -> {

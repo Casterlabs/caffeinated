@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Aug 11 00:24:31 CDT 2022
+EmojiApi-3.2.0.jar>=
+EmojiApi-3.2.0-shaded.jar>=
+EmojiApi-3.2.0-sources.jar>=
+EmojiApi-3.2.0.pom>=

@@ -86,15 +86,16 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // @formatter:off
 
     // Integrations
-    private PluginIntegration plugins = new PluginIntegration();
-    private MusicIntegration  music = new MusicIntegration();
-    private AppControlDeck    controlDeck = new AppControlDeck();
+    private PluginIntegration plugins      = new PluginIntegration();
+    private MusicIntegration  music        = new MusicIntegration();
+    private AppControlDeck    controlDeck  = new AppControlDeck();
     private ThemeManager      themeManager = new ThemeManager();
-    private AppChatbot        chatbot = new AppChatbot();
-    private GlobalKoi         koi = new GlobalKoi();
-    private AppAuth           auth = new AppAuth();
-    private AppApi            api = new AppApi();
-    private AppUI             UI = new AppUI();
+    private AppChatbot        chatbot      = new AppChatbot();
+    private GlobalKoi         koi          = new GlobalKoi();
+    private AppAuth           auth         = new AppAuth();
+    private EmojisObj         emojis       = new EmojisObj();
+    private AppApi            api          = new AppApi();
+    private AppUI             UI           = new AppUI();
 
     // Preferences
     private PreferenceFile<PluginIntegrationPreferences> pluginIntegrationPreferences = new PreferenceFile<>("plugins", PluginIntegrationPreferences.class);
