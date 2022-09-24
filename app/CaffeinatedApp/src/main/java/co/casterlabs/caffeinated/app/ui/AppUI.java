@@ -16,8 +16,8 @@ import co.casterlabs.caffeinated.app.ui.events.AppearanceUpdateEvent;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
@@ -75,7 +75,7 @@ public class AppUI extends JavascriptObject {
         this.preferenceFile.save();
 
         // Broadcast to the plugins.
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             try {
                 JsonObject preferences = (JsonObject) Rson.DEFAULT.toJson(this.preferences);
 
@@ -103,29 +103,27 @@ public class AppUI extends JavascriptObject {
     public void onUILoaded() {
         this.uiFinishedLoad = true;
 
-        CaffeinatedApp.getInstance().getInitPromise().then((aVoid) -> {
-            PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
+        PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
 
-            if (prefs.get().isNew()) {
-                CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
+        if (prefs.get().isNew()) {
+            CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
 
-                prefs.get().setNew(false);
-                prefs.save();
+            prefs.get().setNew(false);
+            prefs.save();
 
-                this.navigate("/welcome/step1");
+            this.navigate("/welcome/step1");
+        } else {
+            AppAuth auth = CaffeinatedApp.getInstance().getAuth();
+
+            if (!auth.isSignedIn()) {
+                this.navigate("/signin");
+            } else if (auth.isAuthorized()) {
+                this.navigate("/home");
             } else {
-                AppAuth auth = CaffeinatedApp.getInstance().getAuth();
-
-                if (!auth.isSignedIn()) {
-                    this.navigate("/signin");
-                } else if (auth.isAuthorized()) {
-                    this.navigate("/home");
-                } else {
-                    // Otherwise AppAuth will automagically move us there :D
-                    FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (theme-loaded)");
-                }
+                // Otherwise AppAuth will automagically move us there :D
+                FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (theme-loaded)");
             }
-        });
+        }
     }
 
     @JavascriptFunction

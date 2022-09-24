@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
-import co.casterlabs.kaimen.util.threading.Promise;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.async.Promise;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
@@ -26,7 +26,7 @@ public class Currencies {
     public static final String baseCurrency = "USD";
 
     static {
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             while (true) {
                 try {
                     JsonObject response = Rson.DEFAULT.fromJson(

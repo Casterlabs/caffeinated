@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -20,10 +21,9 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
-import co.casterlabs.caffeinated.util.Triple;
 import co.casterlabs.caffeinated.util.collections.IdentityCollection;
-import co.casterlabs.kaimen.util.functional.Producer;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.functional.tuples.Triple;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -34,7 +34,7 @@ import xyz.e3ndr.reflectionlib.ReflectionLib;
 public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugins {
     private static final FastLogger logger = new FastLogger();
 
-    private Map<String, Triple<CaffeinatedPlugin, Producer<Widget>, WidgetDetails>> widgetFactories = new HashMap<>();
+    private Map<String, Triple<CaffeinatedPlugin, Supplier<Widget>, WidgetDetails>> widgetFactories = new HashMap<>();
     private Map<String, CaffeinatedPlugin> plugins = new HashMap<>();
     private Map<String, WidgetHandle> widgetHandles = new HashMap<>();
 
@@ -58,8 +58,8 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
     public List<WidgetDetails> getCreatableWidgets() {
         List<WidgetDetails> details = new LinkedList<>();
 
-        for (Triple<CaffeinatedPlugin, Producer<Widget>, WidgetDetails> factory : this.widgetFactories.values()) {
-            details.add(factory.c);
+        for (Triple<CaffeinatedPlugin, Supplier<Widget>, WidgetDetails> factory : this.widgetFactories.values()) {
+            details.add(factory.c());
         }
 
         return details;
@@ -83,17 +83,17 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
 
     @SneakyThrows
     private WidgetHandle createWidget(@NonNull String namespace, @NonNull String id, @NonNull String name, @Nullable JsonObject settings, @NonNull WidgetType expectedType) {
-        Triple<CaffeinatedPlugin, Producer<Widget>, WidgetDetails> factory = this.widgetFactories.get(namespace);
+        Triple<CaffeinatedPlugin, Supplier<Widget>, WidgetDetails> factory = this.widgetFactories.get(namespace);
 
         assert factory != null : "A factory associated to that widget is not registered.";
-        assert factory.c.getType() == expectedType : "That widget is not of the expected type of " + expectedType;
+        assert factory.c().getType() == expectedType : "That widget is not of the expected type of " + expectedType;
 
-        List<Widget> pluginWidgetsField = ReflectionLib.getValue(factory.a, "widgets");
+        List<Widget> pluginWidgetsField = ReflectionLib.getValue(factory.a(), "widgets");
 
         String conductorKey = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorKey();
         int conductorPort = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorPort();
 
-        WidgetHandle handle = new WidgetHandle(factory.b.produce(), conductorKey, conductorPort) {
+        WidgetHandle handle = new WidgetHandle(factory.b().get(), conductorKey, conductorPort) {
             @Override
             public void onSettingsUpdate() {
                 CaffeinatedApp.getInstance().getPlugins().save();
@@ -105,14 +105,14 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         handle.namespace = namespace;
         handle.id = id;
         handle.name = name;
-        handle.plugin = factory.a;
-        handle.details = factory.c;
+        handle.plugin = factory.a();
+        handle.details = factory.c();
 
         // Register it, update it, and return it.
         this.widgetHandles.put(handle.widget.getId(), handle);
         pluginWidgetsField.add(handle.widget);
 
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             // Set the settings.
             if (settings != null) {
                 handle.settings = settings;
@@ -162,7 +162,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
 
     @SneakyThrows
     @Override
-    public CaffeinatedPlugins registerWidgetFactory(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Producer<Widget> widgetProducer) {
+    public CaffeinatedPlugins registerWidgetFactory(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Supplier<Widget> widgetSupplier) {
         assert !this.widgetFactories.containsKey(widgetDetails.getNamespace()) : "A widget of that namespace is already registered.";
 
         widgetDetails.validate();
@@ -170,7 +170,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         List<String> pluginWidgetNamespacesField = ReflectionLib.getValue(plugin, "widgetNamespaces");
         pluginWidgetNamespacesField.add(widgetDetails.getNamespace());
 
-        this.widgetFactories.put(widgetDetails.getNamespace(), new Triple<>(plugin, widgetProducer, widgetDetails));
+        this.widgetFactories.put(widgetDetails.getNamespace(), new Triple<>(plugin, widgetSupplier, widgetDetails));
         this.$creatableWidgets.add(widgetDetails);
 
         // Automatically create the docks and applets when registered.
@@ -292,8 +292,8 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         List<String> pluginWidgetNamespacesField = ReflectionLib.getValue(plugin, "widgetNamespaces");
 
         for (String widgetNamespace : pluginWidgetNamespacesField) {
-            Triple<CaffeinatedPlugin, Producer<Widget>, WidgetDetails> removed = this.widgetFactories.remove(widgetNamespace);
-            this.$creatableWidgets.remove(removed.c);
+            Triple<CaffeinatedPlugin, Supplier<Widget>, WidgetDetails> removed = this.widgetFactories.remove(widgetNamespace);
+            this.$creatableWidgets.remove(removed.c());
         }
 
         for (Widget widget : new ArrayList<>(pluginWidgetsField)) {

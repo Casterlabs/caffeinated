@@ -3,7 +3,6 @@ package co.casterlabs.caffeinated.bootstrap;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -18,12 +17,12 @@ import co.casterlabs.caffeinated.bootstrap.impl.windows.common.WindowsBootstrap;
 import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.app.AppBootstrap;
 import co.casterlabs.kaimen.app.AppEntry;
 import co.casterlabs.kaimen.app.ui.UIServer;
-import co.casterlabs.kaimen.util.platform.Platform;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.WebviewFactory;
 import co.casterlabs.kaimen.webview.WebviewLifeCycleListener;
@@ -89,7 +88,7 @@ public class Bootstrap implements Runnable {
     private static UIServer uiServer;
 
     // FOR TESTING.
-    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         AppBootstrap.main(args);
     }
 
@@ -101,7 +100,7 @@ public class Bootstrap implements Runnable {
 
         NativeBootstrap nb = null;
 
-        switch (Platform.os) {
+        switch (Platform.osDistribution) {
             case LINUX:
                 nb = new LinuxBootstrap();
                 break;
@@ -110,12 +109,12 @@ public class Bootstrap implements Runnable {
                 nb = new MacOSBootstrap();
                 break;
 
-            case WINDOWS:
+            case WINDOWS_NT:
                 nb = new WindowsBootstrap();
                 break;
         }
 
-        assert nb != null : "Unsupported platform: " + Platform.os;
+        assert nb != null : "Unsupported platform: " + Platform.osDistribution;
 
         nb.init();
 
@@ -232,10 +231,10 @@ public class Bootstrap implements Runnable {
         String appUrl = isDev ? this.devAddress : uiServer.getLocalAddress();
 
         // Setup the webview.
-        WebviewFactory factory = WebviewFactory.get(app.getAppPreferences().get().getRendererPreference());
+        WebviewFactory factory = WebviewFactory.getFactory(app.getAppPreferences().get().getRendererPreference());
 
         logger.info("Initializing UI (this may take some time)");
-        webview = factory.produce();
+        webview = factory.get();
 
         // Register the lifecycle listener.
         WebviewLifeCycleListener uiLifeCycleListener = new WebviewLifeCycleListener() {
@@ -251,7 +250,7 @@ public class Bootstrap implements Runnable {
                 app.setWebview(webview);
                 app.setAppUrl(appUrl);
 
-                new AsyncTask(() -> {
+                AsyncTask.create(() -> {
                     webview.getBridge().defineObject("Caffeinated", app);
 
                     this.traySupported = TrayHandler.tryCreateTray(webview);
@@ -294,7 +293,7 @@ public class Bootstrap implements Runnable {
                 logger.debug("onCloseRequested");
 
                 if (app.canCloseUI()) {
-                    new AsyncTask(() -> {
+                    AsyncTask.create(() -> {
                         if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray() && this.traySupported) {
                             webview.close();
                         } else {
@@ -359,7 +358,7 @@ public class Bootstrap implements Runnable {
     }
 
     private static void shutdown(boolean force, boolean relaunch, boolean isReset) {
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             if (CaffeinatedApp.getInstance().canCloseUI() || force) {
                 logger.info("Shutting down.");
 
@@ -428,7 +427,7 @@ public class Bootstrap implements Runnable {
                 command = String.format("\"%s/bin/java\" %s -cp \"%s\" %s", javaHome, jvmArgs, classpath, entry);
             }
         } else {
-            switch (Platform.os) {
+            switch (Platform.osDistribution) {
                 case LINUX:
                     command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
                     break;
@@ -437,7 +436,7 @@ public class Bootstrap implements Runnable {
                     command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated";
                     break;
 
-                case WINDOWS:
+                case WINDOWS_NT:
                     command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated.exe";
                     break;
 

@@ -16,8 +16,8 @@ import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.NativeSystem.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
-import co.casterlabs.caffeinated.util.Pair;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.io.http.MimeTypes;
 import lombok.SneakyThrows;
@@ -29,7 +29,7 @@ public class LinuxSystemPlaybackMusicProvider extends SystemPlaybackMusicProvide
 
     @Override
     protected void init() {
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             while (true) {
                 this.metadata = getPlayerMetaData();
                 this.update();
@@ -67,8 +67,8 @@ public class LinuxSystemPlaybackMusicProvider extends SystemPlaybackMusicProvide
                 // Use the better parsing for a more accurate result.
                 Pair<String, List<String>> betterResult = InternalMusicProvider.parseTitleForArtists(title, artists);
 
-                title = betterResult.a;
-                artists = betterResult.b;
+                title = betterResult.a();
+                artists = betterResult.b();
 
                 MusicTrack track = new MusicTrack(title, artists, album, albumArtUrl, "");
 

@@ -19,8 +19,7 @@ public class AppPreferences {
 
     private WebviewRenderer[] rendererPreference = {
             WebviewRenderer.WEBKIT,
-            WebviewRenderer.CHROMIUM_EMBEDDED_FRAMEWORK,
-            WebviewRenderer.WEBVIEW_PROJECT
+            WebviewRenderer.CHROMIUM_EMBEDDED_FRAMEWORK
     };
 
 }

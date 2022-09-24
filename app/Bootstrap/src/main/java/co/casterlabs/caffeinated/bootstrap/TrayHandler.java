@@ -12,15 +12,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.commons.platform.OSDistribution;
+import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.util.platform.OperatingSystem;
-import co.casterlabs.kaimen.util.platform.Platform;
+import co.casterlabs.kaimen.app.AppEvent;
 import co.casterlabs.kaimen.webview.Webview;
 import lombok.NonNull;
 
@@ -34,7 +34,7 @@ public class TrayHandler {
     public static boolean tryCreateTray(Webview webview) {
         if (tray == null) {
             // Check the SystemTray support
-            if ((Platform.os == OperatingSystem.MACOSX) || !SystemTray.isSupported()) {
+            if ((Platform.osDistribution == OSDistribution.MACOSX) || !SystemTray.isSupported()) {
                 // Note that calling SystemTray will cause an AWT thread lock. So we always need
                 // to be diligent and check for platform before compat.
                 return false;
@@ -68,7 +68,7 @@ public class TrayHandler {
 
             // Setup the tray icon.
             icon = new TrayIcon(new ImageIcon(App.getIconURL(), "Casterlabs Logo").getImage());
-            App.appIconChangeEvent.on(TrayHandler::changeTrayIcon);
+            App.on(AppEvent.ICON_CHANGE, TrayHandler::changeTrayIcon);
 
             icon.setImageAutoSize(true);
             icon.setPopupMenu(popup);
@@ -111,12 +111,12 @@ public class TrayHandler {
         }
     }
 
-    private static void changeTrayIcon(URL url) {
+    private static void changeTrayIcon() {
         if (lastImage != null) {
             lastImage.flush();
         }
 
-        Image image = new ImageIcon(url, "").getImage();
+        Image image = new ImageIcon(App.getIconURL()).getImage();
         lastImage = image;
 
         icon.setImage(image);

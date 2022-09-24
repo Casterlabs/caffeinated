@@ -14,8 +14,8 @@ import java.util.Set;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
+import co.casterlabs.commons.async.Promise;
 import co.casterlabs.kaimen.util.reflection.Reflective;
-import co.casterlabs.kaimen.util.threading.Promise;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.types.events.KoiEvent;

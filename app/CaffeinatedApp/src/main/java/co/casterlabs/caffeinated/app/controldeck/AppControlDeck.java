@@ -14,7 +14,7 @@ import co.casterlabs.caffeinated.controldeck.protocol.packets.ControlDeckPacket;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV2Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV2Listener;
 import co.casterlabs.caffeinated.util.collections.ValueIdentityHashMap;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.rakurai.json.Rson;
@@ -74,7 +74,7 @@ public class AppControlDeck extends JavascriptObject {
 
         @Override
         public void onMessage(JsonObject message, final String sender) {
-            new AsyncTask(() -> {
+            AsyncTask.create(() -> {
                 try {
                     String transportType = message.getString("t_type");
 

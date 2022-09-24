@@ -9,7 +9,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCa
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.DonationEvent;
 import co.casterlabs.koi.api.types.events.rich.Donation;
@@ -85,7 +85,7 @@ public class DonationGoal extends GenericGoal {
 
     @KoiEventHandler
     public void onDonation(@Nullable DonationEvent e) {
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             double total = 0;
 
             for (Donation d : e.getDonations()) {

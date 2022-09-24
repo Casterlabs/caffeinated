@@ -9,7 +9,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
-import co.casterlabs.caffeinated.util.Pair;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;

@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.stream.Collectors;
 
+import co.casterlabs.commons.functional.tuples.Pair;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;

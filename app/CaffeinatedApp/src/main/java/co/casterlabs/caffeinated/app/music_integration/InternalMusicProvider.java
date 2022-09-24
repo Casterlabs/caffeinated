@@ -12,7 +12,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
-import co.casterlabs.caffeinated.util.Pair;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonElement;

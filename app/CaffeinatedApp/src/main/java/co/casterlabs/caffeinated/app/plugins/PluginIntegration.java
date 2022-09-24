@@ -21,7 +21,7 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
@@ -246,7 +246,7 @@ public class PluginIntegration extends JavascriptObject {
 
         for (WidgetSettingsButton b : handle.settingsLayout.getButtons()) {
             if (b.getId().equals(buttonId)) {
-                new AsyncTask(b.getOnClick());
+                AsyncTask.create(b.getOnClick());
                 return;
             }
         }

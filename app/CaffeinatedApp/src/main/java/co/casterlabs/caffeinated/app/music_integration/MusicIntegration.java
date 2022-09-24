@@ -17,7 +17,7 @@ import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
@@ -128,7 +128,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
         musicApiDir.mkdirs();
 
         // Write some cute files for the end user to mess with :^)
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             try {
                 Files.writeString(
                     new File(musicApiDir, "current_playback.json").toPath(),
@@ -150,7 +150,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
         });
 
         // Broadcast to the plugins & the music api.
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             try {
                 @SuppressWarnings("deprecation")
                 JsonObject music = this.toJson();

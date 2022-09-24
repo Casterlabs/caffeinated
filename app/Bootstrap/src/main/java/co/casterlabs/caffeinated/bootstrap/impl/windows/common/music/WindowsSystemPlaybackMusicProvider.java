@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.NativeSystem.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.PlaybackEvent;
@@ -18,8 +16,8 @@ import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.Play
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.types.MediaInfo;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.types.PlaybackStatus;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
-import co.casterlabs.caffeinated.util.Pair;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.SneakyThrows;
@@ -34,11 +32,11 @@ public class WindowsSystemPlaybackMusicProvider extends SystemPlaybackMusicProvi
     @Override
     protected void init() {
         if (!WMCJCW_LOCATION.exists()) {
-            JOptionPane.showMessageDialog(null, "Unable to find WMC-JsonConsoleWrapper.\nThe system music service will not work.", "Casterlabs-Caffeinated", JOptionPane.ERROR_MESSAGE, null);
+//            JOptionPane.showMessageDialog(null, "Unable to find WMC-JsonConsoleWrapper.\nThe system music service will not work.", "Casterlabs-Caffeinated", JOptionPane.ERROR_MESSAGE, null);
             return;
         }
 
-        new AsyncTask(this::startListener);
+        AsyncTask.create(this::startListener);
     }
 
     @SneakyThrows
@@ -197,8 +195,8 @@ public class WindowsSystemPlaybackMusicProvider extends SystemPlaybackMusicProvi
                 // Use the better parsing for a more accurate result.
                 Pair<String, List<String>> betterResult = InternalMusicProvider.parseTitleForArtists(title, artists);
 
-                title = betterResult.a;
-                artists = betterResult.b;
+                title = betterResult.a();
+                artists = betterResult.b();
 
                 MusicTrack track = new MusicTrack(title, artists, album, albumArtUrl, "");
 

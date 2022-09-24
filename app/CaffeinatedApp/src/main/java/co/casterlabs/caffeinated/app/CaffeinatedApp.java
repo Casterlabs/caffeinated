@@ -30,7 +30,6 @@ import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
-import co.casterlabs.kaimen.util.threading.Promise;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
@@ -112,8 +111,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // Event stuff
     private Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
 
-    private @Getter Promise<Void> initPromise = new Promise<>();
-
     static {
         AppDirs appDirs = AppDirsFactory.getInstance();
         appDataDir = appDirs.getUserDataDir("casterlabs-caffeinated", null, null, true);
@@ -188,8 +185,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         this.analytics.trackPageView("/", this.UI.getPreferences().getLanguage());
         this.analytics.startHeartbeat();
-
-        this.initPromise.fulfill(null);
     }
 
     @Override

@@ -9,7 +9,7 @@ import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Shout;
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
@@ -48,7 +48,7 @@ public class AppChatbot extends JavascriptObject {
         int timerIntervalSeconds = this.preferences.get().getTimerIntervalSeconds();
 
         if ((timerIntervalSeconds > 0) && !this.preferences.get().getTimers().isEmpty()) {
-            this.timerTask = new AsyncTask(() -> {
+            this.timerTask = AsyncTask.create(() -> {
                 while (true) {
                     try {
                         Thread.sleep(timerIntervalSeconds * 1000);

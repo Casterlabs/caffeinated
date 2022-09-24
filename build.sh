@@ -29,7 +29,7 @@ fi
 rm -rf dist/*
 mkdir -p dist
 
-KAIMEN_VERSION="b67ece9"
+KAIMEN_VERSION="129cff9"
 
 if [[ $@ != *"nodist"* ]]; then
     cp app/Bootstrap/target/classes/commit.txt dist
@@ -41,7 +41,7 @@ if [[ $@ != *"nodist"* ]]; then
     java -jar ProjectBuilder.jar -os MACOSX -arch AMD64 -wi WEBKIT -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -cp app/Bootstrap/target/Caffeinated.jar -i icon.icns -id co.casterlabs.caffeinated
     echo ""
 
-    java -jar ProjectBuilder.jar -os WINDOWS -arch AMD64 -wi CHROMIUM_EMBEDDED_FRAMEWORK -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -res app/WMC-JsonConsoleWrapper.exe -cp app/Bootstrap/target/Caffeinated.jar -i icon.ico
+    java -jar ProjectBuilder.jar -os WINDOWS_NT -arch AMD64 -wi CHROMIUM_EMBEDDED_FRAMEWORK -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -res app/WMC-JsonConsoleWrapper.exe -cp app/Bootstrap/target/Caffeinated.jar -i icon.ico
     echo ""
 
     java -jar ProjectBuilder.jar -os LINUX -arch AMD64 -wi CHROMIUM_EMBEDDED_FRAMEWORK -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -cp app/Bootstrap/target/Caffeinated.jar

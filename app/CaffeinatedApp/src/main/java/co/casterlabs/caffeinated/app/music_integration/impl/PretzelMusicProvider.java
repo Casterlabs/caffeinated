@@ -11,7 +11,7 @@ import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider.PretzelSettings;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -53,7 +53,7 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
                             "https://play.pretzel.rocks"
                         );
 
-                        new AsyncTask(() -> {
+                        AsyncTask.create(() -> {
                             this.pollPretzel();
                         });
                     }
@@ -66,7 +66,7 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
             }
         });
 
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             while (true) {
                 this.pollPretzel();
                 try {
