@@ -20,7 +20,7 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
@@ -119,7 +119,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         }
 
         // Send update to the widget instances.
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             JsonObject statics = this.toJson();
             JsonObject extendedStatics = this.toJsonExtended();
 

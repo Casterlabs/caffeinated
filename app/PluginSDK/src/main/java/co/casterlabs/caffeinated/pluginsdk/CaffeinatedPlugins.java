@@ -1,12 +1,12 @@
 package co.casterlabs.caffeinated.pluginsdk;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
-import co.casterlabs.kaimen.util.functional.Producer;
 import lombok.NonNull;
 
 public interface CaffeinatedPlugins {
@@ -39,7 +39,7 @@ public interface CaffeinatedPlugins {
      * 
      * @return                this instance, for chaining.
      */
-    public CaffeinatedPlugins registerWidgetFactory(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Producer<Widget> widgetProducer);
+    public CaffeinatedPlugins registerWidgetFactory(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Supplier<Widget> widgetProducer);
 
     /**
      * Registers a widget that can be created by the user.

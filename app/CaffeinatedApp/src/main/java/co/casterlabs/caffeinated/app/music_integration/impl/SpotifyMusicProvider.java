@@ -10,9 +10,9 @@ import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider.SpotifySettings;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
-import co.casterlabs.caffeinated.util.Pair;
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -44,7 +44,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
                 }
             });
 
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             while (true) {
                 this.pollSpotify();
                 try {
@@ -130,8 +130,8 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
                             // Use the better parsing for a more accurate result.
                             Pair<String, List<String>> betterResult = InternalMusicProvider.parseTitleForArtists(title, artists);
 
-                            title = betterResult.a;
-                            artists = betterResult.b;
+                            title = betterResult.a();
+                            artists = betterResult.b();
 
                             MusicTrack track = new MusicTrack(title, artists, album, albumArtUrl, songLink);
 

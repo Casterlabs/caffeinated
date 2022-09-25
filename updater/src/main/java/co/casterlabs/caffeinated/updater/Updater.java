@@ -31,7 +31,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
-    private static final int VERSION = 21;
+    private static final int VERSION = 22;
     private static final String CHANNEL = "stable";
 
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/";
@@ -45,7 +45,7 @@ public class Updater {
     private static File buildokFile = new File(appDirectory, ".build_ok");
 
     private static final List<OperatingSystem> INLINE_PLATFORMS = Arrays.asList(
-        OperatingSystem.WINDOWS
+//        OperatingSystem.WINDOWS
     );
 
     private static @Getter boolean isLauncherOutOfDate = false;

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.kaimen.util.platform.Platform;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonArray;
@@ -31,7 +31,7 @@ public class FontProvider {
     );
 
     static {
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             Set<String> combined = new HashSet<>();
 
             for (Provider provider : providers) {
@@ -97,12 +97,12 @@ class SystemFontsProvider implements Provider {
 
     @Override
     public List<String> listFonts() {
-        switch (Platform.os) {
+        switch (Platform.osDistribution) {
             case MACOSX: {
                 return this.listMacFonts();
             }
 
-            case WINDOWS: {
+            case WINDOWS_NT: {
 
                 try {
                     FastLogger.logStatic("Loading Windows System fonts.");

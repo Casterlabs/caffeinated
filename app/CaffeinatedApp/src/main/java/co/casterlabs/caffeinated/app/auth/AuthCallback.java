@@ -1,13 +1,14 @@
 package co.casterlabs.caffeinated.app.auth;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
 import co.casterlabs.caffeinated.util.Crypto;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
-import co.casterlabs.kaimen.util.threading.Promise;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.async.Promise;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -20,6 +21,9 @@ public class AuthCallback {
     private KinokoV1Connection connection;
 
     private Promise<String> authPromise;
+    private Consumer<String> authPromiseResolve;
+    private Consumer<Throwable> authPromiseReject;
+
     private AsyncTask timeoutWatcher;
 
     public AuthCallback(String type, boolean isKoi) {
@@ -35,14 +39,17 @@ public class AuthCallback {
 
     public Promise<String> connect() {
         if (this.authPromise == null) {
-            this.authPromise = new Promise<>();
+            this.authPromise = new Promise<>((resolve, reject) -> {
+                this.authPromiseResolve = resolve;
+                this.authPromiseReject = reject;
 
-            this.timeoutWatcher = new AsyncTask(() -> {
-                try {
-                    Thread.sleep(TIMEOUT);
-                    authPromise.error(new AuthException("TIMED_OUT"));
-                    cancel();
-                } catch (InterruptedException ignored) {}
+                this.timeoutWatcher = AsyncTask.create(() -> {
+                    try {
+                        Thread.sleep(TIMEOUT);
+                        this.authPromiseReject.accept(new AuthException("TIMED_OUT"));
+                        cancel();
+                    } catch (InterruptedException ignored) {}
+                });
             });
 
             this.reconnect();
@@ -52,7 +59,7 @@ public class AuthCallback {
     }
 
     public void cancel() {
-        this.authPromise.fulfill(null);
+        this.authPromiseResolve.accept(null);
         this.timeoutWatcher.cancel();
         this.connection.close();
     }
@@ -87,10 +94,10 @@ public class AuthCallback {
             if (message.startsWith("\"token:")) {
                 String token = message.substring(7, message.length() - 1);
 
-                authPromise.fulfill(token);
+                authPromiseResolve.accept(token);
                 cancel();
             } else {
-                authPromise.error(new AuthException("NO_TOKEN_PROVIDED"));
+                authPromiseReject.accept(new AuthException("NO_TOKEN_PROVIDED"));
                 cancel();
             }
         }

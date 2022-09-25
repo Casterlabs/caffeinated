@@ -17,7 +17,7 @@ import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
@@ -133,7 +133,7 @@ public class AppAuth extends JavascriptObject {
             prefs.get().setCasterlabsAuthToken(token);
             prefs.save();
 
-            this.clRefreshTask = new AsyncTask(() -> {
+            this.clRefreshTask = AsyncTask.create(() -> {
                 while (true) {
                     try {
                         JsonObject response = this.sendAuthorizedApiRequest("/v3/account", null);
@@ -148,7 +148,7 @@ public class AppAuth extends JavascriptObject {
                         continue;
                     } catch (CasterlabsApiException e) {
                         if (e.getErrors().contains("UNAUTHORIZED")) {
-                            new AsyncTask(this::logoutCasterlabs);
+                            AsyncTask.create(this::logoutCasterlabs);
                         }
                         // Fall through
                     } catch (IOException e) {

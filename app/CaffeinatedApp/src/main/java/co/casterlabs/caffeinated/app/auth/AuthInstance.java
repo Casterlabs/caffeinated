@@ -9,7 +9,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiConnection;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
@@ -195,7 +195,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
                 this.koi.login(this.token);
             } catch (Exception e) {
                 this.logger.exception(e);
-                new AsyncTask(() -> {
+                AsyncTask.create(() -> {
                     this.onClose(true);
                 });
             }

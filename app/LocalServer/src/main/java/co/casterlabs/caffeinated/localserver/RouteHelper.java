@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.rakurai.io.http.HttpResponse;
 import co.casterlabs.rakurai.io.http.HttpSession;
 import co.casterlabs.rakurai.io.http.HttpStatus;
@@ -95,7 +95,7 @@ public interface RouteHelper {
 
             @Override
             public void onOpen(Websocket websocket) {
-                new AsyncTask(() -> {
+                AsyncTask.create(() -> {
                     try {
                         websocket.send(errorPayload.toString());
                         Thread.sleep(1000);

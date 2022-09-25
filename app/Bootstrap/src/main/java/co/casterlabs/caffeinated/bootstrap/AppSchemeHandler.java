@@ -1,21 +1,23 @@
 package co.casterlabs.caffeinated.bootstrap;
 
 import java.io.IOException;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.kaimen.util.functional.ConsumingProducer;
 import co.casterlabs.rakurai.io.http.HttpResponse;
 import co.casterlabs.rakurai.io.http.HttpSession;
 import co.casterlabs.rakurai.io.http.MimeTypes;
 import co.casterlabs.rakurai.io.http.StandardHttpStatus;
+import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class AppSchemeHandler implements ConsumingProducer<HttpSession, co.casterlabs.rakurai.io.http.HttpResponse> {
+public class AppSchemeHandler implements Function<HttpSession, co.casterlabs.rakurai.io.http.HttpResponse> {
 
+    @SneakyThrows
     @Override
-    public @Nullable HttpResponse produce(@Nullable HttpSession request) throws InterruptedException {
+    public @Nullable HttpResponse apply(@Nullable HttpSession request) {
         String uri = request.getUri();
 
         // Append `index.html` to the end when required.

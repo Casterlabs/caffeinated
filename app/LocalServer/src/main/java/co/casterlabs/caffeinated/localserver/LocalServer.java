@@ -13,8 +13,8 @@ import co.casterlabs.caffeinated.localserver.handlers.RouteLocalServer;
 import co.casterlabs.caffeinated.localserver.handlers.RoutePluginApi;
 import co.casterlabs.caffeinated.localserver.handlers.RouteWidgetApi;
 import co.casterlabs.caffeinated.localserver.websocket.RealtimeConnection;
-import co.casterlabs.caffeinated.util.Pair;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.impl.http.undertow.UndertowHttpServer;
 import co.casterlabs.rakurai.io.http.HttpMethod;
 import co.casterlabs.rakurai.io.http.server.HttpServerImplementation;
@@ -75,7 +75,7 @@ public class LocalServer implements Closeable, HttpProvider {
             sora.addHttpProvider(this, widgetApi);
             sora.addWebsocketProvider(this, widgetApi);
 
-            new AsyncTask(this::pingHandler);
+            AsyncTask.create(this::pingHandler);
         }
 
         private void pingHandler() {
@@ -86,7 +86,7 @@ public class LocalServer implements Closeable, HttpProvider {
                             Pair<RealtimeConnection, Object> attachment = websocket.getAttachment();
 
                             if (attachment != null) {
-                                attachment.a.checkExpiryAndPing();
+                                attachment.a().checkExpiryAndPing();
                             }
                         } catch (ClassCastException ignored) {}
                     }

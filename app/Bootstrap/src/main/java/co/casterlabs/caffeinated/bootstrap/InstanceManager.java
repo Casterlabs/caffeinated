@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileLock;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
-import co.casterlabs.kaimen.util.threading.Promise;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.async.Promise;
 import xyz.e3ndr.consoleutil.ipc.IpcChannel;
 import xyz.e3ndr.consoleutil.ipc.MemoryMappedIpc;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -74,40 +76,47 @@ public class InstanceManager {
     }
 
     private static boolean childIpcComms(String command) {
-        Promise<Void> commsPromise = new Promise<>();
+        Promise<Void> commsPromise = new Promise<>(new BiConsumer<Consumer<Void>, Consumer<Throwable>>() {
+            private volatile boolean completed = false;
 
-        // Watchdog task
-        new AsyncTask(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException ignored) {}
+            @Override
+            public void accept(Consumer<Void> resolve, Consumer<Throwable> reject) {
+                AsyncTask ipcTask = AsyncTask.create(() -> {
+                    try {
+                        IpcChannel ipc = MemoryMappedIpc.startHostIpc(ipcDir, "launch");
 
-            if (!commsPromise.isCompleted()) {
-                commsPromise.error(new IllegalStateException("IPC communication took more than 5 seconds."));
-            }
-        });
+                        ipc.write(command);
 
-        // IPC task
-        new AsyncTask(() -> {
-            try {
-                IpcChannel ipc = MemoryMappedIpc.startHostIpc(ipcDir, "launch");
+                        while (true) {
+                            String line = ipc.read();
 
-                ipc.write(command);
+                            FastLogger.logStatic("IPC (CHILD): %s", line);
 
-                while (true) {
-                    String line = ipc.read();
+                            if (line.equals("OK")) {
+                                resolve.accept(null);
+                                break;
+                            }
+                        }
 
-                    FastLogger.logStatic("IPC (CHILD): %s", line);
-
-                    if (line.equals("OK")) {
-                        commsPromise.fulfill(null);
-                        break;
+                        ipc.close();
+                    } catch (Exception e) {
+                        reject.accept(new IOException("IPC communications failed.", e));
+                    } finally {
+                        this.completed = true;
                     }
-                }
+                });
 
-                ipc.close();
-            } catch (Exception e) {
-                commsPromise.error(new IOException("IPC communications failed.", e));
+                // Watchdog task
+                AsyncTask.create(() -> {
+                    try {
+                        TimeUnit.SECONDS.sleep(2);
+                    } catch (InterruptedException ignored) {}
+
+                    if (!this.completed) {
+                        ipcTask.cancel();
+                        reject.accept(new IllegalStateException("IPC communication took more than 5 seconds."));
+                    }
+                });
             }
         });
 
@@ -135,47 +144,44 @@ public class InstanceManager {
             hostStarted = false;
         }
 
-        Promise<Void> commsPromise = new Promise<>();
-
-        new AsyncTask(() -> {
-            try {
-                IpcChannel ipc = MemoryMappedIpc.startChildIpc(ipcDir, "launch");
-                commsPromise.fulfill(null);
-
-                Runtime.getRuntime().addShutdownHook(new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            ipc.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                while (true) {
-                    String line = ipc.read();
-
-                    FastLogger.logStatic("IPC (HOST): %s", line);
-
-                    if (line.equals("SUMMON")) {
-                        if (!Bootstrap.getWebview().isOpen()) {
-                            Bootstrap.getWebview().open(CaffeinatedApp.getInstance().getAppUrl());
-                        }
-                        Bootstrap.getWebview().focus();
-                    } else if (line.equals("SHUTDOWN")) {
-                        Bootstrap.shutdown();
-                    }
-
-                    ipc.write("OK");
-                }
-            } catch (Exception e) {
-                commsPromise.fulfill(null);
-            }
-        });
-
         try {
-            commsPromise.await();
+            new Promise<>((resolve, reject) -> {
+                try {
+                    IpcChannel ipc = MemoryMappedIpc.startChildIpc(ipcDir, "launch");
+                    resolve.accept(null);
+
+                    Runtime.getRuntime().addShutdownHook(new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                ipc.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    while (true) {
+                        String line = ipc.read();
+
+                        FastLogger.logStatic("IPC (HOST): %s", line);
+
+                        if (line.equals("SUMMON")) {
+                            if (!Bootstrap.getWebview().isOpen()) {
+                                Bootstrap.getWebview().open(CaffeinatedApp.getInstance().getAppUrl());
+                            }
+                            Bootstrap.getWebview().focus();
+                        } else if (line.equals("SHUTDOWN")) {
+                            Bootstrap.shutdown();
+                        }
+
+                        ipc.write("OK");
+                    }
+                } catch (Exception e) {
+                    reject.accept(e);
+                }
+            })
+                .await();
         } catch (Throwable e) {
             e.printStackTrace();
         }

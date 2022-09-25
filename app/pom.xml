@@ -17,7 +17,7 @@
 	</modules>
 
 	<properties>
-		<kaimen.version>7677a23</kaimen.version>
+		<kaimen.version>b5d45c2</kaimen.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -73,7 +73,7 @@
 				<artifactId>AllWebviewImpls</artifactId>
 				<version>${kaimen.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
 				<artifactId>Windows-amd64</artifactId>
