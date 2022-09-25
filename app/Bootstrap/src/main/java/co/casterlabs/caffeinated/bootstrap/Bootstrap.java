@@ -20,6 +20,7 @@ import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.kaimen.app.App;
+import co.casterlabs.kaimen.app.App.PowerManagementHint;
 import co.casterlabs.kaimen.app.AppBootstrap;
 import co.casterlabs.kaimen.app.AppEntry;
 import co.casterlabs.kaimen.app.ui.UIServer;
@@ -95,6 +96,7 @@ public class Bootstrap implements Runnable {
     @AppEntry
     public static void main() throws Exception {
         App.setName("Casterlabs Caffeinated");
+        App.setPowermanagementHint(PowerManagementHint.POWER_SAVER);
 
         System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 
