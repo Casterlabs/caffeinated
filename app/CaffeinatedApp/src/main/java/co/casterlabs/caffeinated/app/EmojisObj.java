@@ -1,9 +1,9 @@
 package co.casterlabs.caffeinated.app;
 
 import co.casterlabs.caffeinated.pluginsdk.Emojis;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.emoji.data.EmojiIndex;
 import co.casterlabs.emoji.generator.EmojiIndexGenerator;
-import co.casterlabs.kaimen.util.threading.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import lombok.NonNull;
@@ -14,7 +14,7 @@ public class EmojisObj extends JavascriptObject implements Emojis {
     private static @Setter String emojiProvider = "system"; // Gets set by AppUI.
 
     static {
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             try {
                 emojiIndex = EmojiIndexGenerator.load();
             } catch (Exception e) {

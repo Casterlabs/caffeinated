@@ -6,6 +6,7 @@ import java.util.Map;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.app.App.Appearance;
+import co.casterlabs.kaimen.app.AppEvent;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
@@ -43,10 +44,13 @@ public class ThemeManager extends JavascriptObject {
             setTheme(FALLBACK);
         }
 
-        App.systemThemeChangeEvent.on(this::calculateEffectiveTheme);
+        App.on(AppEvent.APPEARANCE_CHANGE, this::calculateEffectiveTheme);
+        this.calculateEffectiveTheme();
     }
 
-    private void calculateEffectiveTheme(Appearance appearance) {
+    private void calculateEffectiveTheme() {
+        Appearance appearance = App.getAppearance();
+
         if (!this.currentTheme.isAuto()) {
             this.effectiveTheme = this.currentTheme;
             return;
@@ -78,7 +82,7 @@ public class ThemeManager extends JavascriptObject {
 
         try {
             App.setAppearance(theme.getAppearance());
-            this.calculateEffectiveTheme(theme.getAppearance());
+            this.calculateEffectiveTheme();
         } catch (Exception e) {
             e.printStackTrace();
         }

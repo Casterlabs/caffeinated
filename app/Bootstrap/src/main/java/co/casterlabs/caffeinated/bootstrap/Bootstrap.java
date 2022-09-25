@@ -112,6 +112,9 @@ public class Bootstrap implements Runnable {
             case WINDOWS_NT:
                 nb = new WindowsBootstrap();
                 break;
+
+            default:
+                break;
         }
 
         assert nb != null : "Unsupported platform: " + Platform.osDistribution;
