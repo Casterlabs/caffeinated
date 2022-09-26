@@ -59,7 +59,7 @@
 		{/each}
 
 		<button
-			class="relative flex items-center justify-center rounded-lg border border-mauve-4 bg-mauve-1 p-5 focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
+			class="relative flex items-center justify-center rounded-lg border border-mauve-5 bg-mauve-1 p-5 focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
 			title={t('sr.page.widgets.create')}
 			on:click={() => (showingCreationModal = true)}
 		>
