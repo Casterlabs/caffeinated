@@ -50,7 +50,7 @@
 	{#if mikeysModeEnabled}
 		<div id="mikeys">
 			Enjoy your
-			<a href="https://eatmikeys.com/" target="_blank" style="color: var(--link);"> Mikey's </a>
+			<a href="https://eatmikeys.com/" target="_blank" class="text-link"> Mikey's </a>
 			:^)
 		</div>
 	{/if}
