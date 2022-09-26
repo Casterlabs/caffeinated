@@ -15,11 +15,17 @@ export default {
     'app.love': 'Made with ♥ by Casterlabs',
     'app.copyright': 'Copyright © {year} Casterlabs. All rights reserved.',
 
+    'sr.modal.close': 'Close Modal',
+
     'page.dashboard': 'Dashboard',
     'page.chat': 'Chat',
     'page.widgets': 'Widgets & Alerts',
     'page.chat_bot': 'Chat Bot',
+
     'page.docks': 'Docks',
+    'page.docks.info': 'These go into your OBS Browser Docks.',
+    'page.docks.info.show_me_how': 'Show me how',
+    'page.docks.info.show_me_how.modal.title': 'How to create an OBS Browser Dock',
 
     /* ------------------------ */
     /* Settings                 */
