@@ -1,5 +1,6 @@
 <script>
 	import LocalizedText from '../../components/LocalizedText.svelte';
+	import PageTitle from '../../components/PageTitle.svelte';
 
 	import { page } from '$app/stores';
 
@@ -12,15 +13,22 @@
 		['page.settings.accounts',   '/settings/accounts'],
 		['page.settings.about',      '/settings/about']
 	];
+
+	// Filter the list of tabs for a match.
+	// We default on "Developer Stuff" for... reasons...
+	$: currentPage = (tabs.filter(([_, href]) => $page.url.pathname == href)[0] || [
+		'Developer Stuff'
+	])[0];
 </script>
+
+<PageTitle title={['page.settings', currentPage]} />
 
 <!-- <h1 class="text-3xl font-bold tracking-tight text-mauve-12 mb-6">Settings</h1> -->
 
 <div class="border-b border-mauve-8">
 	<nav class="-mb-px flex space-x-8">
 		{#each tabs as [name, href]}
-			{@const isSelected = $page.url.pathname == href}
-
+			{@const isSelected = currentPage == name}
 			<a
 				{href}
 				class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
