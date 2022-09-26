@@ -14,7 +14,7 @@ import lombok.SneakyThrows;
 public class EmojiRainWidget extends Widget {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.emojirain_widget")
-        .withIcon("smile")
+        .withIcon("face-smile")
         .withCategory(WidgetDetailsCategory.INTERACTION)
         .withFriendlyName("Emoji Rain");
 

@@ -14,7 +14,7 @@ import lombok.SneakyThrows;
 public class NowPlayingWidget extends Widget {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.now_playing")
-        .withIcon("music")
+        .withIcon("musical-note")
         .withCategory(WidgetDetailsCategory.OTHER)
         .withFriendlyName("Now Playing Widget")
         .withShowDemo(true, 64 / 199d);

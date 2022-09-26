@@ -15,7 +15,7 @@ import lombok.SneakyThrows;
 public class ChatWidget extends Widget {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.chat_widget")
-        .withIcon("message-square")
+        .withIcon("chat-bubble-left")
         .withCategory(WidgetDetailsCategory.INTERACTION)
         .withFriendlyName("Chat Widget");
 

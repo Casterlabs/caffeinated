@@ -29,7 +29,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 public class DonationTotalLabel extends GenericLabel implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.donation_total_label")
-        .withIcon("dollar-sign")
+        .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Donation Total Label");
 

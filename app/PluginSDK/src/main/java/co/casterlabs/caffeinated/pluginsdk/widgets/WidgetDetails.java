@@ -7,7 +7,7 @@ import lombok.Value;
 import lombok.With;
 
 /**
- * See {@link https://feathericons.com/} for icons.
+ * See {@link https://heroicons.com} for icons.
  */
 @Value
 @AllArgsConstructor
@@ -15,7 +15,7 @@ import lombok.With;
 public class WidgetDetails {
     private @With String namespace;
 
-    private @With String icon;
+    private @With String icon; // https://heroicons.com
     private @With String friendlyName;
     private @With WidgetDetailsCategory category;
 

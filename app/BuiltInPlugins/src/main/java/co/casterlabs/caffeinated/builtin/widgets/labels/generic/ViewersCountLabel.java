@@ -20,7 +20,7 @@ import lombok.NonNull;
 public class ViewersCountLabel extends GenericLabel implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.viewers_count_label")
-        .withIcon("users")
+        .withIcon("eye")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Viewers Count Label");
 

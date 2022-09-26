@@ -35,7 +35,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
     public static class StreamChatDock extends Widget {
         public static final WidgetDetails DETAILS = new WidgetDetails()
             .withNamespace("co.casterlabs.dock.stream_chat")
-            .withIcon("message-circle")
+            .withIcon("chat-bubble-left")
             .withType(WidgetType.DOCK)
             .withFriendlyName("Stream Chat");
 
@@ -64,7 +64,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
 
                 Caffeinated.getInstance().openLink(url);
             });
-            
+
             instance.on("savePreferences", (data) -> {
                 this.settings().set("preferences", data);
             });

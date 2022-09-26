@@ -10,7 +10,7 @@ import co.casterlabs.koi.api.types.user.User;
 public class SubscriptionAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.subscription_alert")
-        .withIcon("user")
+        .withIcon("user-plus")
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Subscription Alert");
 

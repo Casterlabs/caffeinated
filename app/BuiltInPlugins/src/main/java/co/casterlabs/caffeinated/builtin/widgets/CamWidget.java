@@ -28,7 +28,7 @@ import lombok.SneakyThrows;
 public class CamWidget extends Widget implements KinokoV1Listener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.cam_widget")
-        .withIcon("video")
+        .withIcon("video-camera")
         .withCategory(WidgetDetailsCategory.OTHER)
         .withShowDemo(true, 3 / 4d)
         .withFriendlyName("Cam Widget");
