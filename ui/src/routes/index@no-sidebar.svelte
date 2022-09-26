@@ -42,7 +42,9 @@
 
 	{#if mikeysModeEnabled}
 		<div id="mikeys">
-			Enjoy your <a href="https://eatmikeys.com/" rel="external">Mikey's</a> :^)
+			Enjoy your
+			<a href="https://eatmikeys.com/" target="_blank" style="color: var(--link);"> Mikey's </a>
+			:^)
 		</div>
 	{/if}
 
