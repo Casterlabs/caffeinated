@@ -15,7 +15,7 @@ export default {
     'app.love': 'Made with ♥ by Casterlabs',
     'app.copyright': 'Copyright © {year} Casterlabs. All rights reserved.',
 
-    'page.home': 'Home',
+    'page.dashboard': 'Dashboard',
     'page.chat': 'Chat',
     'page.widgets': 'Widgets & Alerts',
     'page.chat_bot': 'Chat Bot',

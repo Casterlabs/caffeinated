@@ -121,9 +121,9 @@ public class AppUI extends JavascriptObject {
             AppAuth auth = CaffeinatedApp.getInstance().getAuth();
 
             if (!auth.isSignedIn()) {
-                this.navigate("/signin");
+                this.navigate("/auth/signin");
             } else if (auth.isAuthorized()) {
-                this.navigate("/home");
+                this.navigate("/dashboard");
             } else {
                 // Otherwise AppAuth will automagically move us there :D
                 FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");

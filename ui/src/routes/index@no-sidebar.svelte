@@ -24,7 +24,7 @@
 
 			setTimeout(
 				Caffeinated.UI.onUILoaded,
-				mikeysModeEnabled ? (120 + 15) * 1000 /* 2m15s */ : 150
+				mikeysModeEnabled ? (120 + 15) * 1000 /* 2m15s */ : 1500
 			);
 		})
 	);

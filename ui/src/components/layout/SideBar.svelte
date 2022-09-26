@@ -6,8 +6,8 @@
 	const sections = [
 		[
 			{
-				href: '/home',
-				name: 'page.home',
+				href: '/dashboard',
+				name: 'page.dashboard',
 				useStartsWith: false
 			},
 			{

@@ -6,8 +6,6 @@
 
 	const console = createConsole('LocalizedText');
 
-	const preferences = st || Caffeinated.UI.svelte('preferences');
-
 	export let opts = {};
 	export let key;
 
@@ -71,7 +69,6 @@
 	$: key, render($language);
 	$: opts, render($language);
 	$: slotContents, render($language);
-	$: $preferences, render($language);
 	language.subscribe(render);
 </script>
 
