@@ -184,17 +184,13 @@ public class Bootstrap implements Runnable {
     private static void writeAppFile(@NonNull String filename, byte[] bytes) throws IOException {
         File file;
 
-        switch (ConsoleUtil.getPlatform()) {
-            case MAC:
+        switch (Platform.osDistribution) {
+            case MACOSX:
                 if (new File("./").getCanonicalPath().contains(".app")) {
                     file = new File("../../../", filename);
                     break;
                 }
-                // Otherwise, break free.
 
-            case UNIX:
-            case WINDOWS:
-            case UNKNOWN:
             default:
                 file = new File(filename);
                 break;

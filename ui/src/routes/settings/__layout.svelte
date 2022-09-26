@@ -5,11 +5,12 @@
 
 	const preferences = st || Caffeinated.UI.svelte('preferences');
 
+	// prettier-ignore
 	const tabs = [
 		['page.settings.appearance', '/settings/appearance'],
-		['page.settings.plugins', '/settings/plugins'],
-		['page.settings.accounts', '/settings/accounts'],
-		['page.settings.about', '/settings/about']
+		['page.settings.plugins',    '/settings/plugins'],
+		['page.settings.accounts',   '/settings/accounts'],
+		['page.settings.about',      '/settings/about']
 	];
 </script>
 
