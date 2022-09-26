@@ -4,9 +4,11 @@
 	import LocalizedText from '../../components/LocalizedText.svelte';
 
 	import { onMount } from 'svelte';
+	import { t } from '$lib/translate.mjs';
 
 	let docks = [];
 	let showingTutorialModal = false;
+	let showingCreationModal = false;
 
 	onMount(async () => {
 		docks = (await Caffeinated.plugins.widgets).filter((w) => w.details.type == 'WIDGET');
@@ -36,6 +38,14 @@
 	</Modal>
 {/if}
 
+{#if showingCreationModal}
+	<Modal on:close={() => (showingCreationModal = false)}>
+		<LocalizedText slot="title" key="page.widgets.create.modal.title" />
+
+		// TODO Pick from category dropdown, pick from list, give it a name.
+	</Modal>
+{/if}
+
 <div class="mt-8 grid gap-4 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
 	{#each docks as dock}
 		<a
@@ -52,4 +62,17 @@
 			</div>
 		</a>
 	{/each}
+
+	<button
+		class="relative flex items-center justify-center rounded-lg border border-mauve-4 bg-mauve-1 p-5 focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
+		title={t('sr.page.widgets.create')}
+		on:click={() => (showingCreationModal = true)}
+	>
+		<div class="text-mauve-12">
+			<span class="sr-only">
+				<LocalizedText key="sr.page.widgets.create" />
+			</span>
+			<icon data-icon="plus" />
+		</div>
+	</button>
 </div>

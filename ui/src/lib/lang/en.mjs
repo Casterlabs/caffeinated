@@ -26,6 +26,8 @@ export default {
     'page.widgets': 'Widgets & Alerts',
     'page.widgets.info': 'Add these to OBS as Browser sources.',
     'page.widgets.info.show_me_how.modal.title': 'How to create an OBS Browser Source',
+    'sr.page.widgets.create': 'Create a new widget',
+    'page.widgets.create.modal.title': 'Create a new widget',
 
     'page.docks': 'Docks',
     'page.docks.info': 'Add these to OBS as Browser Docks.',
