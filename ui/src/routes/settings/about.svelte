@@ -1,11 +1,10 @@
 <script>
 	import LocalizedText from '../../components/LocalizedText.svelte';
 
+	import { icon, iconColor } from '$lib/app.mjs';
+
 	const buildInfo = st || Caffeinated.svelte('buildInfo');
 	const preferences = st || Caffeinated.UI.svelte('preferences');
-	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
-
-	$: iconColor = $effectiveTheme?.appearance == 'LIGHT' ? 'black' : 'white';
 
 	async function setPreferenceItem(name, value) {
 		Caffeinated.UI.updateAppearance({
@@ -18,11 +17,7 @@
 <ul class="bg-mauve-2 shadow rounded-md border border-mauve-6 divide-y">
 	<li class="py-4 flex flex-row space-x-8">
 		<div class="w-50 flex-1 flex items-center">
-			<img
-				src="/images/wordmark/{$preferences?.icon || 'casterlabs'}/{iconColor}.svg"
-				class="h-auto w-full"
-				alt="Casterlabs"
-			/>
+			<img src="/images/wordmark/{$icon}/{$iconColor}.svg" class="h-auto w-full" alt="Casterlabs" />
 		</div>
 		<div class="w-50 flex-1 flex flex-col items-left justify-center text-mauve-11">
 			<p>Casterlabs-Caffeinated</p>

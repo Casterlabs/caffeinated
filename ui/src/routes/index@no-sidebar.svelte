@@ -3,11 +3,11 @@
 
 	import { onDestroy } from 'svelte';
 
+	import { icon, iconColor } from '$lib/app.mjs';
+
 	const preferences = st || Caffeinated.UI.svelte('preferences');
-	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
 	const useBetaKoiPath = st || Caffeinated.svelte('useBetaKoiPath');
 
-	$: iconColor = $effectiveTheme?.appearance == 'LIGHT' ? 'black' : 'white';
 	let mikeysModeEnabled = false;
 
 	function disableBetaKoi() {
@@ -36,7 +36,7 @@
 			<img src="/images/mikeys.png" class="h-auto w-auto" alt="Mikeys Logo" />
 		{:else}
 			<img
-				src="/images/wordmark/{$preferences?.icon || 'casterlabs'}/{iconColor}.svg"
+				src="/images/wordmark/{$icon}/{$iconColor}.svg"
 				class="h-auto w-auto"
 				alt="Casterlabs Logo"
 			/>

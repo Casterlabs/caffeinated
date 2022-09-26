@@ -32,12 +32,6 @@
 	import '$lib/css/colors/overlay-black.css';
 	import '$lib/css/colors/overlay-white.css';
 
-	import { dev } from '$app/env';
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
-
-	let hideDevButton = false;
-
 	// Little helper to allow us to access the
 	// stores but prevent SSR from erroring out.
 	if (typeof global == 'undefined') {
@@ -52,8 +46,15 @@
 		};
 	}
 
+	import { dev } from '$app/env';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import * as App from '$lib/app.mjs';
+
 	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
-	$: useLightTheme = $effectiveTheme?.appearance == 'LIGHT';
+	const preferences = st || Caffeinated.UI.svelte('preferences');
+
+	let hideDevButton = false;
 
 	// Stupid ass workaround... Basically, we don't want to load the
 	// dark css at all if we're in light mode and vice-versa.
@@ -62,6 +63,7 @@
 	// in $lib, but noooooooooooo.
 	let themeComponent = null;
 
+	$: useLightTheme = $effectiveTheme?.appearance == 'LIGHT';
 	$: effectiveTheme,
 		$effectiveTheme && console.info('[Layout]', 'Switching to (effective) theme:', $effectiveTheme);
 
@@ -71,6 +73,19 @@
 			: import('../components/layout/Theme_Dark.svelte')
 		).then((c) => (themeComponent = c.default));
 
+	// Set some app helpers.
+	// Helps with making the UI more responsive.
+	preferences.subscribe((prefs) => {
+		if (!prefs) return;
+		const { language, icon } = prefs;
+
+		App.language.set(language);
+		App.icon.set(icon);
+	});
+
+	$: useLightTheme, App.iconColor.set(useLightTheme ? 'black' : 'white');
+
+	// Expose the goto() function to the Java side.
 	onMount(() => {
 		window.debug_goto = goto;
 		Bridge.on('goto', ({ path }) => goto(path));
