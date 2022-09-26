@@ -46,7 +46,7 @@
                     element.innerHTML = iconCache[icon];
                     console.debug('[app.html]', 'Loaded icon from cache:', icon);
                 } else {
-                    fetch(`/icons/${icon}.svg`)
+                    fetch(`/images/icons/${icon}.svg`)
                         .then((res) => {
                             if (res.ok) {
                                 return res.text();
