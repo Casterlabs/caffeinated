@@ -15,6 +15,7 @@ export default {
     'app.love': 'Made with ♥ by Casterlabs',
     'app.copyright': 'Copyright © {year} Casterlabs. All rights reserved.',
 
+    'modal.close': 'Close',
     'sr.modal.close': 'Close Modal',
 
     show_me_how: 'Show me how',

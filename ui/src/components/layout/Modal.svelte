@@ -2,6 +2,7 @@
 	import LocalizedText from '../LocalizedText.svelte';
 
 	import { createEventDispatcher } from 'svelte';
+	import { t } from '$lib/translate.mjs';
 
 	const dispatch = createEventDispatcher();
 
@@ -22,7 +23,11 @@
 					<slot name="title" />
 				</h3>
 
-				<button class="absolute top-4 right-3.5 text-mauve-12" on:click={close}>
+				<button
+					class="absolute top-4 right-3.5 text-mauve-12"
+					title={t('modal.close')}
+					on:click={close}
+				>
 					<span class="sr-only">
 						<LocalizedText key="sr.modal.close" />
 					</span>
