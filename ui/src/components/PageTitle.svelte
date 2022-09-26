@@ -19,7 +19,7 @@
 
 		for (const part of parts) {
 			titleString += ' - ';
-			titleString += t($language, part);
+			titleString += t(part);
 		}
 	}
 

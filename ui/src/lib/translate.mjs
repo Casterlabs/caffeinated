@@ -3,6 +3,9 @@ export const FALLBACK_LANGUAGE = 'en';
 // Languages
 import en from './lang/en.mjs';
 
+import { language } from '$lib/app.mjs';
+import {get } from 'svelte/store';
+
 // prettier-ignore
 const languages = {
     "en": en
@@ -35,8 +38,8 @@ const console = createConsole('translate');
 // [placeholder]: external localization
 // %placeholder%: ui component
 
-export function t(locale, key, opts = {}) {
-    return translate(locale, key, opts, true);
+export function t(key, opts = {}) {
+    return translate(get(language), key, opts, true);
 }
 
 export function translate(locale, key, opts = {}, simpleResponse = true) {
