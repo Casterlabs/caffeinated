@@ -72,6 +72,7 @@
 		).then((c) => (themeComponent = c.default));
 
 	onMount(() => {
+		window.debug_goto = goto;
 		Bridge.on('goto', ({ path }) => goto(path));
 	});
 </script>

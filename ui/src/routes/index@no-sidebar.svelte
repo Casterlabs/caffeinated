@@ -1,6 +1,8 @@
 <script>
 	import LoadingSpinner from '../components/LoadingSpinner.svelte';
 
+	import { onDestroy } from 'svelte';
+
 	const preferences = st || Caffeinated.UI.svelte('preferences');
 	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
 	const useBetaKoiPath = st || Caffeinated.svelte('useBetaKoiPath');
@@ -13,14 +15,19 @@
 		Bridge.emit('app:restart');
 	}
 
-	preferences.subscribe((val) => {
-		if (!val) return;
+	onDestroy(
+		preferences.subscribe((val) => {
+			if (!val) return;
 
-		mikeysModeEnabled = val.mikeysMode;
-		console.debug("Mikey's Mode:", mikeysModeEnabled);
+			mikeysModeEnabled = val.mikeysMode;
+			console.debug("Mikey's Mode:", mikeysModeEnabled);
 
-		setTimeout(Caffeinated.UI.onUILoaded, mikeysModeEnabled ? (120 + 15) * 1000 /* 2m15s */ : 150);
-	});
+			setTimeout(
+				Caffeinated.UI.onUILoaded,
+				mikeysModeEnabled ? (120 + 15) * 1000 /* 2m15s */ : 150
+			);
+		})
+	);
 </script>
 
 <div class="mt-10 flex flex-col items-center justify-center">
