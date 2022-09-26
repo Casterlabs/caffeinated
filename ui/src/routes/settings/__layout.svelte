@@ -15,7 +15,7 @@
 
 <!-- <h1 class="text-3xl font-bold tracking-tight text-mauve-12 mb-6">Settings</h1> -->
 
-<div class="border-b border-current text-mauve-11">
+<div class="border-b border-mauve-8">
 	<nav class="-mb-px flex space-x-8">
 		{#each tabs as [name, href]}
 			{@const isSelected = $page.url.pathname == href}
