@@ -23,13 +23,13 @@
 				useStartsWith: true
 			},
 			{
-				href: '/chat-bot',
-				name: 'page.chat_bot',
+				href: '/docks',
+				name: 'page.docks',
 				useStartsWith: false
 			},
 			{
-				href: '/docks',
-				name: 'page.docks',
+				href: '/chat-bot',
+				name: 'page.chat_bot',
 				useStartsWith: false
 			},
 			{
