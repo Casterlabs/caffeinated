@@ -126,7 +126,7 @@ public class AppUI extends JavascriptObject {
                 this.navigate("/home");
             } else {
                 // Otherwise AppAuth will automagically move us there :D
-                FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (theme-loaded)");
+                FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
             }
         }
     }

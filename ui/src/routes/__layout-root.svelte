@@ -33,6 +33,9 @@
 	import '$lib/css/colors/overlay-white.css';
 
 	import { dev } from '$app/env';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+
 	let hideDevButton = false;
 
 	// Little helper to allow us to access the
@@ -67,6 +70,10 @@
 			? import('../components/layout/Theme_Light.svelte')
 			: import('../components/layout/Theme_Dark.svelte')
 		).then((c) => (themeComponent = c.default));
+
+	onMount(() => {
+		Bridge.on('goto', ({ path }) => goto(path));
+	});
 </script>
 
 <svelte:component this={themeComponent} />

@@ -5,7 +5,7 @@
 	const preferences = st || Caffeinated.UI.svelte('preferences');
 	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
 
-	$: useBlack = $effectiveTheme?.appearance == 'LIGHT';
+	$: iconColor = $effectiveTheme?.appearance == 'LIGHT' ? 'black' : 'white';
 
 	async function setPreferenceItem(name, value) {
 		Caffeinated.UI.updateAppearance({
@@ -19,7 +19,7 @@
 	<li class="py-4 flex flex-row space-x-8">
 		<div class="w-50 flex-1 flex items-center">
 			<img
-				src="/images/wordmark/{$preferences?.icon}/{useBlack ? 'black' : 'white'}.svg"
+				src="/images/wordmark/{$preferences?.icon || 'casterlabs'}/{iconColor}.svg"
 				class="h-auto w-full"
 				alt="Casterlabs"
 			/>

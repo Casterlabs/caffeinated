@@ -12,7 +12,7 @@
 		height: 100%;
 		border-radius: 50%;
 		display: inline-block;
-		border-top: 3px solid white;
+		border-top: 3px solid var(--mauve8);
 		border-right: 3px solid transparent;
 		margin-bottom: 3px;
 		box-sizing: border-box;
