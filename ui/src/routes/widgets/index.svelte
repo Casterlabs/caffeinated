@@ -1,26 +1,22 @@
 <script>
-	import Modal from '../components/layout/Modal.svelte';
-	import PageTitle from '../components/PageTitle.svelte';
-	import LocalizedText from '../components/LocalizedText.svelte';
+	import Modal from '../../components/layout/Modal.svelte';
+	import PageTitle from '../../components/PageTitle.svelte';
+	import LocalizedText from '../../components/LocalizedText.svelte';
 
 	import { onMount } from 'svelte';
 
 	let docks = [];
 	let showingTutorialModal = false;
 
-	function copyWidgetUrl(id) {
-		Caffeinated.plugins.copyWidgetUrl(id);
-	}
-
 	onMount(async () => {
-		docks = (await Caffeinated.plugins.widgets).filter((w) => w.details.type == 'DOCK');
+		docks = (await Caffeinated.plugins.widgets).filter((w) => w.details.type == 'WIDGET');
 	});
 </script>
 
-<PageTitle title="page.docks" />
+<PageTitle title="page.widgets" />
 
 <div>
-	<LocalizedText key="page.docks.info" />
+	<LocalizedText key="page.widgets.info" />
 
 	<button
 		class="flex flex-row items-center text-link"
@@ -33,18 +29,18 @@
 
 {#if showingTutorialModal}
 	<Modal on:close={() => (showingTutorialModal = false)}>
-		<LocalizedText slot="title" key="page.docks.info.show_me_how.modal.title" />
+		<LocalizedText slot="title" key="page.widgets.info.show_me_how.modal.title" />
 
 		<!-- svelte-ignore a11y-media-has-caption -->
-		<video src="/tutorials/create_obs_browser_dock.webm" autoplay loop muted />
+		<video src="/tutorials/create_obs_source_widget.webm" autoplay loop muted />
 	</Modal>
 {/if}
 
 <div class="mt-8 grid gap-4 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
 	{#each docks as dock}
-		<button
+		<a
 			class="relative flex items-center space-x-3 rounded-lg border border-mauve-6 bg-mauve-2 p-5 shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
-			on:click={() => copyWidgetUrl(dock.id)}
+			href="/widgets/edit?id={dock.id}"
 		>
 			<div class="flex-shrink-0 text-mauve-12">
 				<icon data-icon={dock.details.icon} />
@@ -54,6 +50,6 @@
 					{dock.details.friendlyName}
 				</p>
 			</div>
-		</button>
+		</a>
 	{/each}
 </div>

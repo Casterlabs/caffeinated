@@ -17,15 +17,20 @@ export default {
 
     'sr.modal.close': 'Close Modal',
 
+    show_me_how: 'Show me how',
+
     'page.dashboard': 'Dashboard',
     'page.chat': 'Chat',
+
     'page.widgets': 'Widgets & Alerts',
-    'page.chat_bot': 'Chat Bot',
+    'page.widgets.info': 'Add these to OBS as Browser sources.',
+    'page.widgets.info.show_me_how.modal.title': 'How to create an OBS Browser Source',
 
     'page.docks': 'Docks',
-    'page.docks.info': 'These go into your OBS Browser Docks.',
-    'page.docks.info.show_me_how': 'Show me how',
+    'page.docks.info': 'Add these to OBS as Browser Docks.',
     'page.docks.info.show_me_how.modal.title': 'How to create an OBS Browser Dock',
+
+    'page.chat_bot': 'Chat Bot',
 
     /* ------------------------ */
     /* Settings                 */
