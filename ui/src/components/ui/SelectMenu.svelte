@@ -14,6 +14,7 @@
 		'tim-cook': 'Tim Cook',
 		'bill-gates': 'Bill Gates'
 	};
+	export let disabled = false;
 
 	let open = false;
 	let highlighted = null;
@@ -27,7 +28,7 @@
 	}
 </script>
 
-<div class="w-full">
+<div class="w-full" class:opacity-70={disabled} class:pointer-events-none={disabled}>
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label id={ID} class="block text-sm font-medium text-mauve-12">
 		<LocalizedText key={title} />
@@ -80,6 +81,7 @@
 				aria-haspopup="listbox"
 				aria-expanded={open}
 				aria-labelledby={ID}
+				aria-disabled={disabled}
 				on:click={() => (open = !open)}
 			>
 				<span class="block truncate text-mauve-12">
