@@ -28,9 +28,9 @@
 				useStartsWith: false
 			},
 			{
-				href: '/chat-bot',
+				href: '/chat-bot/commands',
 				name: 'page.chat_bot',
-				useStartsWith: false
+				useStartsWith: true
 			},
 			{
 				href: '/settings/appearance',
