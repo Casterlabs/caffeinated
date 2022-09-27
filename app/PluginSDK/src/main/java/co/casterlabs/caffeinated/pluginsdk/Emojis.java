@@ -1,7 +1,8 @@
 package co.casterlabs.caffeinated.pluginsdk;
 
+import org.jetbrains.annotations.Nullable;
+
 import co.casterlabs.emoji.data.EmojiIndex;
-import lombok.NonNull;
 
 public interface Emojis {
 
@@ -9,6 +10,6 @@ public interface Emojis {
 
     public String getEmojiProvider();
 
-    public String matchAndReturnHTML(@NonNull String input, boolean escapeInput);
+    public String matchAndReturnHTML(@Nullable String input, boolean escapeInput);
 
 }
