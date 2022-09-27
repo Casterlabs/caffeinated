@@ -44,3 +44,7 @@ icon>svg {
 a {
     -webkit-user-drag: none;
 }
+
+pre {
+    display: inline-block;
+}

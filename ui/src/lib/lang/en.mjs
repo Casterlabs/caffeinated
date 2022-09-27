@@ -52,12 +52,15 @@ export default {
     'page.chat_bot.timers.format': 'Every %seconds% seconds, send one of the following:',
     'page.chat_bot.timers.example': 'I love Casterlabs!',
     'page.chat_bot.settings': 'Settings',
-    'page.chat_bot.settings.sender': 'Send messages from %dropdown% account.',
-    'page.chat_bot.settings.sender.SYSTEM': 'the @Casterlabs',
-    'page.chat_bot.settings.sender.CLIENT': 'your',
-    'page.chat_bot.settings.hide_commands_from_chat': 'Hide commands from chat: %checkbox%',
-    'page.chat_bot.settings.hide_timers_from_chat': 'Hide timers from chat: %checkbox%',
-    'page.chat_bot.settings.hide_from_chatbots': 'Hide these accounts from chat:',
+    'page.chat_bot.settings.sender': 'Send messages from:',
+    'page.chat_bot.settings.sender.SYSTEM': 'the @Casterlabs account',
+    'page.chat_bot.settings.sender.CLIENT': 'your account',
+    'page.chat_bot.settings.hide_commands_from_chat': 'Hide commands from chat',
+    'page.chat_bot.settings.hide_commands_from_chat.description': 'Makes Caffeinated hide all !commands and responses from the chat widget.',
+    'page.chat_bot.settings.hide_timers_from_chat': 'Hide timers from chat',
+    'page.chat_bot.settings.hide_timers_from_chat.description': 'Makes Caffeinated hide all timer messages from the chat widget.',
+    'page.chat_bot.settings.hide_from_chatbots': 'Hide these accounts from chat',
+    'page.chat_bot.settings.hide_from_chatbots.description': 'Hide some additional accounts from your chat widget, such as <pre>@Nightbot</pre>.',
 
     /* ------------------------ */
     /* Settings                 */
