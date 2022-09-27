@@ -48,11 +48,13 @@
 
 	import { dev } from '$app/env';
 	import { goto } from '$app/navigation';
+	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import * as App from '$lib/app.mjs';
 
 	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
 	const preferences = st || Caffeinated.UI.svelte('preferences');
+	const hasCasterlabsPlus = st || Caffeinated.svelte('hasCasterlabsPlus');
 
 	let hideDevButton = false;
 
@@ -83,11 +85,18 @@
 		App.icon.set(icon);
 	});
 
+	hasCasterlabsPlus.subscribe((has) => {
+		if (has === null) return;
+		App.hasCasterlabsPlus.set(has);
+	});
+
 	$: useLightTheme, App.iconColor.set(useLightTheme ? 'black' : 'white');
 
 	// Expose the goto() function to the Java side.
 	onMount(() => {
 		window.debug_goto = goto;
+		window.debug_App = App;
+		window.debug_get = get;
 		Bridge.on('goto', ({ path }) => goto(path));
 	});
 </script>
