@@ -85,6 +85,11 @@ export default {
     'page.settings.appearance.mikeys_mode.description': '<a class="text-link" href="https://twitter.com/Casterlabs/status/1508475284944736268" target="_blank">For those of you who need more time to cook your pockets :^)</a>',
 
     'page.settings.plugins': 'Plugins',
+    'page.settings.plugins.open_directory': 'Open Plugins Folder',
+    'page.settings.plugins.internal_plugin': 'Internal Plugin',
+    'page.settings.plugins.file.load': 'Load',
+    'page.settings.plugins.file.unload': 'Unload',
+
     'page.settings.accounts': 'Accounts',
 
     'page.settings.about': 'About',
