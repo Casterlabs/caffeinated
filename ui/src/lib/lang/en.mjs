@@ -91,6 +91,8 @@ export default {
     'page.settings.plugins.file.unload': 'Unload',
 
     'page.settings.accounts': 'Accounts',
+    'page.settings.accounts.music_services': 'Music Services',
+    'page.settings.accounts.music_services.enable': 'Enable',
 
     'page.settings.about': 'About',
     'page.settings.about.enable_unsafe': 'Enable Stupidly Unsafe Settings'
