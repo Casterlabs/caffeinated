@@ -26,7 +26,7 @@
 		class="flex flex-row items-center text-link"
 		on:click={() => (showingTutorialModal = true)}
 	>
-		<icon class="inline-block w-4" data-icon="chevron-right" />
+		<icon class="inline-block w-4" data-icon="filled/chevron-right" />
 		<LocalizedText key="show_me_how" />
 	</button>
 </div>
@@ -67,7 +67,7 @@
 				<span class="sr-only">
 					<LocalizedText key="sr.page.widgets.create" />
 				</span>
-				<icon data-icon="plus" />
+				<icon data-icon="filled/plus" />
 			</div>
 		</button>
 	</CardList>

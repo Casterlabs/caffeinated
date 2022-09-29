@@ -28,7 +28,7 @@
 		class="flex flex-row items-center text-link"
 		on:click={() => (showingTutorialModal = true)}
 	>
-		<icon class="inline-block w-4" data-icon="chevron-right" />
+		<icon class="inline-block w-4" data-icon="filled/chevron-right" />
 		<LocalizedText key="show_me_how" />
 	</button>
 </div>

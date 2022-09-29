@@ -90,7 +90,7 @@
 							<span class="sr-only">
 								<LocalizedText key="sr.page.chat_bot.settings.hide_from_chatbots.remove" />
 							</span>
-							<icon class="h-5" data-icon="trash" />
+							<icon class="h-5" data-icon="filled/trash" />
 						</button>
 					</li>
 				{/each}
@@ -109,7 +109,7 @@
 					<span class="sr-only">
 						<LocalizedText key="sr.page.chat_bot.settings.hide_from_chatbots.add" />
 					</span>
-					<icon data-icon="plus" />
+					<icon data-icon="filled/plus" />
 				</div>
 			</button>
 		</div>

@@ -46,7 +46,20 @@
                     element.innerHTML = iconCache[icon];
                     console.debug('[app.html]', 'Loaded icon from cache:', icon);
                 } else {
-                    fetch(`/images/icons/${icon}.svg`)
+                    const [iconType, iconPath] = icon.split('/');
+                    let url = '';
+
+                    switch (iconType) {
+                        case 'filled':
+                            url = `/images/icons/${iconPath}.svg`;
+                            break;
+
+                        case 'service':
+                            url = `/images/services/${iconPath}/icon.svg`;
+                            break;
+                    }
+
+                    fetch(url)
                         .then((res) => {
                             if (res.ok) {
                                 return res.text();
