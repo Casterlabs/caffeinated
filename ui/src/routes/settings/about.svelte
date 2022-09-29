@@ -14,8 +14,8 @@
 	}
 </script>
 
-<ul class="bg-mauve-2 shadow rounded-md border border-mauve-6 divide-y">
-	<li class="py-4 flex flex-row space-x-8">
+<ul class="bg-mauve-2 shadow rounded-md border border-mauve-6">
+	<li class="py-4 flex flex-row space-x-8 border-b border-mauve-6">
 		<div class="w-50 flex-1 flex items-center">
 			<img src="/images/wordmark/{$icon}/{$iconColor}.svg" class="h-auto w-full" alt="Casterlabs" />
 		</div>
