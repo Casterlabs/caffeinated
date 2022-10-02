@@ -47,7 +47,7 @@
                     console.debug('[app.html]', 'Loaded icon from cache:', icon);
                 } else {
                     const [iconType, iconPath] = icon.split('/');
-                    let url = '';
+                    let url = '/no.icon.type';
 
                     switch (iconType) {
                         case 'filled':
