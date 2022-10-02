@@ -202,7 +202,7 @@ public class PluginIntegration extends JavascriptObject {
         handle.onSettingsUpdate(new JsonObject());
 
         this.save();
-        CaffeinatedApp.getInstance().getUI().navigate("/pages/edit-widget?widget=" + handle.id);
+        CaffeinatedApp.getInstance().getUI().navigate("/widgets/edit?widget=" + handle.id);
     }
 
     @SneakyThrows

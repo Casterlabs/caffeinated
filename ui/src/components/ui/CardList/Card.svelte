@@ -33,4 +33,7 @@
 			<LocalizedText key={text} />
 		</p>
 	</div>
+	<div class="flex-shrink-0 text-mauve-12">
+		<slot />
+	</div>
 </button>
