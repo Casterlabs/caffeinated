@@ -18,6 +18,8 @@ export default {
     'modal.close': 'Close',
     'sr.modal.close': 'Close Modal',
 
+    'sr.navigation.back': 'Go Back',
+
     show_me_how: 'Show me how',
 
     'page.dashboard': 'Dashboard',
@@ -35,6 +37,8 @@ export default {
     'page.widgets.create.category.INTERACTION': 'Interaction',
     'page.widgets.create.category.GOALS': 'Goals',
     'page.widgets.create.category.OTHER': 'Other',
+
+    'sr.page.widget.editor.edit_name': 'Edit name',
 
     'page.docks': 'Docks',
     'page.docks.info': 'Add these to OBS as Browser Docks.',
