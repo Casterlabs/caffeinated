@@ -9,16 +9,14 @@
 	// prettier-ignore
 	const tabs = [
 		['page.settings.appearance', '/settings/appearance'],
-		['page.settings.plugins',    '/settings/plugins'],
 		['page.settings.accounts',   '/settings/accounts'],
-		['page.settings.about',      '/settings/about']
+		['page.settings.plugins',    '/settings/plugins'],
+		['page.settings.about',      '/settings/about'],
+		['Developer Stuff',          '/settings/developer-stuff']
 	];
 
 	// Filter the list of tabs for a match.
-	// We default on "Developer Stuff" for... reasons...
-	$: currentPage = (tabs.filter(([_, href]) => $page.url.pathname == href)[0] || [
-		'Developer Stuff'
-	])[0];
+	$: currentPage = tabs.filter(([_, href]) => $page.url.pathname == href)[0][0];
 </script>
 
 <PageTitle title={['page.settings', currentPage]} />
@@ -32,6 +30,7 @@
 			<a
 				{href}
 				class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
+				class:hidden={name == 'Developer Stuff' && !$preferences?.enableStupidlyUnsafeSettings}
 				aria-current={isSelected ? 'page' : undefined}
 				class:border-b-2={isSelected}
 				class:text-crimson-11={isSelected}
@@ -39,21 +38,6 @@
 				<LocalizedText key={name} />
 			</a>
 		{/each}
-
-		{#if $preferences?.enableStupidlyUnsafeSettings}
-			{@const href = '/settings/developer-stuff'}
-			{@const isSelected = $page.url.pathname == href}
-
-			<a
-				{href}
-				class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
-				aria-current={isSelected ? 'page' : undefined}
-				class:border-b-2={isSelected}
-				class:text-crimson-11={isSelected}
-			>
-				Developer Stuff
-			</a>
-		{/if}
 	</nav>
 </div>
 
