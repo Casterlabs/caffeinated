@@ -12,7 +12,7 @@
 	const debouncer = new Debouncer();
 
 	const PLATFORMS = {
-		[null]: 'page.chat_bot.commands.platform.ANY',
+		[null]: 'page.chat_bot.platform.ANY',
 		CAFFEINE: 'Caffeine',
 		TWITCH: 'Twitch',
 		TROVO: 'Trovo',

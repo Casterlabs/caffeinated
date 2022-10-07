@@ -54,15 +54,11 @@ export default {
     /* ---- Chat Bot ---- */
 
     'page.chat_bot': 'Chat Bot',
+    'page.chat_bot.platform.ANY': 'Any Platform',
 
     'sr.page.chat_bot.remove': 'Remove',
 
     'page.chat_bot.commands': 'Commands',
-    'page.chat_bot.commands.platform.ANY': 'Any Platform',
-    'page.chat_bot.commands.shouts.DONATION': 'Donates',
-    'page.chat_bot.commands.shouts.FOLLOW': 'Follows',
-    'page.chat_bot.commands.shouts.RAID': 'Raids',
-    'page.chat_bot.commands.shouts.SUBSCRIPTION': 'Subscribes',
     'page.chat_bot.commands.type.COMMAND': 'runs',
     'page.chat_bot.commands.type.CONTAINS': 'mentions',
     'page.chat_bot.commands.format.COMMAND': 'When someone from %platform% %action% <b>!</b>%action_target%, send: %message%',
@@ -72,10 +68,10 @@ export default {
 
     'page.chat_bot.shouts': 'Shouts',
     'page.chat_bot.shouts.format': 'When someone from %platform% %action% say: %message%',
-    'page.chat_bot.shouts.DONATION': 'donates',
-    'page.chat_bot.shouts.FOLLOW': 'follows',
-    'page.chat_bot.shouts.RAID': 'raids',
-    'page.chat_bot.shouts.SUBSCRIPTION': 'subscribes',
+    'page.chat_bot.shouts.DONATION': 'Donates',
+    'page.chat_bot.shouts.FOLLOW': 'Follows',
+    'page.chat_bot.shouts.RAID': 'Raids',
+    'page.chat_bot.shouts.SUBSCRIPTION': 'Subscribes',
     'page.chat_bot.shouts.example': 'Thank you for the follow!',
 
     'page.chat_bot.timers': 'Timers',
