@@ -100,7 +100,7 @@
 
 	<li>
 		<button
-			class="mt-2 w-full relative flex items-center justify-center rounded-lg transition text-mauve-12 border hover:border-mauve-8 border-mauve-7 hover:bg-mauve-3 bg-mauve-2 py-1 px-2 shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
+			class="mt-2 w-full relative flex items-center justify-center rounded-lg transition hover:text-mauve-12 text-mauve-11 border hover:border-mauve-8 border-mauve-7 hover:bg-mauve-3 bg-mauve-2 py-1 px-2 shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
 			title={t('sr.page.chat_bot.commands.add')}
 			on:click={() => {
 				commands.push({
