@@ -3,6 +3,13 @@
 
 	import createConsole from '$lib/console-helper.mjs';
 
+	const SHOUT_EVENT_TYPES = {
+		DONATION: 'page.chat_bot.commands.shouts.DONATION',
+		FOLLOW: 'page.chat_bot.commands.shouts.FOLLOW',
+		RAID: 'page.chat_bot.commands.shouts.RAID',
+		SUBSCRIPTION: 'page.chat_bot.commands.shouts.SUBSCRIPTION'
+	};
+
 	const console = createConsole('Chat Bot/Shouts');
 	const preferences = st || Caffeinated.chatbot.svelte('preferences');
 

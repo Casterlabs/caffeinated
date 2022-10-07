@@ -2,7 +2,6 @@ package co.casterlabs.caffeinated.app.chatbot;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.PreferenceFile;
@@ -31,7 +30,8 @@ public class AppChatbot extends JavascriptObject {
     private PreferenceFile<ChatbotPreferences> preferences;
 
     @JavascriptValue(allowSet = false)
-    private List<KoiEventType> supportedShoutEvents = Arrays.asList(KoiEventType.DONATION, KoiEventType.FOLLOW, KoiEventType.RAID, KoiEventType.SUBSCRIPTION);
+    private List<KoiEventType> supportedShoutEvents = Arrays.asList(KoiEventType.DONATION, KoiEventType.FOLLOW,
+            KoiEventType.RAID, KoiEventType.SUBSCRIPTION);
 
     private AsyncTask timerTask;
     private int timerIndex;
@@ -43,7 +43,8 @@ public class AppChatbot extends JavascriptObject {
     }
 
     private void resetTimerTask() {
-        if (this.timerTask != null) this.timerTask.cancel();
+        if (this.timerTask != null)
+            this.timerTask.cancel();
 
         int timerIntervalSeconds = this.preferences.get().getTimerIntervalSeconds();
 
@@ -52,7 +53,8 @@ public class AppChatbot extends JavascriptObject {
                 while (true) {
                     try {
                         Thread.sleep(timerIntervalSeconds * 1000);
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) {
+                    }
 
                     List<String> timerTexts = this.preferences.get().getTimers();
 
@@ -69,12 +71,11 @@ public class AppChatbot extends JavascriptObject {
 
                         for (UserPlatform platform : koi.getSignedInPlatforms()) {
                             koi.sendChat(
-                                platform,
-                                text,
-                                this.preferences.get().getRealChatter(),
-                                null,
-                                false
-                            );
+                                    platform,
+                                    text,
+                                    this.preferences.get().getRealChatter(),
+                                    null,
+                                    false);
                         }
                     }
                 }
@@ -93,7 +94,7 @@ public class AppChatbot extends JavascriptObject {
     public boolean processEvent(KoiEvent e) {
         boolean resultedInAnAction = false;
 
-        Set<Shout> shouts = this.preferences.get().getShouts();
+        List<Shout> shouts = this.preferences.get().getShouts();
 
         for (Shout shout : shouts) {
             if (shout.getEventType() == e.getType()) {
@@ -134,12 +135,11 @@ public class AppChatbot extends JavascriptObject {
                     String message = String.format("@%s %s", target.getDisplayname(), shout.getText());
 
                     CaffeinatedApp.getInstance().getKoi().sendChat(
-                        platform,
-                        message,
-                        this.preferences.get().getRealChatter(),
-                        null,
-                        false
-                    );
+                            platform,
+                            message,
+                            this.preferences.get().getRealChatter(),
+                            null,
+                            false);
 
                     resultedInAnAction = true;
                     break; // We still want to try to process it as a command.
@@ -183,12 +183,11 @@ public class AppChatbot extends JavascriptObject {
                         String message = command.getResponse();
 
                         CaffeinatedApp.getInstance().getKoi().sendChat(
-                            platform,
-                            message,
-                            this.preferences.get().getRealChatter(),
-                            chatEvent.getId(),
-                            false
-                        );
+                                platform,
+                                message,
+                                this.preferences.get().getRealChatter(),
+                                chatEvent.getId(),
+                                false);
                         resultedInAnAction = true;
                         break;
                     }

@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
@@ -49,21 +48,20 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 @SuppressWarnings("deprecation")
 public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHandler {
     private static final List<KoiEventType> KEPT_EVENTS = Arrays.asList(
-        KoiEventType.FOLLOW,
-        KoiEventType.SUBSCRIPTION,
-        KoiEventType.META,
-        KoiEventType.VIEWER_JOIN,
-        KoiEventType.VIEWER_LEAVE,
-        KoiEventType.RAID,
-        KoiEventType.CHANNEL_POINTS,
-        KoiEventType.CLEARCHAT,
-        KoiEventType.PLATFORM_MESSAGE,
-        KoiEventType.RICH_MESSAGE,
+            KoiEventType.FOLLOW,
+            KoiEventType.SUBSCRIPTION,
+            KoiEventType.META,
+            KoiEventType.VIEWER_JOIN,
+            KoiEventType.VIEWER_LEAVE,
+            KoiEventType.RAID,
+            KoiEventType.CHANNEL_POINTS,
+            KoiEventType.CLEARCHAT,
+            KoiEventType.PLATFORM_MESSAGE,
+            KoiEventType.RICH_MESSAGE,
 
-        // Deprecated
-        KoiEventType.CHAT,
-        KoiEventType.DONATION
-    );
+            // Deprecated
+            KoiEventType.CHAT,
+            KoiEventType.DONATION);
 
     private List<KoiLifeCycleHandler> koiEventListeners = new LinkedList<>();
 
@@ -139,7 +137,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                                     instance.onKoiStaticsUpdate(statics);
                                     break;
                             }
-                        } catch (IOException ignored) {}
+                        } catch (IOException ignored) {
+                        }
                     }
                 }
             }
@@ -181,7 +180,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                 if (prefs.isHideCommandsFromChat()) {
                     // Hide all command response messages.
                     {
-                        Set<Command> commands = prefs.getCommands();
+                        List<Command> commands = prefs.getCommands();
 
                         for (ChatbotPreferences.Command command : commands) {
                             if (command.getResponse().equals(event.getRaw())) {
@@ -223,9 +222,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
                 case VIEWER_LIST: {
                     this.viewers.put(
-                        e.getStreamer().getPlatform(),
-                        Collections.unmodifiableList(((ViewerListEvent) e).getViewers())
-                    );
+                            e.getStreamer().getPlatform(),
+                            Collections.unmodifiableList(((ViewerListEvent) e).getViewers()));
 
                     this.updateBridgeData();
                     break;
@@ -233,9 +231,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
                 case USER_UPDATE: {
                     this.userStates.put(
-                        e.getStreamer().getPlatform(),
-                        (UserUpdateEvent) e
-                    );
+                            e.getStreamer().getPlatform(),
+                            (UserUpdateEvent) e);
 
                     this.updateBridgeData();
                     break;
@@ -243,9 +240,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
                 case STREAM_STATUS: {
                     this.streamStates.put(
-                        e.getStreamer().getPlatform(),
-                        (StreamStatusEvent) e
-                    );
+                            e.getStreamer().getPlatform(),
+                            (StreamStatusEvent) e);
 
                     this.updateBridgeData();
                     break;
@@ -253,9 +249,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
                 case ROOMSTATE: {
                     this.roomStates.put(
-                        e.getStreamer().getPlatform(),
-                        (RoomstateEvent) e
-                    );
+                            e.getStreamer().getPlatform(),
+                            (RoomstateEvent) e);
 
                     this.updateBridgeData();
                     break;
@@ -283,21 +278,20 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         }
 
         FastLogger.logStatic(
-            LogLevel.DEBUG,
-            "Processed %s event for %s.",
-            e.getType().name().toLowerCase().replace('_', ' '),
-            e.getStreamer().getUPID()
-        );
+                LogLevel.DEBUG,
+                "Processed %s event for %s.",
+                e.getType().name().toLowerCase().replace('_', ' '),
+                e.getStreamer().getUPID());
     }
 
     @JavascriptFunction
     @Override
-    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
+    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter,
+            @Nullable String replyTarget, boolean isUserGesture) {
         if (message.startsWith("/koi test ")) {
             this.sendTest(
-                platform,
-                message.substring("/koi test ".length()).trim()
-            );
+                    platform,
+                    message.substring("/koi test ".length()).trim());
         } else {
             AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
 

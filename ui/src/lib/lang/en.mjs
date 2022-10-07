@@ -12,6 +12,9 @@ export default {
     // All keys prefixed with `sr.` are for screen readers only.
     // They will not be shown to end-users.
 
+    'generic.quote.left': "'",
+    'generic.quote.right': "'",
+
     'app.love': 'Made with ♥ by Casterlabs',
     'app.copyright': 'Copyright © {year} Casterlabs. All rights reserved.',
 
@@ -24,6 +27,8 @@ export default {
 
     'page.dashboard': 'Dashboard',
     'page.chat': 'Chat',
+
+    /* ---- Widgets & Alerts ---- */
 
     'page.widgets': 'Widgets & Alerts',
     'page.widgets.info': 'Add these to OBS as Browser sources.',
@@ -40,18 +45,31 @@ export default {
 
     'sr.page.widget.editor.edit_name': 'Edit name',
 
+    /* ---- Docks ---- */
+
     'page.docks': 'Docks',
     'page.docks.info': 'Add these to OBS as Browser Docks.',
     'page.docks.info.show_me_how.modal.title': 'How to create an OBS Browser Dock',
 
+    /* ---- Chat Bot ---- */
+
     'page.chat_bot': 'Chat Bot',
+
+    'sr.page.chat_bot.remove': 'Remove',
+
     'page.chat_bot.commands': 'Commands',
-    'page.chat_bot.commands.mention': 'Mention sender when replying: %checkbox%',
-    'page.chat_bot.commands.runs': 'runs',
-    'page.chat_bot.commands.mentions': 'mentions',
+    'page.chat_bot.commands.platform.ANY': 'Any Platform',
+    'page.chat_bot.commands.shouts.DONATION': 'Donates',
+    'page.chat_bot.commands.shouts.FOLLOW': 'Follows',
+    'page.chat_bot.commands.shouts.RAID': 'Raids',
+    'page.chat_bot.commands.shouts.SUBSCRIPTION': 'Subscribes',
+    'page.chat_bot.commands.type.COMMAND': 'runs',
+    'page.chat_bot.commands.type.CONTAINS': 'mentions',
     'page.chat_bot.commands.format.COMMAND': 'When someone from %platform% %action% <b>!</b>%action_target%, send: %message%',
-    'page.chat_bot.commands.format.CONTAINS': 'When someone from %platform% %action% <b>[generic.leftquote]</b>%action_target%<b>[generic.rightquote]</b>, reply with: %message%',
+    'page.chat_bot.commands.format.CONTAINS': 'When someone from %platform% %action% <b>[generic.quote.left]</b>%action_target%<b>[generic.quote.right]</b>, reply with: %message%',
     'page.chat_bot.commands.example': 'Checkout casterlabs.co!',
+    'sr.page.chat_bot.commands.add': 'Create another command',
+
     'page.chat_bot.shouts': 'Shouts',
     'page.chat_bot.shouts.format': 'When someone from %platform% %action% say: %message%',
     'page.chat_bot.shouts.DONATION': 'donates',
@@ -59,9 +77,11 @@ export default {
     'page.chat_bot.shouts.RAID': 'raids',
     'page.chat_bot.shouts.SUBSCRIPTION': 'subscribes',
     'page.chat_bot.shouts.example': 'Thank you for the follow!',
+
     'page.chat_bot.timers': 'Timers',
     'page.chat_bot.timers.format': 'Every %seconds% seconds, send one of the following:',
     'page.chat_bot.timers.example': 'I love Casterlabs!',
+
     'page.chat_bot.settings': 'Settings',
     'page.chat_bot.settings.sender': 'Send messages from:',
     'page.chat_bot.settings.sender.SYSTEM': 'the @Casterlabs account',
@@ -73,11 +93,8 @@ export default {
     'page.chat_bot.settings.hide_from_chatbots': 'Hide these accounts from chat',
     'page.chat_bot.settings.hide_from_chatbots.description': 'Hide some additional accounts from your chat widget, such as <pre>@Nightbot</pre>.',
     'sr.page.chat_bot.settings.hide_from_chatbots.add': 'Hide another account',
-    'sr.page.chat_bot.settings.hide_from_chatbots.remove': 'Remove',
 
-    /* ------------------------ */
-    /* Settings                 */
-    /* ------------------------ */
+    /* ---- Settings ---- */
 
     'page.settings': 'Settings',
 

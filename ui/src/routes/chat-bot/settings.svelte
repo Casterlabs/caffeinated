@@ -80,7 +80,7 @@
 
 						<button
 							class="absolute inset-y-1 right-1 text-red-500 hover:text-red-600"
-							title={t('sr.page.chat_bot.settings.hide_from_chatbots.remove')}
+							title={t('sr.page.chat_bot.remove')}
 							on:click={() => {
 								const chatbots = $preferences.chatbots;
 								chatbots.splice(idx, 1);
@@ -88,7 +88,7 @@
 							}}
 						>
 							<span class="sr-only">
-								<LocalizedText key="sr.page.chat_bot.settings.hide_from_chatbots.remove" />
+								<LocalizedText key="sr.page.chat_bot.remove" />
 							</span>
 							<icon class="h-5" data-icon="filled/trash" />
 						</button>
