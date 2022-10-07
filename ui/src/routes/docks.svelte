@@ -5,6 +5,7 @@
 	import CardList from '../components/ui/CardList/index.svelte';
 	import Card from '../components/ui/cardlist/Card.svelte';
 
+	import { t } from '$lib/translate.mjs';
 	import { onMount } from 'svelte';
 
 	let docks = [];
@@ -49,7 +50,22 @@
 				icon={dock.details.icon}
 				text={dock.details.friendlyName}
 				on:click={() => copyWidgetUrl(dock.id)}
-			/>
+			>
+				<div class="absolute inset-y-1 right-2.5 flex items-center space-x-1">
+					<button
+						class="text-mauve-12 hover:text-mauve-11"
+						title={t('sr.page.widgets.copy_link')}
+						on:click|stopPropagation={() => {
+							window.Caffeinated.plugins.copyWidgetUrl(dock.id);
+						}}
+					>
+						<span class="sr-only">
+							<LocalizedText key="sr.page.widgets.copy_link" />
+						</span>
+						<icon class="w-5 h-5" data-icon="filled/document-duplicate" />
+					</button>
+				</div></Card
+			>
 		{/each}
 	</CardList>
 </div>
