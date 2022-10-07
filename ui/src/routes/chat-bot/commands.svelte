@@ -45,7 +45,7 @@
 </script>
 
 <ul class="space-y-4">
-	{#each commands as command}
+	{#each commands as command, idx}
 		<li class="relative">
 			<Container>
 				<LocalizedText
@@ -86,7 +86,7 @@
 				class="absolute top-2 right-1 text-red-500 hover:text-red-600"
 				title={t('sr.page.chat_bot.remove')}
 				on:click={() => {
-					commands.splice(commands.indexOf(command), 1);
+					commands.splice(idx, 1);
 					save();
 				}}
 			>
