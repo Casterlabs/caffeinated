@@ -22,6 +22,7 @@ export default {
     'sr.modal.close': 'Close Modal',
 
     'sr.navigation.back': 'Go Back',
+    'navigation.want_to_go_back': 'Want to go back?',
 
     show_me_how: 'Show me how',
 
@@ -117,6 +118,8 @@ export default {
     'page.settings.accounts': 'Accounts',
     'page.settings.accounts.music_services': 'Music Services',
     'page.settings.accounts.music_services.enable': 'Enable',
+    'page.settings.accounts.connect': 'Connect',
+    'page.settings.accounts.disconnect': 'Disconnect',
 
     'page.settings.about': 'About',
     'page.settings.about.enable_unsafe': 'Enable Stupidly Unsafe Settings'

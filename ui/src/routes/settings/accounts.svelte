@@ -8,6 +8,7 @@
 	import createConsole from '$lib/console-helper.mjs';
 
 	const MUSIC_SERVICES_WITH_ENABLE = ['system', 'pretzel'];
+	const MUSIC_SERVICES_WITH_OAUTH = ['spotify'];
 
 	const console = createConsole('Settings/Accounts');
 
@@ -28,8 +29,18 @@
 				<Container>
 					<div class="h-8 flex flex-row items-center">
 						<icon class="h-5 -ml-1 mr-1" data-icon="service/{provider.serviceId}" />
-						<p class="flex-1">
+						<p class="flex-1 flex flex-row items-center">
 							{provider.serviceName}
+
+							{#if provider.accountName}
+								<a
+									href={provider.accountLink}
+									target="_blank"
+									class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-mauve-4 text-mauve-11 inline-flex items-center rounded-full font-base underline"
+								>
+									{provider.accountName}
+								</a>
+							{/if}
 						</p>
 
 						<div class="flex-0">
@@ -43,8 +54,24 @@
 										});
 									}}
 								/>
-							{:else}
-								...
+							{:else if MUSIC_SERVICES_WITH_OAUTH.includes(provider.serviceId)}
+								{#if provider.isSignedIn}
+									<button
+										class="px-1.5 py-1 inline-flex items-center rounded bg-red-600 text-mauve-12 text-xs font-base"
+										on:click={() => {
+											window.Caffeinated.music.signoutMusicProvider(provider.serviceId);
+										}}
+									>
+										<LocalizedText key="page.settings.accounts.disconnect" />
+									</button>
+								{:else}
+									<a
+										class="px-1.5 py-1 inline-flex items-center rounded bg-green-600 text-mauve-12 text-xs font-base"
+										href="/signin/{provider.serviceId}"
+									>
+										<LocalizedText key="page.settings.accounts.connect" />
+									</a>
+								{/if}
 							{/if}
 						</div>
 					</div>
