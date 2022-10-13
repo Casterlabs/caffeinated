@@ -9,6 +9,7 @@
     import GlimeshButton from "../../components/platforms/signin-buttons/glimesh.svelte";
     import BrimeButton from "../../components/platforms/signin-buttons/brime.svelte";
     import YouTubeButton from "../../components/platforms/signin-buttons/youtube.svelte";
+    import DLiveButton from "../../components/platforms/signin-buttons/dlive.svelte";
 
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
@@ -44,6 +45,7 @@
         <GlimeshButton />
         <BrimeButton />
         <YouTubeButton />
+        <DLiveButton />
     </div>
 
     <div class="service-disclaimer">

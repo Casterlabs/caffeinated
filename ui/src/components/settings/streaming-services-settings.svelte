@@ -11,7 +11,8 @@
         trovo: {},
         glimesh: {},
         brime: {},
-        youtube: {}
+        youtube: {},
+        dlive: {}
     };
 
     function parseBridgeData(koiAuth) {
@@ -134,6 +135,16 @@
             bind:accountLink={accounts.youtube.accountLink}
             bind:isSignedIn={accounts.youtube.isSignedIn}
             bind:isLoading={accounts.youtube.isLoading}
+            on:signout={signout}
+        />
+        <AccountBox
+            platform="dlive"
+            platformName="DLive"
+            signInHandler={signin}
+            bind:accountName={accounts.dlive.accountName}
+            bind:accountLink={accounts.dlive.accountLink}
+            bind:isSignedIn={accounts.dlive.isSignedIn}
+            bind:isLoading={accounts.dlive.isLoading}
             on:signout={signout}
         />
     </div>
