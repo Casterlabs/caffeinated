@@ -66,7 +66,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         .put("caffeinated_trovo",   "https://casterlabs.co/auth/redirect")
         .put("caffeinated_glimesh", "https://casterlabs.co/auth/redirect")
         .put("caffeinated_brime",   "https://casterlabs.co/auth/redirect")
-        .put("caffeinated_youtube", "https://casterlabs.co/auth/redirect");
+        .put("caffeinated_youtube", "https://casterlabs.co/auth/redirect")
+        .put("caffeinated_tiktok",  "https://casterlabs.co/auth/redirect")
+        .put("caffeinated_dlive",   "https://casterlabs.co/auth/redirect");
     // @formatter:on
 
     private static @Getter CaffeinatedApp instance;

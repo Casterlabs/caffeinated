@@ -16,12 +16,20 @@ public class Donation {
     private String name;
 
     public static enum DonationType {
-        TWITCH_BITS,
-        CAFFEINE_PROP,
         CASTERLABS_TEST,
-        TROVO_SPELL,
-        SUPER_CHAT,
-        SUPER_STICKER;
 
+        CAFFEINE_PROP,
+
+        TWITCH_BITS,
+
+        TROVO_SPELL,
+
+        YOUTUBE_SUPER_CHAT,
+        YOUTUBE_SUPER_STICKER,
+
+        DLIVE_SUPER_CHAT,
+        DLIVE_LEMON,
+
+        ;
     }
 }
