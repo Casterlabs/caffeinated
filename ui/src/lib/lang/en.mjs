@@ -29,6 +29,16 @@ export default {
     'page.dashboard': 'Dashboard',
     'page.chat': 'Chat',
 
+    /* ---- Signin ---- */
+
+    'page.signin': 'Sign In',
+    'page.signin.welcome': 'Welcome to Casterlabs.',
+    'page.signin.choose': 'Choose a platform to get started with.',
+    'page.signin.disclaimer': 'By signing in, you agree to our %terms_of_service% and our %privacy_policy%. Click %here% if you actually read them.',
+    'page.signin.disclaimer.terms_of_service': 'Terms of Service',
+    'page.signin.disclaimer.privacy_policy': 'Privacy Policy',
+    'page.signin.disclaimer.here': 'here',
+
     /* ---- Widgets & Alerts ---- */
 
     'page.widgets': 'Widgets & Alerts',
