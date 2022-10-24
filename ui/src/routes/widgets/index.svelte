@@ -85,11 +85,7 @@
 <div class="mt-8">
 	<CardList>
 		{#each widgets as widget}
-			<Card
-				icon={widget.details.icon}
-				text={widget.details.friendlyName}
-				href="/widgets/edit?id={widget.id}"
-			>
+			<Card icon={widget.details.icon} text={widget.name} href="/widgets/edit?id={widget.id}">
 				<div class="absolute inset-y-1 right-2.5 flex items-center space-x-1">
 					<button
 						class="text-mauve-12 hover:text-mauve-11"
