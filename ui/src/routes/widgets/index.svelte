@@ -101,7 +101,7 @@
 					</button>
 
 					<button
-						class="text-red-500 hover:text-red-600"
+						class="text-error hover:opacity-80"
 						title={t('sr.page.widgets.delete')}
 						on:click|stopPropagation={() => {
 							window.Caffeinated.plugins.deleteWidget(widget.id);

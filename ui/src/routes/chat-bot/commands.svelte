@@ -83,7 +83,7 @@
 			</Container>
 
 			<button
-				class="absolute top-2 right-1 text-red-500 hover:text-red-600"
+				class="absolute top-2 right-1 text-error hover:opacity-80"
 				title={t('sr.page.chat_bot.remove')}
 				on:click={() => {
 					commands.splice(idx, 1);

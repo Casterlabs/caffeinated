@@ -77,7 +77,7 @@
 									...
 								{:else if userData}
 									<button
-										class="px-1.5 py-1 inline-flex items-center rounded bg-red-600 text-base-12 text-xs font-base"
+										class="px-1.5 py-1 inline-flex items-center rounded bg-error text-white text-xs font-base"
 										on:click={() => {
 											window.Caffeinated.auth.signout(tokenId);
 										}}
@@ -86,7 +86,7 @@
 									</button>
 								{:else}
 									<button
-										class="px-1.5 py-1 inline-flex items-center rounded bg-green-600 text-base-12 text-xs font-base"
+										class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 										on:click={() => {
 											window.Caffeinated.auth.requestOAuthSignin(platform, true, true);
 											loading.push(platform);
@@ -141,7 +141,7 @@
 								{:else if MUSIC_SERVICES_WITH_OAUTH.includes(provider.serviceId)}
 									{#if provider.isSignedIn}
 										<button
-											class="px-1.5 py-1 inline-flex items-center rounded bg-red-600 text-base-12 text-xs font-base"
+											class="px-1.5 py-1 inline-flex items-center rounded bg-error text-white text-xs font-base"
 											on:click={() => {
 												window.Caffeinated.music.signoutMusicProvider(provider.serviceId);
 											}}
@@ -150,7 +150,7 @@
 										</button>
 									{:else}
 										<a
-											class="px-1.5 py-1 inline-flex items-center rounded bg-green-600 text-base-12 text-xs font-base"
+											class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 											href="/signin/{provider.serviceId}"
 										>
 											<LocalizedText key="page.settings.accounts.connect" />

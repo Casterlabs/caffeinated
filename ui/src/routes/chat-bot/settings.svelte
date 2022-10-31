@@ -79,7 +79,7 @@
 						/>
 
 						<button
-							class="absolute inset-y-1 right-1 text-red-500 hover:text-red-600"
+							class="absolute inset-y-1 right-1 text-error hover:opacity-80"
 							title={t('sr.page.chat_bot.remove')}
 							on:click={() => {
 								const chatbots = $preferences.chatbots;

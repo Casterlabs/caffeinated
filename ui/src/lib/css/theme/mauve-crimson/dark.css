@@ -3,3 +3,11 @@
 @import "../../colors/base/mauve.css";
 @import "../../colors/primary/crimson.css";
 @import "../_dark.css";
+
+/* - */
+
+#css-intermediate {
+    --link: rgb(91 91 255);
+    --error: rgb(252, 31, 31);
+    --success: rgb(64, 187, 64);
+}
