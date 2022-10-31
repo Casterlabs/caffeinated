@@ -13,7 +13,7 @@
 </script>
 
 <textarea
-	class="px-1.5 py-1 inline-block w-full text-mauve-12 rounded-md border transition hover:border-mauve-8 border-mauve-7 bg-mauve-1 shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7 text-sm"
+	class="px-1.5 py-1 inline-block w-full text-base-12 rounded-md border transition hover:border-base-8 border-base-7 bg-base-1 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 	class:resize-none={!resize}
 	placeholder={t(placeholder)}
 	{rows}

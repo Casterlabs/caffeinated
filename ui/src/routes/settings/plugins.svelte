@@ -33,7 +33,7 @@
 						{/if}
 
 						{#if context.pluginIds.length > 0}
-							<span class="text-mauve-11 text-xs">
+							<span class="text-base-11 text-xs">
 								&bull;
 								{context.pluginIds.join(',')}
 							</span>

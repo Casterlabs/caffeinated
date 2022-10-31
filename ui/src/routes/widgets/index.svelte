@@ -88,7 +88,7 @@
 			<Card icon={widget.details.icon} text={widget.name} href="/widgets/edit?id={widget.id}">
 				<div class="absolute inset-y-1 right-2.5 flex items-center space-x-1">
 					<button
-						class="text-mauve-12 hover:text-mauve-11"
+						class="text-base-12 hover:text-base-11"
 						title={t('sr.page.widgets.copy_link')}
 						on:click|stopPropagation={() => {
 							window.Caffeinated.plugins.copyWidgetUrl(widget.id);
@@ -119,14 +119,14 @@
 	</CardList>
 
 	<button
-		class="fixed bottom-3 -translate-x-3 flex items-center justify-center shadow-sm rounded-lg border border-mauve-5 bg-mauve-1 p-2 focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7 overflow-hidden hover:overflow-visible"
+		class="fixed bottom-3 -translate-x-3 flex items-center justify-center shadow-sm rounded-lg border border-base-5 bg-base-1 p-2 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 overflow-hidden hover:overflow-visible"
 		aria-haspopup="true"
 		aria-controls="widget-creation-dropup"
 		title={t('sr.page.widgets.create')}
 	>
 		<div class="absolute left-0 bottom-full -translate-x-px" id="widget-creation-dropup">
 			<div
-				class="mb-1.5 shadow-sm rounded-lg border border-mauve-5 bg-mauve-1 w-36 divide-y divide-current text-mauve-5"
+				class="mb-1.5 shadow-sm rounded-lg border border-base-5 bg-base-1 w-36 divide-y divide-current text-base-5"
 			>
 				{#each Object.entries(widgetCategories) as [category, widgets]}
 					<button
@@ -134,7 +134,7 @@
 						aria-haspopup="true"
 						aria-controls="widget-creation-dropright-{category}"
 					>
-						<div class="p-2 flex flex-row items-center text-md space-x-2 text-mauve-12 w-full">
+						<div class="p-2 flex flex-row items-center text-md space-x-2 text-base-12 w-full">
 							<icon class="flex-0 w-5 h-5" data-icon={CATEGORY_ICONS[category]} />
 							<span class="flex-1 text-left">
 								<LocalizedText key="page.widgets.create.category.{category}" />
@@ -144,7 +144,7 @@
 
 						<div class="absolute left-full bottom-0 w-96">
 							<div
-								class="translate-x-1.5 translate-y-px shadow-sm rounded-lg border border-mauve-5 bg-mauve-1 w-36 divide-y divide-current text-mauve-5"
+								class="translate-x-1.5 translate-y-px shadow-sm rounded-lg border border-base-5 bg-base-1 w-36 divide-y divide-current text-base-5"
 								id="widget-creation-dropright-{category}"
 							>
 								{#each widgets as widget}
@@ -155,7 +155,7 @@
 											widget.create();
 										}}
 									>
-										<div class="truncate text-left p-2 text-sm text-mauve-12 w-full">
+										<div class="truncate text-left p-2 text-sm text-base-12 w-full">
 											<LocalizedText key={widget.name} />
 										</div>
 									</button>
@@ -167,7 +167,7 @@
 			</div>
 		</div>
 
-		<div class="text-mauve-12">
+		<div class="text-base-12">
 			<span class="sr-only">
 				<LocalizedText key="sr.page.widgets.create" />
 			</span>

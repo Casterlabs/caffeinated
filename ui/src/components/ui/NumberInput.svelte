@@ -24,7 +24,7 @@
 </script>
 
 <input
-	class="px-2 py-1 text-mauve-12 rounded-md border transition hover:border-mauve-8 border-mauve-7 bg-mauve-1 shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7 text-sm"
+	class="px-2 py-1 text-base-12 rounded-md border transition hover:border-base-8 border-base-7 bg-base-1 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 	type="number"
 	{min}
 	{max}

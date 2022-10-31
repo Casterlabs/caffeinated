@@ -65,7 +65,7 @@
 									<a
 										href={userData.link}
 										target="_blank"
-										class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-mauve-4 text-mauve-11 inline-flex items-center rounded-full font-base underline"
+										class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-base-4 text-base-11 inline-flex items-center rounded-full font-base underline"
 									>
 										{userData.displayname}
 									</a>
@@ -77,7 +77,7 @@
 									...
 								{:else if userData}
 									<button
-										class="px-1.5 py-1 inline-flex items-center rounded bg-red-600 text-mauve-12 text-xs font-base"
+										class="px-1.5 py-1 inline-flex items-center rounded bg-red-600 text-base-12 text-xs font-base"
 										on:click={() => {
 											window.Caffeinated.auth.signout(tokenId);
 										}}
@@ -86,7 +86,7 @@
 									</button>
 								{:else}
 									<button
-										class="px-1.5 py-1 inline-flex items-center rounded bg-green-600 text-mauve-12 text-xs font-base"
+										class="px-1.5 py-1 inline-flex items-center rounded bg-green-600 text-base-12 text-xs font-base"
 										on:click={() => {
 											window.Caffeinated.auth.requestOAuthSignin(platform, true, true);
 											loading.push(platform);
@@ -120,7 +120,7 @@
 									<a
 										href={provider.accountLink}
 										target="_blank"
-										class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-mauve-4 text-mauve-11 inline-flex items-center rounded-full font-base underline"
+										class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-base-4 text-base-11 inline-flex items-center rounded-full font-base underline"
 									>
 										{provider.accountName}
 									</a>
@@ -141,7 +141,7 @@
 								{:else if MUSIC_SERVICES_WITH_OAUTH.includes(provider.serviceId)}
 									{#if provider.isSignedIn}
 										<button
-											class="px-1.5 py-1 inline-flex items-center rounded bg-red-600 text-mauve-12 text-xs font-base"
+											class="px-1.5 py-1 inline-flex items-center rounded bg-red-600 text-base-12 text-xs font-base"
 											on:click={() => {
 												window.Caffeinated.music.signoutMusicProvider(provider.serviceId);
 											}}
@@ -150,7 +150,7 @@
 										</button>
 									{:else}
 										<a
-											class="px-1.5 py-1 inline-flex items-center rounded bg-green-600 text-mauve-12 text-xs font-base"
+											class="px-1.5 py-1 inline-flex items-center rounded bg-green-600 text-base-12 text-xs font-base"
 											href="/signin/{provider.serviceId}"
 										>
 											<LocalizedText key="page.settings.accounts.connect" />

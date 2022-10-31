@@ -59,7 +59,7 @@ for (const color of colors) {
 
     for (let idx = 1; idx < 13; idx++) {
         css += `
-    --primary${idx}: var(--${color}${idx})
+    --primary${idx}: var(--${color}${idx});
         `;
     }
 
@@ -74,7 +74,7 @@ for (const base of bases) {
 
     for (let idx = 1; idx < 13; idx++) {
         css += `
-    --base${idx}: var(--${base}${idx})
+    --base${idx}: var(--${base}${idx});
         `;
     }
 

@@ -33,7 +33,7 @@
 	}
 </script>
 
-<ul class="divide-y divide-current text-mauve-6">
+<ul class="divide-y divide-current text-base-6">
 	<li class="py-4">
 		<SelectMenu
 			title="page.settings.appearance.theme"

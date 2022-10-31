@@ -30,7 +30,7 @@
 
 <div class="w-full" class:opacity-70={disabled} class:pointer-events-none={disabled}>
 	<!-- svelte-ignore a11y-label-has-associated-control -->
-	<label id={ID} class="block text-sm font-medium text-mauve-12">
+	<label id={ID} class="block text-sm font-medium text-base-12">
 		<LocalizedText key={title} />
 	</label>
 
@@ -77,25 +77,25 @@
 			<button
 				type="button"
 				role="listbox"
-				class="relative w-full h-[2.375rem] cursor-pointer rounded-md border border-mauve-7 bg-mauve-1 py-2 pl-3 pr-10 text-left shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7 text-sm"
+				class="relative w-full h-[2.375rem] cursor-pointer rounded-md border border-base-7 bg-base-1 py-2 pl-3 pr-10 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 				aria-haspopup="listbox"
 				aria-expanded={open}
 				aria-labelledby={ID}
 				aria-disabled={disabled}
 				on:click={() => (open = !open)}
 			>
-				<span class="block truncate text-mauve-12">
+				<span class="block truncate text-base-12">
 					<LocalizedText key={options[value]} />
 				</span>
 				<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
-					<icon class="h-5 w-5 text-mauve-10" data-icon="icon/chevron-up-down" />
+					<icon class="h-5 w-5 text-base-10" data-icon="icon/chevron-up-down" />
 				</span>
 			</button>
 
 			{#if open}
-				<div class="absolute z-10 mt-1 max-h-60 w-full shadow-lg rounded-md bg-mauve-1">
+				<div class="absolute z-10 mt-1 max-h-60 w-full shadow-lg rounded-md bg-base-1">
 					<ul
-						class="overflow-auto rounded-md py-1 ring-1 ring-mauve-8 ring-opacity-5 focus:outline-none text-sm"
+						class="overflow-auto rounded-md py-1 ring-1 ring-base-8 ring-opacity-5 focus:outline-none text-sm"
 						role="listbox"
 						tabindex="-1"
 						aria-activedescendant="{ID}_{value}"
@@ -108,8 +108,8 @@
 							<li
 								id="{ID}_{value}"
 								class="font-normal relative cursor-default select-none"
-								class:text-mauve-12={!isHighlighted}
-								class:bg-crimson-9={isHighlighted}
+								class:text-base-12={!isHighlighted}
+								class:bg-primary-9={isHighlighted}
 								class:text-white={isHighlighted}
 								role="option"
 								aria-selected={isSelected}
@@ -128,7 +128,7 @@
 									{#if isSelected}
 										<span
 											class="absolute inset-y-0 right-0 flex items-center pr-4"
-											class:text-crimson-9={!isHighlighted}
+											class:text-primary-9={!isHighlighted}
 											class:text-white={isHighlighted}
 										>
 											<icon class="h-5 w-5" data-icon="icon/check" />

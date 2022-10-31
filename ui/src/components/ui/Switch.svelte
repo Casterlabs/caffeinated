@@ -18,10 +18,10 @@
 
 <div class="flex items-center justify-between w-full">
 	<div class="flex flex-col">
-		<p class="text-sm font-medium text-mauve-12" id="{ID}-label">
+		<p class="text-sm font-medium text-base-12" id="{ID}-label">
 			<LocalizedText key={title} />
 		</p>
-		<p class="text-sm text-mauve-11" id="{ID}-description">
+		<p class="text-sm text-base-11" id="{ID}-description">
 			<LocalizedText key={description} />
 		</p>
 	</div>
@@ -29,9 +29,9 @@
 	<button
 		type="button"
 		role="switch"
-		class="relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-crimson-7 focus:ring-offset-2 ring-offset-current text-mauve-2"
-		class:bg-mauve-9={!checked}
-		class:bg-crimson-9={checked}
+		class="relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-7 focus:ring-offset-2 ring-offset-current text-base-2"
+		class:bg-base-9={!checked}
+		class:bg-primary-9={checked}
 		aria-checked="true"
 		aria-labelledby="{ID}-label"
 		aria-describedby="{ID}-description"

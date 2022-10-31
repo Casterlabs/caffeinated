@@ -42,10 +42,10 @@
 </script>
 
 <div class="flex-0 w-48 h-full flex flex-col">
-	<div class="flex flex-grow flex-col overflow-y-auto bg-mauve-2 pb-4">
+	<div class="flex flex-grow flex-col overflow-y-auto bg-base-2 pb-4">
 		<!-- <div class="flex flex-shrink-0 items-center px-4 pt-5 mb-3">
 			<svg
-				class="h-auto w-full text-mauve-12"
+				class="h-auto w-full text-base-12"
 				xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
 				xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
 				xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +148,7 @@
 			>
 		</div> -->
 		<nav
-			class="flex flex-1 flex-col divide-y divide-current text-mauve-6 overflow-y-auto"
+			class="flex flex-1 flex-col divide-y divide-current text-base-6 overflow-y-auto"
 			aria-label="Sidebar"
 		>
 			{#each sections as section}
@@ -160,13 +160,13 @@
 
 						<a
 							href={item.href}
-							class="group flex items-center px-3 py-2 text-sm leading-6 border-current text-mauve-7 hover:text-mauve-8 font-medium rounded-md"
+							class="group flex items-center px-3 py-2 text-sm leading-6 border-current text-base-7 hover:text-base-8 font-medium rounded-md"
 							aria-current={isSelected ? 'page' : undefined}
-							class:bg-mauve-03={!isSelected}
-							class:hover:bg-mauve-4={!isSelected}
-							class:bg-mauve-5={isSelected}
+							class:bg-base-03={!isSelected}
+							class:hover:bg-base-4={!isSelected}
+							class:bg-base-5={isSelected}
 						>
-							<span class="text-mauve-12">
+							<span class="text-base-12">
 								<LocalizedText key={item.name} />
 							</span>
 						</a>

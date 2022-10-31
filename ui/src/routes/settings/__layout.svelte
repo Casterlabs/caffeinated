@@ -21,9 +21,9 @@
 
 <PageTitle title={['page.settings', currentPage]} />
 
-<!-- <h1 class="text-3xl font-bold tracking-tight text-mauve-12 mb-6">Settings</h1> -->
+<!-- <h1 class="text-3xl font-bold tracking-tight text-base-12 mb-6">Settings</h1> -->
 
-<div class="border-b border-mauve-8">
+<div class="border-b border-base-8">
 	<nav class="-mb-px flex space-x-8">
 		{#each tabs as [name, href]}
 			{@const isSelected = currentPage == name}
@@ -33,7 +33,7 @@
 				class:hidden={name == 'Developer Stuff' && !$preferences?.enableStupidlyUnsafeSettings}
 				aria-current={isSelected ? 'page' : undefined}
 				class:border-b-2={isSelected}
-				class:text-crimson-11={isSelected}
+				class:text-primary-11={isSelected}
 			>
 				<LocalizedText key={name} />
 			</a>

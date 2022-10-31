@@ -76,7 +76,7 @@
 
 <div
 	id="css-intermediate"
-	class="w-full h-full bg-mauve-1 text-mauve-12"
+	class="w-full h-full bg-base-1 text-base-12"
 	class:dark-theme={!useLightTheme}
 >
 	<slot />

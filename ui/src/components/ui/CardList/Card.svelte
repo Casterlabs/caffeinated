@@ -22,18 +22,18 @@
 
 <button
 	role={href ? 'link' : 'button'}
-	class="relative flex items-center space-x-3 rounded-lg border border-mauve-6 bg-mauve-2 p-5 shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
+	class="relative flex items-center space-x-3 rounded-lg border border-base-6 bg-base-2 p-5 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
 	on:click={onClick}
 >
-	<div class="flex-shrink-0 text-mauve-12">
+	<div class="flex-shrink-0 text-base-12">
 		<icon data-icon="icon/{icon}" />
 	</div>
 	<div class="min-w-0 flex-1">
-		<p class="text-sm font-medium text-mauve-12 text-left">
+		<p class="text-sm font-medium text-base-12 text-left">
 			<LocalizedText key={text} />
 		</p>
 	</div>
-	<div class="flex-shrink-0 text-mauve-12">
+	<div class="flex-shrink-0 text-base-12">
 		<slot />
 	</div>
 </button>

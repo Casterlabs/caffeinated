@@ -21,7 +21,7 @@
 	}
 </script>
 
-<ul class="divide-y divide-current text-mauve-6">
+<ul class="divide-y divide-current text-base-6">
 	<li class="py-4">
 		<SelectMenu
 			title="page.chat_bot.settings.sender"
@@ -53,10 +53,10 @@
 	<li class="py-4">
 		<div class="flex items-center justify-between w-full">
 			<div class="flex flex-col">
-				<p class="text-sm font-medium text-mauve-12" id="CHATBOT_HIDEFROM-label">
+				<p class="text-sm font-medium text-base-12" id="CHATBOT_HIDEFROM-label">
 					<LocalizedText key="page.chat_bot.settings.hide_from_chatbots" />
 				</p>
-				<p class="text-sm text-mauve-11" id="CHATBOT_HIDEFROM-description">
+				<p class="text-sm text-base-11" id="CHATBOT_HIDEFROM-description">
 					<LocalizedText key="page.chat_bot.settings.hide_from_chatbots.description" />
 				</p>
 			</div>
@@ -97,7 +97,7 @@
 			</ul>
 
 			<button
-				class="mt-2 w-full relative flex items-center justify-center rounded-lg border transition border-mauve-5 text-mauve-11 hover:text-mauve-12 hover:shadow-sm hover:border-mauve-7 hover:bg-mauve-2 p-1 focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
+				class="mt-2 w-full relative flex items-center justify-center rounded-lg border transition border-base-5 text-base-11 hover:text-base-12 hover:shadow-sm hover:border-base-7 hover:bg-base-2 p-1 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
 				title={t('sr.page.chat_bot.settings.hide_from_chatbots.add')}
 				on:click={() => {
 					const chatbots = $preferences.chatbots;

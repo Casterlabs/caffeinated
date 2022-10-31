@@ -150,7 +150,7 @@
 	<h1 class="font-medium text-2xl text-center">
 		<LocalizedText key="page.signin.welcome" />
 	</h1>
-	<h2 class="text-sm text-mauve-11 mt-1">
+	<h2 class="text-sm text-base-11 mt-1">
 		<LocalizedText key="page.signin.choose" />
 	</h2>
 
@@ -158,7 +158,7 @@
 		{#each PLATFORMS as { id, name, color }}
 			<a
 				href="/signin/{id.toLowerCase()}"
-				class="signin-icon w-12 h-12 border border-mauve-6 rounded inline-flex items-center justify-center transition"
+				class="signin-icon w-12 h-12 border border-base-6 rounded inline-flex items-center justify-center transition"
 				style="--color: {color};"
 				title={name}
 			>
@@ -167,7 +167,7 @@
 		{/each}
 	</div>
 
-	<span class="absolute inset-x-0 bottom-2 text-xs text-mauve-11">
+	<span class="absolute inset-x-0 bottom-2 text-xs text-base-11">
 		<LocalizedText
 			key="page.signin.disclaimer"
 			slotMapping={['terms_of_service', 'privacy_policy', 'here']}

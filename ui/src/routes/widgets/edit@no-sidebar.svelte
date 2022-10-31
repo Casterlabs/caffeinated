@@ -52,7 +52,7 @@
 	</div>
 
 	<div
-		class="-mt-1 pb-5 -mx-6 border-b border-mauve-6 w-screen flex flex-col items-center justify-center"
+		class="-mt-1 pb-5 -mx-6 border-b border-base-6 w-screen flex flex-col items-center justify-center"
 	>
 		<span class="text-lg font-semibold relative">
 			<div

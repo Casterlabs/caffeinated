@@ -23,9 +23,9 @@
 <button
 	type="button"
 	role="switch"
-	class="relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-crimson-7 focus:ring-offset-2 ring-offset-current text-mauve-2"
-	class:bg-mauve-9={!checked}
-	class:bg-crimson-9={checked}
+	class="relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-7 focus:ring-offset-2 ring-offset-current text-base-2"
+	class:bg-base-9={!checked}
+	class:bg-primary-9={checked}
 	title={t(title)}
 	aria-checked={checked}
 	aria-labelledby="{ID}-label"

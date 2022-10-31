@@ -53,7 +53,7 @@
 			>
 				<div class="absolute inset-y-1 right-2.5 flex items-center space-x-1">
 					<button
-						class="text-mauve-12 hover:text-mauve-11"
+						class="text-base-12 hover:text-base-11"
 						title={t('sr.page.widgets.copy_link')}
 						on:click|stopPropagation={() => {
 							window.Caffeinated.plugins.copyWidgetUrl(dock.id);
