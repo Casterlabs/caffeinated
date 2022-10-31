@@ -50,8 +50,14 @@
                     let url = '/no.icon.type';
 
                     switch (iconType) {
-                        case 'filled':
-                            url = `/images/icons/${iconPath}.svg`;
+                        case 'solid':
+                            url = `/images/icons/solid/${iconPath}.svg`;
+                            break;
+                        case 'outline':
+                            url = `/images/icons/outline/${iconPath}.svg`;
+                            break;
+                        case 'sominilid':
+                            url = `/images/icons/mini/${iconPath}.svg`;
                             break;
 
                         case 'service':
