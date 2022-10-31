@@ -10,11 +10,11 @@
 	import { t } from '$lib/translate.mjs';
 
 	const CATEGORY_ICONS = {
-		ALERTS: 'outline/bell-alert',
-		LABELS: 'outline/tag',
-		INTERACTION: 'outline/chat-bubble-oval-left',
-		GOALS: 'outline/chart-bar',
-		OTHER: 'outline/star'
+		ALERTS: 'icon/bell-alert',
+		LABELS: 'icon/tag',
+		INTERACTION: 'icon/chat-bubble-oval-left',
+		GOALS: 'icon/chart-bar',
+		OTHER: 'icon/star'
 	};
 
 	let widgets = [];
@@ -68,7 +68,7 @@
 		class="flex flex-row items-center text-link"
 		on:click={() => (showingTutorialModal = true)}
 	>
-		<icon class="inline-block w-4" data-icon="outline/chevron-right" />
+		<icon class="inline-block w-4" data-icon="icon/chevron-right" />
 		<LocalizedText key="show_me_how" />
 	</button>
 </div>
@@ -97,7 +97,7 @@
 						<span class="sr-only">
 							<LocalizedText key="sr.page.widgets.copy_link" />
 						</span>
-						<icon class="w-5 h-5" data-icon="mini/document-duplicate" />
+						<icon class="w-5 h-5" data-icon="icon/document-duplicate" />
 					</button>
 
 					<button
@@ -111,7 +111,7 @@
 						<span class="sr-only">
 							<LocalizedText key="sr.page.widgets.delete" />
 						</span>
-						<icon class="w-5 h-5" data-icon="mini/trash" />
+						<icon class="w-5 h-5" data-icon="icon/trash" />
 					</button>
 				</div>
 			</Card>
@@ -139,7 +139,7 @@
 							<span class="flex-1 text-left">
 								<LocalizedText key="page.widgets.create.category.{category}" />
 							</span>
-							<icon class="flex-0 w-5 h-5" data-icon="solid/chevron-right" />
+							<icon class="flex-0 w-5 h-5" data-icon="icon/chevron-right" />
 						</div>
 
 						<div class="absolute left-full bottom-0 w-96">
@@ -171,7 +171,7 @@
 			<span class="sr-only">
 				<LocalizedText key="sr.page.widgets.create" />
 			</span>
-			<icon data-icon="solid/plus" />
+			<icon data-icon="icon/plus" />
 		</div>
 	</button>
 </div>

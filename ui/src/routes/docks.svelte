@@ -29,7 +29,7 @@
 		class="flex flex-row items-center text-link"
 		on:click={() => (showingTutorialModal = true)}
 	>
-		<icon class="inline-block w-4" data-icon="outline/chevron-right" />
+		<icon class="inline-block w-4" data-icon="icon/chevron-right" />
 		<LocalizedText key="show_me_how" />
 	</button>
 </div>
@@ -62,7 +62,7 @@
 						<span class="sr-only">
 							<LocalizedText key="sr.page.widgets.copy_link" />
 						</span>
-						<icon class="w-5 h-5" data-icon="mini/document-duplicate" />
+						<icon class="w-5 h-5" data-icon="icon/document-duplicate" />
 					</button>
 				</div></Card
 			>

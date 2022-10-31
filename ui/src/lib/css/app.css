@@ -41,14 +41,8 @@ icon>svg {
     height: 100%;
 }
 
-icon>svg[width="24"] * {
-    /* Outline */
+icon>svg.icon-outline * {
     stroke: currentColor;
-}
-
-icon>svg[width="20"] * {
-    /* Mini */
-    fill: currentColor;
 }
 
 a {

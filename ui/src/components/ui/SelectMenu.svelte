@@ -88,7 +88,7 @@
 					<LocalizedText key={options[value]} />
 				</span>
 				<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
-					<icon class="h-5 w-5 text-mauve-10" data-icon="outline/chevron-up-down" />
+					<icon class="h-5 w-5 text-mauve-10" data-icon="icon/chevron-up-down" />
 				</span>
 			</button>
 
@@ -131,7 +131,7 @@
 											class:text-crimson-9={!isHighlighted}
 											class:text-white={isHighlighted}
 										>
-											<icon class="h-5 w-5" data-icon="outline/check" />
+											<icon class="h-5 w-5" data-icon="icon/check" />
 										</span>
 									{/if}</button
 								>

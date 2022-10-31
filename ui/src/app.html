@@ -47,43 +47,64 @@
                     console.debug('[app.html]', 'Loaded icon from cache:', icon);
                 } else {
                     const [iconType, iconPath] = icon.split('/');
-                    let url = '/no.icon.type';
 
-                    switch (iconType) {
-                        case 'solid':
-                            url = `/images/icons/solid/${iconPath}.svg`;
-                            break;
-                        case 'outline':
-                            url = `/images/icons/outline/${iconPath}.svg`;
-                            break;
-                        case 'mini':
-                            url = `/images/icons/mini/${iconPath}.svg`;
-                            break;
+                    (async() => {
+                        try {
+                            let svg;
 
-                        case 'service':
-                            url = `/images/services/${iconPath}/icon.svg`;
-                            break;
-                    }
+                            switch (iconType) {
+                                case 'icon':
+                                    const promises = [
+                                        fetch(`/images/icons/solid/${iconPath}.svg`)
+                                        .then((res) => {
+                                            if (res.ok) {
+                                                return res.text();
+                                            } else {
+                                                throw 'Status: ' + res.status;
+                                            }
+                                        })
+                                        .then((s) => s.replace('<svg', '<svg class="icon-solid"')),
 
-                    fetch(url)
-                        .then((res) => {
-                            if (res.ok) {
-                                return res.text();
-                            } else {
-                                throw 'Status: ' + res.status;
+                                        fetch(`/images/icons/outline/${iconPath}.svg`)
+                                        .then((res) => {
+                                            if (res.ok) {
+                                                return res.text();
+                                            } else {
+                                                throw 'Status: ' + res.status;
+                                            }
+                                        })
+                                        .then((s) => s.replace('<svg', '<svg class="icon-outline"'))
+                                    ];
+
+                                    svg = (await Promise.all(promises)).join('');
+                                    break;
+
+                                case 'service':
+                                    svg = fetch(`/images/services/${iconPath}/icon.svg`).then((res) => {
+                                        if (res.ok) {
+                                            return res.text();
+                                        } else {
+                                            throw 'Status: ' + res.status;
+                                        }
+                                    });
+                                    break;
                             }
-                        })
-                        .then((svg) => {
-                            element.innerHTML = iconCache[icon] = svg;
-                            console.debug('[app.html]', 'Loaded icon:', icon);
-                        })
-                        .catch((e) => {
+
+                            if (svg) {
+                                element.innerHTML = iconCache[icon] = svg;
+                                console.debug('[app.html]', 'Loaded icon:', icon);
+                            } else {
+                                throw 'Unknown icon: ' + icon;
+                            }
+                        } catch (e) {
                             element.innerHTML = iconCache[icon] =
                                 '<div class="bg-red-500 h-full w-full text-white" title="MISSING ICON">X</div>'; // Visual error.
                             console.error('[app.html]', 'Could not load icon', icon, 'due to an error:');
                             console.error(e);
-                        })
-                        .finally((val) => {});
+                        }
+
+                        element.setAttribute('data-icon-type', iconType);
+                    })();
                 }
             }
 

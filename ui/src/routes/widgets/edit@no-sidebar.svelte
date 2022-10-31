@@ -47,7 +47,7 @@
 			<span class="sr-only">
 				<LocalizedText key="sr.navigation.back" />
 			</span>
-			<icon class="w-5 h-5" data-icon="solid/arrow-left" />
+			<icon class="w-5 h-5" data-icon="icon/arrow-left" />
 		</CircularButton>
 	</div>
 
@@ -93,7 +93,7 @@
 				<span class="sr-only">
 					<LocalizedText key="sr.page.widget.editor.edit_name" />
 				</span>
-				<icon class="w-5 h-5" data-icon="solid/pencil-square" />
+				<icon class="w-5 h-5" data-icon="icon/pencil-square" />
 			</button>
 		</span>
 
