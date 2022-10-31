@@ -80,13 +80,15 @@
                                     break;
 
                                 case 'service':
-                                    svg = fetch(`/images/services/${iconPath}/icon.svg`).then((res) => {
-                                        if (res.ok) {
-                                            return res.text();
-                                        } else {
-                                            throw 'Status: ' + res.status;
-                                        }
-                                    });
+                                    svg = await fetch(`/images/services/${iconPath}/icon.svg`)
+                                        .then((res) => {
+                                            if (res.ok) {
+                                                return res.text();
+                                            } else {
+                                                throw 'Status: ' + res.status;
+                                            }
+                                        })
+                                        .then((s) => s.replace('<svg', '<svg class="icon-service"'));
                                     break;
                             }
 

@@ -37,15 +37,19 @@ icon>svg {
     height: 100%;
 }
 
+icon>svg.icon-service * {
+    /* fill: currentColor !important; */
+}
+
 icon>svg.icon-outline * {
     stroke: currentColor;
 }
 
-#css-intermediate.dark-theme icon .icon-outline {
+#css-intermediate.dark-theme icon>svg.icon-outline {
     display: none;
 }
 
-#css-intermediate:not(.dark-theme) icon .icon-solid {
+#css-intermediate:not(.dark-theme) icon>svg.icon-solid {
     display: none;
 }
 

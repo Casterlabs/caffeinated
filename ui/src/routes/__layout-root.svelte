@@ -29,22 +29,9 @@
 
 	let hideDevButton = false;
 
-	// Stupid ass workaround... Basically, we don't want to load the
-	// dark css at all if we're in light mode and vice-versa.
-	// So we need to dynamically import a component that has the css
-	// we want. This could be solved if <style> elements resolved things
-	// in $lib, but noooooooooooo.
-	let themeComponent = null;
-
 	$: useLightTheme = $effectiveTheme?.appearance == 'LIGHT';
 	$: effectiveTheme,
 		$effectiveTheme && console.info('[Layout]', 'Switching to (effective) theme:', $effectiveTheme);
-
-	$: useLightTheme,
-		(useLightTheme
-			? import('../components/layout/theme/mauve-crimson/Light.svelte')
-			: import('../components/layout/theme/mauve-crimson/Dark.svelte')
-		).then((c) => (themeComponent = c.default));
 
 	// Set some app helpers.
 	// Helps with making the UI more responsive.
@@ -72,13 +59,21 @@
 	});
 </script>
 
-<svelte:component this={themeComponent} />
+<svelte:head>
+	{#if $effectiveTheme}
+		{#if $effectiveTheme.appearance == 'DARK'}
+			<link href="/src/lib/css/theme/_dark.css" rel="stylesheet" />
+		{/if}
 
-<div
-	id="css-intermediate"
-	class="w-full h-full bg-base-1 text-base-12"
-	class:dark-theme={!useLightTheme}
->
+		{#if $effectiveTheme.id == 'CASTERLABS_LIGHT'}
+			<link href="/src/lib/css/theme/mauve-crimson/light.css" rel="stylesheet" />
+		{:else}
+			<link href="/src/lib/css/theme/mauve-crimson/dark.css" rel="stylesheet" />
+		{/if}
+	{/if}
+</svelte:head>
+
+<div id="css-intermediate" class="w-full h-full bg-base-1 text-base-12 dark-theme">
 	<slot />
 
 	{#if dev}
