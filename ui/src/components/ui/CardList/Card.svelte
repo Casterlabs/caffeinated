@@ -26,7 +26,7 @@
 	on:click={onClick}
 >
 	<div class="flex-shrink-0 text-mauve-12">
-		<icon data-icon="filled/{icon}" />
+		<icon data-icon="solid/{icon}" />
 	</div>
 	<div class="min-w-0 flex-1">
 		<p class="text-sm font-medium text-mauve-12 text-left">

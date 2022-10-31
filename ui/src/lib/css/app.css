@@ -41,6 +41,16 @@ icon>svg {
     height: 100%;
 }
 
+icon>svg[width="24"] * {
+    /* Outline */
+    stroke: currentColor;
+}
+
+icon>svg[width="20"] * {
+    /* Mini */
+    fill: currentColor;
+}
+
 a {
     -webkit-user-drag: none;
 }

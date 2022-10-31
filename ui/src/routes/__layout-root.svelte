@@ -128,9 +128,9 @@
 			}}
 		>
 			{#if useLightTheme}
-				<icon data-icon="filled/sun" />
+				<icon data-icon="solid/sun" />
 			{:else}
-				<icon data-icon="filled/moon" />
+				<icon data-icon="solid/moon" />
 			{/if}
 		</button>
 	{/if}

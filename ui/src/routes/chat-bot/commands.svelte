@@ -93,7 +93,7 @@
 				<span class="sr-only">
 					<LocalizedText key="sr.page.chat_bot.remove" />
 				</span>
-				<icon class="h-5" data-icon="filled/trash" />
+				<icon class="h-5" data-icon="solid/trash" />
 			</button>
 		</li>
 	{/each}
@@ -116,7 +116,7 @@
 				<span class="sr-only">
 					<LocalizedText key="sr.page.chat_bot.commands.add" />
 				</span>
-				<icon data-icon="filled/plus" />
+				<icon data-icon="solid/plus" />
 			</div>
 		</button>
 	</li>

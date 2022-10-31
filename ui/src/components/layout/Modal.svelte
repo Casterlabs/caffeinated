@@ -31,7 +31,7 @@
 					<span class="sr-only">
 						<LocalizedText key="sr.modal.close" />
 					</span>
-					<icon data-icon="filled/x-mark" />
+					<icon data-icon="solid/x-mark" />
 				</button>
 
 				<div class="text-mauve-10">

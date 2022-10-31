@@ -91,8 +91,8 @@
 				<span class="block truncate text-mauve-12">
 					<LocalizedText key={options[value]} />
 				</span>
-				<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
-					<icon class="h-4 w-4 text-mauve-10" data-icon="filled/chevron-up-down" />
+				<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-0.5">
+					<icon class="h-4 w-4 text-mauve-10" data-icon="outline/chevron-up-down" />
 				</span>
 			</button>
 
@@ -135,7 +135,7 @@
 											class:text-crimson-9={!isHighlighted}
 											class:text-white={isHighlighted}
 										>
-											<icon class="h-5 w-5" data-icon="filled/check" />
+											<icon class="h-5 w-5" data-icon="outline/check" />
 										</span>
 									{/if}</button
 								>

@@ -55,14 +55,14 @@
 				<span class="sr-only">
 					<LocalizedText key="sr.page.chat_bot.remove" />
 				</span>
-				<icon class="h-5" data-icon="filled/trash" />
+				<icon class="h-5" data-icon="solid/trash" />
 			</button>
 		</li>
 	{/each}
 
 	<li>
 		<button
-			class="mt-2 w-full relative flex items-center justify-center rounded-lg border transition border-mauve-4 text-mauve-11 hover:text-mauve-12 hover:shadow-sm hover:border-mauve-7 hover:bg-mauve-2 p-1 focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
+			class="mt-2 w-full relative flex items-center justify-center rounded-lg transition hover:text-mauve-12 text-mauve-11 border hover:border-mauve-8 border-mauve-7 hover:bg-mauve-3 bg-mauve-2 py-1 px-2 shadow-sm focus:border-crimson-7 focus:outline-none focus:ring-1 focus:ring-crimson-7"
 			title={t('sr.page.chat_bot.settings.hide_from_chatbots.add')}
 			on:click={() => {
 				timers.push(t('page.chat_bot.timers.example'));
@@ -73,7 +73,7 @@
 				<span class="sr-only">
 					<LocalizedText key="sr.page.chat_bot.settings.hide_from_chatbots.add" />
 				</span>
-				<icon data-icon="filled/plus" />
+				<icon data-icon="solid/plus" />
 			</div>
 		</button>
 	</li>
