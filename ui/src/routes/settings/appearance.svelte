@@ -19,8 +19,24 @@
 		twemoji: 'Twemoji',
 		openmoji: 'OpenMoji'
 	};
-	const THEMES = st || Caffeinated.themeManager.svelte('themes');
+	const APPEARANCES = {
+		FOLLOW_SYSTEM: 'page.settings.appearance.appearance.FOLLOW_SYSTEM',
+		LIGHT: 'page.settings.appearance.appearance.LIGHT',
+		DARK: 'page.settings.appearance.appearance.DARK'
+	};
+	// prettier-ignore
+	const THEMES = {
+		'mauve/red':   'Blinky',
+		'mauve/pink':  'Pinky',
+		'slate/blue':  'Inky',
+		'sand/orange': 'Clyde',
+		'sage/teal':   'Wintergreen',
+		'bronze/gold': 'Bronze'
+	};
 
+	const baseColor = st || Caffeinated.themeManager.svelte('baseColor');
+	const primaryColor = st || Caffeinated.themeManager.svelte('primaryColor');
+	const appearance = st || Caffeinated.themeManager.svelte('appearance');
 	const preferences = st || Caffeinated.UI.svelte('preferences');
 
 	$: preferences, $preferences && console.debug('UI Preferences:', $preferences);
@@ -37,16 +53,22 @@
 	<li class="py-4">
 		<SelectMenu
 			title="page.settings.appearance.theme"
-			value={$preferences?.theme}
-			options={Object.values($THEMES || {}) //
-				.reduce(
-					(obj, curr) => ({
-						...obj,
-						[curr.id]: `page.settings.appearance.theme.${curr.id}`
-					}),
-					{}
-				)}
-			on:value={({ detail: value }) => setPreferenceItem('theme', value)}
+			value="{$baseColor}/{$primaryColor}"
+			options={THEMES}
+			on:value={({ detail: value }) => {
+				const [newBaseColor, newPrimaryColor] = value.split('/');
+				window.Caffeinated.themeManager.setTheme(newBaseColor, newPrimaryColor, $appearance);
+			}}
+		/>
+	</li>
+	<li class="py-4">
+		<SelectMenu
+			title="page.settings.appearance.appearance"
+			value={$appearance}
+			options={APPEARANCES}
+			on:value={({ detail: value }) => {
+				window.Caffeinated.themeManager.setTheme($baseColor, $primaryColor, value);
+			}}
 		/>
 	</li>
 	<li class="py-4">

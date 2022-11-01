@@ -146,10 +146,11 @@
 			class:opacity-0={hideDevButton}
 			title="Quick Theme Switch"
 			on:click={async () => {
-				Caffeinated.UI.updateAppearance({
-					...(await Caffeinated.UI.preferences),
-					theme: useLightTheme ? 'CASTERLABS_DARK' : 'CASTERLABS_LIGHT'
-				});
+				window.Caffeinated.themeManager.setTheme(
+					$baseColorTheme,
+					$primaryColorTheme,
+					useLightTheme ? 'DARK' : 'LIGHT'
+				);
 			}}
 			on:contextmenu={(e) => {
 				e.preventDefault();

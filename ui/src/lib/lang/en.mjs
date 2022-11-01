@@ -107,9 +107,10 @@ export default {
 
     'page.settings.appearance': 'Appearance',
     'page.settings.appearance.theme': 'Theme',
-    'page.settings.appearance.theme.CASTERLABS_LIGHT': 'Light',
-    'page.settings.appearance.theme.CASTERLABS_DARK': 'Dark',
-    'page.settings.appearance.theme.SYSTEM': 'Follow System',
+    'page.settings.appearance.appearance': 'Appearance',
+    'page.settings.appearance.appearance.LIGHT': 'Light',
+    'page.settings.appearance.appearance.DARK': 'Dark',
+    'page.settings.appearance.appearance.FOLLOW_SYSTEM': 'Follow System',
     'page.settings.appearance.icon': 'Icon',
     'page.settings.appearance.emojis': 'Emojis 😀',
     'page.settings.appearance.emojis.SYSTEM': 'System',
