@@ -13,7 +13,6 @@ import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
-import co.casterlabs.caffeinated.app.ui.events.AppearanceUpdateEvent;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
@@ -69,7 +68,6 @@ public class AppUI extends JavascriptObject {
     @JavascriptFunction
     public void updateAppearance(@NonNull AppearanceUpdateEvent event) {
         this.preferences.setIcon(event.getIcon());
-        this.preferences.setTheme(event.getTheme());
         this.preferences.setCloseToTray(event.isCloseToTray());
         this.preferences.setMikeysMode(event.isMikeysMode());
         this.preferences.setEmojiProvider(event.getEmojiProvider());
@@ -100,8 +98,6 @@ public class AppUI extends JavascriptObject {
         });
 
         this.updateIcon();
-
-        CaffeinatedApp.getInstance().getThemeManager().setTheme(event.getTheme());
     }
 
     @JavascriptFunction

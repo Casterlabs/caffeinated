@@ -16,7 +16,7 @@ public class UIPreferences {
 
     private String emojiProvider = Platform.osDistribution == OSDistribution.MACOSX ? "system" : "twemoji"; // Use system emojis by default on macOS, Twemoji elsewhere.
     private String icon = "casterlabs";
-    private String theme = "co.casterlabs.dark";
+    private String theme = "co.casterlabs.dark"; // Unused.
     private String language = "en-US";
     private boolean closeToTray = true;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();

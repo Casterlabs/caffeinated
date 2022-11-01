@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.ui.events;
+package co.casterlabs.caffeinated.app.ui;
 
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.validation.JsonValidate;
@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 @JsonClass(exposeAll = true)
 public class AppearanceUpdateEvent {
-    private String theme;
     private String icon;
     private String emojiProvider;
     private String language;
@@ -17,7 +16,6 @@ public class AppearanceUpdateEvent {
 
     @JsonValidate
     private void validate() {
-        assert this.theme != null;
         assert this.icon != null;
         assert this.emojiProvider != null;
         assert this.language != null;
