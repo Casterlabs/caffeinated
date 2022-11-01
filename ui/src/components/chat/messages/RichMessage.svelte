@@ -46,8 +46,13 @@
 			}
 		},
 		{
-			type: 'divider',
-			hidden: isDeleted || !PLATFORMS_WITH_DELETE.includes(event.sender.platform)
+			type: 'button',
+			icon: 'icon/arrow-up',
+			text: 'chat.viewer.action.upvote',
+			hidden: !PLATFORMS_WITH_UPVOTE.includes(event.sender.platform),
+			onclick() {
+				onContextMenuAction('upvote', event);
+			}
 		},
 		{
 			type: 'button',
