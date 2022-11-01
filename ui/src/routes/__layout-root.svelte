@@ -87,15 +87,16 @@
 
 	const baseColorTheme = st || Caffeinated.themeManager.svelte('baseColor');
 	const primaryColorTheme = st || Caffeinated.themeManager.svelte('primaryColor');
-	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
+	const effectiveAppearance = st || Caffeinated.themeManager.svelte('effectiveAppearance');
 	const preferences = st || Caffeinated.UI.svelte('preferences');
 	const hasCasterlabsPlus = st || Caffeinated.svelte('hasCasterlabsPlus');
 
 	let hideDevButton = false;
 
-	$: useLightTheme = $effectiveTheme?.appearance == 'LIGHT';
-	$: effectiveTheme,
-		$effectiveTheme && console.info('[Layout]', 'Switching to (effective) theme:', $effectiveTheme);
+	$: useLightTheme = $effectiveAppearance == 'LIGHT';
+	$: effectiveAppearance,
+		$effectiveAppearance &&
+			console.info('[Layout]', 'Switching to (effective) theme:', $effectiveAppearance);
 
 	// Set some app helpers.
 	// Helps with making the UI more responsive.
@@ -171,7 +172,7 @@
 		--success: rgb(69, 204, 69);
 	}
 
-	#css-intermediate.dark-mode {
+	#css-intermediate.dark-theme {
 		--link: rgb(58, 137, 255);
 		--error: rgb(252, 31, 31);
 		--success: rgb(64, 187, 64);
