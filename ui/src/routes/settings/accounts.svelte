@@ -88,7 +88,11 @@
 									<button
 										class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 										on:click={() => {
-											window.Caffeinated.auth.requestOAuthSignin(platform, true, true);
+											window.Caffeinated.auth.requestOAuthSignin(
+												`caffeinated_${platform.toLowerCase()}`,
+												true,
+												true
+											);
 											loading.push(platform);
 										}}
 									>
