@@ -139,6 +139,8 @@
 >
 	<slot />
 
+	<div id="context-menu" />
+
 	{#if dev}
 		<!-- svelte-ignore missing-declaration -->
 		<button

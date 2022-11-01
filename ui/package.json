@@ -24,6 +24,7 @@
     },
     "type": "module",
     "dependencies": {
-        "@radix-ui/colors": "^0.1.8"
+        "@radix-ui/colors": "^0.1.8",
+        "svelte-portal": "^2.2.0"
     }
 }
