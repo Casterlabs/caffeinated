@@ -100,7 +100,7 @@
 	}
 </script>
 
-<div class="h-screen -mx-6 -my-4 flex flex-col">
+<div class="h-screen -mx-6 -my-4 px-2 py-1 flex flex-col">
 	<div class="flex-1 overflow-x-hidden overflow-y-auto">
 		<ul bind:this={chatBox} />
 	</div>
