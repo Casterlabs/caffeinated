@@ -9,12 +9,15 @@
 	import FollowMessage from './messages/FollowMessage.svelte';
 	import RaidMessage from './messages/RaidMessage.svelte';
 
+	import ViewersList from './ViewersList.svelte';
+
 	import createConsole from '$lib/console-helper.mjs';
 	const console = createConsole('ChatViewer');
 
 	export let doAction = (action, data) => {};
 
 	let chatBox;
+	let viewersListElement;
 	let chatElements = {};
 
 	// prettier-ignore
@@ -115,6 +118,7 @@
 
 		switch (event.event_type) {
 			case 'VIEWER_LIST':
+				viewersListElement.onViewersList(event);
 				break;
 
 			case 'META': {
@@ -184,6 +188,8 @@
 
 	<div class="flex-0 h-16">...</div>
 </div>
+
+<ViewersList bind:this={viewersListElement} />
 
 <style>
 	ul :global(b) {

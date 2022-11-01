@@ -144,10 +144,6 @@ export default {
     'chat.viewer.send_message.placeholder': 'Send a message',
 
     'chat.viewer.preferences.title': 'Chat Preferences',
-    'chat.viewer.preferences.show_timestamps': 'Show Timestamps',
-    'chat.viewer.preferences.show_mod_actions': 'Show Mod Actions',
-    'chat.viewer.preferences.show_avatars': 'Show Avatars',
-    'chat.viewer.preferences.show_badges': 'Show Badges',
     'chat.viewer.preferences.show_viewers': 'Show Viewers',
     'chat.viewer.preferences.show_viewers_list': 'Show Viewers List',
 
