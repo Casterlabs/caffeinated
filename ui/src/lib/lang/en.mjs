@@ -126,6 +126,7 @@ export default {
     'page.settings.plugins.file.unload': 'Unload',
 
     'page.settings.accounts': 'Accounts',
+    'page.settings.accounts.streaming_services': 'Streaming Services',
     'page.settings.accounts.music_services': 'Music Services',
     'page.settings.accounts.music_services.enable': 'Enable',
     'page.settings.accounts.connect': 'Connect',
