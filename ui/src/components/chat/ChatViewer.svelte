@@ -73,6 +73,25 @@
 				}
 			}
 
+			case 'raid': {
+				switch (event.sender.platform) {
+					case 'CAFFEINE':
+						sendCommand(`/afterparty @${event.sender.username}`);
+						return;
+
+					case 'TWITCH':
+						sendCommand(`/raid ${event.sender.username}`);
+						return;
+
+					case 'TROVO':
+						sendCommand(`/host ${event.sender.username}`);
+						return;
+
+					default:
+						return;
+				}
+			}
+
 			case 'delete': {
 				doAction('delete', {
 					platform: event.sender.platform,

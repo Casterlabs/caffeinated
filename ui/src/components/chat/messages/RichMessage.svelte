@@ -3,6 +3,12 @@
 <script>
 	import ContextMenu from '../../interaction/ContextMenu.svelte';
 
+	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
+	const PLATFORMS_WITH_TIMEOUT = ['TWITCH', 'TROVO', 'BRIME'];
+	const PLATFORMS_WITH_RAID = ['CAFFEINE', 'TWITCH', 'TROVO'];
+	const PLATFORMS_WITH_DELETE = ['TWITCH', 'BRIME', 'TROVO', 'DLIVE' /*"YOUTUBE"*/];
+	const PLATFORMS_WITH_UPVOTE = ['CAFFEINE'];
+
 	export let event;
 	export let onContextMenuAction;
 
@@ -16,6 +22,7 @@
 			type: 'button',
 			icon: 'icon/no-symbol',
 			text: 'chat.viewer.action.ban',
+			hidden: !PLATFORMS_WITH_BAN.includes(event.sender.platform),
 			onclick() {
 				onContextMenuAction('ban', event);
 			}
@@ -24,17 +31,30 @@
 			type: 'button',
 			icon: 'icon/clock',
 			text: 'chat.viewer.action.timeout',
+			hidden: !PLATFORMS_WITH_TIMEOUT.includes(event.sender.platform),
 			onclick() {
 				onContextMenuAction('timeout', event);
 			}
 		},
-		{ type: 'divider', hidden: isDeleted },
+		{
+			type: 'button',
+			icon: 'icon/users',
+			text: 'chat.viewer.action.raid',
+			hidden: !PLATFORMS_WITH_RAID.includes(event.sender.platform),
+			onclick() {
+				onContextMenuAction('raid', event);
+			}
+		},
+		{
+			type: 'divider',
+			hidden: isDeleted || !PLATFORMS_WITH_DELETE.includes(event.sender.platform)
+		},
 		{
 			type: 'button',
 			icon: 'icon/trash',
 			text: 'chat.viewer.action.delete_message',
 			color: 'error',
-			hidden: isDeleted,
+			hidden: isDeleted || !PLATFORMS_WITH_DELETE.includes(event.sender.platform),
 			onclick() {
 				onContextMenuAction('delete', event);
 			}

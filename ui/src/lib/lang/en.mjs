@@ -164,5 +164,6 @@ export default {
 
     'chat.viewer.action.ban': 'Ban',
     'chat.viewer.action.timeout': 'Timeout',
-    'chat.viewer.action.delete_message': 'Delete Message'
+    'chat.viewer.action.delete_message': 'Delete Message',
+    'chat.viewer.action.raid': 'Raid'
 };
