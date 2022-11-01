@@ -134,5 +134,35 @@ export default {
     'page.settings.accounts.disconnect': 'Disconnect',
 
     'page.settings.about': 'About',
-    'page.settings.about.enable_unsafe': 'Enable Stupidly Unsafe Settings'
+    'page.settings.about.enable_unsafe': 'Enable Stupidly Unsafe Settings',
+
+    /* ---- Chat ---- */
+
+    'chat.viewer': 'Chat',
+
+    'chat.viewer.send_message': 'Send',
+    'chat.viewer.send_message.placeholder': 'Send a message',
+
+    'chat.viewer.preferences.title': 'Chat Preferences',
+    'chat.viewer.preferences.show_timestamps': 'Show Timestamps',
+    'chat.viewer.preferences.show_mod_actions': 'Show Mod Actions',
+    'chat.viewer.preferences.show_avatars': 'Show Avatars',
+    'chat.viewer.preferences.show_badges': 'Show Badges',
+    'chat.viewer.preferences.show_viewers': 'Show Viewers',
+    'chat.viewer.preferences.show_viewers_list': 'Show Viewers List',
+
+    'chat.viewer.message.CLEARCHAT': 'Chat was cleared',
+    'chat.viewer.message.CHANNELPOINTS': '{displayname} just redeemed %image%{reward}',
+    'chat.viewer.message.RAID': '{displayname} just raided with {viewers} viewers',
+    'chat.viewer.message.FOLLOW': '{displayname} just followed',
+    'chat.viewer.message.SUBSCRIPTION.SUB': '{displayname} just subscribed for {months} months',
+    'chat.viewer.message.SUBSCRIPTION.RESUB': '{displayname} just resubscribed for {months} months',
+    'chat.viewer.message.SUBSCRIPTION.SUBGIFT': '{gifter} just gifted {recipient} a {months} month subscription',
+    'chat.viewer.message.SUBSCRIPTION.ANONSUBGIFT': 'Anonymous just gifted {recipient} a {months} month subscription',
+    'chat.viewer.message.VIEWER_JOIN': '{displayname} joined',
+    'chat.viewer.message.VIEWER_LEAVE': '{displayname} left',
+
+    'chat.viewer.action.ban': 'Ban',
+    'chat.viewer.action.timeout': 'Timeout',
+    'chat.viewer.action.delete_message': 'Delete Message'
 };
