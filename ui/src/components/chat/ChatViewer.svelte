@@ -107,3 +107,10 @@
 
 	<div class="flex-0 h-16">...</div>
 </div>
+
+<style>
+	ul :global(b) {
+		font-weight: 600;
+		color: var(--primary11);
+	}
+</style>
