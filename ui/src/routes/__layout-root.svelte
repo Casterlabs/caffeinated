@@ -26,6 +26,7 @@
 	import '$lib/css/colors/primary/amber.css';
 	import '$lib/css/colors/primary/gold.css';
 	import '$lib/css/colors/primary/bronze.css';
+	import '$lib/css/colors/primary/gray.css';
 	import '$lib/css/colors/base/gray.css';
 	import '$lib/css/colors/base/mauve.css';
 	import '$lib/css/colors/base/slate.css';
@@ -101,8 +102,8 @@
 	class="w-full h-full bg-base-1 text-base-12"
 	class:dark-theme={!useLightTheme}
 	data-theme-dark={!useLightTheme}
-	data-theme-base="mauve"
-	data-theme-primary="crimson"
+	data-theme-base="gray"
+	data-theme-primary="gray"
 >
 	<slot />
 

@@ -31,7 +31,10 @@ const colors = [
 
     // Metals
     'gold',
-    'bronze'
+    'bronze',
+
+    // Other
+    'gray'
 ];
 
 const bases = [
@@ -120,5 +123,3 @@ for (const color of misc) {
     console.log(`import "$lib/css/colors/${name}.css"`);
     fs.writeFile(`./${name}.css`, css, () => {});
 }
-
-console.log(`import "$lib/css/colors/misc.css"`);
