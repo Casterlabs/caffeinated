@@ -9,11 +9,10 @@
 	import FollowMessage from './messages/FollowMessage.svelte';
 	import RaidMessage from './messages/RaidMessage.svelte';
 
-	import { createEventDispatcher } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
-
 	const console = createConsole('ChatViewer');
-	const dispatch = createEventDispatcher();
+
+	export let doAction = (action, data) => {};
 
 	let chatBox;
 	let chatElements = {};
@@ -31,7 +30,66 @@
 		RAID:             RaidMessage,
 	};
 
-	function onContextMenuAction(action, event) {}
+	function onContextMenuAction(action, event) {
+		console.debug('Context Menu Action:', action, event);
+
+		function sendCommand(command) {
+			doAction('chat', {
+				platform: event.sender.platform,
+				message: command,
+				replyTarget: null
+			});
+		}
+
+		switch (action) {
+			case 'ban': {
+				switch (event.sender.platform) {
+					case 'TWITCH':
+						sendCommand(`/ban ${event.sender.username}`);
+						return;
+
+					case 'TROVO':
+						sendCommand(`/ban ${event.sender.username}`);
+						return;
+
+					default:
+						return;
+				}
+			}
+
+			case 'timeout': {
+				// We timeout for 10 minutes
+				switch (event.sender.platform) {
+					case 'TWITCH':
+						sendCommand(`/timeout ${event.sender.username} 600`);
+						return;
+
+					case 'TROVO':
+						sendCommand(`/ban ${event.sender.username} 600`);
+						return;
+
+					default:
+						return;
+				}
+			}
+
+			case 'delete': {
+				doAction('delete', {
+					platform: event.sender.platform,
+					eventId: event.id
+				});
+				return;
+			}
+
+			case 'upvote': {
+				doAction('upvote', {
+					platform: event.sender.platform,
+					eventId: event.id
+				});
+				return;
+			}
+		}
+	}
 
 	export function processEvent(event) {
 		console.log('Processing event:', event);
