@@ -5,6 +5,14 @@ import fs from 'fs';
 // https://www.radix-ui.com/docs/colors/palette-composition/the-scales
 
 const colors = [
+    // Grays
+    'gray',
+    'mauve',
+    'slate',
+    'sage',
+    'olive',
+    'sand',
+
     // Colors
     'tomato',
     'red',
@@ -31,20 +39,7 @@ const colors = [
 
     // Metals
     'gold',
-    'bronze',
-
-    // Other
-    'gray'
-];
-
-const bases = [
-    // Grays
-    'gray',
-    'mauve',
-    'slate',
-    'sage',
-    'olive',
-    'sand'
+    'bronze'
 ];
 
 const misc = [
@@ -53,6 +48,13 @@ const misc = [
     'whiteA'
 ];
 
+// Reset.
+fs.rmdirSync('./primary', { recursive: true, force: true });
+fs.rmdirSync('./base', { recursive: true, force: true });
+fs.rmSync('./overlay-black.css');
+fs.rmSync('./overlay-white.css');
+
+// Create our dirs.
 fs.mkdirSync('./primary');
 fs.mkdirSync('./base');
 
@@ -72,20 +74,20 @@ for (const color of colors) {
     fs.writeFile(`./primary/${color}.css`, css, () => {});
 }
 
-for (const base of bases) {
-    let css = `@import "@radix-ui/colors/${base}.css"; @import "@radix-ui/colors/${base}Dark.css";`;
-    css += `#css-intermediate[data-theme-base="${base}"] {`;
+for (const color of colors) {
+    let css = `@import "@radix-ui/colors/${color}.css"; @import "@radix-ui/colors/${color}Dark.css";`;
+    css += `#css-intermediate[data-theme-base="${color}"] {`;
 
     for (let idx = 1; idx < 13; idx++) {
         css += `
-    --base${idx}: var(--${base}${idx});
+    --base${idx}: var(--${color}${idx});
         `;
     }
 
     css += '}';
 
-    console.log(`import "$lib/css/colors/base/${base}.css"`);
-    fs.writeFile(`./base/${base}.css`, css, () => {});
+    console.log(`import "$lib/css/colors/base/${color}.css"`);
+    fs.writeFile(`./base/${color}.css`, css, () => {});
 }
 
 for (const color of misc) {

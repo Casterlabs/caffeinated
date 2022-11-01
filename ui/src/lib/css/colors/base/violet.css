@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/violet.css"; @import "@radix-ui/colors/violetDark.css";#css-intermediate[data-theme-base="violet"] {
+    --base1: var(--violet1);
+        
+    --base2: var(--violet2);
+        
+    --base3: var(--violet3);
+        
+    --base4: var(--violet4);
+        
+    --base5: var(--violet5);
+        
+    --base6: var(--violet6);
+        
+    --base7: var(--violet7);
+        
+    --base8: var(--violet8);
+        
+    --base9: var(--violet9);
+        
+    --base10: var(--violet10);
+        
+    --base11: var(--violet11);
+        
+    --base12: var(--violet12);
+        }

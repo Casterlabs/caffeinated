@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/yellow.css"; @import "@radix-ui/colors/yellowDark.css";#css-intermediate[data-theme-base="yellow"] {
+    --base1: var(--yellow1);
+        
+    --base2: var(--yellow2);
+        
+    --base3: var(--yellow3);
+        
+    --base4: var(--yellow4);
+        
+    --base5: var(--yellow5);
+        
+    --base6: var(--yellow6);
+        
+    --base7: var(--yellow7);
+        
+    --base8: var(--yellow8);
+        
+    --base9: var(--yellow9);
+        
+    --base10: var(--yellow10);
+        
+    --base11: var(--yellow11);
+        
+    --base12: var(--yellow12);
+        }

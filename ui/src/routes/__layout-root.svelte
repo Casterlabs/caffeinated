@@ -1,9 +1,11 @@
 <script>
-	import '$lib/css/app.css';
-	import '$lib/css/colors/base.css';
-	import '$lib/css/colors/primary.css';
-	import '$lib/css/colors/misc.css';
-
+	// Theme colors.
+	import '$lib/css/colors/primary/gray.css';
+	import '$lib/css/colors/primary/mauve.css';
+	import '$lib/css/colors/primary/slate.css';
+	import '$lib/css/colors/primary/sage.css';
+	import '$lib/css/colors/primary/olive.css';
+	import '$lib/css/colors/primary/sand.css';
 	import '$lib/css/colors/primary/tomato.css';
 	import '$lib/css/colors/primary/red.css';
 	import '$lib/css/colors/primary/crimson.css';
@@ -26,15 +28,42 @@
 	import '$lib/css/colors/primary/amber.css';
 	import '$lib/css/colors/primary/gold.css';
 	import '$lib/css/colors/primary/bronze.css';
-	import '$lib/css/colors/primary/gray.css';
 	import '$lib/css/colors/base/gray.css';
 	import '$lib/css/colors/base/mauve.css';
 	import '$lib/css/colors/base/slate.css';
 	import '$lib/css/colors/base/sage.css';
 	import '$lib/css/colors/base/olive.css';
 	import '$lib/css/colors/base/sand.css';
+	import '$lib/css/colors/base/tomato.css';
+	import '$lib/css/colors/base/red.css';
+	import '$lib/css/colors/base/crimson.css';
+	import '$lib/css/colors/base/pink.css';
+	import '$lib/css/colors/base/plum.css';
+	import '$lib/css/colors/base/purple.css';
+	import '$lib/css/colors/base/violet.css';
+	import '$lib/css/colors/base/indigo.css';
+	import '$lib/css/colors/base/blue.css';
+	import '$lib/css/colors/base/cyan.css';
+	import '$lib/css/colors/base/teal.css';
+	import '$lib/css/colors/base/green.css';
+	import '$lib/css/colors/base/grass.css';
+	import '$lib/css/colors/base/orange.css';
+	import '$lib/css/colors/base/brown.css';
+	import '$lib/css/colors/base/sky.css';
+	import '$lib/css/colors/base/mint.css';
+	import '$lib/css/colors/base/lime.css';
+	import '$lib/css/colors/base/yellow.css';
+	import '$lib/css/colors/base/amber.css';
+	import '$lib/css/colors/base/gold.css';
+	import '$lib/css/colors/base/bronze.css';
 	import '$lib/css/colors/overlay-black.css';
 	import '$lib/css/colors/overlay-white.css';
+
+	// The actual gravy.
+	import '$lib/css/app.css';
+	import '$lib/css/colors/base.css';
+	import '$lib/css/colors/primary.css';
+	import '$lib/css/colors/misc.css';
 
 	// Little helper to allow us to access the
 	// stores but prevent SSR from erroring out.
@@ -56,6 +85,8 @@
 	import { onMount } from 'svelte';
 	import * as App from '$lib/app.mjs';
 
+	const baseColorTheme = st || Caffeinated.themeManager.svelte('baseColor');
+	const primaryColorTheme = st || Caffeinated.themeManager.svelte('primaryColor');
 	const effectiveTheme = st || Caffeinated.themeManager.svelte('effectiveTheme');
 	const preferences = st || Caffeinated.UI.svelte('preferences');
 	const hasCasterlabsPlus = st || Caffeinated.svelte('hasCasterlabsPlus');
@@ -102,8 +133,8 @@
 	class="w-full h-full bg-base-1 text-base-12"
 	class:dark-theme={!useLightTheme}
 	data-theme-dark={!useLightTheme}
-	data-theme-base="gray"
-	data-theme-primary="gray"
+	data-theme-base={$baseColorTheme || 'gray'}
+	data-theme-primary={$primaryColorTheme || 'gray'}
 >
 	<slot />
 

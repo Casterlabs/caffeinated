@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/amber.css"; @import "@radix-ui/colors/amberDark.css";#css-intermediate[data-theme-base="amber"] {
+    --base1: var(--amber1);
+        
+    --base2: var(--amber2);
+        
+    --base3: var(--amber3);
+        
+    --base4: var(--amber4);
+        
+    --base5: var(--amber5);
+        
+    --base6: var(--amber6);
+        
+    --base7: var(--amber7);
+        
+    --base8: var(--amber8);
+        
+    --base9: var(--amber9);
+        
+    --base10: var(--amber10);
+        
+    --base11: var(--amber11);
+        
+    --base12: var(--amber12);
+        }
