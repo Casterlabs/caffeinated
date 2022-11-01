@@ -1,4 +1,4 @@
-#css-intermediate {
+@import "@radix-ui/colors/slate.css"; @import "@radix-ui/colors/slateDark.css";#css-intermediate[data-theme-base="slate"] {
     --base1: var(--slate1);
         
     --base2: var(--slate2);

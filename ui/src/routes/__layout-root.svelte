@@ -1,7 +1,39 @@
 <script>
 	import '$lib/css/app.css';
-	import '$lib/css/base.css';
-	import '$lib/css/primary.css';
+	import '$lib/css/colors/base.css';
+	import '$lib/css/colors/primary.css';
+	import '$lib/css/colors/misc.css';
+
+	import '$lib/css/colors/primary/tomato.css';
+	import '$lib/css/colors/primary/red.css';
+	import '$lib/css/colors/primary/crimson.css';
+	import '$lib/css/colors/primary/pink.css';
+	import '$lib/css/colors/primary/plum.css';
+	import '$lib/css/colors/primary/purple.css';
+	import '$lib/css/colors/primary/violet.css';
+	import '$lib/css/colors/primary/indigo.css';
+	import '$lib/css/colors/primary/blue.css';
+	import '$lib/css/colors/primary/cyan.css';
+	import '$lib/css/colors/primary/teal.css';
+	import '$lib/css/colors/primary/green.css';
+	import '$lib/css/colors/primary/grass.css';
+	import '$lib/css/colors/primary/orange.css';
+	import '$lib/css/colors/primary/brown.css';
+	import '$lib/css/colors/primary/sky.css';
+	import '$lib/css/colors/primary/mint.css';
+	import '$lib/css/colors/primary/lime.css';
+	import '$lib/css/colors/primary/yellow.css';
+	import '$lib/css/colors/primary/amber.css';
+	import '$lib/css/colors/primary/gold.css';
+	import '$lib/css/colors/primary/bronze.css';
+	import '$lib/css/colors/base/gray.css';
+	import '$lib/css/colors/base/mauve.css';
+	import '$lib/css/colors/base/slate.css';
+	import '$lib/css/colors/base/sage.css';
+	import '$lib/css/colors/base/olive.css';
+	import '$lib/css/colors/base/sand.css';
+	import '$lib/css/colors/overlay-black.css';
+	import '$lib/css/colors/overlay-white.css';
 
 	// Little helper to allow us to access the
 	// stores but prevent SSR from erroring out.
@@ -59,21 +91,19 @@
 	});
 </script>
 
-<svelte:head>
-	{#if $effectiveTheme}
-		{#if $effectiveTheme.appearance == 'DARK'}
-			<link href="/src/lib/css/theme/_dark.css" rel="stylesheet" />
-		{/if}
+<!--
+	The app's theming is handled with data-theme-base, data-theme-primary, and class:dark-theme (we include data-theme-dark for debugging).
+	All of the css files to make this happen are imported above.
+-->
 
-		{#if $effectiveTheme.id == 'CASTERLABS_LIGHT'}
-			<link href="/src/lib/css/theme/mauve-crimson/light.css" rel="stylesheet" />
-		{:else}
-			<link href="/src/lib/css/theme/mauve-crimson/dark.css" rel="stylesheet" />
-		{/if}
-	{/if}
-</svelte:head>
-
-<div id="css-intermediate" class="w-full h-full bg-base-1 text-base-12 dark-theme">
+<div
+	id="css-intermediate"
+	class="w-full h-full bg-base-1 text-base-12"
+	class:dark-theme={!useLightTheme}
+	data-theme-dark={!useLightTheme}
+	data-theme-base="mauve"
+	data-theme-primary="crimson"
+>
 	<slot />
 
 	{#if dev}
@@ -101,3 +131,17 @@
 		</button>
 	{/if}
 </div>
+
+<style>
+	#css-intermediate {
+		--link: rgb(54, 100, 252);
+		--error: rgb(224, 30, 30);
+		--success: rgb(69, 204, 69);
+	}
+
+	#css-intermediate.dark-mode {
+		--link: rgb(58, 137, 255);
+		--error: rgb(252, 31, 31);
+		--success: rgb(64, 187, 64);
+	}
+</style>

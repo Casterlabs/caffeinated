@@ -1,4 +1,4 @@
-#css-intermediate {
+@import "@radix-ui/colors/crimson.css"; @import "@radix-ui/colors/crimsonDark.css";#css-intermediate[data-theme-primary="crimson"] {
     --primary1: var(--crimson1);
         
     --primary2: var(--crimson2);

@@ -1,4 +1,4 @@
-#css-intermediate {
+@import "@radix-ui/colors/sage.css"; @import "@radix-ui/colors/sageDark.css";#css-intermediate[data-theme-base="sage"] {
     --base1: var(--sage1);
         
     --base2: var(--sage2);

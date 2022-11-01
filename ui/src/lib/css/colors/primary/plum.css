@@ -1,4 +1,4 @@
-#css-intermediate {
+@import "@radix-ui/colors/plum.css"; @import "@radix-ui/colors/plumDark.css";#css-intermediate[data-theme-primary="plum"] {
     --primary1: var(--plum1);
         
     --primary2: var(--plum2);

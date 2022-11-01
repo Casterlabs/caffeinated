@@ -1,4 +1,4 @@
-#css-intermediate {
+@import "@radix-ui/colors/purple.css"; @import "@radix-ui/colors/purpleDark.css";#css-intermediate[data-theme-primary="purple"] {
     --primary1: var(--purple1);
         
     --primary2: var(--purple2);

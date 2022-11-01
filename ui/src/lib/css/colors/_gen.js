@@ -54,8 +54,8 @@ fs.mkdirSync('./primary');
 fs.mkdirSync('./base');
 
 for (const color of colors) {
-    const name = color;
-    let css = '#css-intermediate {';
+    let css = `@import "@radix-ui/colors/${color}.css"; @import "@radix-ui/colors/${color}Dark.css";`;
+    css += `#css-intermediate[data-theme-primary="${color}"] {`;
 
     for (let idx = 1; idx < 13; idx++) {
         css += `
@@ -65,12 +65,13 @@ for (const color of colors) {
 
     css += '}';
 
-    fs.writeFile(`./primary/${name}.css`, css, () => {});
+    console.log(`import "$lib/css/colors/primary/${color}.css"`);
+    fs.writeFile(`./primary/${color}.css`, css, () => {});
 }
 
 for (const base of bases) {
-    const name = base;
-    let css = '#css-intermediate {';
+    let css = `@import "@radix-ui/colors/${base}.css"; @import "@radix-ui/colors/${base}Dark.css";`;
+    css += `#css-intermediate[data-theme-base="${base}"] {`;
 
     for (let idx = 1; idx < 13; idx++) {
         css += `
@@ -80,7 +81,8 @@ for (const base of bases) {
 
     css += '}';
 
-    fs.writeFile(`./base/${name}.css`, css, () => {});
+    console.log(`import "$lib/css/colors/base/${base}.css"`);
+    fs.writeFile(`./base/${base}.css`, css, () => {});
 }
 
 for (const color of misc) {
@@ -115,5 +117,8 @@ for (const color of misc) {
         `;
     }
 
+    console.log(`import "$lib/css/colors/${name}.css"`);
     fs.writeFile(`./${name}.css`, css, () => {});
 }
+
+console.log(`import "$lib/css/colors/misc.css"`);
