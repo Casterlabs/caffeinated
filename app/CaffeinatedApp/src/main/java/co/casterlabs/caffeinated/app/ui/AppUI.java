@@ -117,7 +117,7 @@ public class AppUI extends JavascriptObject {
             AppAuth auth = CaffeinatedApp.getInstance().getAuth();
 
             if (!auth.isSignedIn()) {
-                this.navigate("/auth/signin");
+                this.navigate("/signin");
             } else if (auth.isAuthorized()) {
                 this.navigate("/dashboard");
             } else {

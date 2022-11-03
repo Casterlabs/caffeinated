@@ -155,11 +155,11 @@
 	<h1 class="font-medium text-2xl text-center">
 		<LocalizedText key="page.signin.welcome" />
 	</h1>
-	<h2 class="text-sm text-base-11 mt-1">
+	<h2 class="text-sm text-base-11 mt-1 text-center">
 		<LocalizedText key="page.signin.choose" />
 	</h2>
 
-	<div class="mt-4 w-64 flex flex-wrap gap-2">
+	<div class="mt-4 w-fit mx-auto grid grid-cols-4 gap-2">
 		{#each PLATFORMS as { id, name, color }}
 			<a
 				href="/signin/{id.toLowerCase()}"
@@ -194,5 +194,6 @@
 <style>
 	.signin-icon:hover {
 		background: var(--color);
+		color: white;
 	}
 </style>
