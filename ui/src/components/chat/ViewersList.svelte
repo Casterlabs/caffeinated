@@ -62,7 +62,7 @@
 </script>
 
 <div
-	class="fixed inset-0 z-index-[2000] opacity-60"
+	class="pointer-events-none fixed inset-0 z-index-[2000] opacity-60"
 	on:contextmenu={copyViewersList}
 	on:dblclick={copyViewersList}
 >
