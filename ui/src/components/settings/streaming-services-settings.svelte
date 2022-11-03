@@ -12,7 +12,8 @@
         glimesh: {},
         brime: {},
         youtube: {},
-        dlive: {}
+        dlive: {},
+        theta: {}
     };
 
     function parseBridgeData(koiAuth) {
@@ -145,6 +146,16 @@
             bind:accountLink={accounts.dlive.accountLink}
             bind:isSignedIn={accounts.dlive.isSignedIn}
             bind:isLoading={accounts.dlive.isLoading}
+            on:signout={signout}
+        />
+        <AccountBox
+            platform="theta"
+            platformName="Theta"
+            signInHandler={signin}
+            bind:accountName={accounts.theta.accountName}
+            bind:accountLink={accounts.theta.accountLink}
+            bind:isSignedIn={accounts.theta.isSignedIn}
+            bind:isLoading={accounts.theta.isLoading}
             on:signout={signout}
         />
     </div>

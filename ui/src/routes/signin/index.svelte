@@ -10,6 +10,7 @@
     import BrimeButton from "../../components/platforms/signin-buttons/brime.svelte";
     import YouTubeButton from "../../components/platforms/signin-buttons/youtube.svelte";
     import DLiveButton from "../../components/platforms/signin-buttons/dlive.svelte";
+    import ThetaButton from "../../components/platforms/signin-buttons/theta.svelte";
 
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
@@ -46,6 +47,7 @@
         <BrimeButton />
         <YouTubeButton />
         <DLiveButton />
+        <ThetaButton />
     </div>
 
     <div class="service-disclaimer">
