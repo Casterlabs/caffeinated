@@ -38,6 +38,11 @@
 			id: 'DLIVE',
 			name: 'DLive',
 			color: '#ccc121'
+		},
+		{
+			id: 'THETA',
+			name: 'Theta',
+			color: '#161a24'
 		}
 	];
 

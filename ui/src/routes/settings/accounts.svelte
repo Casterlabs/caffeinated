@@ -14,7 +14,8 @@
 		GLIMESH: 'Glimesh',
 		BRIME: 'Brime',
 		YOUTUBE: 'YouTube (BETA)',
-		DLIVE: 'DLive'
+		DLIVE: 'DLive',
+		THETA: 'Theta'
 	};
 
 	const MUSIC_SERVICES_WITH_ENABLE = ['system', 'pretzel'];
