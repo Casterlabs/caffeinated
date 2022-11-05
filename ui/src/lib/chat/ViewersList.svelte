@@ -72,19 +72,21 @@
 	on:dblclick={copyViewersList}
 >
 	<Movable bind:this={movable} on:update={onUpdate}>
-		<div class="relative overflow-y-auto overflow-x-hidden h-full">
-			<span class="absolute -top-1 right-0 text-right">
-				<icon class="inline-block h-4 w-4 translate-y-0.5" data-icon="icon/eye" />
-				{viewersList.length}
-			</span>
+		{#if visible}
+			<div class="relative overflow-y-auto overflow-x-hidden h-full">
+				<span class="absolute -top-1 right-0 text-right">
+					<icon class="inline-block h-4 w-4 translate-y-0.5" data-icon="icon/eye" />
+					{viewersList.length}
+				</span>
 
-			<ul>
-				{#each viewersList as viewer}
-					<li>
-						{viewer.displayname}
-					</li>
-				{/each}
-			</ul>
-		</div>
+				<ul>
+					{#each viewersList as viewer}
+						<li>
+							{viewer.displayname}
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
 	</Movable>
 </div>
