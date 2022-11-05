@@ -17,8 +17,8 @@
 	export let doAction = (action, data) => {};
 
 	let chatBox;
-	let viewersListElement;
 	let chatElements = {};
+	export let viewersList;
 
 	// prettier-ignore
 	const EVENT_CLASSES = {
@@ -118,7 +118,7 @@
 
 		switch (event.event_type) {
 			case 'VIEWER_LIST':
-				viewersListElement.onViewersList(event);
+				viewersList.onViewersList(event);
 				break;
 
 			case 'META': {
@@ -189,7 +189,7 @@
 	<div class="flex-0 h-16">...</div>
 </div>
 
-<ViewersList bind:this={viewersListElement} />
+<ViewersList bind:this={viewersList} />
 
 <style>
 	ul :global(b) {
