@@ -11,6 +11,8 @@
 
 	let movable = null;
 
+	export let visible = false;
+
 	function onUpdate(positionData) {
 		dispatch('update', positionData);
 	}
@@ -65,6 +67,7 @@
 
 <div
 	class="pointer-events-none fixed inset-0 z-index-[2000] opacity-60"
+	class:hidden={!visible}
 	on:contextmenu={copyViewersList}
 	on:dblclick={copyViewersList}
 >

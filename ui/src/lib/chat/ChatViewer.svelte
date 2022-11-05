@@ -230,6 +230,7 @@
 
 <ViewersList
 	bind:this={viewersList}
+	visible={showViewersList}
 	on:copy={({ detail: data }) => doAction('copy-viewers', data)}
 	on:update={savePreferences}
 />
