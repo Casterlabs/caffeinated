@@ -6,6 +6,7 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -68,6 +69,11 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             instance.on("savePreferences", (data) -> {
                 this.settings().set("preferences", data);
             });
+        }
+
+        @Override
+        public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+            return null; // TODO
         }
 
     }

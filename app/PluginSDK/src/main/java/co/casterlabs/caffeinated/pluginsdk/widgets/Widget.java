@@ -220,9 +220,7 @@ public abstract class Widget {
 
     public void onNewInstance(@NonNull WidgetInstance instance) {}
 
-    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-        return "/";
-    }
+    public abstract @NonNull String getWidgetBasePath(WidgetInstanceMode mode);
 
     /* ---------------- */
     /* Events           */
