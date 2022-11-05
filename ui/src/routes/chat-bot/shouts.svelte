@@ -1,9 +1,9 @@
 <script>
-	import LocalizedText from '../../components/LocalizedText.svelte';
-	import SlimSelectMenu from '../../components/ui/SlimSelectMenu.svelte';
-	import TextArea from '../../components/ui/TextArea.svelte';
-	import SlimTextArea from '../../components/ui/SlimTextArea.svelte';
-	import Container from '../../components/ui/Container.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import SlimSelectMenu from '$lib/ui/SlimSelectMenu.svelte';
+	import TextArea from '$lib/ui/TextArea.svelte';
+	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
+	import Container from '$lib/ui/Container.svelte';
 
 	import { t } from '$lib/translate.mjs';
 	import createConsole from '$lib/console-helper.mjs';

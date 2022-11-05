@@ -1,6 +1,6 @@
 <script>
 	import PageTitle from '../components/PageTitle.svelte';
-	import ChatViewer from '../components/chat/ChatViewer.svelte';
+	import ChatViewer from '$lib/chat/ChatViewer.svelte';
 
 	import { onMount } from 'svelte';
 

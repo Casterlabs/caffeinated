@@ -1,6 +1,6 @@
 <script>
-	import LoadingSpinner from './LoadingSpinner.svelte';
-	import LocalizedText from './LocalizedText.svelte';
+	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { onMount } from 'svelte';
 

@@ -1,5 +1,5 @@
 <script>
-	import LocalizedText from '../../components/LocalizedText.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 	import PageTitle from '../../components/PageTitle.svelte';
 
 	import { page } from '$app/stores';

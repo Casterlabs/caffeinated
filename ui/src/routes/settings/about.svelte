@@ -1,5 +1,5 @@
 <script>
-	import LocalizedText from '../../components/LocalizedText.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { icon, iconColor } from '$lib/app.mjs';
 
@@ -17,7 +17,11 @@
 <ul class="bg-base-2 shadow rounded-md border border-base-6">
 	<li class="py-4 flex flex-row space-x-8 border-b border-base-6">
 		<div class="w-50 flex-1 flex items-center">
-			<img src="/images/wordmark/{$icon}/{$iconColor}.svg" class="h-auto w-full" alt="Casterlabs" />
+			<img
+				src="/images/brand/wordmark/{$icon}/{$iconColor}.svg"
+				class="h-auto w-full"
+				alt="Casterlabs"
+			/>
 		</div>
 		<div class="w-50 flex-1 flex flex-col items-left justify-center text-base-11">
 			<p>Casterlabs-Caffeinated</p>

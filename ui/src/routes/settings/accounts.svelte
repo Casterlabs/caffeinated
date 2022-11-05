@@ -1,9 +1,9 @@
 <script>
-	import LocalizedText from '../../components/LocalizedText.svelte';
-	import Container from '../../components/ui/Container.svelte';
-	import SlimButton from '../../components/ui/SlimButton.svelte';
-	import Button from '../../components/ui/Button.svelte';
-	import SlimSwitch from '../../components/ui/SlimSwitch.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import Container from '$lib/ui/Container.svelte';
+	import SlimButton from '$lib/ui/SlimButton.svelte';
+	import Button from '$lib/ui/Button.svelte';
+	import SlimSwitch from '$lib/ui/SlimSwitch.svelte';
 
 	import createConsole from '$lib/console-helper.mjs';
 

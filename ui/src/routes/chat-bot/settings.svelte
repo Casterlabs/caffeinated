@@ -1,10 +1,10 @@
 <script>
-	import SelectMenu from '../../components/ui/SelectMenu.svelte';
-	import Switch from '../../components/ui/Switch.svelte';
-	import TextArea from '../../components/ui/TextArea.svelte';
-	import LocalizedText from '../../components/LocalizedText.svelte';
+	import SelectMenu from '$lib/ui/SelectMenu.svelte';
+	import Switch from '$lib/ui/Switch.svelte';
+	import TextArea from '$lib/ui/TextArea.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 
-	import { hasCasterlabsPlus } from '$lib/app.mjs';
+	// import { hasCasterlabsPlus } from '$lib/app.mjs';
 	import { t } from '$lib/translate.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 
@@ -25,12 +25,12 @@
 	<li class="py-4">
 		<SelectMenu
 			title="page.chat_bot.settings.sender"
-			value={$hasCasterlabsPlus ? $preferences?.chatter : 'SYSTEM'}
+			value={/*$hasCasterlabsPlus ? $preferences?.chatter : */ 'SYSTEM'}
 			options={{
 				SYSTEM: 'page.chat_bot.settings.sender.SYSTEM',
 				CLIENT: 'page.chat_bot.settings.sender.CLIENT'
 			}}
-			disabled={!$hasCasterlabsPlus}
+			disabled={/*!$hasCasterlabsPlus*/ true}
 			on:value={({ detail: value }) => setPreferenceItem('chatter', value)}
 		/>
 	</li>

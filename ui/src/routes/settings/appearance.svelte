@@ -1,6 +1,6 @@
 <script>
-	import SelectMenu from '../../components/ui/SelectMenu.svelte';
-	import Switch from '../../components/ui/Switch.svelte';
+	import SelectMenu from '$lib/ui/SelectMenu.svelte';
+	import Switch from '$lib/ui/Switch.svelte';
 
 	import { supportedLanguages } from '$lib/translate.mjs';
 	import createConsole from '$lib/console-helper.mjs';

@@ -1,8 +1,7 @@
 <script>
-	import LoadingSpinner from '../components/LoadingSpinner.svelte';
+	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
 	import { onDestroy } from 'svelte';
-
 	import { icon, iconColor } from '$lib/app.mjs';
 
 	const preferences = st || Caffeinated.UI.svelte('preferences');
@@ -36,7 +35,7 @@
 			<img src="/images/mikeys.png" class="h-auto w-auto" alt="Mikeys Logo" />
 		{:else}
 			<img
-				src="/images/wordmark/{$icon}/{$iconColor}.svg"
+				src="/images/brand/wordmark/{$icon}/{$iconColor}.svg"
 				class="h-auto w-auto"
 				alt="Casterlabs Logo"
 			/>

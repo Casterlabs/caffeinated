@@ -1,10 +1,9 @@
 <script>
-	import Modal from '../../components/layout/Modal.svelte';
+	import Modal from '$lib/ui/Modal.svelte';
 	import PageTitle from '../../components/PageTitle.svelte';
-	import LocalizedText from '../../components/LocalizedText.svelte';
-	import CardList from '../../components/ui/CardList/index.svelte';
-	import Card from '../../components/ui/cardlist/Card.svelte';
-	import FocusListener from '../../components/interaction/FocusListener.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import CardList from '$lib/ui/CardList/index.svelte';
+	import Card from '$lib/ui/cardlist/Card.svelte';
 
 	import { onMount } from 'svelte';
 	import { t } from '$lib/translate.mjs';

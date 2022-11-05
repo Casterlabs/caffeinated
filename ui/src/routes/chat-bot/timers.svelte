@@ -1,7 +1,7 @@
 <script>
-	import TextArea from '../../components/ui/TextArea.svelte';
-	import LocalizedText from '../../components/LocalizedText.svelte';
-	import NumberInput from '../../components/ui/NumberInput.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import TextArea from '$lib/ui/TextArea.svelte';
+	import NumberInput from '$lib/ui/NumberInput.svelte';
 
 	import { t } from '$lib/translate.mjs';
 	import createConsole from '$lib/console-helper.mjs';
