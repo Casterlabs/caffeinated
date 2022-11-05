@@ -8,6 +8,10 @@
 
 	function doAction(action, data) {
 		switch (action) {
+			case 'save-preferences': {
+				Caffeinated.UI.chatPreferences = data;
+				return;
+			}
 			case 'copy-viewers': {
 				Caffeinated.copyText(data, 'Copied the viewer list to your clipboard');
 				return;
@@ -33,6 +37,8 @@
 	onMount(() => {
 		const eventListener = Bridge.on('koi:event', chatViewer.processEvent);
 		Caffeinated.koi.eventHistory.then((h) => h.forEach(chatViewer.processEvent));
+
+		Caffeinated.UI.chatPreferences.then(chatViewer.loadConfig);
 
 		Caffeinated.koi.viewers.then((all) => {
 			for (const [platform, viewers] of Object.entries(all)) {
