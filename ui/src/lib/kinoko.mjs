@@ -1,4 +1,4 @@
-import EventHandler from "./event-handler.mjs";
+import EventHandler from './event-handler.mjs';
 
 function KinokoV1() {
     const eventHandler = new EventHandler();
@@ -33,8 +33,10 @@ function KinokoV1() {
             }
         },
 
-        connect(channel, type = "client", proxy = false) {
-            const uri = `wss://api.casterlabs.co/v1/kinoko?channel=${encodeURIComponent(channel)}&type=${encodeURIComponent(type)}&proxy=${encodeURIComponent(proxy)}`;
+        connect(channel, type = 'client', proxy = false) {
+            const uri = `wss://api.casterlabs.co/v1/kinoko?channel=${encodeURIComponent(
+				channel
+			)}&type=${encodeURIComponent(type)}&proxy=${encodeURIComponent(proxy)}`;
 
             this.disconnect();
 
@@ -48,47 +50,47 @@ function KinokoV1() {
             };
 
             ws.onopen = () => {
-                eventHandler.emit("open");
+                eventHandler.emit('open');
             };
 
             ws.onclose = () => {
-                eventHandler.emit("close");
+                eventHandler.emit('close');
             };
 
             ws.onmessage = (message) => {
                 const data = message.data;
 
                 switch (data) {
-                    case ":ping":
+                    case ':ping':
                         {
                             if (!proxyMode) {
-                                ws.send(":ping");
+                                ws.send(':ping');
                                 return;
                             }
                             break;
                         }
 
-                    case ":orphaned":
+                    case ':orphaned':
                         {
-                            eventHandler.emit("orphaned");
+                            eventHandler.emit('orphaned');
                             return;
                         }
 
-                    case ":adopted":
+                    case ':adopted':
                         {
-                            eventHandler.emit("adopted");
+                            eventHandler.emit('adopted');
                             return;
                         }
 
                     default:
                         {
                             if (proxyMode) {
-                                eventHandler.emit("message", { message: data });
+                                eventHandler.emit('message', { message: data });
                             } else {
                                 try {
-                                    eventHandler.emit("message", { message: JSON.parse(data) });
+                                    eventHandler.emit('message', { message: JSON.parse(data) });
                                 } catch (ignored) {
-                                    eventHandler.emit("message", { message: data });
+                                    eventHandler.emit('message', { message: data });
                                 }
                             }
                             return;
@@ -110,18 +112,18 @@ function KinokoV1() {
 }
 
 function generateUnsafePassword(len = 32) {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
     return Array(len)
         .fill(chars)
         .map((x) => {
             return x[Math.floor(Math.random() * x.length)];
         })
-        .join("");
+        .join('');
 }
 
 class AuthCallback {
-    constructor(type = "unknown") {
+    constructor(type = 'unknown') {
         this.id = `auth_redirect:${generateUnsafePassword(128)}:${type}`;
         this.cancelled = false;
     }
@@ -143,22 +145,22 @@ class AuthCallback {
                     if (!fufilled) {
                         fufilled = true;
                         this.cancel();
-                        reject("TOKEN_TIMEOUT");
+                        reject('TOKEN_TIMEOUT');
                     }
                 }, timeout) :
                 -1;
 
-            this.kinoko.connect(this.id, "parent");
+            this.kinoko.connect(this.id, 'parent');
 
-            this.kinoko.on("close", () => {
+            this.kinoko.on('close', () => {
                 if (!fufilled && !this.cancelled) {
-                    reject("CONNECTION_CLOSED");
+                    reject('CONNECTION_CLOSED');
                 }
 
                 clearTimeout(id);
             });
 
-            this.kinoko.on("message", (data) => {
+            this.kinoko.on('message', (data) => {
                 const message = data.message;
 
                 fufilled = true;
@@ -166,14 +168,14 @@ class AuthCallback {
                 this.kinoko.disconnect();
                 this.kinoko = null;
 
-                if (message === "NONE") {
-                    reject("NO_TOKEN_PROVIDED");
-                } else if (message.startsWith("token:")) {
+                if (message === 'NONE') {
+                    reject('NO_TOKEN_PROVIDED');
+                } else if (message.startsWith('token:')) {
                     const token = message.substring(6);
 
                     resolve(token);
                 } else {
-                    reject("TOKEN_MESSAGE_INVALID");
+                    reject('TOKEN_MESSAGE_INVALID');
                 }
             });
         });

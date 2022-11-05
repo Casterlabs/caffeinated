@@ -41,15 +41,15 @@ function EventHandler(console = window.console) {
         emit(type, data) {
             // Broadcast under a wildcard.
             {
-                const wildCardCallbacks = listeners["*"];
+                const wildCardCallbacks = listeners['*'];
 
                 if (wildCardCallbacks) {
                     Object.values(wildCardCallbacks).forEach((callback) => {
                         try {
                             callback(type.toLowerCase(), data);
                         } catch (e) {
-                            console.error("[EventHandler]", "A listener produced an exception: ");
-                            console.error("[EventHandler]", e);
+                            console.error('[EventHandler]', 'A listener produced an exception: ');
+                            console.error('[EventHandler]', e);
                         }
                     });
                 }
@@ -64,14 +64,14 @@ function EventHandler(console = window.console) {
                         try {
                             callback(data);
                         } catch (e) {
-                            console.error("[EventHandler]", "A listener produced an exception: ");
-                            console.error("[EventHandler]", e);
+                            console.error('[EventHandler]', 'A listener produced an exception: ');
+                            console.error('[EventHandler]', e);
                         }
                     });
                 }
             }
 
-            console.debug("[EventHandler]", type.toLowerCase(), data);
+            console.debug('[EventHandler]', type.toLowerCase(), data);
         }
     };
 }
