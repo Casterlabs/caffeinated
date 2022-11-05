@@ -63,7 +63,7 @@
 
 		<!-- svelte-ignore missing-declaration -->
 		<button
-			class="fixed top-2 right-2 bg-gray-4 p-1.5 rounded-md"
+			class="fixed top-2 right-2 p-1.5 rounded-md"
 			class:opacity-0={hideDevButton}
 			title="Quick Theme Switch"
 			on:click={async () => {
