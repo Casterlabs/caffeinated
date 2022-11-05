@@ -30,6 +30,7 @@ import co.casterlabs.caffeinated.builtin.widgets.labels.generic.StreamUptimeLabe
 import co.casterlabs.caffeinated.builtin.widgets.labels.generic.SubscriberCountLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.generic.ViewersCountLabel;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.IOUtil;
 import lombok.NonNull;
 
@@ -104,7 +105,7 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
     // or
     // 2) Grab resources from the dev environment, since we're bundled in a
     // different way from the typical plugin setup.
-    public static @Nullable String resolveResource(@NonNull String path) throws IOException {
+    public static @Nullable Pair<String, String> resolveResource(@NonNull String path) throws IOException {
         InputStream in;
 
         if (CaffeinatedPlugin.isDevEnvironment()) {
@@ -113,7 +114,9 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
             in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("widgets" + path);
         }
 
-        return IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
+        String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
+
+        return new Pair<>(content, "text/html");
     }
 
 }

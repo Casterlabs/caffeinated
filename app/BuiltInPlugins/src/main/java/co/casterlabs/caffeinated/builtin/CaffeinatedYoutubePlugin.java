@@ -19,6 +19,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
 import co.casterlabs.caffeinated.util.WebUtil;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.ChatEvent;
@@ -153,7 +154,7 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
 
         @SneakyThrows
         @Override
-        public @Nullable String getWidgetHtml() {
+        public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
             return CaffeinatedDefaultPlugin.resolveResource("/youtube.html");
         }
 
@@ -327,11 +328,11 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
 
         @SneakyThrows
         @Override
-        public @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
+        public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
             if (mode == WidgetInstanceMode.DOCK) {
                 return CaffeinatedDefaultPlugin.resolveResource("/youtube-dock.html");
             } else {
-                return super.getWidgetHtml(WidgetInstanceMode.WIDGET);
+                return super.getWidgetResource(WidgetInstanceMode.WIDGET, resource);
             }
         }
 

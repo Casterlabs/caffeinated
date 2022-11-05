@@ -16,6 +16,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
@@ -214,7 +215,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
     @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
+    public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
         if (mode == WidgetInstanceMode.WIDGET_ALT) {
             return CaffeinatedDefaultPlugin.resolveResource("/goal_alert.html");
         } else {

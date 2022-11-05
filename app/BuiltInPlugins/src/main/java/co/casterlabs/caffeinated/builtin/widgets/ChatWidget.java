@@ -6,10 +6,12 @@ import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.commons.functional.tuples.Pair;
 import lombok.SneakyThrows;
 
 public class ChatWidget extends Widget {
@@ -56,7 +58,7 @@ public class ChatWidget extends Widget {
 
     @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml() {
+    public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
         return CaffeinatedDefaultPlugin.resolveResource("/chat.html");
     }
 

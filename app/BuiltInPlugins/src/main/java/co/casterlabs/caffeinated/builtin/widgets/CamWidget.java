@@ -14,6 +14,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.util.Crypto;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
@@ -114,7 +115,7 @@ public class CamWidget extends Widget implements KinokoV1Listener {
 
     @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
+    public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
         if (mode == WidgetInstanceMode.WIDGET) {
             return CaffeinatedDefaultPlugin.resolveResource("/cam.html");
         } else {
