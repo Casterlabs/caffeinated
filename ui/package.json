@@ -2,7 +2,9 @@
     "name": "casterlabs-caffeinated",
     "version": "1.0.0",
     "scripts": {
-        "dev": "vite dev --port 3000",
+        "dev": "concurrently \"npm run dev-sync\" \"npm run dev-vite\"",
+        "dev-sync": "cd ../../__common/sync && npm start",
+        "dev-vite": "vite dev --port 3000",
         "build": "vite build",
         "preview": "vite preview",
         "lint": "prettier --check .",
@@ -12,6 +14,7 @@
         "@sveltejs/adapter-static": "^1.0.0-next.32",
         "@sveltejs/kit": "next",
         "autoprefixer": "^10.4.4",
+        "concurrently": "^7.5.0",
         "postcss": "^8.4.12",
         "prettier": "^2.5.1",
         "prettier-plugin-svelte": "^2.5.0",
