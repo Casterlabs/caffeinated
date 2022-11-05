@@ -22,6 +22,14 @@
 	let chatElements = {};
 	export let viewersList;
 
+	// Preferences
+	let showChatTimestamps = true;
+	let showModActions = true;
+	let showProfilePictures = false;
+	let showBadges = false;
+	let showViewers = false;
+	let showViewersList = false;
+
 	// prettier-ignore
 	const EVENT_CLASSES = {
 		PLATFORM_MESSAGE: PlatformMessage,
@@ -115,6 +123,35 @@
 		}
 	}
 
+	function savePreferences() {
+		const { x, y, width, height } = viewersList.getPositionData();
+
+		doAction('save-preferences', {
+			showChatTimestamps: showChatTimestamps,
+			showModActions: showModActions,
+			showProfilePictures: showProfilePictures,
+			showBadges: showBadges,
+			showViewers: showViewers,
+			showViewersList: showViewersList,
+			viewersX: x,
+			viewersY: y,
+			viewersWidth: width,
+			viewersHeight: height
+		});
+	}
+
+	export function loadConfig(config) {
+		showChatTimestamps = config.showChatTimestamps;
+		showModActions = config.showModActions;
+		showProfilePictures = config.showProfilePictures;
+		showBadges = config.showBadges;
+		showViewers = config.showViewers;
+		showViewersList = config.showViewersList;
+
+		const { viewersX, viewersY, viewersWidth, viewersHeight } = config;
+		viewersList.setPositionData(viewersX, viewersY, viewersWidth, viewersHeight);
+	}
+
 	export function processEvent(event) {
 		console.log('Processing event:', event);
 
@@ -194,6 +231,7 @@
 <ViewersList
 	bind:this={viewersList}
 	on:copy={({ detail: data }) => doAction('copy-viewers', data)}
+	on:update={savePreferences}
 />
 
 <style>
