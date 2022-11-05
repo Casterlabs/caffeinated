@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Just A Caffeinated Widget</title>
+        <style>
+            iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                border: none;
+            }
+        </style>
+    </head>
+
+    <body></body>
+
+    <footer>
+        <script type="module">
+            import Conn from "./conn.mjs";
+
+            const queryParams = (() => {
+                let vars = {};
+
+                location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
+                    vars[key] = value;
+                });
+
+                return vars;
+            })();
+
+            const { pluginId, widgetId, authorization } = queryParams;
+            const port = queryParams.port || "8092";
+            const address = queryParams.address || "127.0.0.1";
+
+            const conn = new Conn(`ws://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/realtime/heartbeat?authorization=${authorization}`);
+
+            conn.on("init", () => {
+                const sandboxFrame = document.createElement("iframe");
+                sandboxFrame.src = `http://${address}:${port}/api/plugin/widget/loader/widget.html?${location.search}`;
+
+                document.body.appendChild(sandboxFrame);
+            });
+
+            // We completely reset the widget everytime it loses connection.
+            conn.on("close", () => {
+                setTimeout(() => {
+                    location.reload();
+                }, 2500);
+            });
+
+            // Connect.
+            conn.connect();
+        </script>
+    </footer>
+</html>

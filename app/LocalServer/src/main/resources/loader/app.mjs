@@ -3,9 +3,10 @@ import EventHandler from "./eventHandler.mjs";
 const eventHandler = new EventHandler();
 
 let store = {
-    language: "en-US",
+    language: "en",
     emojiProvider: "system",
-    theme: "system"
+    theme: ["gray", "gray"],
+    appearance: "FOLLOW_SYSTEM"
 };
 
 let appStyleElement;

@@ -219,10 +219,11 @@ export function init({ initHandler, disconnectHandler }) {
         musicInstance.broadcast("music", music_data);
     });
 
-    conn.on("appearance", ({ language, emojiProvider, theme }) => {
+    conn.on("appearance", ({ language, emojiProvider, theme, appearance }) => {
         App.mutate("language", language);
         App.mutate("emojiProvider", emojiProvider);
         App.mutate("theme", theme);
+        App.mutate("appearance", appearance);
     });
 
     // We completely reset the widget everytime it loses connection.
