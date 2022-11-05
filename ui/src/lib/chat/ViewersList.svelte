@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script>
 	import Movable from '../interaction/Movable.svelte';
 

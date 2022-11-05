@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script>
 	import PlatformMessage from './messages/PlatformMessage.svelte';
 	import ChannelPointsMessage from './messages/ChannelPointsMessage.svelte';
