@@ -74,7 +74,7 @@
 	<Movable bind:this={movable} on:update={onUpdate}>
 		{#if visible}
 			<div class="relative overflow-y-auto overflow-x-hidden h-full">
-				<span class="absolute -top-1 right-0 text-right">
+				<span class="absolute top-0 right-0 text-right">
 					<icon class="inline-block h-4 w-4 translate-y-0.5" data-icon="icon/eye" />
 					{viewersList.length}
 				</span>
