@@ -191,7 +191,10 @@
 	<div class="flex-0 h-16">...</div>
 </div>
 
-<ViewersList bind:this={viewersList} />
+<ViewersList
+	bind:this={viewersList}
+	on:copy={({ detail: data }) => doAction('copy-viewers', data)}
+/>
 
 <style>
 	ul :global(b) {

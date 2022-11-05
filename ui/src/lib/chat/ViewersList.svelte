@@ -59,7 +59,7 @@
 			list.push(viewer.displayname);
 		}
 
-		Caffeinated.copyText(list.join('\n'), 'Copied the viewer list to your clipboard');
+		dispatch('copy', list.join('\n'));
 	}
 </script>
 
