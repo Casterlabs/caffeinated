@@ -15,7 +15,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
 import co.casterlabs.commons.async.Promise;
-import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.kaimen.util.reflection.Reflective;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
@@ -221,12 +220,8 @@ public abstract class Widget {
 
     public void onNewInstance(@NonNull WidgetInstance instance) {}
 
-    /**
-     * @return A pair of strings, with A being the content and B being the content
-     *         type (nullable)
-     */
-    public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
-        return null;
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+        return "/";
     }
 
     /* ---------------- */

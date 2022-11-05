@@ -61,12 +61,10 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
         }
     }
 
-    @HttpEndpoint(uri = "/api/plugin/:pluginId/widget/:widgetId/:mode/:authorization/html.*")
+    @HttpEndpoint(uri = "/api/plugin/:pluginId/:authorization/html.*")
     public HttpResponse onGetWidgetHtmlRequest(SoraHttpSession session) {
         try {
             String pluginId = session.getUriParameters().get("pluginId");
-            String widgetId = session.getUriParameters().get("widgetId");
-            WidgetInstanceMode mode = WidgetInstanceMode.valueOf(session.getUriParameters().get("mode").toUpperCase());
 
             String[] urlParts = session.getUri().split("/html", 2);
             String trueBaseUrl = urlParts[0].concat("/html");
@@ -76,26 +74,12 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                 resource = "/";
             }
 
-            CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPlugins().getPlugins().getPluginById(pluginId);
-
-            if (owningPlugin == null) {
+            CaffeinatedPlugin plugin = CaffeinatedApp.getInstance().getPlugins().getPlugins().getPluginById(pluginId);
+            if (plugin == null) {
                 return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
             }
 
-            Widget widget = null;
-            // Search for the widget.
-            for (Widget w : owningPlugin.getWidgets()) {
-                if (w.getId().equals(widgetId)) {
-                    widget = w;
-                    break;
-                }
-            }
-
-            if (widget == null) {
-                return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.WIDGET_NOT_FOUND);
-            }
-
-            Pair<String, String> response = widget.getWidgetResource(mode, resource);
+            Pair<String, String> response = plugin.getResource(resource);
 
             if (response == null) {
                 return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);

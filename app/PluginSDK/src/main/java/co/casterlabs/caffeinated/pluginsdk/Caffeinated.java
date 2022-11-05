@@ -25,6 +25,8 @@ public interface Caffeinated {
 
     public void openLink(String url);
 
+    public String getMimeForPath(String path);
+
     public String getLocale();
 
     public @Nullable CasterlabsAccount getCasterlabsAccount();

@@ -186,8 +186,8 @@ export function init({ initHandler, disconnectHandler }) {
     deepFreeze(musicInstance);
 
     // Listen for events on the conn, fire them off, yeah you get the idea.
-    conn.on("init", () => {
-        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App })) {
+    conn.on("init", ({ basePath }) => {
+        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, basePath })) {
             App.init();
             widgetInstance.broadcast("init");
             koiInstance.broadcast("koi_statics", koi_statics);

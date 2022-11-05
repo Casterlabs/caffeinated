@@ -68,7 +68,7 @@ export default class Conn {
                         {
                             this.connectionId = payload.data.connectionId;
                             this.widgetData = payload.data.widget;
-                            this.broadcast("init");
+                            this.broadcast("init", payload.data);
                             return;
                         }
 

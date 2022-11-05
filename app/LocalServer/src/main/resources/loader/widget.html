@@ -89,8 +89,8 @@
 
             function initHandler(params) {
                 initParameters = params;
-                const { address, port, pluginId, widgetId, authorization, widgetMode } = params;
-                sandboxFrame.src = `http://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/${widgetMode}/${authorization}/html/`;
+                const { address, port, pluginId, widgetId, authorization, widgetMode, basePath } = params;
+                sandboxFrame.src = `http://${address}:${port}/api/plugin/${pluginId}/${authorization}/html${basePath}`;
             }
 
             init({ initHandler });

@@ -1,6 +1,9 @@
 package co.casterlabs.caffeinated.pluginsdk;
 
 import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,10 +18,12 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.commons.async.Promise;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.kaimen.util.reflection.Reflective;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -124,20 +129,6 @@ public abstract class CaffeinatedPlugin implements Closeable {
 
     public abstract @NonNull String getId();
 
-    /**
-     * A helper to get resources out of the plugin to a widget.
-     * 
-     * @implNote            plugins should override this and return whatever data
-     *                      they want.
-     * 
-     * @param    resourceId the id of the resource
-     * 
-     * @return              null if no data is found.
-     */
-    public @Nullable String getResource(@NonNull String resourceId) {
-        return null;
-    }
-
     public @Nullable JsonObject getLang() {
         return null;
     }
@@ -157,6 +148,25 @@ public abstract class CaffeinatedPlugin implements Closeable {
     /* ---------------- */
     /* Framework        */
     /* ---------------- */
+
+    /**
+     * @return               A pair of strings, with A being the content and B being
+     *                       the content type (nullable)
+     * 
+     * @implNote             By default, this will read resources directly from your
+     *                       jar. You can override this if you need to serve content
+     *                       from a custom location.
+     * 
+     * @throws   IOException
+     */
+    public @Nullable Pair<String, String> getResource(String resource) throws IOException {
+        InputStream in = this.classLoader.getResourceAsStream(resource);
+
+        String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
+        String mime = Caffeinated.getInstance().getMimeForPath(resource);
+
+        return new Pair<>(content, mime);
+    }
 
     /**
      * @deprecated While this is used internally, plugins can use it as well for

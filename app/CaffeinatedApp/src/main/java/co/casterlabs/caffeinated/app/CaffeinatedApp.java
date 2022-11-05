@@ -38,6 +38,7 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
+import co.casterlabs.rakurai.io.http.MimeTypes;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.swetrix.Swetrix;
 import lombok.Getter;
@@ -234,6 +235,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @Override
     public void openLink(String url) {
         this.UI.openLink(url);
+    }
+
+    @Override
+    public String getMimeForPath(String path) {
+        return MimeTypes.getMimeForFile(new File(path));
     }
 
     @JavascriptFunction
