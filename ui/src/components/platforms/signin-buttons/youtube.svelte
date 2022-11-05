@@ -1,9 +1,9 @@
 <div class="no-select login-button">
     <a class="button has-text-centered" href="/signin/youtube">
         <div class="platform-logo">
-            <img src="/img/services/youtube/icon.svg" alt="Youtube Logo" />
+            <img src="/img/services/youtube/icon.svg" alt="YouTube Logo" />
         </div>
-        <span> Youtube (BETA) </span>
+        <span> YouTube (BETA) </span>
     </a>
 </div>
 
