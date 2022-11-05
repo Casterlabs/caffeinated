@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/mint.css"; @import "@radix-ui/colors/mintDark.css";#css-intermediate[data-theme-primary="mint"] {
+    --primary1: var(--mint1);
+        
+    --primary2: var(--mint2);
+        
+    --primary3: var(--mint3);
+        
+    --primary4: var(--mint4);
+        
+    --primary5: var(--mint5);
+        
+    --primary6: var(--mint6);
+        
+    --primary7: var(--mint7);
+        
+    --primary8: var(--mint8);
+        
+    --primary9: var(--mint9);
+        
+    --primary10: var(--mint10);
+        
+    --primary11: var(--mint11);
+        
+    --primary12: var(--mint12);
+        }

@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/tomato.css"; @import "@radix-ui/colors/tomatoDark.css";#css-intermediate[data-theme-primary="tomato"] {
+    --primary1: var(--tomato1);
+        
+    --primary2: var(--tomato2);
+        
+    --primary3: var(--tomato3);
+        
+    --primary4: var(--tomato4);
+        
+    --primary5: var(--tomato5);
+        
+    --primary6: var(--tomato6);
+        
+    --primary7: var(--tomato7);
+        
+    --primary8: var(--tomato8);
+        
+    --primary9: var(--tomato9);
+        
+    --primary10: var(--tomato10);
+        
+    --primary11: var(--tomato11);
+        
+    --primary12: var(--tomato12);
+        }

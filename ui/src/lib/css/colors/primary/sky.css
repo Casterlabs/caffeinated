@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/sky.css"; @import "@radix-ui/colors/skyDark.css";#css-intermediate[data-theme-primary="sky"] {
+    --primary1: var(--sky1);
+        
+    --primary2: var(--sky2);
+        
+    --primary3: var(--sky3);
+        
+    --primary4: var(--sky4);
+        
+    --primary5: var(--sky5);
+        
+    --primary6: var(--sky6);
+        
+    --primary7: var(--sky7);
+        
+    --primary8: var(--sky8);
+        
+    --primary9: var(--sky9);
+        
+    --primary10: var(--sky10);
+        
+    --primary11: var(--sky11);
+        
+    --primary12: var(--sky12);
+        }

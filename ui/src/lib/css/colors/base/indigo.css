@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/indigo.css"; @import "@radix-ui/colors/indigoDark.css";#css-intermediate[data-theme-base="indigo"] {
+    --base1: var(--indigo1);
+        
+    --base2: var(--indigo2);
+        
+    --base3: var(--indigo3);
+        
+    --base4: var(--indigo4);
+        
+    --base5: var(--indigo5);
+        
+    --base6: var(--indigo6);
+        
+    --base7: var(--indigo7);
+        
+    --base8: var(--indigo8);
+        
+    --base9: var(--indigo9);
+        
+    --base10: var(--indigo10);
+        
+    --base11: var(--indigo11);
+        
+    --base12: var(--indigo12);
+        }

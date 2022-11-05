@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/crimson.css"; @import "@radix-ui/colors/crimsonDark.css";#css-intermediate[data-theme-base="crimson"] {
+    --base1: var(--crimson1);
+        
+    --base2: var(--crimson2);
+        
+    --base3: var(--crimson3);
+        
+    --base4: var(--crimson4);
+        
+    --base5: var(--crimson5);
+        
+    --base6: var(--crimson6);
+        
+    --base7: var(--crimson7);
+        
+    --base8: var(--crimson8);
+        
+    --base9: var(--crimson9);
+        
+    --base10: var(--crimson10);
+        
+    --base11: var(--crimson11);
+        
+    --base12: var(--crimson12);
+        }

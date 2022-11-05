@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/gold.css"; @import "@radix-ui/colors/goldDark.css";#css-intermediate[data-theme-base="gold"] {
+    --base1: var(--gold1);
+        
+    --base2: var(--gold2);
+        
+    --base3: var(--gold3);
+        
+    --base4: var(--gold4);
+        
+    --base5: var(--gold5);
+        
+    --base6: var(--gold6);
+        
+    --base7: var(--gold7);
+        
+    --base8: var(--gold8);
+        
+    --base9: var(--gold9);
+        
+    --base10: var(--gold10);
+        
+    --base11: var(--gold11);
+        
+    --base12: var(--gold12);
+        }

@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/pink.css"; @import "@radix-ui/colors/pinkDark.css";#css-intermediate[data-theme-base="pink"] {
+    --base1: var(--pink1);
+        
+    --base2: var(--pink2);
+        
+    --base3: var(--pink3);
+        
+    --base4: var(--pink4);
+        
+    --base5: var(--pink5);
+        
+    --base6: var(--pink6);
+        
+    --base7: var(--pink7);
+        
+    --base8: var(--pink8);
+        
+    --base9: var(--pink9);
+        
+    --base10: var(--pink10);
+        
+    --base11: var(--pink11);
+        
+    --base12: var(--pink12);
+        }

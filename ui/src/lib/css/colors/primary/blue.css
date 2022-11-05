@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/blue.css"; @import "@radix-ui/colors/blueDark.css";#css-intermediate[data-theme-primary="blue"] {
+    --primary1: var(--blue1);
+        
+    --primary2: var(--blue2);
+        
+    --primary3: var(--blue3);
+        
+    --primary4: var(--blue4);
+        
+    --primary5: var(--blue5);
+        
+    --primary6: var(--blue6);
+        
+    --primary7: var(--blue7);
+        
+    --primary8: var(--blue8);
+        
+    --primary9: var(--blue9);
+        
+    --primary10: var(--blue10);
+        
+    --primary11: var(--blue11);
+        
+    --primary12: var(--blue12);
+        }

@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/olive.css"; @import "@radix-ui/colors/oliveDark.css";#css-intermediate[data-theme-base="olive"] {
+    --base1: var(--olive1);
+        
+    --base2: var(--olive2);
+        
+    --base3: var(--olive3);
+        
+    --base4: var(--olive4);
+        
+    --base5: var(--olive5);
+        
+    --base6: var(--olive6);
+        
+    --base7: var(--olive7);
+        
+    --base8: var(--olive8);
+        
+    --base9: var(--olive9);
+        
+    --base10: var(--olive10);
+        
+    --base11: var(--olive11);
+        
+    --base12: var(--olive12);
+        }

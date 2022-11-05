@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/lime.css"; @import "@radix-ui/colors/limeDark.css";#css-intermediate[data-theme-base="lime"] {
+    --base1: var(--lime1);
+        
+    --base2: var(--lime2);
+        
+    --base3: var(--lime3);
+        
+    --base4: var(--lime4);
+        
+    --base5: var(--lime5);
+        
+    --base6: var(--lime6);
+        
+    --base7: var(--lime7);
+        
+    --base8: var(--lime8);
+        
+    --base9: var(--lime9);
+        
+    --base10: var(--lime10);
+        
+    --base11: var(--lime11);
+        
+    --base12: var(--lime12);
+        }
