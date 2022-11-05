@@ -1,8 +1,5 @@
 package co.casterlabs.caffeinated.builtin.widgets;
 
-import org.jetbrains.annotations.Nullable;
-
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
@@ -10,8 +7,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
-import co.casterlabs.commons.functional.tuples.Pair;
-import lombok.SneakyThrows;
+import lombok.NonNull;
 
 public class NowPlayingWidget extends Widget {
     public static final WidgetDetails DETAILS = new WidgetDetails()
@@ -34,10 +30,9 @@ public class NowPlayingWidget extends Widget {
         this.setSettingsLayout(LAYOUT);
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
-        return CaffeinatedDefaultPlugin.resolveResource("/now-playing.html");
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+        return "/now-playing.html";
     }
 
 }

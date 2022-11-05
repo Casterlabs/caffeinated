@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
@@ -16,7 +15,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
-import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
@@ -24,7 +22,6 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 
 public abstract class GenericGoal extends Widget implements KoiEventListener {
     private static String[] platforms;
@@ -213,13 +210,12 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
         return layout;
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
         if (mode == WidgetInstanceMode.WIDGET_ALT) {
-            return CaffeinatedDefaultPlugin.resolveResource("/goal_alert.html");
+            return "/goal_alert.html";
         } else {
-            return CaffeinatedDefaultPlugin.resolveResource("/goal.html");
+            return "/goal.html";
         }
     }
 

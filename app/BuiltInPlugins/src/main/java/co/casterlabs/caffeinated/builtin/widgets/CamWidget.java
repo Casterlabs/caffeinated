@@ -1,8 +1,5 @@
 package co.casterlabs.caffeinated.builtin.widgets;
 
-import org.jetbrains.annotations.Nullable;
-
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
@@ -14,7 +11,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.util.Crypto;
-import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
@@ -113,13 +109,12 @@ public class CamWidget extends Widget implements KinokoV1Listener {
         }
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
         if (mode == WidgetInstanceMode.WIDGET) {
-            return CaffeinatedDefaultPlugin.resolveResource("/cam.html");
+            return "/cam.html";
         } else {
-            return CaffeinatedDefaultPlugin.resolveResource("/cam-qr.html");
+            return "/cam-qr.html";
         }
     }
 

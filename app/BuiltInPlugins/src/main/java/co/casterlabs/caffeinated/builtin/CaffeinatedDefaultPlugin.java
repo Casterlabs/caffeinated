@@ -100,18 +100,19 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
         return "co.casterlabs.defaultwidgets";
     }
 
-    // This allows us to either:
-    // 1) Grab resources out of the jar normally.
-    // or
-    // 2) Grab resources from the dev environment, since we're bundled in a
-    // different way from the typical plugin setup.
-    public static @Nullable Pair<String, String> resolveResource(@NonNull String path) throws IOException {
+    @Override
+    public @Nullable Pair<String, String> getResource(String resource) throws IOException {
+        // This allows us to either:
+        // 1) Grab resources out of the jar normally.
+        // or
+        // 2) Grab resources from the dev environment, since we're bundled in a
+        // different way from the typical plugin setup.
         InputStream in;
 
         if (CaffeinatedPlugin.isDevEnvironment()) {
-            in = new FileInputStream(new File("../BuiltInPlugins/src/main/resources/widgets", path));
+            in = new FileInputStream(new File("../BuiltInPlugins/src/main/resources/widgets", resource));
         } else {
-            in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("widgets" + path);
+            in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("widgets" + resource);
         }
 
         String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);

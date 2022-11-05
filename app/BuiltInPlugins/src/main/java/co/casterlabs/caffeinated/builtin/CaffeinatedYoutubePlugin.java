@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.jetbrains.annotations.Nullable;
-
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
@@ -19,7 +17,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.ChatEvent;
@@ -152,10 +149,13 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
             });
         }
 
-        @SneakyThrows
         @Override
-        public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
-            return CaffeinatedDefaultPlugin.resolveResource("/youtube.html");
+        public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+            if (mode == WidgetInstanceMode.DOCK) {
+                return "/youtube-dock.html";
+            } else {
+                return "/youtube.html";
+            }
         }
 
     }
@@ -324,16 +324,6 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
 
                 updateVolume(volume);
             });
-        }
-
-        @SneakyThrows
-        @Override
-        public @Nullable Pair<String, String> getWidgetResource(WidgetInstanceMode mode, String resource) {
-            if (mode == WidgetInstanceMode.DOCK) {
-                return CaffeinatedDefaultPlugin.resolveResource("/youtube-dock.html");
-            } else {
-                return super.getWidgetResource(WidgetInstanceMode.WIDGET, resource);
-            }
         }
 
     }
