@@ -12,6 +12,7 @@
 	import RaidMessage from './messages/RaidMessage.svelte';
 
 	import ViewersList from './ViewersList.svelte';
+	import InputBox from './InputBox.svelte';
 
 	import createConsole from '../console-helper.mjs';
 	const console = createConsole('ChatViewer');
@@ -225,7 +226,9 @@
 		<ul bind:this={chatBox} />
 	</div>
 
-	<div class="flex-0 h-16">...</div>
+	<div class="flex-0 pt-2 pb-1 h-fit">
+		<InputBox />
+	</div>
 </div>
 
 <ViewersList
