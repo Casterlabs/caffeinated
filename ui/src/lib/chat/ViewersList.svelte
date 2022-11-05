@@ -66,7 +66,7 @@
 </script>
 
 <div
-	class="pointer-events-none fixed inset-0 z-index-[2000] opacity-60"
+	class="pointer-events-none fixed inset-0 z-index-[2000] opacity-60 hover:opacity-80 focus:opacity-80 transition duration-200"
 	class:hidden={!visible}
 	on:contextmenu={copyViewersList}
 	on:dblclick={copyViewersList}
