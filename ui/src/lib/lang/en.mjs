@@ -135,6 +135,7 @@ export default {
 
     'page.settings.about': 'About',
     'page.settings.about.enable_unsafe': 'Enable Stupidly Unsafe Settings',
+    'page.settings.about.enable_alternate_themes': 'Use Alternate Themes',
 
     /* ---- Chat ---- */
 

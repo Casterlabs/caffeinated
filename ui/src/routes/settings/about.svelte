@@ -52,5 +52,17 @@
 				}}
 			/>
 		</label>
+		<br />
+		<label class="checkbox select-none cursor-pointer hover:text-base-10">
+			<LocalizedText key="page.settings.about.enable_alternate_themes" />
+			<input
+				type="checkbox"
+				checked={$preferences?.enableAlternateThemes}
+				on:change={({ target }) => {
+					const { checked } = target;
+					setPreferenceItem('enableAlternateThemes', checked);
+				}}
+			/>
+		</label>
 	</li>
 </ul>

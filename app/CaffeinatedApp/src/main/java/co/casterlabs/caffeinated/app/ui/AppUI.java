@@ -73,6 +73,7 @@ public class AppUI extends JavascriptObject {
         this.preferences.setEmojiProvider(event.getEmojiProvider());
         this.preferences.setLanguage(event.getLanguage());
         this.preferences.setEnableStupidlyUnsafeSettings(event.isEnableStupidlyUnsafeSettings());
+        this.preferences.setEnableAlternateThemes(event.isEnableAlternateThemes());
         this.preferenceFile.save();
 
         this.updateEmojiProvider();

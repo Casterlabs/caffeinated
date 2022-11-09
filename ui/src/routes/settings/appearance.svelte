@@ -26,12 +26,17 @@
 	};
 	// prettier-ignore
 	const THEMES = {
-		'mauve/red':   'Blinky',
-		'mauve/pink':  'Pinky',
-		'slate/blue':  'Inky',
-		'sand/orange': 'Clyde',
-		'sage/teal':   'Wintergreen',
-		'bronze/gold': 'Bronze'
+		'mauve/crimson': 'Casterlabs',
+		'bronze/gold':   'Bronze',
+		'gray/gray':     'Noir'
+	};
+	// prettier-ignore
+	const PAC_THEMES = {
+		'mauve/red':   '赤ベイ',
+		'mauve/pink':  'ピンキー',
+		'slate/blue':  '青助',
+		'sand/orange': '愚図た',
+		'sand/yellow': 'パックマン'
 	};
 
 	const baseColor = st || Caffeinated.themeManager.svelte('baseColor');
@@ -54,7 +59,7 @@
 		<SelectMenu
 			title="page.settings.appearance.theme"
 			value="{$baseColor}/{$primaryColor}"
-			options={THEMES}
+			options={$preferences?.enableAlternateThemes ? PAC_THEMES : THEMES}
 			on:value={({ detail: value }) => {
 				const [newBaseColor, newPrimaryColor] = value.split('/');
 				window.Caffeinated.themeManager.setTheme(newBaseColor, newPrimaryColor, $appearance);

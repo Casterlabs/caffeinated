@@ -11,7 +11,8 @@ public class AppearanceUpdateEvent {
     private String emojiProvider;
     private String language;
     private boolean closeToTray;
-    private boolean enableStupidlyUnsafeSettings = false;
+    private boolean enableStupidlyUnsafeSettings;
+    private boolean enableAlternateThemes;
     private boolean mikeysMode;
 
     @JsonValidate
