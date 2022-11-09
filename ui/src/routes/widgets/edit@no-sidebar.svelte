@@ -1,6 +1,6 @@
 <script>
-	import CircularButton from '../../components/ui/CircularButton.svelte';
-	import LocalizedText from '../../components/LocalizedText.svelte';
+	import CircularButton from '$lib/ui/CircularButton.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { t } from '$lib/translate.mjs';
 	import { goto } from '$app/navigation';
@@ -14,6 +14,8 @@
 
 	let nameEditorElement;
 	let nameEditorTextContent;
+
+	let currentSection;
 
 	function editName() {}
 
@@ -36,14 +38,15 @@
 				// All is good.
 				widget = w;
 				nameEditorTextContent = widget.name;
+				currentSection = widget.settingsLayout.sections[0];
 				console.debug('Widget data:', widget);
 			});
 	});
 </script>
 
 {#if widget}
-	<div class="fixed left-2.5 top-2.5" title={t('sr.navigation.back')}>
-		<CircularButton on:click={() => goto('/widgets')}>
+	<div class="fixed left-2.5 top-2.5">
+		<CircularButton title={t('sr.navigation.back')} on:click={() => goto('/widgets')}>
 			<span class="sr-only">
 				<LocalizedText key="sr.navigation.back" />
 			</span>
@@ -51,9 +54,33 @@
 		</CircularButton>
 	</div>
 
-	<div
-		class="-mt-1 pb-5 -mx-6 border-b border-base-6 w-screen flex flex-col items-center justify-center"
-	>
+	<div class="fixed right-2.5 top-2.5">
+		<CircularButton
+			title={t('sr.navigation.back')}
+			on:click={() => {
+				window.Caffeinated.plugins.copyWidgetUrl(widget.id);
+			}}
+		>
+			<span class="sr-only">
+				<LocalizedText key="sr.page.widgets.copy_link" />
+			</span>
+			<icon class="w-5 h-5" data-icon="icon/document-duplicate" />
+		</CircularButton>
+		<CircularButton
+			title={t('sr.navigation.back')}
+			on:click={() => {
+				window.Caffeinated.plugins.deleteWidget(widget.id);
+				goto('/widgets');
+			}}
+		>
+			<span class="sr-only">
+				<LocalizedText key="sr.page.widgets.delete" />
+			</span>
+			<icon class="w-5 h-5 text-error" data-icon="icon/trash" />
+		</CircularButton>
+	</div>
+
+	<div class="-mt-1 pb-5 -mx-6 w-screen flex flex-col items-center justify-center">
 		<span class="text-lg font-semibold relative">
 			<div
 				contenteditable
@@ -100,5 +127,31 @@
 		<span class="text-xs font-thin">
 			<LocalizedText key={widget.details.friendlyName} />
 		</span>
+	</div>
+
+	<div class="border-b border-base-8 -mx-6 w-screen">
+		{#if (widget.settingsLayout?.sections || []).length > 1}
+			<nav class="mt-1 -mb-px flex justify-center space-x-8">
+				{#each widget.settingsLayout?.sections || [] as section}
+					{@const isSelected = currentSection == section}
+					<button
+						class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
+						aria-current={isSelected ? 'page' : undefined}
+						class:border-b-2={isSelected}
+						class:text-primary-11={isSelected}
+						on:click={() => (currentSection = section)}
+					>
+						<LocalizedText key={section.name} />
+					</button>
+				{/each}
+			</nav>
+		{/if}
+	</div>
+
+	<div class="mt-1.5">
+		{#each currentSection.items as item}
+			{item.name}
+			<br />
+		{/each}
 	</div>
 {/if}
