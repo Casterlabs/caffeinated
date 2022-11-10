@@ -1,11 +1,12 @@
 <script>
 	import CircularButton from '$lib/ui/CircularButton.svelte';
+	import FormInput from '$lib/ui/FormInput.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { t } from '$lib/translate.mjs';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const console = createConsole('Widget Editor');
@@ -21,26 +22,32 @@
 
 	onMount(() => {
 		const id = $page.url.searchParams.get('id');
+		let initial = true;
 
-		Caffeinated.plugins.widgets
-			.then((widgets) => {
-				// Filter for a widget object with a matching id.
-				// This'll return `undefined` if there's no matching result.
-				return widgets.filter((w) => w.id == id)[0];
-			})
-			.then((w) => {
-				// If the widget is `undefined`, go back.
-				if (!w) {
-					goto('/widgets');
-					return;
-				}
+		const unreg = Caffeinated.plugins.mutate('widgets', (widgets) => {
+			// Filter for a widget object with a matching id.
+			// This'll return `undefined` if there's no matching result.
+			const w = widgets.filter((w) => w.id == id)[0];
 
-				// All is good.
-				widget = w;
+			// If the widget is `undefined`, go back.
+			if (!w) {
+				goto('/widgets');
+				return;
+			}
+
+			// All is good.
+			widget = w;
+
+			if (initial) {
+				initial = false;
 				nameEditorTextContent = widget.name;
-				currentSection = widget.settingsLayout.sections[0];
-				console.debug('Widget data:', widget);
-			});
+				currentSection = widget.settingsLayout.sections[0]?.id;
+			}
+
+			console.debug('Widget data:', widget);
+		});
+
+		return () => Bridge.off(unreg[0], unreg[1]);
 	});
 </script>
 
@@ -133,13 +140,18 @@
 		{#if (widget.settingsLayout?.sections || []).length > 1}
 			<nav class="mt-1 -mb-px flex justify-center space-x-8">
 				{#each widget.settingsLayout?.sections || [] as section}
-					{@const isSelected = currentSection == section}
+					{@const isSelected = currentSection == section.id}
 					<button
 						class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
 						aria-current={isSelected ? 'page' : undefined}
 						class:border-b-2={isSelected}
 						class:text-primary-11={isSelected}
-						on:click={() => (currentSection = section)}
+						on:click={() => {
+							currentSection = null;
+
+							// Svelte bug :(
+							tick().then(() => (currentSection = section.id));
+						}}
 					>
 						<LocalizedText key={section.name} />
 					</button>
@@ -148,10 +160,17 @@
 		{/if}
 	</div>
 
-	<div class="mt-1.5">
-		{#each currentSection.items as item}
-			{item.name}
-			<br />
+	<ul class="block max-w-sm mx-auto mt-2 divide-y divide-current text-base-6">
+		{#each widget.settingsLayout?.sections || [] as section}
+			{#if currentSection == section.id}
+				{#each section?.items || [] as item}
+					<li class="py-4">
+						<span class="text-base-12">
+							<FormInput {widget} widgetSettingsSection={section} widgetSettingsItem={item} />
+						</span>
+					</li>
+				{/each}
+			{/if}
 		{/each}
-	</div>
+	</ul>
 {/if}
