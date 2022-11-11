@@ -46,7 +46,7 @@
 			{:else if type == 'text'}
 				<SlimTextArea rows="1" resize={false} bind:value on:value={onInput} />
 			{:else if type == 'textarea'}
-				//textarea
+				<SlimTextArea rows="1" resize={true} bind:value on:value={onInput} />
 			{:else if type == 'dropdown'}
 				{@const { options } = widgetSettingsItem.extraData}
 				<SlimSelectMenu
