@@ -37,7 +37,7 @@
 			</p>
 		</div>
 
-		<div class="text-right w-36">
+		<div class="text-right w-40">
 			{#if type == 'color'}
 				<ColorInput bind:value on:value={onInput} />
 			{:else if type == 'number'}
