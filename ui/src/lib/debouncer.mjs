@@ -1,12 +1,11 @@
-const DEBOUNCE_TIMEOUT = 500;
-
 export default class Debouncer {
-    constructor() {
+    constructor(timeout = 500) {
         this.id = -1;
+        this.timeout = timeout;
     }
 
     debounce(fun) {
         clearTimeout(this.id);
-        this.id = setTimeout(fun, DEBOUNCE_TIMEOUT);
+        this.id = setTimeout(fun, this.timeout);
     }
 }
