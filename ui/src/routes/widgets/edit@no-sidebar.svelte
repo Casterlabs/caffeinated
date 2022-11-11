@@ -63,7 +63,7 @@
 
 	<div class="fixed right-2.5 top-2.5">
 		<CircularButton
-			title={t('sr.navigation.back')}
+			title={t('sr.page.widgets.copy_link')}
 			on:click={() => {
 				window.Caffeinated.plugins.copyWidgetUrl(widget.id);
 			}}
@@ -74,7 +74,7 @@
 			<icon class="w-5 h-5" data-icon="icon/document-duplicate" />
 		</CircularButton>
 		<CircularButton
-			title={t('sr.navigation.back')}
+			title={t('sr.page.widgets.delete')}
 			on:click={() => {
 				window.Caffeinated.plugins.deleteWidget(widget.id);
 				goto('/widgets');
