@@ -40,7 +40,9 @@ public class PluginIntegration extends JavascriptObject {
     private static final File pluginsDir = new File(CaffeinatedApp.appDataDir, "plugins");
 
     private PluginsHandler plugins = new PluginsHandler();
-    private @JavascriptValue(allowSet = false, watchForMutate = true) List<PluginContext> contexts = new ArrayList<>();
+
+    @JavascriptValue(allowSet = false)
+    private List<PluginContext> contexts = new ArrayList<>();
 
     private boolean isLoading = true;
 

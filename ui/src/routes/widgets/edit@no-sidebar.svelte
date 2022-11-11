@@ -22,32 +22,32 @@
 
 	onMount(() => {
 		const id = $page.url.searchParams.get('id');
-		let initial = true;
 
-		const unreg = Caffeinated.plugins.mutate('widgets', (widgets) => {
-			// Filter for a widget object with a matching id.
-			// This'll return `undefined` if there's no matching result.
-			const w = widgets.filter((w) => w.id == id)[0];
+		Caffeinated.plugins.widgets
+			.then((widgets) => {
+				// Filter for a widget object with a matching id.
+				// This'll return `undefined` if there's no matching result.
+				return widgets.filter((w) => w.id == id)[0];
+			})
+			.then((w) => {
+				// If the widget is `undefined`, go back.
+				if (!w) {
+					goto('/widgets');
+					return;
+				}
 
-			// If the widget is `undefined`, go back.
-			if (!w) {
-				goto('/widgets');
-				return;
-			}
-
-			// All is good.
-			widget = w;
-
-			if (initial) {
-				initial = false;
+				// All is good.
+				widget = w;
 				nameEditorTextContent = widget.name;
 				currentSection = widget.settingsLayout.sections[0]?.id;
-			}
+				console.debug('Widget data:', widget);
+			});
 
-			console.debug('Widget data:', widget);
-		});
+		const eventListener = Bridge.on(`widgets:${id}`, (w) => (widget = w));
 
-		return () => Bridge.off(unreg[0], unreg[1]);
+		return () => {
+			Bridge.off(`widgets:${id}`, eventListener);
+		};
 	});
 </script>
 
