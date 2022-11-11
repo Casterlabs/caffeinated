@@ -4,6 +4,7 @@
 
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { t } from '$lib/translate.mjs';
 
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
@@ -77,6 +78,7 @@
 				type="button"
 				role="listbox"
 				class="relative w-{width} h-fit cursor-pointer rounded-md border border-base-7 bg-base-1 py-1 pl-1.5 pr-5 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
+				title={t(options[value])}
 				aria-haspopup="listbox"
 				aria-expanded={open}
 				aria-labelledby={ID}
@@ -129,7 +131,11 @@
 								}}
 								on:mouseenter={() => (highlighted = id)}
 							>
-								<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => select(id)}>
+								<button
+									class="w-full text-left py-2 pl-3 pr-9"
+									on:click={() => select(id)}
+									title={t(name)}
+								>
 									<span class="block truncate" class:font-semibold={isSelected}>
 										<LocalizedText key={name} />
 									</span>
