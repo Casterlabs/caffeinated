@@ -14,6 +14,7 @@
 		'bill-gates': 'Bill Gates'
 	};
 	export let disabled = false;
+	export let width = 'fit';
 
 	let open = false;
 	let highlighted = null;
@@ -27,7 +28,11 @@
 	}
 </script>
 
-<div class="inline-block w-fit" class:opacity-70={disabled} class:pointer-events-none={disabled}>
+<div
+	class="inline-block w-{width}"
+	class:opacity-70={disabled}
+	class:pointer-events-none={disabled}
+>
 	<FocusListener class="relative mt-1" on:lostfocus={() => (open = false)}>
 		<div
 			on:keyup={(e) => {
@@ -71,7 +76,7 @@
 			<button
 				type="button"
 				role="listbox"
-				class="relative w-fit h-fit cursor-pointer rounded-md border border-base-7 bg-base-1 py-1 pl-1.5 pr-5 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
+				class="relative w-{width} h-fit cursor-pointer rounded-md border border-base-7 bg-base-1 py-1 pl-1.5 pr-5 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 				aria-haspopup="listbox"
 				aria-expanded={open}
 				aria-labelledby={ID}

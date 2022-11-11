@@ -3,10 +3,9 @@
 	import NumberInput from './NumberInput.svelte';
 	import Switch from './Switch.svelte';
 	import ColorInput from './ColorInput.svelte';
-
-	import Debouncer from '$lib/debouncer.mjs';
-
-	const debouncer = new Debouncer();
+	import SlimPassword from './SlimPassword.svelte';
+	import SlimTextArea from './SlimTextArea.svelte';
+	import SlimSelectMenu from './SlimSelectMenu.svelte';
 
 	export let widget;
 	export let widgetSettingsSection;
@@ -22,10 +21,6 @@
 	}
 
 	function onInput() {
-		debouncer.debounce(onChange);
-	}
-
-	function onChange() {
 		Caffeinated.plugins.editWidgetSettingsItem(widget.id, settingsKey, value);
 	}
 </script>
@@ -33,7 +28,7 @@
 {#if type == 'html'}
 	{@html widgetSettingsItem.extraData.html}
 {:else if type == 'checkbox'}
-	<Switch title={widgetSettingsItem.name} description="" bind:checked={value} on:value={onChange} />
+	<Switch title={widgetSettingsItem.name} description="" bind:checked={value} on:value={onInput} />
 {:else}
 	<div class="flex items-center justify-between w-full">
 		<div class="flex flex-col">
@@ -42,29 +37,38 @@
 			</p>
 		</div>
 
-		{#if type == 'color'}
-			<ColorInput bind:value on:value={onInput} />
-		{:else if type == 'number'}
-			{@const { step, min, max } = widgetSettingsItem.extraData}
-			<NumberInput {step} {min} {max} bind:value on:value={onInput} />
-		{:else if type == 'dropdown'}
-			//dropdown
-		{:else if type == 'text'}
-			//text
-		{:else if type == 'textarea'}
-			//textarea
-		{:else if type == 'password'}
-			//password
-		{:else if type == 'currency'}
-			//currency
-		{:else if type == 'font'}
-			//font
-		{:else if type == 'range'}
-			//range
-		{:else if type == 'file'}
-			//file
-		{:else}
-			... {type}
-		{/if}
+		<div class="text-right w-36">
+			{#if type == 'color'}
+				<ColorInput bind:value on:value={onInput} />
+			{:else if type == 'number'}
+				{@const { step, min, max } = widgetSettingsItem.extraData}
+				<NumberInput {step} {min} {max} bind:value on:value={onInput} />
+			{:else if type == 'text'}
+				<SlimTextArea rows="1" resize={false} bind:value on:value={onInput} />
+			{:else if type == 'textarea'}
+				//textarea
+			{:else if type == 'dropdown'}
+				{@const { options } = widgetSettingsItem.extraData}
+				<SlimSelectMenu
+					title={widgetSettingsItem.name}
+					width="full"
+					bind:value
+					on:value={onInput}
+					options={options.reduce((arr, i) => ({ ...arr, [i]: i }), {})}
+				/>
+			{:else if type == 'password'}
+				<SlimPassword bind:value on:value={onInput} />
+			{:else if type == 'currency'}
+				//currency
+			{:else if type == 'font'}
+				//font
+			{:else if type == 'range'}
+				//range
+			{:else if type == 'file'}
+				//file
+			{:else}
+				... {type}
+			{/if}
+		</div>
 	</div>
 {/if}
