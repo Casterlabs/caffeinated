@@ -22,16 +22,18 @@
 	}
 
 	function onInput() {
-		debouncer.debounce(() => {
-			Caffeinated.plugins.editWidgetSettingsItem(widget.id, settingsKey, value);
-		});
+		debouncer.debounce(onChange);
+	}
+
+	function onChange() {
+		Caffeinated.plugins.editWidgetSettingsItem(widget.id, settingsKey, value);
 	}
 </script>
 
 {#if type == 'html'}
 	{@html widgetSettingsItem.extraData.html}
 {:else if type == 'checkbox'}
-	<Switch title={widgetSettingsItem.name} description="" bind:checked={value} on:value={onInput} />
+	<Switch title={widgetSettingsItem.name} description="" bind:checked={value} on:value={onChange} />
 {:else}
 	<div class="flex items-center justify-between w-full">
 		<div class="flex flex-col">
