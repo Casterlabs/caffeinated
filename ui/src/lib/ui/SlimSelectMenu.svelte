@@ -102,9 +102,9 @@
 			</button>
 
 			{#if open}
-				<div class="absolute z-10 mt-1 max-h-60 w-full shadow-lg rounded-md bg-base-1">
+				<div class="absolute z-10 mt-1 w-full shadow-lg rounded-md bg-base-1">
 					<ul
-						class="overflow-auto rounded-md py-1 ring-1 ring-base-8 ring-opacity-5 focus:outline-none text-sm"
+						class="overflow-auto max-h-36 rounded-md py-1 ring-1 ring-base-8 ring-opacity-5 focus:outline-none text-sm"
 						role="listbox"
 						tabindex="-1"
 						aria-activedescendant="{ID}_{value}"
