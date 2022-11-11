@@ -4,6 +4,7 @@
 
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { t } from '$lib/translate.mjs';
 
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
