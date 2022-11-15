@@ -2,6 +2,7 @@
 	import CircularButton from '$lib/ui/CircularButton.svelte';
 	import FormInput from '$lib/ui/FormInput.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import AspectVar from '$lib/aspect-ratio/AspectVar.svelte';
 
 	import { t } from '$lib/translate.mjs';
 	import { goto } from '$app/navigation';
@@ -173,4 +174,12 @@
 			{/if}
 		{/each}
 	</ul>
+
+	{#if widget.details.showDemo}
+		<div class="max-w-md mx-auto mt-6 select-none">
+			<AspectVar aspectRatio={widget.details.demoAspectRatio}>
+				<iframe class="w-full h-full" aria-hidden="true" title="Preview" src={widget.url} />
+			</AspectVar>
+		</div>
+	{/if}
 {/if}

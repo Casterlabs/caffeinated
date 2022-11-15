@@ -52,7 +52,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
 
             return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
                 .setMimeType(mime)
-                .putHeader("Content-Security-Policy", "frame-ancestors 'self' casterlabs.co widgets.casterlabs.co;")
+//                .putHeader("Content-Security-Policy", "frame-ancestors 'self' casterlabs.co widgets.casterlabs.co;")
                 .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co")
                 .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
 
                 return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
                     .setMimeType(mime)
-                    .putHeader("Content-Security-Policy", "frame-ancestors 'self' casterlabs.co widgets.casterlabs.co;")
+//                    .putHeader("Content-Security-Policy", "frame-ancestors 'self' casterlabs.co widgets.casterlabs.co;")
                     .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co")
                     .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
             }
