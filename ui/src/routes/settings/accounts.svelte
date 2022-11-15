@@ -112,6 +112,19 @@
 		<h1 class="text-xl font-semibold mb-2">
 			<LocalizedText key="page.settings.accounts.music_services" />
 		</h1>
+
+		{#if $activePlayback}
+			{@const { currentTrack } = $activePlayback}
+			<p class="mb-2 flex flex-row items-center">
+				<img class="inline-block w-10 h-10 rounded" alt="" src={currentTrack.albumArtUrl} />
+				<a href={currentTrack.link} target="_blank" class="ml-2 text-sm">
+					{currentTrack.title}
+					<br />
+					{currentTrack.artists.join(', ')}
+				</a>
+			</p>
+		{/if}
+
 		<ul class="space-y-2">
 			{#each Object.values($musicProviders || {}) as provider}
 				<li>
