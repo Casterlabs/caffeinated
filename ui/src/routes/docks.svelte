@@ -51,7 +51,7 @@
 				text={dock.details.friendlyName}
 				on:click={() => copyWidgetUrl(dock.id)}
 			>
-				<div class="absolute inset-y-1 right-2.5 flex items-center space-x-1">
+				<div class="text-right flex items-center space-x-1">
 					<button
 						class="text-base-12 hover:text-base-11"
 						title={t('sr.page.widgets.copy_link')}
