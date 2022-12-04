@@ -34,25 +34,25 @@
 		<dependency>
 			<groupId>co.casterlabs</groupId>
 			<artifactId>EmojiApi</artifactId>
-			<version>3.2.0</version>
+			<version>3.3.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.14.3</version>
+			<version>1.15.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>
 			<artifactId>Util</artifactId>
-			<version>1.14.3</version>
+			<version>1.15.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>FastLoggingFramework</artifactId>
-			<version>1.8.1</version>
+			<version>1.9.4</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -64,7 +64,7 @@
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>4.6.0</version>
+			<version>4.10.0</version>
 			<scope>compile</scope>
 		</dependency>
 
