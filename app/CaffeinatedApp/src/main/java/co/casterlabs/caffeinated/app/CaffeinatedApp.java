@@ -1,7 +1,6 @@
 package co.casterlabs.caffeinated.app;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
@@ -46,11 +45,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
-import xyz.e3ndr.fastloggingframework.FastLogHandler;
-import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
+import xyz.e3ndr.fastloggingframework.loggerimpl.FileLogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.fastloggingframework.logging.LogColor;
-import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
@@ -129,31 +125,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             logsDir.mkdirs();
             logFile.createNewFile();
 
-            @SuppressWarnings("resource")
-            final FileOutputStream logOut = new FileOutputStream(logFile, true);
+            new FileLogHandler(logFile);
 
-            FastLoggingFramework.setLogHandler(new FastLogHandler() {
-                @Override
-                protected void log(String name, LogLevel level, String formatted) {
-                    System.out.println(LogColor.translateToAnsi(formatted));
-
-                    String stripped = LogColor.strip(formatted);
-
-                    try {
-                        logOut.write(stripped.getBytes());
-                        logOut.write('\n');
-                        logOut.flush();
-                    } catch (IOException e) {
-                        FastLogger.logException(e);
-                    }
-                }
-            });
-
-            logOut.write(
-                String.format("\n\n---------- %s ----------\n", Instant.now().toString())
-                    .getBytes()
-            );
-
+            FastLogger.logStatic("\n\n---------- %s ----------\n", Instant.now());
             FastLogger.logStatic("Log file: %s", logFile);
         } catch (IOException e) {
             FastLogger.logException(e);
