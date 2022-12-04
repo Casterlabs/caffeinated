@@ -107,7 +107,7 @@ public class Bootstrap implements Runnable {
                 nb = new LinuxBootstrap();
                 break;
 
-            case MACOSX:
+            case MACOS:
                 nb = new MacOSBootstrap();
                 break;
 
@@ -185,7 +185,7 @@ public class Bootstrap implements Runnable {
         File file;
 
         switch (Platform.osDistribution) {
-            case MACOSX:
+            case MACOS:
                 if (new File("./").getCanonicalPath().contains(".app")) {
                     file = new File("../../../", filename);
                     break;
@@ -433,7 +433,7 @@ public class Bootstrap implements Runnable {
                     command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
                     break;
 
-                case MACOSX:
+                case MACOS:
                     command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated";
                     break;
 

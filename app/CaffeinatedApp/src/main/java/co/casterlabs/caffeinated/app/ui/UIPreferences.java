@@ -14,7 +14,7 @@ public class UIPreferences {
     private static final String CURRENT_SKITTLE = MiscUtil.random("green_skittle", "orange_skittle", "purple_skittle", "red_skittle", "yellow_skittle");
     private static final boolean IS_PRIDE_MONTH = Calendar.getInstance().get(Calendar.MONTH) == Calendar.JUNE;
 
-    private String emojiProvider = Platform.osDistribution == OSDistribution.MACOSX ? "system" : "twemoji"; // Use system emojis by default on macOS, Twemoji elsewhere.
+    private String emojiProvider = Platform.osDistribution == OSDistribution.MACOS ? "system" : "twemoji"; // Use system emojis by default on macOS, Twemoji elsewhere.
     private String icon = "casterlabs";
     private String theme = "co.casterlabs.dark"; // Unused.
     private String language = "en-US";
