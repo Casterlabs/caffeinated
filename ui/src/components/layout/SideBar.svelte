@@ -11,9 +11,9 @@
 				useStartsWith: false
 			},
 			{
-				href: '/chat',
-				name: 'page.chat',
-				useStartsWith: false
+				href: '/chat-bot/commands',
+				name: 'page.chat_bot',
+				useStartsWith: true
 			}
 		],
 		[
@@ -26,11 +26,6 @@
 				href: '/docks',
 				name: 'page.docks',
 				useStartsWith: false
-			},
-			{
-				href: '/chat-bot/commands',
-				name: 'page.chat_bot',
-				useStartsWith: true
 			},
 			{
 				href: '/settings/appearance',
