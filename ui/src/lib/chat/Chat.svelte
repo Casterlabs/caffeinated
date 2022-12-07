@@ -11,7 +11,6 @@
 	import FollowMessage from './messages/FollowMessage.svelte';
 	import RaidMessage from './messages/RaidMessage.svelte';
 
-	import ViewersList from './ViewersList.svelte';
 	import InputBox from './InputBox.svelte';
 
 	import createConsole from '../console-helper.mjs';
@@ -21,7 +20,6 @@
 
 	let chatBox;
 	let chatElements = {};
-	export let viewersList;
 
 	// Preferences
 	let showChatTimestamps = true;
@@ -29,7 +27,6 @@
 	let showProfilePictures = false;
 	let showBadges = false;
 	let showViewers = false;
-	let showViewersList = false;
 
 	// prettier-ignore
 	const EVENT_CLASSES = {
@@ -124,7 +121,7 @@
 		}
 	}
 
-	function savePreferences() {
+	export function savePreferences() {
 		const { x, y, width, height } = viewersList.getPositionData();
 
 		doAction('save-preferences', {
@@ -147,20 +144,12 @@
 		showProfilePictures = config.showProfilePictures;
 		showBadges = config.showBadges;
 		showViewers = config.showViewers;
-		showViewersList = config.showViewersList;
-
-		const { viewersX, viewersY, viewersWidth, viewersHeight } = config;
-		viewersList.setPositionData(viewersX, viewersY, viewersWidth, viewersHeight);
 	}
 
 	export function processEvent(event) {
 		console.log('Processing event:', event);
 
 		switch (event.event_type) {
-			case 'VIEWER_LIST':
-				viewersList.onViewersList(event);
-				break;
-
 			case 'META': {
 				const chatElement = chatElements[event.meta_id];
 
@@ -221,7 +210,7 @@
 	}
 </script>
 
-<div class="h-screen -mx-6 -my-4 px-2 py-1 flex flex-col">
+<div class="h-full px-2 py-1 flex flex-col">
 	<div class="flex-1 overflow-x-hidden overflow-y-auto">
 		<ul bind:this={chatBox} />
 	</div>
@@ -230,13 +219,6 @@
 		<InputBox />
 	</div>
 </div>
-
-<ViewersList
-	bind:this={viewersList}
-	visible={showViewersList}
-	on:copy={({ detail: data }) => doAction('copy-viewers', data)}
-	on:update={savePreferences}
-/>
 
 <style>
 	ul :global(b) {

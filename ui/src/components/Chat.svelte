@@ -1,6 +1,5 @@
 <script>
-	import PageTitle from '../components/PageTitle.svelte';
-	import ChatViewer from '$lib/chat/ChatViewer.svelte';
+	import ChatViewer from '$lib/chat/Chat.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -56,7 +55,5 @@
 		};
 	});
 </script>
-
-<PageTitle title="page.chat" />
 
 <ChatViewer bind:this={chatViewer} {doAction} />
