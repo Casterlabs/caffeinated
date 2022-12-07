@@ -27,7 +27,7 @@
 	const effectiveAppearance = st || Caffeinated.themeManager.svelte('effectiveAppearance');
 	const preferences = st || Caffeinated.UI.svelte('preferences');
 
-	let hideDevButton = false;
+	let hideDevButton = true;
 
 	// Set some app helpers.
 	// Helps with making the UI more responsive.
@@ -63,7 +63,7 @@
 
 		<!-- svelte-ignore missing-declaration -->
 		<button
-			class="fixed top-2 right-2 p-1.5 rounded-md"
+			class="fixed bottom-2 left-2 p-1.5 rounded-md"
 			class:opacity-0={hideDevButton}
 			title="Quick Theme Switch"
 			on:click={async () => {
