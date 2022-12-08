@@ -1,5 +1,8 @@
 <script>
 	import { onMount, createEventDispatcher, tick } from 'svelte';
+	import createConsole from '$lib/console-helper.mjs';
+
+	const console = createConsole('CustomResizableGrid');
 
 	const dispatch = createEventDispatcher();
 
@@ -16,6 +19,7 @@
 		for (const [location, div] of Object.entries(slotElements)) {
 			const contents = slotContents[location].firstElementChild;
 
+			console.debug('Mounting slot:', location, div, contents);
 			div.firstElementChild?.remove();
 			div.appendChild(contents);
 		}
