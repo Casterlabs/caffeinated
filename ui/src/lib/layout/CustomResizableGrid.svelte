@@ -3,10 +3,10 @@
 
 	const dispatch = createEventDispatcher();
 
-	let width = 3;
-	let height = 3;
 	let vlayout = [0.25, 0.33]; // last item is implied.
 	let hlayout = [0.33, 0.25]; // last item is implied.
+	$: width = vlayout.length + 1;
+	$: height = hlayout.length + 1;
 
 	let slotContents = {};
 	let slotElements = {};
@@ -18,12 +18,9 @@
 
 	onMount(onLayoutUpdated);
 
-	export function updateLayout(newLayout, newWidth, newHeight) {
-		width = newWidth;
-		height = newHeight;
+	export function updateLayout(newLayout) {
 		vlayout = newLayout.v;
 		hlayout = newLayout.h;
-		console.debug(newLayout);
 		tick().then(onLayoutUpdated);
 	}
 </script>
