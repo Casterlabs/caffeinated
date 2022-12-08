@@ -8,12 +8,20 @@
 	$: width = vlayout.length + 1;
 	$: height = hlayout.length + 1;
 
-	let slotContents = {};
-	let slotElements = {};
+	let slotContents = {}; // <slot />
+	let slotElements = {}; // <div />
 
 	function onLayoutUpdated() {
 		// Loop bind the slotContents to slotElements.
-		dispatch('mount');
+		for (const [location, div] of Object.entries(slotElements)) {
+			const contents = slotContents[location].firstElementChild;
+
+			div.firstElementChild?.remove();
+			div.appendChild(contents);
+		}
+
+		// Notify of our updated layout.
+		dispatch('update', { v: [...vlayout], h: [...hlayout] });
 	}
 
 	onMount(onLayoutUpdated);
@@ -35,7 +43,7 @@
 				{#each Array(width) as _, vindex}
 					{@const isVLast = vindex == width - 1}
 					{@const vSize = isVLast ? 1 - vlayout.reduce((p, i) => p + i, 0) : vlayout[vindex]}
-					{@const location = `${hindex},${vindex}`}
+					{@const location = `${vindex},${hindex}`}
 
 					<div
 						class="vslot-area"
@@ -66,40 +74,40 @@
 <div style="display: none;" aria-hidden="true">
 	<!-- We need 10 of these -->
 	<span bind:this={slotContents['0,0']}><slot name="0,0" /></span>
-	<span bind:this={slotContents['0,1']}><slot name="0,1" /></span>
-	<span bind:this={slotContents['0,2']}><slot name="0,2" /></span>
-	<span bind:this={slotContents['0,3']}><slot name="0,3" /></span>
-	<span bind:this={slotContents['0,4']}><slot name="0,4" /></span>
-	<span bind:this={slotContents['0,5']}><slot name="0,5" /></span>
 	<span bind:this={slotContents['1,0']}><slot name="1,0" /></span>
-	<span bind:this={slotContents['1,1']}><slot name="1,1" /></span>
-	<span bind:this={slotContents['1,2']}><slot name="1,2" /></span>
-	<span bind:this={slotContents['1,3']}><slot name="1,3" /></span>
-	<span bind:this={slotContents['1,4']}><slot name="1,4" /></span>
-	<span bind:this={slotContents['1,5']}><slot name="1,5" /></span>
 	<span bind:this={slotContents['2,0']}><slot name="2,0" /></span>
-	<span bind:this={slotContents['2,1']}><slot name="2,1" /></span>
-	<span bind:this={slotContents['2,2']}><slot name="2,2" /></span>
-	<span bind:this={slotContents['2,3']}><slot name="2,3" /></span>
-	<span bind:this={slotContents['2,4']}><slot name="2,4" /></span>
-	<span bind:this={slotContents['2,5']}><slot name="2,5" /></span>
 	<span bind:this={slotContents['3,0']}><slot name="3,0" /></span>
-	<span bind:this={slotContents['3,1']}><slot name="3,1" /></span>
-	<span bind:this={slotContents['3,2']}><slot name="3,2" /></span>
-	<span bind:this={slotContents['3,3']}><slot name="3,3" /></span>
-	<span bind:this={slotContents['3,4']}><slot name="3,4" /></span>
-	<span bind:this={slotContents['3,5']}><slot name="3,5" /></span>
 	<span bind:this={slotContents['4,0']}><slot name="4,0" /></span>
-	<span bind:this={slotContents['4,1']}><slot name="4,1" /></span>
-	<span bind:this={slotContents['4,2']}><slot name="4,2" /></span>
-	<span bind:this={slotContents['4,3']}><slot name="4,3" /></span>
-	<span bind:this={slotContents['4,4']}><slot name="4,4" /></span>
-	<span bind:this={slotContents['4,5']}><slot name="4,5" /></span>
 	<span bind:this={slotContents['5,0']}><slot name="5,0" /></span>
+	<span bind:this={slotContents['0,1']}><slot name="0,1" /></span>
+	<span bind:this={slotContents['1,1']}><slot name="1,1" /></span>
+	<span bind:this={slotContents['2,1']}><slot name="2,1" /></span>
+	<span bind:this={slotContents['3,1']}><slot name="3,1" /></span>
+	<span bind:this={slotContents['4,1']}><slot name="4,1" /></span>
 	<span bind:this={slotContents['5,1']}><slot name="5,1" /></span>
+	<span bind:this={slotContents['0,2']}><slot name="0,2" /></span>
+	<span bind:this={slotContents['1,2']}><slot name="1,2" /></span>
+	<span bind:this={slotContents['2,2']}><slot name="2,2" /></span>
+	<span bind:this={slotContents['3,2']}><slot name="3,2" /></span>
+	<span bind:this={slotContents['4,2']}><slot name="4,2" /></span>
 	<span bind:this={slotContents['5,2']}><slot name="5,2" /></span>
+	<span bind:this={slotContents['0,3']}><slot name="0,3" /></span>
+	<span bind:this={slotContents['1,3']}><slot name="1,3" /></span>
+	<span bind:this={slotContents['2,3']}><slot name="2,3" /></span>
+	<span bind:this={slotContents['3,3']}><slot name="3,3" /></span>
+	<span bind:this={slotContents['4,3']}><slot name="4,3" /></span>
 	<span bind:this={slotContents['5,3']}><slot name="5,3" /></span>
+	<span bind:this={slotContents['0,4']}><slot name="0,4" /></span>
+	<span bind:this={slotContents['1,4']}><slot name="1,4" /></span>
+	<span bind:this={slotContents['2,4']}><slot name="2,4" /></span>
+	<span bind:this={slotContents['3,4']}><slot name="3,4" /></span>
+	<span bind:this={slotContents['4,4']}><slot name="4,4" /></span>
 	<span bind:this={slotContents['5,4']}><slot name="5,4" /></span>
+	<span bind:this={slotContents['0,5']}><slot name="0,5" /></span>
+	<span bind:this={slotContents['1,5']}><slot name="1,5" /></span>
+	<span bind:this={slotContents['2,5']}><slot name="2,5" /></span>
+	<span bind:this={slotContents['3,5']}><slot name="3,5" /></span>
+	<span bind:this={slotContents['4,5']}><slot name="4,5" /></span>
 	<span bind:this={slotContents['5,5']}><slot name="5,5" /></span>
 </div>
 
