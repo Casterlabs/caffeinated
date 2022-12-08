@@ -45,19 +45,37 @@
 <div
 	class="fixed top-0 right-4 h-9 -translate-y-8 hover:translate-y-0 px-2 py-0.5 transition-all rounded-b-md ring-1 ring-base-7 bg-base-5 text-base-12 opacity-90"
 >
+	<!-- This is yucky looking, ik. -->
 	<div class="inline-block w-12">
 		<NumberInput
 			value={width}
-			min="1"
-			max="6"
+			min={1}
+			max={6}
 			on:value={({ detail: newWidth }) => {
-				if (newWidth < width) {
-					layout.h.pop();
-					layoutElement.updateLayout(layout);
+				const delta = newWidth - width;
+				const isAdd = delta > 0;
+
+				const newItemSize = 1 / newWidth;
+				const oldItemSize = 1 / width;
+				const scale = newItemSize / oldItemSize;
+				console.log(scale);
+
+				layout.v.forEach((value, idx) => {
+					layout.v[idx] = value * scale;
+				});
+
+				if (isAdd) {
+					for (let idx = 0; idx < Math.abs(delta); idx++) {
+						layout.v.push(newItemSize);
+					}
 				} else {
-					// TODO
+					for (let idx = 0; idx < Math.abs(delta); idx++) {
+						layout.v.pop();
+					}
 				}
+
 				console.debug('New width:', newWidth);
+				layoutElement.updateLayout(layout);
 			}}
 		/>
 	</div>
@@ -65,16 +83,33 @@
 	<div class="inline-block w-12">
 		<NumberInput
 			value={height}
-			min="1"
-			max="6"
+			min={1}
+			max={6}
 			on:value={({ detail: newHeight }) => {
-				if (newHeight < height) {
-					layout.v.pop();
-					layoutElement.updateLayout(layout);
+				const delta = newHeight - height;
+				const isAdd = delta > 0;
+
+				const newItemSize = 1 / newHeight;
+				const oldItemSize = 1 / height;
+				const scale = newItemSize / oldItemSize;
+				console.log(scale);
+
+				layout.h.forEach((value, idx) => {
+					layout.h[idx] = value * scale;
+				});
+
+				if (isAdd) {
+					for (let idx = 0; idx < Math.abs(delta); idx++) {
+						layout.h.push(newItemSize);
+					}
 				} else {
-					// TODO
+					for (let idx = 0; idx < Math.abs(delta); idx++) {
+						layout.h.pop();
+					}
 				}
+
 				console.debug('New height:', newHeight);
+				layoutElement.updateLayout(layout);
 			}}
 		/>
 	</div>
