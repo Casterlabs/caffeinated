@@ -23,6 +23,9 @@ public class UIPreferences {
     private boolean enableStupidlyUnsafeSettings = false;
     private boolean enableAlternateThemes = false;
 
+    private DashboardConfig mainDashboard = new DashboardConfig();
+    private DashboardConfig dockDashboard = new DashboardConfig();
+
     private boolean mikeysMode = false; // https://twitter.com/Casterlabs/status/1508475284944736268
 
     public String getIcon() {

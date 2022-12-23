@@ -10,10 +10,6 @@
 	const console = createConsole('Dashboard');
 
 	let layoutElement;
-	let layout = {
-		h: [0.25, 0.33],
-		v: [0.33, 0.45]
-	}; // TODO load and save this to caffeinated.
 
 	let contents = {};
 	for (let x = 0; x < MAX; x++) {
@@ -22,15 +18,22 @@
 		}
 	}
 
-	function onLayoutUpdate({ detail: _layout }) {
-		layout = _layout;
-		console.debug('Layout update:', layout);
+	function onLayoutUpdate({ detail: newLayout }) {
+		console.debug('Layout update:', newLayout);
 		// TODO save
 	}
 
-	onMount(() => {
+	// const preferences = st || Caffeinated.UI.svelte('preferences');
+	// $: preferences, $preferences && console.debug('UI Preferences:', $preferences);
+
+	onMount(async () => {
+		const { mainDashboard: layout } = await Caffeinated.UI.preferences;
+
 		layoutElement.updateLayout(layout);
-		// TODO load
+
+		// TODO parse the slot contents of the layout.
+
+		console.log('Loaded layout:', layout);
 	});
 </script>
 
