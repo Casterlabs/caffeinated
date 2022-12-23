@@ -215,7 +215,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @SneakyThrows
     @Override
     public void onClose(boolean remote) {
-        if (!this.disposed && remote) {
+        if (!this.disposed) {
             CaffeinatedApp.getInstance().getAuth().checkStatus();
             this.logger.info("Reconnecting to Koi.");
             Thread.sleep(5000);
