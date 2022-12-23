@@ -6,6 +6,8 @@
 	import { onMount } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
 
+	const MAX = 6;
+
 	const console = createConsole('Dashboard');
 
 	let layoutElement;
@@ -50,7 +52,7 @@
 		<NumberInput
 			value={width}
 			min={1}
-			max={6}
+			max={MAX}
 			on:value={({ detail: newWidth }) => {
 				const delta = newWidth - width;
 				const isAdd = delta > 0;
@@ -84,7 +86,7 @@
 		<NumberInput
 			value={height}
 			min={1}
-			max={6}
+			max={MAX}
 			on:value={({ detail: newHeight }) => {
 				const delta = newHeight - height;
 				const isAdd = delta > 0;
