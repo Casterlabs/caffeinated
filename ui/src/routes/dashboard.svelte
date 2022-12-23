@@ -1,6 +1,7 @@
 <script>
 	import PageTitle from '../components/PageTitle.svelte';
 	import CustomResizableGrid from '$lib/layout/ResizableGrid.svelte';
+	import WidgetPreview from '$lib/WidgetPreview.svelte';
 
 	import { onMount } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
@@ -11,10 +12,11 @@
 
 	let layoutElement;
 
+	/** @type {Map<string, [String | SvelteComponent, object?]>} */
 	let contents = {};
 	for (let x = 0; x < MAX; x++) {
 		for (let y = 0; y < MAX; y++) {
-			contents[`${x},${y}`] = `${x},${y}`;
+			contents[`${x},${y}`] = [`${x},${y}`];
 		}
 	}
 

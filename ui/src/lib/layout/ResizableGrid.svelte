@@ -21,7 +21,7 @@
 	$: width = vlayout.length + 1;
 	$: height = hlayout.length + 1;
 
-	/** @type {String | SvelteComponent} */
+	/** @type {[String | SvelteComponent, object?]} */
 	export let contents = {}; // "x,y" = ...
 
 	function onLayoutUpdated(remount = true) {
@@ -136,13 +136,13 @@
 						{@const vSize = isVLast ? 1 - vlayout.reduce((p, i) => p + i, 0) : vlayout[vindex]}
 						{@const location = `${vindex},${hindex}`}
 
-						{@const content = contents[location] || ''}
+						{@const [content, props] = contents[location] || ['']}
 
 						<div class="vslot-area" style="--size: {vSize};" data-position={location}>
 							{#if typeof content == 'string'}
 								{@html content}
 							{:else}
-								<svelte:component this={content} />
+								<svelte:component this={content} {...props || {}} />
 							{/if}
 						</div>
 
