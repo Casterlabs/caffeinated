@@ -54,7 +54,7 @@
 	let isDraggingVerticalSizer = false;
 	let draggingWhich = 0; // either the x or y border depending on the above variable.
 
-	let isResizingLocked = true;
+	export let isResizingLocked = true;
 
 	function onMouseMove(e) {
 		if (!isDraggingSizer) return;

@@ -40,13 +40,13 @@
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.15.0</version>
+			<version>1.16.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.casterlabs.rakurai</groupId>
 			<artifactId>Util</artifactId>
-			<version>1.15.0</version>
+			<version>1.16.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
