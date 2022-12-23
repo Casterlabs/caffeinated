@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script>
-	import Movable from '../interaction/Movable.svelte';
+	import Movable from '../layout/Movable.svelte';
 
 	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
