@@ -2,12 +2,25 @@
 	import PageTitle from '../components/PageTitle.svelte';
 	import CustomResizableGrid from '$lib/layout/ResizableGrid.svelte';
 	import DashboardPiece from '$lib/layout/dashboard/DashboardPiece.svelte';
+	import WelcomeWagon from '$lib/layout/dashboard/WelcomeWagon.svelte';
+	import Chat from '../components/Chat.svelte';
+	import Viewers from '../components/Viewers.svelte';
 
 	import { onMount } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const MAX = 6;
 	const console = createConsole('Dashboard');
+
+	const components = {
+		[null]: '',
+		welcomewagon: WelcomeWagon,
+		'co.casterlabs.dock.stream_chat.dock': Chat,
+	};
+
+	const componentChoices = {
+		[null]: 'dashboard.customize.options.none',
+	};
 
 	let layoutElement;
 
@@ -28,6 +41,16 @@
 	// $: preferences, $preferences && console.debug('UI Preferences:', $preferences);
 
 	onMount(async () => {
+		// Load async.
+		Caffeinated.plugins.widgets.then((widgets) => {
+			for (const widget of widgets) {
+				if (widget.details.type == 'DOCK') {
+					componentChoices[widget.id] = widget.details.friendlyName;
+					// We can get away with updating this because componentChoices is a pointer ;)
+				}
+			}
+		});
+
 		const { mainDashboard: layout } = await Caffeinated.UI.preferences;
 
 		// Fill all slots with DashboardPiece.
@@ -38,7 +61,14 @@
 
 				contents[location] = [
 					DashboardPiece,
-					{ location, onPieceUpdate, grid: layoutElement, current: currentValue }
+					{
+						location,
+						onPieceUpdate,
+						grid: layoutElement,
+						current: currentValue,
+						components, // These are pointers ;)
+						componentChoices // ^
+					}
 				];
 			}
 		}

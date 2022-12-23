@@ -1,22 +1,13 @@
 <script>
 	import WidgetPreview from '$lib/WidgetPreview.svelte';
-	import WelcomeWagon from '$lib/layout/dashboard/WelcomeWagon.svelte';
 	import ResizableGrid from '../ResizableGrid.svelte';
 	import SlimSelectMenu from '$lib/ui/SlimSelectMenu.svelte';
-	import Chat from '../../../components/Chat.svelte';
 
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
-	const DEFAULT_COMPONENTS = {
-		[null]: '',
-		welcomewagon: WelcomeWagon,
-		'co.casterlabs.dock.stream_chat.dock': Chat
-	};
-
-	const componentChoices = {
-		[null]: 'dashboard.customize.options.none'
-	};
+	export let components;
+	export let componentChoices;
 
 	/** @type {ResizableGrid} */
 	export let grid;
@@ -41,7 +32,7 @@
 			return;
 		}
 
-		component = DEFAULT_COMPONENTS[current];
+		component = components[current];
 		componentProps = { grid };
 
 		if (!component) {
@@ -58,18 +49,7 @@
 		}
 	}
 
-	onMount(() => {
-		// We populate componentChoices asynchronously.
-		Caffeinated.plugins.widgets.then((widgets) => {
-			for (const widget of widgets) {
-				if (widget.details.type == 'DOCK') {
-					componentChoices[widget.id] = widget.details.friendlyName;
-				}
-			}
-		});
-
-		doMount();
-	});
+	onMount(doMount);
 </script>
 
 <div class="flex-1 h-full w-full relative">
