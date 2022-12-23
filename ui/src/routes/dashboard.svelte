@@ -1,6 +1,6 @@
 <script>
 	import PageTitle from '../components/PageTitle.svelte';
-	import CustomResizableGrid from '$lib/layout/CustomResizableGrid.svelte';
+	import CustomResizableGrid from '$lib/layout/ResizableGrid.svelte';
 	import NumberInput from '$lib/ui/NumberInput.svelte';
 
 	import { onMount } from 'svelte';
