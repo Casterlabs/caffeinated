@@ -1,4 +1,5 @@
 <script>
+	import WidgetPreview from '$lib/WidgetPreview.svelte';
 	import CircularButton from '$lib/ui/CircularButton.svelte';
 	import FormInput from '$lib/ui/FormInput.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
@@ -178,7 +179,7 @@
 	{#if widget.details.showDemo}
 		<div class="max-w-md mx-auto mt-6 select-none">
 			<AspectVar aspectRatio={widget.details.demoAspectRatio}>
-				<iframe class="w-full h-full" aria-hidden="true" title="Preview" src={widget.url} />
+				<WidgetPreview {widget} mode="DEMO" ariaHidden={true} />
 			</AspectVar>
 		</div>
 	{/if}
