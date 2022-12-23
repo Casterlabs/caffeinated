@@ -19,6 +19,13 @@
 	$: width = layout?.v?.length + 1 || 0;
 	$: height = layout?.h?.length + 1 || 0;
 
+	let contents = {};
+	for (let x = 0; x < MAX; x++) {
+		for (let y = 0; y < MAX; y++) {
+			contents[`${x},${y}`] = `${x},${y}`;
+		}
+	}
+
 	function onLayoutUpdate({ detail: _layout }) {
 		layout = _layout;
 		console.debug('Layout update:', layout);
@@ -33,21 +40,8 @@
 
 <PageTitle title="page.dashboard" />
 
-<div class="hidden">
-	{#if layoutElement}
-		{#each Array(width) as _, hindex}
-			{#each Array(height) as _, vindex}
-				{@const location = `${vindex},${hindex}`}
-				<div bind:this={layoutElement.slotContents[location]}>
-					{location}
-				</div>
-			{/each}
-		{/each}
-	{/if}
-</div>
-
 <div class="fixed inset-0 left-48">
-	<CustomResizableGrid bind:this={layoutElement} on:update={onLayoutUpdate} />
+	<CustomResizableGrid bind:this={layoutElement} {contents} on:update={onLayoutUpdate} />
 </div>
 
 <div

@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script>
-	import { onMount, createEventDispatcher, tick } from 'svelte';
+	import { onMount, createEventDispatcher, tick, SvelteComponent } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const console = createConsole('CustomResizableGrid');
@@ -19,20 +19,8 @@
 	$: width = vlayout.length + 1;
 	$: height = hlayout.length + 1;
 
-	export let slotContents = {}; // <:element />
-	let slotElements = {}; // <div />
-
-	export function doMount() {
-		// Loop bind the slotContents to slotElements.
-		for (const [location, div] of Object.entries(slotElements)) {
-			const contents = slotContents[location];
-
-			if (!div || !contents) continue;
-
-			console.debug('Mounting slot:', location, div, contents);
-			div.appendChild(contents);
-		}
-	}
+	/** @type {String | SvelteComponent} */
+	export let contents = {}; // "x,y" = ...
 
 	function onLayoutUpdated(remount = true) {
 		// Notify of our updated layout.
@@ -40,7 +28,7 @@
 
 		if (remount) {
 			// Try to remount the contents.
-			tick().then(doMount);
+			tick();
 		}
 	}
 
@@ -143,12 +131,15 @@
 					{@const vSize = isVLast ? 1 - vlayout.reduce((p, i) => p + i, 0) : vlayout[vindex]}
 					{@const location = `${vindex},${hindex}`}
 
-					<div
-						class="vslot-area"
-						style="--size: {vSize};"
-						bind:this={slotElements[location]}
-						data-position={location}
-					/>
+					{@const content = contents[location] || ''}
+
+					<div class="vslot-area" style="--size: {vSize};" data-position={location}>
+						{#if typeof content == 'string'}
+							{@html content}
+						{:else}
+							<svelte:component this={content} />
+						{/if}
+					</div>
 
 					{#if !isVLast}
 						<!-- Add the ver sizer everywhere except the last item. -->
