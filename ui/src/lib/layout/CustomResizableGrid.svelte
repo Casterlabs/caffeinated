@@ -8,8 +8,14 @@
 
 	const dispatch = createEventDispatcher();
 
+	let /** @type {HTMLElement} */ container;
+
+	/* -------------------- */
+	/* Mounting & Creation  */
+	/* -------------------- */
+
 	let vlayout = [0.25, 0.33]; // last item is implied.
-	let hlayout = [0.33, 0.25]; // last item is implied.
+	let hlayout = [0.33, 0.45]; // last item is implied.
 	$: width = vlayout.length + 1;
 	$: height = hlayout.length + 1;
 
@@ -28,12 +34,14 @@
 		}
 	}
 
-	function onLayoutUpdated() {
+	function onLayoutUpdated(remount = true) {
 		// Notify of our updated layout.
 		dispatch('update', { v: [...vlayout], h: [...hlayout] });
 
-		// Automatically try to mount the contents.
-		tick().then(doMount);
+		if (remount) {
+			// Try to remount the contents.
+			tick().then(doMount);
+		}
 	}
 
 	onMount(onLayoutUpdated);
@@ -43,9 +51,71 @@
 		hlayout = newLayout.h;
 		tick().then(onLayoutUpdated);
 	}
+
+	/* -------------------- */
+	/* Dragging & Resizing  */
+	/* -------------------- */
+
+	const MINIMUM_DISTANCE = 12; /*px*/
+
+	let isDraggingSizer = false;
+	let isDraggingVerticalSizer = false;
+	let draggingWhich = 0; // either the x or y border depending on the above variable.
+
+	function onMouseMove(e) {
+		if (!isDraggingSizer) return;
+
+		const {
+			x: containerOffsetX,
+			y: containerOffsetY,
+			width: containerWidth,
+			height: containerHeight
+		} = container.getBoundingClientRect();
+		const { clientX: mouseX, clientY: mouseY } = e;
+
+		// We add 3.5 to X to keep the sizer bar centered on the mouse.
+		const mousePosition = [
+			(mouseX + 3.5 - containerOffsetX) / containerWidth,
+			(mouseY - containerOffsetY) / containerHeight
+		];
+
+		const minDistance = MINIMUM_DISTANCE / containerWidth;
+		const maxDistance = (containerWidth - MINIMUM_DISTANCE) / containerWidth;
+
+		const relevantPosition = // Clamp
+			Math.min(Math.max(mousePosition[isDraggingVerticalSizer ? 0 : 1], minDistance), maxDistance);
+
+		const currentLayout = isDraggingVerticalSizer ? vlayout : hlayout;
+
+		let subOther = 0;
+		for (let i = 0; i < draggingWhich; i++) {
+			subOther += currentLayout[i];
+		}
+
+		currentLayout[draggingWhich] = relevantPosition - subOther;
+
+		// Tell Svelte to rerender.
+		vlayout = vlayout;
+		hlayout = hlayout;
+	}
+
+	function onMouseUp() {
+		isDraggingSizer = false;
+		onLayoutUpdated(false);
+	}
+
+	function onMouseDown(e, isVertical, which) {
+		isDraggingSizer = true;
+		isDraggingVerticalSizer = isVertical;
+		draggingWhich = which;
+		console.log('Started dragging: ', isVertical, which);
+		onMouseMove(e);
+	}
 </script>
 
-<div class="hlayout">
+<svelte:window on:mousemove={onMouseMove} on:mouseup={onMouseUp} />
+
+<div class="hlayout" bind:this={container}>
 	{#each Array(height) as _, hindex}
 		{@const isHLast = hindex == height - 1}
 		{@const hSize = isHLast ? 1 - hlayout.reduce((p, i) => p + i, 0) : hlayout[hindex]}
@@ -66,7 +136,7 @@
 
 					{#if !isVLast}
 						<!-- Add the ver sizer everywhere except the last item. -->
-						<div class="vsizer-bar oversize">
+						<div class="vsizer-bar oversize" on:mousedown={(e) => onMouseDown(e, true, vindex)}>
 							<div class="inner" />
 						</div>
 					{/if}
@@ -76,7 +146,7 @@
 
 		{#if !isHLast}
 			<!-- Add the hoz sizer everywhere except the last item. -->
-			<div class="hsizer-bar">
+			<div class="hsizer-bar" on:mousedown={(e) => onMouseDown(e, false, hindex)}>
 				<div class="inner" />
 			</div>
 		{/if}
