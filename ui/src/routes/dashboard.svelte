@@ -16,10 +16,12 @@
 		[null]: '',
 		welcomewagon: WelcomeWagon,
 		'co.casterlabs.dock.stream_chat.dock': Chat,
+		'co.casterlabs.dock.viewers.dock': Viewers
 	};
 
 	const componentChoices = {
 		[null]: 'dashboard.customize.options.none',
+		'co.casterlabs.dock.viewers.dock': 'Viewers' // Temporary.
 	};
 
 	let layoutElement;
