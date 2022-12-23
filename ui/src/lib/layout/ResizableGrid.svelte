@@ -55,6 +55,7 @@
 	let isDraggingSizer = false;
 	let isDraggingVerticalSizer = false;
 	let draggingWhich = 0; // either the x or y border depending on the above variable.
+	let lastFrameRequest = -1;
 
 	export const isResizingLocked = writable(true);
 
@@ -104,9 +105,12 @@
 
 		currentLayout[draggingWhich] = currentPosition;
 
-		// Tell Svelte to rerender.
-		vlayout = vlayout;
-		hlayout = hlayout;
+		// Tell Svelte to rerender next frame.
+		cancelAnimationFrame(lastFrameRequest);
+		lastFrameRequest = requestAnimationFrame(() => {
+			vlayout = vlayout;
+			hlayout = hlayout;
+		});
 	}
 
 	function onMouseUp() {
