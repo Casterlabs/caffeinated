@@ -39,17 +39,6 @@
 
 		Caffeinated.UI.chatPreferences.then(chatViewer.loadConfig);
 
-		Caffeinated.koi.viewers.then((all) => {
-			for (const [platform, viewers] of Object.entries(all)) {
-				chatViewer.viewersList.onViewersList({
-					streamer: {
-						platform
-					},
-					viewers
-				});
-			}
-		});
-
 		return () => {
 			Bridge.off('koi:event', eventListener);
 		};

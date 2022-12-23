@@ -122,19 +122,12 @@
 	}
 
 	export function savePreferences() {
-		const { x, y, width, height } = viewersList.getPositionData();
-
 		doAction('save-preferences', {
 			showChatTimestamps: showChatTimestamps,
 			showModActions: showModActions,
 			showProfilePictures: showProfilePictures,
 			showBadges: showBadges,
-			showViewers: showViewers,
-			showViewersList: showViewersList,
-			viewersX: x,
-			viewersY: y,
-			viewersWidth: width,
-			viewersHeight: height
+			showViewers: showViewers
 		});
 	}
 
