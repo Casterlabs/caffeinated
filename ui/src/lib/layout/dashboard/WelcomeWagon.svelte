@@ -1,4 +1,4 @@
-<icon class="hint-arrow absolute top-12 right-4" data-icon="icon/arrow-small-up" />
+<icon class="hint-arrow fixed top-12 right-6" data-icon="icon/arrow-small-up" />
 
 <div class="w-full h-full flex justify-center items-center text-center">
 	<div>
