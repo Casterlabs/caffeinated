@@ -2,10 +2,19 @@
 	import WidgetPreview from '$lib/WidgetPreview.svelte';
 	import WelcomeWagon from '$lib/layout/dashboard/WelcomeWagon.svelte';
 	import ResizableGrid from '../ResizableGrid.svelte';
+	import SlimSelectMenu from '$lib/ui/SlimSelectMenu.svelte';
+
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	const DEFAULT_COMPONENTS = {
+		none: '',
 		welcomewagon: WelcomeWagon
+	};
+
+	const componentChoices = {
+		none: 'dashboard.customize.options.none',
+		welcomewagon: 'WelcomeWagon'
 	};
 
 	/** @type {ResizableGrid} */
@@ -14,10 +23,13 @@
 	export let onPieceUpdate; // fn
 	export let current;
 
+	$: resizingLocked = grid?.isResizingLocked;
+
 	let component;
 	let componentProps = {};
 
 	function save() {
+		doMount();
 		onPieceUpdate(location, current);
 	}
 
@@ -47,6 +59,17 @@
 	onMount(doMount);
 </script>
 
-<div class="h-full w-full relative">
+<div class="flex-1 w-full relative">
 	<svelte:component this={component} {...componentProps} />
+
+	{#if !$resizingLocked}
+		<div class="absolute inset-x-0 top-0 h-fit opacity-90" transition:fade={{ duration: 100 }}>
+			<SlimSelectMenu
+				width="full"
+				options={componentChoices}
+				bind:value={current}
+				on:value={save}
+			/>
+		</div>
+	{/if}
 </div>
