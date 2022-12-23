@@ -109,6 +109,7 @@
 	}
 
 	function onMouseUp() {
+		if (!isDraggingSizer) return; // Not for us.
 		isDraggingSizer = false;
 		onLayoutUpdated(false);
 	}
