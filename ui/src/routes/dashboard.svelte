@@ -51,7 +51,7 @@
 </div>
 
 <div
-	class="fixed top-0 right-4 h-9 -xtranslate-y-8 hover:translate-y-0 px-2 py-0.5 transition-all rounded-b-md ring-1 ring-base-7 bg-base-5 text-base-12 opacity-90"
+	class="fixed top-0 right-4 h-9 -translate-y-8 hover:translate-y-0 px-2 py-0.5 transition-all rounded-b-md ring-1 ring-base-7 bg-base-5 text-base-12 opacity-90"
 >
 	<!-- This is yucky looking, ik. -->
 	<div class="inline-block w-12">
