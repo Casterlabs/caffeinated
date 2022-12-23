@@ -11,6 +11,6 @@ import co.casterlabs.rakurai.json.element.JsonNumber;
 public class DashboardConfig {
     public final List<JsonNumber> v = new LinkedList<>();
     public final List<JsonNumber> h = new LinkedList<>();
-    public final Map<String, String> contents = Map.of("0,0", "co.casterlabs.caffeinated.welcomewagon");
+    public final Map<String, String> contents = Map.of("0,0", "welcomewagon");
 
 }
