@@ -29,7 +29,8 @@
 		dispatch('update', { v: [...vlayout], h: [...hlayout] });
 
 		if (remount) {
-			// Try to remount the contents.
+			vlayout = vlayout;
+			hlayout = hlayout;
 			tick();
 		}
 	}
@@ -182,6 +183,7 @@
 				value={width}
 				min={1}
 				max={maxSize}
+				disabled={isResizingLocked}
 				on:value={({ detail: newWidth }) => {
 					const delta = newWidth - width;
 					const isAdd = delta > 0;
@@ -216,6 +218,7 @@
 				value={height}
 				min={1}
 				max={maxSize}
+				disabled={isResizingLocked}
 				on:value={({ detail: newHeight }) => {
 					const delta = newHeight - height;
 					const isAdd = delta > 0;
