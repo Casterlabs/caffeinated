@@ -62,6 +62,8 @@
 	let isDraggingVerticalSizer = false;
 	let draggingWhich = 0; // either the x or y border depending on the above variable.
 
+	export let isLocked = true;
+
 	function onMouseMove(e) {
 		if (!isDraggingSizer) return;
 
@@ -92,7 +94,21 @@
 			subOther += currentLayout[i];
 		}
 
-		currentLayout[draggingWhich] = relevantPosition - subOther;
+		const lastPosition = currentLayout[draggingWhich];
+		const currentPosition = relevantPosition - subOther;
+		const positionDelta = lastPosition - currentPosition;
+
+		if (positionDelta == 0) {
+			return; // No change, do NOT rerender or do anything.
+		}
+
+		// Is it the last sizer bar? If so, don't apply any adjustments.
+		if (draggingWhich != currentLayout.length - 1) {
+			// Eat or Add some space to the next item.
+			currentLayout[draggingWhich + 1] += positionDelta;
+		}
+
+		currentLayout[draggingWhich] = currentPosition;
 
 		// Tell Svelte to rerender.
 		vlayout = vlayout;
@@ -105,10 +121,10 @@
 	}
 
 	function onMouseDown(e, isVertical, which) {
+		if (isLocked) return;
 		isDraggingSizer = true;
 		isDraggingVerticalSizer = isVertical;
 		draggingWhich = which;
-		console.log('Started dragging: ', isVertical, which);
 		onMouseMove(e);
 	}
 </script>
@@ -136,7 +152,11 @@
 
 					{#if !isVLast}
 						<!-- Add the ver sizer everywhere except the last item. -->
-						<div class="vsizer-bar oversize" on:mousedown={(e) => onMouseDown(e, true, vindex)}>
+						<div
+							class="vsizer-bar oversize"
+							class:cursor-col-resize={!isLocked}
+							on:mousedown={(e) => onMouseDown(e, true, vindex)}
+						>
 							<div class="inner" />
 						</div>
 					{/if}
@@ -146,7 +166,11 @@
 
 		{#if !isHLast}
 			<!-- Add the hoz sizer everywhere except the last item. -->
-			<div class="hsizer-bar" on:mousedown={(e) => onMouseDown(e, false, hindex)}>
+			<div
+				class="hsizer-bar"
+				class:cursor-row-resize={!isLocked}
+				on:mousedown={(e) => onMouseDown(e, false, hindex)}
+			>
 				<div class="inner" />
 			</div>
 		{/if}
@@ -170,7 +194,6 @@
 	.hsizer-bar {
 		width: 100%;
 		height: var(--sizer-bar-size);
-		cursor: row-resize;
 	}
 
 	.hsizer-bar .inner {
@@ -196,7 +219,6 @@
 	.vsizer-bar {
 		height: 100%;
 		width: var(--sizer-bar-size);
-		cursor: col-resize;
 	}
 
 	.vsizer-bar .inner {

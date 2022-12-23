@@ -11,7 +11,10 @@
 	const console = createConsole('Dashboard');
 
 	let layoutElement;
-	let layout; // TODO load and save this to caffeinated.
+	let layout = {
+		h: [0.25, 0.33],
+		v: [0.33, 0.45]
+	}; // TODO load and save this to caffeinated.
 
 	$: width = layout?.v?.length + 1 || 0;
 	$: height = layout?.h?.length + 1 || 0;
@@ -23,6 +26,7 @@
 	}
 
 	onMount(() => {
+		layoutElement.updateLayout(layout);
 		// TODO load
 	});
 </script>
@@ -30,14 +34,16 @@
 <PageTitle title="page.dashboard" />
 
 <div class="hidden">
-	{#each Array(width) as _, hindex}
-		{#each Array(height) as _, vindex}
-			{@const location = `${vindex},${hindex}`}
-			<div bind:this={layoutElement.slotContents[location]}>
-				{location}
-			</div>
+	{#if layoutElement}
+		{#each Array(width) as _, hindex}
+			{#each Array(height) as _, vindex}
+				{@const location = `${vindex},${hindex}`}
+				<div bind:this={layoutElement.slotContents[location]}>
+					{location}
+				</div>
+			{/each}
 		{/each}
-	{/each}
+	{/if}
 </div>
 
 <div class="fixed inset-0 left-48">
@@ -45,7 +51,7 @@
 </div>
 
 <div
-	class="fixed top-0 right-4 h-9 -translate-y-8 hover:translate-y-0 px-2 py-0.5 transition-all rounded-b-md ring-1 ring-base-7 bg-base-5 text-base-12 opacity-90"
+	class="fixed top-0 right-4 h-9 -xtranslate-y-8 hover:translate-y-0 px-2 py-0.5 transition-all rounded-b-md ring-1 ring-base-7 bg-base-5 text-base-12 opacity-90"
 >
 	<!-- This is yucky looking, ik. -->
 	<div class="inline-block w-12">
@@ -115,4 +121,23 @@
 			}}
 		/>
 	</div>
+
+	<button
+		on:click={() => {
+			if (!layoutElement) return;
+			layoutElement.isLocked = !layoutElement.isLocked;
+		}}
+		class="relative ml-1.5 -translate-y-1 w-6 h-6 text-base-12"
+	>
+		<icon
+			class="absolute inset-0 transition-all"
+			class:opacity-0={!layoutElement?.isLocked}
+			data-icon="icon/lock-closed"
+		/>
+		<icon
+			class="absolute inset-0 transition-all"
+			class:opacity-0={layoutElement?.isLocked}
+			data-icon="icon/lock-open"
+		/>
+	</button>
 </div>
