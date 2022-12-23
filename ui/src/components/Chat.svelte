@@ -11,10 +11,6 @@
 				Caffeinated.UI.chatPreferences = data;
 				return;
 			}
-			case 'copy-viewers': {
-				Caffeinated.copyText(data, 'Copied the viewer list to your clipboard');
-				return;
-			}
 			case 'chat': {
 				const { platform, message, replyTarget } = data;
 				Caffeinated.koi.sendChat(platform, message, 'CLIENT', replyTarget, true);
