@@ -23,11 +23,11 @@
 	<icon class="hint-arrow fixed top-12 right-6" data-icon="icon/arrow-small-up" />
 {:else}
 	<icon
-		class="hint-arrow absolute top-4 right-1/2 -translate-x-1/2"
+		class="hint-arrow absolute top-11 right-1/2 -translate-x-1/2"
 		data-icon="icon/arrow-small-up"
 	/>
 
-	<p class="text-center pt-10">
+	<p class="text-center pt-16">
 		<LocalizedText key="dashboard.customize.welcomewagon.next" />
 	</p>
 {/if}
