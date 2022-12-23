@@ -1,6 +1,5 @@
 package co.casterlabs.caffeinated.app.ui;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -47,11 +46,11 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             WidgetHandle handle = ReflectionLib.getValue(this, "$handle");
             String newFormat;
 
-            if (CaffeinatedApp.getInstance().isDev()) {
-                newFormat = "http://localhost:3001";
-            } else {
-                newFormat = "https://studio.casterlabs.co";
-            }
+//            if (CaffeinatedApp.getInstance().isDev()) {
+//                newFormat = "http://localhost:3001";
+//            } else {
+            newFormat = "https://studio.casterlabs.co";
+//            }
 
             newFormat += "/popout/stream-chat?pluginId=%s&widgetId=%s&authorization=%s&port=%d&mode=%s";
 
