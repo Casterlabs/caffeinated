@@ -8,12 +8,12 @@
 	import { fade } from 'svelte/transition';
 
 	const DEFAULT_COMPONENTS = {
-		none: '',
+		[null]: '',
 		welcomewagon: WelcomeWagon
 	};
 
 	const componentChoices = {
-		none: 'dashboard.customize.options.none',
+		[null]: 'dashboard.customize.options.none',
 		welcomewagon: 'WelcomeWagon'
 	};
 
@@ -28,7 +28,8 @@
 	let component;
 	let componentProps = {};
 
-	function save() {
+	function save({ detail: newValue }) {
+		current = newValue;
 		doMount();
 		onPieceUpdate(location, current);
 	}
@@ -67,7 +68,7 @@
 			<SlimSelectMenu
 				width="full"
 				options={componentChoices}
-				bind:value={current}
+				value={current || null}
 				on:value={save}
 			/>
 		</div>
