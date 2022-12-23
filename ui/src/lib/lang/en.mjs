@@ -163,5 +163,11 @@ export default {
     'chat.viewer.action.timeout': 'Timeout',
     'chat.viewer.action.delete_message': 'Delete Message',
     'chat.viewer.action.raid': 'Raid',
-    'chat.viewer.action.upvote': 'Upvote'
+    'chat.viewer.action.upvote': 'Upvote',
+
+    /* ---- Dashboard ---- */
+
+	'dashboard.customize.welcomewagon.welcome': 'Welcome!',
+	'dashboard.customize.welcomewagon.getstarted': 'Get started by unlocking your dashboard.',
+	'dashboard.customize.welcomewagon.next': 'Next, change this panel to something else.'
 };

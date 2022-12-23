@@ -28,7 +28,7 @@
 		}
 
 		component = DEFAULT_COMPONENTS[current];
-		componentProps = {};
+		componentProps = { grid };
 
 		if (!component) {
 			let widget;

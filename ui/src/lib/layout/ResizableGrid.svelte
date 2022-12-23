@@ -5,6 +5,7 @@
 
 	import { onMount, createEventDispatcher, tick, SvelteComponent } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
+	import { writable } from 'svelte/store';
 
 	const console = createConsole('CustomResizableGrid');
 
@@ -55,7 +56,7 @@
 	let isDraggingVerticalSizer = false;
 	let draggingWhich = 0; // either the x or y border depending on the above variable.
 
-	export let isResizingLocked = true;
+	export const isResizingLocked = writable(true);
 
 	function onMouseMove(e) {
 		if (!isDraggingSizer) return;
@@ -115,7 +116,7 @@
 	}
 
 	function onMouseDown(e, isVertical, which) {
-		if (isResizingLocked) return;
+		if ($isResizingLocked) return;
 		isDraggingSizer = true;
 		isDraggingVerticalSizer = isVertical;
 		draggingWhich = which;
@@ -152,7 +153,7 @@
 							<!-- Add the ver sizer everywhere except the last item. -->
 							<div
 								class="vsizer-bar oversize"
-								class:cursor-col-resize={!isResizingLocked}
+								class:cursor-col-resize={!$isResizingLocked}
 								on:mousedown={(e) => onMouseDown(e, true, vindex)}
 							>
 								<div class="inner" />
@@ -166,7 +167,7 @@
 				<!-- Add the hoz sizer everywhere except the last item. -->
 				<div
 					class="hsizer-bar"
-					class:cursor-row-resize={!isResizingLocked}
+					class:cursor-row-resize={!$isResizingLocked}
 					on:mousedown={(e) => onMouseDown(e, false, hindex)}
 				>
 					<div class="inner" />
@@ -184,7 +185,7 @@
 				value={width}
 				min={1}
 				max={maxSize}
-				disabled={isResizingLocked}
+				disabled={$isResizingLocked}
 				on:value={({ detail: newWidth }) => {
 					const delta = newWidth - width;
 					const isAdd = delta > 0;
@@ -219,7 +220,7 @@
 				value={height}
 				min={1}
 				max={maxSize}
-				disabled={isResizingLocked}
+				disabled={$isResizingLocked}
 				on:value={({ detail: newHeight }) => {
 					const delta = newHeight - height;
 					const isAdd = delta > 0;
@@ -250,17 +251,17 @@
 		</div>
 
 		<button
-			on:click={() => (isResizingLocked = !isResizingLocked)}
+			on:click={() => ($isResizingLocked = !$isResizingLocked)}
 			class="relative ml-1.5 -translate-y-1 w-6 h-6 text-base-12"
 		>
 			<icon
 				class="absolute inset-0 transition-all"
-				class:opacity-0={!isResizingLocked}
+				class:opacity-0={!$isResizingLocked}
 				data-icon="icon/lock-closed"
 			/>
 			<icon
 				class="absolute inset-0 transition-all"
-				class:opacity-0={isResizingLocked}
+				class:opacity-0={$isResizingLocked}
 				data-icon="icon/lock-open"
 			/>
 		</button>

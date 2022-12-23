@@ -1,11 +1,36 @@
-<icon class="hint-arrow fixed top-12 right-6" data-icon="icon/arrow-small-up" />
+<script>
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import ResizableGrid from '../ResizableGrid.svelte';
 
-<div class="w-full h-full flex justify-center items-center text-center">
-	<div>
-		<h1 class="text-xl font-semibold">Welcome!</h1>
-		<p>Get started by unlocking your dashboard</p>
+	/** @type {ResizableGrid} */
+	export let grid;
+
+	$: resizingLocked = grid?.isResizingLocked;
+</script>
+
+{#if $resizingLocked}
+	<div class="w-full h-full flex justify-center items-center text-center">
+		<div>
+			<h1 class="text-xl font-semibold">
+				<LocalizedText key="dashboard.customize.welcomewagon.welcome" />
+			</h1>
+			<p>
+				<LocalizedText key="dashboard.customize.welcomewagon.getstarted" />
+			</p>
+		</div>
 	</div>
-</div>
+
+	<icon class="hint-arrow fixed top-12 right-6" data-icon="icon/arrow-small-up" />
+{:else}
+	<icon
+		class="hint-arrow absolute top-4 right-1/2 -translate-x-1/2"
+		data-icon="icon/arrow-small-up"
+	/>
+
+	<p class="text-center pt-10">
+		<LocalizedText key="dashboard.customize.welcomewagon.next" />
+	</p>
+{/if}
 
 <style>
 	.hint-arrow {
