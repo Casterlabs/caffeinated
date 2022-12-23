@@ -59,7 +59,7 @@
 	onMount(doMount);
 </script>
 
-<div class="flex-1 w-full relative">
+<div class="flex-1 h-full w-full relative">
 	<svelte:component this={component} {...componentProps} />
 
 	{#if !$resizingLocked}
