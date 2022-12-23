@@ -87,7 +87,7 @@
 				on:click={() => (open = !open)}
 			>
 				<span class="block truncate text-base-12">
-					<LocalizedText key={options[value]} />
+					<LocalizedText key={options[value]} />&nbsp;
 				</span>
 				<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
 					<icon class="h-5 w-5 text-base-10" data-icon="icon/chevron-up-down" />
