@@ -1,6 +1,8 @@
 <svelte:options accessors />
 
 <script>
+	import NumberInput from '$lib/ui/NumberInput.svelte';
+
 	import { onMount, createEventDispatcher, tick, SvelteComponent } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
 
@@ -44,13 +46,15 @@
 	/* Dragging & Resizing  */
 	/* -------------------- */
 
+	export let maxSize = 3;
+
 	const MINIMUM_DISTANCE = 12; /*px*/
 
 	let isDraggingSizer = false;
 	let isDraggingVerticalSizer = false;
 	let draggingWhich = 0; // either the x or y border depending on the above variable.
 
-	export let isLocked = true;
+	let isResizingLocked = true;
 
 	function onMouseMove(e) {
 		if (!isDraggingSizer) return;
@@ -109,7 +113,7 @@
 	}
 
 	function onMouseDown(e, isVertical, which) {
-		if (isLocked) return;
+		if (isResizingLocked) return;
 		isDraggingSizer = true;
 		isDraggingVerticalSizer = isVertical;
 		draggingWhich = which;
@@ -119,53 +123,144 @@
 
 <svelte:window on:mousemove={onMouseMove} on:mouseup={onMouseUp} />
 
-<div class="hlayout" bind:this={container}>
-	{#each Array(height) as _, hindex}
-		{@const isHLast = hindex == height - 1}
-		{@const hSize = isHLast ? 1 - hlayout.reduce((p, i) => p + i, 0) : hlayout[hindex]}
+<div class="relative w-full h-full">
+	<div class="hlayout" bind:this={container}>
+		{#each Array(height) as _, hindex}
+			{@const isHLast = hindex == height - 1}
+			{@const hSize = isHLast ? 1 - hlayout.reduce((p, i) => p + i, 0) : hlayout[hindex]}
 
-		<div class="hslot-area" style="--size: {hSize};">
-			<div class="vlayout">
-				{#each Array(width) as _, vindex}
-					{@const isVLast = vindex == width - 1}
-					{@const vSize = isVLast ? 1 - vlayout.reduce((p, i) => p + i, 0) : vlayout[vindex]}
-					{@const location = `${vindex},${hindex}`}
+			<div class="hslot-area" style="--size: {hSize};">
+				<div class="vlayout">
+					{#each Array(width) as _, vindex}
+						{@const isVLast = vindex == width - 1}
+						{@const vSize = isVLast ? 1 - vlayout.reduce((p, i) => p + i, 0) : vlayout[vindex]}
+						{@const location = `${vindex},${hindex}`}
 
-					{@const content = contents[location] || ''}
+						{@const content = contents[location] || ''}
 
-					<div class="vslot-area" style="--size: {vSize};" data-position={location}>
-						{#if typeof content == 'string'}
-							{@html content}
-						{:else}
-							<svelte:component this={content} />
-						{/if}
-					</div>
-
-					{#if !isVLast}
-						<!-- Add the ver sizer everywhere except the last item. -->
-						<div
-							class="vsizer-bar oversize"
-							class:cursor-col-resize={!isLocked}
-							on:mousedown={(e) => onMouseDown(e, true, vindex)}
-						>
-							<div class="inner" />
+						<div class="vslot-area" style="--size: {vSize};" data-position={location}>
+							{#if typeof content == 'string'}
+								{@html content}
+							{:else}
+								<svelte:component this={content} />
+							{/if}
 						</div>
-					{/if}
-				{/each}
+
+						{#if !isVLast}
+							<!-- Add the ver sizer everywhere except the last item. -->
+							<div
+								class="vsizer-bar oversize"
+								class:cursor-col-resize={!isResizingLocked}
+								on:mousedown={(e) => onMouseDown(e, true, vindex)}
+							>
+								<div class="inner" />
+							</div>
+						{/if}
+					{/each}
+				</div>
 			</div>
+
+			{#if !isHLast}
+				<!-- Add the hoz sizer everywhere except the last item. -->
+				<div
+					class="hsizer-bar"
+					class:cursor-row-resize={!isResizingLocked}
+					on:mousedown={(e) => onMouseDown(e, false, hindex)}
+				>
+					<div class="inner" />
+				</div>
+			{/if}
+		{/each}
+	</div>
+
+	<div
+		class="fixed top-0 right-4 h-10 -translate-y-9 hover:translate-y-0 px-2 pt-1 transition-all rounded-b-md ring-1 ring-base-7 bg-base-5 text-base-12 opacity-90"
+	>
+		<!-- This is yucky looking, ik. -->
+		<div class="inline-block w-12">
+			<NumberInput
+				value={width}
+				min={1}
+				max={maxSize}
+				on:value={({ detail: newWidth }) => {
+					const delta = newWidth - width;
+					const isAdd = delta > 0;
+
+					const newItemSize = 1 / newWidth;
+					const oldItemSize = 1 / width;
+					const scale = newItemSize / oldItemSize;
+					console.log(scale);
+
+					vlayout.forEach((value, idx) => {
+						vlayout[idx] = value * scale;
+					});
+
+					if (isAdd) {
+						for (let idx = 0; idx < Math.abs(delta); idx++) {
+							vlayout.push(newItemSize);
+						}
+					} else {
+						for (let idx = 0; idx < Math.abs(delta); idx++) {
+							vlayout.pop();
+						}
+					}
+
+					console.debug('New width:', newWidth);
+					onLayoutUpdated();
+				}}
+			/>
+		</div>
+		x
+		<div class="inline-block w-12">
+			<NumberInput
+				value={height}
+				min={1}
+				max={maxSize}
+				on:value={({ detail: newHeight }) => {
+					const delta = newHeight - height;
+					const isAdd = delta > 0;
+
+					const newItemSize = 1 / newHeight;
+					const oldItemSize = 1 / height;
+					const scale = newItemSize / oldItemSize;
+					console.log(scale);
+
+					hlayout.forEach((value, idx) => {
+						hlayout[idx] = value * scale;
+					});
+
+					if (isAdd) {
+						for (let idx = 0; idx < Math.abs(delta); idx++) {
+							hlayout.push(newItemSize);
+						}
+					} else {
+						for (let idx = 0; idx < Math.abs(delta); idx++) {
+							hlayout.pop();
+						}
+					}
+
+					console.debug('New height:', newHeight);
+					onLayoutUpdated();
+				}}
+			/>
 		</div>
 
-		{#if !isHLast}
-			<!-- Add the hoz sizer everywhere except the last item. -->
-			<div
-				class="hsizer-bar"
-				class:cursor-row-resize={!isLocked}
-				on:mousedown={(e) => onMouseDown(e, false, hindex)}
-			>
-				<div class="inner" />
-			</div>
-		{/if}
-	{/each}
+		<button
+			on:click={() => (isResizingLocked = !isResizingLocked)}
+			class="relative ml-1.5 -translate-y-1 w-6 h-6 text-base-12"
+		>
+			<icon
+				class="absolute inset-0 transition-all"
+				class:opacity-0={!isResizingLocked}
+				data-icon="icon/lock-closed"
+			/>
+			<icon
+				class="absolute inset-0 transition-all"
+				class:opacity-0={isResizingLocked}
+				data-icon="icon/lock-open"
+			/>
+		</button>
+	</div>
 </div>
 
 <style>
