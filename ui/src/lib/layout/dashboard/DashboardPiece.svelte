@@ -3,18 +3,19 @@
 	import WelcomeWagon from '$lib/layout/dashboard/WelcomeWagon.svelte';
 	import ResizableGrid from '../ResizableGrid.svelte';
 	import SlimSelectMenu from '$lib/ui/SlimSelectMenu.svelte';
+	import Chat from '../../../components/Chat.svelte';
 
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	const DEFAULT_COMPONENTS = {
 		[null]: '',
-		welcomewagon: WelcomeWagon
+		welcomewagon: WelcomeWagon,
+		'co.casterlabs.dock.stream_chat.dock': Chat
 	};
 
 	const componentChoices = {
-		[null]: 'dashboard.customize.options.none',
-		welcomewagon: 'WelcomeWagon'
+		[null]: 'dashboard.customize.options.none'
 	};
 
 	/** @type {ResizableGrid} */
