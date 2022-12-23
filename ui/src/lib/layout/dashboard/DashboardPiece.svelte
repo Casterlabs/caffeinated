@@ -53,11 +53,22 @@
 			}
 
 			component = WidgetPreview;
-			componentProps = { widget, mode: 'APPLET', ariaHidden: false };
+			componentProps = { widget, mode: 'DOCK', ariaHidden: false };
 		}
 	}
 
-	onMount(doMount);
+	onMount(() => {
+		// We populate componentChoices asynchronously.
+		Caffeinated.plugins.widgets.then((widgets) => {
+			for (const widget of widgets) {
+				if (widget.details.type == 'DOCK') {
+					componentChoices[widget.id] = widget.details.friendlyName;
+				}
+			}
+		});
+
+		doMount();
+	});
 </script>
 
 <div class="flex-1 h-full w-full relative">
