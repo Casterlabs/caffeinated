@@ -38,13 +38,13 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.casterlabs.rakurai</groupId>
+			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Json</artifactId>
 			<version>1.16.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.casterlabs.rakurai</groupId>
+			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Util</artifactId>
 			<version>1.16.0</version>
 			<scope>compile</scope>

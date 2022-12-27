@@ -117,7 +117,7 @@ public interface RouteHelper {
     default JsonObject makeWebsocketErrorPayload(HttpStatus status, RequestError error, boolean isFatal) {
         return new JsonObject()
             .putNull("data")
-            .put("errors", JsonArray.of(error.name()))
+            .put("errors", new JsonArray(error.name()))
             .put("type", "ERROR")
             .put(
                 "status",
