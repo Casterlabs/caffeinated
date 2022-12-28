@@ -139,8 +139,8 @@
 										>
 											<icon class="h-5 w-5" data-icon="icon/check" />
 										</span>
-									{/if}</button
-								>
+									{/if}
+								</button>
 							</li>
 						{/each}
 					</ul>

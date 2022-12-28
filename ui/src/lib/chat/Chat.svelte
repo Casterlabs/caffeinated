@@ -18,6 +18,8 @@
 
 	export let doAction = (action, data) => {};
 
+	export let userStates = [];
+
 	let chatBox;
 	let chatElements = {};
 
@@ -203,13 +205,22 @@
 	}
 </script>
 
-<div class="h-full px-2 py-1 flex flex-col">
+<div class="h-full px-2 pt-2 flex flex-col">
 	<div class="flex-1 overflow-x-hidden overflow-y-auto">
 		<ul bind:this={chatBox} />
 	</div>
 
 	<div class="flex-0 pt-2 pb-1 h-fit">
-		<InputBox />
+		<InputBox
+			{userStates}
+			on:send={({ detail }) => {
+				doAction('chat', {
+					message: detail.message,
+					platform: detail.platform,
+					replyTarget: detail.replyTarget?.id || null
+				});
+			}}
+		/>
 	</div>
 </div>
 

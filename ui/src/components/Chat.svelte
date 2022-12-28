@@ -5,6 +5,8 @@
 
 	let chatViewer;
 
+	const userStates = st || Caffeinated.koi.svelte('userStates');
+
 	function doAction(action, data) {
 		switch (action) {
 			case 'save-preferences': {
@@ -40,4 +42,4 @@
 	});
 </script>
 
-<ChatViewer bind:this={chatViewer} {doAction} />
+<ChatViewer bind:this={chatViewer} {doAction} userStates={$userStates} />
