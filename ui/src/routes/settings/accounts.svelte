@@ -6,6 +6,7 @@
 	import SlimSwitch from '$lib/ui/SlimSwitch.svelte';
 	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
+	import { goto } from '$app/navigation';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const STREAMING_SERVICES = {
@@ -93,6 +94,10 @@
 									<button
 										class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 										on:click={() => {
+											if (platform == 'CAFFEINE') {
+												goto('/signin/caffeine');
+											}
+
 											window.Caffeinated.auth.requestOAuthSignin(
 												`caffeinated_${platform.toLowerCase()}`,
 												true,

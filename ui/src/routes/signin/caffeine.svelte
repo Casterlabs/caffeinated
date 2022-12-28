@@ -1,8 +1,9 @@
 <script>
-	import LocalizedText from '../../components/LocalizedText.svelte';
-	import SlimTextArea from '../../components/ui/SlimTextArea.svelte';
-	import SlimButton from '../../components/ui/SlimButton.svelte';
-	import SlimPassword from '../../components/ui/SlimPassword.svelte';
+	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import SlimButton from '$lib/ui/SlimButton.svelte';
+	import SlimPassword from '$lib/ui/SlimPassword.svelte';
+	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
 
 	let usernameInput = '';
 	let passwordInput = '';
@@ -94,7 +95,13 @@
 			class="relative w-full mt-1.5 cursor-pointer rounded-md py-1.5 px-2 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-center text-xs"
 			on:click={submit}
 		>
-			Sign In
+			{#if isLoading}
+				<div class="w-4 mx-auto">
+					<LoadingSpinner />
+				</div>
+			{:else}
+				Sign In
+			{/if}
 		</button>
 	</div>
 
