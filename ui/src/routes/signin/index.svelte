@@ -24,11 +24,11 @@
 			name: 'Glimesh',
 			color: '#33528b'
 		},
-		{
-			id: 'BRIME',
-			name: 'Brime',
-			color: 'linear-gradient(45deg, #8439af 15%, #fc3537 65%)'
-		},
+		// {
+		// 	id: 'BRIME',
+		// 	name: 'Brime',
+		// 	color: 'linear-gradient(45deg, #8439af 15%, #fc3537 65%)'
+		// },
 		{
 			id: 'YOUTUBE',
 			name: 'YouTube (BETA)',

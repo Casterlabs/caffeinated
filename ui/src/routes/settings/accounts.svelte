@@ -14,7 +14,7 @@
 		TWITCH: 'Twitch',
 		TROVO: 'Trovo',
 		GLIMESH: 'Glimesh',
-		BRIME: 'Brime',
+		// BRIME: 'Brime',
 		YOUTUBE: 'YouTube (BETA)',
 		DLIVE: 'DLive',
 		THETA: 'Theta'
