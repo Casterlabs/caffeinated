@@ -73,7 +73,12 @@
 			{/each}
 		</span>
 
-		<span style:color={event.sender.color || 'red'}>{event.sender.displayname}</span>:
+		<span style:color={event.sender.color || 'red'}> {event.sender.displayname}</span><span
+			aria-hidden="true"
+		>
+			<span class="select-none"> : </span>
+			<span class="opacity-0 absolute"> &gt;&nbsp; </span>
+		</span>
 
 		<span>
 			{@html event.html}
