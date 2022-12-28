@@ -17,7 +17,7 @@
 	</modules>
 
 	<properties>
-		<kaimen.version>9ce1829</kaimen.version>
+		<kaimen.version>7257f2e12c</kaimen.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -55,13 +55,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<!-- Override -->
-				<groupId>co.casterlabs.Rakurai</groupId>
-				<artifactId>Json</artifactId>
-				<version>1.16.0</version>
-			</dependency>
-			
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
 				<artifactId>App</artifactId>
@@ -126,8 +119,14 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<dependencies>
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
+	<dependencies>
 		<!-- Code related packages -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -142,7 +141,6 @@
 			<version>19.0.0</version>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 
 </project>

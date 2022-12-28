@@ -24,12 +24,6 @@
 
 	<dependencies>
 
-		<dependency>
-			<groupId>co.casterlabs.kaimen</groupId>
-			<artifactId>Util</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		
 		<!-- Utilities -->
 		<dependency>
 			<groupId>co.casterlabs</groupId>
@@ -40,13 +34,13 @@
 		<dependency>
 			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.16.0</version>
+			<version>1.16.2</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Util</artifactId>
-			<version>1.16.0</version>
+			<version>1.16.2</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -68,5 +62,11 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>co.casterlabs.kaimen</groupId>
+			<artifactId>Util</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
 	</dependencies>
 </project>
