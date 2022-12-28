@@ -4,6 +4,7 @@
 	import SlimButton from '$lib/ui/SlimButton.svelte';
 	import Button from '$lib/ui/Button.svelte';
 	import SlimSwitch from '$lib/ui/SlimSwitch.svelte';
+	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
 	import createConsole from '$lib/console-helper.mjs';
 
@@ -35,6 +36,7 @@
 
 			if (loading.includes(platform)) {
 				loading.splice(loading.indexOf(platform), 1);
+				loading = loading;
 			}
 		});
 
@@ -75,7 +77,9 @@
 
 							<div class="flex-0">
 								{#if loading.includes(platform)}
-									...
+									<div class="w-6 mr-4">
+										<LoadingSpinner />
+									</div>
 								{:else if userData}
 									<button
 										class="px-1.5 py-1 inline-flex items-center rounded bg-error text-white text-xs font-base"
@@ -92,9 +96,10 @@
 											window.Caffeinated.auth.requestOAuthSignin(
 												`caffeinated_${platform.toLowerCase()}`,
 												true,
-												true
+												false
 											);
 											loading.push(platform);
+											loading = loading;
 										}}
 									>
 										<LocalizedText key="page.settings.accounts.connect" />
