@@ -63,7 +63,8 @@
 			{:else if type == 'font'}
 				//font
 			{:else if type == 'range'}
-				//range
+				{@const { step, min, max } = widgetSettingsItem.extraData}
+				<input class="range" type="range" bind:value on:input={onInput} {step} {min} {max} />
 			{:else if type == 'file'}
 				//file
 			{:else}
@@ -72,3 +73,31 @@
 		</div>
 	</div>
 {/if}
+
+<style>
+	.range {
+		appearance: none;
+		height: 4px !important;
+		transform: translateY(-3px);
+		background-color: var(--base6);
+	}
+
+	.range::-webkit-slider-runnable-track {
+		width: 300px;
+		height: 2px;
+		border: none;
+		border-radius: 3px;
+	}
+
+	.range::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		border: none;
+		height: 12px;
+		width: 12px;
+		border-radius: 500%;
+		background: var(--base1);
+		border: 2px solid var(--primary10);
+		margin-top: -5px;
+		cursor: pointer;
+	}
+</style>

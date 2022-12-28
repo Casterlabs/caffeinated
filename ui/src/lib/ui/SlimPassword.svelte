@@ -27,6 +27,6 @@
 
 <style>
 	input::placeholder {
-		color: var(--mauve8);
+		color: var(--base8);
 	}
 </style>
