@@ -7,6 +7,7 @@
 	import SlimTextArea from './SlimTextArea.svelte';
 	import SlimSelectMenu from './SlimSelectMenu.svelte';
 	import RangeInput from './RangeInput.svelte';
+	import FileInput from './FileInput.svelte';
 
 	export let widget;
 	export let widgetSettingsSection;
@@ -67,7 +68,8 @@
 				{@const { step, min, max } = widgetSettingsItem.extraData}
 				<RangeInput {step} {min} {max} bind:value on:value={onInput} />
 			{:else if type == 'file'}
-				//file
+				{@const { allowed } = widgetSettingsItem.extraData}
+				<FileInput bind:value allowedTypes={allowed} on:value={onInput} />
 			{:else}
 				... {type}
 			{/if}
