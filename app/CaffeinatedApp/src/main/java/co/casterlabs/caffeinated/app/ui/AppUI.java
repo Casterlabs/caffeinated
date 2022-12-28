@@ -7,7 +7,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
-import co.casterlabs.caffeinated.app.AppPreferences;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.PreferenceFile;
@@ -116,27 +115,27 @@ public class AppUI extends JavascriptObject {
     public void onUILoaded() {
         this.uiFinishedLoad = true;
 
-        PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
+//        PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
 
-        if (prefs.get().isNew()) {
-            CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
+//        if (prefs.get().isNew()) {
+//            CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
+//
+//            prefs.get().setNew(false);
+//            prefs.save();
+//
+//            this.navigate("/welcome/step1");
+//        } else {
+        AppAuth auth = CaffeinatedApp.getInstance().getAuth();
 
-            prefs.get().setNew(false);
-            prefs.save();
-
-            this.navigate("/welcome/step1");
+        if (!auth.isSignedIn()) {
+            this.navigate("/signin");
+        } else if (auth.isAuthorized()) {
+            this.navigate("/dashboard");
         } else {
-            AppAuth auth = CaffeinatedApp.getInstance().getAuth();
-
-            if (!auth.isSignedIn()) {
-                this.navigate("/signin");
-            } else if (auth.isAuthorized()) {
-                this.navigate("/dashboard");
-            } else {
-                // Otherwise AppAuth will automagically move us there :D
-                FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
-            }
+            // Otherwise AppAuth will automagically move us there :D
+            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
         }
+//        }
     }
 
     @JavascriptFunction
