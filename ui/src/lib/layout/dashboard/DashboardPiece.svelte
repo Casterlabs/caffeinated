@@ -56,7 +56,7 @@
 	<svelte:component this={component} {...componentProps} />
 
 	{#if !$resizingLocked}
-		<div class="absolute inset-x-1 top-0 h-fit opacity-80" transition:fade={{ duration: 100 }}>
+		<div class="absolute inset-x-1 top-0 h-fit opacity-90" transition:fade={{ duration: 100 }}>
 			<SlimSelectMenu
 				width="full"
 				options={componentChoices}

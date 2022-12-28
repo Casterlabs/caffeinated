@@ -25,22 +25,30 @@
 	};
 
 	let layoutElement;
+	let currentLayout;
 
 	/** @type {Map<string, [String | SvelteComponent, object?]>} */
 	let contents = {};
 
+	function save() {
+		console.debug('Saving layout:', currentLayout);
+		Caffeinated.UI.updateDashboard(currentLayout, true /*isMain*/);
+	}
+
 	function onLayoutUpdate({ detail: newLayout }) {
+		if (!currentLayout) return;
 		console.debug('Layout update:', newLayout);
-		// TODO save
+		currentLayout.h = newLayout.h;
+		currentLayout.v = newLayout.v;
+		save();
 	}
 
 	function onPieceUpdate(location, value) {
-		// TODO save
+		if (!currentLayout) return;
 		console.debug('Piece update:', location, value);
+		currentLayout.contents[location] = value;
+		save();
 	}
-
-	// const preferences = st || Caffeinated.UI.svelte('preferences');
-	// $: preferences, $preferences && console.debug('UI Preferences:', $preferences);
 
 	onMount(async () => {
 		// Load async.
@@ -53,13 +61,14 @@
 			}
 		});
 
-		const { mainDashboard: layout } = await Caffeinated.UI.preferences;
+		currentLayout = (await Caffeinated.UI.preferences).mainDashboard;
+		console.log('Loaded layout:', currentLayout);
 
 		// Fill all slots with DashboardPiece.
 		for (let x = 0; x < MAX; x++) {
 			for (let y = 0; y < MAX; y++) {
 				const location = `${x},${y}`;
-				const currentValue = layout.contents[location];
+				const currentValue = currentLayout.contents[location];
 
 				contents[location] = [
 					DashboardPiece,
@@ -75,11 +84,7 @@
 			}
 		}
 
-		layoutElement.updateLayout(layout);
-
-		// TODO parse the slot contents of the layout.
-
-		console.log('Loaded layout:', layout);
+		layoutElement.updateLayout(currentLayout);
 	});
 </script>
 

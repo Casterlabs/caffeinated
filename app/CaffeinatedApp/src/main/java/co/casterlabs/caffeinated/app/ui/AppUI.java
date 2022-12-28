@@ -102,6 +102,17 @@ public class AppUI extends JavascriptObject {
     }
 
     @JavascriptFunction
+    public void updateDashboard(@NonNull DashboardConfig config, boolean isMain) {
+        if (isMain) {
+            this.preferences.setMainDashboard(config);
+        } else {
+            this.preferences.setDockDashboard(config);
+        }
+
+        this.preferenceFile.save();
+    }
+
+    @JavascriptFunction
     public void onUILoaded() {
         this.uiFinishedLoad = true;
 
