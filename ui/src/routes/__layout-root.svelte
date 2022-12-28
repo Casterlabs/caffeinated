@@ -21,6 +21,7 @@
 	import hookIcons from '$lib/icons.mjs';
 	import hookAnchors from '$lib/intercept-anchors.mjs';
 	import * as App from '$lib/app.mjs';
+	import * as Currencies from '$lib/currencies.mjs';
 
 	const baseColorTheme = st || Caffeinated.themeManager.svelte('baseColor');
 	const primaryColorTheme = st || Caffeinated.themeManager.svelte('primaryColor');
@@ -51,6 +52,7 @@
 		window.debug_goto = goto;
 		window.debug_get = get;
 		window.debug_App = App;
+		window.debug_Currencies = Currencies;
 		Bridge.on('goto', ({ path }) => goto(path));
 	});
 </script>
