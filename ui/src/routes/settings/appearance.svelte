@@ -92,7 +92,7 @@
 			on:value={({ detail: value }) => setPreferenceItem('emojiProvider', value)}
 		/>
 	</li>
-	<li class="py-4">
+	<!-- <li class="py-4">
 		<SelectMenu
 			title="page.settings.appearance.language"
 			value={$preferences?.language}
@@ -105,7 +105,7 @@
 			)}
 			on:value={({ detail: value }) => setPreferenceItem('language', value)}
 		/>
-	</li>
+	</li> -->
 	<li class="py-4">
 		<Switch
 			title="page.settings.appearance.close_to_tray"
