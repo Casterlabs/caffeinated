@@ -206,6 +206,10 @@
 				li.appendChild(messageTimestamp);
 				li.appendChild(messageContainer);
 
+				if (['VIEWER_JOIN', 'VIEWER_LEAVE'].includes(event.event_type)) {
+					li.classList.add('viewer-joinleave');
+				}
+
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
 					// (so, we must keep track of it)
