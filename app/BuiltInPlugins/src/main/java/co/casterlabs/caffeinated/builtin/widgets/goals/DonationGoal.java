@@ -18,7 +18,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 public class DonationGoal extends GenericGoal {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.donation_goal")
-        .withIcon("dollar-sign")
+        .withIcon("banknotes")
         .withCategory(WidgetDetailsCategory.GOALS)
         .withFriendlyName("Donation Goal");
 

@@ -12,7 +12,7 @@ import lombok.NonNull;
 public class CustomGoal extends GenericGoal {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.custom_goal")
-        .withIcon("bar-chart")
+        .withIcon("chart-bar")
         .withCategory(WidgetDetailsCategory.GOALS)
         .withFriendlyName("Custom Goal");
 

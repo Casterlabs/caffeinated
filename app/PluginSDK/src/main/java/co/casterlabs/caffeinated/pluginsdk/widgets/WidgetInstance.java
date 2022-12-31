@@ -10,6 +10,7 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -47,16 +48,23 @@ public abstract class WidgetInstance implements Closeable {
                 case "resource_poll": {
                     String resourceId = message.getAsString();
 
-                    String result = null;
+                    String content = null;
+                    String mime = null;
 
                     try {
-                        result = this.widget.getPlugin().getResource(resourceId);
+                        Pair<String, String> result = this.widget.getPlugin().getResource(resourceId);
+                        content = result.a();
+                        mime = result.b();
                     } catch (Throwable t) {
                         this.logger.severe("An error occured whilst getting a resource:\n%s", t);
                     }
 
                     try {
-                        this.emit0("__internal:resource_poll:" + resourceId, Rson.DEFAULT.toJson(result));
+                        this.emit0(
+                            "__internal:resource_poll:" + resourceId,
+                            new JsonObject().put("content", content)
+                                .put("mime", mime)
+                        );
                     } catch (IOException ignored) {}
 
                     break;

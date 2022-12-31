@@ -94,8 +94,10 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         int conductorPort = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorPort();
 
         WidgetHandle handle = new WidgetHandle(factory.b().get(), conductorKey, conductorPort) {
+            @SuppressWarnings("deprecation")
             @Override
             public void onSettingsUpdate() {
+                CaffeinatedApp.getInstance().getAppBridge().emit("widgets:" + this.id, this.widget.toJson());
                 CaffeinatedApp.getInstance().getPlugins().save();
             }
         };

@@ -12,7 +12,7 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 public class SubscribersGoal extends GenericGoal {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.subscribers_goal")
-        .withIcon("users")
+        .withIcon("user-plus")
         .withCategory(WidgetDetailsCategory.GOALS)
         .withFriendlyName("Subscribers Goal");
 

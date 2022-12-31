@@ -98,7 +98,7 @@ class SystemFontsProvider implements Provider {
     @Override
     public List<String> listFonts() {
         switch (Platform.osDistribution) {
-            case MACOSX: {
+            case MACOS: {
                 return this.listMacFonts();
             }
 

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.jetbrains.annotations.Nullable;
-
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
@@ -151,10 +149,13 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
             });
         }
 
-        @SneakyThrows
         @Override
-        public @Nullable String getWidgetHtml() {
-            return CaffeinatedDefaultPlugin.resolveResource("/youtube.html");
+        public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+            if (mode == WidgetInstanceMode.DOCK) {
+                return "/youtube-dock.html";
+            } else {
+                return "/youtube.html";
+            }
         }
 
     }
@@ -323,16 +324,6 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
 
                 updateVolume(volume);
             });
-        }
-
-        @SneakyThrows
-        @Override
-        public @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
-            if (mode == WidgetInstanceMode.DOCK) {
-                return CaffeinatedDefaultPlugin.resolveResource("/youtube-dock.html");
-            } else {
-                return super.getWidgetHtml(WidgetInstanceMode.WIDGET);
-            }
         }
 
     }

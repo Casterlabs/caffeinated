@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
@@ -17,7 +17,7 @@ import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
-import lombok.SneakyThrows;
+import lombok.NonNull;
 
 public abstract class GenericLabel extends Widget implements KoiEventListener {
     private static String[] platforms;
@@ -93,10 +93,9 @@ public abstract class GenericLabel extends Widget implements KoiEventListener {
         return layout;
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml() {
-        return CaffeinatedDefaultPlugin.resolveResource("/text.html");
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+        return "/text.html";
     }
 
     @KoiEventHandler

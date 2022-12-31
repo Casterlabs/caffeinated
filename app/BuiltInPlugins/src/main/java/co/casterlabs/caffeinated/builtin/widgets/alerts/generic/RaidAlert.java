@@ -9,7 +9,7 @@ import co.casterlabs.koi.api.types.events.RaidEvent;
 public class RaidAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.raid_alert")
-        .withIcon("users")
+        .withIcon("user-group")
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Raid Alert");
 

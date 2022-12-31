@@ -17,7 +17,7 @@
 	</modules>
 
 	<properties>
-		<kaimen.version>9b81d0b</kaimen.version>
+		<kaimen.version>7257f2e12c</kaimen.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -73,7 +73,7 @@
 				<artifactId>AllWebviewImpls</artifactId>
 				<version>${kaimen.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
 				<artifactId>Windows-amd64</artifactId>
@@ -119,8 +119,14 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<dependencies>
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
+	<dependencies>
 		<!-- Code related packages -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -135,7 +141,6 @@
 			<version>19.0.0</version>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 
 </project>

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -215,7 +216,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @SneakyThrows
     @Override
     public void onClose(boolean remote) {
-        if (!this.disposed && remote) {
+        if (!this.disposed) {
             CaffeinatedApp.getInstance().getAuth().checkStatus();
             this.logger.info("Reconnecting to Koi.");
             Thread.sleep(5000);
@@ -241,6 +242,11 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 
     public boolean isConnected() {
         return this.koi.isConnected();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.userData);
     }
 
 }

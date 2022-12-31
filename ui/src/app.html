@@ -1,117 +1,28 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<html class="h-full">
 
-        <!-- Scripts -->
-        <script src="https://unpkg.com/feather-icons"></script>
-        <script src="/init.js"></script>
-        <script type="module" src="/js/interceptAnchors.js"></script>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/favicon.ico" />
 
-        <script type="module">
-            import Currencies from "/js/currencies.mjs";
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-            function fileSizeFormatter(num, decimalPlaces = 1, threshold = 1000) {
-                let shortened;
-                let mult;
+    <link rel="stylesheet" href="/css/toastify.min.css" />
 
-                if (num >= threshold && num >= 1000) {
-                    if (num >= 1099511627776) {
-                        shortened = "Over 1";
-                        mult = "tb";
-                    } else if (num >= 1073741824) {
-                        shortened = (num / 1000000000).toFixed(decimalPlaces);
-                        mult = "gb";
-                    } else if (num >= 1048576) {
-                        shortened = (num / 1000000).toFixed(decimalPlaces);
-                        mult = "mb";
-                    } else if (num >= 1024) {
-                        shortened = (num / 1000).toFixed(decimalPlaces);
-                        mult = "kb";
-                    }
-                } else {
-                    shortened = num.toFixed(decimalPlaces);
-                    mult = "b";
-                }
+    <title>Casterlabs-Caffeinated</title>
 
-                if (shortened.includes(".")) {
-                    shortened = shortened.replace(/\.?0+$/, "");
-                }
+    %sveltekit.head%
+</head>
 
-                return shortened + mult;
-            }
+<body class="h-full">
+    <div class="h-full">%sveltekit.body%</div>
 
-            function kFormatter(num, decimalPlaces = 1, threshold = 1000) {
-                const negative = num < 0;
-                let shortened;
-                let mult;
+    <canvas id="doot-canvas" class="absolute inset-0" style="pointer-events: none; transition: 250ms opacity; opacity: 0"></canvas>
 
-                num = Math.abs(num);
+    <script src="/js/toastify.js"></script>
+</body>
 
-                if (num >= threshold && num >= 1000) {
-                    if (num >= 1000000000000) {
-                        shortened = "Over 1";
-                        mult = "t";
-                    } else if (num >= 1000000000) {
-                        shortened = (num / 1000000000).toFixed(decimalPlaces);
-                        mult = "b";
-                    } else if (num >= 1000000) {
-                        shortened = (num / 1000000).toFixed(decimalPlaces);
-                        mult = "m";
-                    } else if (num >= 1000) {
-                        shortened = (num / 1000).toFixed(decimalPlaces);
-                        mult = "k";
-                    }
-                } else {
-                    shortened = num.toFixed(decimalPlaces);
-                    mult = "";
-                }
-
-                if (shortened.includes(".")) {
-                    shortened = shortened.replace(/\.?0+$/, "");
-                }
-
-                return (negative ? "-" : "") + shortened + mult;
-            }
-
-            Object.defineProperty(window, "Currencies", {
-                value: Currencies,
-                writable: false,
-                configurable: false
-            });
-            Object.defineProperty(window, "fileSizeFormatter", {
-                value: fileSizeFormatter,
-                writable: false,
-                configurable: false
-            });
-            Object.defineProperty(window, "kFormatter", {
-                value: kFormatter,
-                writable: false,
-                configurable: false
-            });
-
-            // if (location.pathname != "/") {
-            // 	console.warn("[app.html]", "Reload detected, redirecting to /");
-            // 	location.href = "/";
-            // }
-        </script>
-
-        <link rel="stylesheet" href="/css/global.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-        <div data-what="theme-stylesheet"></div>
-
-        %svelte.head%
-    </head>
-
-    <body>
-        <div class="body-container">
-            <div id="svelte">%svelte.body%</div>
-        </div>
-
-        <div id="sandbox-frames" class="hidden"></div>
-    </body>
-
-    <!-- These need to be loaded AFTER the body -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </html>

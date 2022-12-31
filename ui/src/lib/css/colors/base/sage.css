@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/sage.css"; @import "@radix-ui/colors/sageDark.css";#css-intermediate[data-theme-base="sage"] {
+    --base1: var(--sage1);
+        
+    --base2: var(--sage2);
+        
+    --base3: var(--sage3);
+        
+    --base4: var(--sage4);
+        
+    --base5: var(--sage5);
+        
+    --base6: var(--sage6);
+        
+    --base7: var(--sage7);
+        
+    --base8: var(--sage8);
+        
+    --base9: var(--sage9);
+        
+    --base10: var(--sage10);
+        
+    --base11: var(--sage11);
+        
+    --base12: var(--sage12);
+        }

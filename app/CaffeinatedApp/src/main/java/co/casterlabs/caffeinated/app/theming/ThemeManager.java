@@ -1,70 +1,68 @@
 package co.casterlabs.caffeinated.app.theming;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.app.App.Appearance;
+import co.casterlabs.kaimen.app.AppEvent;
+import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import lombok.Getter;
 import lombok.NonNull;
 
 public class ThemeManager extends JavascriptObject {
+    private PreferenceFile<ThemePreferences> preferenceFile = new PreferenceFile<>("theme", ThemePreferences.class);
 
+    // These all include some defaults so that the app can load and not look
+    // completely broken.
+    @Getter
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private Map<String, Theme> themes = new HashMap<>();
+    private String baseColor = "gray";
 
+    @Getter
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private @Getter Theme currentTheme;
+    private String primaryColor = "gray";
+
+    @Getter
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private Appearance appearance = Appearance.FOLLOW_SYSTEM;
+
+    // Calculated.
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private @Getter Appearance effectiveAppearance;
 
     public void init() {
-        this.registerTheme(
-            new Theme("system", "Follow System", Appearance.FOLLOW_SYSTEM, true),
-            new Theme("co.casterlabs.light", "Light", Appearance.LIGHT, false),
-            new Theme("co.casterlabs.dark", "Dark", Appearance.DARK, false)
-        );
+        this.baseColor = this.preferenceFile.get().getBaseColor();
+        this.primaryColor = this.preferenceFile.get().getPrimaryColor();
+        this.appearance = this.preferenceFile.get().getAppearance();
 
-        String theme = CaffeinatedApp.getInstance().getUI().getPreferences().getTheme();
+        App.on(AppEvent.APPEARANCE_CHANGE, this::calculateEffectiveTheme);
+        this.calculateEffectiveTheme();
+    }
 
-        if (theme != null) {
-            setTheme(theme);
+    private void calculateEffectiveTheme() {
+        if (this.appearance == Appearance.FOLLOW_SYSTEM) {
+            App.setAppearance(Appearance.FOLLOW_SYSTEM);
+            Appearance appearance = App.getAppearance();
+            this.effectiveAppearance = appearance;
         } else {
-            setTheme("system");
+            App.setAppearance(this.appearance);
+            this.effectiveAppearance = this.appearance;
         }
     }
 
-    public void registerTheme(@NonNull Theme... themes) {
-        for (Theme theme : themes) {
-            this.themes.put(theme.getId(), theme);
-        }
-    }
+    @JavascriptFunction
+    public void setTheme(@NonNull String baseColor, @NonNull String primaryColor, @NonNull Appearance appearance) {
+        this.preferenceFile.get().setBaseColor(baseColor);
+        this.preferenceFile.get().setPrimaryColor(primaryColor);
+        this.preferenceFile.get().setAppearance(appearance);
+        this.preferenceFile.save();
 
-    @JavascriptSetter("theme")
-    public void setTheme(@NonNull String id) {
-        if ((currentTheme != null) && currentTheme.getId().equals(id)) {
-            return;
-        }
+        this.appearance = appearance;
+        this.baseColor = baseColor;
+        this.primaryColor = primaryColor;
 
-        final String defaultTheme = "system";
-
-        Theme theme = themes.get(id);
-
-        if (theme == null) {
-            theme = themes.get(defaultTheme);
-        }
-
-        assert theme != null : "There is no theme registered with an id of '" + id + "' or '" + defaultTheme + "'";
-
-        currentTheme = theme;
-
-        try {
-            App.setAppearance(theme.getAppearance());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.calculateEffectiveTheme();
     }
 
 }

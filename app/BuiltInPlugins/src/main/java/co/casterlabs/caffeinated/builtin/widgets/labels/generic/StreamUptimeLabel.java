@@ -1,11 +1,9 @@
 package co.casterlabs.caffeinated.builtin.widgets.labels.generic;
 
-import org.jetbrains.annotations.Nullable;
-
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
-import lombok.SneakyThrows;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
+import lombok.NonNull;
 
 public class StreamUptimeLabel extends GenericLabel {
     public static final WidgetDetails DETAILS = new WidgetDetails()
@@ -24,10 +22,9 @@ public class StreamUptimeLabel extends GenericLabel {
         return false;
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml() {
-        return CaffeinatedDefaultPlugin.resolveResource("/streamuptime.html");
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+        return "/streamuptime.html";
     }
 
     @Override

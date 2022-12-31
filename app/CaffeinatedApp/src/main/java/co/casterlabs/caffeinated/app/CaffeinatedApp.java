@@ -1,7 +1,6 @@
 package co.casterlabs.caffeinated.app;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
@@ -38,6 +37,7 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
+import co.casterlabs.rakurai.io.http.MimeTypes;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.swetrix.Swetrix;
 import lombok.Getter;
@@ -45,11 +45,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
-import xyz.e3ndr.fastloggingframework.FastLogHandler;
-import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
+import xyz.e3ndr.fastloggingframework.loggerimpl.FileLogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.fastloggingframework.logging.LogColor;
-import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
@@ -88,15 +85,16 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // @formatter:off
 
     // Integrations
-    private PluginIntegration plugins = new PluginIntegration();
-    private MusicIntegration  music = new MusicIntegration();
-    private AppControlDeck    controlDeck = new AppControlDeck();
+    private PluginIntegration plugins      = new PluginIntegration();
+    private MusicIntegration  music        = new MusicIntegration();
+    private AppControlDeck    controlDeck  = new AppControlDeck();
     private ThemeManager      themeManager = new ThemeManager();
-    private AppChatbot        chatbot = new AppChatbot();
-    private GlobalKoi         koi = new GlobalKoi();
-    private AppAuth           auth = new AppAuth();
-    private AppApi            api = new AppApi();
-    private AppUI             UI = new AppUI();
+    private AppChatbot        chatbot      = new AppChatbot();
+    private GlobalKoi         koi          = new GlobalKoi();
+    private AppAuth           auth         = new AppAuth();
+    private EmojisObj         emojis       = new EmojisObj();
+    private AppApi            api          = new AppApi();
+    private AppUI             UI           = new AppUI();
 
     // Preferences
     private PreferenceFile<PluginIntegrationPreferences> pluginIntegrationPreferences = new PreferenceFile<>("plugins", PluginIntegrationPreferences.class);
@@ -127,31 +125,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             logsDir.mkdirs();
             logFile.createNewFile();
 
-            @SuppressWarnings("resource")
-            final FileOutputStream logOut = new FileOutputStream(logFile, true);
+            new FileLogHandler(logFile);
 
-            FastLoggingFramework.setLogHandler(new FastLogHandler() {
-                @Override
-                protected void log(String name, LogLevel level, String formatted) {
-                    System.out.println(LogColor.translateToAnsi(formatted));
-
-                    String stripped = LogColor.strip(formatted);
-
-                    try {
-                        logOut.write(stripped.getBytes());
-                        logOut.write('\n');
-                        logOut.flush();
-                    } catch (IOException e) {
-                        FastLogger.logException(e);
-                    }
-                }
-            });
-
-            logOut.write(
-                String.format("\n\n---------- %s ----------\n", Instant.now().toString())
-                    .getBytes()
-            );
-
+            FastLogger.logStatic("\n\n---------- %s ----------\n", Instant.now());
             FastLogger.logStatic("Log file: %s", logFile);
         } catch (IOException e) {
             FastLogger.logException(e);
@@ -233,6 +209,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @Override
     public void openLink(String url) {
         this.UI.openLink(url);
+    }
+
+    @Override
+    public String getMimeForPath(String path) {
+        return MimeTypes.getMimeForFile(new File(path));
     }
 
     @JavascriptFunction

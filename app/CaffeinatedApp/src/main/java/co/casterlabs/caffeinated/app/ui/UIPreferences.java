@@ -14,13 +14,17 @@ public class UIPreferences {
     private static final String CURRENT_SKITTLE = MiscUtil.random("green_skittle", "orange_skittle", "purple_skittle", "red_skittle", "yellow_skittle");
     private static final boolean IS_PRIDE_MONTH = Calendar.getInstance().get(Calendar.MONTH) == Calendar.JUNE;
 
-    private String emojiProvider = Platform.osDistribution == OSDistribution.MACOSX ? "system" : "twemoji"; // Use system emojis by default on macOS, Twemoji elsewhere.
+    private String emojiProvider = Platform.osDistribution == OSDistribution.MACOS ? "system" : "twemoji"; // Use system emojis by default on macOS, Twemoji elsewhere.
     private String icon = "casterlabs";
-    private String theme = "co.casterlabs.dark";
+    private String theme = "co.casterlabs.dark"; // Unused.
     private String language = "en-US";
     private boolean closeToTray = true;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
     private boolean enableStupidlyUnsafeSettings = false;
+    private boolean enableAlternateThemes = false;
+
+    private DashboardConfig mainDashboard = new DashboardConfig();
+    private DashboardConfig dockDashboard = new DashboardConfig();
 
     private boolean mikeysMode = false; // https://twitter.com/Casterlabs/status/1508475284944736268
 
@@ -44,11 +48,6 @@ public class UIPreferences {
         private boolean showBadges = false;
         private boolean showViewers = false;
         private boolean showViewersList = true;
-
-        private double viewersX = .8;
-        private double viewersY = .02;
-        private double viewersWidth = .15;
-        private double viewersHeight = .65;
 
     }
 

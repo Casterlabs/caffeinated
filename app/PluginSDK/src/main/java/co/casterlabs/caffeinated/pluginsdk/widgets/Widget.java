@@ -55,7 +55,7 @@ public abstract class Widget {
         public String conductorKey;
         public int conductorPort;
 
-        private String urlFormat = "https://widgets.casterlabs.co/caffeinated/widget.html?pluginId=%s&widgetId=%s&authorization=%s&port=%d&mode=%s";
+        private String urlFormat = "https://widgets.casterlabs.co/caffeinated/loader.html?pluginId=%s&widgetId=%s&authorization=%s&port=%d&mode=%s";
 
         public WidgetHandle(Widget w, String conductorKey, int conductorPort) {
             this.widget = w;
@@ -220,17 +220,7 @@ public abstract class Widget {
 
     public void onNewInstance(@NonNull WidgetInstance instance) {}
 
-    /**
-     * @deprecated Implement {@link #getWidgetHtml(WidgetInstanceMode)} instead.
-     */
-    @Deprecated
-    protected @Nullable String getWidgetHtml() {
-        return null;
-    }
-
-    public @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
-        return this.getWidgetHtml();
-    }
+    public abstract @NonNull String getWidgetBasePath(WidgetInstanceMode mode);
 
     /* ---------------- */
     /* Events           */

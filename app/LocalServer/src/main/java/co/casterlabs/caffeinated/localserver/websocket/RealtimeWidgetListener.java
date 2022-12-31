@@ -90,6 +90,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                 .put("connectionId", this.connectionId)
                 .put("widget", Rson.DEFAULT.toJson(this.handle))
                 .put("koi", Caffeinated.getInstance().getKoi().toJson())
+                .put("basePath", this.handle.widget.getWidgetBasePath(this.mode))
         );
     }
 

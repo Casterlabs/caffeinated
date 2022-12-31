@@ -1,20 +1,18 @@
 package co.casterlabs.caffeinated.builtin.widgets;
 
-import org.jetbrains.annotations.Nullable;
-
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
-import lombok.SneakyThrows;
+import lombok.NonNull;
 
 public class EmojiRainWidget extends Widget {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.emojirain_widget")
-        .withIcon("smile")
+        .withIcon("face-smile")
         .withCategory(WidgetDetailsCategory.INTERACTION)
         .withFriendlyName("Emoji Rain");
 
@@ -32,10 +30,9 @@ public class EmojiRainWidget extends Widget {
         this.setSettingsLayout(LAYOUT);
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml() {
-        return CaffeinatedDefaultPlugin.resolveResource("/rain.html");
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+        return "/rain.html";
     }
 
 }

@@ -1,8 +1,5 @@
 package co.casterlabs.caffeinated.builtin.widgets;
 
-import org.jetbrains.annotations.Nullable;
-
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
@@ -28,7 +25,7 @@ import lombok.SneakyThrows;
 public class CamWidget extends Widget implements KinokoV1Listener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.cam_widget")
-        .withIcon("video")
+        .withIcon("video-camera")
         .withCategory(WidgetDetailsCategory.OTHER)
         .withShowDemo(true, 3 / 4d)
         .withFriendlyName("Cam Widget");
@@ -112,13 +109,12 @@ public class CamWidget extends Widget implements KinokoV1Listener {
         }
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml(WidgetInstanceMode mode) {
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
         if (mode == WidgetInstanceMode.WIDGET) {
-            return CaffeinatedDefaultPlugin.resolveResource("/cam.html");
+            return "/cam.html";
         } else {
-            return CaffeinatedDefaultPlugin.resolveResource("/cam-qr.html");
+            return "/cam-qr.html";
         }
     }
 

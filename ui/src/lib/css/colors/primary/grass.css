@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/grass.css"; @import "@radix-ui/colors/grassDark.css";#css-intermediate[data-theme-primary="grass"] {
+    --primary1: var(--grass1);
+        
+    --primary2: var(--grass2);
+        
+    --primary3: var(--grass3);
+        
+    --primary4: var(--grass4);
+        
+    --primary5: var(--grass5);
+        
+    --primary6: var(--grass6);
+        
+    --primary7: var(--grass7);
+        
+    --primary8: var(--grass8);
+        
+    --primary9: var(--grass9);
+        
+    --primary10: var(--grass10);
+        
+    --primary11: var(--grass11);
+        
+    --primary12: var(--grass12);
+        }

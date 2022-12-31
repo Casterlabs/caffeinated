@@ -1,21 +1,19 @@
 package co.casterlabs.caffeinated.builtin.widgets;
 
-import org.jetbrains.annotations.Nullable;
-
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
-import lombok.SneakyThrows;
+import lombok.NonNull;
 
 public class ChatWidget extends Widget {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.chat_widget")
-        .withIcon("message-square")
+        .withIcon("chat-bubble-left")
         .withCategory(WidgetDetailsCategory.INTERACTION)
         .withFriendlyName("Chat Widget");
 
@@ -54,10 +52,9 @@ public class ChatWidget extends Widget {
         this.setSettingsLayout(LAYOUT);
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml() {
-        return CaffeinatedDefaultPlugin.resolveResource("/chat.html");
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+        return "/chat.html";
     }
 
 }

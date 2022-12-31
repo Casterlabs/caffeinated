@@ -15,7 +15,7 @@ import co.casterlabs.koi.api.types.events.rich.Donation;
 public class DonationAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.donation_alert")
-        .withIcon("dollar-sign")
+        .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Donation Alert");
 

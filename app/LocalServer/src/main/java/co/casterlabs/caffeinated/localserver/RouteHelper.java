@@ -27,7 +27,10 @@ public interface RouteHelper {
     /* -------------------- */
 
     default boolean authorize(SoraHttpSession session) {
-        String auth = session.getQueryParameters().get("authorization");
+        String auth = session.getQueryParameters().getOrDefault(
+            "authorization",
+            session.getUriParameters().get("authorization")
+        );
 
         if (auth == null) {
             return false;
@@ -39,7 +42,10 @@ public interface RouteHelper {
     }
 
     default boolean authorize(SoraWebsocketSession session) {
-        String auth = session.getQueryParameters().get("authorization");
+        String auth = session.getQueryParameters().getOrDefault(
+            "authorization",
+            session.getUriParameters().get("authorization")
+        );
 
         if (auth == null) {
             return false;
@@ -111,7 +117,7 @@ public interface RouteHelper {
     default JsonObject makeWebsocketErrorPayload(HttpStatus status, RequestError error, boolean isFatal) {
         return new JsonObject()
             .putNull("data")
-            .put("errors", new JsonArray(error.name()))
+            .put("errors", JsonArray.of(error.name()))
             .put("type", "ERROR")
             .put(
                 "status",

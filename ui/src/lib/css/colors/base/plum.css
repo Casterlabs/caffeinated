@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/plum.css"; @import "@radix-ui/colors/plumDark.css";#css-intermediate[data-theme-base="plum"] {
+    --base1: var(--plum1);
+        
+    --base2: var(--plum2);
+        
+    --base3: var(--plum3);
+        
+    --base4: var(--plum4);
+        
+    --base5: var(--plum5);
+        
+    --base6: var(--plum6);
+        
+    --base7: var(--plum7);
+        
+    --base8: var(--plum8);
+        
+    --base9: var(--plum9);
+        
+    --base10: var(--plum10);
+        
+    --base11: var(--plum11);
+        
+    --base12: var(--plum12);
+        }

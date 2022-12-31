@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.TTS;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
@@ -19,7 +19,6 @@ import co.casterlabs.koi.api.types.events.ChatEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 
 public abstract class GenericAlert extends Widget {
 
@@ -118,10 +117,9 @@ public abstract class GenericAlert extends Widget {
         return layout;
     }
 
-    @SneakyThrows
     @Override
-    public @Nullable String getWidgetHtml() {
-        return CaffeinatedDefaultPlugin.resolveResource("/alert.html");
+    public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+        return "/alert.html";
     }
 
     public void queueAlert(@NonNull String titleHtml, @Nullable ChatEvent chatEvent, @Nullable String[] customImages, @Nullable String ttsText) {

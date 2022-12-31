@@ -16,7 +16,7 @@ public abstract class NativeSystem {
     private static @Getter SystemPlaybackMusicProvider systemPlaybackMusicProvider = null;
 
     static {
-        App.getMainThread().submitTask(() -> {
+        App.getMainThread().execute(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception ignored) {}

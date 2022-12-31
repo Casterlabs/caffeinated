@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/slate.css"; @import "@radix-ui/colors/slateDark.css";#css-intermediate[data-theme-primary="slate"] {
+    --primary1: var(--slate1);
+        
+    --primary2: var(--slate2);
+        
+    --primary3: var(--slate3);
+        
+    --primary4: var(--slate4);
+        
+    --primary5: var(--slate5);
+        
+    --primary6: var(--slate6);
+        
+    --primary7: var(--slate7);
+        
+    --primary8: var(--slate8);
+        
+    --primary9: var(--slate9);
+        
+    --primary10: var(--slate10);
+        
+    --primary11: var(--slate11);
+        
+    --primary12: var(--slate12);
+        }

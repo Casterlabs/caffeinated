@@ -19,9 +19,13 @@ public interface Caffeinated {
 
     public Music getMusic();
 
+    public Emojis getEmojis();
+
     public void copyText(@NonNull String text, @Nullable String toastText);
 
     public void openLink(String url);
+
+    public String getMimeForPath(String path);
 
     public String getLocale();
 

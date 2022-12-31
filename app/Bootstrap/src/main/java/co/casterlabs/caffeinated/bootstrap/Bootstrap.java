@@ -20,6 +20,7 @@ import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.kaimen.app.App;
+import co.casterlabs.kaimen.app.App.PowerManagementHint;
 import co.casterlabs.kaimen.app.AppBootstrap;
 import co.casterlabs.kaimen.app.AppEntry;
 import co.casterlabs.kaimen.app.ui.UIServer;
@@ -95,6 +96,7 @@ public class Bootstrap implements Runnable {
     @AppEntry
     public static void main() throws Exception {
         App.setName("Casterlabs Caffeinated");
+        App.setPowermanagementHint(PowerManagementHint.POWER_SAVER);
 
         System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 
@@ -105,12 +107,15 @@ public class Bootstrap implements Runnable {
                 nb = new LinuxBootstrap();
                 break;
 
-            case MACOSX:
+            case MACOS:
                 nb = new MacOSBootstrap();
                 break;
 
             case WINDOWS_NT:
                 nb = new WindowsBootstrap();
+                break;
+
+            default:
                 break;
         }
 
@@ -179,17 +184,13 @@ public class Bootstrap implements Runnable {
     private static void writeAppFile(@NonNull String filename, byte[] bytes) throws IOException {
         File file;
 
-        switch (ConsoleUtil.getPlatform()) {
-            case MAC:
+        switch (Platform.osDistribution) {
+            case MACOS:
                 if (new File("./").getCanonicalPath().contains(".app")) {
                     file = new File("../../../", filename);
                     break;
                 }
-                // Otherwise, break free.
 
-            case UNIX:
-            case WINDOWS:
-            case UNKNOWN:
             default:
                 file = new File(filename);
                 break;
@@ -210,7 +211,9 @@ public class Bootstrap implements Runnable {
         logger.info("buildInfo.versionString      | %s", buildInfo.getVersionString());
         logger.info("buildInfo.author             | %s", buildInfo.getAuthor());
         logger.info("buildInfo.isDev              | %b", isDev);
-        logger.info("system.platform              | %s", ConsoleUtil.getPlatform().name());
+        logger.info("platform.arch                | %s", Platform.arch);
+        logger.info("platform.osFamily            | %s", Platform.osFamily);
+        logger.info("platform.osDistribution      | %s", Platform.osDistribution);
         logger.info("bootstrap.args               | %s", System.getProperty("sun.java.command"));
         logger.info("");
 
@@ -432,7 +435,7 @@ public class Bootstrap implements Runnable {
                     command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
                     break;
 
-                case MACOSX:
+                case MACOS:
                     command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated";
                     break;
 

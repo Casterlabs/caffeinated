@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/mauve.css"; @import "@radix-ui/colors/mauveDark.css";#css-intermediate[data-theme-primary="mauve"] {
+    --primary1: var(--mauve1);
+        
+    --primary2: var(--mauve2);
+        
+    --primary3: var(--mauve3);
+        
+    --primary4: var(--mauve4);
+        
+    --primary5: var(--mauve5);
+        
+    --primary6: var(--mauve6);
+        
+    --primary7: var(--mauve7);
+        
+    --primary8: var(--mauve8);
+        
+    --primary9: var(--mauve9);
+        
+    --primary10: var(--mauve10);
+        
+    --primary11: var(--mauve11);
+        
+    --primary12: var(--mauve12);
+        }

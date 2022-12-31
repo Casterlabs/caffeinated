@@ -132,7 +132,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
             try {
                 Files.writeString(
                     new File(musicApiDir, "current_playback.json").toPath(),
-                    Rson.DEFAULT.toJsonString(this.activePlayback)
+                    Rson.DEFAULT.toJson(this.activePlayback).toString()
                 );
 
                 Files.writeString(

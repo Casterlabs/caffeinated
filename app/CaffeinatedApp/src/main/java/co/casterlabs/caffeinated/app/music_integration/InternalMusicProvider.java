@@ -102,7 +102,8 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
 
     public abstract void signout();
 
-    public static Pair<String, List<String>> parseTitleForArtists(@NonNull String title, @NonNull List<String> prediscoveredArtists) {
+    public static Pair<String, List<String>> parseTitleForArtists(@NonNull String title,
+            @NonNull List<String> prediscoveredArtists) {
         final boolean PARSE_FT = true;
         final boolean CLEANSE_TITLE = true;
         final String FT_REGEX = "(\\(ft.*\\))|(\\(feat.*\\))|(\\(avec.*\\))";
@@ -143,7 +144,7 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.serviceId, this.currentTrack);
+        return Objects.hash(this.serviceId, this.currentTrack, this.isSignedIn);
     }
 
 }

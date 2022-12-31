@@ -6,6 +6,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.localserver.RequestError;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.http.HttpResponse;
 import co.casterlabs.rakurai.io.http.StandardHttpStatus;
 import co.casterlabs.rakurai.json.Rson;
@@ -30,13 +31,21 @@ public class RoutePluginApi implements HttpProvider, RouteHelper {
                     return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
                 }
 
-                String response = owningPlugin.getResource(resourceId);
+                Pair<String, String> response = owningPlugin.getResource(resourceId);
 
                 if (response == null) {
                     return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);
-                } else {
-                    return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, response);
                 }
+
+                String content = response.a();
+                String mime = response.b();
+                if (mime == null) {
+                    mime = "application/octet-stream";
+                }
+
+                return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
+                    .setMimeType(mime);
+
             } else {
                 return newErrorResponse(StandardHttpStatus.UNAUTHORIZED, RequestError.UNAUTHORIZED);
             }

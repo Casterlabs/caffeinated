@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
@@ -99,7 +98,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             }
         }
 
-        for (UserPlatform key : new ArrayList<>(this.viewers.keySet())) {
+        for (UserPlatform key : new ArrayList<>(this.userStates.keySet())) {
             if (!validPlatforms.contains(key)) {
                 this.viewers.remove(key);
                 this.userStates.remove(key);
@@ -181,7 +180,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                 if (prefs.isHideCommandsFromChat()) {
                     // Hide all command response messages.
                     {
-                        Set<Command> commands = prefs.getCommands();
+                        List<Command> commands = prefs.getCommands();
 
                         for (ChatbotPreferences.Command command : commands) {
                             if (command.getResponse().equals(event.getRaw())) {
@@ -292,7 +291,10 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
     @JavascriptFunction
     @Override
-    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
+    public void sendChat(
+        @NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter,
+        @Nullable String replyTarget, boolean isUserGesture
+    ) {
         if (message.startsWith("/koi test ")) {
             this.sendTest(
                 platform,

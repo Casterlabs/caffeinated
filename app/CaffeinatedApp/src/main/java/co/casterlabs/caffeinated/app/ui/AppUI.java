@@ -7,12 +7,11 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
-import co.casterlabs.caffeinated.app.AppPreferences;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
-import co.casterlabs.caffeinated.app.ui.events.AppearanceUpdateEvent;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
@@ -47,7 +46,11 @@ public class AppUI extends JavascriptObject {
     private List<String> fonts = FontProvider.listFonts();
 
     public void init() {
-        // Unused, for now.
+        this.updateEmojiProvider();
+    }
+
+    private void updateEmojiProvider() {
+        EmojisObj.setEmojiProvider(this.preferences.getEmojiProvider());
     }
 
     @JavascriptGetter("chatPreferences")
@@ -63,16 +66,16 @@ public class AppUI extends JavascriptObject {
 
     @JavascriptFunction
     public void updateAppearance(@NonNull AppearanceUpdateEvent event) {
-        UIPreferences uiPrefs = this.getPreferences();
-
-        uiPrefs.setIcon(event.getIcon());
-        uiPrefs.setTheme(event.getTheme());
-        uiPrefs.setCloseToTray(event.isCloseToTray());
-        uiPrefs.setMikeysMode(event.isMikeysMode());
-        uiPrefs.setEmojiProvider(event.getEmojiProvider());
-        uiPrefs.setLanguage(event.getLanguage());
-        uiPrefs.setEnableStupidlyUnsafeSettings(event.isEnableStupidlyUnsafeSettings());
+        this.preferences.setIcon(event.getIcon());
+        this.preferences.setCloseToTray(event.isCloseToTray());
+        this.preferences.setMikeysMode(event.isMikeysMode());
+        this.preferences.setEmojiProvider(event.getEmojiProvider());
+        this.preferences.setLanguage(event.getLanguage());
+        this.preferences.setEnableStupidlyUnsafeSettings(event.isEnableStupidlyUnsafeSettings());
+        this.preferences.setEnableAlternateThemes(event.isEnableAlternateThemes());
         this.preferenceFile.save();
+
+        this.updateEmojiProvider();
 
         // Broadcast to the plugins.
         AsyncTask.create(() -> {
@@ -95,35 +98,44 @@ public class AppUI extends JavascriptObject {
         });
 
         this.updateIcon();
+    }
 
-        CaffeinatedApp.getInstance().getThemeManager().setTheme(event.getTheme());
+    @JavascriptFunction
+    public void updateDashboard(@NonNull DashboardConfig config, boolean isMain) {
+        if (isMain) {
+            this.preferences.setMainDashboard(config);
+        } else {
+            this.preferences.setDockDashboard(config);
+        }
+
+        this.preferenceFile.save();
     }
 
     @JavascriptFunction
     public void onUILoaded() {
         this.uiFinishedLoad = true;
 
-        PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
+//        PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
 
-        if (prefs.get().isNew()) {
-            CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
+//        if (prefs.get().isNew()) {
+//            CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
+//
+//            prefs.get().setNew(false);
+//            prefs.save();
+//
+//            this.navigate("/welcome/step1");
+//        } else {
+        AppAuth auth = CaffeinatedApp.getInstance().getAuth();
 
-            prefs.get().setNew(false);
-            prefs.save();
-
-            this.navigate("/welcome/step1");
+        if (!auth.isSignedIn()) {
+            this.navigate("/signin");
+        } else if (auth.isAuthorized()) {
+            this.navigate("/dashboard");
         } else {
-            AppAuth auth = CaffeinatedApp.getInstance().getAuth();
-
-            if (!auth.isSignedIn()) {
-                this.navigate("/signin");
-            } else if (auth.isAuthorized()) {
-                this.navigate("/home");
-            } else {
-                // Otherwise AppAuth will automagically move us there :D
-                FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (theme-loaded)");
-            }
+            // Otherwise AppAuth will automagically move us there :D
+            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
         }
+//        }
     }
 
     @JavascriptFunction

@@ -103,7 +103,7 @@ public class WidgetSettingsItem {
             WidgetSettingsItemType.DROPDOWN,
             new JsonObject()
                 .put("defaultValue", defaultValue)
-                .put("options", new JsonArray(options))
+                .put("options", JsonArray.of((Object[]) options))
         );
     }
 
@@ -199,7 +199,7 @@ public class WidgetSettingsItem {
             name,
             WidgetSettingsItemType.FILE,
             new JsonObject()
-                .put("allowed", new JsonArray(allowed))
+                .put("allowed", JsonArray.of((Object[]) allowed))
         );
     }
 

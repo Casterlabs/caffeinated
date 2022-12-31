@@ -40,7 +40,9 @@ public class PluginIntegration extends JavascriptObject {
     private static final File pluginsDir = new File(CaffeinatedApp.appDataDir, "plugins");
 
     private PluginsHandler plugins = new PluginsHandler();
-    private @JavascriptValue(allowSet = false, watchForMutate = true) List<PluginContext> contexts = new ArrayList<>();
+
+    @JavascriptValue(allowSet = false)
+    private List<PluginContext> contexts = new ArrayList<>();
 
     private boolean isLoading = true;
 
@@ -202,7 +204,7 @@ public class PluginIntegration extends JavascriptObject {
         handle.onSettingsUpdate(new JsonObject());
 
         this.save();
-        CaffeinatedApp.getInstance().getUI().navigate("/pages/edit-widget?widget=" + handle.id);
+        CaffeinatedApp.getInstance().getUI().navigate("/widgets/edit?widget=" + handle.id);
     }
 
     @SneakyThrows
