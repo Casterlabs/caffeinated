@@ -36,10 +36,11 @@
 	// Helps with making the UI more responsive.
 	preferences.subscribe((prefs) => {
 		if (!prefs) return;
-		const { language, icon } = prefs;
+		const { language, icon, emojiProvider } = prefs;
 
 		App.language.set(language);
 		App.icon.set(icon);
+		App.emojiProvider.set(emojiProvider);
 	});
 
 	baseColorTheme.subscribe(App.baseColor.set);
@@ -53,6 +54,8 @@
 
 		Caffeinated.UI.fonts.then(fonts.set);
 		getCurrencies().then(currencies.set);
+
+		App.setMatchAndReturnEmojiHTML((text) => Caffeinated.emojis.matchAndReturnHTML(text, false));
 
 		window.debug_goto = goto;
 		window.debug_get = get;
