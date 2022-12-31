@@ -5,7 +5,9 @@
 	export let onContextMenuAction;
 </script>
 
-<LocalizedText
-	key="chat.viewer.message.VIEWER_JOIN"
-	opts={{ displayname: event.viewer.displayname }}
-/>
+<span class="viewer-joinleave">
+	<LocalizedText
+		key="chat.viewer.message.VIEWER_JOIN"
+		opts={{ displayname: event.viewer.displayname }}
+	/>
+</span>

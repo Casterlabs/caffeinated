@@ -45,8 +45,8 @@ public class UIPreferences {
         private boolean showChatTimestamps = true;
         private boolean showProfilePictures = false;
         private boolean showBadges = false;
+        private boolean showBadgesOnLeft = false;
         private boolean showViewers = false;
-        private boolean userBadgesOnLeft = false;
 
         // Still used by the popout dock.
         private @Deprecated boolean showModActions = true;

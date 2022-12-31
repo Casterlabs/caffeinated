@@ -145,8 +145,10 @@ export default {
     'chat.viewer.send_message.placeholder': 'Send a message',
 
     'chat.viewer.preferences.title': 'Chat Preferences',
+    'chat.viewer.preferences.show_chat_timestamps': 'Show Timestamps',
+    'chat.viewer.preferences.show_profile_pictures': 'Show Avatars',
+    'chat.viewer.preferences.show_badges': 'Show Badges',
     'chat.viewer.preferences.show_viewers': 'Show Viewers',
-    'chat.viewer.preferences.show_viewers_list': 'Show Viewers List',
 
     'chat.viewer.message.CLEARCHAT': 'Chat was cleared',
     'chat.viewer.message.CHANNELPOINTS': '<b>{displayname}</b> just redeemed %image%<b>{reward}</b>',

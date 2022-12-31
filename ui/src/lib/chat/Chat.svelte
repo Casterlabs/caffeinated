@@ -27,9 +27,10 @@
 
 	// Preferences
 	let settingsModalOpen = false;
-	let showChatTimestamps = true;
+	let showChatTimestamps = false;
 	let showProfilePictures = false;
 	let showBadges = false;
+	let showBadgesOnLeft = false;
 	let showViewers = false;
 
 	// prettier-ignore
@@ -130,6 +131,7 @@
 			showChatTimestamps: showChatTimestamps,
 			showProfilePictures: showProfilePictures,
 			showBadges: showBadges,
+			showBadgesOnLeft: showBadgesOnLeft,
 			showViewers: showViewers
 		});
 	}
@@ -138,6 +140,7 @@
 		showChatTimestamps = config.showChatTimestamps;
 		showProfilePictures = config.showProfilePictures;
 		showBadges = config.showBadges;
+		showBadgesOnLeft = config.showBadgesOnLeft;
 		showViewers = config.showViewers;
 	}
 
@@ -219,15 +222,49 @@
 	<Modal on:close={() => (settingsModalOpen = false)}>
 		<LocalizedText slot="title" key="chat.viewer.preferences.title" />
 
-		<Switch
-			title="chat.viewer.preferences.show_chat_timestamps"
-			description=""
-			bind:checked={showChatTimestamps}
-		/>
+		<ul class="w-72 divide-y divide-current text-base-6">
+			<li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.show_chat_timestamps"
+					description=""
+					bind:checked={showChatTimestamps}
+					on:value={savePreferences}
+				/>
+			</li>
+			<!-- <li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.show_profile_pictures"
+					description=""
+					bind:checked={showProfilePictures}
+					on:value={savePreferences}
+				/>
+			</li> -->
+			<li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.show_badges"
+					description=""
+					bind:checked={showBadges}
+					on:value={savePreferences}
+				/>
+			</li>
+			<li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.show_viewers"
+					description=""
+					bind:checked={showViewers}
+					on:value={savePreferences}
+				/>
+			</li>
+		</ul>
 	</Modal>
 {/if}
 
-<div class="h-full px-2 pt-2 flex flex-col" class:show-timestamps={showChatTimestamps}>
+<div
+	class="h-full px-2 pt-2 flex flex-col"
+	class:show-timestamps={showChatTimestamps}
+	class:show-badges={showBadges}
+	class:show-viewers={showViewers}
+>
 	<div class="flex-1 overflow-x-hidden overflow-y-auto">
 		<ul bind:this={chatBox} />
 	</div>
@@ -263,6 +300,8 @@
 		color: var(--primary11);
 	}
 
+	/* Timestamps */
+
 	:global(.message-container) {
 		display: flex;
 		flex-direction: row;
@@ -282,5 +321,25 @@
 
 	.show-timestamps :global(.message-timestamp) {
 		display: inline-block;
+	}
+
+	/* Badges */
+
+	:global(.richmessage-badges) {
+		display: none;
+	}
+
+	.show-badges :global(.richmessage-badges) {
+		display: unset !important;
+	}
+
+	/* Viewer Join/Leave Messages */
+
+	:global(.viewer-joinleave) {
+		display: none;
+	}
+
+	.show-viewers :global(.viewer-joinleave) {
+		display: unset !important;
 	}
 </style>
