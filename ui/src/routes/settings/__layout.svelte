@@ -30,11 +30,12 @@
 			<a
 				{href}
 				class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
-				class:hidden={name == 'Developer Stuff' && !$preferences?.enableStupidlyUnsafeSettings}
+				class:hidden={name == 'Developer Stuff'}
 				aria-current={isSelected ? 'page' : undefined}
 				class:border-b-2={isSelected}
 				class:text-primary-11={isSelected}
 			>
+				<!-- && !$preferences?.enableStupidlyUnsafeSettings -->
 				<LocalizedText key={name} />
 			</a>
 		{/each}
