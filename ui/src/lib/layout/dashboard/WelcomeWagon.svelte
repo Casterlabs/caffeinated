@@ -23,13 +23,18 @@
 	<icon class="hint-arrow fixed top-12 right-6" data-icon="icon/arrow-small-up" />
 {:else}
 	<icon
-		class="hint-arrow absolute top-11 right-1/2 -translate-x-1/2"
+		class="hint-arrow absolute top-14 right-1/2 -translate-x-1/2"
 		data-icon="icon/arrow-small-up"
 	/>
 
-	<p class="text-center pt-16">
-		<LocalizedText key="dashboard.customize.welcomewagon.next" />
-	</p>
+	<div class="text-center pt-20 -translate-y-2">
+		<h1 class="font-semibold text-md">
+			<LocalizedText key="dashboard.customize.welcomewagon.next" />
+		</h1>
+		<h2 class="font-thin text-sm">
+			<LocalizedText key="dashboard.customize.welcomewagon.also" />
+		</h2>
+	</div>
 {/if}
 
 <style>

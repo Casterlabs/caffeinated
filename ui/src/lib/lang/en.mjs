@@ -170,6 +170,7 @@ export default {
 	'dashboard.customize.welcomewagon.welcome': 'Welcome!',
 	'dashboard.customize.welcomewagon.getstarted': 'Get started by unlocking your dashboard.',
 	'dashboard.customize.welcomewagon.next': 'Next, change this panel to something else.',
+    'dashboard.customize.welcomewagon.also': 'You can also change the layout in the top right menu.',
 	'dashboard.customize.options.none': 'Empty',
 
 };

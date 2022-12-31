@@ -21,6 +21,7 @@
 
 	const componentChoices = {
 		[null]: 'dashboard.customize.options.none',
+		// welcomewagon: 'WelcomeWagon',
 		'co.casterlabs.dock.viewers.dock': 'Viewers' // Temporary.
 	};
 
