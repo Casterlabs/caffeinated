@@ -159,7 +159,7 @@
 		</div>
 	{/if}
 
-	<div class="flex-1">
+	<div class="flex-1 relative">
 		<textarea
 			class="px-2.5 py-2 resize-none block w-full text-base-12 border transition hover:border-base-8 border-base-7 bg-base-1 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 			class:rounded-l-md={!isMultiAccountMode}
@@ -175,6 +175,8 @@
 				}
 			}}
 		/>
+
+		<slot />
 	</div>
 
 	<div class="flex-0">

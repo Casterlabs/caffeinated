@@ -12,20 +12,22 @@
 	import RaidMessage from './messages/RaidMessage.svelte';
 
 	import InputBox from './InputBox.svelte';
+	import Modal from '$lib/ui/Modal.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import Switch from '$lib/ui/Switch.svelte';
 
 	import createConsole from '../console-helper.mjs';
 	const console = createConsole('ChatViewer');
 
 	export let doAction = (action, data) => {};
-
 	export let userStates = [];
 
 	let chatBox;
 	let chatElements = {};
 
 	// Preferences
+	let settingsModalOpen = false;
 	let showChatTimestamps = true;
-	let showModActions = true;
 	let showProfilePictures = false;
 	let showBadges = false;
 	let showViewers = false;
@@ -126,7 +128,6 @@
 	export function savePreferences() {
 		doAction('save-preferences', {
 			showChatTimestamps: showChatTimestamps,
-			showModActions: showModActions,
 			showProfilePictures: showProfilePictures,
 			showBadges: showBadges,
 			showViewers: showViewers
@@ -135,7 +136,6 @@
 
 	export function loadConfig(config) {
 		showChatTimestamps = config.showChatTimestamps;
-		showModActions = config.showModActions;
 		showProfilePictures = config.showProfilePictures;
 		showBadges = config.showBadges;
 		showViewers = config.showViewers;
@@ -184,14 +184,24 @@
 				const clazz = EVENT_CLASSES[event.event_type];
 				if (!clazz) return;
 
-				const elem = document.createElement('li');
+				const messageTimestamp = document.createElement('span');
+				messageTimestamp.classList = 'message-timestamp';
+				messageTimestamp.innerText = new Date(event.timestamp || Date.now()).toLocaleTimeString();
+
+				const messageContainer = document.createElement('span');
+				messageContainer.classList = 'message-content';
 				const message = new clazz({
-					target: elem,
+					target: messageContainer,
 					props: {
 						event,
 						onContextMenuAction
 					}
 				});
+
+				const li = document.createElement('li');
+				li.classList = 'message-container';
+				li.appendChild(messageTimestamp);
+				li.appendChild(messageContainer);
 
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
@@ -199,13 +209,25 @@
 					chatElements[event.meta_id] = message;
 				}
 
-				chatBox.appendChild(elem);
+				chatBox.appendChild(li);
 			}
 		}
 	}
 </script>
 
-<div class="h-full px-2 pt-2 flex flex-col">
+{#if settingsModalOpen}
+	<Modal on:close={() => (settingsModalOpen = false)}>
+		<LocalizedText slot="title" key="chat.viewer.preferences.title" />
+
+		<Switch
+			title="chat.viewer.preferences.show_chat_timestamps"
+			description=""
+			bind:checked={showChatTimestamps}
+		/>
+	</Modal>
+{/if}
+
+<div class="h-full px-2 pt-2 flex flex-col" class:show-timestamps={showChatTimestamps}>
 	<div class="flex-1 overflow-x-hidden overflow-y-auto">
 		<ul bind:this={chatBox} />
 	</div>
@@ -220,7 +242,18 @@
 					replyTarget: detail.replyTarget?.id || null
 				});
 			}}
-		/>
+		>
+			<button
+				class="absolute inset-y-2 right-2 translate-y-px"
+				on:click={() => (settingsModalOpen = true)}
+			>
+				<icon
+					class="w-5 h-5 transition-all"
+					class:rotate-45={settingsModalOpen}
+					data-icon="icon/cog"
+				/>
+			</button>
+		</InputBox>
 	</div>
 </div>
 
@@ -228,5 +261,26 @@
 	ul :global(b) {
 		font-weight: 600;
 		color: var(--primary11);
+	}
+
+	:global(.message-container) {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	:global(.message-timestamp) {
+		display: none;
+		user-select: none !important;
+		font-weight: 625;
+		font-size: 0.7em;
+	}
+
+	.show-timestamps :global(.message-content) {
+		margin-left: 6px;
+	}
+
+	.show-timestamps :global(.message-timestamp) {
+		display: inline-block;
 	}
 </style>
