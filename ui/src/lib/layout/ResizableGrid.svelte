@@ -294,7 +294,7 @@
 	.hsizer-bar .inner {
 		width: 100%;
 		margin-top: 3px;
-		background-color: var(--base10);
+		background-color: var(--base8);
 		height: 1px;
 	}
 
@@ -319,7 +319,7 @@
 	.vsizer-bar .inner {
 		height: 100%;
 		margin-left: 3px;
-		background-color: var(--base10);
+		background-color: var(--base8);
 		width: 1px;
 	}
 
