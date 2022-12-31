@@ -43,11 +43,14 @@ public class UIPreferences {
     @JsonClass(exposeAll = true)
     public static class ChatViewerPreferences {
         private boolean showChatTimestamps = true;
-        private boolean showModActions = true;
         private boolean showProfilePictures = false;
         private boolean showBadges = false;
         private boolean showViewers = false;
-        private boolean showViewersList = true;
+        private boolean userBadgesOnLeft = false;
+
+        // Still used by the popout dock.
+        private @Deprecated boolean showModActions = true;
+        private @Deprecated boolean showViewersList = true;
 
     }
 
