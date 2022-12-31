@@ -8,10 +8,9 @@
 	import SlimSelectMenu from './SlimSelectMenu.svelte';
 	import RangeInput from './RangeInput.svelte';
 	import FileInput from './FileInput.svelte';
-
-	import { getCurrencies } from '$lib/currencies.mjs';
-	import { fonts } from '$lib/fonts.mjs';
 	import SlimSearchMenu from './SlimSearchMenu.svelte';
+
+	import { fonts, currencies } from '$lib/misc.mjs';
 
 	export let widget;
 	export let widgetSettingsSection;
@@ -65,20 +64,16 @@
 			{:else if type == 'password'}
 				<SlimPassword bind:value on:value={onInput} />
 			{:else if type == 'currency'}
-				{#await getCurrencies() then { currencies }}
-					<SlimSelectMenu
-						title={widgetSettingsItem.name}
-						width="full"
-						bind:value
-						on:value={onInput}
-						options={currencies.reduce(
-							(arr, currency) => ({ ...arr, [currency.currencyCode]: currency.currencyName }),
-							{}
-						)}
-					/>
-				{:catch err}
-					{err}
-				{/await}
+				<SlimSelectMenu
+					title={widgetSettingsItem.name}
+					width="full"
+					bind:value
+					on:value={onInput}
+					options={$currencies.currencies.reduce(
+						(arr, currency) => ({ ...arr, [currency.currencyCode]: currency.currencyName }),
+						{}
+					)}
+				/>
 			{:else if type == 'font'}
 				<SlimSearchMenu
 					title={widgetSettingsItem.name}
