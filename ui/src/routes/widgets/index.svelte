@@ -3,7 +3,7 @@
 	import PageTitle from '../../components/PageTitle.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import CardList from '$lib/ui/CardList/index.svelte';
-	import Card from '$lib/ui/cardlist/Card.svelte';
+	import Card from '$lib/ui/CardList/Card.svelte';
 
 	import { onMount } from 'svelte';
 	import { t } from '$lib/translate.mjs';
