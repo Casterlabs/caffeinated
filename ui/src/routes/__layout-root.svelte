@@ -16,6 +16,7 @@
 	import { dev } from '$app/env';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
+	import { fonts } from '$lib/fonts.mjs';
 	import { onMount } from 'svelte';
 	import CSSIntermediate from '$lib/CSSIntermediate.svelte';
 	import hookIcons from '$lib/icons.mjs';
@@ -48,6 +49,8 @@
 	onMount(() => {
 		hookIcons();
 		hookAnchors(Caffeinated.UI.openLink);
+
+		Caffeinated.UI.fonts.then(fonts.set);
 
 		window.debug_goto = goto;
 		window.debug_get = get;

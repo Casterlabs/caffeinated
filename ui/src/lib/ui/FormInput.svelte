@@ -10,6 +10,8 @@
 	import FileInput from './FileInput.svelte';
 
 	import { getCurrencies } from '$lib/currencies.mjs';
+	import { fonts } from '$lib/fonts.mjs';
+	import SlimSearchMenu from './SlimSearchMenu.svelte';
 
 	export let widget;
 	export let widgetSettingsSection;
@@ -78,7 +80,28 @@
 					{err}
 				{/await}
 			{:else if type == 'font'}
-				//font
+				<SlimSearchMenu
+					title={widgetSettingsItem.name}
+					width="full"
+					bind:value
+					on:value={onInput}
+					search={(query) => {
+						query = query.toLowerCase();
+						let result = [];
+
+						for (const font of $fonts) {
+							if (font.toLowerCase().includes(query)) {
+								result.push(font);
+							}
+
+							if (result.length == 6) {
+								break; // Max of 6 results.
+							}
+						}
+
+						return result;
+					}}
+				/>
 			{:else if type == 'range'}
 				{@const { step, min, max } = widgetSettingsItem.extraData}
 				<RangeInput {step} {min} {max} bind:value on:value={onInput} />
