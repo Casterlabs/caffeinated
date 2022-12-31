@@ -4,8 +4,8 @@
 # (Optional) Compile everything
 if [[ $@ != *"nocompile"* ]]; then
     # Delete old ui build stuff.
-    # rm -rf ui/build
-    # rm -rf app/Bootstrap/src/main/resources/app
+    rm -rf ui/build
+    rm -rf app/Bootstrap/src/main/resources/app
     
     # Build UI
     cd ui
