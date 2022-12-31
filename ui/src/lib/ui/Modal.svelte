@@ -3,6 +3,7 @@
 
 	import { createEventDispatcher } from 'svelte';
 	import { t } from '$lib/translate.mjs';
+	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
 
@@ -11,7 +12,13 @@
 	}
 </script>
 
-<div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<div
+	class="relative z-10"
+	aria-labelledby="modal-title"
+	role="dialog"
+	aria-modal="true"
+	transition:fade={{ duration: 150 }}
+>
 	<div class="fixed inset-0 bg-base-6 opacity-75 transition-opacity" />
 
 	<div class="fixed inset-0 z-10 overflow-y-auto">
