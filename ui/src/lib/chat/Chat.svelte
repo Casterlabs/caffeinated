@@ -17,11 +17,13 @@
 	import Switch from '$lib/ui/Switch.svelte';
 
 	import createConsole from '../console-helper.mjs';
+	import { fade } from 'svelte/transition';
 	const console = createConsole('ChatViewer');
 
 	export let doAction = (action, data) => {};
 	export let userStates = [];
 
+	/** @type {HTMLElement} */
 	let chatBox;
 	let chatElements = {};
 
@@ -32,6 +34,22 @@
 	let showBadges = false;
 	let showBadgesOnLeft = false;
 	let showViewers = false;
+
+	let isAtBottom = true;
+
+	function checkNearBottom() {
+		const elem = chatBox.parentElement;
+		const scrollPercent = (elem.scrollTop + elem.clientHeight) / elem.scrollHeight;
+		isAtBottom = scrollPercent >= 0.9;
+	}
+
+	function jumpToBottom(behavior = 'smooth') {
+		const elem = chatBox.parentElement;
+
+		setTimeout(() => {
+			elem.scrollTo({ top: elem.scrollHeight + 200, behavior });
+		}, 50);
+	}
 
 	// prettier-ignore
 	const EVENT_CLASSES = {
@@ -185,7 +203,7 @@
 
 			default: {
 				const clazz = EVENT_CLASSES[event.event_type];
-				if (!clazz) return;
+				if (!clazz) break;
 
 				const messageTimestamp = document.createElement('span');
 				messageTimestamp.classList = 'message-timestamp';
@@ -217,7 +235,12 @@
 				}
 
 				chatBox.appendChild(li);
+				break;
 			}
+		}
+
+		if (isAtBottom) {
+			jumpToBottom('auto');
 		}
 	}
 </script>
@@ -264,14 +287,24 @@
 {/if}
 
 <div
-	class="h-full px-2 pt-2 flex flex-col"
+	class="h-full px-2 pt-2 flex flex-col relative"
 	class:show-timestamps={showChatTimestamps}
 	class:show-badges={showBadges}
 	class:show-viewers={showViewers}
 >
-	<div class="flex-1 overflow-x-hidden overflow-y-auto">
+	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
 		<ul bind:this={chatBox} />
 	</div>
+
+	{#if !isAtBottom}
+		<button
+			class="absolute bottom-14 right-3 cursor-pointer rounded-full p-1 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
+			transition:fade
+			on:click={() => jumpToBottom()}
+		>
+			<icon data-icon="icon/arrow-small-down" />
+		</button>
+	{/if}
 
 	<div class="flex-0 pt-2 pb-1 h-fit">
 		<InputBox
