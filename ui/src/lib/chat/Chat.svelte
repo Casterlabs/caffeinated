@@ -292,7 +292,7 @@
 	class:show-badges={showBadges}
 	class:show-viewers={showViewers}
 >
-	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
+	<div class="flex-1 overflow-x-hidden overflow-y-auto break-words" on:scroll={checkNearBottom}>
 		<ul bind:this={chatBox} />
 	</div>
 
@@ -337,13 +337,11 @@
 		color: var(--primary11);
 	}
 
-	/* Timestamps */
-
 	:global(.message-container) {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
+		display: block;
 	}
+
+	/* Timestamps */
 
 	:global(.message-timestamp) {
 		display: none;
@@ -377,6 +375,6 @@
 	}
 
 	.show-viewers :global(.viewer-joinleave) {
-		display: unset !important;
+		display: block !important;
 	}
 </style>
