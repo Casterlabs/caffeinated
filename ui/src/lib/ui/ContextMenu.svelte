@@ -71,6 +71,7 @@
 	}}
 >
 	<div
+		class="contents"
 		on:contextmenu={(e) => {
 			e.preventDefault();
 			const { clientX: x, clientY: y } = e;

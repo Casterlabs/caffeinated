@@ -28,6 +28,6 @@
 	</script>
 </svelte:head>
 
-<div bind:this={element} data-long-press-delay={DELAY}>
+<div class="contents" bind:this={element} data-long-press-delay={DELAY}>
 	<slot />
 </div>
