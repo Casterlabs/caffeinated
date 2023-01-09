@@ -18,7 +18,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class UserUpdateEvent extends KoiEvent {
     private User streamer;
-    private String timestamp;
 
     // Intercept the deserialization.
     @JsonDeserializationMethod("streamer")
