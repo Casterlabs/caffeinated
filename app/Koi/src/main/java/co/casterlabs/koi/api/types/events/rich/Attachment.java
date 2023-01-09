@@ -12,6 +12,9 @@ public class Attachment {
     private String html;
 
     public static enum AttachmentType {
-        GIF;
+        @Deprecated
+        GIF,
+        IMAGE,
+        INTERACTIVE;
     }
 }

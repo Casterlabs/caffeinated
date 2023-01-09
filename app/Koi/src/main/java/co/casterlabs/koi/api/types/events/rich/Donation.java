@@ -7,13 +7,17 @@ import lombok.Data;
 @Data
 @JsonClass(exposeAll = true)
 public class Donation {
-    @JsonField("animated_image")
-    private String animatedImage;
-    private String currency;
-    private double amount;
-    private String image;
     private Donation.DonationType type;
     private String name;
+
+    private String currency;
+    private double amount;
+
+    private String image;
+
+    @Deprecated
+    @JsonField("animated_image")
+    private String animatedImage;
 
     public static enum DonationType {
         CASTERLABS_TEST,

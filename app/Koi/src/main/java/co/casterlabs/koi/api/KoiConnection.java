@@ -149,7 +149,7 @@ public class KoiConnection implements Closeable {
                         return;
                     }
 
-                    case "FEATURES": {
+                    case "INTEGRATION_FEATURES": {
                         listener.onSupportedFeatures(
                             Rson.DEFAULT.fromJson(
                                 packet.get("features"),
@@ -260,15 +260,6 @@ public class KoiConnection implements Closeable {
                 .put("type", "DELETE")
                 .put("message_id", messageId)
                 .put("is_user_gesture", isUserGesture)
-                .toString()
-        );
-    }
-
-    public void sendTest(@NonNull String eventType) {
-        this.socket.send(
-            new JsonObject()
-                .put("type", "TEST")
-                .put("eventType", eventType.toUpperCase())
                 .toString()
         );
     }

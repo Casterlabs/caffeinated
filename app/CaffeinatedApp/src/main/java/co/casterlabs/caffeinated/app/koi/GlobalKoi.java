@@ -296,10 +296,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         @Nullable String replyTarget, boolean isUserGesture
     ) {
         if (message.startsWith("/koi test ")) {
-            this.sendTest(
-                platform,
-                message.substring("/koi test ".length()).trim()
-            );
+            // NOOP
         } else {
             AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
 
@@ -326,14 +323,6 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
         if (inst != null) {
             inst.deleteChat(messageId, isUserGesture);
-        }
-    }
-
-    public void sendTest(@NonNull UserPlatform platform, @NonNull String eventType) {
-        AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
-
-        if (inst != null) {
-            inst.sendTest(eventType);
         }
     }
 
