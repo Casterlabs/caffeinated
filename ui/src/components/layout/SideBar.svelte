@@ -2,6 +2,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	const sections = [
 		[
@@ -34,6 +35,14 @@
 			}
 		]
 	];
+
+	let updateAvailable = false;
+
+	onMount(() => {
+		setTimeout(async () => {
+			updateAvailable = await Caffeinated.hasUpdate();
+		}, 15 /*min*/ * 80 * 1000);
+	});
 </script>
 
 <div class="flex-0 w-[var(--sidebar-width)] h-full flex flex-col">
@@ -43,6 +52,21 @@
 			aria-label="Sidebar"
 			role="listbox"
 		>
+			{#if updateAvailable}
+				<div class="space-y-1 px-2 py-4" role="listitem">
+					<button
+						class="group flex flex-col items-center px-3 py-2 border-current font-medium rounded-md bg-primary-10 hover:bg-primary-11 text-base-1 hover:text-base-3 transition"
+					>
+						<h1 class="text-md">
+							<LocalizedText key="sidebar.update_app" />
+						</h1>
+						<h2 class="text-xs">
+							<LocalizedText key="sidebar.update_app.description" />
+						</h2>
+					</button>
+				</div>
+			{/if}
+
 			{#each sections as section}
 				<div class="space-y-1 px-2 py-4" role="listitem">
 					{#each section as item}

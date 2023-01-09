@@ -24,10 +24,11 @@ export default {
     'sr.navigation.back': 'Go Back',
     'navigation.want_to_go_back': 'Want to go back?',
 
-    show_me_how: 'Show me how',
+    'show_me_how': 'Show me how',
 
     'page.dashboard': 'Dashboard',
-    'page.chat': 'Chat',
+    'sidebar.update_app': 'Update the app',
+    'sidebar.update_app.description': 'Click here to restart and download the latest updates.',
 
     /* ---- Signin ---- */
 

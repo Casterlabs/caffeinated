@@ -29,6 +29,7 @@ import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
+import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
@@ -45,6 +46,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
+import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.loggerimpl.FileLogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
@@ -262,6 +264,27 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
 
         return account.isHasCasterlabsPlus();
+    }
+
+    @JavascriptFunction
+    public boolean hasUpdate() {
+        if (isDev) return false;
+
+        try {
+            String commit = WebUtil.sendHttpRequest(
+                new Request.Builder()
+                    .url(
+                        String.format(
+                            "https://cdn.casterlabs.co/dist/%s/commit",
+                            this.buildInfo.getBuildChannel()
+                        )
+                    )
+            );
+
+            return !this.buildInfo.getCommit().equals(commit);
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
 }
