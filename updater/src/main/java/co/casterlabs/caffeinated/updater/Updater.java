@@ -246,9 +246,12 @@ public class Updater {
                 dialog.dispose();
                 mainMethod.invoke(null, (Object) args);
             } else {
+                String updaterCommandLine = Platform.tryGetCommandLine();
+                FastLogger.logStatic("Updater CommandLine: %s", updaterCommandLine);
+
                 ProcessBuilder pb = new ProcessBuilder()
                     .directory(appDirectory)
-                    .command(launchCommand);
+                    .command(launchCommand, "--restart-commandline", updaterCommandLine);
 
                 // TODO wait for .build_ok to show up.
 

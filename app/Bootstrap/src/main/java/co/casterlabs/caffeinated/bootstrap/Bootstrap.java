@@ -75,6 +75,11 @@ public class Bootstrap implements Runnable {
     }, description = "Disables colored output.")
     private boolean disableColor = false;
 
+    @Option(names = {
+            "--restart-commandline"
+    }, description = "The command to be executed to restart Caffeinated. Has a default.")
+    private String restartCommandLine;
+
     private static boolean restartWithConsole = false;
 
     private static FastLogger logger = new FastLogger();
@@ -429,6 +434,8 @@ public class Bootstrap implements Runnable {
             } else {
                 command = String.format("\"%s/bin/java\" %s -cp \"%s\" %s", javaHome, jvmArgs, classpath, entry);
             }
+        } else if (instance.restartCommandLine != null) {
+            command = instance.restartCommandLine;
         } else {
             switch (Platform.osDistribution) {
                 case LINUX:
