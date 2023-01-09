@@ -91,7 +91,7 @@
 
 <PageTitle title="page.dashboard" />
 
-<div class="fixed inset-0 left-48">
+<div class="fixed inset-0 left-[var(--sidebar-width)]">
 	<CustomResizableGrid
 		bind:this={layoutElement}
 		maxSize={MAX}

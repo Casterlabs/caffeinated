@@ -36,7 +36,7 @@
 	];
 </script>
 
-<div class="flex-0 w-48 h-full flex flex-col">
+<div class="flex-0 w-[var(--sidebar-width)] h-full flex flex-col">
 	<div class="flex flex-grow flex-col overflow-y-auto bg-base-2 pb-4">
 		<!-- <div class="flex flex-shrink-0 items-center px-4 pt-5 mb-3">
 			<svg
@@ -171,3 +171,9 @@
 		</nav>
 	</div>
 </div>
+
+<style>
+	:root {
+		--sidebar-width: 12rem;
+	}
+</style>
