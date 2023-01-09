@@ -246,14 +246,15 @@ public class Updater {
                 dialog.dispose();
                 mainMethod.invoke(null, (Object) args);
             } else {
-                String updaterCommandLine = Platform.tryGetCommandLine();
+                String updaterCommandLine = '"' + Platform.tryGetCommandLine().replace("\"", "\\\"") + '"';
                 FastLogger.logStatic("Updater CommandLine: %s", updaterCommandLine);
 
                 ProcessBuilder pb = new ProcessBuilder()
                     .directory(appDirectory)
                     .command(launchCommand, "--restart-commandline", updaterCommandLine);
 
-                // TODO wait for .build_ok to show up.
+                // TODO look for the .build_ok file before trusting the process. (kill & let the
+                // user know it's dead)
 
                 if (Platform.osDistribution == OSDistribution.MACOS) {
                     // On MacOS we do not want to keep the updater process open as it'll stick in
@@ -268,8 +269,6 @@ public class Updater {
                 pb.start();
 
                 // TODO look for "Starting the UI" before we close the dialog.
-                // TODO look for the .build_ok file before trusting the process. (kill & let the
-                // user know it's dead)
 
                 TimeUnit.SECONDS.sleep(2);
                 dialog.close();
