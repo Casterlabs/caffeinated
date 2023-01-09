@@ -14,6 +14,9 @@
 
 	export let upvotes = event.upvotes;
 	export let isDeleted = false;
+
+	// Either if `is_highlighted` or `donations` > 0.
+	$: highlighted = event?.is_highlighted || event?.donations.length > 0 || false;
 </script>
 
 <ContextMenu
@@ -66,7 +69,12 @@
 		}
 	]}
 >
-	<div class="transition" class:opacity-60={isDeleted} class:hover:opacity-100={isDeleted}>
+	<div
+		class="transition inline-block"
+		class:highlight={highlighted}
+		class:opacity-60={isDeleted}
+		class:hover:opacity-100={isDeleted}
+	>
 		<span class="richmessage-badges space-x-1" aria-hidden="true">
 			{#each event.sender.badges as badge}
 				<img class="inline-block h-4 -translate-y-0.5" alt="" src={badge} />
@@ -77,7 +85,7 @@
 			aria-hidden="true"
 		>
 			<span class="select-none"> : </span>
-			<span class="opacity-0 absolute"> &gt;&nbsp; </span>
+			<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
 		</span>
 
 		<span>
@@ -101,6 +109,14 @@
 </ContextMenu>
 
 <style>
+	/* Highlight */
+	:global(li.message-container):has(.highlight) {
+		border-radius: 0.375rem; /* rounded-md */
+		padding: 0.5rem; /* p-2 */
+		background-color: var(--primary5); /* bg-primary-5 */
+		text-shadow: 1px 1px 5px var(--primary3); /* Try to make the text more readable */
+	}
+
 	/* Upvotes */
 	.upvote-1 {
 		/* 1+ */
