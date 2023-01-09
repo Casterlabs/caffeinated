@@ -16,9 +16,9 @@ import java.util.concurrent.TimeUnit;
 import co.casterlabs.caffeinated.updater.util.FileUtil;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
 import co.casterlabs.caffeinated.updater.util.ZipUtil;
-import co.casterlabs.caffeinated.updater.util.platform.OperatingSystem;
-import co.casterlabs.caffeinated.updater.util.platform.Platform;
 import co.casterlabs.caffeinated.updater.window.UpdaterDialog;
+import co.casterlabs.commons.platform.OSDistribution;
+import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonArray;
@@ -44,8 +44,8 @@ public class Updater {
     private static File commitFile = new File(appDirectory, ".commit");
     private static File buildokFile = new File(appDirectory, ".build_ok");
 
-    private static final List<OperatingSystem> INLINE_PLATFORMS = Arrays.asList(
-//        OperatingSystem.WINDOWS
+    private static final List<OSDistribution> INLINE_PLATFORMS = Arrays.asList(
+        // OSDistribution.WINDOWS_NT
     );
 
     private static @Getter boolean isLauncherOutOfDate = false;
@@ -56,8 +56,8 @@ public class Updater {
     static {
         appDirectory.mkdirs();
 
-        switch (Platform.os) {
-            case MACOSX:
+        switch (Platform.osDistribution) {
+            case MACOS:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
                 REMOTE_ZIP_DOWNLOAD_URL += "macOS-amd64.zip";
                 break;
@@ -67,7 +67,7 @@ public class Updater {
                 REMOTE_ZIP_DOWNLOAD_URL += "Linux-amd64.zip";
                 break;
 
-            case WINDOWS:
+            case WINDOWS_NT:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.exe";
                 REMOTE_ZIP_DOWNLOAD_URL += "Windows-amd64.zip";
                 break;
@@ -159,23 +159,25 @@ public class Updater {
 
                 updateFile.delete();
 
-                // Make the executable... executable on Linux.
-                if (Platform.os == OperatingSystem.LINUX) {
-                    String executable = appDirectory.getAbsolutePath() + "/Casterlabs-Caffeinated";
+                switch (Platform.osDistribution) {
+                    case LINUX: {
+                        // Make the executable... executable on Linux.
+                        String executable = appDirectory.getAbsolutePath() + "/Casterlabs-Caffeinated";
 
-                    new ProcessBuilder()
-                        .command(
-                            "chmod", "+x", executable
-                        )
-                        .inheritIO()
-                        .start()
+                        new ProcessBuilder()
+                            .command(
+                                "chmod", "+x", executable
+                            )
+                            .inheritIO()
+                            .start()
 
-                        // Wait for exit.
-                        .waitFor();
-                } else
+                            // Wait for exit.
+                            .waitFor();
+                        break;
+                    }
 
-                    // Unquarantine the app on MacOS.
-                    if (Platform.os == OperatingSystem.MACOSX) {
+                    case MACOS: {
+                        // Unquarantine the app on MacOS.
                         String app = '"' + appDirectory.getAbsolutePath() + "/Casterlabs-Caffeinated.app" + '"';
                         String command = "xattr -rd com.apple.quarantine " + app + " && chmod -R u+x " + app;
 
@@ -192,7 +194,12 @@ public class Updater {
 
                             // Wait for exit.
                             .waitFor();
+                        break;
                     }
+
+                    default:
+                        break;
+                }
             }
         } catch (Exception e) {
             throw new UpdaterException(UpdaterException.Error.DOWNLOAD_FAILED, "Update failed :(", e);
@@ -201,7 +208,7 @@ public class Updater {
 
     public static void launch(UpdaterDialog dialog) throws UpdaterException {
         try {
-            if (INLINE_PLATFORMS.contains(Platform.os)) {
+            if (INLINE_PLATFORMS.contains(Platform.osDistribution)) {
                 // Here's where the fun starts, we load all the jars and run the in the same
                 // process 👀
 
@@ -245,7 +252,7 @@ public class Updater {
 
                 // TODO wait for .build_ok to show up.
 
-                if (Platform.os == OperatingSystem.MACOSX) {
+                if (Platform.osDistribution == OSDistribution.MACOS) {
                     // On MacOS we do not want to keep the updater process open as it'll stick in
                     // the dock. So we start the process and kill the updater to make sure that
                     // doesn't happen.

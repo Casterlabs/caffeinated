@@ -21,14 +21,15 @@ import co.casterlabs.caffeinated.updater.animations.ValentinesAnimation;
 import co.casterlabs.caffeinated.updater.animations.WinterSeasonAnimation;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
 import co.casterlabs.caffeinated.updater.window.UpdaterDialog;
+import co.casterlabs.commons.platform.OSFamily;
+import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.io.IOUtil;
 import lombok.Getter;
 import lombok.Setter;
 import okhttp3.Request;
 import okhttp3.Response;
-import xyz.e3ndr.consoleutil.ConsoleUtil;
+import xyz.e3ndr.fastloggingframework.FastLogHandler;
 import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
-import xyz.e3ndr.fastloggingframework.LogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogColor;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
@@ -50,7 +51,7 @@ public class Launcher {
             @SuppressWarnings("resource")
             final FileOutputStream logOut = new FileOutputStream(logFile, true);
 
-            FastLoggingFramework.setLogHandler(new LogHandler() {
+            FastLoggingFramework.setLogHandler(new FastLogHandler() {
                 @Override
                 protected void log(String name, LogLevel level, String formatted) {
                     System.out.println(LogColor.translateToAnsi(formatted));
@@ -147,24 +148,18 @@ public class Launcher {
         } else {
             String[] kill;
 
-            switch (ConsoleUtil.getPlatform()) {
-                case WINDOWS: {
-                    kill = new String[] {
-                            "taskkill",
-                            "/F",
-                            "/IM",
-                            "Casterlabs-Caffeinated.exe"
-                    };
-                    break;
-                }
-
-                default: {
-                    kill = new String[] {
-                            "pkill",
-                            "Casterlabs-Caffeinated"
-                    };
-                    break;
-                }
+            if (Platform.osFamily == OSFamily.WINDOWS) {
+                kill = new String[] {
+                        "taskkill",
+                        "/F",
+                        "/IM",
+                        "Casterlabs-Caffeinated.exe"
+                };
+            } else {
+                kill = new String[] {
+                        "pkill",
+                        "Casterlabs-Caffeinated"
+                };
             }
 
             FastLogger.logStatic("App isn't responding (or isn't open), attempting to kill it.");
@@ -180,18 +175,13 @@ public class Launcher {
         if (Updater.isLauncherOutOfDate()) {
             TimeUnit.SECONDS.sleep(1);
 
-            switch (ConsoleUtil.getPlatform()) {
-                case WINDOWS: {
-                    try {
-                        updateUpdaterWindows();
-                        return;
-                    } catch (Exception e) {
-                        FastLogger.logStatic("Couldn't automagically update the updater (defaulting to the normal message):\n%s", e);
-                    }
-                }
-
-                default: {
-                    break;
+            // Try to autodownload the installer and run it.
+            if (Platform.osFamily == OSFamily.WINDOWS) {
+                try {
+                    updateUpdaterWindows();
+                    return;
+                } catch (Exception e) {
+                    FastLogger.logStatic("Couldn't automagically update the updater (defaulting to the normal message):\n%s", e);
                 }
             }
 

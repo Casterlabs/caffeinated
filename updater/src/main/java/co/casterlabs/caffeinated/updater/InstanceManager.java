@@ -6,8 +6,8 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileLock;
 import java.util.concurrent.TimeUnit;
 
-import co.casterlabs.caffeinated.updater.util.async.AsyncTask;
-import co.casterlabs.caffeinated.updater.util.async.Promise;
+import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.async.PromiseWithHandles;
 import xyz.e3ndr.consoleutil.ipc.IpcChannel;
 import xyz.e3ndr.consoleutil.ipc.MemoryMappedIpc;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -55,22 +55,22 @@ public class InstanceManager {
     }
 
     private static boolean childIpcComms(String command) {
-        Promise<Void> commsPromise = new Promise<>();
+        PromiseWithHandles<Void> commsPromise = new PromiseWithHandles<>();
 
         // Watchdog task
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             try {
                 Thread.sleep(CHECK_TIMEOUT);
             } catch (InterruptedException ignored) {}
 
-            if (!commsPromise.isCompleted()) {
-                commsPromise.error(new IllegalStateException("IPC communication timed out."));
+            if (!commsPromise.hasCompleted()) {
+                commsPromise.reject(new IllegalStateException("IPC communication timed out."));
                 FastLogger.logStatic(LogLevel.INFO, "IPC communication timed out.");
             }
         });
 
         // IPC task
-        new AsyncTask(() -> {
+        AsyncTask.create(() -> {
             try {
                 IpcChannel ipc = MemoryMappedIpc.startHostIpc(ipcDir, "launch");
 
@@ -80,14 +80,14 @@ public class InstanceManager {
                     String line = ipc.read();
 
                     if (line.equals("OK")) {
-                        commsPromise.fulfill(null);
+                        commsPromise.resolve(null);
                         break;
                     }
                 }
 
                 ipc.close();
             } catch (Exception e) {
-                commsPromise.error(new IOException("IPC communications failed.", e));
+                commsPromise.reject(new IOException("IPC communications failed.", e));
             }
         });
 
