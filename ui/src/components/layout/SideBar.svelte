@@ -56,6 +56,7 @@
 				<div class="space-y-1 px-2 py-4" role="listitem">
 					<button
 						class="group flex flex-col items-center px-3 py-2 border-current font-medium rounded-md bg-primary-10 hover:bg-primary-11 text-base-1 hover:text-base-3 transition"
+						on:click={() => Bridge.emit('app:restart')}
 					>
 						<h1 class="text-md">
 							<LocalizedText key="sidebar.update_app" />
