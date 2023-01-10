@@ -39,9 +39,9 @@
 	let updateAvailable = false;
 
 	onMount(() => {
-		setTimeout(async () => {
+		setInterval(async () => {
 			updateAvailable = await Caffeinated.hasUpdate();
-		}, 15 /*min*/ * 80 * 1000);
+		}, 2 /*min*/ * 60 * 1000);
 	});
 </script>
 
