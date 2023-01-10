@@ -51,8 +51,6 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
         Pair<RealtimeConnection, WidgetInstance> connPair = new Pair<>(this.connInstance, this.wInstance);
 
         websocket.setAttachment(connPair);
-        this.handle.widgetInstances.add(this.wInstance);
-        this.handle.widget.onNewInstance(this.wInstance);
 
         JsonObject statics = null;
 
@@ -104,6 +102,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
             switch (type) {
 
                 case "READY": {
+                    this.handle.widgetInstances.add(this.wInstance);
                     this.handle.widget.onNewInstance(this.wInstance);
                     return;
                 }
