@@ -4,8 +4,6 @@ import java.time.Instant;
 
 import co.casterlabs.koi.api.types.user.SimpleProfile;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
-import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
-import co.casterlabs.rakurai.json.annotating.JsonExclude;
 import co.casterlabs.rakurai.json.annotating.JsonField;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -20,7 +18,7 @@ import lombok.ToString;
 @JsonClass(exposeAll = true)
 public abstract class KoiEvent {
     protected SimpleProfile streamer;
-    private @JsonExclude Instant timestamp;
+    protected String timestamp;
 
     @JsonField("event_abilities")
     protected EventAbilities abilities;
@@ -32,14 +30,8 @@ public abstract class KoiEvent {
         return new JsonString(this.getType());
     }
 
-    @JsonSerializationMethod("timestamp")
-    private JsonElement $serialize_timestamp() {
-        return new JsonString(this.timestamp.toString());
-    }
-
-    @JsonDeserializationMethod("timestamp")
-    private void $deserialize_timestamp(JsonElement e) {
-        this.timestamp = Instant.parse(e.getAsString());
+    public Instant getTimestamp() {
+        return Instant.parse(this.timestamp); // TODO Fix this ugliness.
     }
 
     @Getter
