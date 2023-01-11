@@ -271,9 +271,7 @@
             div.appendChild(msg);
 
             // Upvotes
-            const counter = document.createElement("sup");
-            counter.setAttribute("data-meta-id", event.meta_id);
-            div.appendChild(counter);
+            msg.querySelector(".upvote-counter")?.setAttribute("data-meta-id", event.meta_id);
 
             return div;
         }

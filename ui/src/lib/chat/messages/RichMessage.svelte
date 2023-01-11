@@ -1,6 +1,7 @@
 <svelte:options accessors />
 
 <script>
+	import { onMount } from 'svelte';
 	import ContextMenu from '../../ui/ContextMenu.svelte';
 
 	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
@@ -11,12 +12,23 @@
 
 	export let event;
 	export let onContextMenuAction;
+	let container;
 
 	export let upvotes = event.upvotes;
 	export let isDeleted = false;
 
 	// Either if `is_highlighted` or `donations` > 0.
 	$: highlighted = event?.is_highlighted || event?.donations.length > 0 || false;
+
+	function updateUpvotes() {
+		if (!container) return;
+
+		const counter = container.querySelector('.upvote-counter');
+		if (counter) counter.innerHTML = upvotes;
+	}
+
+	$: upvotes, updateUpvotes();
+	onMount(updateUpvotes);
 </script>
 
 <ContextMenu
@@ -74,6 +86,7 @@
 		class:highlight={highlighted}
 		class:opacity-60={isDeleted}
 		class:hover:opacity-100={isDeleted}
+		bind:this={container}
 	>
 		<span class="richmessage-badges space-x-1" aria-hidden="true">
 			{#each event.sender.badges as badge}
@@ -88,21 +101,14 @@
 			<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
 		</span>
 
-		<span>
+		<span
+			class:upvote-1={upvotes > 0}
+			class:upvote-2={upvotes > 10}
+			class:upvote-3={upvotes > 100}
+			class:upvote-4={upvotes > 1000}
+		>
 			{@html event.html}
-		</span>{#if upvotes > 0}
-			<sup class="upvote-counter">
-				{#if upvotes < 10}
-					<span class="upvote-1">{upvotes}</span>
-				{:else if upvotes < 100}
-					<span class="upvote-2">{upvotes}</span>
-				{:else if upvotes < 1000}
-					<span class="upvote-3">{upvotes}</span>
-				{:else}
-					<span class="upvote-4">{upvotes}</span>
-				{/if}
-			</sup>
-		{/if}
+		</span>
 
 		<!-- TODO Donations -->
 	</div>
@@ -118,23 +124,32 @@
 	}
 
 	/* Upvotes */
-	.upvote-1 {
+	:global(.upvote-counter) {
+		display: none;
+		font-weight: bold;
+	}
+
+	.upvote-1 :global(.upvote-counter) {
 		/* 1+ */
 		color: #ff00ff;
+		display: inline-block;
 	}
 
-	.upvote-2 {
+	.upvote-2 :global(.upvote-counter) {
 		/* 10+ */
 		color: #00ff00;
+		display: inline-block;
 	}
 
-	.upvote-3 {
+	.upvote-3 :global(.upvote-counter) {
 		/* 100+ */
 		color: #ffff00;
+		display: inline-block;
 	}
 
-	.upvote-4 {
+	.upvote-4 :global(.upvote-counter) {
 		/* 1000+ */
 		color: #ffffff;
+		display: inline-block;
 	}
 </style>
