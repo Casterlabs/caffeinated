@@ -30,6 +30,7 @@
 				location.href.includes('?fromSettings')
 			);
 			// Success!
+			history.back();
 		} catch (ex) {
 			isLoading = false;
 
