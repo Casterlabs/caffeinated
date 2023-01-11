@@ -292,7 +292,7 @@
 	class:show-badges={showBadges}
 	class:show-viewers={showViewers}
 >
-	<div class="flex-1 overflow-x-hidden overflow-y-auto break-all" on:scroll={checkNearBottom}>
+	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
 		<ul bind:this={chatBox} />
 	</div>
 
@@ -339,10 +339,15 @@
 
 	:global(.message-container) {
 		display: block;
+		white-space: nowrap;
+		width: 100%;
+		overflow: hidden;
 	}
 
 	:global(.message-content) {
+		width: calc(100% - var(--timestamp-width, 0));
 		display: inline-block;
+		white-space: normal;
 	}
 
 	/* Timestamps */
@@ -353,15 +358,18 @@
 		font-weight: 625;
 		font-size: 0.7em;
 		vertical-align: top;
+		text-align: right;
 		transform: translateY(0.3rem);
 	}
 
-	.show-timestamps :global(.message-content) {
-		margin-left: 6px;
+	.show-timestamps :global(.message-container) {
+		--timestamp-width: 70px;
 	}
 
 	.show-timestamps :global(.message-timestamp) {
 		display: inline-block;
+		width: var(--timestamp-width, 0);
+		padding-right: 5px;
 	}
 
 	/* Badges */
