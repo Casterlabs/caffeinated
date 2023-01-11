@@ -352,6 +352,8 @@
 		user-select: none !important;
 		font-weight: 625;
 		font-size: 0.7em;
+		vertical-align: top;
+		transform: translateY(0.3rem);
 	}
 
 	.show-timestamps :global(.message-content) {
