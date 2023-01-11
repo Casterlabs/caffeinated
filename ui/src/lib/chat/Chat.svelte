@@ -292,7 +292,7 @@
 	class:show-badges={showBadges}
 	class:show-viewers={showViewers}
 >
-	<div class="flex-1 overflow-x-hidden overflow-y-auto break-words" on:scroll={checkNearBottom}>
+	<div class="flex-1 overflow-x-hidden overflow-y-auto break-all" on:scroll={checkNearBottom}>
 		<ul bind:this={chatBox} />
 	</div>
 
@@ -339,6 +339,10 @@
 
 	:global(.message-container) {
 		display: block;
+	}
+
+	:global(.message-content) {
+		display: inline-block;
 	}
 
 	/* Timestamps */
