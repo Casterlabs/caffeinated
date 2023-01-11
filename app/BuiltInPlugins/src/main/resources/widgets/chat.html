@@ -25,10 +25,6 @@
             padding-right: 15px;
         }
         
-        .hide-donations .donation {
-            display: none;
-        }
-        
         .message {
             padding-left: 0.5ch;
         }
@@ -160,12 +156,6 @@
                     break;
             }
 
-            if (Widget.getSetting("chat_style.show_donations")) {
-                document.body.classList.remove("hide-donations");
-            } else {
-                document.body.classList.add("hide-donations");
-            }
-
             if (shouldRedraw) {
                 chatDiv.innerHTML = "";
                 Koi.eventHistory.forEach(onEvent);
@@ -284,22 +274,6 @@
             const counter = document.createElement("sup");
             counter.setAttribute("data-meta-id", event.meta_id);
             div.appendChild(counter);
-
-            // Donations
-            if (event.donations.length > 0) {
-                div.classList.add("donation");
-
-                event.donations.forEach((donation) => {
-                    // TODO Trovo, when we figure that out.
-                    if (donation.type === "CAFFEINE_PROP") {
-                        const img = document.createElement("img");
-
-                        img.src = donation.animated_image;
-
-                        div.appendChild(img);
-                    }
-                });
-            }
 
             return div;
         }

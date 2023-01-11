@@ -28,7 +28,6 @@ public class ChatWidget extends Widget {
                 .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
                 .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right"))
                 .addItem(WidgetSettingsItem.asDropdown("badges", "Badges", "After Username", "Hidden", "Before Username", "After Username"))
-                .addItem(WidgetSettingsItem.asCheckbox("show_donations", "Show Donations", true))
         )
 //        .addSection(
 //            new WidgetSettingsSection("moderation", "Moderation")
