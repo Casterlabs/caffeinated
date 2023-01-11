@@ -81,7 +81,7 @@
 			{/each}
 		</span>
 
-		<span style:color={event.sender.color || 'red'}> {event.sender.displayname}</span><span
+		<b style:color={event.sender.color || 'red'}>{event.sender.displayname}</b><span
 			aria-hidden="true"
 		>
 			<span class="select-none"> : </span>
