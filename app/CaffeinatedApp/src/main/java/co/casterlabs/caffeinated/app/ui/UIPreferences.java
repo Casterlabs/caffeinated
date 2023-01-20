@@ -22,6 +22,7 @@ public class UIPreferences {
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
     private boolean enableStupidlyUnsafeSettings = false;
     private boolean enableAlternateThemes = false;
+    private double zoom = 1.0;
 
     private DashboardConfig mainDashboard = new DashboardConfig();
     private DashboardConfig dockDashboard = new DashboardConfig();

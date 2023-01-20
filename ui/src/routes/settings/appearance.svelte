@@ -4,8 +4,14 @@
 
 	import { supportedLanguages } from '$lib/translate.mjs';
 	import createConsole from '$lib/console-helper.mjs';
+	import RangeInput from '$lib/ui/RangeInput.svelte';
+	import Button from '$lib/ui/Button.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	const console = createConsole('Settings/Appearance');
+
+	const MIN_ZOOM = 0.45;
+	const MAX_ZOOM = 1.5;
 
 	const ICONS = {
 		casterlabs: 'Casterlabs',
@@ -91,6 +97,39 @@
 			options={EMOJI_PROVIDERS}
 			on:value={({ detail: value }) => setPreferenceItem('emojiProvider', value)}
 		/>
+	</li>
+	<li class="py-4">
+		<div class="flex items-center justify-between w-full">
+			<div class="flex flex-col">
+				<p class="text-sm font-medium text-base-12" id="zoominput-label">
+					<LocalizedText key="page.settings.appearance.zoom" />
+				</p>
+				<p class="text-sm text-base-11" id="zoominput-description">
+					<LocalizedText key="page.settings.appearance.zoom.description" />
+				</p>
+			</div>
+
+			<span aria-labelledby="zoominput-label" aria-describedby="zoominput-description">
+				<span
+					class="inline-block text-base-12 translate-y-1.5 mr-1.5"
+					class:opacity-0={$preferences?.zoom == 1}
+				>
+					<Button on:click={() => setPreferenceItem('zoom', 1)}>
+						<icon class="w-4 h-full" data-icon="icon/x-mark" />
+						<span class="sr-only">
+							<LocalizedText key="sr.page.settings.appearance.zoom.reset" />
+						</span>
+					</Button>
+				</span>
+				<RangeInput
+					min={MIN_ZOOM}
+					max={MAX_ZOOM}
+					step=".1"
+					value={$preferences?.zoom}
+					on:value={({ detail: value }) => setPreferenceItem('zoom', value)}
+				/>
+			</span>
+		</div>
 	</li>
 	<!-- <li class="py-4">
 		<SelectMenu

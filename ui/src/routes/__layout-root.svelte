@@ -36,11 +36,13 @@
 	// Helps with making the UI more responsive.
 	preferences.subscribe((prefs) => {
 		if (!prefs) return;
-		const { language, icon, emojiProvider } = prefs;
+		const { language, icon, emojiProvider, zoom } = prefs;
 
 		App.language.set(language);
 		App.icon.set(icon);
 		App.emojiProvider.set(emojiProvider);
+
+		document.documentElement.style.fontSize = `${zoom * 100}%`;
 	});
 
 	baseColorTheme.subscribe(App.baseColor.set);
