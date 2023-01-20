@@ -77,7 +77,7 @@
 		<LocalizedText slot="title" key="page.widgets.info.show_me_how.modal.title" />
 
 		<!-- svelte-ignore a11y-media-has-caption -->
-		<video src="/tutorials/create_obs_source_widget.mp4" autoplay loop muted />
+		<video src="/tutorials/create_obs_source_widget.webm" autoplay loop muted />
 	</Modal>
 {/if}
 
