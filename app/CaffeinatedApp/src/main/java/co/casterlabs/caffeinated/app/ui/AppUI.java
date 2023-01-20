@@ -65,14 +65,14 @@ public class AppUI extends JavascriptObject {
     }
 
     @JavascriptFunction
-    public void updateAppearance(@NonNull AppearanceUpdateEvent event) {
-        this.preferences.setIcon(event.getIcon());
-        this.preferences.setCloseToTray(event.isCloseToTray());
-        this.preferences.setMikeysMode(event.isMikeysMode());
-        this.preferences.setEmojiProvider(event.getEmojiProvider());
-        this.preferences.setLanguage(event.getLanguage());
-        this.preferences.setEnableStupidlyUnsafeSettings(event.isEnableStupidlyUnsafeSettings());
-        this.preferences.setEnableAlternateThemes(event.isEnableAlternateThemes());
+    public void updateAppearance(@NonNull UIPreferences newPreferences) {
+        this.preferences.setIcon(newPreferences.getIcon());
+        this.preferences.setCloseToTray(newPreferences.isCloseToTray());
+        this.preferences.setMikeysMode(newPreferences.isMikeysMode());
+        this.preferences.setEmojiProvider(newPreferences.getEmojiProvider());
+        this.preferences.setLanguage(newPreferences.getLanguage());
+        this.preferences.setEnableStupidlyUnsafeSettings(newPreferences.isEnableStupidlyUnsafeSettings());
+        this.preferences.setEnableAlternateThemes(newPreferences.isEnableAlternateThemes());
         this.preferenceFile.save();
 
         this.updateEmojiProvider();
