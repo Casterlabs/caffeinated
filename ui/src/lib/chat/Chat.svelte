@@ -363,7 +363,7 @@
 	}
 
 	.show-timestamps :global(.message-container) {
-		--timestamp-width: 70px;
+		--timestamp-width: 10ch;
 	}
 
 	.show-timestamps :global(.message-timestamp) {
