@@ -54,19 +54,13 @@
 					key="page.chat_bot.shouts.format"
 					slotMapping={['platform', 'action', 'message']}
 				>
-					<SlimSelectMenu
-						slot="0"
-						bind:value={shout.platform}
-						options={PLATFORMS}
-						on:value={saveDB}
-					/>
+					<span class="inline-block align-middle -translate-y-1 h-fit" slot="0">
+						<SlimSelectMenu bind:value={shout.platform} options={PLATFORMS} on:value={saveDB} />
+					</span>
 
-					<SlimSelectMenu
-						slot="1"
-						bind:value={shout.eventType}
-						options={EVENT_TYPES}
-						on:value={saveDB}
-					/>
+					<span class="inline-block align-middle -translate-y-1 h-fit" slot="1">
+						<SlimSelectMenu bind:value={shout.eventType} options={EVENT_TYPES} on:value={saveDB} />
+					</span>
 
 					<span slot="2" class="block mt-1.5">
 						<TextArea

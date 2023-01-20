@@ -30,7 +30,9 @@
 
 {#if $preferences}
 	<LocalizedText key="page.chat_bot.timers.format" slotMapping={['seconds']}>
-		<NumberInput slot="0" bind:value={$preferences.timerIntervalSeconds} min={45} on:value={save} />
+		<span slot="0" class="inline-block w-16">
+			<NumberInput bind:value={$preferences.timerIntervalSeconds} min={45} on:value={save} />
+		</span>
 	</LocalizedText>
 {/if}
 

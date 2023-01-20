@@ -52,14 +52,13 @@
 					key="page.chat_bot.commands.format.{command.type}"
 					slotMapping={['platform', 'action', 'action_target', 'message']}
 				>
-					<SlimSelectMenu
-						slot="0"
-						bind:value={command.platform}
-						options={PLATFORMS}
-						on:value={saveDB}
-					/>
+					<span class="inline-block align-top h-fit" slot="0">
+						<SlimSelectMenu bind:value={command.platform} options={PLATFORMS} on:value={saveDB} />
+					</span>
 
-					<SlimSelectMenu slot="1" bind:value={command.type} options={TYPES} on:value={saveDB} />
+					<span class="inline-block align-top h-fit" slot="1">
+						<SlimSelectMenu bind:value={command.type} options={TYPES} on:value={saveDB} />
+					</span>
 
 					<div class="w-28 inline-block translate-y-2.5" slot="2">
 						<SlimTextArea

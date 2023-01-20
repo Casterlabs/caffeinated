@@ -34,7 +34,7 @@
 	class:opacity-70={disabled}
 	class:pointer-events-none={disabled}
 >
-	<FocusListener class="relative mt-1" on:lostfocus={() => (open = false)}>
+	<FocusListener class="relative" on:lostfocus={() => (open = false)}>
 		<div
 			on:keyup={(e) => {
 				if (e.code == 'Enter') {
