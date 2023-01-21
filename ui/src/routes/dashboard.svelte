@@ -3,8 +3,8 @@
 	import CustomResizableGrid from '$lib/layout/ResizableGrid.svelte';
 	import DashboardPiece from '$lib/layout/dashboard/DashboardPiece.svelte';
 	import WelcomeWagon from '$lib/layout/dashboard/WelcomeWagon.svelte';
-	import Chat from '../components/Chat.svelte';
-	import Viewers from '../components/Viewers.svelte';
+	import Chat from '../components/dashboard/Chat.svelte';
+	import Viewers from '../components/dashboard/Viewers.svelte';
 
 	import { onMount } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
