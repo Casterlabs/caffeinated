@@ -4,29 +4,9 @@
 	let platforms = {};
 	let viewersList = [];
 
-	let movable = null;
-
-	export function getPositionData() {
-		return movable.getPositionData();
-	}
-
-	export function setPositionData(x, y, width, height) {
-		movable.setPositionData(x, y, width, height);
-	}
-
-	export function onViewersList(e) {
+	function onViewersList(e) {
 		console.log(e);
 		platforms[e.streamer.platform] = e.viewers;
-
-		updateViewersList();
-	}
-
-	export function onAuthUpdate(signedInPlatforms) {
-		for (const platform of Object.keys(platforms)) {
-			if (!signedInPlatforms.includes(platform)) {
-				delete platforms[platform];
-			}
-		}
 
 		updateViewersList();
 	}
