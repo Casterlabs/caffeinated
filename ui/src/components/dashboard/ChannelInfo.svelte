@@ -1,5 +1,6 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import Button from '$lib/ui/Button.svelte';
 	import SlimSearchMenu from '$lib/ui/SlimSearchMenu.svelte';
 	import SlimSelectMenu from '$lib/ui/SlimSelectMenu.svelte';
 	import TextArea from '$lib/ui/TextArea.svelte';
@@ -158,7 +159,7 @@
 					<p class="text-sm font-medium text-base-12 mb-0.5">
 						<LocalizedText key="channel_info.tags" />
 					</p>
-					TAGS
+					// TODO TAGS
 				</div>
 			{/if}
 
@@ -185,9 +186,17 @@
 					<p class="text-sm font-medium text-base-12 mb-0.5">
 						<LocalizedText key="channel_info.thumbnail" />
 					</p>
-					THUMBNAIL
+					// TODO THUMBNAIL
 				</div>
 			{/if}
+
+			<button
+				type="button"
+				class="relative w-full h-[2.375rem] cursor-pointer rounded-md py-1.5 px-2 shadow-sm transition-[background-color] bg-base-1 border border-base-6 hover:bg-base-3 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-center text-sm"
+				on:click={() => {}}
+			>
+				<LocalizedText key="channel_info.update" />
+			</button>
 		{/if}
 	</div>
 </div>
