@@ -13,6 +13,7 @@
 	export let value = 'tim-cook';
 	export let disabled = false;
 	export let width = 'fit';
+	export let localize = true;
 
 	let open = false;
 	let highlighted = null;
@@ -104,7 +105,11 @@
 				<div aria-hidden="true" class="h-0 overflow-hidden">
 					{#each options as name}
 						<span class="block">
-							<LocalizedText key={name} />
+							{#if localize}
+								<LocalizedText key={name} />
+							{:else}
+								{name}
+							{/if}
 						</span>
 					{/each}
 				</div>
@@ -137,7 +142,7 @@
 				{/if}
 			</div>
 
-			{#if open}
+			{#if open && options.length > 0}
 				<div class="absolute z-10 mt-1 w-full shadow-lg rounded-md bg-base-1">
 					<ul
 						class="overflow-auto max-h-36 rounded-md py-1 ring-1 ring-base-8 ring-opacity-5 focus:outline-none text-sm"
@@ -168,10 +173,14 @@
 								<button
 									class="w-full text-left py-2 pl-3 pr-9"
 									on:click={() => select(name)}
-									title={t(name)}
+									title={localize ? t(name) : name}
 								>
 									<span class="block truncate" class:font-semibold={isSelected}>
-										<LocalizedText key={name} />
+										{#if localize}
+											<LocalizedText key={name} />
+										{:else}
+											{name}
+										{/if}
 									</span>
 
 									{#if isSelected}
@@ -182,8 +191,8 @@
 										>
 											<icon class="h-5 w-5" data-icon="icon/check" />
 										</span>
-									{/if}</button
-								>
+									{/if}
+								</button>
 							</li>
 						{/each}
 					</ul>
