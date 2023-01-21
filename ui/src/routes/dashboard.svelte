@@ -2,9 +2,11 @@
 	import PageTitle from '../components/PageTitle.svelte';
 	import CustomResizableGrid from '$lib/layout/ResizableGrid.svelte';
 	import DashboardPiece from '$lib/layout/dashboard/DashboardPiece.svelte';
-	import WelcomeWagon from '$lib/layout/dashboard/WelcomeWagon.svelte';
-	import Chat from '../components/dashboard/Chat.svelte';
-	import Viewers from '../components/dashboard/Viewers.svelte';
+
+	import component_WelcomeWagon from '$lib/layout/dashboard/WelcomeWagon.svelte';
+	import component_Chat from '../components/dashboard/Chat.svelte';
+	import component_Viewers from '../components/dashboard/Viewers.svelte';
+	import component_ChannelInfo from '../components/dashboard/ChannelInfo.svelte';
 
 	import { onMount } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
@@ -14,15 +16,17 @@
 
 	const components = {
 		[null]: '',
-		welcomewagon: WelcomeWagon,
-		'co.casterlabs.dock.stream_chat.dock': Chat,
-		'co.casterlabs.dock.viewers.dock': Viewers
+		welcomewagon: component_WelcomeWagon,
+		'co.casterlabs.dock.stream_chat.dock': component_Chat,
+		'co.casterlabs.dock.viewers.dock': component_Viewers,
+		'co.casterlabs.dock.channel_info': component_ChannelInfo
 	};
 
 	const componentChoices = {
 		[null]: 'dashboard.customize.options.none',
 		// welcomewagon: 'WelcomeWagon',
-		'co.casterlabs.dock.viewers.dock': 'Viewers' // Temporary.
+		'co.casterlabs.dock.viewers.dock': 'Viewers', // Temporary.
+		'co.casterlabs.dock.channel_info': 'Channel Info' // Temporary.
 	};
 
 	let layoutElement;

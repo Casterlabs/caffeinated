@@ -171,6 +171,16 @@ export default {
     'chat.viewer.action.raid': 'Raid',
     'chat.viewer.action.upvote': 'Upvote',
 
+    /* ---- Channel Info ---- */
+
+    'channel_info.title': 'Title',
+    'channel_info.category': 'Category',
+    'channel_info.language': 'Language',
+    'channel_info.tags': 'Tags',
+    'channel_info.content_rating': 'Content Rating',
+    'channel_info.thumbnail': 'Thumbnail',
+    'channel_info.update': 'Update',
+
     /* ---- Dashboard ---- */
 
 	'dashboard.customize.welcomewagon.welcome': 'Welcome!',
