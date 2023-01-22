@@ -6,7 +6,7 @@
 	import component_WelcomeWagon from '$lib/layout/dashboard/WelcomeWagon.svelte';
 	import component_Chat from '../components/dashboard/Chat.svelte';
 	import component_Viewers from '../components/dashboard/Viewers.svelte';
-	import component_ChannelInfo from '../components/dashboard/ChannelInfo.svelte';
+	import component_ChannelInfo from '../components/dashboard/ChannelInfo/index.svelte';
 
 	import { onMount } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';

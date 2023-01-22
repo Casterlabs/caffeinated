@@ -177,8 +177,13 @@ export default {
     'channel_info.category': 'Category',
     'channel_info.language': 'Language',
     'channel_info.tags': 'Tags',
+    'channel_info.tags.add': 'add',
+    'channel_info.tags.add.description': 'Add another tag...',
+    'channel_info.tags.remove': 'Remove',
     'channel_info.content_rating': 'Content Rating',
     'channel_info.thumbnail': 'Thumbnail',
+    'channel_info.thumbnail.select_file': 'Select a file',
+    'channel_info.thumbnail.clear': 'Clear',
     'channel_info.update': 'Update',
 
     /* ---- Dashboard ---- */
