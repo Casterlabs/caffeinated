@@ -21,7 +21,9 @@
 
 	let currentSection;
 
-	function editName() {}
+	function editName() {
+		Caffeinated.plugins.renameWidget(widget.id, nameEditorTextContent);
+	}
 
 	onMount(() => {
 		const id = $page.url.searchParams.get('id');
