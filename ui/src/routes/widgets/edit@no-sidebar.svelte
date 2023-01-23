@@ -206,11 +206,7 @@
 		</ul>
 
 		{#if widget.details.showDemo}
-			<div class="max-w-md mx-auto mt-6 select-none">
-				<AspectVar aspectRatio={widget.details.demoAspectRatio}>
-					<WidgetPreview {widget} mode="DEMO" ariaHidden={true} />
-				</AspectVar>
-			</div>
+			<WidgetPreview {widget} mode="DEMO" ariaHidden={true} />
 		{/if}
 	{/if}
 </div>

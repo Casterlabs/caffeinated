@@ -47,6 +47,7 @@ export default {
     'page.widgets.info.show_me_how.modal.title': 'How to create an OBS Browser Source',
     'sr.page.widgets.create': 'Create a new widget',
     'page.widgets.create.new': '(New)',
+    'page.widgets.preview': 'Preview',
     'sr.page.widgets.delete': 'Delete',
     'sr.page.widgets.copy_link': 'Copy Link',
     'page.widgets.create.category.ALERTS': 'Alerts',
