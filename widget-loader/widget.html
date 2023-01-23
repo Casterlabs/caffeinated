@@ -71,12 +71,14 @@
                     contentWindow.addEventListener("load", () => {
                         console.log("[Widget Loader]", "contentWindow has loaded.");
                         App.init(contentDocument);
-                        widgetInstance.broadcast("init");
-                        koiInstance.broadcast("koi_statics", koi_statics);
 
                         if (isFirstLoad) {
-                            conn.send("READY", {});
-                            isFirstLoad = false;
+                            setTimeout(() => {
+                                widgetInstance.broadcast("init");
+                                koiInstance.broadcast("koi_statics", koi_statics);
+                                conn.send("READY", {});
+                                isFirstLoad = false;
+                            }, 100);
                         }
                     });
                 }
