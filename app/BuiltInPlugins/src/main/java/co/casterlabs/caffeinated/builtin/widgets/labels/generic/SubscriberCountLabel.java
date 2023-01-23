@@ -22,7 +22,7 @@ public class SubscriberCountLabel extends GenericLabel implements KoiEventListen
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Subscriber Count Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private String currHtml = "";
 

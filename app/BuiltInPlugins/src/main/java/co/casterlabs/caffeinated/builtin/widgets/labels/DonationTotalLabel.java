@@ -32,7 +32,7 @@ public class DonationTotalLabel extends GenericLabel implements KoiEventListener
         .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Donation Total Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private String currHtml = "";
 

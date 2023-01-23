@@ -35,7 +35,7 @@ public class RecentDonationLabel extends GenericLabel implements KoiEventListene
         .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Recent Donation Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private User recentDonator;
     private double recentAmount;

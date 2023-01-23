@@ -15,7 +15,7 @@ public class NowPlayingWidget extends Widget {
         .withIcon("musical-note")
         .withCategory(WidgetDetailsCategory.OTHER)
         .withFriendlyName("Now Playing Widget")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, 260 / 670d);
 
     @Override
     public void onInit() {

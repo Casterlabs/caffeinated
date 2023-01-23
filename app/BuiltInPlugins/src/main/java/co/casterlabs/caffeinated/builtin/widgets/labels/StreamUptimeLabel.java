@@ -12,7 +12,7 @@ public class StreamUptimeLabel extends GenericLabel {
         .withIcon("clock")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Stream Uptime Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
     public void onInit() {

@@ -26,7 +26,7 @@ public class RecentFollowerLabel extends GenericLabel implements KoiEventListene
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Recent Follower Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private User recentFollower;
     private String currHtml = "";

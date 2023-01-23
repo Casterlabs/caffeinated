@@ -22,7 +22,7 @@ public class FollowerCountLabel extends GenericLabel implements KoiEventListener
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Follower Count Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private String currHtml = "";
 

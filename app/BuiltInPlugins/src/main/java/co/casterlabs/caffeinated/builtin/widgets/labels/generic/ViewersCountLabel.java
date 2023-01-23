@@ -23,7 +23,7 @@ public class ViewersCountLabel extends GenericLabel implements KoiEventListener 
         .withIcon("eye")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Viewers Count Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private String currHtml = "";
 

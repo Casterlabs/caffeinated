@@ -26,7 +26,7 @@ public class RecentSubscriberLabel extends GenericLabel implements KoiEventListe
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Recent Subscriber Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private User recentSubscriber;
     private String currHtml = "";

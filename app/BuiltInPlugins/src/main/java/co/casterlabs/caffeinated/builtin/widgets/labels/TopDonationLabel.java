@@ -35,7 +35,7 @@ public class TopDonationLabel extends GenericLabel implements KoiEventListener {
         .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Top Donation Label")
-        .withShowDemo(true, 332 / 932d);
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private User topDonator;
     private double topAmount;

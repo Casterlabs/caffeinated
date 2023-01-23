@@ -20,6 +20,8 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import lombok.NonNull;
 
 public abstract class GenericLabel extends Widget implements KoiEventListener {
+    public static final double DEMO_ASPECT_RATIO = 1 / 8d;
+
     private static String[] platforms;
 
     private boolean wasMultiPlatform;
