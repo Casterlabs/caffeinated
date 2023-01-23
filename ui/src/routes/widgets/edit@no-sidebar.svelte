@@ -164,17 +164,19 @@
 		</div>
 
 		<ul class="block max-w-sm mx-auto mt-2 divide-y divide-current text-base-6">
-			{#each widget.settingsLayout?.sections || [] as section}
-				{#if currentSection == section.id}
-					{#each section?.items || [] as item}
-						<li class="py-4">
-							<span class="text-base-12">
-								<FormInput {widget} widgetSettingsSection={section} widgetSettingsItem={item} />
-							</span>
-						</li>
-					{/each}
-				{/if}
-			{/each}
+			{#key widget}
+				{#each widget.settingsLayout?.sections || [] as section}
+					{#if currentSection == section.id}
+						{#each section?.items || [] as item}
+							<li class="py-4">
+								<span class="text-base-12">
+									<FormInput {widget} widgetSettingsSection={section} widgetSettingsItem={item} />
+								</span>
+							</li>
+						{/each}
+					{/if}
+				{/each}
+			{/key}
 		</ul>
 
 		{#if widget.details.showDemo}
