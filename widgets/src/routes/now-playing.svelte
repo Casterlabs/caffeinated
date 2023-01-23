@@ -21,7 +21,9 @@
 	let textOnly_textAlign;
 
 	async function update() {
-		if (!Music.activePlayback || !Widget.getSetting('style.visible')) {
+		console.log(Music.activePlayback);
+
+		if (!Music.activePlayback) {
 			title = '';
 			artist = '';
 			return;
