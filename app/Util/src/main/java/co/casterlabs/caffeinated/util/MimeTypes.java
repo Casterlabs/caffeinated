@@ -475,12 +475,16 @@ public class MimeTypes {
     }
 
     public static @NonNull String getMimeForFile(@NonNull File file) {
-        int idx = file.getName().lastIndexOf('.');
+        return getMimeForFile(file.getName());
+    }
+
+    public static @NonNull String getMimeForFile(@NonNull String fileName) {
+        int idx = fileName.lastIndexOf('.');
 
         if (idx == -1) {
             return "application/octet-stream";
         } else {
-            return getMimeForType(file.getName().substring(idx));
+            return getMimeForType(fileName.substring(idx));
         }
     }
 
