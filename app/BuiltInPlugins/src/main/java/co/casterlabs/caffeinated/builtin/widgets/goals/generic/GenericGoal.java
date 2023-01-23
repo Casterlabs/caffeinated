@@ -77,56 +77,36 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
     protected WidgetSettingsLayout generateSettingsLayout() {
         WidgetSettingsLayout layout = new WidgetSettingsLayout();
 
-        String currentStyle = this.settings().has("style.style") ? this.settings().getString("style.style") : "Progress Bar (With Text)";
+        String currentStyle = this.settings().has("style.style") ? this.settings().getString("style.style") : "Progress Bar";
 
         {
             WidgetSettingsSection barStyle = new WidgetSettingsSection("style", "Style")
-                .addItem(WidgetSettingsItem.asDropdown("style", "Style", "Progress Bar (With Text)", "Progress Bar (With Text)", "Text", "Progress Bar (Without Text)"));
+                .addItem(WidgetSettingsItem.asDropdown("style", "Style", "Progress Bar (With Text)", "Progress Bar", "Text Only"))
+                .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
+                .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128))
+                .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"));
 
-            if (!currentStyle.equals("Progress Bar (Without Text)")) {
-                barStyle
-                    .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
-                    .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128));
-
-                if (currentStyle.equals("Text")) {
-                    barStyle.addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"));
-                }
-
-                barStyle.addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"));
+            if (currentStyle.equals("Text Only")) {
+                barStyle.addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"));
             }
 
             layout.addSection(barStyle);
         }
 
         {
-            WidgetSettingsSection barGoal = new WidgetSettingsSection("goal", "Goal");
+            WidgetSettingsSection barGoal = new WidgetSettingsSection("goal", "Goal")
+                .addItem(WidgetSettingsItem.asText("title", "Title", "", ""))
+                .addItem(WidgetSettingsItem.asNumber("target", "Target", 10, 1, 0, Integer.MAX_VALUE));
 
-            boolean isRounded = this.settings().has("goal.rounded_edges") ? this.settings().getBoolean("goal.rounded_edges") : false;
-
-            if (currentStyle.equals("Progress Bar (Without Text)")) {
+            if (currentStyle.equals("Progress Bar")) {
                 barGoal
                     .addItem(WidgetSettingsItem.asCheckbox("rounded_edges", "Rounded Edges", false))
+                    .addItem(WidgetSettingsItem.asCheckbox("add_numbers", "Show Numbers", true))
                     .addItem(WidgetSettingsItem.asColor("bar_color", "Bar Color", "#31f8ff"));
 
+                boolean isRounded = this.settings().has("goal.rounded_edges") ? this.settings().getBoolean("goal.rounded_edges") : false;
                 if (isRounded) {
-                    barGoal
-                        .addItem(WidgetSettingsItem.asNumber("roundness", "Roundess (px)", 20, 1, 0, 30));
-                }
-            } else {
-                barGoal
-                    .addItem(WidgetSettingsItem.asText("title", "Title", "", ""))
-                    .addItem(WidgetSettingsItem.asNumber("target", "Target", 10, 1, 0, Integer.MAX_VALUE));
-
-                if (currentStyle.equals("Progress Bar (With Text)")) {
-                    barGoal
-                        .addItem(WidgetSettingsItem.asCheckbox("rounded_edges", "Rounded Edges", false))
-                        .addItem(WidgetSettingsItem.asCheckbox("add_numbers", "Add Numbers", true))
-                        .addItem(WidgetSettingsItem.asColor("bar_color", "Bar Color", "#31f8ff"));
-
-                    if (isRounded) {
-                        barGoal
-                            .addItem(WidgetSettingsItem.asNumber("roundness", "Roundess (px)", 20, 1, 0, 30));
-                    }
+                    barGoal.addItem(WidgetSettingsItem.asNumber("roundness", "Roundess (px)", 20, 1, 0, 30));
                 }
             }
 
