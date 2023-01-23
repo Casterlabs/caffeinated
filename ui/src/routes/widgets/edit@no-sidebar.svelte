@@ -14,6 +14,7 @@
 	const console = createConsole('Widget Editor');
 
 	let widget;
+	let settingsLayout;
 
 	let nameEditorElement;
 	let nameEditorTextContent;
@@ -40,17 +41,40 @@
 
 				// All is good.
 				widget = w;
+				settingsLayout = widget.settingsLayout;
 				nameEditorTextContent = widget.name;
 				currentSection = widget.settingsLayout.sections[0]?.id;
 				console.debug('Widget data:', widget);
 			});
 
-		const eventListener = Bridge.on(`widgets:${id}`, (w) => (widget = w));
+		const eventListener = Bridge.on(`widgets:${id}`, (w) => {
+			widget = w;
+
+			if (!deepEqual(widget.settingsLayout, settingsLayout)) {
+				settingsLayout = widget.settingsLayout; // Re-render the UI.
+			}
+		});
 
 		return () => {
 			Bridge.off(`widgets:${id}`, eventListener);
 		};
 	});
+
+	function deepEqual(x, y) {
+		if (x === y) {
+			return true;
+		} else if (typeof x == 'object' && x != null && typeof y == 'object' && y != null) {
+			if (Object.keys(x).length != Object.keys(y).length) return false;
+
+			for (var prop in x) {
+				if (y.hasOwnProperty(prop)) {
+					if (!deepEqual(x[prop], y[prop])) return false;
+				} else return false;
+			}
+
+			return true;
+		} else return false;
+	}
 </script>
 
 <div class="overflow-x-hidden">
@@ -164,7 +188,7 @@
 		</div>
 
 		<ul class="block max-w-sm mx-auto mt-2 divide-y divide-current text-base-6">
-			{#key widget}
+			{#key settingsLayout}
 				{#each widget.settingsLayout?.sections || [] as section}
 					{#if currentSection == section.id}
 						{#each section?.items || [] as item}
