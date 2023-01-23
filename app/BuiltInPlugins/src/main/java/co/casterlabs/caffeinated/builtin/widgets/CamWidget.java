@@ -112,9 +112,9 @@ public class CamWidget extends Widget implements KinokoV1Listener {
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
         if (mode == WidgetInstanceMode.WIDGET) {
-            return "/cam.html";
+            return "/cam";
         } else {
-            return "/cam-qr.html";
+            return "/cam-qr";
         }
     }
 

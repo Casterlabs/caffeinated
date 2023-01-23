@@ -32,7 +32,7 @@ public class NowPlayingWidget extends Widget {
 
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-        return "/now-playing.html";
+        return "/now-playing";
     }
 
 }

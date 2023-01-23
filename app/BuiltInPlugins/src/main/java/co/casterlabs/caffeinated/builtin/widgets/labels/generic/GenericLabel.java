@@ -95,7 +95,7 @@ public abstract class GenericLabel extends Widget implements KoiEventListener {
 
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-        return "/text.html";
+        return "/text";
     }
 
     @KoiEventHandler

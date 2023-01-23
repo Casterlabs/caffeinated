@@ -67,7 +67,7 @@ public class KeyboardWidget extends Widget implements NativeKeyListener {
     @SneakyThrows
     @Override
     public @Nullable String getWidgetHtml() {
-        return CaffeinatedDefaultPlugin.resolveResource("/keyboard.html");
+        return CaffeinatedDefaultPlugin.resolveResource("/keyboard");
     }
 
 }

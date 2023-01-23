@@ -1,7 +1,5 @@
 package co.casterlabs.caffeinated.builtin;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -30,9 +28,12 @@ import co.casterlabs.caffeinated.builtin.widgets.labels.generic.StreamUptimeLabe
 import co.casterlabs.caffeinated.builtin.widgets.labels.generic.SubscriberCountLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.generic.ViewersCountLabel;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.caffeinated.util.MimeTypes;
+import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.IOUtil;
 import lombok.NonNull;
+import okhttp3.Request;
 
 public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
@@ -102,22 +103,38 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
     @Override
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
-        // This allows us to either:
-        // 1) Grab resources out of the jar normally.
-        // or
-        // 2) Grab resources from the dev environment, since we're bundled in a
-        // different way from the typical plugin setup.
-        InputStream in;
-
         if (CaffeinatedPlugin.isDevEnvironment()) {
-            in = new FileInputStream(new File("../BuiltInPlugins/src/main/resources/widgets", resource));
+            String url = "http://localhost:3002/$caffeinated-sdk-root$" + resource;
+            Pair<byte[], String> result = WebUtil.sendHttpRequestBytesWithMime(new Request.Builder().url(url));
+
+            String content = new String(result.a(), StandardCharsets.UTF_8);
+            String mimeType = result.b();
+
+            return new Pair<>(content, mimeType);
         } else {
-            in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("widgets" + resource);
+            // Append `index.html` to the end when required.
+            if (!resource.contains(".")) {
+                if (resource.endsWith("/")) {
+                    resource += "index.html";
+                } else {
+                    resource += "/index.html";
+                }
+            }
+
+            String mimeType = "application/octet-stream";
+
+            String[] split = resource.split("\\.");
+            if (split.length > 1) {
+                mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
+            }
+
+            try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("widgets" + resource)) {
+                return new Pair<>(
+                    IOUtil.readInputStreamString(in, StandardCharsets.UTF_8),
+                    mimeType
+                );
+            }
         }
-
-        String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
-
-        return new Pair<>(content, "text/html");
     }
 
 }

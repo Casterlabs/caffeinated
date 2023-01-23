@@ -213,9 +213,9 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
         if (mode == WidgetInstanceMode.WIDGET_ALT) {
-            return "/goal_alert.html";
+            return "/goal_alert";
         } else {
-            return "/goal.html";
+            return "/goal";
         }
     }
 

@@ -24,7 +24,7 @@ public class StreamUptimeLabel extends GenericLabel {
 
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-        return "/streamuptime.html";
+        return "/stream-uptime";
     }
 
     @Override

@@ -53,7 +53,7 @@ public class ChatWidget extends Widget {
 
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-        return "/chat.html";
+        return "/chat";
     }
 
 }

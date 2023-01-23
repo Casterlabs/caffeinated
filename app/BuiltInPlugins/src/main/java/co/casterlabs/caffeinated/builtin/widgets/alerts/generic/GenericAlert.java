@@ -119,7 +119,7 @@ public abstract class GenericAlert extends Widget {
 
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-        return "/alert.html";
+        return "/alert";
     }
 
     public void queueAlert(@NonNull String titleHtml, @Nullable ChatEvent chatEvent, @Nullable String[] customImages, @Nullable String ttsText) {
