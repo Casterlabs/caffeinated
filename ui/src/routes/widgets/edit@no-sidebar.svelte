@@ -79,7 +79,7 @@
 	}
 </script>
 
-<div class="overflow-x-hidden">
+<div class="overflow-x-hidden min-h-full">
 	{#if widget}
 		<div class="fixed left-2.5 top-2.5">
 			<CircularButton title={t('sr.navigation.back')} on:click={() => goto('/widgets')}>
@@ -116,94 +116,96 @@
 			</CircularButton>
 		</div>
 
-		<div class="-mt-1 pb-5 -mx-6 w-screen flex flex-col items-center justify-center">
-			<span class="text-lg font-semibold relative">
-				<div
-					contenteditable
-					class="px-1"
-					bind:this={nameEditorElement}
-					bind:textContent={nameEditorTextContent}
-					on:blur={editName}
-					on:keypress={(e) => {
-						if (e.key === 'Enter') {
-							e.preventDefault();
-							e.target.blur();
-						}
-					}}
-				/>
+		<div class="flex flex-col min-h-full">
+			<div class="-mt-1 pb-5 -mx-6 w-screen flex flex-col items-center justify-center">
+				<span class="text-lg font-semibold relative">
+					<div
+						contenteditable
+						class="px-1"
+						bind:this={nameEditorElement}
+						bind:textContent={nameEditorTextContent}
+						on:blur={editName}
+						on:keypress={(e) => {
+							if (e.key === 'Enter') {
+								e.preventDefault();
+								e.target.blur();
+							}
+						}}
+					/>
 
-				<button
-					class="absolute left-full top-1 translate-x-0.5"
-					title={t('sr.page.widget.editor.edit_name')}
-					on:click={() => {
-						const range = document.createRange();
-						const sel = window.getSelection();
+					<button
+						class="absolute left-full top-1 translate-x-0.5"
+						title={t('sr.page.widget.editor.edit_name')}
+						on:click={() => {
+							const range = document.createRange();
+							const sel = window.getSelection();
 
-						// Select all of the text.
-						range.setStart(nameEditorElement.childNodes[0], nameEditorTextContent.length);
+							// Select all of the text.
+							range.setStart(nameEditorElement.childNodes[0], nameEditorTextContent.length);
 
-						// Unselect, moving the caret.
-						range.collapse(true);
+							// Unselect, moving the caret.
+							range.collapse(true);
 
-						// Tell the browser to use our range.
-						sel.removeAllRanges();
-						sel.addRange(range);
+							// Tell the browser to use our range.
+							sel.removeAllRanges();
+							sel.addRange(range);
 
-						// Focus the editor.
-						nameEditorElement.focus();
-					}}
-				>
-					<span class="sr-only">
-						<LocalizedText key="sr.page.widget.editor.edit_name" />
-					</span>
-					<icon class="w-5 h-5" data-icon="icon/pencil-square" />
-				</button>
-			</span>
+							// Focus the editor.
+							nameEditorElement.focus();
+						}}
+					>
+						<span class="sr-only">
+							<LocalizedText key="sr.page.widget.editor.edit_name" />
+						</span>
+						<icon class="w-5 h-5" data-icon="icon/pencil-square" />
+					</button>
+				</span>
 
-			<span class="text-xs font-thin">
-				<LocalizedText key={widget.details.friendlyName} />
-			</span>
-		</div>
+				<span class="text-xs font-thin">
+					<LocalizedText key={widget.details.friendlyName} />
+				</span>
+			</div>
 
-		<div class="border-b border-base-8 -mx-6 w-screen">
-			{#if (widget.settingsLayout?.sections || []).length > 1}
-				<nav class="mt-1 -mb-px flex justify-center space-x-8">
-					{#each widget.settingsLayout?.sections || [] as section}
-						{@const isSelected = currentSection == section.id}
-						<button
-							class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
-							aria-current={isSelected ? 'page' : undefined}
-							class:border-b-2={isSelected}
-							class:text-primary-11={isSelected}
-							on:click={() => {
-								currentSection = null;
+			<div class="border-b border-base-8 -mx-6 w-screen">
+				{#if (widget.settingsLayout?.sections || []).length > 1}
+					<nav class="mt-1 -mb-px flex justify-center space-x-8">
+						{#each widget.settingsLayout?.sections || [] as section}
+							{@const isSelected = currentSection == section.id}
+							<button
+								class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
+								aria-current={isSelected ? 'page' : undefined}
+								class:border-b-2={isSelected}
+								class:text-primary-11={isSelected}
+								on:click={() => {
+									currentSection = null;
 
-								// Svelte bug :(
-								tick().then(() => (currentSection = section.id));
-							}}
-						>
-							<LocalizedText key={section.name} />
-						</button>
-					{/each}
-				</nav>
-			{/if}
-		</div>
-
-		<ul class="block max-w-sm mx-auto mt-2 divide-y divide-current text-base-6">
-			{#key settingsLayout}
-				{#each widget.settingsLayout?.sections || [] as section}
-					{#if currentSection == section.id}
-						{#each section?.items || [] as item}
-							<li class="py-4">
-								<span class="text-base-12">
-									<FormInput {widget} widgetSettingsSection={section} widgetSettingsItem={item} />
-								</span>
-							</li>
+									// Svelte bug :(
+									tick().then(() => (currentSection = section.id));
+								}}
+							>
+								<LocalizedText key={section.name} />
+							</button>
 						{/each}
-					{/if}
-				{/each}
-			{/key}
-		</ul>
+					</nav>
+				{/if}
+			</div>
+
+			<ul class="flex-1 block w-full max-w-sm mx-auto mt-2 divide-y divide-current text-base-6">
+				{#key settingsLayout}
+					{#each widget.settingsLayout?.sections || [] as section}
+						{#if currentSection == section.id}
+							{#each section?.items || [] as item}
+								<li class="py-4">
+									<span class="text-base-12">
+										<FormInput {widget} widgetSettingsSection={section} widgetSettingsItem={item} />
+									</span>
+								</li>
+							{/each}
+						{/if}
+					{/each}
+				{/key}
+			</ul>
+		</div>
 
 		{#if widget.details.showDemo}
 			<WidgetPreview {widget} mode="DEMO" ariaHidden={true} />
