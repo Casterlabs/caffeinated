@@ -18,6 +18,7 @@ import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
 import co.casterlabs.rakurai.json.annotating.JsonExclude;
 import co.casterlabs.rakurai.json.annotating.JsonField;
+import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rakurai.json.serialization.JsonParseException;
@@ -76,7 +77,11 @@ public class RichMessageEvent extends MessageMeta {
 
             this.fragments.add(Rson.DEFAULT.fromJson(fragment, fragmentClass));
         }
+    }
 
+    @JsonSerializationMethod("fragments")
+    private JsonElement $serialize_fragments() {
+        return Rson.DEFAULT.toJson(this.fragments);
     }
 
     @Override
