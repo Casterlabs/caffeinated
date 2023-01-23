@@ -1,7 +1,6 @@
 package co.casterlabs.caffeinated.localserver.handlers;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -40,20 +39,28 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
         try {
             String resource = session.getUri().split("/loader", 2)[1];
 
-            InputStream in;
-
             if (CaffeinatedPlugin.isDevEnvironment()) {
-                in = new FileInputStream(new File("../LocalServer/src/main/resources/loader", resource));
-            } else {
-                in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("loader" + resource);
+                return HttpResponse.newFixedLengthResponse(
+                    StandardHttpStatus.OK,
+                    "<!DOCTYPE html>\r\n"
+                        + "<html>\r\n"
+                        + "<head>\r\n"
+                        + "<meta http-equiv=\"refresh\" content=\"0; url='http://localhost:3002/$caffeinated-sdk-root$/loader" + resource + session.getQueryString() + "'\" />\r\n"
+                        + "</head>\r\n"
+                        + "</html>"
+                )
+                    .setMimeType("text/html")
+                    .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co")
+                    .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
             }
+
+            InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("loader" + resource);
 
             String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
             String mime = MimeTypes.getMimeForFile(new File(resource));
 
             return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
                 .setMimeType(mime)
-//                .putHeader("Content-Security-Policy", "frame-ancestors 'self' casterlabs.co widgets.casterlabs.co;")
                 .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co")
                 .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
         } catch (Exception e) {

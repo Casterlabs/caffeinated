@@ -95,7 +95,12 @@
             function initHandler(params) {
                 initParameters = params;
                 const { address, port, pluginId, widgetId, authorization, widgetMode, basePath } = params;
-                sandboxFrame.src = `http://${address}:${port}/api/plugin/${pluginId}/${authorization}/html${basePath}`;
+
+                if (location.origin == "http://localhost:3002") {
+                    sandboxFrame.src = `http://localhost:3002/$caffeinated-sdk-root$${basePath}`;
+                } else {
+                    sandboxFrame.src = `http://${address}:${port}/api/plugin/${pluginId}/${authorization}/html${basePath}`;
+                }
                 return false;
             }
 
