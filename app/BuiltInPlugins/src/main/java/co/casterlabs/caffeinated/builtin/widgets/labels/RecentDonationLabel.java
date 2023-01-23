@@ -34,7 +34,8 @@ public class RecentDonationLabel extends GenericLabel implements KoiEventListene
         .withNamespace("co.casterlabs.recent_donation_label")
         .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.LABELS)
-        .withFriendlyName("Recent Donation Label");
+        .withFriendlyName("Recent Donation Label")
+        .withShowDemo(true, 332 / 932d);
 
     private User recentDonator;
     private double recentAmount;

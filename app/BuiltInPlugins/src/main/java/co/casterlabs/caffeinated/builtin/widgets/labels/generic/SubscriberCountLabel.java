@@ -21,7 +21,8 @@ public class SubscriberCountLabel extends GenericLabel implements KoiEventListen
         .withNamespace("co.casterlabs.subscriber_count_label")
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.LABELS)
-        .withFriendlyName("Subscriber Count Label");
+        .withFriendlyName("Subscriber Count Label")
+        .withShowDemo(true, 332 / 932d);
 
     private String currHtml = "";
 

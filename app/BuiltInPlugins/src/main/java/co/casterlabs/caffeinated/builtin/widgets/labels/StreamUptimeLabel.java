@@ -1,5 +1,6 @@
-package co.casterlabs.caffeinated.builtin.widgets.labels.generic;
+package co.casterlabs.caffeinated.builtin.widgets.labels;
 
+import co.casterlabs.caffeinated.builtin.widgets.labels.generic.GenericLabel;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
@@ -10,7 +11,8 @@ public class StreamUptimeLabel extends GenericLabel {
         .withNamespace("co.casterlabs.stream_uptime_label")
         .withIcon("clock")
         .withCategory(WidgetDetailsCategory.LABELS)
-        .withFriendlyName("Stream Uptime Label");
+        .withFriendlyName("Stream Uptime Label")
+        .withShowDemo(true, 332 / 932d);
 
     @Override
     public void onInit() {

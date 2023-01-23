@@ -22,7 +22,8 @@ public class ViewersCountLabel extends GenericLabel implements KoiEventListener 
         .withNamespace("co.casterlabs.viewers_count_label")
         .withIcon("eye")
         .withCategory(WidgetDetailsCategory.LABELS)
-        .withFriendlyName("Viewers Count Label");
+        .withFriendlyName("Viewers Count Label")
+        .withShowDemo(true, 332 / 932d);
 
     private String currHtml = "";
 

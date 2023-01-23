@@ -21,7 +21,8 @@ public class FollowerCountLabel extends GenericLabel implements KoiEventListener
         .withNamespace("co.casterlabs.follower_count_label")
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.LABELS)
-        .withFriendlyName("Follower Count Label");
+        .withFriendlyName("Follower Count Label")
+        .withShowDemo(true, 332 / 932d);
 
     private String currHtml = "";
 

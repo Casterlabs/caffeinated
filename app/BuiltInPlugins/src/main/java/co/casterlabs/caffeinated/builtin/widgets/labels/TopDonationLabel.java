@@ -34,7 +34,8 @@ public class TopDonationLabel extends GenericLabel implements KoiEventListener {
         .withNamespace("co.casterlabs.top_donation_label")
         .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.LABELS)
-        .withFriendlyName("Top Donation Label");
+        .withFriendlyName("Top Donation Label")
+        .withShowDemo(true, 332 / 932d);
 
     private User topDonator;
     private double topAmount;

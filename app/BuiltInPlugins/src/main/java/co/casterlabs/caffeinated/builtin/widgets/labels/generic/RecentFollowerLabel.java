@@ -25,7 +25,8 @@ public class RecentFollowerLabel extends GenericLabel implements KoiEventListene
         .withNamespace("co.casterlabs.recent_follower_label")
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.LABELS)
-        .withFriendlyName("Recent Follower Label");
+        .withFriendlyName("Recent Follower Label")
+        .withShowDemo(true, 332 / 932d);
 
     private User recentFollower;
     private String currHtml = "";
