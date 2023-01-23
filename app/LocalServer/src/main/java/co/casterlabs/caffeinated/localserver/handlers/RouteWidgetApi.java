@@ -33,6 +33,7 @@ import co.casterlabs.sora.api.websockets.annotations.WebsocketEndpoint;
 
 public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHelper {
     private static final String BASE_URL_REPLACE = "/$caffeinated-sdk-root$";
+    private static final String ESCAPED_BASE_URL_REPLACE = "/$\\caffeinated-sdk-root$";
 
     @HttpEndpoint(uri = "/api/plugin/widget/loader.*")
     public HttpResponse onGetWidgetLoaderRequest(SoraHttpSession session) {
@@ -85,7 +86,8 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                 return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);
             } else {
                 String content = response.a()
-                    .replace(BASE_URL_REPLACE, trueBaseUrl);
+                    .replace(BASE_URL_REPLACE, trueBaseUrl)
+                    .replace(ESCAPED_BASE_URL_REPLACE, BASE_URL_REPLACE);
 
                 String mime = response.b();
                 if (mime == null) {
