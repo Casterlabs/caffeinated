@@ -15,19 +15,49 @@ public class NowPlayingWidget extends Widget {
         .withIcon("musical-note")
         .withCategory(WidgetDetailsCategory.OTHER)
         .withFriendlyName("Now Playing Widget")
-        .withShowDemo(true, 64 / 199d);
-
-    private static final WidgetSettingsLayout LAYOUT = new WidgetSettingsLayout()
-        .addSection(
-            new WidgetSettingsSection("style", "Style")
-                .addItem(WidgetSettingsItem.asCheckbox("visible", "Is Visible", true))
-                .addItem(WidgetSettingsItem.asDropdown("background_style", "Background Style", "Blur", "Blur", "Clear", "Solid"))
-                .addItem(WidgetSettingsItem.asDropdown("image_style", "Image Location", "Left", "Left", "Right", "None"))
-        );
+        .withShowDemo(true, 332 / 932d);
 
     @Override
     public void onInit() {
-        this.setSettingsLayout(LAYOUT);
+        this.generateSettingsLayout();
+    }
+
+    @Override
+    protected void onSettingsUpdate() {
+        this.generateSettingsLayout();
+    }
+
+    protected void generateSettingsLayout() {
+        WidgetSettingsSection section = new WidgetSettingsSection("style", "Style")
+            .addItem(WidgetSettingsItem.asDropdown("card_style", "Card Style", "Horizontal Card", "Horizontal Card", "Text Only", "Image Only"));
+
+        switch (this.settings().getString("style.card_style", "Horizontal Card")) {
+            case "Horizontal Card": {
+                section
+                    .addItem(WidgetSettingsItem.asDropdown("background_style", "Background Style", "Blur", "Blur", "Clear", "Solid"))
+                    .addItem(WidgetSettingsItem.asDropdown("image_style", "Image Location", "Left", "Left", "Right", "None"));
+                break;
+            }
+
+            case "Text Only": {
+                section
+                    .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
+                    .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128))
+                    .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ff0000"))
+                    .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"));
+                break;
+            }
+
+            case "Image Only": {
+                break;
+            }
+
+        }
+
+        this.setSettingsLayout(
+            new WidgetSettingsLayout()
+                .addSection(section)
+        );
     }
 
     @Override
