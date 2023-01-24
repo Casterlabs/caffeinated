@@ -22,7 +22,6 @@ public class UpdaterPane extends JPanel {
     private static final long serialVersionUID = -4429924866600191261L;
 
     private static final String[] STREAMERS = {
-            "DivideAConquer",
             "FallenWolf",
             "GeenoTV",
             "Glitch3dPenguin",
@@ -32,7 +31,7 @@ public class UpdaterPane extends JPanel {
 
     private @Setter @NonNull DialogAnimation currentAnimation = new BlankAnimation();
 
-    private String chosenStreamer = "sadshepherdgirl"; // Default is required for WindowBuilder.
+    private String chosenStreamer = STREAMERS[0]; // Default is required for WindowBuilder.
     private Image chosenStreamerImage;
 
     private @Getter UpdaterUI ui;
