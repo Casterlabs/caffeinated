@@ -108,6 +108,8 @@ export default {
 
     'page.settings.appearance': 'Appearance',
     'page.settings.appearance.theme': 'Theme',
+    'page.settings.appearance.theme.base_color': 'Base Color',
+    'page.settings.appearance.theme.primary_color': 'Primary Color',
     'page.settings.appearance.appearance': 'Appearance',
     'page.settings.appearance.appearance.LIGHT': 'Light',
     'page.settings.appearance.appearance.DARK': 'Dark',

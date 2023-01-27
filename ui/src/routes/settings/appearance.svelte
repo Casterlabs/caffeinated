@@ -36,14 +36,37 @@
 		'bronze/gold':   'Bronze',
 		'gray/gray':     'Noir'
 	};
-	// prettier-ignore
-	const PAC_THEMES = {
-		'mauve/red':   '赤ベイ',
-		'mauve/pink':  'ピンキー',
-		'slate/blue':  '青助',
-		'sand/orange': '愚図た',
-		'sand/yellow': 'パックマン'
-	};
+
+	const THEME_COLORS = [
+		'Gray',
+		'Mauve',
+		'Slate',
+		'Sage',
+		'Olive',
+		'Sand',
+		'Tomato',
+		'Red',
+		'Crimson',
+		'Pink',
+		'Plum',
+		'Purple',
+		'Violet',
+		'Indigo',
+		'Blue',
+		'Cyan',
+		'Teal',
+		'Green',
+		'Grass',
+		'Brown',
+		'Orange',
+		'Sky',
+		'Mint',
+		'Lime',
+		'Yellow',
+		'Amber',
+		'Gold',
+		'Bronze'
+	];
 
 	const baseColor = st || Caffeinated.themeManager.svelte('baseColor');
 	const primaryColor = st || Caffeinated.themeManager.svelte('primaryColor');
@@ -61,17 +84,46 @@
 </script>
 
 <ul class="divide-y divide-current text-base-6">
-	<li class="py-4">
-		<SelectMenu
-			title="page.settings.appearance.theme"
-			value="{$baseColor}/{$primaryColor}"
-			options={$preferences?.enableAlternateThemes ? PAC_THEMES : THEMES}
-			on:value={({ detail: value }) => {
-				const [newBaseColor, newPrimaryColor] = value.split('/');
-				window.Caffeinated.themeManager.setTheme(newBaseColor, newPrimaryColor, $appearance);
-			}}
-		/>
-	</li>
+	{#if $preferences?.enableAlternateThemes}
+		<li class="py-4">
+			<SelectMenu
+				title="page.settings.appearance.theme.base_color"
+				value={$baseColor}
+				options={THEME_COLORS.reduce(
+					(arr, color) => ({ ...arr, [color.toLowerCase()]: color }),
+					{}
+				)}
+				on:value={({ detail: value }) => {
+					window.Caffeinated.themeManager.setTheme(value, $primaryColor, $appearance);
+				}}
+			/>
+		</li>
+		<li class="py-4">
+			<SelectMenu
+				title="page.settings.appearance.theme.primary_color"
+				value={$primaryColor}
+				options={THEME_COLORS.reduce(
+					(arr, color) => ({ ...arr, [color.toLowerCase()]: color }),
+					{}
+				)}
+				on:value={({ detail: value }) => {
+					window.Caffeinated.themeManager.setTheme($baseColor, value, $appearance);
+				}}
+			/>
+		</li>
+	{:else}
+		<li class="py-4">
+			<SelectMenu
+				title="page.settings.appearance.theme"
+				value="{$baseColor}/{$primaryColor}"
+				options={THEMES}
+				on:value={({ detail: value }) => {
+					const [newBaseColor, newPrimaryColor] = value.split('/');
+					window.Caffeinated.themeManager.setTheme(newBaseColor, newPrimaryColor, $appearance);
+				}}
+			/>
+		</li>
+	{/if}
 	<li class="py-4">
 		<SelectMenu
 			title="page.settings.appearance.appearance"
