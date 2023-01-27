@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
+import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.NativeSystem.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.PlaybackEvent;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.PlaybackEvent.PlaybackEventType;
@@ -30,7 +30,7 @@ public class WindowsSystemPlaybackMusicProvider extends SystemPlaybackMusicProvi
     private Map<String, SessionState> sessions = new HashMap<>();
 
     @Override
-    protected void init() {
+    public void init() {
         if (!WMCJCW_LOCATION.exists()) {
 //            JOptionPane.showMessageDialog(null, "Unable to find WMC-JsonConsoleWrapper.\nThe system music service will not work.", "Casterlabs-Caffeinated", JOptionPane.ERROR_MESSAGE, null);
             return;

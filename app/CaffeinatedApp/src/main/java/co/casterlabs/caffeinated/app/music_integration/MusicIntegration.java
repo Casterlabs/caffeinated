@@ -2,13 +2,13 @@ package co.casterlabs.caffeinated.app.music_integration;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.PreferenceFile;
+import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
@@ -25,8 +25,6 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
-import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 @Getter
 public class MusicIntegration extends JavascriptObject implements Music {
@@ -52,18 +50,9 @@ public class MusicIntegration extends JavascriptObject implements Music {
         // Register the providers (in order of preference)
         new SpotifyMusicProvider(this);
         new PretzelMusicProvider(this);
+        if (systemPlaybackMusicProvider != null) this.providers.put(systemPlaybackMusicProvider.getServiceId(), systemPlaybackMusicProvider);
 
-        // Try to register the system playback music provider.
-        if (systemPlaybackMusicProvider != null) {
-            this.providers.put(systemPlaybackMusicProvider.getServiceId(), systemPlaybackMusicProvider);
-            try {
-                ReflectionLib.invokeMethod(systemPlaybackMusicProvider, "init");
-            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                FastLogger.logException(e);
-            }
-        }
-
-        // Load their settings
+        // Load their settings and init.
         PreferenceFile<MusicIntegrationPreferences> prefs = CaffeinatedApp.getInstance().getMusicIntegrationPreferences();
         JsonObject prefsSettings = prefs.get().getSettings();
         for (Map.Entry<String, InternalMusicProvider<?>> entry : this.providers.entrySet()) {
@@ -73,6 +62,8 @@ public class MusicIntegration extends JavascriptObject implements Music {
             // Doesn't matter if it's null, we check for that inside of
             // MusicProvider#updateSettingsFromJson
             provider.updateSettingsFromJson(prefsSettings.get(providerId));
+
+            provider.init();
         }
 
         this.loaded = true;

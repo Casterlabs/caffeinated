@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.music_integration;
+package co.casterlabs.caffeinated.app.music_integration.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +38,8 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
     private MusicTrack currentTrack = null;
 
     private T settings;
+
+    public abstract void init();
 
     @SuppressWarnings("unchecked")
     protected void updateSettings(@NonNull Object settings) {
@@ -102,8 +104,10 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
 
     public abstract void signout();
 
-    public static Pair<String, List<String>> parseTitleForArtists(@NonNull String title,
-            @NonNull List<String> prediscoveredArtists) {
+    public static Pair<String, List<String>> parseTitleForArtists(
+        @NonNull String title,
+        @NonNull List<String> prediscoveredArtists
+    ) {
         final boolean PARSE_FT = true;
         final boolean CLEANSE_TITLE = true;
         final String FT_REGEX = "(\\(ft.*\\))|(\\(feat.*\\))|(\\(avec.*\\))";

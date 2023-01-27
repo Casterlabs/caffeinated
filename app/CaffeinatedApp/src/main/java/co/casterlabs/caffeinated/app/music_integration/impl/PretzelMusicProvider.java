@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider.PretzelSettings;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
@@ -28,11 +27,14 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
     private String channelId;
     private MusicTrack currentTrackCache;
 
-    @SuppressWarnings("deprecation")
     public PretzelMusicProvider(@NonNull MusicIntegration musicIntegration) {
         super("Pretzel", "pretzel", PretzelSettings.class);
         musicIntegration.getProviders().put(this.getServiceId(), this);
+    }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void init() {
         CaffeinatedApp.getInstance().onAppEvent("auth:platforms", (JsonObject data) -> {
             try {
                 if (data.containsKey("TWITCH")) {
