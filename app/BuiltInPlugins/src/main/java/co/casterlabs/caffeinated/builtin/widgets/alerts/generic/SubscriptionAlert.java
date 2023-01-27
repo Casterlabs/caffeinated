@@ -12,7 +12,8 @@ public class SubscriptionAlert extends GenericAlert implements KoiEventListener 
         .withNamespace("co.casterlabs.subscription_alert")
         .withIcon("user-plus")
         .withCategory(WidgetDetailsCategory.ALERTS)
-        .withFriendlyName("Subscription Alert");
+        .withFriendlyName("Subscription Alert")
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
     public void onInit() {

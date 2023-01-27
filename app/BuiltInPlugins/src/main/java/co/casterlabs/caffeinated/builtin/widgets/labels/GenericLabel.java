@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.builtin.widgets.labels.generic;
+package co.casterlabs.caffeinated.builtin.widgets.labels;
 
 import java.util.ArrayList;
 import java.util.Collections;

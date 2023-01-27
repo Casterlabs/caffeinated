@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.builtin.widgets.goals.generic;
+package co.casterlabs.caffeinated.builtin.widgets.goals;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +24,8 @@ import lombok.Getter;
 import lombok.NonNull;
 
 public abstract class GenericGoal extends Widget implements KoiEventListener {
+    public static final double DEMO_ASPECT_RATIO = 12 / 1d;
+
     private static String[] platforms;
 
     private boolean wasMultiPlatform;

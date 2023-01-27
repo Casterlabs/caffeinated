@@ -14,7 +14,8 @@ public class EmojiRainWidget extends Widget {
         .withNamespace("co.casterlabs.emojirain_widget")
         .withIcon("face-smile")
         .withCategory(WidgetDetailsCategory.INTERACTION)
-        .withFriendlyName("Emoji Rain");
+        .withFriendlyName("Emoji Rain")
+        .withShowDemo(true, 3 / 4d);
 
     private static final WidgetSettingsLayout LAYOUT = new WidgetSettingsLayout()
         .addSection(

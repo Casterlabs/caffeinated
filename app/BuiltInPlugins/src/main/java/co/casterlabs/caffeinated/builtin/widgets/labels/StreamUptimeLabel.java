@@ -1,6 +1,5 @@
 package co.casterlabs.caffeinated.builtin.widgets.labels;
 
-import co.casterlabs.caffeinated.builtin.widgets.labels.generic.GenericLabel;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;

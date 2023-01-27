@@ -17,7 +17,8 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
         .withNamespace("co.casterlabs.donation_alert")
         .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.ALERTS)
-        .withFriendlyName("Donation Alert");
+        .withFriendlyName("Donation Alert")
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
     public void onInit() {

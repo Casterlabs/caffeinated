@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.builtin.widgets.labels.generic.GenericLabel;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
@@ -18,7 +17,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSectio
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
-import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.DonationEvent;
 import co.casterlabs.koi.api.types.events.rich.Donation;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -26,7 +24,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class DonationTotalLabel extends GenericLabel implements KoiEventListener {
+public class DonationTotalLabel extends GenericLabel {
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.donation_total_label")
         .withIcon("currency-dollar")

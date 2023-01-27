@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.builtin.widgets.labels.generic;
+package co.casterlabs.caffeinated.builtin.widgets.labels;
 
 import java.io.IOException;
 
@@ -10,18 +10,17 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCa
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
-import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
 
-public class SubscriberCountLabel extends GenericLabel implements KoiEventListener {
+public class FollowerCountLabel extends GenericLabel {
     public static final WidgetDetails DETAILS = new WidgetDetails()
-        .withNamespace("co.casterlabs.subscriber_count_label")
+        .withNamespace("co.casterlabs.follower_count_label")
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.LABELS)
-        .withFriendlyName("Subscriber Count Label")
+        .withFriendlyName("Follower Count Label")
         .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private String currHtml = "";
@@ -44,16 +43,16 @@ public class SubscriberCountLabel extends GenericLabel implements KoiEventListen
         UserPlatform platform = this.getSelectedPlatform();
 
         if (platform != null) {
-            this.updateText(Caffeinated.getInstance().getKoi().getUserStates().get(platform).getStreamer().getSubCount());
+            this.updateText(Caffeinated.getInstance().getKoi().getUserStates().get(platform).getStreamer().getFollowersCount());
         }
     }
 
-    private void updateText(long subscriberCount) {
-        if (subscriberCount == -1) {
-            subscriberCount = 0; // TODO detect if the platform supports subscribers.
+    private void updateText(long followerCount) {
+        if (followerCount == -1) {
+            followerCount = 0; // TODO detect if the platform supports followers.
         }
 
-        String html = String.valueOf(subscriberCount);
+        String html = String.valueOf(followerCount);
 
         String prefix = WebUtil.escapeHtml(this.settings().getString("text.prefix")).replace(" ", "&nbsp;");
         String suffix = WebUtil.escapeHtml(this.settings().getString("text.suffix")).replace(" ", "&nbsp;");

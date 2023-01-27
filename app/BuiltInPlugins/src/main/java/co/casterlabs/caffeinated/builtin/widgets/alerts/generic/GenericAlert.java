@@ -21,6 +21,7 @@ import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
 
 public abstract class GenericAlert extends Widget {
+    public static final double DEMO_ASPECT_RATIO = 3 / 4d;
 
     @Override
     protected void onSettingsUpdate() {

@@ -15,7 +15,8 @@ public class ChatWidget extends Widget {
         .withNamespace("co.casterlabs.chat_widget")
         .withIcon("chat-bubble-left")
         .withCategory(WidgetDetailsCategory.INTERACTION)
-        .withFriendlyName("Chat Widget");
+        .withFriendlyName("Chat Widget")
+        .withShowDemo(true, 3 / 4d);
 
     private final WidgetSettingsLayout LAYOUT = new WidgetSettingsLayout()
         .addSection(

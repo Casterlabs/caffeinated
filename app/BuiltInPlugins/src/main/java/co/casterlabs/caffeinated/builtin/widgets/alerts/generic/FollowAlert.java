@@ -11,7 +11,8 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
         .withNamespace("co.casterlabs.follow_alert")
         .withIcon("user")
         .withCategory(WidgetDetailsCategory.ALERTS)
-        .withFriendlyName("Follow Alert");
+        .withFriendlyName("Follow Alert")
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
     public void onInit() {

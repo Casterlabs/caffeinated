@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.builtin.widgets.goals.generic;
+package co.casterlabs.caffeinated.builtin.widgets.goals;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -9,12 +9,13 @@ import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 
-public class FollowersGoal extends GenericGoal {
+public class SubscribersGoal extends GenericGoal {
     public static final WidgetDetails DETAILS = new WidgetDetails()
-        .withNamespace("co.casterlabs.followers_goal")
-        .withIcon("users")
+        .withNamespace("co.casterlabs.subscribers_goal")
+        .withIcon("user-plus")
         .withCategory(WidgetDetailsCategory.GOALS)
-        .withFriendlyName("Followers Goal");
+        .withFriendlyName("Subscribers Goal")
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
     public void onInit() {
@@ -33,7 +34,7 @@ public class FollowersGoal extends GenericGoal {
         UserPlatform platform = this.getSelectedPlatform();
 
         if (platform != null) {
-            this.update(Caffeinated.getInstance().getKoi().getUserStates().get(platform).getStreamer().getFollowersCount());
+            this.update(Caffeinated.getInstance().getKoi().getUserStates().get(platform).getStreamer().getSubCount());
         }
     }
 

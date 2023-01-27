@@ -11,7 +11,8 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
         .withNamespace("co.casterlabs.raid_alert")
         .withIcon("user-group")
         .withCategory(WidgetDetailsCategory.ALERTS)
-        .withFriendlyName("Raid Alert");
+        .withFriendlyName("Raid Alert")
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
     public void onInit() {
