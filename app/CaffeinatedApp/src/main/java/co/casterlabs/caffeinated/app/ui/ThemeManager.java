@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.theming;
+package co.casterlabs.caffeinated.app.ui;
 
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.kaimen.app.App;
