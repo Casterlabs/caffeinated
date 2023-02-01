@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.builtin.widgets.alerts.generic;
+package co.casterlabs.caffeinated.builtin.widgets.alerts;
 
 import java.io.IOException;
 import java.util.Base64;

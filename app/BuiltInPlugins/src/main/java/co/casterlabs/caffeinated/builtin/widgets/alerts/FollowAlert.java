@@ -1,18 +1,17 @@
-package co.casterlabs.caffeinated.builtin.widgets.alerts.generic;
+package co.casterlabs.caffeinated.builtin.widgets.alerts;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.events.SubscriptionEvent;
-import co.casterlabs.koi.api.types.user.User;
+import co.casterlabs.koi.api.types.events.FollowEvent;
 
-public class SubscriptionAlert extends GenericAlert implements KoiEventListener {
+public class FollowAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
-        .withNamespace("co.casterlabs.subscription_alert")
-        .withIcon("user-plus")
+        .withNamespace("co.casterlabs.follow_alert")
+        .withIcon("user")
         .withCategory(WidgetDetailsCategory.ALERTS)
-        .withFriendlyName("Subscription Alert")
+        .withFriendlyName("Follow Alert")
         .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
@@ -21,17 +20,9 @@ public class SubscriptionAlert extends GenericAlert implements KoiEventListener 
     }
 
     @KoiEventHandler
-    public void onSubscriber(SubscriptionEvent e) {
-        User sub = null;
-
-        if (e.getGiftRecipient() != null) {
-            sub = e.getGiftRecipient();
-        } else {
-            sub = e.getSubscriber();
-        }
-
+    public void onFollow(FollowEvent e) {
         // Generate the title html.
-        String title = String.format("<span class='highlight'>%s</span>", sub.getDisplayname());
+        String title = String.format("<span class='highlight'>%s</span>", e.getFollower().getDisplayname());
 
         this.queueAlert(title, null, null, null);
     }
@@ -43,7 +34,7 @@ public class SubscriptionAlert extends GenericAlert implements KoiEventListener 
 
     @Override
     protected String defaultSuffix() {
-        return "just subscribed!";
+        return "just followed!";
     }
 
     @Override

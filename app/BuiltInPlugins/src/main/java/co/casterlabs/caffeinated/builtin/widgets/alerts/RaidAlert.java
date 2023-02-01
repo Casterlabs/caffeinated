@@ -1,17 +1,17 @@
-package co.casterlabs.caffeinated.builtin.widgets.alerts.generic;
+package co.casterlabs.caffeinated.builtin.widgets.alerts;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.events.FollowEvent;
+import co.casterlabs.koi.api.types.events.RaidEvent;
 
-public class FollowAlert extends GenericAlert implements KoiEventListener {
+public class RaidAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
-        .withNamespace("co.casterlabs.follow_alert")
-        .withIcon("user")
+        .withNamespace("co.casterlabs.raid_alert")
+        .withIcon("user-group")
         .withCategory(WidgetDetailsCategory.ALERTS)
-        .withFriendlyName("Follow Alert")
+        .withFriendlyName("Raid Alert")
         .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
@@ -20,11 +20,12 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
     }
 
     @KoiEventHandler
-    public void onFollow(FollowEvent e) {
+    public void onRaid(RaidEvent e) {
         // Generate the title html.
-        String title = String.format("<span class='highlight'>%s</span>", e.getFollower().getDisplayname());
+        String title = String.format("<span class='highlight'>%s</span>", e.getHost().getDisplayname());
+        String title2 = String.format("<span class='highlight'>%s</span>", e.getViewers());
 
-        this.queueAlert(title, null, null, null);
+        this.queueAlert(title, title2, null, null, null);
     }
 
     @Override
@@ -33,8 +34,13 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
     }
 
     @Override
+    protected String defaultInfix() {
+        return "is raiding with";
+    }
+
+    @Override
     protected String defaultSuffix() {
-        return "just followed!";
+        return "viewers!";
     }
 
     @Override
@@ -45,6 +51,11 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
     @Override
     protected boolean hasTTS() {
         return false;
+    }
+
+    @Override
+    protected boolean hasInfix() {
+        return true;
     }
 
 }

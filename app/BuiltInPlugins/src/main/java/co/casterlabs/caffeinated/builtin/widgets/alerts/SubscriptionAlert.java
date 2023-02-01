@@ -1,17 +1,18 @@
-package co.casterlabs.caffeinated.builtin.widgets.alerts.generic;
+package co.casterlabs.caffeinated.builtin.widgets.alerts;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.events.RaidEvent;
+import co.casterlabs.koi.api.types.events.SubscriptionEvent;
+import co.casterlabs.koi.api.types.user.User;
 
-public class RaidAlert extends GenericAlert implements KoiEventListener {
+public class SubscriptionAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
-        .withNamespace("co.casterlabs.raid_alert")
-        .withIcon("user-group")
+        .withNamespace("co.casterlabs.subscription_alert")
+        .withIcon("user-plus")
         .withCategory(WidgetDetailsCategory.ALERTS)
-        .withFriendlyName("Raid Alert")
+        .withFriendlyName("Subscription Alert")
         .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     @Override
@@ -20,12 +21,19 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
     }
 
     @KoiEventHandler
-    public void onRaid(RaidEvent e) {
-        // Generate the title html.
-        String title = String.format("<span class='highlight'>%s</span>", e.getHost().getDisplayname());
-        String title2 = String.format("<span class='highlight'>%s</span>", e.getViewers());
+    public void onSubscriber(SubscriptionEvent e) {
+        User sub = null;
 
-        this.queueAlert(title, title2, null, null, null);
+        if (e.getGiftRecipient() != null) {
+            sub = e.getGiftRecipient();
+        } else {
+            sub = e.getSubscriber();
+        }
+
+        // Generate the title html.
+        String title = String.format("<span class='highlight'>%s</span>", sub.getDisplayname());
+
+        this.queueAlert(title, null, null, null);
     }
 
     @Override
@@ -34,13 +42,8 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
     }
 
     @Override
-    protected String defaultInfix() {
-        return "is raiding with";
-    }
-
-    @Override
     protected String defaultSuffix() {
-        return "viewers!";
+        return "just subscribed!";
     }
 
     @Override
@@ -51,11 +54,6 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
     @Override
     protected boolean hasTTS() {
         return false;
-    }
-
-    @Override
-    protected boolean hasInfix() {
-        return true;
     }
 
 }
