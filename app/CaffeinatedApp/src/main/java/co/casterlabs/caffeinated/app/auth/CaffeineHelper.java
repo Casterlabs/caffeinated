@@ -62,15 +62,15 @@ public class CaffeineHelper {
             } else {
                 JsonObject json = Rson.DEFAULT.fromJson(body, JsonObject.class);
 
-                if (json.containsKey("next")) {
-                    throw new IllegalStateException("MFA");
-                } else if (json.containsKey("credentials")) {
-                    JsonObject credentials = json.getObject("credentials");
-
-                    return credentials.get("refresh_token").getAsString();
-                } else {
-                    throw new IllegalArgumentException(body);
+                if (json.containsKey("credentials") && !json.get("credentials").isJsonNull()) {
+                    return json.getObject("credentials").getString("refresh_token");
                 }
+
+                if (json.containsKey("next") && json.getString("next").equals("mfa_otp_required")) {
+                    throw new IllegalStateException("MFA");
+                }
+
+                throw new IllegalArgumentException(body);
             }
         }
     }
