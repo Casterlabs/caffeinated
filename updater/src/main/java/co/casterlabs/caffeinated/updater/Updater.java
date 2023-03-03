@@ -31,7 +31,7 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
     private static final int VERSION = 25;
-    private static final String CHANNEL = "stable";
+    private static final String CHANNEL = System.getProperty("caffeinated.channel", "stable");
 
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/";
     private static final String REMOTE_COMMIT_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/commit";
