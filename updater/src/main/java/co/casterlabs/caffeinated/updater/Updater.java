@@ -255,7 +255,7 @@ public class Updater {
 
             ProcessBuilder pb = new ProcessBuilder()
                 .directory(appDirectory)
-                .command(launchCommand);
+                .command(launchCommand, "--started-by-updater");
 
             // TODO look for the build info file before trusting the process. (kill & let
             // the user know it's dead)
@@ -267,6 +267,7 @@ public class Updater {
                 FastLogger.logStatic(LogLevel.INFO, "The process will now exit, this is so the updater's icon doesn't stick in the dock.");
                 pb.start();
                 dialog.close();
+                System.exit(0);
                 return;
             }
 
