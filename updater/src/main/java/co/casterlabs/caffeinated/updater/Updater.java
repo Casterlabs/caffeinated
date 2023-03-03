@@ -9,6 +9,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -42,6 +43,7 @@ public class Updater {
     private static File appDirectory = new File(appDataDirectory, "app");
     private static File updateFile = new File(appDirectory, "update.zip");
     private static File buildInfoFile = new File(appDirectory, "current_build_info.json");
+    private static File expectUpdaterFile = new File(appDirectory, "expect-updater");
 
     private static final List<OSDistribution> INLINE_PLATFORMS = Arrays.asList(
         // OSDistribution.WINDOWS_NT
@@ -246,12 +248,14 @@ public class Updater {
                 return;
             }
 
-            String updaterCommandLine = '"' + Platform.tryGetCommandLine().replace("\"", "\\\"") + '"';
+            String updaterCommandLine = Platform.tryGetCommandLine();
             FastLogger.logStatic("Updater CommandLine: %s", updaterCommandLine);
+            expectUpdaterFile.createNewFile();
+            Files.writeString(expectUpdaterFile.toPath(), updaterCommandLine);
 
             ProcessBuilder pb = new ProcessBuilder()
                 .directory(appDirectory)
-                .command(launchCommand, "--restart-commandline", updaterCommandLine);
+                .command(launchCommand);
 
             // TODO look for the build info file before trusting the process. (kill & let
             // the user know it's dead)
