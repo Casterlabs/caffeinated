@@ -5,12 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 
 import co.casterlabs.caffeinated.updater.util.FileUtil;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
@@ -265,13 +266,26 @@ public class Updater {
                 return;
             }
 
-            pb.start();
+            Process proc = pb
+                .redirectOutput(Redirect.PIPE)
+                .start();
 
-            // TODO look for "Starting the UI" before we close the dialog.
+            Scanner in = new Scanner(proc.getInputStream());
+            boolean hasAlreadyStarted = false;
 
-            TimeUnit.SECONDS.sleep(2);
-            dialog.close();
-            System.exit(0);
+            try {
+                while (true) {
+                    String line = in.nextLine();
+                    System.out.println(line);
+
+                    if (!hasAlreadyStarted && line.contains("Starting the UI")) {
+                        // Look for "Starting the UI" before we close the dialog.
+                        FastLogger.logStatic(LogLevel.INFO, "UI Started!");
+                        dialog.close();
+                        System.exit(0);
+                    }
+                }
+            } catch (Exception ignored) {}
         } catch (Exception e) {
             throw new UpdaterException(UpdaterException.Error.LAUNCH_FAILED, "Could not launch update :(", e);
         }
