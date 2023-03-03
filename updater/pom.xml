@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.16.2</version>
+			<version>1.17.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
