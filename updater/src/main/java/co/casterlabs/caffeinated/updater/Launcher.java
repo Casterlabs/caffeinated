@@ -265,7 +265,13 @@ public class Launcher {
             switch (e.getError()) {
                 case LAUNCH_FAILED:
                     Updater.borkInstall();
-                    TimeUnit.SECONDS.sleep(5);
+                    TimeUnit.SECONDS.sleep(2);
+                    dialog.setStatus("Could not launch update, redownloading in 3.");
+                    TimeUnit.SECONDS.sleep(1);
+                    dialog.setStatus("Could not launch update, redownloading in 2.");
+                    TimeUnit.SECONDS.sleep(1);
+                    dialog.setStatus("Could not launch update, redownloading in 1.");
+                    TimeUnit.SECONDS.sleep(1);
                     checkForUpdates();
                     return;
 
