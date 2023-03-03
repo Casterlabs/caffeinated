@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -41,8 +40,7 @@ public class Updater {
     public static String appDataDirectory = AppDirsFactory.getInstance().getUserDataDir("casterlabs-caffeinated", null, null, true);
     private static File appDirectory = new File(appDataDirectory, "app");
     private static File updateFile = new File(appDirectory, "update.zip");
-    private static File commitFile = new File(appDirectory, ".commit");
-    private static File buildokFile = new File(appDirectory, ".build_ok");
+    private static File buildInfoFile = new File(appDirectory, "current_build_info.json");
 
     private static final List<OSDistribution> INLINE_PLATFORMS = Arrays.asList(
         // OSDistribution.WINDOWS_NT
@@ -88,24 +86,28 @@ public class Updater {
     }
 
     public static void borkInstall() {
-        buildokFile.delete();
+        buildInfoFile.delete();
     }
 
     public static boolean needsUpdate() {
         try {
             // Check for existence of files.
-            if (!commitFile.exists()) {
-                return true;
-            } else if (!buildokFile.exists()) {
+            if (!buildInfoFile.exists()) {
                 FastLogger.logStatic("Build was not healthy, forcing redownload.");
                 return true;
-            } else {
-                // Check the version.
-                String installedCommit = FileUtil.readFile(commitFile).trim();
-                String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
-
-                return !remoteCommit.equals(installedCommit);
             }
+
+            JsonObject buildInfo = Rson.DEFAULT.fromJson(FileUtil.readFile(buildInfoFile), JsonObject.class);
+
+            // Check the version.
+            String installedChannel = buildInfo.getString("buildChannel");
+            if (!installedChannel.equals(CHANNEL)) return true;
+
+            String installedCommit = buildInfo.getString("commit");
+            String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
+            if (!remoteCommit.equals(installedCommit)) return true;
+
+            return false;
         } catch (IOException e) {
             FastLogger.logException(e);
             return true;
@@ -151,11 +153,6 @@ public class Updater {
             {
                 dialog.setStatus("Installing updates...");
                 ZipUtil.unzip(updateFile, appDirectory);
-
-                commitFile.createNewFile();
-
-                String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
-                Files.writeString(commitFile.toPath(), remoteCommit);
 
                 updateFile.delete();
 
