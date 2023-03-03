@@ -269,6 +269,18 @@ public class Launcher {
                     checkForUpdates();
                     return;
 
+                case DOWNLOAD_FAILED:
+                    Updater.borkInstall();
+                    TimeUnit.SECONDS.sleep(2);
+                    dialog.setStatus("Update failed, retrying in 3.");
+                    TimeUnit.SECONDS.sleep(1);
+                    dialog.setStatus("Update failed, retrying in 2.");
+                    TimeUnit.SECONDS.sleep(1);
+                    dialog.setStatus("Update failed, retrying in 1.");
+                    TimeUnit.SECONDS.sleep(1);
+                    checkForUpdates();
+                    return;
+
                 default:
                     return;
             }
