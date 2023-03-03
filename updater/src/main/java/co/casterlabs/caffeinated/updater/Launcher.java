@@ -242,19 +242,21 @@ public class Launcher {
 
     private static void checkForUpdates() throws Exception {
         try {
+            // Artificial delay added in here because it'd be too jarring otherwise.
+            // Heh, JARring, haha.
+
             if (Updater.needsUpdate() || (mode == UpdaterMode.FORCE)) {
                 FastLogger.logStatic("Downloading updates.");
                 Updater.downloadAndInstallUpdate(dialog);
                 dialog.setStatus("Done!");
-                // Artificial delay added because it'd be too jarring otherwise.
-                // Heh, JARring, haha.
-                TimeUnit.SECONDS.sleep(2);
             } else {
-                FastLogger.logStatic("You are up to date!");
                 TimeUnit.SECONDS.sleep(1);
+                FastLogger.logStatic("You are up to date!");
                 dialog.setStatus("You are up to date!");
             }
 
+            TimeUnit.SECONDS.sleep(2);
+            dialog.setStatus("Launching Caffeinated...");
             Updater.launch(dialog);
         } catch (UpdaterException e) {
             dialog.setStatus(e.getMessage());
@@ -265,7 +267,25 @@ public class Launcher {
             switch (e.getError()) {
                 case LAUNCH_FAILED:
                     Updater.borkInstall();
-                    TimeUnit.SECONDS.sleep(5);
+                    TimeUnit.SECONDS.sleep(2);
+                    dialog.setStatus("Could not launch update, redownloading in 3.");
+                    TimeUnit.SECONDS.sleep(1);
+                    dialog.setStatus("Could not launch update, redownloading in 2.");
+                    TimeUnit.SECONDS.sleep(1);
+                    dialog.setStatus("Could not launch update, redownloading in 1.");
+                    TimeUnit.SECONDS.sleep(1);
+                    checkForUpdates();
+                    return;
+
+                case DOWNLOAD_FAILED:
+                    Updater.borkInstall();
+                    TimeUnit.SECONDS.sleep(2);
+                    dialog.setStatus("Update failed, retrying in 3.");
+                    TimeUnit.SECONDS.sleep(1);
+                    dialog.setStatus("Update failed, retrying in 2.");
+                    TimeUnit.SECONDS.sleep(1);
+                    dialog.setStatus("Update failed, retrying in 1.");
+                    TimeUnit.SECONDS.sleep(1);
                     checkForUpdates();
                     return;
 

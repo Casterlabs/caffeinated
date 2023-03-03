@@ -5,13 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 
 import co.casterlabs.caffeinated.updater.util.FileUtil;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
@@ -31,8 +32,8 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
-    private static final int VERSION = 24;
-    private static final String CHANNEL = "stable";
+    private static final int VERSION = 26;
+    private static final String CHANNEL = System.getProperty("caffeinated.channel", "stable");
 
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/";
     private static final String REMOTE_COMMIT_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/commit";
@@ -41,8 +42,8 @@ public class Updater {
     public static String appDataDirectory = AppDirsFactory.getInstance().getUserDataDir("casterlabs-caffeinated", null, null, true);
     private static File appDirectory = new File(appDataDirectory, "app");
     private static File updateFile = new File(appDirectory, "update.zip");
-    private static File commitFile = new File(appDirectory, ".commit");
-    private static File buildokFile = new File(appDirectory, ".build_ok");
+    private static File buildInfoFile = new File(appDirectory, "current_build_info.json");
+    private static File expectUpdaterFile = new File(appDirectory, "expect-updater");
 
     private static final List<OSDistribution> INLINE_PLATFORMS = Arrays.asList(
         // OSDistribution.WINDOWS_NT
@@ -88,24 +89,28 @@ public class Updater {
     }
 
     public static void borkInstall() {
-        buildokFile.delete();
+        buildInfoFile.delete();
     }
 
     public static boolean needsUpdate() {
         try {
             // Check for existence of files.
-            if (!commitFile.exists()) {
-                return true;
-            } else if (!buildokFile.exists()) {
+            if (!buildInfoFile.exists()) {
                 FastLogger.logStatic("Build was not healthy, forcing redownload.");
                 return true;
-            } else {
-                // Check the version.
-                String installedCommit = FileUtil.readFile(commitFile).trim();
-                String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
-
-                return !remoteCommit.equals(installedCommit);
             }
+
+            JsonObject buildInfo = Rson.DEFAULT.fromJson(FileUtil.readFile(buildInfoFile), JsonObject.class);
+
+            // Check the version.
+            String installedChannel = buildInfo.getString("buildChannel");
+            if (!installedChannel.equals(CHANNEL)) return true;
+
+            String installedCommit = buildInfo.getString("commit");
+            String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
+            if (!remoteCommit.equals(installedCommit)) return true;
+
+            return false;
         } catch (IOException e) {
             FastLogger.logException(e);
             return true;
@@ -151,11 +156,6 @@ public class Updater {
             {
                 dialog.setStatus("Installing updates...");
                 ZipUtil.unzip(updateFile, appDirectory);
-
-                commitFile.createNewFile();
-
-                String remoteCommit = WebUtil.sendHttpRequest(new Request.Builder().url(REMOTE_COMMIT_URL)).trim();
-                Files.writeString(commitFile.toPath(), remoteCommit);
 
                 updateFile.delete();
 
@@ -245,35 +245,52 @@ public class Updater {
                 // Hide the updater dialog, invoke the main method, and pray.
                 dialog.dispose();
                 mainMethod.invoke(null, (Object) args);
-            } else {
-                String updaterCommandLine = '"' + Platform.tryGetCommandLine().replace("\"", "\\\"") + '"';
-                FastLogger.logStatic("Updater CommandLine: %s", updaterCommandLine);
+                return;
+            }
 
-                ProcessBuilder pb = new ProcessBuilder()
-                    .directory(appDirectory)
-                    .command(launchCommand, "--restart-commandline", updaterCommandLine);
+            String updaterCommandLine = Platform.tryGetCommandLine();
+            FastLogger.logStatic("Updater CommandLine: %s", updaterCommandLine);
+            expectUpdaterFile.createNewFile();
+            Files.writeString(expectUpdaterFile.toPath(), updaterCommandLine);
 
-                // TODO look for the .build_ok file before trusting the process. (kill & let the
-                // user know it's dead)
+            ProcessBuilder pb = new ProcessBuilder()
+                .directory(appDirectory)
+                .command(launchCommand, "--started-by-updater");
 
-                if (Platform.osDistribution == OSDistribution.MACOS) {
-                    // On MacOS we do not want to keep the updater process open as it'll stick in
-                    // the dock. So we start the process and kill the updater to make sure that
-                    // doesn't happen.
-                    FastLogger.logStatic(LogLevel.INFO, "The process will now exit, this is so the updater's icon doesn't stick in the dock.");
-                    pb.start();
-                    dialog.close();
-                    return;
-                }
+            // TODO look for the build info file before trusting the process. (kill & let
+            // the user know it's dead)
 
+            if (Platform.osDistribution == OSDistribution.MACOS) {
+                // On MacOS we do not want to keep the updater process open as it'll stick in
+                // the dock. So we start the process and kill the updater to make sure that
+                // doesn't happen.
+                FastLogger.logStatic(LogLevel.INFO, "The process will now exit, this is so the updater's icon doesn't stick in the dock.");
                 pb.start();
-
-                // TODO look for "Starting the UI" before we close the dialog.
-
-                TimeUnit.SECONDS.sleep(2);
                 dialog.close();
                 System.exit(0);
+                return;
             }
+
+            Process proc = pb
+                .redirectOutput(Redirect.PIPE)
+                .start();
+
+            Scanner in = new Scanner(proc.getInputStream());
+            boolean hasAlreadyStarted = false;
+
+            try {
+                while (true) {
+                    String line = in.nextLine();
+                    System.out.println(line);
+
+                    if (!hasAlreadyStarted && line.contains("Starting the UI")) {
+                        // Look for "Starting the UI" before we close the dialog.
+                        FastLogger.logStatic(LogLevel.INFO, "UI Started!");
+                        dialog.close();
+                        System.exit(0);
+                    }
+                }
+            } catch (Exception ignored) {}
         } catch (Exception e) {
             throw new UpdaterException(UpdaterException.Error.LAUNCH_FAILED, "Could not launch update :(", e);
         }
