@@ -242,35 +242,36 @@ public class Updater {
                 // Hide the updater dialog, invoke the main method, and pray.
                 dialog.dispose();
                 mainMethod.invoke(null, (Object) args);
-            } else {
-                String updaterCommandLine = '"' + Platform.tryGetCommandLine().replace("\"", "\\\"") + '"';
-                FastLogger.logStatic("Updater CommandLine: %s", updaterCommandLine);
-
-                ProcessBuilder pb = new ProcessBuilder()
-                    .directory(appDirectory)
-                    .command(launchCommand, "--restart-commandline", updaterCommandLine);
-
-                // TODO look for the .build_ok file before trusting the process. (kill & let the
-                // user know it's dead)
-
-                if (Platform.osDistribution == OSDistribution.MACOS) {
-                    // On MacOS we do not want to keep the updater process open as it'll stick in
-                    // the dock. So we start the process and kill the updater to make sure that
-                    // doesn't happen.
-                    FastLogger.logStatic(LogLevel.INFO, "The process will now exit, this is so the updater's icon doesn't stick in the dock.");
-                    pb.start();
-                    dialog.close();
-                    return;
-                }
-
-                pb.start();
-
-                // TODO look for "Starting the UI" before we close the dialog.
-
-                TimeUnit.SECONDS.sleep(2);
-                dialog.close();
-                System.exit(0);
+                return;
             }
+
+            String updaterCommandLine = '"' + Platform.tryGetCommandLine().replace("\"", "\\\"") + '"';
+            FastLogger.logStatic("Updater CommandLine: %s", updaterCommandLine);
+
+            ProcessBuilder pb = new ProcessBuilder()
+                .directory(appDirectory)
+                .command(launchCommand, "--restart-commandline", updaterCommandLine);
+
+            // TODO look for the build info file before trusting the process. (kill & let
+            // the user know it's dead)
+
+            if (Platform.osDistribution == OSDistribution.MACOS) {
+                // On MacOS we do not want to keep the updater process open as it'll stick in
+                // the dock. So we start the process and kill the updater to make sure that
+                // doesn't happen.
+                FastLogger.logStatic(LogLevel.INFO, "The process will now exit, this is so the updater's icon doesn't stick in the dock.");
+                pb.start();
+                dialog.close();
+                return;
+            }
+
+            pb.start();
+
+            // TODO look for "Starting the UI" before we close the dialog.
+
+            TimeUnit.SECONDS.sleep(2);
+            dialog.close();
+            System.exit(0);
         } catch (Exception e) {
             throw new UpdaterException(UpdaterException.Error.LAUNCH_FAILED, "Could not launch update :(", e);
         }
