@@ -18,6 +18,7 @@ import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.app.App.PowerManagementHint;
@@ -145,7 +146,7 @@ public class Bootstrap implements Runnable {
 
         instance = this;
 
-        File expectUpdaterFile = new File("expect-updater");
+        File expectUpdaterFile = getAppFile("expect-updater");
         if (expectUpdaterFile.exists()) {
             restartCommandLine = new String(Files.readAllBytes(expectUpdaterFile.toPath()));
 
@@ -207,25 +208,22 @@ public class Bootstrap implements Runnable {
     }
 
     private static void writeAppFile(@NonNull String filename, byte[] bytes) throws IOException {
-        File file;
-
-        switch (Platform.osDistribution) {
-            case MACOS:
-                if (new File("./").getCanonicalPath().contains(".app")) {
-                    file = new File("../../../", filename);
-                    break;
-                }
-
-            default:
-                file = new File(filename);
-                break;
-        }
+        File file = getAppFile(filename);
 
         if (bytes == null) {
             file.createNewFile();
         } else {
             Files.write(file.toPath(), bytes);
         }
+    }
+
+    private static File getAppFile(@NonNull String filename) throws IOException {
+        if (Platform.osDistribution == OSDistribution.MACOS) {
+            if (new File("./").getCanonicalPath().contains(".app")) {
+                return new File("../../../", filename);
+            }
+        }
+        return new File(filename);
     }
 
     private void startApp() throws Exception {
