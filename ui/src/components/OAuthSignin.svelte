@@ -4,11 +4,12 @@
 
 	import { onMount } from 'svelte';
 
+	export let type;
 	export let platform;
-	export let isKoi = false;
 
 	onMount(() => {
-		Caffeinated.auth.requestOAuthSignin(platform, isKoi, true);
+		const shouldGoBack = location.search != '?dontGoBack'; // Default: true
+		Caffeinated.auth.requestOAuthSignin(type, platform, shouldGoBack);
 	});
 
 	function cancelAuth() {

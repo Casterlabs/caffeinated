@@ -162,7 +162,7 @@
 	<div class="mt-4 w-fit mx-auto grid grid-cols-4 gap-2">
 		{#each PLATFORMS as { id, name, color }}
 			<a
-				href="/signin/{id.toLowerCase()}"
+				href="/signin/{id.toLowerCase()}?dontGoBack"
 				class="signin-icon w-12 h-12 border border-base-6 rounded inline-flex items-center justify-center transition"
 				style="--color: {color};"
 				title={name}

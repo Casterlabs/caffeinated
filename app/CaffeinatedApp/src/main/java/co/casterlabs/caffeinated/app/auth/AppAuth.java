@@ -76,8 +76,7 @@ public class AppAuth extends JavascriptObject {
                 .header("Content-Type", "application/json");
         }
 
-        String token = CaffeinatedApp.getInstance().getAuthPreferences().get().getCasterlabsAuthToken();
-
+        String token = CaffeinatedApp.getInstance().getAuthPreferences().get().getToken("casterlabs", "casterlabs");
         if (token != null) {
             request.header("Authorization", "Bearer " + token);
         }
@@ -121,7 +120,7 @@ public class AppAuth extends JavascriptObject {
 
         PreferenceFile<AuthPreferences> prefs = CaffeinatedApp.getInstance().getAuthPreferences();
 
-        prefs.get().setCasterlabsAuthToken(null);
+        prefs.get().removeToken("casterlabs", "casterlabs");
         prefs.save();
     }
 
@@ -130,7 +129,7 @@ public class AppAuth extends JavascriptObject {
         if (this.casterlabsAccount == null) {
             PreferenceFile<AuthPreferences> prefs = CaffeinatedApp.getInstance().getAuthPreferences();
 
-            prefs.get().setCasterlabsAuthToken(token);
+            prefs.get().addToken("casterlabs", "casterlabs", token);
             prefs.save();
 
             this.clRefreshTask = AsyncTask.create(() -> {
@@ -194,16 +193,13 @@ public class AppAuth extends JavascriptObject {
     }
 
     public void init() {
-        List<String> ids = CaffeinatedApp.getInstance().getAuthPreferences().get().getKoiTokenIds();
-
-        for (String tokenId : ids) {
+        for (String tokenId : CaffeinatedApp.getInstance().getAuthPreferences().get().getAllTokenIdsByType("koi")) {
             this.startAuthInstance(tokenId);
         }
 
-        String token = CaffeinatedApp.getInstance().getAuthPreferences().get().getCasterlabsAuthToken();
-
-        if (token != null) {
-            this.loginCasterlabs(token);
+        String casterlabsToken = CaffeinatedApp.getInstance().getAuthPreferences().get().getToken("casterlabs", "casterlabs");
+        if (casterlabsToken != null) {
+            this.loginCasterlabs(casterlabsToken);
         }
     }
 
@@ -211,11 +207,7 @@ public class AppAuth extends JavascriptObject {
         this.cancelSignin();
 
         for (AuthInstance inst : this.authInstances.values()) {
-            try {
-                inst.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            inst.close();
         }
     }
 
@@ -241,9 +233,9 @@ public class AppAuth extends JavascriptObject {
 
         if (this.isAuthorized != authorized) {
             CaffeinatedApp
-                    .getInstance()
-                    .getUI()
-                    .navigate(authorized ? "/dashboard" : "/signin");
+                .getInstance()
+                .getUI()
+                .navigate(authorized ? "/dashboard" : "/signin");
         }
 
         this.isAuthorized = authorized;
@@ -274,6 +266,11 @@ public class AppAuth extends JavascriptObject {
     }
 
     private void startAuthInstance(String tokenId) {
+        AuthInstance existing = this.authInstances.remove(tokenId);
+        if (existing != null) {
+            existing.close(); // We don't care enough to invalidate.
+        }
+
         this.logger.debug("Starting AuthInstance with id: %s", tokenId);
         this.authInstances.put(tokenId, new AuthInstance(tokenId));
     }
@@ -285,51 +282,46 @@ public class AppAuth extends JavascriptObject {
 
     @SuppressWarnings("deprecation")
     @JavascriptFunction
-    public void requestOAuthSignin(@NonNull String platform, boolean isKoi, boolean shouldNavigateBackwards) {
+    public void requestOAuthSignin(@NonNull String type, @NonNull String platform, boolean shouldNavigateBackwards) {
         try {
+            final boolean isKoi = type.equalsIgnoreCase("koi");
+
             this.logger.info("Signin requested. (%s)", platform);
 
             if (this.currentAuthCallback != null) {
                 this.cancelSignin();
             }
-
             this.currentAuthCallback = this.authorize(platform, isKoi);
 
             this.currentAuthCallback
                 .connect()
                 .then((token) -> {
                     this.currentAuthCallback = null;
+                    if (token == null) return;
 
-                    if (token != null) {
-                        this.logger.info("Signin completed (%s)", platform);
+                    this.logger.info("Signin completed (%s)", platform);
 
-                        if (isKoi) {
-                            String tokenId = CaffeinatedApp
-                                .getInstance()
-                                .getAuthPreferences()
-                                .get()
-                                .addKoiToken(token);
+                    CaffeinatedApp
+                        .getInstance()
+                        .getAuthPreferences()
+                        .get()
+                        .addToken(type, platform, token);
 
-                            this.startAuthInstance(tokenId);
-                        } else {
-                            CaffeinatedApp
-                                .getInstance()
-                                .getAuthPreferences()
-                                .get()
-                                .addToken(platform, token);
+                    CaffeinatedApp.getInstance().emitAppEvent(
+                        "auth:completion",
+                        new JsonObject()
+                            .put("type", type)
+                            .put("platform", platform)
+                            .put("tokenId", platform)
+                    );
 
-                            CaffeinatedApp.getInstance().emitAppEvent(
-                                "auth:completion",
-                                new JsonObject()
-                                    .put("platform", platform)
-                                    .put("tokenId", platform)
-                            );
-                        }
+                    if (isKoi) {
+                        this.startAuthInstance(platform);
+                    }
 
-                        if (shouldNavigateBackwards) {
-                            // Navigate backwards for the signin screen.
-                            CaffeinatedApp.getInstance().getUI().goBack();
-                        }
+                    if (shouldNavigateBackwards) {
+                        // Navigate backwards for the signin screen.
+                        CaffeinatedApp.getInstance().getUI().goBack();
                     }
                 });
         } catch (IOException e) {
@@ -361,14 +353,15 @@ public class AppAuth extends JavascriptObject {
     @JavascriptFunction
     public void loginCaffeine(@NonNull String username, @NonNull String password, @Nullable String mfa, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
         String koiToken = CaffeineHelper.login(username, password, mfa);
+        final String tokenId = "caffeine";
 
-        String tokenId = CaffeinatedApp
+        CaffeinatedApp
             .getInstance()
             .getAuthPreferences()
             .get()
-            .addKoiToken(koiToken);
+            .addToken("koi", tokenId, koiToken);
 
-        CaffeinatedApp.getInstance().getAnalytics().track("AUTH__caffeinated_caffeine", true);
+        CaffeinatedApp.getInstance().getAnalytics().track("AUTH__" + tokenId, true);
         this.startAuthInstance(tokenId);
 
         if (shouldNavigateBackwards) {
@@ -378,25 +371,26 @@ public class AppAuth extends JavascriptObject {
     }
 
     private AuthCallback authorize(String type, boolean isKoi) throws IOException {
-        String oauthLink = CaffeinatedApp.AUTH_URLS.getString(type);
+        String oauthLink = CaffeinatedApp.OVERRIDE_AUTH_URLS
+            .getOrDefault(type, CaffeinatedApp.AUTH_URL);
 
         if (oauthLink == null) {
             throw new IllegalArgumentException("Type '" + type + "' does not have an oauth link associated with it.");
-        } else {
-            CaffeinatedApp.getInstance().getAnalytics().track("AUTH__" + type, true);
-
-            AuthCallback callback = new AuthCallback(type, isKoi);
-
-            try {
-                Desktop
-                    .getDesktop()
-                    .browse(new URI(oauthLink + "?state=" + callback.getStateString()));
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-
-            return callback;
         }
+
+        CaffeinatedApp.getInstance().getAnalytics().track("AUTH__" + type, true);
+
+        AuthCallback callback = new AuthCallback(type, isKoi);
+
+        try {
+            Desktop
+                .getDesktop()
+                .browse(new URI(oauthLink + "?state=" + callback.getStateString()));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return callback;
     }
 
     public @Nullable AuthInstance getAuthInstance(UserPlatform platform) {

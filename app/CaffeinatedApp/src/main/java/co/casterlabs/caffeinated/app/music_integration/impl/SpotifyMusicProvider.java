@@ -31,6 +31,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
     private String refreshToken;
     private String accessToken;
 
+    @SuppressWarnings("deprecation")
     public SpotifyMusicProvider(@NonNull MusicIntegration musicIntegration) {
         super("Spotify", "spotify", SpotifySettings.class);
         musicIntegration.getProviders().put(this.getServiceId(), this);
@@ -38,9 +39,10 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
         CaffeinatedApp
             .getInstance()
             .onAppEvent("auth:completion", (JsonObject data) -> {
-                if (data.getString("platform").equals("caffeinated_spotify")) {
+                if (data.getString("type").equals("music") &&
+                    data.getString("platform").equals("spotify")) {
                     this.logger.info("Completing OAuth.");
-                    this.completeOAuth(data.getString("tokenId"));
+                    this.completeOAuth();
                 }
             });
 
@@ -155,18 +157,15 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
 
     @Override
     protected void onSettingsUpdate() {
-        String tokenId = this.getSettings().tokenId;
+        this.refreshToken = CaffeinatedApp
+            .getInstance()
+            .getAuthPreferences()
+            .get()
+            .getToken("music", "spotify");
 
-        if (tokenId == null) {
+        if (this.refreshToken == null) {
             this.setAccountData(false, null, null);
         } else {
-            this.refreshToken = CaffeinatedApp
-                .getInstance()
-                .getAuthPreferences()
-                .get()
-                .getTokens()
-                .getString(tokenId);
-
             this.setAccountData(true, "?", "https://example.com");
             this.pollSpotify();
         }
@@ -174,29 +173,20 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
 
     @Override
     public void signout() {
-        String tokenId = this.getSettings().tokenId;
+        this.refreshToken = null;
+        this.accessToken = null;
 
-        if (tokenId != null) {
-            this.refreshToken = null;
-            this.accessToken = null;
-
-            // Update the tokenId.
-            this.getSettings().tokenId = null;
-            this.updateSettings(this.getSettings());
-
-            CaffeinatedApp.getInstance().getAuthPreferences().get().getTokens().remove(tokenId);
-            CaffeinatedApp.getInstance().getAuthPreferences().save();
-        }
+        CaffeinatedApp.getInstance().getAuthPreferences().get().removeToken("music", "spotify");
+        CaffeinatedApp.getInstance().getAuthPreferences().save();
     }
 
     @JsonClass(exposeAll = true)
     public static class SpotifySettings {
-        private String tokenId;
 
     }
 
-    private void completeOAuth(String tokenId) {
-        String code = CaffeinatedApp.getInstance().getAuthPreferences().get().getTokens().getString(tokenId);
+    private void completeOAuth() {
+        String code = CaffeinatedApp.getInstance().getAuthPreferences().get().getToken("music", "spotify");
 
         try {
             JsonObject response = Rson.DEFAULT.fromJson(
@@ -209,7 +199,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
             String refreshToken = response.getString("refresh_token");
 
             // Update the auth file.
-            CaffeinatedApp.getInstance().getAuthPreferences().get().getTokens().put(tokenId, refreshToken);
+            CaffeinatedApp.getInstance().getAuthPreferences().get().addToken("music", "spotify", refreshToken);
             CaffeinatedApp.getInstance().getAuthPreferences().save();
 
             FastLogger.logStatic("RefreshToken: ", refreshToken);
@@ -218,10 +208,6 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
         }
 
         this.logger.info("OAuth Completed, enabling now.");
-
-        // Update the tokenId.
-        this.getSettings().tokenId = tokenId;
-        this.updateSettings(this.getSettings());
 
         CaffeinatedApp.getInstance().getAuthPreferences().save();
 

@@ -96,11 +96,12 @@
 										on:click={() => {
 											if (platform == 'CAFFEINE') {
 												goto('/signin/caffeine');
+												return;
 											}
 
 											window.Caffeinated.auth.requestOAuthSignin(
-												`caffeinated_${platform.toLowerCase()}`,
-												true,
+												'koi',
+												platform.toLowerCase(),
 												false
 											);
 											loading.push(platform);

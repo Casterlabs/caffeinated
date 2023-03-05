@@ -2,4 +2,4 @@
 	import OAuthSignin from '../../components/OAuthSignin.svelte';
 </script>
 
-<OAuthSignin platform="caffeinated_spotify" isKoi={false} />
+<OAuthSignin type="music" platform="spotify" />

@@ -23,14 +23,14 @@
 		isLoading = true;
 
 		try {
+			const shouldGoBack = location.search != '?dontGoBack'; // Default: true
+
 			await Caffeinated.auth.loginCaffeine(
 				usernameInput,
 				passwordInput,
 				mfaInput,
-				location.href.includes('?fromSettings')
+				shouldGoBack
 			);
-			// Success!
-			history.back();
 		} catch (ex) {
 			isLoading = false;
 

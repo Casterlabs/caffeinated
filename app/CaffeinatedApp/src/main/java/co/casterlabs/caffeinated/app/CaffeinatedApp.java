@@ -57,19 +57,10 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public static final String caffeinatedClientId = "LmHG2ux992BxqQ7w9RJrfhkW";
     public static final String appDataDir;
 
-    // I chose JsonObject because of the builder syntax.
-    // @formatter:off
-    public static final JsonObject AUTH_URLS = new JsonObject()
-        .put("caffeinated_spotify", "https://casterlabs.co/auth/redirect/spotify")
-        .put("caffeinated_twitch",  "https://casterlabs.co/auth/redirect")
-        .put("caffeinated_trovo",   "https://casterlabs.co/auth/redirect")
-        .put("caffeinated_glimesh", "https://casterlabs.co/auth/redirect")
-        .put("caffeinated_brime",   "https://casterlabs.co/auth/redirect")
-        .put("caffeinated_youtube", "https://casterlabs.co/auth/redirect")
-        .put("caffeinated_tiktok",  "https://casterlabs.co/auth/redirect")
-        .put("caffeinated_dlive",   "https://casterlabs.co/auth/redirect")
-        .put("caffeinated_theta",   "https://casterlabs.co/auth/redirect");
-    // @formatter:on
+    public static final String AUTH_URL = "https://casterlabs.co/auth/redirect";
+    public static final Map<String, String> OVERRIDE_AUTH_URLS = Map.of(
+        "caffeinated_spotify", "https://casterlabs.co/auth/redirect/spotify"
+    );
 
     private static @Getter CaffeinatedApp instance;
 

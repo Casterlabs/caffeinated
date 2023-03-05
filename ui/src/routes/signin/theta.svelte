@@ -2,4 +2,4 @@
 	import OAuthSignin from '../../components/OAuthSignin.svelte';
 </script>
 
-<OAuthSignin platform="caffeinated_theta" isKoi={true} />
+<OAuthSignin type="koi" platform="theta" />
