@@ -57,101 +57,98 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
     }
 
     private void pollSpotify() {
-        if (this.isSignedIn()) {
-            try {
-                if (this.accessToken == null) {
-                    JsonObject response = Rson.DEFAULT.fromJson(
-                        WebUtil.sendHttpRequest(
-                            new Request.Builder()
-                                .url(String.format("%s?refresh_token=%s", AUTH_PROXY_URL, this.refreshToken))
-                        ), JsonObject.class
-                    );
+        if (!this.isSignedIn()) return;
 
-                    if (response.containsKey("error")) {
-                        this.signout();
-                        return;
-                    } else {
-                        this.logger.debug("Refreshed token.");
-
-                        this.accessToken = "Bearer " + response.getString("access_token");
-
-                        // TODO if (response.containsKey("refresh_token")) {} update prefs
-
-                        JsonObject profile = Rson.DEFAULT.fromJson(
-                            WebUtil.sendHttpRequest(
-                                new Request.Builder()
-                                    .url("https://api.spotify.com/v1/me")
-                                    .header("content-type", "application/json")
-                                    .header("authorization", this.accessToken)
-                            ), JsonObject.class
-                        );
-
-                        this.setAccountData(
-                            true,
-                            profile.getString("display_name"),
-                            profile.getObject("external_urls").getString("spotify")
-                        );
-
-                        this.logger.debug("Refreshed profile.");
-                    }
-                }
-
+        try {
+            if (this.accessToken == null) {
                 JsonObject response = Rson.DEFAULT.fromJson(
                     WebUtil.sendHttpRequest(
                         new Request.Builder()
-                            .url("https://api.spotify.com/v1/me/player")
+                            .url(String.format("%s?refresh_token=%s", AUTH_PROXY_URL, this.refreshToken))
+                    ), JsonObject.class
+                );
+
+                if (response.containsKey("error")) {
+                    this.signout();
+                    return;
+                }
+
+                this.logger.debug("Refreshed token.");
+
+                this.accessToken = "Bearer " + response.getString("access_token");
+
+                // TODO if (response.containsKey("refresh_token")) {} update prefs
+
+                JsonObject profile = Rson.DEFAULT.fromJson(
+                    WebUtil.sendHttpRequest(
+                        new Request.Builder()
+                            .url("https://api.spotify.com/v1/me")
                             .header("content-type", "application/json")
                             .header("authorization", this.accessToken)
                     ), JsonObject.class
                 );
 
-                if (response.containsKey("error")) {
-                    int responseStatus = response.getObject("error").getNumber("status").intValue();
+                this.setAccountData(
+                    true,
+                    profile.getString("display_name"),
+                    profile.getObject("external_urls").getString("spotify")
+                );
 
-                    if (responseStatus == 401) {
-                        this.accessToken = null;
-                        this.pollSpotify();
-                        return;
-                    }
-                } else {
-                    if (response.containsKey("item")) {
-                        if (response.get("item").isJsonObject()) {
-                            JsonObject item = response.getObject("item");
-
-                            boolean isPlaying = response.getBoolean("is_playing");
-                            String songLink = item.getObject("external_urls").getString("spotify");
-                            String albumArtUrl = item.getObject("album").getArray("images").getObject(0).getString("url");
-                            String album = item.getObject("album").getString("name");
-                            String title = item.getString("name");
-                            List<String> artists = new LinkedList<>();
-
-                            for (JsonElement artist : item.getArray("artists")) {
-                                artists.add(artist.getAsObject().getString("name"));
-                            }
-
-                            // Use the better parsing for a more accurate result.
-                            Pair<String, List<String>> betterResult = InternalMusicProvider.parseTitleForArtists(title, artists);
-
-                            title = betterResult.a();
-                            artists = betterResult.b();
-
-                            MusicTrack track = new MusicTrack(title, artists, album, albumArtUrl, songLink);
-
-                            if (isPlaying) {
-                                this.setPlaying(track);
-                            } else {
-                                this.setPaused(track);
-                            }
-                        } else {
-                            this.makePaused();
-                        }
-                    }
-                }
-            } catch (StringIndexOutOfBoundsException | JsonParseException ignored) {
-                // ignored.
-            } catch (Exception e) {
-                e.printStackTrace();
+                this.logger.debug("Refreshed profile.");
             }
+
+            JsonObject response = Rson.DEFAULT.fromJson(
+                WebUtil.sendHttpRequest(
+                    new Request.Builder()
+                        .url("https://api.spotify.com/v1/me/player")
+                        .header("content-type", "application/json")
+                        .header("authorization", this.accessToken)
+                ), JsonObject.class
+            );
+
+            if (response.containsKey("error")) {
+                int responseStatus = response.getObject("error").getNumber("status").intValue();
+
+                if (responseStatus == 401) {
+                    this.accessToken = null;
+                    this.pollSpotify();
+                }
+                return;
+            }
+
+            if (response.containsKey("item") && response.get("item").isJsonObject()) {
+                JsonObject item = response.getObject("item");
+
+                boolean isPlaying = response.getBoolean("is_playing");
+                String songLink = item.getObject("external_urls").getString("spotify");
+                String albumArtUrl = item.getObject("album").getArray("images").getObject(0).getString("url");
+                String album = item.getObject("album").getString("name");
+                String title = item.getString("name");
+                List<String> artists = new LinkedList<>();
+
+                for (JsonElement artist : item.getArray("artists")) {
+                    artists.add(artist.getAsObject().getString("name"));
+                }
+
+                // Use the better parsing for a more accurate result.
+                Pair<String, List<String>> betterResult = InternalMusicProvider.parseTitleForArtists(title, artists);
+                title = betterResult.a();
+                artists = betterResult.b();
+
+                MusicTrack track = new MusicTrack(title, artists, album, albumArtUrl, songLink);
+
+                if (isPlaying) {
+                    this.setPlaying(track);
+                } else {
+                    this.setPaused(track);
+                }
+            } else {
+                this.makePaused();
+            }
+        } catch (StringIndexOutOfBoundsException | JsonParseException ignored) {
+            // ignored.
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -176,6 +173,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
         this.refreshToken = null;
         this.accessToken = null;
 
+        this.setAccountData(false, null, null);
         CaffeinatedApp.getInstance().getAuthPreferences().get().removeToken("music", "spotify");
         CaffeinatedApp.getInstance().getAuthPreferences().save();
     }
@@ -196,13 +194,11 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
                 ), JsonObject.class
             );
 
-            String refreshToken = response.getString("refresh_token");
+            this.refreshToken = response.getString("refresh_token");
 
             // Update the auth file.
-            CaffeinatedApp.getInstance().getAuthPreferences().get().addToken("music", "spotify", refreshToken);
+            CaffeinatedApp.getInstance().getAuthPreferences().get().addToken("music", "spotify", this.refreshToken);
             CaffeinatedApp.getInstance().getAuthPreferences().save();
-
-            FastLogger.logStatic("RefreshToken: ", refreshToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -210,7 +206,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
         this.logger.info("OAuth Completed, enabling now.");
 
         CaffeinatedApp.getInstance().getAuthPreferences().save();
-
+        this.setAccountData(true, "?", "#");
         this.pollSpotify();
     }
 

@@ -8,9 +8,9 @@
 	export let platform;
 
 	onMount(() => {
-		const shouldGoBack =
+		const dontGoBack =
 			location.search.includes('?dontGoBack') || location.search.includes('&dontGoBack');
-		Caffeinated.auth.requestOAuthSignin(type, platform, shouldGoBack);
+		Caffeinated.auth.requestOAuthSignin(type, platform, !dontGoBack);
 	});
 
 	function cancelAuth() {

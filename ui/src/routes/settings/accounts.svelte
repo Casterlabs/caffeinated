@@ -207,7 +207,7 @@
 									{:else}
 										<a
 											class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
-											href="/signin/{provider.serviceId}"
+											href="/signin/oauth?type=music&platform={provider.serviceId}"
 										>
 											<LocalizedText key="page.settings.accounts.connect" />
 										</a>
