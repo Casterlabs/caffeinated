@@ -25,12 +25,7 @@
 		try {
 			const shouldGoBack = location.search != '?dontGoBack'; // Default: true
 
-			await Caffeinated.auth.loginCaffeine(
-				usernameInput,
-				passwordInput,
-				mfaInput,
-				shouldGoBack
-			);
+			await Caffeinated.auth.loginCaffeine(usernameInput, passwordInput, mfaInput, shouldGoBack);
 		} catch (ex) {
 			isLoading = false;
 
@@ -58,7 +53,8 @@
 </script>
 
 <div class="mt-8 flex flex-col items-center">
-	<h1 class="text-xl font-medium">Sign in with Caffeine</h1>
+	<h1 class="text-2xl font-medium">Sign in with Caffeine</h1>
+	<br />
 
 	<div class="mt-4 w-72">
 		<span
