@@ -1,7 +1,6 @@
 package co.casterlabs.caffeinated.app.auth;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,20 +48,18 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 
     public AuthInstance(String tokenId) {
         this.tokenId = tokenId;
-
         this.logger = new FastLogger(String.format("AuthInstance (%d) ?", this.tokenId.hashCode()));
 
         this.token = CaffeinatedApp
             .getInstance()
             .getAuthPreferences()
             .get()
-            .getKoiTokens()
-            .getString(this.tokenId);
+            .getToken("koi", this.tokenId);
 
         String koiUrl = CaffeinatedApp.getInstance().isUseBetaKoiPath() ? //
             "wss://api.casterlabs.co/beta/v2/koi" : "wss://api.casterlabs.co/v2/koi";
 
-        FastLogger koiLogger = new FastLogger("AuthInstance Koi");
+        FastLogger koiLogger = new FastLogger("AuthInstance Koi (" + tokenId + ")");
 
         if (FastLoggingFramework.getDefaultLevel() == LogLevel.TRACE) {
             koiLogger.setCurrentLevel(LogLevel.TRACE);
@@ -81,13 +78,10 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     }
 
     public void invalidate() {
-        try {
-            this.close();
-        } catch (IOException ignored) {}
+        this.close();
 
         this.logger.info("I have been invalidate()'d, goodbye.");
-        CaffeinatedApp.getInstance().getAuthPreferences().get().getKoiTokens().remove(this.tokenId);
-        CaffeinatedApp.getInstance().getAuthPreferences().save();
+        CaffeinatedApp.getInstance().getAuthPreferences().get().removeToken("koi", this.tokenId);
         CaffeinatedApp.getInstance().getAuth().getAuthInstances().remove(this.tokenId);
         CaffeinatedApp.getInstance().getAuth().checkAuth();
         CaffeinatedApp.getInstance().getAuth().updateBridgeData();
@@ -145,7 +139,6 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @KoiEventHandler
     public void onUserUpdate(UserUpdateEvent e) {
         // Update the logger with the streamer's name.
-        this.logger = new FastLogger(String.format("AuthInstance (%d) %s", this.tokenId.hashCode(), e.getStreamer().getDisplayname()));
         this.userData = e.getStreamer();
 
         if (this.roomstate == null) {
@@ -231,7 +224,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         this.disposed = true;
         this.koi.close();
     }
