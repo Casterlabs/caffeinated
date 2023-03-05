@@ -39,7 +39,7 @@ export const STREAMING_SERVICES = {
 	// 	color: 'linear-gradient(45deg, #8439af 15%, #fc3537 65%)'
 	// },
 	YOUTUBE: {
-		name: 'YouTube (BETA)',
+		name: 'YouTube',
 		color: '#ff0000'
 	},
 	DLIVE: {
