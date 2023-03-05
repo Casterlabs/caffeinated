@@ -24,7 +24,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 public abstract class GenericGoal extends Widget implements KoiEventListener {
-    public static final double DEMO_ASPECT_RATIO = 12 / 1d;
+    public static final double DEMO_ASPECT_RATIO = 1 / 10d;
 
     private static String[] platforms;
 
@@ -195,7 +195,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
         if (mode == WidgetInstanceMode.WIDGET_ALT) {
-            return "/goal_alert";
+            return "/goal_alert.html";
         } else {
             return "/goal";
         }
