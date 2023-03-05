@@ -370,6 +370,26 @@ public class AppAuth extends JavascriptObject {
         }
     }
 
+    @JavascriptFunction
+    public void loginKick(@NonNull String username, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
+        final String koiToken = username;
+        final String tokenId = "caffeine";
+
+        CaffeinatedApp
+            .getInstance()
+            .getAuthPreferences()
+            .get()
+            .addToken("koi", tokenId, koiToken);
+
+        CaffeinatedApp.getInstance().getAnalytics().track("AUTH__" + tokenId, true);
+        this.startAuthInstance(tokenId);
+
+        if (shouldNavigateBackwards) {
+            // Navigate backwards for the signin screen.
+            CaffeinatedApp.getInstance().getUI().goBack();
+        }
+    }
+
     private AuthCallback authorize(String type, boolean isKoi) throws IOException {
         String oauthLink = CaffeinatedApp.OVERRIDE_AUTH_URLS
             .getOrDefault(type, CaffeinatedApp.AUTH_URL);
