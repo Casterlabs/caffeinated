@@ -5,4 +5,4 @@ mkdir widgets/static/loader
 cp -r widget-loader/* widgets/static/loader
 
 # Run both the UI and widgets dev servers.
-npx concurrently "cd ui && npm run dev" "cd widgets && npm run dev"
+npx concurrently "cd ui && npm install && npm run dev" "cd widgets && npm install && npm run dev"
