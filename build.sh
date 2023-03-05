@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # (Optional) Compile everything
 if [[ $@ != *"nocompile"* ]]; then
     # Delete any old builds.
@@ -9,44 +8,44 @@ if [[ $@ != *"nocompile"* ]]; then
     rm -rf app/Bootstrap/src/main/resources/app
     rm -rf app/LocalServer/src/main/resources/loader
     rm -rf app/BuiltInPlugins/src/main/resources/widgets
-    
+
     # Build UI
     cd ui
     npm i
     npm run build
-    
+
     # Copy UI output to app/Bootstrap/src/main/resources/app
     cd ..
-    mkdir app/Bootstrap/src/main/resources/app
+    mkdir -p app/Bootstrap/src/main/resources/app
     cd ui/build
     cp -r * ../../app/Bootstrap/src/main/resources/app
     cd ../..
-    
+
     # Build Widgets
     cd widgets
     npm i
     npm run build
-    
+
     # Copy Widgets output to app/BuiltInPlugins/src/main/resources/widgets
     cd ..
-    mkdir app/BuiltInPlugins/src/main/resources/widgets
+    mkdir -p app/BuiltInPlugins/src/main/resources/widgets
     cd widgets/build
     cp -r * ../../app/BuiltInPlugins/src/main/resources/widgets
     cd ../..
-    
+
     # Copy the widget loader
-    mkdir app/LocalServer/src/main/resources/loader
+    mkdir -p app/LocalServer/src/main/resources/loader
     cp -r widget-loader/* app/LocalServer/src/main/resources/loader
-    
+
     # Compile the maven project
-	cd app
+    cd app
     mvn clean package
     cd ..
 fi
 
 # Reset/clear the dist folder
 rm -rf dist/*
-mkdir -p dist
+mkdir -p -p dist
 
 KAIMEN_VERSION="7257f2e12c"
 VM_OPTIONS="-vm XX:+UnlockExperimentalVMOptions -vm XX:+UseShenandoahGC -vm XX:ShenandoahUncommitDelay=500 -vm XX:ShenandoahGuaranteedGCInterval=2000 -vm XX:ShenandoahGCHeuristics=compact"
