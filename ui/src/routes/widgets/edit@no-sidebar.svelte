@@ -91,6 +91,21 @@
 		</div>
 
 		<div class="fixed right-2.5 top-2.5">
+			{#each settingsLayout?.buttons || [] as button}
+				<CircularButton
+					on:click={() =>
+						window.Caffeinated.plugins.clickWidgetSettingsButton(widget.id, button.id)}
+				>
+					<icon
+						class="w-5 h-5 inline-block translate-y-0.5"
+						data-icon="icon/{button.icon}"
+						title={button.iconTitle}
+					/>
+					<span class="text-sm inline-block -translate-y-0.5">
+						{button.text}
+					</span>
+				</CircularButton>
+			{/each}
 			<CircularButton
 				title={t('sr.page.widgets.copy_link')}
 				on:click={() => {
