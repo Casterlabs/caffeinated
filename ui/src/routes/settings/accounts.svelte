@@ -7,18 +7,8 @@
 	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
 	import { goto } from '$app/navigation';
+	import { STREAMING_SERVICES, SPECIAL_SIGNIN } from '../../components/caffeinatedAuth.mjs';
 	import createConsole from '$lib/console-helper.mjs';
-
-	const STREAMING_SERVICES = {
-		CAFFEINE: 'Caffeine',
-		TWITCH: 'Twitch',
-		TROVO: 'Trovo',
-		GLIMESH: 'Glimesh',
-		// BRIME: 'Brime',
-		YOUTUBE: 'YouTube (BETA)',
-		DLIVE: 'DLive',
-		THETA: 'Theta'
-	};
 
 	const MUSIC_SERVICES_WITH_ENABLE = ['system', 'pretzel'];
 	const MUSIC_SERVICES_WITH_OAUTH = ['spotify'];
@@ -53,7 +43,7 @@
 		</h1>
 		<ul class="space-y-2">
 			<!-- Loop over all of the "official" platforms -->
-			{#each Object.entries(STREAMING_SERVICES) as [platform, platformName]}
+			{#each Object.entries(STREAMING_SERVICES) as [platform, { name: platformName }]}
 				{@const { tokenId, userData } =
 					Object.values($authInstances || {}) //
 						.filter(({ userData }) => userData?.platform == platform)[0] || {}}
@@ -95,8 +85,8 @@
 									<button
 										class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 										on:click={() => {
-											if (platform == 'CAFFEINE') {
-												goto('/signin/caffeine');
+											if (SPECIAL_SIGNIN[platform]) {
+												goto(SPECIAL_SIGNIN[platform]);
 												return;
 											}
 

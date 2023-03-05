@@ -8,7 +8,8 @@
 	export let platform;
 
 	onMount(() => {
-		const shouldGoBack = location.search != '?dontGoBack'; // Default: true
+		const shouldGoBack =
+			location.search.includes('?dontGoBack') || location.search.includes('&dontGoBack');
 		Caffeinated.auth.requestOAuthSignin(type, platform, shouldGoBack);
 	});
 
