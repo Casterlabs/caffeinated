@@ -38,8 +38,8 @@ public class ChatWidget extends Widget {
         {
             WidgetSettingsSection messageStyle = new WidgetSettingsSection("message_style", "Message Style")
                 .addItem(WidgetSettingsItem.asDropdown("message_direction", "Messages Direction", "Bottom-up", "Bottom-up", "Top-down"))
-                .addItem(WidgetSettingsItem.asDropdown("badges", "Badges", "Before Username", "Hidden", "Before Username", "After Username"))
-                .addItem(WidgetSettingsItem.asCheckbox("show_avatars", "Show user avatars", false));
+                .addItem(WidgetSettingsItem.asDropdown("badges", "Badges", "Before Username", "Hidden", "Before Username", "After Username"));
+//                .addItem(WidgetSettingsItem.asCheckbox("show_avatars", "Show user avatars", false));
 
             messageStyle.addItem(WidgetSettingsItem.asCheckbox("disappearing", "Make messages disappear", false));
             if (this.settings().getBoolean("message_style.disappearing", false)) {
@@ -66,10 +66,10 @@ public class ChatWidget extends Widget {
                 );
             }
 
-            messageStyle.addItem(WidgetSettingsItem.asDropdown("message_style", "Message Style", "Text", "Text", "Card"));
-            if ("Card".equals(this.settings().getString("message_style.message_style"))) {
-                messageStyle.addItem(WidgetSettingsItem.asColor("message_style.message_style.card_color", "Card Color", "#6e6466"));
-            }
+//            messageStyle.addItem(WidgetSettingsItem.asDropdown("message_style", "Message Style", "Text", "Text", "Card"));
+//            if ("Card".equals(this.settings().getString("message_style.message_style"))) {
+//                messageStyle.addItem(WidgetSettingsItem.asColor("message_style.message_style.card_color", "Card Color", "#6e6466"));
+//            }
 
             layout.addSection(messageStyle);
         }
