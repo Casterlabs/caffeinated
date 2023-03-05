@@ -1,41 +1,25 @@
 <script>
-	const COLORS = [
-		// Grays
-		'gray',
-		'mauve',
-		'slate',
-		'sage',
-		'olive',
-		'sand',
+	import SelectMenu from '$lib/ui/SelectMenu.svelte';
 
-		// Colors
-		'tomato',
-		'red',
-		'crimson',
-		'pink',
-		'plum',
-		'purple',
-		'violet',
-		'indigo',
-		'blue',
-		'cyan',
-		'teal',
-		'green',
-		'grass',
-		'orange',
-		'brown',
+	import { goto } from '$app/navigation';
+	import { ALL_STREAMING_SERVICES, SPECIAL_SIGNIN } from '../../components/caffeinatedAuth.mjs';
 
-		// Bright Colors
-		'sky',
-		'mint',
-		'lime',
-		'yellow',
-		'amber',
-
-		// Metals
-		'gold',
-		'bronze'
-	];
+	let manualAuthPlatform = 0;
 </script>
 
-// TODO Settings/Developer Stuff
+<SelectMenu
+	title="Manually authenticate platform"
+	options={ALL_STREAMING_SERVICES}
+	bind:value={manualAuthPlatform}
+	on:value={({ detail: index }) => {
+		if (index == 0) return;
+		manualAuthPlatform = 0;
+
+		const platform = ALL_STREAMING_SERVICES[index];
+		if (SPECIAL_SIGNIN[platform]) {
+			goto(SPECIAL_SIGNIN[platform]);
+		} else {
+			goto(`/signin/oauth?type=koi&platform=${platform.toLowerCase()}`);
+		}
+	}}
+/>

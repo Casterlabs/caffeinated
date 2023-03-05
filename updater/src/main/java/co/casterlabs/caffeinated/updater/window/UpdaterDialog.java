@@ -15,6 +15,7 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 
 import co.casterlabs.caffeinated.updater.animations.DialogAnimation;
 import co.casterlabs.caffeinated.updater.util.FileUtil;
@@ -23,7 +24,7 @@ import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class UpdaterDialog extends JDialog implements Closeable {
+public class UpdaterDialog extends JFrame implements Closeable {
     private static final long serialVersionUID = 327804372803161092L;
 
     public static final int WIDTH = 500;

@@ -7,18 +7,8 @@
 	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
 	import { goto } from '$app/navigation';
+	import { STREAMING_SERVICES, SPECIAL_SIGNIN } from '../../components/caffeinatedAuth.mjs';
 	import createConsole from '$lib/console-helper.mjs';
-
-	const STREAMING_SERVICES = {
-		CAFFEINE: 'Caffeine',
-		TWITCH: 'Twitch',
-		TROVO: 'Trovo',
-		GLIMESH: 'Glimesh',
-		// BRIME: 'Brime',
-		YOUTUBE: 'YouTube (BETA)',
-		DLIVE: 'DLive',
-		THETA: 'Theta'
-	};
 
 	const MUSIC_SERVICES_WITH_ENABLE = ['system', 'pretzel'];
 	const MUSIC_SERVICES_WITH_OAUTH = ['spotify'];
@@ -52,7 +42,8 @@
 			<LocalizedText key="page.settings.accounts.streaming_services" />
 		</h1>
 		<ul class="space-y-2">
-			{#each Object.entries(STREAMING_SERVICES) as [platform, platformName]}
+			<!-- Loop over all of the "official" platforms -->
+			{#each Object.entries(STREAMING_SERVICES) as [platform, { name: platformName }]}
 				{@const { tokenId, userData } =
 					Object.values($authInstances || {}) //
 						.filter(({ userData }) => userData?.platform == platform)[0] || {}}
@@ -94,13 +85,14 @@
 									<button
 										class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 										on:click={() => {
-											if (platform == 'CAFFEINE') {
-												goto('/signin/caffeine');
+											if (SPECIAL_SIGNIN[platform]) {
+												goto(SPECIAL_SIGNIN[platform]);
+												return;
 											}
 
 											window.Caffeinated.auth.requestOAuthSignin(
-												`caffeinated_${platform.toLowerCase()}`,
-												true,
+												'koi',
+												platform.toLowerCase(),
 												false
 											);
 											loading.push(platform);
@@ -110,6 +102,42 @@
 										<LocalizedText key="page.settings.accounts.connect" />
 									</button>
 								{/if}
+							</div>
+						</div>
+					</Container>
+				</li>
+			{/each}
+
+			<!-- Loop over all of the other platforms -->
+			{#each Object.values($authInstances || {}).filter(({ userData }) => !STREAMING_SERVICES[userData?.platform]) as { tokenId, userData }}
+				<li>
+					<Container>
+						<div class="h-8 flex flex-row items-center bg-red-200">
+							<icon
+								class="w-5 h-5 -ml-1 mr-1.5"
+								data-icon="service/{userData.platform.toLowerCase()}"
+							/>
+							<p class="flex-1 flex flex-row items-center">
+								TEST / {userData.platform}
+
+								<a
+									href={userData.link}
+									target="_blank"
+									class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-base-4 text-base-11 inline-flex items-center rounded-full font-base underline"
+								>
+									{userData.displayname}
+								</a>
+							</p>
+
+							<div class="flex-0">
+								<button
+									class="px-1.5 py-1 inline-flex items-center rounded bg-error text-white text-xs font-base"
+									on:click={() => {
+										window.Caffeinated.auth.signout(tokenId);
+									}}
+								>
+									<LocalizedText key="page.settings.accounts.disconnect" />
+								</button>
 							</div>
 						</div>
 					</Container>
@@ -179,7 +207,7 @@
 									{:else}
 										<a
 											class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
-											href="/signin/{provider.serviceId}"
+											href="/signin/oauth?type=music&platform={provider.serviceId}"
 										>
 											<LocalizedText key="page.settings.accounts.connect" />
 										</a>

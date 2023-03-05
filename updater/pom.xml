@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.16.2</version>
+			<version>1.17.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -144,7 +144,7 @@
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>4.6.0</version>
+			<version>4.10.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

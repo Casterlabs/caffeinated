@@ -30,7 +30,8 @@ public class AuthCallback {
         this.connection = new KinokoV1Connection(new Listener());
         this.type = type;
 
-        this.stateString = String.format("auth_redirect:%s:%s", new String(Crypto.generateSecureRandomKey()), this.type);
+        // TODO get rid of the "caffeinated_"
+        this.stateString = String.format("auth_redirect:%s:caffeinated_%s", new String(Crypto.generateSecureRandomKey()), this.type);
 
         if (isKoi) {
             this.stateString += ':' + CaffeinatedApp.caffeinatedClientId;

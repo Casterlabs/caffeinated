@@ -18,6 +18,7 @@ import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.app.App.PowerManagementHint;
@@ -76,10 +77,17 @@ public class Bootstrap implements Runnable {
     private boolean disableColor = false;
 
     @Option(names = {
-            "--restart-commandline"
-    }, description = "The command to be executed to restart Caffeinated. Has a default.")
-    private String restartCommandLine;
+            "--started-by-updater"
+    }, description = "Internal use only.")
+    private boolean startedByUpdater = false;
 
+    @Deprecated
+    @Option(names = {
+            "--restart-commandline"
+    }, description = "Unused.")
+    private String $unused_restartCommandLine;
+
+    private static String restartCommandLine = null;
     private static boolean restartWithConsole = false;
 
     private static FastLogger logger = new FastLogger();
@@ -138,6 +146,19 @@ public class Bootstrap implements Runnable {
 
         instance = this;
 
+        File expectUpdaterFile = getAppFile("expect-updater");
+        if (expectUpdaterFile.exists()) {
+            restartCommandLine = new String(Files.readAllBytes(expectUpdaterFile.toPath()));
+
+            if (this.startedByUpdater) {
+                logger.info("App has been started by the updater, cool beans.");
+            } else {
+                logger.warn("App was not started by the updater and the expect-updater file is present. Launching updater.");
+                relaunch();
+                return;
+            }
+        }
+
         isDev = this.devAddress != null;
         ReflectionLib.setStaticValue(FileUtil.class, "isDev", isDev);
         buildInfo = Rson.DEFAULT.fromJson(FileUtil.loadResource("build_info.json"), BuildInfo.class);
@@ -187,25 +208,22 @@ public class Bootstrap implements Runnable {
     }
 
     private static void writeAppFile(@NonNull String filename, byte[] bytes) throws IOException {
-        File file;
-
-        switch (Platform.osDistribution) {
-            case MACOS:
-                if (new File("./").getCanonicalPath().contains(".app")) {
-                    file = new File("../../../", filename);
-                    break;
-                }
-
-            default:
-                file = new File(filename);
-                break;
-        }
+        File file = getAppFile(filename);
 
         if (bytes == null) {
             file.createNewFile();
         } else {
             Files.write(file.toPath(), bytes);
         }
+    }
+
+    private static File getAppFile(@NonNull String filename) throws IOException {
+        if (Platform.osDistribution == OSDistribution.MACOS) {
+            if (new File("./").getCanonicalPath().contains(".app")) {
+                return new File("../../../", filename);
+            }
+        }
+        return new File(filename);
     }
 
     private void startApp() throws Exception {
@@ -418,7 +436,9 @@ public class Bootstrap implements Runnable {
     private static void relaunch() {
         String command;
 
-        if (buildInfo.isDev()) {
+        if (restartCommandLine != null) {
+            command = restartCommandLine;
+        } else {
             String jvmArgs = String.join(" ", ManagementFactory.getRuntimeMXBean().getInputArguments());
             String entry = System.getProperty("sun.java.command"); // Tested, present in OpenJDK and Oracle
             String classpath = System.getProperty("java.class.path");
@@ -433,25 +453,6 @@ public class Bootstrap implements Runnable {
                 command = String.format("\"%s/bin/java\" %s -cp \"%s\" -jar %s", javaHome, jvmArgs, classpath, String.join(" ", args));
             } else {
                 command = String.format("\"%s/bin/java\" %s -cp \"%s\" %s", javaHome, jvmArgs, classpath, entry);
-            }
-        } else if (instance.restartCommandLine != null) {
-            command = instance.restartCommandLine;
-        } else {
-            switch (Platform.osDistribution) {
-                case LINUX:
-                    command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
-                    break;
-
-                case MACOS:
-                    command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated";
-                    break;
-
-                case WINDOWS_NT:
-                    command = CaffeinatedApp.appDataDir + "/app/Casterlabs-Caffeinated.exe";
-                    break;
-
-                default:
-                    return; // Compiler.
             }
         }
 

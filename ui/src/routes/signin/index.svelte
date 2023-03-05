@@ -2,49 +2,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { onDestroy } from 'svelte';
-
-	const PLATFORMS = [
-		{
-			id: 'CAFFEINE',
-			name: 'Caffeine',
-			color: '#0000ff'
-		},
-		{
-			id: 'TWITCH',
-			name: 'Twitch',
-			color: '#8838ff'
-		},
-		{
-			id: 'TROVO',
-			name: 'Trovo',
-			color: '#149b53'
-		},
-		{
-			id: 'GLIMESH',
-			name: 'Glimesh',
-			color: '#33528b'
-		},
-		// {
-		// 	id: 'BRIME',
-		// 	name: 'Brime',
-		// 	color: 'linear-gradient(45deg, #8439af 15%, #fc3537 65%)'
-		// },
-		{
-			id: 'YOUTUBE',
-			name: 'YouTube (BETA)',
-			color: '#ff0000'
-		},
-		{
-			id: 'DLIVE',
-			name: 'DLive',
-			color: '#ccc121'
-		},
-		{
-			id: 'THETA',
-			name: 'Theta',
-			color: '#161a24'
-		}
-	];
+	import { SPECIAL_SIGNIN, STREAMING_SERVICES } from '../../components/caffeinatedAuth.mjs';
 
 	// DOOT!
 	const ACTIVATE_AT = 5;
@@ -160,14 +118,18 @@
 	</h2>
 
 	<div class="mt-4 w-fit mx-auto grid grid-cols-4 gap-2">
-		{#each PLATFORMS as { id, name, color }}
+		{#each Object.entries(STREAMING_SERVICES) as [platform, { name, color }]}
+			{@const href = SPECIAL_SIGNIN[platform]
+				? `${SPECIAL_SIGNIN[platform]}?dontGoBack`
+				: `/signin/oauth?dontGoBack&type=koi&platform=${platform.toLowerCase()}`}
+
 			<a
-				href="/signin/{id.toLowerCase()}"
+				{href}
 				class="signin-icon w-12 h-12 border border-base-6 rounded inline-flex items-center justify-center transition"
 				style="--color: {color};"
 				title={name}
 			>
-				<icon data-icon="service/{id.toLowerCase()}" />
+				<icon data-icon="service/{platform.toLowerCase()}" />
 			</a>
 		{/each}
 	</div>

@@ -41,7 +41,7 @@
 
 		<br />
 		<br />
-		<!-- <label class="checkbox select-none cursor-pointer hover:text-base-10">
+		<label class="checkbox select-none cursor-pointer hover:text-base-10">
 			<LocalizedText key="page.settings.about.enable_unsafe" />
 			<input
 				type="checkbox"
@@ -51,7 +51,7 @@
 					setPreferenceItem('enableStupidlyUnsafeSettings', checked);
 				}}
 			/>
-		</label> -->
+		</label>
 		<br />
 		<label class="checkbox select-none cursor-pointer hover:text-base-10">
 			<LocalizedText key="page.settings.about.enable_alternate_themes" />
