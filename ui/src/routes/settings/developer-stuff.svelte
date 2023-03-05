@@ -1,41 +1,42 @@
 <script>
-	const COLORS = [
-		// Grays
-		'gray',
-		'mauve',
-		'slate',
-		'sage',
-		'olive',
-		'sand',
+	import { goto } from '$app/navigation';
+	import SelectMenu from '$lib/ui/SelectMenu.svelte';
 
-		// Colors
-		'tomato',
-		'red',
-		'crimson',
-		'pink',
-		'plum',
-		'purple',
-		'violet',
-		'indigo',
-		'blue',
-		'cyan',
-		'teal',
-		'green',
-		'grass',
-		'orange',
-		'brown',
-
-		// Bright Colors
-		'sky',
-		'mint',
-		'lime',
-		'yellow',
-		'amber',
-
-		// Metals
-		'gold',
-		'bronze'
+	const PLATFORMS = [
+		'',
+		'CAFFEINE',
+		'TWITCH',
+		'TROVO',
+		'GLIMESH',
+		'BRIME',
+		'YOUTUBE',
+		'DLIVE',
+		'TIKTOK',
+		'THETA',
+		'KICK'
 	];
+
+	const SPECIAL_PLATFORMS = {
+		CAFFEINE: '/signin/caffeine',
+		KICK: '/signin/kick'
+	};
+
+	let manualAuthPlatform = 0;
 </script>
 
-// TODO Settings/Developer Stuff
+<SelectMenu
+	title="Manually authenticate platform"
+	options={PLATFORMS}
+	bind:value={manualAuthPlatform}
+	on:value={({ detail: index }) => {
+		if (index == 0) return;
+		manualAuthPlatform = 0;
+
+		const platform = PLATFORMS[index];
+		if (SPECIAL_PLATFORMS[platform]) {
+			goto(SPECIAL_PLATFORMS[platform]);
+		} else {
+			goto(`/signin/oauth?type=koi&platform=${platform.toLowerCase()}`);
+		}
+	}}
+/>

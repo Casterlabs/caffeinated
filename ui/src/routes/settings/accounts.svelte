@@ -52,6 +52,7 @@
 			<LocalizedText key="page.settings.accounts.streaming_services" />
 		</h1>
 		<ul class="space-y-2">
+			<!-- Loop over all of the "official" platforms -->
 			{#each Object.entries(STREAMING_SERVICES) as [platform, platformName]}
 				{@const { tokenId, userData } =
 					Object.values($authInstances || {}) //
@@ -111,6 +112,42 @@
 										<LocalizedText key="page.settings.accounts.connect" />
 									</button>
 								{/if}
+							</div>
+						</div>
+					</Container>
+				</li>
+			{/each}
+
+			<!-- Loop over all of the other platforms -->
+			{#each Object.values($authInstances || {}).filter(({ userData }) => !STREAMING_SERVICES[userData?.platform]) as { tokenId, userData }}
+				<li>
+					<Container>
+						<div class="h-8 flex flex-row items-center bg-red-200">
+							<icon
+								class="w-5 h-5 -ml-1 mr-1.5"
+								data-icon="service/{userData.platform.toLowerCase()}"
+							/>
+							<p class="flex-1 flex flex-row items-center">
+								TEST / {userData.platform}
+
+								<a
+									href={userData.link}
+									target="_blank"
+									class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-base-4 text-base-11 inline-flex items-center rounded-full font-base underline"
+								>
+									{userData.displayname}
+								</a>
+							</p>
+
+							<div class="flex-0">
+								<button
+									class="px-1.5 py-1 inline-flex items-center rounded bg-error text-white text-xs font-base"
+									on:click={() => {
+										window.Caffeinated.auth.signout(tokenId);
+									}}
+								>
+									<LocalizedText key="page.settings.accounts.disconnect" />
+								</button>
 							</div>
 						</div>
 					</Container>
