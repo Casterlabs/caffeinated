@@ -69,7 +69,7 @@ public abstract class GenericAlert extends Widget {
             if (this.settings().getBoolean("tts.enabled", true)) {
                 ttsSection
                     .addItem(WidgetSettingsItem.asRange("volume", "Volume", .5, .01, 0, 1))
-                    .addItem(WidgetSettingsItem.asDropdown("voice", "Voice", "Brian", TTS.getVoicesAsArray()));
+                    .addItem(WidgetSettingsItem.asDropdown("voice", "Default Voice", "Brian", TTS.getVoicesAsArray()));
 
                 layout.addButton(
                     new WidgetSettingsButton("skip-tts")
