@@ -3,6 +3,7 @@ package co.casterlabs.koi.api;
 public enum KoiIntegrationFeatures {
 
     /* ---- Misc ---- */
+
     CHANNEL_POINTS,
     CHAT_BOT_LINKING,
     UPDATE_STREAM_INFO,
