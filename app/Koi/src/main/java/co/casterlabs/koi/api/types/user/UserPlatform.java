@@ -10,6 +10,7 @@ public enum UserPlatform {
     TIKTOK,
     DLIVE,
     THETA,
+    KICK,
 
     CASTERLABS_SYSTEM;
 

@@ -27,8 +27,8 @@ public class CamWidget extends Widget implements KinokoV1Listener {
         .withNamespace("co.casterlabs.cam_widget")
         .withIcon("video-camera")
         .withCategory(WidgetDetailsCategory.OTHER)
-        .withShowDemo(true, 3 / 4d)
-        .withFriendlyName("Cam Widget");
+        .withFriendlyName("Cam Widget")
+        .withShowDemo(true, 3 / 4d);
 
     private KinokoV1Connection kinoko = new KinokoV1Connection(this);
     private String channelId;

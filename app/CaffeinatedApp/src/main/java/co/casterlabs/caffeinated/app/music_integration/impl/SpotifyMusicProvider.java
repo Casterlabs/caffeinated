@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider.SpotifySettings;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
@@ -35,7 +34,11 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
     public SpotifyMusicProvider(@NonNull MusicIntegration musicIntegration) {
         super("Spotify", "spotify", SpotifySettings.class);
         musicIntegration.getProviders().put(this.getServiceId(), this);
+    }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void init() {
         CaffeinatedApp
             .getInstance()
             .onAppEvent("auth:completion", (JsonObject data) -> {

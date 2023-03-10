@@ -4,7 +4,7 @@ import javax.swing.UIManager;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
+import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Getter;
@@ -39,7 +39,8 @@ public abstract class NativeSystem {
             super("System", "system", SystemPlaybackSettings.class);
         }
 
-        protected abstract void init();
+        @Override
+        public abstract void init();
 
         protected abstract void update();
 

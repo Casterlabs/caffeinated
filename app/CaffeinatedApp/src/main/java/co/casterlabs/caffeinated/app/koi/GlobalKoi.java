@@ -66,7 +66,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
     private List<KoiLifeCycleHandler> koiEventListeners = new LinkedList<>();
 
-    // Definition hell.
+    // Definition hell, accessors for the UI.
     @JavascriptValue(allowSet = false)
     private List<KoiEvent> eventHistory = new LinkedList<>();
 
@@ -90,6 +90,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
      */
     @Deprecated
     public void updateFromAuth() {
+        // Diff the AuthInstances and check for signedout platforms.
         List<UserPlatform> validPlatforms = new LinkedList<>();
 
         for (AuthInstance inst : CaffeinatedApp.getInstance().getAuth().getAuthInstances().values()) {
@@ -169,116 +170,115 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                     }
                 }
             }
-        } else {
-            boolean chatBotResultedInAction = CaffeinatedApp.getInstance().getChatbot().processEvent(e);
+            return; // Don't further process.
+        }
 
-            // We don't want to silence donations. That's why we're not using instanceof
-            if (e.getType() == KoiEventType.RICH_MESSAGE) {
-                ChatbotPreferences prefs = CaffeinatedApp.getInstance().getChatbotPreferences().get();
-                RichMessageEvent event = (RichMessageEvent) e;
+        // Process shout events.
+        CaffeinatedApp.getInstance().getChatbot().processEventForShout(e);
 
-                if (prefs.isHideCommandsFromChat()) {
-                    // Hide all command response messages.
-                    {
-                        List<Command> commands = prefs.getCommands();
+        if (e.getType() == KoiEventType.RICH_MESSAGE) {
+            ChatbotPreferences prefs = CaffeinatedApp.getInstance().getChatbotPreferences().get();
+            RichMessageEvent richMessage = (RichMessageEvent) e;
 
-                        for (ChatbotPreferences.Command command : commands) {
-                            if (command.getResponse().equals(event.getRaw())) {
-                                return;
-                            }
-                        }
-                    }
+            boolean commandResultedInAction = CaffeinatedApp.getInstance().getChatbot().processEventForCommand(richMessage);
 
-                    // Hide !commands and "commands".
-                    if (chatBotResultedInAction) {
-                        return;
-                    }
+            if (prefs.isHideCommandsFromChat()) {
+                // Hide !commands and "commands".
+                if (commandResultedInAction) {
+                    return;
                 }
 
-                // We want to hide all messages from listed chatbots.
+                // Hide all command response messages.
                 {
-                    List<String> chatbots = prefs.getChatbots();
+                    List<Command> commands = prefs.getCommands();
 
-                    for (String chatbot : chatbots) {
-                        if (chatbot.equalsIgnoreCase(event.getSender().getDisplayname())) {
+                    for (ChatbotPreferences.Command command : commands) {
+                        if (command.getResponse().equals(richMessage.getRaw())) {
                             return;
                         }
                     }
                 }
+            }
 
-                if (prefs.isHideTimersFromChat()) {
-                    // Hide all timer messages.
-                    if (prefs.getTimers().contains(event.getRaw())) {
+            // We want to hide all messages from listed chatbots.
+            {
+                List<String> chatbots = prefs.getChatbots();
+
+                for (String chatbot : chatbots) {
+                    if (chatbot.equalsIgnoreCase(richMessage.getSender().getDisplayname())) {
                         return;
                     }
                 }
             }
 
-            if (KEPT_EVENTS.contains(e.getType())) {
-                this.eventHistory.add(e);
+            if (prefs.isHideTimersFromChat()) {
+                // Hide all timer messages.
+                if (prefs.getTimers().contains(richMessage.getRaw())) {
+                    return;
+                }
+            }
+        }
+
+        // Add it to the local event history.
+        if (KEPT_EVENTS.contains(e.getType())) {
+            this.eventHistory.add(e);
+        }
+
+        switch (e.getType()) {
+            case VIEWER_LIST: {
+                this.viewers.put(
+                    e.getStreamer().getPlatform(),
+                    Collections.unmodifiableList(((ViewerListEvent) e).getViewers())
+                );
+                this.updateBridgeData();
+                break;
             }
 
-            switch (e.getType()) {
-
-                case VIEWER_LIST: {
-                    this.viewers.put(
-                        e.getStreamer().getPlatform(),
-                        Collections.unmodifiableList(((ViewerListEvent) e).getViewers())
-                    );
-
-                    this.updateBridgeData();
-                    break;
-                }
-
-                case USER_UPDATE: {
-                    this.userStates.put(
-                        e.getStreamer().getPlatform(),
-                        (UserUpdateEvent) e
-                    );
-
-                    this.updateBridgeData();
-                    break;
-                }
-
-                case STREAM_STATUS: {
-                    this.streamStates.put(
-                        e.getStreamer().getPlatform(),
-                        (StreamStatusEvent) e
-                    );
-
-                    this.updateBridgeData();
-                    break;
-                }
-
-                case ROOMSTATE: {
-                    this.roomStates.put(
-                        e.getStreamer().getPlatform(),
-                        (RoomstateEvent) e
-                    );
-
-                    this.updateBridgeData();
-                    break;
-                }
-
-                default:
-                    break;
+            case USER_UPDATE: {
+                this.userStates.put(
+                    e.getStreamer().getPlatform(),
+                    (UserUpdateEvent) e
+                );
+                this.updateBridgeData();
+                break;
             }
 
-            // Emit the event to Caffeinated.
-            JsonElement asJson = Rson.DEFAULT.toJson(e);
-
-            CaffeinatedApp.getInstance().getAppBridge().emit("koi:event:" + e.getType().name().toLowerCase(), asJson);
-            CaffeinatedApp.getInstance().getAppBridge().emit("koi:event", asJson);
-
-            // These are used internally.
-            for (KoiLifeCycleHandler listener : this.koiEventListeners) {
-                KoiEventUtil.reflectInvoke(listener, e);
+            case STREAM_STATUS: {
+                this.streamStates.put(
+                    e.getStreamer().getPlatform(),
+                    (StreamStatusEvent) e
+                );
+                this.updateBridgeData();
+                break;
             }
 
-            // Notify the plugins
-            for (CaffeinatedPlugin pl : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
-                pl.fireKoiEventListeners(e);
+            case ROOMSTATE: {
+                this.roomStates.put(
+                    e.getStreamer().getPlatform(),
+                    (RoomstateEvent) e
+                );
+                this.updateBridgeData();
+                break;
             }
+
+            default:
+                break;
+        }
+
+        // Emit the event to Caffeinated.
+        JsonElement asJson = Rson.DEFAULT.toJson(e);
+
+        CaffeinatedApp.getInstance().getAppBridge().emit("koi:event:" + e.getType().name().toLowerCase(), asJson);
+        CaffeinatedApp.getInstance().getAppBridge().emit("koi:event", asJson);
+
+        // These are used internally.
+        for (KoiLifeCycleHandler listener : this.koiEventListeners) {
+            KoiEventUtil.reflectInvoke(listener, e);
+        }
+
+        // Notify the plugins
+        for (CaffeinatedPlugin pl : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
+            pl.fireKoiEventListeners(e);
         }
 
         FastLogger.logStatic(
@@ -291,18 +291,16 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
     @JavascriptFunction
     @Override
-    public void sendChat(
-        @NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter,
-        @Nullable String replyTarget, boolean isUserGesture
-    ) {
-        if (message.startsWith("/koi test ")) {
+    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
+        if (message.startsWith("/koi test")) {
             // NOOP
-        } else {
-            AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
+            return;
+        }
 
-            if (inst != null) {
-                inst.sendChat(message, chatter, replyTarget, isUserGesture);
-            }
+        AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
+
+        if (inst != null) {
+            inst.sendChat(message, chatter, replyTarget, isUserGesture);
         }
     }
 
@@ -325,6 +323,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             inst.deleteChat(messageId, isUserGesture);
         }
     }
+
+    // These all have to be unmodifiable as they're exposed in the plugin SDK.
 
     @Override
     public List<KoiEvent> getEventHistory() {

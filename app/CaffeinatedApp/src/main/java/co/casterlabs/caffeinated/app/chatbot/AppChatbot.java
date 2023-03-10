@@ -12,12 +12,11 @@ import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
-import co.casterlabs.koi.api.types.events.ChatEvent;
-import co.casterlabs.koi.api.types.events.DonationEvent;
 import co.casterlabs.koi.api.types.events.FollowEvent;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.RaidEvent;
+import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -30,8 +29,10 @@ public class AppChatbot extends JavascriptObject {
     private PreferenceFile<ChatbotPreferences> preferences;
 
     @JavascriptValue(allowSet = false)
-    private List<KoiEventType> supportedShoutEvents = Arrays.asList(KoiEventType.DONATION, KoiEventType.FOLLOW,
-            KoiEventType.RAID, KoiEventType.SUBSCRIPTION);
+    private List<KoiEventType> supportedShoutEvents = Arrays.asList(
+        KoiEventType.DONATION, KoiEventType.FOLLOW,
+        KoiEventType.RAID, KoiEventType.SUBSCRIPTION
+    );
 
     private AsyncTask timerTask;
     private int timerIndex;
@@ -53,8 +54,7 @@ public class AppChatbot extends JavascriptObject {
                 while (true) {
                     try {
                         Thread.sleep(timerIntervalSeconds * 1000);
-                    } catch (InterruptedException e) {
-                    }
+                    } catch (InterruptedException e) {}
 
                     List<String> timerTexts = this.preferences.get().getTimers();
 
@@ -71,11 +71,12 @@ public class AppChatbot extends JavascriptObject {
 
                         for (UserPlatform platform : koi.getSignedInPlatforms()) {
                             koi.sendChat(
-                                    platform,
-                                    text,
-                                    this.preferences.get().getRealChatter(),
-                                    null,
-                                    false);
+                                platform,
+                                text,
+                                this.preferences.get().getRealChatter(),
+                                null,
+                                false
+                            );
                         }
                     }
                 }
@@ -91,111 +92,111 @@ public class AppChatbot extends JavascriptObject {
     }
 
     // Accessed from Koi.
-    public boolean processEvent(KoiEvent e) {
-        boolean resultedInAnAction = false;
+    public void processEventForShout(KoiEvent e) {
+        for (Shout shout : this.preferences.get().getShouts()) {
+            KoiEventType shoutType = shout.getEventType() == KoiEventType.DONATION ? //
+                KoiEventType.RICH_MESSAGE : shout.getEventType();
 
-        List<Shout> shouts = this.preferences.get().getShouts();
+            if (shoutType != e.getType() ||
+                shout.getText().isBlank()) {
+                continue;
+            }
 
-        for (Shout shout : shouts) {
-            if (shout.getEventType() == e.getType()) {
-                if (shout.getText().isBlank()) {
-                    continue;
-                }
+            User eventSender = null;
 
-                User target = null;
+            switch (e.getType()) {
+                case RICH_MESSAGE: {
+                    RichMessageEvent richMessage = (RichMessageEvent) e;
 
-                switch (e.getType()) {
-                    case DONATION:
-                        target = ((DonationEvent) e).getSender();
-                        break;
-
-                    case FOLLOW:
-                        target = ((FollowEvent) e).getFollower();
-                        break;
-
-                    case RAID:
-                        target = ((RaidEvent) e).getHost();
-                        break;
-
-                    case SUBSCRIPTION:
-                        target = ((SubscriptionEvent) e).getSubscriber();
-                        break;
-
-                    default:
+                    // Not a donation, skip.
+                    if (!richMessage.getDonations().isEmpty()) {
                         continue;
+                    }
+
+                    eventSender = richMessage.getSender();
+                    break;
                 }
 
-                UserPlatform platform = target.getPlatform();
+                case FOLLOW:
+                    eventSender = ((FollowEvent) e).getFollower();
+                    break;
 
-                if (platform == UserPlatform.CASTERLABS_SYSTEM) {
-                    platform = CaffeinatedApp.getInstance().getKoi().getFirstSignedInPlatform();
+                case RAID:
+                    eventSender = ((RaidEvent) e).getHost();
+                    break;
+
+                case SUBSCRIPTION:
+                    eventSender = ((SubscriptionEvent) e).getSubscriber();
+                    break;
+
+                default:
+                    continue;
+            }
+
+            // Null means any, so we check if the event's platform matches the target.
+            UserPlatform platform = eventSender.getPlatform();
+            if ((shout.getPlatform() != null) && (shout.getPlatform() != platform)) {
+                continue;
+            }
+
+            String message = String.format("@%s %s", eventSender.getDisplayname(), shout.getText());
+
+            CaffeinatedApp.getInstance().getKoi().sendChat(
+                platform,
+                message,
+                this.preferences.get().getRealChatter(),
+                null,
+                false
+            );
+
+            return;
+        }
+    }
+
+    // Accessed from Koi.
+    public boolean processEventForCommand(RichMessageEvent richMessage) {
+        for (Command command : this.preferences.get().getCommands()) {
+            // Not filled out, ignore.
+            if (command.getTrigger().isBlank() || command.getResponse().isBlank()) {
+                continue;
+            }
+
+            // Null means any, so we check if the event's platform matches the target.
+            UserPlatform platform = richMessage.getSender().getPlatform();
+            if ((command.getPlatform() == null) || (command.getPlatform() == platform)) {
+                boolean send = false;
+
+                switch (command.getType()) {
+                    case COMMAND:
+                        if (richMessage.getRaw().startsWith(SYMBOL + command.getTrigger())) {
+                            send = true;
+                        }
+                        break;
+
+                    case CONTAINS:
+                        if (richMessage.getRaw().contains(command.getTrigger())) {
+                            send = true;
+                        }
+                        break;
+
                 }
 
-                if ((shout.getPlatform() == null) || (shout.getPlatform() == platform)) {
-                    String message = String.format("@%s %s", target.getDisplayname(), shout.getText());
+                if (send) {
+                    String message = command.getResponse();
 
                     CaffeinatedApp.getInstance().getKoi().sendChat(
-                            platform,
-                            message,
-                            this.preferences.get().getRealChatter(),
-                            null,
-                            false);
-
-                    resultedInAnAction = true;
-                    break; // We still want to try to process it as a command.
+                        platform,
+                        message,
+                        this.preferences.get().getRealChatter(),
+                        richMessage.getId(),
+                        false
+                    );
+                    return true;
                 }
             }
         }
 
-        if ((e.getType() == KoiEventType.CHAT) || (e.getType() == KoiEventType.DONATION)) {
-            ChatEvent chatEvent = (ChatEvent) e;
-
-            for (Command command : this.preferences.get().getCommands()) {
-                if (command.getTrigger().isBlank() || command.getResponse().isBlank()) {
-                    continue;
-                }
-
-                UserPlatform platform = chatEvent.getSender().getPlatform();
-
-                if (platform == UserPlatform.CASTERLABS_SYSTEM) {
-                    platform = CaffeinatedApp.getInstance().getKoi().getFirstSignedInPlatform();
-                }
-
-                if ((command.getPlatform() == null) || (command.getPlatform() == platform)) {
-                    boolean send = false;
-
-                    switch (command.getType()) {
-                        case COMMAND:
-                            if (chatEvent.getMessage().startsWith(SYMBOL + command.getTrigger())) {
-                                send = true;
-                            }
-                            break;
-
-                        case CONTAINS:
-                            if (chatEvent.getMessage().contains(command.getTrigger())) {
-                                send = true;
-                            }
-                            break;
-
-                    }
-
-                    if (send) {
-                        String message = command.getResponse();
-
-                        CaffeinatedApp.getInstance().getKoi().sendChat(
-                                platform,
-                                message,
-                                this.preferences.get().getRealChatter(),
-                                chatEvent.getId(),
-                                false);
-                        resultedInAnAction = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return resultedInAnAction;
+        return false;
     }
 
 }

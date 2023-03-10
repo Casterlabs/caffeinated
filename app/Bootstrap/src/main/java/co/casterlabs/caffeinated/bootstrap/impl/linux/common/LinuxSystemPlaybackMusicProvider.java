@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.music_integration.InternalMusicProvider;
+import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.NativeSystem.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
@@ -28,7 +28,7 @@ public class LinuxSystemPlaybackMusicProvider extends SystemPlaybackMusicProvide
     private Map<String, String> metadata;
 
     @Override
-    protected void init() {
+    public void init() {
         AsyncTask.create(() -> {
             while (true) {
                 this.metadata = getPlayerMetaData();

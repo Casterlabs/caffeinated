@@ -2,7 +2,6 @@ package co.casterlabs.caffeinated.builtin.widgets.goals;
 
 import java.io.IOException;
 
-import co.casterlabs.caffeinated.builtin.widgets.goals.generic.GenericGoal;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
@@ -14,7 +13,8 @@ public class CustomGoal extends GenericGoal {
         .withNamespace("co.casterlabs.custom_goal")
         .withIcon("chart-bar")
         .withCategory(WidgetDetailsCategory.GOALS)
-        .withFriendlyName("Custom Goal");
+        .withFriendlyName("Custom Goal")
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private double count;
 

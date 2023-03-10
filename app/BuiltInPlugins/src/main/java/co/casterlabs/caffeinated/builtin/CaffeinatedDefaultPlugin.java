@@ -1,7 +1,5 @@
 package co.casterlabs.caffeinated.builtin;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -12,27 +10,30 @@ import co.casterlabs.caffeinated.builtin.widgets.CamWidget;
 import co.casterlabs.caffeinated.builtin.widgets.ChatWidget;
 import co.casterlabs.caffeinated.builtin.widgets.EmojiRainWidget;
 import co.casterlabs.caffeinated.builtin.widgets.NowPlayingWidget;
-import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.DonationAlert;
-import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.FollowAlert;
-import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.RaidAlert;
-import co.casterlabs.caffeinated.builtin.widgets.alerts.generic.SubscriptionAlert;
+import co.casterlabs.caffeinated.builtin.widgets.alerts.DonationAlert;
+import co.casterlabs.caffeinated.builtin.widgets.alerts.FollowAlert;
+import co.casterlabs.caffeinated.builtin.widgets.alerts.RaidAlert;
+import co.casterlabs.caffeinated.builtin.widgets.alerts.SubscriptionAlert;
 import co.casterlabs.caffeinated.builtin.widgets.goals.CustomGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.DonationGoal;
-import co.casterlabs.caffeinated.builtin.widgets.goals.generic.FollowersGoal;
-import co.casterlabs.caffeinated.builtin.widgets.goals.generic.SubscribersGoal;
+import co.casterlabs.caffeinated.builtin.widgets.goals.FollowersGoal;
+import co.casterlabs.caffeinated.builtin.widgets.goals.SubscribersGoal;
 import co.casterlabs.caffeinated.builtin.widgets.labels.DonationTotalLabel;
+import co.casterlabs.caffeinated.builtin.widgets.labels.FollowerCountLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.RecentDonationLabel;
+import co.casterlabs.caffeinated.builtin.widgets.labels.RecentFollowerLabel;
+import co.casterlabs.caffeinated.builtin.widgets.labels.RecentSubscriberLabel;
+import co.casterlabs.caffeinated.builtin.widgets.labels.StreamUptimeLabel;
+import co.casterlabs.caffeinated.builtin.widgets.labels.SubscriberCountLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.TopDonationLabel;
-import co.casterlabs.caffeinated.builtin.widgets.labels.generic.FollowerCountLabel;
-import co.casterlabs.caffeinated.builtin.widgets.labels.generic.RecentFollowerLabel;
-import co.casterlabs.caffeinated.builtin.widgets.labels.generic.RecentSubscriberLabel;
-import co.casterlabs.caffeinated.builtin.widgets.labels.generic.StreamUptimeLabel;
-import co.casterlabs.caffeinated.builtin.widgets.labels.generic.SubscriberCountLabel;
-import co.casterlabs.caffeinated.builtin.widgets.labels.generic.ViewersCountLabel;
+import co.casterlabs.caffeinated.builtin.widgets.labels.ViewersCountLabel;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.caffeinated.util.MimeTypes;
+import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.IOUtil;
 import lombok.NonNull;
+import okhttp3.Request;
 
 public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
@@ -102,22 +103,44 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
     @Override
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
-        // This allows us to either:
-        // 1) Grab resources out of the jar normally.
-        // or
-        // 2) Grab resources from the dev environment, since we're bundled in a
-        // different way from the typical plugin setup.
-        InputStream in;
-
         if (CaffeinatedPlugin.isDevEnvironment()) {
-            in = new FileInputStream(new File("../BuiltInPlugins/src/main/resources/widgets", resource));
-        } else {
-            in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("widgets" + resource);
+            String url = "http://localhost:3002/$caffeinated-sdk-root$" + resource;
+            Pair<byte[], String> result = WebUtil.sendHttpRequestBytesWithMime(new Request.Builder().url(url));
+
+            String content = new String(result.a(), StandardCharsets.UTF_8);
+            String mimeType = result.b();
+
+            return new Pair<>(content, mimeType);
         }
 
-        String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
+        // Append `index.html` to the end when required.
+        if (!resource.contains(".")) {
+            if (resource.endsWith("/")) {
+                resource += "index.html";
+            } else {
+                resource += "/index.html";
+            }
+        }
 
-        return new Pair<>(content, "text/html");
+        String mimeType = "application/octet-stream";
+
+        String[] split = resource.split("\\.");
+        if (split.length > 1) {
+            mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
+        }
+
+        resource = "widgets" + resource;
+        this.getLogger().debug("Loading resource: %s", resource);
+
+        try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {
+            return new Pair<>(
+                IOUtil.readInputStreamString(in, StandardCharsets.UTF_8),
+                mimeType
+            );
+        } catch (Exception e) {
+            this.getLogger().debug("An error occurred whilst loading resource %s:\n%s", resource, e);
+            return new Pair<>("", "text/plain");
+        }
     }
 
 }

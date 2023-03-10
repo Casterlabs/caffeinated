@@ -2,7 +2,6 @@ package co.casterlabs.caffeinated.builtin.widgets.goals;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.builtin.widgets.goals.generic.GenericGoal;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
@@ -20,7 +19,8 @@ public class DonationGoal extends GenericGoal {
         .withNamespace("co.casterlabs.donation_goal")
         .withIcon("banknotes")
         .withCategory(WidgetDetailsCategory.GOALS)
-        .withFriendlyName("Donation Goal");
+        .withFriendlyName("Donation Goal")
+        .withShowDemo(true, DEMO_ASPECT_RATIO);
 
     private double donationTotal = 0;
     private String lastCurrency = null;
