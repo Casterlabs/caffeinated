@@ -7,6 +7,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCa
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.DonationEvent;
@@ -18,7 +19,8 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
         .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Donation Alert")
-        .withShowDemo(true, DEMO_ASPECT_RATIO);
+        .withShowDemo(true, DEMO_ASPECT_RATIO)
+        .withRequiredFeatures(KoiIntegrationFeatures.DONATION_ALERT);
 
     @Override
     public void onInit() {

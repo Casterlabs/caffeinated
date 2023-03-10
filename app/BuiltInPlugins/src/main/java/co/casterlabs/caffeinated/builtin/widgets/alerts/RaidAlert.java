@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.builtin.widgets.alerts;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.RaidEvent;
@@ -12,7 +13,8 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
         .withIcon("user-group")
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Raid Alert")
-        .withShowDemo(true, DEMO_ASPECT_RATIO);
+        .withShowDemo(true, DEMO_ASPECT_RATIO)
+        .withRequiredFeatures(KoiIntegrationFeatures.RAID_ALERT);
 
     @Override
     public void onInit() {

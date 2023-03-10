@@ -8,6 +8,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import lombok.NonNull;
 
 public class ChatWidget extends Widget {
@@ -16,7 +17,8 @@ public class ChatWidget extends Widget {
         .withIcon("chat-bubble-left")
         .withCategory(WidgetDetailsCategory.INTERACTION)
         .withFriendlyName("Chat Widget")
-        .withShowDemo(true, 3 / 4d);
+        .withShowDemo(true, 3 / 4d)
+        .withRequiredFeatures(KoiIntegrationFeatures.CHAT);
 
     @Override
     public void onInit() {

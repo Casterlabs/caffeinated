@@ -9,6 +9,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.util.WebUtil;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.events.ViewerListEvent;
@@ -22,7 +23,8 @@ public class ViewersCountLabel extends GenericLabel {
         .withIcon("eye")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Viewers Count Label")
-        .withShowDemo(true, DEMO_ASPECT_RATIO);
+        .withShowDemo(true, DEMO_ASPECT_RATIO)
+        .withRequiredFeatures(KoiIntegrationFeatures.VIEWERS_COUNT);
 
     private String currHtml = "";
 

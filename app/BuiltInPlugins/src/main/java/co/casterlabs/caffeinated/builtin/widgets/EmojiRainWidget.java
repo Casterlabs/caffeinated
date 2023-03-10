@@ -7,6 +7,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import lombok.NonNull;
 
 public class EmojiRainWidget extends Widget {
@@ -15,7 +16,8 @@ public class EmojiRainWidget extends Widget {
         .withIcon("face-smile")
         .withCategory(WidgetDetailsCategory.INTERACTION)
         .withFriendlyName("Emoji Rain")
-        .withShowDemo(true, 3 / 4d);
+        .withShowDemo(true, 3 / 4d)
+        .withRequiredFeatures(KoiIntegrationFeatures.CHAT);
 
     private static final WidgetSettingsLayout LAYOUT = new WidgetSettingsLayout()
         .addSection(

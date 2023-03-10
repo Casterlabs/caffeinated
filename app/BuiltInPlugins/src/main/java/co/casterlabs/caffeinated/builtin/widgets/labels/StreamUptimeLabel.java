@@ -3,6 +3,7 @@ package co.casterlabs.caffeinated.builtin.widgets.labels;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import lombok.NonNull;
 
 public class StreamUptimeLabel extends GenericLabel {
@@ -11,7 +12,8 @@ public class StreamUptimeLabel extends GenericLabel {
         .withIcon("clock")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Stream Uptime Label")
-        .withShowDemo(true, DEMO_ASPECT_RATIO);
+        .withShowDemo(true, DEMO_ASPECT_RATIO)
+        .withRequiredFeatures(KoiIntegrationFeatures.STREAM_STATUS);
 
     @Override
     public void onInit() {

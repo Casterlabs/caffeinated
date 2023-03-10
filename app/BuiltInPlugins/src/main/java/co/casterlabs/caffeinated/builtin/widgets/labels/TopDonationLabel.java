@@ -16,6 +16,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.DonationEvent;
 import co.casterlabs.koi.api.types.events.rich.Donation;
@@ -33,7 +34,8 @@ public class TopDonationLabel extends GenericLabel {
         .withIcon("currency-dollar")
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Top Donation Label")
-        .withShowDemo(true, DEMO_ASPECT_RATIO);
+        .withShowDemo(true, DEMO_ASPECT_RATIO)
+        .withRequiredFeatures(KoiIntegrationFeatures.DONATION_ALERT);
 
     private User topDonator;
     private double topAmount;
