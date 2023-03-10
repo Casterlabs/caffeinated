@@ -73,7 +73,7 @@ public abstract class GenericAlert extends Widget {
 
                 layout.addButton(
                     new WidgetSettingsButton("skip-tts")
-                        .withIcon("skip-forward")
+                        .withIcon("forward")
                         .withIconTitle("Skip TTS")
                         .withOnClick(() -> {
                             this.broadcastToAll("skip-tts", new JsonObject());

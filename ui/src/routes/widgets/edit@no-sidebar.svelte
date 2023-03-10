@@ -95,15 +95,14 @@
 				<CircularButton
 					on:click={() =>
 						window.Caffeinated.plugins.clickWidgetSettingsButton(widget.id, button.id)}
+					title={button.iconTitle}
 				>
-					<icon
-						class="w-5 h-5 inline-block translate-y-0.5"
-						data-icon="icon/{button.icon}"
-						title={button.iconTitle}
-					/>
-					<span class="text-sm inline-block -translate-y-0.5">
-						{button.text}
-					</span>
+					{#if button.text}
+						<icon class="w-5 h-5 inline-block translate-y-0.5" data-icon="icon/{button.icon}" />
+						<span class="text-sm inline-block -translate-y-0.5">{button.text}</span>
+					{:else}
+						<icon class="w-5 h-5" data-icon="icon/{button.icon}" />
+					{/if}
 				</CircularButton>
 			{/each}
 			<CircularButton

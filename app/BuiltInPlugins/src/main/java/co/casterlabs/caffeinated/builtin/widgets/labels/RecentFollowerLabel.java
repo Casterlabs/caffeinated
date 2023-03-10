@@ -54,8 +54,9 @@ public class RecentFollowerLabel extends GenericLabel {
     protected List<WidgetSettingsButton> getButtons() {
         return Arrays.asList(
             new WidgetSettingsButton("reset")
-                .withIcon("x-circle")
-                .withIconTitle("Reset Text")
+                .withIcon("no-symbol")
+                .withIconTitle("Reset Counter")
+                .withText("Reset Counter")
                 .withOnClick(() -> {
                     this.recentFollower = null;
 

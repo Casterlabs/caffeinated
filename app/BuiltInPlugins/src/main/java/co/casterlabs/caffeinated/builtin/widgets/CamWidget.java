@@ -57,7 +57,7 @@ public class CamWidget extends Widget implements KinokoV1Listener {
             new WidgetSettingsLayout()
                 .addButton(
                     new WidgetSettingsButton("copy-link")
-                        .withIcon("video")
+                        .withIcon("video-camera")
                         .withIconTitle("Copy Camera Link")
                         .withOnClick(() -> {
                             Caffeinated.getInstance().copyText(
