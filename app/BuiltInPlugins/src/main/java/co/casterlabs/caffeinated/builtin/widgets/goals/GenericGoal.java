@@ -197,7 +197,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
         if (mode == WidgetInstanceMode.WIDGET_ALT) {
             return "/goal_alert.html";
         } else {
-            return "/goal";
+            return "/goal.html";
         }
     }
 
