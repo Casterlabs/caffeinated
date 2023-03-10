@@ -51,11 +51,11 @@ export const STREAMING_SERVICES = {
 		color: '#161a24'
 	},
 	// TIKTOK: {
-	// 	name: 'TikTok',
+	// 	name: 'TikTok (BETA)',
 	// 	color: '#000000'
 	// },
 	KICK: {
-		name: 'Kick',
+		name: 'Kick (BETA)',
 		color: '#53fc18'
 	}
 };
