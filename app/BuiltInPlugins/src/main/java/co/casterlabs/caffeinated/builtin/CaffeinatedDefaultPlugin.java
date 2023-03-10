@@ -111,29 +111,35 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
             String mimeType = result.b();
 
             return new Pair<>(content, mimeType);
-        } else {
-            // Append `index.html` to the end when required.
-            if (!resource.contains(".")) {
-                if (resource.endsWith("/")) {
-                    resource += "index.html";
-                } else {
-                    resource += "/index.html";
-                }
-            }
+        }
 
-            String mimeType = "application/octet-stream";
-
-            String[] split = resource.split("\\.");
-            if (split.length > 1) {
-                mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
+        // Append `index.html` to the end when required.
+        if (!resource.contains(".")) {
+            if (resource.endsWith("/")) {
+                resource += "index.html";
+            } else {
+                resource += "/index.html";
             }
+        }
 
-            try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("widgets" + resource)) {
-                return new Pair<>(
-                    IOUtil.readInputStreamString(in, StandardCharsets.UTF_8),
-                    mimeType
-                );
-            }
+        String mimeType = "application/octet-stream";
+
+        String[] split = resource.split("\\.");
+        if (split.length > 1) {
+            mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
+        }
+
+        resource = "/widgets" + resource;
+        this.getLogger().debug("Loading resource: %s", resource);
+
+        try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {
+            return new Pair<>(
+                IOUtil.readInputStreamString(in, StandardCharsets.UTF_8),
+                mimeType
+            );
+        } catch (IOException e) {
+            this.getLogger().debug("An error occurred whilst loading resource %s:\n%s", resource, e);
+            return new Pair<>("", "text/plain");
         }
     }
 
