@@ -59,3 +59,16 @@ export const STREAMING_SERVICES = {
 		color: '#53fc18'
 	}
 };
+
+export const STREAMING_SERVICE_NAMES = {
+	CAFFEINE: 'Caffeine',
+	TWITCH: 'Twitch',
+	TROVO: 'Trovo',
+	GLIMESH: 'Glimesh',
+	// BRIME: 'Brime',
+	YOUTUBE: 'YouTube',
+	DLIVE: 'DLive',
+	THETA: 'Theta',
+	// TIKTOK: 'TikTok (BETA)',
+	KICK: 'Kick (BETA)'
+};
