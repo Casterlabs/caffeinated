@@ -7,7 +7,7 @@
 	let isLoading = false;
 	let errorMessage = null;
 
-	async function submit(e) {
+	async function submit() {
 		if (isLoading) {
 			return;
 		}
@@ -35,7 +35,14 @@
 	<br />
 
 	<div class="mt-4 w-72">
-		<span on:keydown={(e) => e.code == 'Enter' && submit()}>
+		<span
+			on:keydown={(e) => {
+				if (e.code == 'Enter') {
+					e.preventDefault();
+					submit();
+				}
+			}}
+		>
 			<SlimTextArea placeholder="Username" rows="1" resize={false} bind:value={usernameInput} />
 		</span>
 

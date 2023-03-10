@@ -12,8 +12,8 @@ export const ALL_STREAMING_SERVICES = [
 	// 'BRIME',
 	'YOUTUBE',
 	'DLIVE',
-	'TIKTOK',
 	'THETA',
+	'TIKTOK',
 	'KICK'
 ];
 
@@ -49,5 +49,13 @@ export const STREAMING_SERVICES = {
 	THETA: {
 		name: 'Theta',
 		color: '#161a24'
+	},
+	// TIKTOK: {
+	// 	name: 'TikTok (BETA)',
+	// 	color: '#000000'
+	// },
+	KICK: {
+		name: 'Kick (BETA)',
+		color: '#53fc18'
 	}
 };
