@@ -1,8 +1,11 @@
 package co.casterlabs.caffeinated.pluginsdk.widgets;
 
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.annotating.JsonField;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 
@@ -24,6 +27,11 @@ public class WidgetDetails {
     private @With(AccessLevel.PRIVATE) boolean showDemo;
     private @With(AccessLevel.PRIVATE) double demoAspectRatio;
 
+    @With(AccessLevel.PRIVATE)
+    @Getter(AccessLevel.PRIVATE)
+    @JsonField("requiredFeatures")
+    private KoiIntegrationFeatures[] _requiredFeatures;
+
     public WidgetDetails() {
         this.namespace = null;
         this.icon = "grid";
@@ -32,6 +40,7 @@ public class WidgetDetails {
         this.type = WidgetType.WIDGET;
         this.showDemo = false;
         this.demoAspectRatio = 0;
+        this._requiredFeatures = new KoiIntegrationFeatures[0];
     }
 
     public WidgetDetails withShowDemo(boolean showDemo, double aspectRatio) {
@@ -39,10 +48,19 @@ public class WidgetDetails {
             .withDemoAspectRatio(aspectRatio);
     }
 
+    public WidgetDetails withRequiredFeatures(KoiIntegrationFeatures... features) {
+        return this.with_requiredFeatures(features);
+    }
+
     public void validate() {
         assert this.namespace != null : "Namespace cannot be null";
         assert this.icon != null : "Icon cannot be null";
         assert this.friendlyName != null : "Friendly Name cannot be null";
+        assert this._requiredFeatures != null : "Required Features cannot be null";
+    }
+
+    public KoiIntegrationFeatures[] getRequiredFeatures() {
+        return this._requiredFeatures.clone();
     }
 
     public static enum WidgetDetailsCategory {
@@ -51,7 +69,6 @@ public class WidgetDetails {
         INTERACTION,
         GOALS,
         OTHER;
-
     }
 
 }
