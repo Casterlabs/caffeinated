@@ -8,7 +8,7 @@
 <LocalizedText
 	key="chat.viewer.message.CHANNELPOINTS"
 	opts={{
-		displayname: event.follower.displayname,
+		displayname: event.sender.displayname,
 		reward: event.reward.title
 	}}
 	slotMapping={['image']}
