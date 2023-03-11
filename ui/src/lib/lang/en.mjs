@@ -166,10 +166,13 @@ export default {
 	'chat.viewer.send_message.placeholder': 'Send a message',
 
 	'chat.viewer.preferences.title': 'Chat Preferences',
-	'chat.viewer.preferences.show_chat_timestamps': 'Show Timestamps',
-	'chat.viewer.preferences.show_profile_pictures': 'Show Avatars',
-	'chat.viewer.preferences.show_badges': 'Show Badges',
-	'chat.viewer.preferences.show_viewers': 'Show Viewers',
+	'chat.viewer.preferences.show_chat_timestamps': 'Show timestamps',
+	'chat.viewer.preferences.show_profile_pictures': 'Show avatars',
+	'chat.viewer.preferences.show_badges': 'Show badges',
+	'chat.viewer.preferences.show_viewers': 'Show viewers',
+	'chat.viewer.preferences.play_ding_on_message': 'Ding when a new message comes in',
+	'chat.viewer.preferences.read_messages_aloud': 'Read messages aloud',
+	'chat.viewer.preferences.tts_voice': 'TTS Voice',
 
 	'chat.viewer.message.CLEARCHAT': 'Chat was cleared',
 	'chat.viewer.message.CHANNELPOINTS': '<b>{displayname}</b> just redeemed %image%<b>{reward}</b>',

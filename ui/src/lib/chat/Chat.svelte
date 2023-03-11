@@ -15,9 +15,14 @@
 	import Modal from '$lib/ui/Modal.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
+	import SelectMenu from '$lib/ui/SelectMenu.svelte';
 
 	import createConsole from '../console-helper.mjs';
 	import { fade } from 'svelte/transition';
+	import { SUPPORTED_TTS_VOICES } from '$lib/app.mjs';
+	import { supportedLanguages } from '$lib/translate.mjs';
+	import { onDestroy } from 'svelte';
+
 	const console = createConsole('ChatViewer');
 
 	export let doAction = (action, data) => {};
@@ -34,6 +39,9 @@
 	let showBadges = false;
 	let showBadgesOnLeft = false;
 	let showViewers = false;
+	let playDingOnMessage = false;
+	let readMessagesAloud = false;
+	let ttsVoice = 'Brian';
 
 	let isAtBottom = true;
 
@@ -146,11 +154,14 @@
 
 	export function savePreferences() {
 		doAction('save-preferences', {
-			showChatTimestamps: showChatTimestamps,
-			showProfilePictures: showProfilePictures,
-			showBadges: showBadges,
-			showBadgesOnLeft: showBadgesOnLeft,
-			showViewers: showViewers
+			showChatTimestamps,
+			showProfilePictures,
+			showBadges,
+			showBadgesOnLeft,
+			showViewers,
+			playDingOnMessage,
+			readMessagesAloud,
+			ttsVoice
 		});
 	}
 
@@ -160,6 +171,9 @@
 		showBadges = config.showBadges;
 		showBadgesOnLeft = config.showBadgesOnLeft;
 		showViewers = config.showViewers;
+		playDingOnMessage = config.playDingOnMessage;
+		readMessagesAloud = config.readMessagesAloud;
+		ttsVoice = config.ttsVoice;
 	}
 
 	export function processEvent(event) {
@@ -250,6 +264,33 @@
 		<LocalizedText slot="title" key="chat.viewer.preferences.title" />
 
 		<ul class="w-72 divide-y divide-current text-base-6">
+			<li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.play_ding_on_message"
+					description=""
+					bind:checked={playDingOnMessage}
+					on:value={savePreferences}
+				/>
+			</li>
+			<li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.read_messages_aloud"
+					description=""
+					bind:checked={readMessagesAloud}
+					on:value={savePreferences}
+				/>
+			</li>
+			{#if readMessagesAloud}
+				<li class="py-2">
+					<SelectMenu
+						title="chat.viewer.preferences.tts_voice"
+						description=""
+						options={SUPPORTED_TTS_VOICES.reduce((arr, v) => ({ ...arr, [v]: v }), {})}
+						bind:value={ttsVoice}
+						on:value={savePreferences}
+					/>
+				</li>
+			{/if}
 			<li class="py-2">
 				<Switch
 					title="chat.viewer.preferences.show_chat_timestamps"
