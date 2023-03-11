@@ -113,11 +113,8 @@
 				{#if userData}
 					<li>
 						<Container>
-							<div class="h-8 flex flex-row items-center bg-red-200">
-								<icon
-									class="w-5 h-5 -ml-1 mr-1.5"
-									data-icon="service/{userData.platform.toLowerCase()}"
-								/>
+							<div class="h-8 flex flex-row items-center">
+								<icon class="w-5 h-5 -ml-1 mr-1.5" data-icon="icon/beaker" />
 								<p class="flex-1 flex flex-row items-center">
 									TEST / {userData.platform}
 
