@@ -187,7 +187,7 @@
 					chatElement.upvotes = event.upvotes;
 					chatElement.isDeleted = !event.is_visible;
 				}
-				break;
+				return; // Avoid triggering the code below.
 			}
 
 			case 'CLEARCHAT': {
@@ -217,7 +217,7 @@
 
 			default: {
 				const clazz = EVENT_CLASSES[event.event_type];
-				if (!clazz) break;
+				if (!clazz) return; // Avoid triggering the code below.
 
 				const messageTimestamp = document.createElement('span');
 				messageTimestamp.classList = 'message-timestamp';
@@ -251,6 +251,10 @@
 				chatBox.appendChild(li);
 				break;
 			}
+		}
+
+		if (playDingOnMessage) {
+			new Audio('/sounds/dink.mp3').play();
 		}
 
 		if (isAtBottom) {
