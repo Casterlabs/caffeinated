@@ -139,9 +139,9 @@
 					}
 
 					if (isTopDown) {
-						chatBoxOffsetYpx += chatBoxOffsetAmount / TOTAL_FRAME_COUNT; // 1 "step"
+						chatBoxOffsetYpx += chatBoxOffsetAmount / TOTAL_FRAME_COUNT - 1; // 1 "step"
 					} else {
-						chatBoxOffsetYpx -= chatBoxOffsetAmount / TOTAL_FRAME_COUNT; // 1 "step"
+						chatBoxOffsetYpx -= chatBoxOffsetAmount / TOTAL_FRAME_COUNT - 1; // 1 "step"
 					}
 
 					switch (direction) {
