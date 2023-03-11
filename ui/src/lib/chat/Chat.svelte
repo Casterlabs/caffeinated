@@ -20,7 +20,7 @@
 	import createConsole from '../console-helper.mjs';
 	import { fade } from 'svelte/transition';
 	import { SUPPORTED_TTS_VOICES } from '$lib/app.mjs';
-	import { supportedLanguages } from '$lib/translate.mjs';
+	import { t } from '$lib/translate.mjs';
 	import { onDestroy } from 'svelte';
 
 	const console = createConsole('ChatViewer');
@@ -44,6 +44,41 @@
 	let ttsVoice = 'Brian';
 
 	let isAtBottom = true;
+
+	/** @type {HTMLAudioElement} */
+	let ttsAudio = null;
+	let ttsQueue = [];
+
+	function checkTTSQueue() {
+		if (ttsAudio) return;
+		if (ttsQueue.length == 0) return;
+
+		const message = ttsQueue.shift();
+
+		ttsAudio = new Audio(
+			`https://api.casterlabs.co/v1/polly?request=speech&voice=${ttsVoice}&text=${message}`
+		);
+
+		ttsAudio.addEventListener('ended', () => {
+			ttsAudio = null;
+			checkTTSQueue();
+		});
+
+		ttsAudio.play();
+	}
+
+	function skipTTS() {
+		if (ttsAudio) {
+			ttsAudio.pause();
+			ttsAudio = null;
+			checkTTSQueue();
+		}
+	}
+
+	onDestroy(() => {
+		ttsQueue = [];
+		skipTTS();
+	});
 
 	function checkNearBottom() {
 		const elem = chatBox.parentElement;
@@ -153,6 +188,11 @@
 	}
 
 	export function savePreferences() {
+		if (!readMessagesAloud) {
+			ttsQueue = [];
+			skipTTS();
+		}
+
 		doAction('save-preferences', {
 			showChatTimestamps,
 			showProfilePictures,
@@ -253,12 +293,128 @@
 			}
 		}
 
+		if (isAtBottom) {
+			jumpToBottom('auto');
+		}
+
+		if (event.is_historical) {
+			return;
+		}
+
 		if (playDingOnMessage) {
 			new Audio('/sounds/dink.mp3').play();
 		}
 
-		if (isAtBottom) {
-			jumpToBottom('auto');
+		if (readMessagesAloud) {
+			if (event.event_type == 'RICH_MESSAGE') {
+				let hasLink = false;
+				let hasEmotesOrEmojis = false;
+				let text = '';
+
+				for (const fragment of event.fragments) {
+					switch (fragment.type) {
+						case 'TEXT':
+							text += fragment.raw;
+							break;
+
+						case 'EMOTE':
+							hasEmotesOrEmojis = true;
+							text += fragment.emoteName;
+							break;
+
+						case 'EMOJI':
+							hasEmotesOrEmojis = true;
+							text += `${fragment.variation.identifier} emoji`;
+							break;
+
+						case 'LINK':
+							hasLink = true;
+							break;
+
+						case 'MENTION':
+							text += fragment.mentioned.displayname;
+							break;
+					}
+					text += ' ';
+				}
+
+				text = text.trim();
+
+				let format;
+
+				if (event.fragments.length == 1 && hasLink) {
+					format = 'SENT_A_LINK'; // Only one fragment and it's a link.
+				} else if (text.length == 0) {
+					if (hasEmotesOrEmojis) {
+						format = 'SENT_SOME_EMOTES';
+					}
+				} else {
+					// Try to guess whether or not the person was asking a question.
+					if (text.endsWith('?')) {
+						format = 'ASKS';
+					} else {
+						format = 'SAYS';
+					}
+				}
+
+				if (format) {
+					ttsQueue.push(
+						t(`chat.viewer.tts.event.RICH_MESSAGE.${format}`, {
+							name: event.sender.displayname,
+							message: text
+						})
+					);
+				}
+
+				if (event.attachments.length > 0) {
+					ttsQueue.push(
+						t('chat.viewer.tts.event.RICH_MESSAGE.SENT_AN_ATTACHMENT', {
+							name: event.sender.displayname
+						})
+					);
+				}
+
+				checkTTSQueue();
+				return;
+			}
+
+			let message;
+
+			switch (event.event_type) {
+				case 'CHANNEL_POINTS':
+					message = t('chat.viewer.tts.event.CHANNELPOINTS', {
+						name: event.sender.displayname,
+						reward: event.reward.title
+					});
+					break;
+
+				case 'SUBSCRIPTION':
+					message = t(`chat.viewer.tts.event.SUBSCRIPTION.${event.sub_type}`, {
+						months: event.months,
+						name: event.subscriber?.displayname,
+						gifter: event.subscriber?.displayname,
+						recipient: event.gift_recipient?.displayname
+					});
+					break;
+
+				case 'FOLLOW':
+					message = t('chat.viewer.tts.event.FOLLOW', {
+						name: event.follower.displayname
+					});
+					break;
+
+				case 'RAID':
+					message = t('chat.viewer.tts.event.RAID', {
+						name: event.host.displayname,
+						viewers: event.viewers
+					});
+					break;
+			}
+
+			if (message) {
+				ttsQueue.push(message);
+				checkTTSQueue();
+			}
 		}
 	}
 </script>
@@ -341,11 +497,22 @@
 		<ul bind:this={chatBox} />
 	</div>
 
+	{#if ttsAudio}
+		<button
+			class="absolute top-6 right-3 cursor-pointer rounded-full p-1 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
+			transition:fade
+			on:click={skipTTS}
+			title={t('chat.viewer.tts.skip')}
+		>
+			<icon class="h-8 w-8" data-icon="icon/forward" />
+		</button>
+	{/if}
+
 	{#if !isAtBottom}
 		<button
 			class="absolute bottom-14 right-3 cursor-pointer rounded-full p-1 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
 			transition:fade
-			on:click={() => jumpToBottom()}
+			on:click={jumpToBottom}
 		>
 			<icon data-icon="icon/arrow-small-down" />
 		</button>

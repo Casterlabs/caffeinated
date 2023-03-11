@@ -32,7 +32,12 @@
 	}
 
 	onMount(() => {
-		Caffeinated.koi.eventHistory.then((h) => h.forEach(chatViewer.processEvent));
+		Caffeinated.koi.eventHistory.then((history) => {
+			for (const event of history) {
+				event.is_historical = true;
+				chatViewer.processEvent(event);
+			}
+		});
 		Caffeinated.UI.chatPreferences.then(chatViewer.loadConfig);
 
 		const eventListener = Bridge.on('koi:event', chatViewer.processEvent);

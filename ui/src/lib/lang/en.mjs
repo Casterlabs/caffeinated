@@ -174,6 +174,22 @@ export default {
 	'chat.viewer.preferences.read_messages_aloud': 'Read messages aloud',
 	'chat.viewer.preferences.tts_voice': 'TTS Voice',
 
+	'chat.viewer.tts.skip': 'Skip message',
+	'chat.viewer.tts.event.RICH_MESSAGE.ASKS': '{name} asks "{message}"',
+	'chat.viewer.tts.event.RICH_MESSAGE.SAYS': '{name} said "{message}"',
+	'chat.viewer.tts.event.RICH_MESSAGE.SENT_A_LINK': '{name} sent a link.',
+	'chat.viewer.tts.event.RICH_MESSAGE.SENT_SOME_EMOTES': '{name} sent some emotes.',
+	'chat.viewer.tts.event.RICH_MESSAGE.SENT_AN_ATTACHMENT': '{name} sent an attachment.',
+	'chat.viewer.tts.event.CHANNELPOINTS': '{name} just redeemed {reward}.',
+	'chat.viewer.tts.event.RAID': '{name} just raided with {viewers} viewers!',
+	'chat.viewer.tts.event.FOLLOW': '{name} just followed!',
+	'chat.viewer.tts.event.SUBSCRIPTION.SUB': '{name} just subscribed for {months} months.',
+	'chat.viewer.tts.event.SUBSCRIPTION.RESUB': '{name} just resubscribed for {months} months.',
+	'chat.viewer.tts.event.SUBSCRIPTION.SUBGIFT':
+		'{gifter} just gifted {recipient} a {months} month subscription.',
+	'chat.viewer.tts.event.SUBSCRIPTION.ANONSUBGIFT':
+		'Anonymous just gifted {recipient} a {months} month subscription.',
+
 	'chat.viewer.message.CLEARCHAT': 'Chat was cleared',
 	'chat.viewer.message.CHANNELPOINTS': '<b>{displayname}</b> just redeemed %image%<b>{reward}</b>',
 	'chat.viewer.message.RAID': '<b>{displayname}</b> just raided with <b>{viewers}</b> viewers',
