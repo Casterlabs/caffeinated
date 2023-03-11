@@ -41,7 +41,7 @@
 					<icon data-icon="icon/x-mark" />
 				</button>
 
-				<div class="text-base-10">
+				<div class="text-base-11">
 					<slot />
 				</div>
 			</div>

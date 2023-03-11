@@ -7,6 +7,8 @@
 
 	import { onMount } from 'svelte';
 	import { t } from '$lib/translate.mjs';
+	import { STREAMING_SERVICE_NAMES } from '../../components/caffeinatedAuth.mjs';
+	import Button from '$lib/ui/Button.svelte';
 
 	const CATEGORY_ICONS = {
 		ALERTS: 'icon/bell-alert',
@@ -17,32 +19,45 @@
 	};
 
 	let widgets = [];
+	let creatableWidgetByCategory = {
+		ALERTS: [],
+		LABELS: [],
+		INTERACTION: [],
+		GOALS: [],
+		OTHER: []
+	};
+	let supportedFeatures = [];
+	let signedInPlatforms = [];
+
 	let showingTutorialModal = false;
+	let showCreationWarningFeaturesModalFor = null;
 
-	let widgetCreationPopupVisible = false;
-
-	let widgetCategories = {};
-
-	async function reload() {
-		widgets = (await Caffeinated.plugins.widgets).filter((w) => w.details.type == 'WIDGET');
+	async function refreshWidgetsList() {
+		widgets = (await Caffeinated.plugins.widgets) //
+			.filter((w) => w.details.type == 'WIDGET');
 	}
 
 	onMount(async () => {
-		reload();
+		refreshWidgetsList();
 
-		let _widgetCategories = {
-			ALERTS: [],
-			LABELS: [],
-			INTERACTION: [],
-			GOALS: [],
-			OTHER: []
-		};
+		Caffeinated.koi.features.then((featuresByPlatform) => {
+			signedInPlatforms = Object.keys(featuresByPlatform);
 
-		const creatableWidgets = await Caffeinated.plugins.creatableWidgets;
-		for (const creatable of creatableWidgets) {
-			if (creatable.type == 'WIDGET') {
-				_widgetCategories[creatable.category].push({
+			for (const features of Object.values(featuresByPlatform)) {
+				features.forEach((f) => supportedFeatures.push(f));
+			}
+
+			supportedFeatures = supportedFeatures; // re-render
+			console.debug('Supported features:', supportedFeatures);
+		});
+
+		Caffeinated.plugins.creatableWidgets.then((creatableWidgets) => {
+			for (const creatable of creatableWidgets) {
+				if (creatable.type != 'WIDGET') continue;
+
+				creatableWidgetByCategory[creatable.category].push({
 					name: creatable.friendlyName,
+					requiredFeatures: creatable.requiredFeatures,
 					create: () => {
 						Caffeinated.plugins.createNewWidget(
 							creatable.namespace,
@@ -51,10 +66,10 @@
 					}
 				});
 			}
-		}
 
-		// This forces svelte to rerender.
-		widgetCategories = _widgetCategories;
+			creatableWidgetByCategory = creatableWidgetByCategory; // re-render
+			console.debug('Creatable widgets:', creatableWidgetByCategory);
+		});
 	});
 </script>
 
@@ -81,6 +96,58 @@
 	</Modal>
 {/if}
 
+{#if showCreationWarningFeaturesModalFor}
+	{@const listOfPlatforms = (() => {
+		// Dirty AF. Just trying to make it gramatically correct.
+		const commaSeparated = signedInPlatforms
+			.map((p) => STREAMING_SERVICE_NAMES[p]) // KICK -> Kick
+			.join(', '); // "Kick, Twitch"
+
+		const splitByLastComma = commaSeparated.split(/, [A-Za-z]+$/); // ["Kick", ", Twitch"]
+		if (splitByLastComma.length == 1) return commaSeparated;
+
+		let result = splitByLastComma[0]; // "Kick"
+		result += ' or ';
+		result += splitByLastComma[1].substring(', '.length);
+		return result;
+	})()}
+
+	<Modal
+		on:close={() => {
+			showCreationWarningFeaturesModalFor = null;
+		}}
+	>
+		<LocalizedText slot="title" key="page.widgets.info.widget_features_not_supported.modal.title" />
+
+		<p>
+			<LocalizedText
+				key="page.widgets.info.widget_features_not_supported.modal.content"
+				opts={{ platform: listOfPlatforms }}
+			/>
+		</p>
+
+		<div class="mt-8">
+			<Button
+				on:click={() => {
+					showCreationWarningFeaturesModalFor = null;
+				}}
+			>
+				<LocalizedText key="page.widgets.info.widget_features_not_supported.modal.content.cancel" />
+			</Button>
+			<Button
+				on:click={() => {
+					showCreationWarningFeaturesModalFor.create();
+					showCreationWarningFeaturesModalFor = null;
+				}}
+			>
+				<LocalizedText
+					key="page.widgets.info.widget_features_not_supported.modal.content.create_anyway"
+				/>
+			</Button>
+		</div>
+	</Modal>
+{/if}
+
 <div class="mt-8">
 	<CardList>
 		{#each widgets as widget}
@@ -104,7 +171,7 @@
 						title={t('sr.page.widgets.delete')}
 						on:click|stopPropagation={() => {
 							window.Caffeinated.plugins.deleteWidget(widget.id);
-							reload();
+							refreshWidgetsList();
 						}}
 					>
 						<span class="sr-only">
@@ -127,7 +194,7 @@
 			<div
 				class="mb-1.5 shadow-sm rounded-lg border border-base-5 bg-base-1 w-36 divide-y divide-current text-base-5"
 			>
-				{#each Object.entries(widgetCategories) as [category, widgets]}
+				{#each Object.entries(creatableWidgetByCategory) as [category, widgets]}
 					<button
 						class="relative block w-full h-10 overflow-hidden hover:overflow-visible"
 						aria-haspopup="true"
@@ -147,14 +214,31 @@
 								id="widget-creation-dropright-{category}"
 							>
 								{#each widgets as widget}
+									{@const isSupported =
+										widget.requiredFeatures // Filter the list of feature, looking for any that aren't in the list.
+											.filter((f) => !supportedFeatures.includes(f)).length == 0}
 									<button
 										class="block w-full h-10"
 										title={t(widget.name)}
 										on:click={() => {
-											widget.create();
+											if (isSupported) {
+												widget.create();
+											} else {
+												showCreationWarningFeaturesModalFor = widget;
+											}
 										}}
 									>
-										<div class="truncate text-left p-2 text-sm text-base-12 w-full">
+										<div
+											class="truncate text-left p-2 text-sm  w-full"
+											class:text-base-11={!isSupported}
+											class:text-base-12={isSupported}
+										>
+											{#if !isSupported}
+												<icon
+													class="inline-block h-4 w-4 translate-y-0.5"
+													data-icon="icon/exclamation-circle"
+												/>
+											{/if}
 											<LocalizedText key={widget.name} />
 										</div>
 									</button>

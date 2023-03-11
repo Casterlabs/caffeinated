@@ -69,6 +69,6 @@ export const STREAMING_SERVICE_NAMES = {
 	YOUTUBE: 'YouTube',
 	DLIVE: 'DLive',
 	THETA: 'Theta',
-	// TIKTOK: 'TikTok (BETA)',
-	KICK: 'Kick (BETA)'
+	// TIKTOK: 'TikTok',
+	KICK: 'Kick'
 };
