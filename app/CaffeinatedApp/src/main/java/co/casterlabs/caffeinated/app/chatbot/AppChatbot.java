@@ -109,7 +109,7 @@ public class AppChatbot extends JavascriptObject {
                     RichMessageEvent richMessage = (RichMessageEvent) e;
 
                     // Not a donation, skip.
-                    if (!richMessage.getDonations().isEmpty()) {
+                    if (richMessage.getDonations().isEmpty()) {
                         continue;
                     }
 
