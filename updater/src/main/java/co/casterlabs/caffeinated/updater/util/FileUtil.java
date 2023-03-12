@@ -21,12 +21,6 @@ public class FileUtil {
         return IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
     }
 
-    public static String loadResourceFromBuildProject(String path, String project) throws IOException {
-        InputStream in = FileUtil.class.getClassLoader().getResourceAsStream(path);
-
-        return IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
-    }
-
     public static byte[] loadResourceBytes(String path) throws IOException {
         InputStream in = FileUtil.class.getClassLoader().getResourceAsStream(path);
 

@@ -9,6 +9,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -60,17 +61,17 @@ public class Updater {
         switch (Platform.osDistribution) {
             case MACOS:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
-                REMOTE_ZIP_DOWNLOAD_URL += "macOS-amd64.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "macOS-amd64-nojre.zip";
                 break;
 
             case LINUX:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated";
-                REMOTE_ZIP_DOWNLOAD_URL += "Linux-amd64.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "Linux-amd64-nojre.zip";
                 break;
 
             case WINDOWS_NT:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.exe";
-                REMOTE_ZIP_DOWNLOAD_URL += "Windows-amd64.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "Windows-amd64-nojre.zip";
                 break;
 
             default:
@@ -200,6 +201,25 @@ public class Updater {
                     default:
                         break;
                 }
+
+                // Use the updater's built-in JRE instead of needing to ship one with
+                // Caffeinated.
+
+                // Figure out where the updater's base dir is.
+                String updaterCommandLine = Platform.tryGetCommandLine(); // "C:\Program Files\Casterlabs Caffeinated\Casterlabs-Caffeinated-Updater.exe"
+                updaterCommandLine.substring(1); // Chop off the leading quote.
+                updaterCommandLine.substring(0, updaterCommandLine.indexOf('"')); // Chop off the trailing quote (Safe).
+
+                File updaterExecutable = new File(updaterCommandLine);
+                File updaterDirectory = updaterExecutable.getParentFile();
+
+                // Read the manifest file for the newly downloaded app.
+                File manifestFile = new File(appDirectory, "Casterlabs-Caffeinated.json");
+                JsonObject manifest = Rson.DEFAULT.fromJson(FileUtil.readFile(manifestFile), JsonObject.class);
+
+                // Update said manifest to utilize the updater's JRE.
+                manifest.put("jre", new File(updaterDirectory, "jre").getAbsolutePath());
+                Files.write(manifestFile.toPath(), manifest.toString(true).getBytes(StandardCharsets.UTF_8));
             }
         } catch (Exception e) {
             throw new UpdaterException(UpdaterException.Error.DOWNLOAD_FAILED, "Update failed :(", e);
