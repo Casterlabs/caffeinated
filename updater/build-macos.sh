@@ -1,10 +1,9 @@
 #!/bin/bash
 
-
 # Let's get it started.
 echo "Building for MacOS..."
 
-JRE_DOWNLOAD_URL="https://api.adoptium.net/v3/binary/version/jdk-11.0.13%2B8/mac/x64/jre/hotspot/normal/eclipse?project=jdk"
+JRE_DOWNLOAD_URL="https://api.adoptium.net/v3/binary/latest/11/ga/mac/x64/jre/hotspot/normal/eclipse?project=jdk"
 MAIN_CLASS="co.casterlabs.caffeinated.updater.Launcher"
 
 if [ ! -f macos_runtime.tar.gz ]; then
