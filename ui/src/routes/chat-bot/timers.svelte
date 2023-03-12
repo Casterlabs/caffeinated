@@ -5,9 +5,6 @@
 
 	import { t } from '$lib/translate.mjs';
 	import createConsole from '$lib/console-helper.mjs';
-	import Debouncer from '$lib/debouncer.mjs';
-
-	const debouncer = new Debouncer();
 
 	const console = createConsole('Chat Bot/Timers');
 	const preferences = st || Caffeinated.chatbot.svelte('preferences');
@@ -15,10 +12,6 @@
 	$: preferences, $preferences && console.debug('Chat Bot Preferences:', $preferences);
 
 	$: timers = $preferences?.timers || [];
-
-	function saveDB() {
-		debouncer.debounce(save);
-	}
 
 	async function save() {
 		Caffeinated.chatbot.preferences = {
@@ -42,8 +35,8 @@
 			<TextArea
 				placeholder="page.chat_bot.timers.example"
 				rows="2"
-				value={message}
-				on:value={saveDB}
+				bind:value={message}
+				on:value={save}
 			/>
 
 			<button
