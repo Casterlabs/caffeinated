@@ -52,6 +52,7 @@ VM_OPTIONS="-vm XX:+UnlockExperimentalVMOptions -vm XX:+UseShenandoahGC -vm XX:S
 
 if [[ $@ != *"nodist"* ]]; then
     cp app/Bootstrap/target/classes/commit.txt dist
+    mkdir artifacts
 
     echo ""
     echo "Completing packaging of application."
