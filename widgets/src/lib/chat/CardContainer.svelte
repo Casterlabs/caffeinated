@@ -2,6 +2,7 @@
 
 <script>
 	import { fade } from 'svelte/transition';
+	import { onMount } from 'svelte';
 
 	export let settings; // svelte store
 	export let offsetX = 0;
