@@ -11,11 +11,15 @@ if [ ! -f windows_runtime.zip ]; then
 fi
 
 java -jar "packr.jar" \
-     --platform windows64 \
-     --jdk windows_runtime.zip \
-     --executable Casterlabs-Caffeinated-Updater \
-     --classpath target/Casterlabs-Caffeinated-Updater.jar \
-     --mainclass $MAIN_CLASS \
-     --output dist/windows
+    --platform windows64 \
+    --jdk windows_runtime.zip \
+    --executable Casterlabs-Caffeinated-Updater \
+    --classpath target/Casterlabs-Caffeinated-Updater.jar \
+    --mainclass $MAIN_CLASS \
+    --output dist/windows
 
 echo "Finished building for Windows."
+
+cd caffeinated/updater/dist/windows
+zip -r ../artifacts/Windows.zip *
+cd - # Return.

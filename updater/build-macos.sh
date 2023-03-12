@@ -12,13 +12,17 @@ if [ ! -f macos_runtime.tar.gz ]; then
 fi
 
 java -jar "packr.jar" \
-     --platform mac \
-     --jdk macos_runtime.tar.gz \
-     --executable Casterlabs-Caffeinated-Updater \
-     --icon app_icon.icns \
-     --bundle co.casterlabs.caffeinated \
-     --classpath target/Casterlabs-Caffeinated-Updater.jar \
-     --mainclass $MAIN_CLASS \
-     --output dist/macos/Casterlabs-Caffeinated.app
+    --platform mac \
+    --jdk macos_runtime.tar.gz \
+    --executable Casterlabs-Caffeinated-Updater \
+    --icon app_icon.icns \
+    --bundle co.casterlabs.caffeinated \
+    --classpath target/Casterlabs-Caffeinated-Updater.jar \
+    --mainclass $MAIN_CLASS \
+    --output dist/macos/Casterlabs-Caffeinated.app
 
 echo "Finished building for MacOS."
+
+cd caffeinated/updater/dist/macos
+tar -czvf ../artifacts/macOS.tar.gz
+cd - # Return.

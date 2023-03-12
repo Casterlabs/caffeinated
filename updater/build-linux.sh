@@ -12,11 +12,15 @@ if [ ! -f linux_runtime.tar.gz ]; then
 fi
 
 java -jar "packr.jar" \
-     --platform linux64 \
-     --jdk linux_runtime.tar.gz \
-     --executable Casterlabs-Caffeinated-Updater \
-     --classpath target/Casterlabs-Caffeinated-Updater.jar \
-     --mainclass $MAIN_CLASS \
-     --output dist/linux
+    --platform linux64 \
+    --jdk linux_runtime.tar.gz \
+    --executable Casterlabs-Caffeinated-Updater \
+    --classpath target/Casterlabs-Caffeinated-Updater.jar \
+    --mainclass $MAIN_CLASS \
+    --output dist/linux
 
 echo "Finished building for Linux."
+
+cd caffeinated/updater/dist/linux
+tar -czvf ../artifacts/Linux.tar.gz *
+cd -

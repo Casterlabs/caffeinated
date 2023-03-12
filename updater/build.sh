@@ -10,6 +10,7 @@ fi
 # Reset/clear the dist folder
 rm -rf dist/*
 mkdir -p dist
+mkdir dist/artifacts
 mkdir dist/windows
 mkdir dist/linux
 mkdir dist/macos
@@ -28,4 +29,3 @@ if [[ $@ != *"nodist"* ]]; then
     sh build-macos.sh
     echo ""
 fi
-
