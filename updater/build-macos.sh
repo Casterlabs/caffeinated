@@ -23,6 +23,6 @@ java -jar "packr.jar" \
 
 echo "Finished building for MacOS."
 
-cd caffeinated/updater/dist/macos
+cd dist/macos
 tar -czvf ../artifacts/macOS.tar.gz
 cd - # Return.

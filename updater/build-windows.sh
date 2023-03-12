@@ -20,6 +20,6 @@ java -jar "packr.jar" \
 
 echo "Finished building for Windows."
 
-cd caffeinated/updater/dist/windows
+cd dist/windows
 zip -r ../artifacts/Windows.zip *
 cd - # Return.

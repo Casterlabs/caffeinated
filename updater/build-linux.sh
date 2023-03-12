@@ -21,6 +21,6 @@ java -jar "packr.jar" \
 
 echo "Finished building for Linux."
 
-cd caffeinated/updater/dist/linux
+cd dist/linux
 tar -czvf ../artifacts/Linux.tar.gz *
 cd -
