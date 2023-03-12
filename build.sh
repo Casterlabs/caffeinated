@@ -62,7 +62,7 @@ if [[ $@ != *"nodist"* ]]; then
     cd dist/macOS-amd64
     zip -r ../../artifacts/macOS-amd64.zip *
     rm -rf ./jre
-    zip -r ../artifacts/macOS-amd64-nojre.zip *
+    zip -r ../../artifacts/macOS-amd64-nojre.zip *
     cd -
     echo ""
 
@@ -70,7 +70,7 @@ if [[ $@ != *"nodist"* ]]; then
     cd dist/Windows-amd64
     zip -r ../../artifacts/Windows-amd64.zip *
     rm -rf ./jre
-    zip -r ../artifacts/Windows-amd64-nojre.zip *
+    zip -r ../../artifacts/Windows-amd64-nojre.zip *
     cd -
     echo ""
 
@@ -78,7 +78,7 @@ if [[ $@ != *"nodist"* ]]; then
     cd dist/Linux-amd64
     zip -r ../../artifacts/Linux-amd64.zip *
     rm -rf ./jre
-    zip -r ../artifacts/Linux-amd64-nojre.zip *
+    zip -r ../../artifacts/Linux-amd64-nojre.zip *
     cd -
     echo ""
 
