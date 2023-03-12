@@ -33,7 +33,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
-    private static final int VERSION = 26;
+    private static final int VERSION = 27;
     private static final String CHANNEL = System.getProperty("caffeinated.channel", "stable");
 
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/";
