@@ -24,5 +24,5 @@ java -jar "packr.jar" \
 echo "Finished building for MacOS."
 
 cd dist/macos
-tar -czvf ../artifacts/macOS.tar.gz
+tar -czvf ../artifacts/macOS.tar.gz *
 cd - # Return.
