@@ -207,8 +207,8 @@ public class Updater {
 
                 // Figure out where the updater's base dir is.
                 String updaterCommandLine = Platform.tryGetCommandLine(); // "C:\Program Files\Casterlabs Caffeinated\Casterlabs-Caffeinated-Updater.exe"
-                updaterCommandLine.substring(1); // Chop off the leading quote.
-                updaterCommandLine.substring(0, updaterCommandLine.indexOf('"')); // Chop off the trailing quote (Safe).
+                updaterCommandLine = updaterCommandLine.substring(1); // Chop off the leading quote.
+                updaterCommandLine = updaterCommandLine.substring(0, updaterCommandLine.indexOf('"')); // Chop off the trailing quote (Safe).
 
                 File updaterExecutable = new File(updaterCommandLine);
                 File updaterDirectory = updaterExecutable.getParentFile();
@@ -218,7 +218,7 @@ public class Updater {
                 JsonObject manifest = Rson.DEFAULT.fromJson(FileUtil.readFile(manifestFile), JsonObject.class);
 
                 // Update said manifest to utilize the updater's JRE.
-                manifest.put("jre", new File(updaterDirectory, "jre").getAbsolutePath());
+                manifest.put("jrePath", new File(updaterDirectory, "jre").getAbsolutePath());
                 Files.write(manifestFile.toPath(), manifest.toString(true).getBytes(StandardCharsets.UTF_8));
             }
         } catch (Exception e) {
