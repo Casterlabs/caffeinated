@@ -82,6 +82,7 @@
 				const card = new CardContainer({
 					target: li,
 					props: {
+						event,
 						settings
 					}
 				});
