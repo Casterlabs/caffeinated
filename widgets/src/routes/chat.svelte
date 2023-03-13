@@ -188,7 +188,7 @@
 	bind:this={chatBox}
 	id="chatbox"
 	style:--animation-time={ANIMATION_TIME}
-	style:--y-offset="{chatBoxOffsetYpx}px"
+	style:--xx-y-offset="{chatBoxOffsetYpx}px"
 	style:color={$settings['text_style.text_color']}
 	style:font-size="{$settings['text_style.font_size']}px"
 	class="absolute inset-x-0 flex flex-col px-1"
