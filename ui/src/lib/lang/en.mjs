@@ -172,7 +172,7 @@ export default {
 	'chat.viewer.preferences.show_chat_timestamps': 'Show timestamps',
 	'chat.viewer.preferences.show_profile_pictures': 'Show avatars',
 	'chat.viewer.preferences.show_badges': 'Show badges',
-	'chat.viewer.preferences.show_viewers': 'Show viewers',
+	'chat.viewer.preferences.show_viewers': 'Show viewer join/leave messages',
 	'chat.viewer.preferences.play_ding_on_message': 'Ding when a new message comes in',
 	'chat.viewer.preferences.read_messages_aloud': 'Read messages aloud',
 	'chat.viewer.preferences.tts_voice': 'TTS Voice',
