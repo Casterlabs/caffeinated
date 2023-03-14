@@ -13,8 +13,8 @@ export const ALL_STREAMING_SERVICES = [
 	'YOUTUBE',
 	'DLIVE',
 	'THETA',
-	'TIKTOK',
-	'KICK'
+	'KICK',
+	'TIKTOK'
 ];
 
 export const STREAMING_SERVICES = {
@@ -50,13 +50,13 @@ export const STREAMING_SERVICES = {
 		name: 'Theta',
 		color: '#161a24'
 	},
-	// TIKTOK: {
-	// 	name: 'TikTok (BETA)',
-	// 	color: '#000000'
-	// },
 	KICK: {
 		name: 'Kick (BETA)',
 		color: '#53fc18'
+	},
+	TIKTOK: {
+		name: 'TikTok (BETA)',
+		color: '#000000'
 	}
 };
 
@@ -69,6 +69,6 @@ export const STREAMING_SERVICE_NAMES = {
 	YOUTUBE: 'YouTube',
 	DLIVE: 'DLive',
 	THETA: 'Theta',
-	// TIKTOK: 'TikTok',
-	KICK: 'Kick'
+	KICK: 'Kick',
+	TIKTOK: 'TikTok'
 };
