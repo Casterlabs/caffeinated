@@ -104,6 +104,10 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
     @Override
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
         if (CaffeinatedPlugin.isDevEnvironment()) {
+            if (resource.endsWith(".html")) {
+                resource = resource.replace(".html", ""); // TEMP
+            }
+
             String url = "http://localhost:3002/$caffeinated-sdk-root$" + resource;
             Pair<byte[], String> result = WebUtil.sendHttpRequestBytesWithMime(new Request.Builder().url(url));
 
