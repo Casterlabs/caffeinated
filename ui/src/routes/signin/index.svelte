@@ -117,7 +117,7 @@
 		<LocalizedText key="page.signin.choose" />
 	</h2>
 
-	<div class="mt-4 w-fit mx-auto grid grid-cols-4 gap-2">
+	<div class="mt-4 w-72 mx-auto flex flex-wrap justify-center">
 		{#each Object.entries(STREAMING_SERVICES) as [platform, { name, color }]}
 			{@const href = SPECIAL_SIGNIN[platform]
 				? `${SPECIAL_SIGNIN[platform]}?dontGoBack`
@@ -125,7 +125,7 @@
 
 			<a
 				{href}
-				class="signin-icon w-12 h-12 border border-base-6 rounded inline-flex items-center justify-center transition"
+				class="signin-icon w-12 h-12 m-1 border border-base-6 rounded inline-flex items-center justify-center transition"
 				style="--color: {color};"
 				title={name}
 			>
