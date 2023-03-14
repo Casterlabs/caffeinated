@@ -7,10 +7,10 @@ public enum UserPlatform {
     GLIMESH,
     BRIME,
     YOUTUBE,
-    TIKTOK,
     DLIVE,
     THETA,
     KICK,
+    TIKTOK,
 
     CASTERLABS_SYSTEM;
 

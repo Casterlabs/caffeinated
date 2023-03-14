@@ -34,6 +34,8 @@ public class Donation {
         DLIVE_SUPER_CHAT,
         DLIVE_LEMON,
 
+        TIKTOK_COINS,
+
         ;
     }
 }
