@@ -30,6 +30,9 @@ export default {
 	'sidebar.update_app': 'Update the app',
 	'sidebar.update_app.description': 'Click here to restart and download the latest updates.',
 
+	unsupported_feature: 'Not supported',
+	'unsupported_feature.item': 'Not supported by {item}.',
+
 	/* ---- Signin ---- */
 
 	'page.signin': 'Sign In',

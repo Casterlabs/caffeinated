@@ -38,8 +38,16 @@
 				chatViewer.processEvent(event);
 			}
 		});
+
+		Caffeinated.koi.features.then((featuresByPlatform) => {
+			console.debug('Supported features:', featuresByPlatform);
+			chatViewer.supportedFeatures = featuresByPlatform;
+		});
+
+		// Kickstart.
 		Caffeinated.UI.chatPreferences.then(chatViewer.loadConfig);
 
+		// Unsubscribe when this page exits.
 		const eventListener = Bridge.on('koi:event', chatViewer.processEvent);
 		return () => {
 			Bridge.off('koi:event', eventListener);

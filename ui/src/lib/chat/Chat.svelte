@@ -27,6 +27,7 @@
 
 	export let doAction = (action, data) => {};
 	export let userStates = [];
+	export let supportedFeatures = {};
 
 	/** @type {HTMLElement} */
 	let chatBox;
@@ -521,6 +522,7 @@
 	<div class="flex-0 pt-2 pb-1 h-fit">
 		<InputBox
 			{userStates}
+			{supportedFeatures}
 			on:send={({ detail }) => {
 				doAction('chat', {
 					message: detail.message,

@@ -10,11 +10,13 @@
 	const dispatch = createEventDispatcher();
 
 	export let userStates = {};
+	export let supportedFeatures = {};
 	export let replyTarget = null;
 
-	let platform = 'TWITCH';
+	let platform = 'KICK';
 	let message = '';
 
+	$: isSupportedByPlatform = supportedFeatures[platform]?.includes('CHAT_SEND_MESSAGE');
 	$: isMultiAccountMode = Object.keys(userStates || {}).length > 1;
 
 	function send() {
@@ -84,14 +86,20 @@
 						type="button"
 						role="listbox"
 						class="relative w-full h-[2.375rem] cursor-pointer rounded-l-md border border-base-7 bg-base-1 py-2 pl-3 pr-7 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
-						title="{platform} ({userStates[platform]?.streamer?.displayname})"
+						title={isSupportedByPlatform
+							? `${platform} (${userStates[platform]?.streamer?.displayname})`
+							: t('unsupported_feature.item', { item: platform })}
 						aria-haspopup="listbox"
 						aria-expanded={selectorOpen}
 						on:click={() => (selectorOpen = !selectorOpen)}
 					>
 						<span class="block truncate text-base-12">
 							{#key platform}
-								<icon class="w-4 h-5" data-icon="service/{platform.toLowerCase()}" />
+								<icon
+									class="w-4 h-5"
+									class:opacity-60={!isSupportedByPlatform}
+									data-icon="service/{platform.toLowerCase()}"
+								/>
 							{/key}
 						</span>
 						<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
@@ -113,6 +121,7 @@
 								{#each Object.keys(userStates) as name}
 									{@const isSelected = platform == name}
 									{@const isHighlighted = selectorHighlighted == name}
+									{@const isSupported = supportedFeatures[name].includes('CHAT_SEND_MESSAGE')}
 
 									<li
 										id="{ID}_{name}"
@@ -131,8 +140,15 @@
 									>
 										<button
 											class="w-full py-2 pl-3 pr-9"
-											title="{name} ({userStates[name]?.streamer?.displayname})"
-											on:click={() => select(name)}
+											class:opacity-60={!isSupported}
+											title={isSupported
+												? `${name} (${userStates[name]?.streamer?.displayname})`
+												: t('unsupported_feature')}
+											on:click={() => {
+												if (isSupported) {
+													select(name);
+												}
+											}}
 										>
 											<icon
 												class="translate-y-px w-4 h-4"
@@ -163,6 +179,7 @@
 		<textarea
 			class="px-2.5 py-2 resize-none block w-full text-base-12 border transition hover:border-base-8 border-base-7 bg-base-1 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 			class:rounded-l-md={!isMultiAccountMode}
+			class:opacity-60={!isSupportedByPlatform}
 			placeholder={t('chat.viewer.send_message.placeholder')}
 			rows="1"
 			resize={false}
@@ -174,16 +191,18 @@
 					message = '';
 				}
 			}}
+			title={isSupportedByPlatform ? undefined : t('unsupported_feature.item', { item: platform })}
 		/>
 
 		<slot />
 	</div>
 
-	<div class="flex-0">
+	<div class="flex-0" class:opacity-60={!isSupportedByPlatform}>
 		<button
 			type="button"
 			class="relative w-fit h-[2.375rem] cursor-pointer -ml-px rounded-r-md py-1.5 px-2 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-center text-sm"
 			on:click={send}
+			title={isSupportedByPlatform ? undefined : t('unsupported_feature.item', { item: platform })}
 		>
 			<LocalizedText key="chat.viewer.send_message" />
 		</button>
