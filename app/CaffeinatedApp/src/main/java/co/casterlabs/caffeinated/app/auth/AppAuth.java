@@ -163,18 +163,13 @@ public class AppAuth extends JavascriptObject {
         }
     }
 
-    void checkStatus() {
+    synchronized void checkStatus() {
         boolean isAlive = false;
 
-        if (this.authInstances.isEmpty()) {
-            isAlive = true; // Sure.
-            return;
-        } else {
-            for (AuthInstance inst : this.authInstances.values()) {
-                if (inst.isConnected()) {
-                    isAlive = true;
-                    return;
-                }
+        for (AuthInstance inst : this.authInstances.values()) {
+            if (inst.isConnected()) {
+                isAlive = true;
+                break;
             }
         }
 
@@ -185,7 +180,7 @@ public class AppAuth extends JavascriptObject {
             }
         }
 
-        this.isKoiAlive = true;
+        this.isKoiAlive = isAlive;
     }
 
     public boolean isSignedIn() {

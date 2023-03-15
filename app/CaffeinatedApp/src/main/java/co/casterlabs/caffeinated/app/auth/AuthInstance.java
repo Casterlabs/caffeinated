@@ -9,7 +9,8 @@ import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.async.queue.ExecutionQueue;
+import co.casterlabs.commons.async.queue.SyncExecutionQueue;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiConnection;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
@@ -31,6 +32,8 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class AuthInstance implements KoiLifeCycleHandler, Closeable {
+    private static ExecutionQueue reconnectQueue = new SyncExecutionQueue();
+
     private @JsonField @Getter String tokenId;
     private @JsonField @Getter String token;
 
@@ -180,16 +183,20 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     /* ---------------- */
 
     private void reconnect() {
-        if (!this.disposed && !this.koi.isConnected()) {
+        if (this.disposed) return;
+        if (this.koi.isConnected()) return;
+
+        reconnectQueue.execute(() -> {
             try {
                 this.koi.login(this.token);
             } catch (Exception e) {
                 this.logger.exception(e);
-                AsyncTask.create(() -> {
-                    this.onClose(true);
-                });
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ignored) {}
+                this.onClose(true);
             }
-        }
+        });
     }
 
     @Override
@@ -205,12 +212,11 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @SneakyThrows
     @Override
     public void onClose(boolean remote) {
-        if (!this.disposed) {
-            CaffeinatedApp.getInstance().getAuth().checkStatus();
-            this.logger.info("Reconnecting to Koi.");
-            Thread.sleep(5000);
-            this.reconnect();
-        }
+        if (this.disposed) return;
+
+        CaffeinatedApp.getInstance().getAuth().checkStatus();
+        this.logger.info("Reconnecting to Koi.");
+        this.reconnect();
     }
 
     @Override
