@@ -48,7 +48,7 @@ rm -rf dist/*
 mkdir -p -p dist
 
 KAIMEN_VERSION="7257f2e12c"
-VM_OPTIONS="-vm XX:+UnlockExperimentalVMOptions -vm XX:+UseShenandoahGC -vm XX:ShenandoahUncommitDelay=500 -vm XX:ShenandoahGuaranteedGCInterval=2000 -vm XX:ShenandoahGCHeuristics=compact"
+VM_OPTIONS="-vm Xms1M -vm XX:+UseCompressedOops -vm XX:+UseSerialGC -vm XX:MaxHeapFreeRatio=1 -vm XX:MinHeapFreeRatio=1"
 
 if [[ $@ != *"nodist"* ]]; then
     cp app/Bootstrap/target/classes/commit.txt dist
