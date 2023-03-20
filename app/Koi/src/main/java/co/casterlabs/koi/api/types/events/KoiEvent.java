@@ -20,8 +20,9 @@ public abstract class KoiEvent {
     protected SimpleProfile streamer;
     protected String timestamp;
 
+    @Deprecated
     @JsonField("event_abilities")
-    protected EventAbilities abilities;
+    protected EventAbilities abilities = new EventAbilities();
 
     public abstract KoiEventType getType();
 

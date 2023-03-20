@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonClass(exposeAll = true)
 public class SimpleProfile {
-    private String UPID;
-    private String id;
-    private @JsonField("channel_id") String channelId;
-    private UserPlatform platform;
+    protected String UPID;
+    protected String id;
+    protected @JsonField("channel_id") String channelId;
+    protected UserPlatform platform;
 
     public int tryGetIdAsInt() {
         return Integer.parseInt(this.id);
