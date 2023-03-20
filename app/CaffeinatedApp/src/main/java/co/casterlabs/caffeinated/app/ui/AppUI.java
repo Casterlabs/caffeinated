@@ -182,12 +182,12 @@ public class AppUI extends JavascriptObject {
 
     @SneakyThrows
     public void updateIcon() {
-        String path = String.format("assets/logo/%s.png", this.getPreferences().getIcon());
         URL resource;
 
         if (CaffeinatedApp.getInstance().isDev()) {
-            resource = new File("./src/main/resources/", path).toURI().toURL();
+            resource = new File("./src/main/resources/assets/logo/hardhat.png").toURI().toURL();
         } else {
+            String path = String.format("assets/logo/%s.png", this.getPreferences().getIcon());
             resource = AppUI.class.getClassLoader().getResource(path);
         }
 
