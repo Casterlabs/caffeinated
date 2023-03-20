@@ -38,8 +38,7 @@
 	<Modal on:close={() => (showingTutorialModal = false)}>
 		<LocalizedText slot="title" key="page.docks.info.show_me_how.modal.title" />
 
-		<!-- svelte-ignore a11y-media-has-caption -->
-		<video src="/tutorials/create_obs_browser_dock.webm" autoplay loop muted />
+		<img src="/tutorials/create_obs_browser_dock.gif" alt="" />
 	</Modal>
 {/if}
 

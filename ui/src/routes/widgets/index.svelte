@@ -91,8 +91,7 @@
 	<Modal on:close={() => (showingTutorialModal = false)}>
 		<LocalizedText slot="title" key="page.widgets.info.show_me_how.modal.title" />
 
-		<!-- svelte-ignore a11y-media-has-caption -->
-		<video src="/tutorials/create_obs_source_widget.webm" autoplay loop muted />
+		<img src="/tutorials/create_obs_source_widget.gif" alt="" />
 	</Modal>
 {/if}
 
