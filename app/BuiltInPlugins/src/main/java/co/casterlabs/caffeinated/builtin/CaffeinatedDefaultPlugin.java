@@ -29,11 +29,9 @@ import co.casterlabs.caffeinated.builtin.widgets.labels.TopDonationLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.ViewersCountLabel;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.util.MimeTypes;
-import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.IOUtil;
 import lombok.NonNull;
-import okhttp3.Request;
 
 public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
@@ -103,26 +101,12 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
     @Override
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
-        if (CaffeinatedPlugin.isDevEnvironment()) {
-            if (resource.endsWith(".html")) {
-                resource = resource.replace(".html", ""); // TEMP
-            }
-
-            String url = "http://localhost:3002/$caffeinated-sdk-root$" + resource;
-            Pair<byte[], String> result = WebUtil.sendHttpRequestBytesWithMime(new Request.Builder().url(url));
-
-            String content = new String(result.a(), StandardCharsets.UTF_8);
-            String mimeType = result.b();
-
-            return new Pair<>(content, mimeType);
-        }
-
         // Append `index.html` to the end when required.
         if (!resource.contains(".")) {
             if (resource.endsWith("/")) {
                 resource += "index.html";
             } else {
-                resource += "/index.html";
+                resource += ".html";
             }
         }
 

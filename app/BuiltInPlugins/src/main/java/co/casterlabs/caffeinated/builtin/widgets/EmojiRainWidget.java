@@ -35,7 +35,7 @@ public class EmojiRainWidget extends Widget {
 
     @Override
     public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-        return "/emoji-rain.html";
+        return "/emoji-rain";
     }
 
 }
