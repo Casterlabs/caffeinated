@@ -1,5 +1,6 @@
 <script>
-	import LocalizedText from '../../LocalizedText.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import { t } from '$lib/translate.mjs';
 
 	export let event;
 	export let onContextMenuAction;
@@ -7,5 +8,8 @@
 
 <LocalizedText
 	key="chat.viewer.message.VIEWER_JOIN"
-	opts={{ displayname: event.viewer.displayname }}
+	opts={{
+		displayname: event.viewer.displayname,
+		platform: t(`platform.parenthesis.${event.streamer.platform}`)
+	}}
 />

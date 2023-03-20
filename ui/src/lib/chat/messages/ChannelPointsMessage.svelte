@@ -1,5 +1,6 @@
 <script>
-	import LocalizedText from '../../LocalizedText.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import { t } from '$lib/translate.mjs';
 
 	export let event;
 	export let onContextMenuAction;
@@ -9,7 +10,8 @@
 	key="chat.viewer.message.CHANNELPOINTS"
 	opts={{
 		displayname: event.sender.displayname,
-		reward: event.reward.title
+		reward: event.reward.title,
+		platform: t(`platform.parenthesis.${event.streamer.platform}`)
 	}}
 	slotMapping={['image']}
 >

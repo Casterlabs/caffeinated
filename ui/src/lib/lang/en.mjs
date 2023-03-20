@@ -33,6 +33,28 @@ export default {
 	unsupported_feature: 'Not supported',
 	'unsupported_feature.item': 'Not supported by {item}.',
 
+	/* ---- Platforms ---- */
+	'platform.CAFFEINE': 'Caffeine',
+	'platform.parenthesis.CAFFEINE': '(Caffeine)',
+	'platform.TWITCH': 'Twitch',
+	'platform.parenthesis.TWITCH': '(Twitch)',
+	'platform.TROVO': 'Trovo',
+	'platform.parenthesis.TROVO': '(Trovo)',
+	'platform.GLIMESH': 'Glimesh',
+	'platform.parenthesis.GLIMESH': '(Glimesh)',
+	'platform.BRIME': 'Brime',
+	'platform.parenthesis.BRIME': '(Brime)',
+	'platform.YOUTUBE': 'YouTube',
+	'platform.parenthesis.YOUTUBE': '(YouTube)',
+	'platform.DLIVE': 'DLive',
+	'platform.parenthesis.DLIVE': '(DLive)',
+	'platform.THETA': 'Theta',
+	'platform.parenthesis.THETA': '(Theta)',
+	'platform.KICK': 'Kick',
+	'platform.parenthesis.KICK': '(Kick)',
+	'platform.TIKTOK': 'TikTok',
+	'platform.parenthesis.TIKTOK': '(TikTok)',
+
 	/* ---- Signin ---- */
 
 	'page.signin': 'Sign In',
@@ -176,8 +198,9 @@ export default {
 	'chat.viewer.preferences.show_badges': 'Show badges',
 	'chat.viewer.preferences.show_viewers': 'Show viewer join/leave messages',
 	'chat.viewer.preferences.play_ding_on_message': 'Ding when a new message comes in',
-	'chat.viewer.preferences.read_messages_aloud': 'Read messages aloud',
+	'chat.viewer.preferences.read_messages_out_loud': 'Read messages out loud',
 	'chat.viewer.preferences.tts_voice': 'TTS Voice',
+	'chat.viewer.preferences.show_platform': "Show the user's platform",
 
 	'chat.viewer.tts.skip': 'Skip message',
 	'chat.viewer.tts.event.RICH_MESSAGE.ASKS': '{name} asks "{message}"',
@@ -196,19 +219,24 @@ export default {
 		'Anonymous just gifted {recipient} a {months} month subscription.',
 
 	'chat.viewer.message.CLEARCHAT': 'Chat was cleared',
-	'chat.viewer.message.CHANNELPOINTS': '<b>{displayname}</b> just redeemed %image%<b>{reward}</b>',
-	'chat.viewer.message.RAID': '<b>{displayname}</b> just raided with <b>{viewers}</b> viewers',
-	'chat.viewer.message.FOLLOW': '<b>{displayname}</b> just followed',
+	'chat.viewer.message.CHANNELPOINTS':
+		'<b>{displayname} <span class="user-platform">{platform}</span></b> just redeemed %image%<b>{reward}</b>',
+	'chat.viewer.message.RAID':
+		'<b>{displayname} <span class="user-platform">{platform}</span></b> just raided with <b>{viewers}</b> viewers',
+	'chat.viewer.message.FOLLOW':
+		'<b>{displayname} <span class="user-platform">{platform}</span></b> just followed',
 	'chat.viewer.message.SUBSCRIPTION.SUB':
-		'<b>{displayname}</b> just subscribed for <b>{months}</b> months',
+		'<b>{displayname} <span class="user-platform">{platform}</span></b> just subscribed for <b>{months}</b> months',
 	'chat.viewer.message.SUBSCRIPTION.RESUB':
-		'<b>{displayname}</b> just resubscribed for <b>{months}</b> months',
+		'<b>{displayname} <span class="user-platform">{platform}</span></b> just resubscribed for <b>{months}</b> months',
 	'chat.viewer.message.SUBSCRIPTION.SUBGIFT':
-		'<b>{gifter}</b> just gifted <b>{recipient}</b> a <b>{months}</b> month subscription',
+		'<b>{gifter} <span class="user-platform">{platform}</span></b> just gifted <b>{recipient}</b> a <b>{months}</b> month subscription',
 	'chat.viewer.message.SUBSCRIPTION.ANONSUBGIFT':
-		'Anonymous just gifted <b>{recipient}</b> a <b>{months}</b> month subscription',
-	'chat.viewer.message.VIEWER_JOIN': '<b>{displayname}</b> joined',
-	'chat.viewer.message.VIEWER_LEAVE': '<b>{displayname}</b> left',
+		'Anonymous just gifted <b>{recipient} <span class="user-platform">{platform}</span></b> a <b>{months}</b> month subscription',
+	'chat.viewer.message.VIEWER_JOIN':
+		'<b>{displayname} <span class="user-platform">{platform}</span></b> joined',
+	'chat.viewer.message.VIEWER_LEAVE':
+		'<b>{displayname} <span class="user-platform">{platform}</span></b> left',
 
 	'chat.viewer.action.ban': 'Ban',
 	'chat.viewer.action.timeout': 'Timeout',

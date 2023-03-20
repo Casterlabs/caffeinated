@@ -1,5 +1,6 @@
 <script>
-	import LocalizedText from '../../LocalizedText.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import { t } from '$lib/translate.mjs';
 
 	export let event;
 	export let onContextMenuAction;
@@ -11,6 +12,7 @@
 		months: event.months,
 		displayname: event.subscriber?.displayname,
 		gifter: event.subscriber?.displayname,
-		recipient: event.gift_recipient?.displayname
+		recipient: event.gift_recipient?.displayname,
+		platform: t(`platform.parenthesis.${event.streamer.platform}`)
 	}}
 />

@@ -43,6 +43,7 @@
 	let playDingOnMessage = false;
 	let readMessagesAloud = false;
 	let ttsVoice = 'Brian';
+	let showPlatform = false;
 
 	let isAtBottom = true;
 
@@ -202,7 +203,8 @@
 			showViewers,
 			playDingOnMessage,
 			readMessagesAloud,
-			ttsVoice
+			ttsVoice,
+			showPlatform
 		});
 	}
 
@@ -215,6 +217,7 @@
 		playDingOnMessage = config.playDingOnMessage;
 		readMessagesAloud = config.readMessagesAloud;
 		ttsVoice = config.ttsVoice;
+		showPlatform = config.showPlatform;
 	}
 
 	export function processEvent(event) {
@@ -435,7 +438,7 @@
 			</li>
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.read_messages_aloud"
+					title="chat.viewer.preferences.read_messages_out_loud"
 					description=""
 					bind:checked={readMessagesAloud}
 					on:value={savePreferences}
@@ -484,6 +487,14 @@
 					on:value={savePreferences}
 				/>
 			</li>
+			<li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.show_platform"
+					description=""
+					bind:checked={showPlatform}
+					on:value={savePreferences}
+				/>
+			</li>
 		</ul>
 	</Modal>
 {/if}
@@ -493,6 +504,7 @@
 	class:show-timestamps={showChatTimestamps}
 	class:show-badges={showBadges}
 	class:show-viewers={showViewers}
+	class:show-platform={showPlatform}
 >
 	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
 		<ul bind:this={chatBox} />
@@ -562,6 +574,15 @@
 		width: calc(100% - var(--timestamp-width, 0));
 		display: inline-block;
 		white-space: normal;
+	}
+
+	/* User Platform */
+	:global(.user-platform) {
+		display: none;
+	}
+
+	.show-platform :global(.user-platform) {
+		display: unset !important;
 	}
 
 	/* Timestamps */

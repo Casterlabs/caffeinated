@@ -1,5 +1,5 @@
 <script>
-	import LocalizedText from '../../LocalizedText.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	export let event;
 	export let onContextMenuAction;
