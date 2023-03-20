@@ -1,6 +1,7 @@
 package co.casterlabs.caffeinated.pluginsdk.widgets;
 
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
 import lombok.AccessLevel;
@@ -32,6 +33,11 @@ public class WidgetDetails {
     @JsonField("requiredFeatures")
     private KoiIntegrationFeatures[] _requiredFeatures;
 
+    @With(AccessLevel.PRIVATE)
+    @Getter(AccessLevel.PRIVATE)
+    @JsonField("testEvents")
+    private KoiEventType[] _testEvents;
+
     public WidgetDetails() {
         this.namespace = null;
         this.icon = "grid";
@@ -41,6 +47,7 @@ public class WidgetDetails {
         this.showDemo = false;
         this.demoAspectRatio = 0;
         this._requiredFeatures = new KoiIntegrationFeatures[0];
+        this._testEvents = new KoiEventType[0];
     }
 
     public WidgetDetails withShowDemo(boolean showDemo, double aspectRatio) {
@@ -52,6 +59,10 @@ public class WidgetDetails {
         return this.with_requiredFeatures(features);
     }
 
+    public WidgetDetails withTestEvents(KoiEventType... types) {
+        return this.with_testEvents(types);
+    }
+
     public void validate() {
         assert this.namespace != null : "Namespace cannot be null";
         assert this.icon != null : "Icon cannot be null";
@@ -61,6 +72,10 @@ public class WidgetDetails {
 
     public KoiIntegrationFeatures[] getRequiredFeatures() {
         return this._requiredFeatures.clone();
+    }
+
+    public KoiEventType[] getTestEvents() {
+        return this._testEvents.clone();
     }
 
     public static enum WidgetDetailsCategory {

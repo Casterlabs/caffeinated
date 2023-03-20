@@ -5,6 +5,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCa
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.RaidEvent;
 
 public class RaidAlert extends GenericAlert implements KoiEventListener {
@@ -14,7 +15,8 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Raid Alert")
         .withShowDemo(true, DEMO_ASPECT_RATIO)
-        .withRequiredFeatures(KoiIntegrationFeatures.RAID_ALERT);
+        .withRequiredFeatures(KoiIntegrationFeatures.RAID_ALERT)
+        .withTestEvents(KoiEventType.RAID);
 
     @Override
     public void onInit() {

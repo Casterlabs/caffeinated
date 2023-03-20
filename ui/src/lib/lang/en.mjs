@@ -66,6 +66,8 @@ export default {
 	'page.widgets.create.category.OTHER': 'Other',
 
 	'sr.page.widget.editor.edit_name': 'Edit name',
+	'page.widget.editor.test_events.tab': 'Test',
+	'page.widget.editor.test_events.send_test': 'Send Test',
 
 	/* ---- Docks ---- */
 

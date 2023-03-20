@@ -5,6 +5,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCa
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 
@@ -15,7 +16,8 @@ public class SubscriptionAlert extends GenericAlert implements KoiEventListener 
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Subscription Alert")
         .withShowDemo(true, DEMO_ASPECT_RATIO)
-        .withRequiredFeatures(KoiIntegrationFeatures.SUBSCRIPTION_ALERT);
+        .withRequiredFeatures(KoiIntegrationFeatures.SUBSCRIPTION_ALERT)
+        .withTestEvents(KoiEventType.SUBSCRIPTION);
 
     @Override
     public void onInit() {

@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +27,10 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
+import co.casterlabs.koi.api.TestEvents;
+import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
@@ -240,6 +245,19 @@ public class PluginIntegration extends JavascriptObject {
         handle.onSettingsUpdate(settings);
 
         this.save();
+    }
+
+    @SuppressWarnings("deprecation")
+    @JavascriptFunction
+    public void fireTestEvent(@NonNull String widgetId, @NonNull KoiEventType type) {
+        WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+
+        // Pick a random account that we're signed-in to.
+        UserUpdateEvent[] userStates = CaffeinatedApp.getInstance().getKoi().getUserStates().values().toArray(new UserUpdateEvent[0]);
+        UserUpdateEvent randomAccount = userStates[ThreadLocalRandom.current().nextInt(userStates.length)];
+
+        KoiEvent event = TestEvents.createTestEvent(randomAccount.getStreamer().clone(), type);
+        handle.widget.fireKoiEventListeners(event);
     }
 
     @JavascriptFunction

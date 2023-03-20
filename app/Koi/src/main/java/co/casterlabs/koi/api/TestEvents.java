@@ -84,7 +84,7 @@ public class TestEvents {
 
                 result = KoiEventType.get(
                     Rson.DEFAULT.fromJson(
-                        "{\"upvotes\":0,\"visible\":true,\"is_highlighted\":false,\"mentions\":[],\"links\":[],\"sender\":{SENDER},\"message\":\"Have some candy!\",\"id\":\"-1\",\"meta_id\":\"-1\",\"emotes\":{},\"external_emotes\":{},\"donations\":[{\"type\":\"CASTERLABS_TEST\",\"name\":\"Test Donation\",\"currency\":\"{CURRENCY}\",\"amount\":0,\"image\":\"{IMAGE}\",\"animated_image\":\"{IMAGE}\"}]}"
+                        "{\"event_type\":\"DONATION\",\"upvotes\":0,\"visible\":true,\"is_highlighted\":false,\"mentions\":[],\"links\":[],\"sender\":{SENDER},\"message\":\"Have some candy!\",\"id\":\"-1\",\"meta_id\":\"-1\",\"emotes\":{},\"external_emotes\":{},\"donations\":[{\"type\":\"CASTERLABS_TEST\",\"name\":\"Test Donation\",\"currency\":\"{CURRENCY}\",\"amount\":0,\"image\":\"{IMAGE}\",\"animated_image\":\"{IMAGE}\"}]}"
                             .replace("{SENDER}", Rson.DEFAULT.toJson(testUser).toString())
                             .replace("{CURRENCY}", currency)
                             .replace("{IMAGE}", image),

@@ -11,6 +11,7 @@ import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.DonationEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.rich.Donation;
 
 public class DonationAlert extends GenericAlert implements KoiEventListener {
@@ -20,7 +21,8 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Donation Alert")
         .withShowDemo(true, DEMO_ASPECT_RATIO)
-        .withRequiredFeatures(KoiIntegrationFeatures.DONATION_ALERT);
+        .withRequiredFeatures(KoiIntegrationFeatures.DONATION_ALERT)
+        .withTestEvents(KoiEventType.DONATION);
 
     @Override
     public void onInit() {

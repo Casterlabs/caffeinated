@@ -19,6 +19,7 @@ import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.DonationEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.rich.Donation;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.Rson;
@@ -35,7 +36,8 @@ public class RecentDonationLabel extends GenericLabel {
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Recent Donation Label")
         .withShowDemo(true, DEMO_ASPECT_RATIO)
-        .withRequiredFeatures(KoiIntegrationFeatures.DONATION_ALERT);
+        .withRequiredFeatures(KoiIntegrationFeatures.DONATION_ALERT)
+        .withTestEvents(KoiEventType.DONATION);
 
     private User recentDonator;
     private double recentAmount;

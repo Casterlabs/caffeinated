@@ -14,6 +14,7 @@ import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.FollowEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -27,7 +28,8 @@ public class RecentFollowerLabel extends GenericLabel {
         .withCategory(WidgetDetailsCategory.LABELS)
         .withFriendlyName("Recent Follower Label")
         .withShowDemo(true, DEMO_ASPECT_RATIO)
-        .withRequiredFeatures(KoiIntegrationFeatures.FOLLOWER_ALERT);
+        .withRequiredFeatures(KoiIntegrationFeatures.FOLLOWER_ALERT)
+        .withTestEvents(KoiEventType.FOLLOW);
 
     private User recentFollower;
     private String currHtml = "";

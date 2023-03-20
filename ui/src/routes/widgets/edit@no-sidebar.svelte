@@ -1,6 +1,7 @@
 <script>
 	import WidgetPreview from '$lib/WidgetPreview.svelte';
 	import CircularButton from '$lib/ui/CircularButton.svelte';
+	import Button from '$lib/ui/Button.svelte';
 	import FormInput from '$lib/ui/FormInput.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import AspectVar from '$lib/aspect-ratio/AspectVar.svelte';
@@ -20,6 +21,8 @@
 	let nameEditorTextContent;
 
 	let currentSection;
+
+	$: hasTestEvents = widget?.details.testEvents.length > 0;
 
 	function editName() {
 		Caffeinated.plugins.renameWidget(widget.id, nameEditorTextContent);
@@ -200,11 +203,58 @@
 								<LocalizedText key={section.name} />
 							</button>
 						{/each}
+
+						{#if hasTestEvents}
+							{@const isSelected = currentSection == '__INTERNAL_TEST'}
+							<button
+								class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
+								aria-current={isSelected ? 'page' : undefined}
+								class:border-b-2={isSelected}
+								class:text-primary-11={isSelected}
+								on:click={() => {
+									currentSection = null;
+
+									// Svelte bug :(
+									tick().then(() => (currentSection = '__INTERNAL_TEST'));
+								}}
+							>
+								<LocalizedText key="page.widget.editor.test_events.tab" />
+							</button>
+						{/if}
 					</nav>
 				{/if}
 			</div>
 
 			<ul class="flex-1 block w-full max-w-sm mx-auto mt-2 divide-y divide-current text-base-6">
+				{#if currentSection == '__INTERNAL_TEST'}
+					{#each widget.details.testEvents as eventType}
+						<li class="py-4">
+							<span class="text-base-12">
+								<div class="flex items-center justify-between w-full">
+									<div class="flex flex-col">
+										<p class="text-sm font-medium text-base-12">
+											<!-- Try to convert the enum to a friendlier name. -->
+											{(eventType.substring(0, 1) + eventType.substring(1).toLowerCase()).replace(
+												'_',
+												' '
+											)}
+										</p>
+									</div>
+
+									<div class="text-right w-40">
+										<Button
+											on:click={() =>
+												window.Caffeinated.plugins.fireTestEvent(widget.id, eventType)}
+										>
+											<LocalizedText key="page.widget.editor.test_events.send_test" />
+										</Button>
+									</div>
+								</div>
+							</span>
+						</li>
+					{/each}
+				{/if}
+
 				{#key settingsLayout}
 					{#each widget.settingsLayout?.sections || [] as section}
 						{#if currentSection == section.id}

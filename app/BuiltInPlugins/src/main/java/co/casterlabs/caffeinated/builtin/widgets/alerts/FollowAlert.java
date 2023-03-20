@@ -6,6 +6,7 @@ import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.FollowEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 
 public class FollowAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
@@ -14,7 +15,8 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
         .withCategory(WidgetDetailsCategory.ALERTS)
         .withFriendlyName("Follow Alert")
         .withShowDemo(true, DEMO_ASPECT_RATIO)
-        .withRequiredFeatures(KoiIntegrationFeatures.FOLLOWER_ALERT);
+        .withRequiredFeatures(KoiIntegrationFeatures.FOLLOWER_ALERT)
+        .withTestEvents(KoiEventType.FOLLOW);
 
     @Override
     public void onInit() {
