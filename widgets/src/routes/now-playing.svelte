@@ -14,6 +14,7 @@
 	let textColor;
 	let backgroundStyle;
 	let imageStyle;
+	let margin;
 
 	let textOnly_font;
 	let textOnly_fontSize;
@@ -37,6 +38,7 @@
 		textColor = Widget.getSetting('style.text_color');
 		backgroundStyle = Widget.getSetting('style.background_style');
 		imageStyle = Widget.getSetting('style.image_style');
+		margin = Widget.getSetting('style.margin');
 
 		textOnly_font = Widget.getSetting('style.font');
 		textOnly_fontSize = Widget.getSetting('style.font_size');
@@ -69,11 +71,12 @@
 <!-- svelte-ignore a11y-missing-attribute -->
 {#if title}
 	{#if cardStyle == 'Horizontal Card'}
-		<div class="p-6 drop-shadow-lg">
+		<div class="drop-shadow-lg">
 			<AspectVar aspectRatio={298 / 930}>
 				<div
 					class="w-full h-full overflow-hidden rounded-lg relative shadow-lg"
 					style:background-color={cardColor}
+					style:margin="{margin}px"
 				>
 					{#if backgroundStyle == 'Blur'}
 						<img
@@ -106,6 +109,10 @@
 			{title} &bull; {artist}
 		</p>
 	{:else if cardStyle == 'Image Only'}
-		<img class="absolute inset-0 w-full h-full object-contain" src={albumArtUrl} />
+		<img
+			class="absolute inset-0 w-full h-full object-contain"
+			src={albumArtUrl}
+			style:padding="{margin}px;"
+		/>
 	{/if}
 {/if}

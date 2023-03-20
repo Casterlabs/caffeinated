@@ -83,6 +83,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
         {
             WidgetSettingsSection barStyle = new WidgetSettingsSection("style", "Style")
+                .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE))
                 .addItem(WidgetSettingsItem.asDropdown("style", "Style", "Progress Bar (With Text)", "Progress Bar", "Text Only"))
                 .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
                 .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128))

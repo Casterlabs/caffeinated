@@ -34,6 +34,7 @@ public class NowPlayingWidget extends Widget {
         switch (this.settings().getString("style.card_style", "Horizontal Card")) {
             case "Horizontal Card": {
                 section
+                    .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE))
                     .addItem(WidgetSettingsItem.asDropdown("background_style", "Background Style", "Blur", "Blur", "Clear", "Solid"))
                     .addItem(WidgetSettingsItem.asDropdown("image_style", "Image Location", "Left", "Left", "Right", "None"));
                 break;
@@ -49,6 +50,8 @@ public class NowPlayingWidget extends Widget {
             }
 
             case "Image Only": {
+                section
+                    .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE));
                 break;
             }
 

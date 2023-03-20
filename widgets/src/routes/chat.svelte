@@ -191,6 +191,7 @@
 	style:--xx-y-offset="{chatBoxOffsetYpx}px"
 	style:color={$settings['text_style.text_color']}
 	style:font-size="{$settings['text_style.font_size']}px"
+	style:padding="{$settings['message_style.margin']}px"
 	class="absolute inset-x-0 flex flex-col px-1"
 	class:top-0={$settings['message_style.message_direction'] == 'Top-down'}
 	class:flex-col-reverse={$settings['message_style.message_direction'] == 'Top-down'}

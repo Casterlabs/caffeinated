@@ -15,6 +15,7 @@
 	let textColor;
 	let fontSize;
 	let textAlign;
+	let margin;
 
 	let currentCount = -1;
 
@@ -70,6 +71,7 @@
 			textColor = Widget.getSetting('style.text_color');
 			fontSize = Widget.getSetting('style.font_size');
 			textAlign = Widget.getSetting('style.text_align') || 'left';
+			margin = Widget.getSetting('style.margin');
 
 			render();
 		});
@@ -83,7 +85,7 @@
 	});
 </script>
 
-<div style:color={textColor} style:font-size="{fontSize}px">
+<div style:color={textColor} style:font-size="{fontSize}px" style:padding="{margin}px">
 	{#if currentCount != -1}
 		{#if style == 'Text Only'}
 			<p style:text-align={textAlign}>
