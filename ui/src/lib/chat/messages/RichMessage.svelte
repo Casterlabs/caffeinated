@@ -95,7 +95,7 @@
 			{/each}
 		</span>
 
-		<b style:color={event.sender.color || 'red'}
+		<b
 			>{event.sender.displayname}<span class="user-platform">
 				<LocalizedText key="platform.parenthesis.{event.streamer.platform}" /></span
 			></b
