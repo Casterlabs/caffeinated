@@ -296,6 +296,11 @@
 										}
 
 										const textarea = e.target.parentElement.querySelector('textarea');
+
+										if (values[platform].tags.includes(textarea.value)) {
+											return; // Duplicate.
+										}
+
 										values[platform].tags.push(textarea.value);
 										textarea.value = '';
 										values = values; // Rerender
