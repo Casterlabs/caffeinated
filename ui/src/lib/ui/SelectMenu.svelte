@@ -9,12 +9,9 @@
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
 
-	export let title = 'Assigned to';
-	export let value = 'tim-cook';
-	export let options = {
-		'tim-cook': 'Tim Cook',
-		'bill-gates': 'Bill Gates'
-	};
+	export let title = '';
+	export let value = '';
+	export let options = {};
 	export let disabled = false;
 
 	let open = false;

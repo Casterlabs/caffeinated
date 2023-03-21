@@ -10,7 +10,7 @@
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
 
-	export let value = 'tim-cook';
+	export let value = '';
 	export let disabled = false;
 	export let width = 'fit';
 	export let localize = true;

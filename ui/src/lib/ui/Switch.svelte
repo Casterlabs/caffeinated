@@ -6,8 +6,8 @@
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
 
-	export let title = 'My switch button';
-	export let description = 'Click to switch!';
+	export let title = '';
+	export let description = '';
 	export let checked = false;
 
 	function toggle() {
