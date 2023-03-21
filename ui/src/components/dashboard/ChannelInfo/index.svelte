@@ -207,7 +207,7 @@
 							</p>
 							<TextArea
 								rows="1"
-								resize={false}
+								resize={true}
 								placeholder="Live on {platform}!"
 								bind:value={values[platform].title}
 							/>
