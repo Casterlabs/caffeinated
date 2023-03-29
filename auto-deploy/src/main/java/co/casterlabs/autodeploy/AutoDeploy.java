@@ -40,7 +40,7 @@ public class AutoDeploy extends SoraPlugin {
             .createDefaultFactory()
             .create(config.getB2Id(), config.getB2Key(), "AutoDeploy");
 
-        sora.addHttpProvider(this, new RouteCircleCI(config.getRouteToken(), this));
+        sora.addProvider(this, new RouteCircleCI(config.getRouteToken(), this));
     }
 
     @SneakyThrows
@@ -128,7 +128,7 @@ public class AutoDeploy extends SoraPlugin {
 
     @Override
     public @Nullable String getAuthor() {
-        return "Casterlabs-Hidden";
+        return "Casterlabs";
     }
 
     @Override
