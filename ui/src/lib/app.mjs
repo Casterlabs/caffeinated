@@ -62,3 +62,9 @@ async function loadTTSVoices() {
 }
 
 if (typeof fetch != 'undefined') loadTTSVoices();
+
+// Misc
+export let openLink = async (url) => url;
+export function setOpenLink(fn) {
+	openLink = fn;
+}
