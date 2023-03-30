@@ -30,7 +30,7 @@
             const sandboxFrame = document.getElementById("iframe");
 
             function tryInject() {
-                const { conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App } = initParameters;
+                const { conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, openLink } = initParameters;
                 const { contentWindow, contentDocument } = sandboxFrame;
 
                 if (!contentWindow.Koi) {
@@ -52,6 +52,11 @@
                     });
                     Object.defineProperty(contentWindow, "escapeHtml", {
                         value: escapeHtml,
+                        writable: false,
+                        configurable: false
+                    });
+                    Object.defineProperty(contentWindow, "openLink", {
+                        value: openLink,
                         writable: false,
                         configurable: false
                     });

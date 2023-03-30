@@ -152,6 +152,13 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                     }
                 }
 
+                case "OPEN_LINK": {
+                    JsonObject data = message.getObject("data");
+                    String link = data.getString("link");
+                    CaffeinatedApp.getInstance().openLink(link);
+                    return;
+                }
+
                 case "EMISSION": {
                     JsonObject data = message.getObject("data");
                     String emissionType = data.getString("type");

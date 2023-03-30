@@ -43,6 +43,10 @@ export function init({ initHandler, disconnectHandler }) {
 
     const conn = new Conn(`ws://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/realtime?authorization=${authorization}&mode=${widgetMode}`);
 
+    const openLink = (link) => {
+        conn.send("OPEN_LINK", {link});
+    };
+
     // The `Widget` global.
     const widgetInstance = {
         ...new EventHandler(),
@@ -188,7 +192,7 @@ export function init({ initHandler, disconnectHandler }) {
     // Listen for events on the conn, fire them off, yeah you get the idea.
     conn.on("init", ({ basePath }) => {
         // initHandler returns false if it should be handled by the implementer manually.
-        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, basePath })) {
+        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, basePath, openLink })) {
             App.init();
             widgetInstance.broadcast("init");
             koiInstance.broadcast("koi_statics", koi_statics);
@@ -257,6 +261,11 @@ export function init({ initHandler, disconnectHandler }) {
     });
     Object.defineProperty(window, "escapeHtml", {
         value: escapeHtml,
+        writable: false,
+        configurable: true
+    });
+    Object.defineProperty(window, "openLink", {
+        value: openLink,
         writable: false,
         configurable: true
     });
