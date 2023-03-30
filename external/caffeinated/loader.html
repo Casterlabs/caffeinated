@@ -41,7 +41,7 @@
 
             conn.on("init", () => {
                 const sandboxFrame = document.createElement("iframe");
-                sandboxFrame.src = `http://${address}:${port}/api/plugin/widget/loader/widget.html?${location.search}`;
+                sandboxFrame.src = `http://${address}:${port}/api/plugin/widget/loader/widget.html${location.search}`;
 
                 document.body.appendChild(sandboxFrame);
             });
