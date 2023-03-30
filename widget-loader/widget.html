@@ -99,7 +99,20 @@
                 const { address, port, pluginId, widgetId, authorization, widgetMode, basePath } = params;
 
                 if (location.origin == "http://localhost:3002") {
-                    sandboxFrame.src = `http://localhost:3002/$caffeinated-sdk-root$${basePath}`;
+                    // Map the url elsewhere if we're in dev mode.
+                    switch (pluginId) {
+                        case 'co.casterlabs.defaultwidgets':
+                            sandboxFrame.src = `http://localhost:3002/$caffeinated-sdk-root$${basePath}`;
+                            break;
+
+                        case 'co.casterlabs.uidocks':
+                            sandboxFrame.src = `http://localhost:3000${basePath}`;
+                            break;
+
+                        default:
+                            sandboxFrame.src = `http://${address}:${port}/api/plugin/${pluginId}/${authorization}/html${basePath}`;
+                            break;
+                    }
                 } else {
                     sandboxFrame.src = `http://${address}:${port}/api/plugin/${pluginId}/${authorization}/html${basePath}`;
                 }
