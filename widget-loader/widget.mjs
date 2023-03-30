@@ -109,6 +109,10 @@ export function init({ initHandler, disconnectHandler }) {
             return koi_statics.roomStates;
         },
 
+        get features() {
+            return koi_statics.features;
+        },
+
         upvoteChat(platform, messageId) {
             conn.send("KOI", {
                 type: "UPVOTE",
