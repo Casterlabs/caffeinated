@@ -8,7 +8,7 @@
 	export let event;
 	export let offsetX = 0;
 
-	let visible = false;
+	let visible = true;
 
 	let disappearTask = -1;
 	function checkDisappear() {
@@ -19,9 +19,9 @@
 			return;
 		}
 
-		const secondsSinceAdded = Date.now() - new Date(event.timestamp);
+		const timeSinceAdded = Date.now() - new Date(event.timestamp);
 		const disappearAfter = $settings['message_style.disappear_after'] * 1000;
-		const disappearIn = disappearAfter - secondsSinceAdded;
+		const disappearIn = disappearAfter - timeSinceAdded;
 
 		if (disappearIn > 0) {
 			visible = true;
@@ -46,6 +46,6 @@
 
 <style>
 	div {
-		transform: translateX(var(--x-offset));
+		transform: translate(var(--x-offset), var(--item-offset));
 	}
 </style>

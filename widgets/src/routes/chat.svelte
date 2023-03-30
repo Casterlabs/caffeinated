@@ -27,7 +27,7 @@
 	let chatElements = {};
 
 	const settings = writable({});
-	let chatBoxOffsetYpx = 0;
+	let itemYOffset = 0;
 
 	function onEvent(event) {
 		switch (event.event_type) {
@@ -102,7 +102,9 @@
 
 				chatBox.appendChild(li);
 
-				if ($settings['message_style.message_animation'] == 'None') return; // No need to animate :)
+				// No need to animate :)
+				if (event.x_is_catchup) return;
+				if ($settings['message_style.message_animation'] == 'None') return;
 
 				const FRAME_RATE = 100; // fps, keep it even.
 				const FRAME_INTERVAL = 1000 / FRAME_RATE;
@@ -123,12 +125,10 @@
 					}
 				}
 
-				const chatBoxOffsetAmount = li.offsetHeight;
-
 				if (isTopDown) {
-					chatBoxOffsetYpx -= chatBoxOffsetAmount;
+					itemYOffset -= 100;
 				} else {
-					chatBoxOffsetYpx += chatBoxOffsetAmount;
+					itemYOffset += 100;
 				}
 
 				let currentFrame = 0;
@@ -140,9 +140,9 @@
 					}
 
 					if (isTopDown) {
-						chatBoxOffsetYpx += chatBoxOffsetAmount / (TOTAL_FRAME_COUNT + 1); // 1 "step"
+						itemYOffset += 4;
 					} else {
-						chatBoxOffsetYpx -= chatBoxOffsetAmount / (TOTAL_FRAME_COUNT + 1); // 1 "step"
+						itemYOffset -= 4;
 					}
 
 					switch (direction) {
@@ -169,7 +169,12 @@
 		Widget.on('init', () => {
 			Widget.broadcast('update');
 			Koi.on('*', (_, event) => onEvent(event));
-			Koi.eventHistory.forEach(onEvent);
+			Koi.eventHistory.forEach((event) => {
+				onEvent({
+					...event,
+					x_is_catchup: true
+				});
+			});
 		});
 
 		Widget.on('clear', () => {
@@ -188,7 +193,7 @@
 	bind:this={chatBox}
 	id="chatbox"
 	style:--animation-time={ANIMATION_TIME}
-	style:--xx-y-offset="{chatBoxOffsetYpx}px"
+	style:--item-offset="{itemYOffset}%"
 	style:color={$settings['text_style.text_color']}
 	style:font-size="{$settings['text_style.font_size']}px"
 	style:padding="{$settings['message_style.margin']}px"
@@ -200,9 +205,3 @@
 >
 	<!---->
 </ul>
-
-<style>
-	#chatbox {
-		transform: translateY(var(--y-offset));
-	}
-</style>
