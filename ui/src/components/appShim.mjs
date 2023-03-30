@@ -50,7 +50,16 @@ function setupApp() {
 }
 
 function setupDock() {
-	// TODO
+	const widgetApp = window.App;
+
+	widgetApp.on('theme', ([baseColor, primaryColor]) => {
+		App.baseColor.set(baseColor);
+		App.primaryColor.set(primaryColor);
+	});
+
+	widgetApp.on('emojiProvider', App.emojiProvider.set);
+	widgetApp.on('appearance', App.appearance.set);
+	widgetApp.on('language', App.language.set);
 }
 
 export default function () {
