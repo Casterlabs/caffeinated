@@ -17,6 +17,7 @@ import co.casterlabs.rakurai.io.http.websocket.Websocket;
 import co.casterlabs.rakurai.io.http.websocket.WebsocketCloseCode;
 import co.casterlabs.rakurai.io.http.websocket.WebsocketListener;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rakurai.json.serialization.JsonParseException;
@@ -78,8 +79,12 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
         );
 
         this.sendMessage(
-            "APPEARANCE",
-            (JsonObject) Rson.DEFAULT.toJson(CaffeinatedApp.getInstance().getUI().getPreferences())
+            "APP",
+            new JsonObject()
+                .put("emojiProvider", CaffeinatedApp.getInstance().getUI().getPreferences().getEmojiProvider())
+                .put("language", CaffeinatedApp.getInstance().getUI().getPreferences().getLanguage())
+                .put("appearance", CaffeinatedApp.getInstance().getThemeManager().getEffectiveAppearance().name())
+                .put("theme", JsonArray.of(CaffeinatedApp.getInstance().getThemeManager().getBaseColor(), CaffeinatedApp.getInstance().getThemeManager().getPrimaryColor()))
         );
 
         this.sendMessage(

@@ -103,9 +103,9 @@ export default class Conn {
                             return;
                         }
 
-                    case "APPEARANCE":
+                    case "APP":
                         {
-                            this.broadcast("appearance", payload.data);
+                            this.broadcast("app", payload.data);
                             return;
                         }
                 }

@@ -220,7 +220,7 @@ export function init({ initHandler, disconnectHandler }) {
         musicInstance.broadcast("music", music_data);
     });
 
-    conn.on("appearance", ({ language, emojiProvider, theme, appearance }) => {
+    conn.on("app", ({ language, emojiProvider, theme, appearance }) => {
         App.mutate("language", language);
         App.mutate("emojiProvider", emojiProvider);
         App.mutate("theme", theme);

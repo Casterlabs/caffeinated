@@ -6,7 +6,7 @@ let store = {
     language: "en",
     emojiProvider: "system",
     theme: ["gray", "gray"],
-    appearance: "FOLLOW_SYSTEM"
+    appearance: "DARK"
 };
 
 let appStyleElement;
@@ -41,7 +41,7 @@ function init(doc = document) {
 export default {
     init,
 
-    store() {
+    get store() {
         return store;
     },
 
@@ -62,13 +62,13 @@ export default {
     },
 
     mutate(key, value) {
-        if (store[key] !== value) {
-            store[key] = value;
-            eventHandler.broadcast(key, value);
+        if (store[key] === value) return;
 
-            if (["emojiProvider"].includes(key) && appStyleElement) {
-                recomputeStyle();
-            }
+        store[key] = value;
+        eventHandler.broadcast(key, value);
+
+        if (["emojiProvider"].includes(key) && appStyleElement) {
+            recomputeStyle();
         }
     }
 };
