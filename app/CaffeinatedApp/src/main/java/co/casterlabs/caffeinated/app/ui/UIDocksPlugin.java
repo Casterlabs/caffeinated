@@ -92,7 +92,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
 
         @Override
         public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-            return "/popouts/chat";
+            return "/popout/chat";
         }
 
     }
