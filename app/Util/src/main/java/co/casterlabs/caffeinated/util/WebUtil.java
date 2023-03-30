@@ -3,6 +3,7 @@ package co.casterlabs.caffeinated.util;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import co.casterlabs.commons.functional.tuples.Pair;
@@ -13,18 +14,24 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class WebUtil {
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient.Builder()
+        .addNetworkInterceptor(
+            (chain) -> chain.proceed(
+                chain // OkHttp bug.
+                    .request()
+                    .newBuilder()
+                    .removeHeader("Accept-Encoding")
+                    .build()
+            )
+        )
+        .build();
 
     public static String sendHttpRequest(@NonNull Request.Builder builder) throws IOException {
-        try (Response response = client.newCall(builder.build()).execute()) {
-            return response.body().string();
-        }
+        return new String(sendHttpRequestBytes(builder), StandardCharsets.UTF_8);
     }
 
     public static byte[] sendHttpRequestBytes(@NonNull Request.Builder builder) throws IOException {
-        try (Response response = client.newCall(builder.build()).execute()) {
-            return response.body().bytes();
-        }
+        return sendHttpRequestBytesWithMime(builder).a();
     }
 
     public static Pair<byte[], String> sendHttpRequestBytesWithMime(@NonNull Request.Builder builder) throws IOException {
