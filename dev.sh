@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copy the widget loader to the widgets dev server.
+rm -rf widgets/static/loader
 mkdir widgets/static/loader
 cp -r widget-loader/* widgets/static/loader
 
 # Copy the widget loader to the UI dev server.
+rm -rf ui/static/loader
 mkdir ui/static/loader
 cp -r widget-loader/* ui/static/loader
 
