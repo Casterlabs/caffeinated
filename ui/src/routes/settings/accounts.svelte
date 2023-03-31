@@ -58,7 +58,7 @@
 
 								{#if userData}
 									<a
-										href={userData.link}
+										href="/$caffeinated-sdk-root${userData.link}"
 										target="_blank"
 										class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-base-4 text-base-11 inline-flex items-center rounded-full font-base underline"
 									>
@@ -119,7 +119,7 @@
 									TEST / {userData.platform}
 
 									<a
-										href={userData.link}
+										href="/$caffeinated-sdk-root${userData.link}"
 										target="_blank"
 										class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-base-4 text-base-11 inline-flex items-center rounded-full font-base underline"
 									>
@@ -173,7 +173,7 @@
 
 								{#if provider.accountName}
 									<a
-										href={provider.accountLink}
+										href="/$caffeinated-sdk-root${provider.accountLink}"
 										target="_blank"
 										class="ml-2 px-2 py-0.5 text-[0.675rem] leading-[1rem] bg-base-4 text-base-11 inline-flex items-center rounded-full font-base underline"
 									>
@@ -206,7 +206,7 @@
 									{:else}
 										<a
 											class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
-											href="/signin/oauth?type=music&platform={provider.serviceId}"
+											href="/$caffeinated-sdk-root$/signin/oauth?type=music&platform={provider.serviceId}"
 										>
 											<LocalizedText key="page.settings.accounts.connect" />
 										</a>

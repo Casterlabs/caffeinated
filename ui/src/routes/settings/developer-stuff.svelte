@@ -17,9 +17,9 @@
 
 		const platform = ALL_STREAMING_SERVICES[index];
 		if (SPECIAL_SIGNIN[platform]) {
-			goto(SPECIAL_SIGNIN[platform]);
+			goto('/$caffeinated-sdk-root$' + SPECIAL_SIGNIN[platform]);
 		} else {
-			goto(`/signin/oauth?type=koi&platform=${platform.toLowerCase()}`);
+			goto(`/$caffeinated-sdk-root$/signin/oauth?type=koi&platform=${platform.toLowerCase()}`);
 		}
 	}}
 />

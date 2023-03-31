@@ -38,7 +38,7 @@
 	<Modal on:close={() => (showingTutorialModal = false)}>
 		<LocalizedText slot="title" key="page.docks.info.show_me_how.modal.title" />
 
-		<img src="/tutorials/create_obs_browser_dock.gif" alt="" />
+		<img src="/$caffeinated-sdk-root$/tutorials/create_obs_browser_dock.gif" alt="" />
 	</Modal>
 {/if}
 

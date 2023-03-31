@@ -13,7 +13,7 @@
 	onMount(() => {
 		appShim();
 
-		hookIcons();
+		hookIcons('/$caffeinated-sdk-root$');
 		hookAnchors(App.openLink);
 
 		window.debug_goto = goto;

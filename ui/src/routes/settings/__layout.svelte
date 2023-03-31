@@ -8,11 +8,11 @@
 
 	// prettier-ignore
 	const tabs = [
-		['page.settings.appearance', '/settings/appearance'],
-		['page.settings.accounts',   '/settings/accounts'],
-		['page.settings.plugins',    '/settings/plugins'],
-		['page.settings.about',      '/settings/about'],
-		['Developer Stuff',          '/settings/developer-stuff']
+		['page.settings.appearance', '/$caffeinated-sdk-root$/settings/appearance'],
+		['page.settings.accounts',   '/$caffeinated-sdk-root$/settings/accounts'],
+		['page.settings.plugins',    '/$caffeinated-sdk-root$/settings/plugins'],
+		['page.settings.about',      '/$caffeinated-sdk-root$/settings/about'],
+		['Developer Stuff',          '/$caffeinated-sdk-root$/settings/developer-stuff']
 	];
 
 	// Filter the list of tabs for a match.

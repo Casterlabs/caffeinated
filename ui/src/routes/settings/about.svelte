@@ -18,7 +18,7 @@
 	<li class="py-4 flex flex-row space-x-8 border-b border-base-6">
 		<div class="w-50 flex-1 flex items-center">
 			<img
-				src="/images/brand/wordmark/{$icon}/{$iconColor}.svg"
+				src="/$caffeinated-sdk-root$/images/brand/wordmark/{$icon}/{$iconColor}.svg"
 				class="h-auto w-full"
 				alt="Casterlabs"
 			/>

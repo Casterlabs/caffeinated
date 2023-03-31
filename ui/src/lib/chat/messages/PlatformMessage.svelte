@@ -4,10 +4,9 @@
 </script>
 
 <small class="platform-message">
-	<img
+	<icon
 		class="inline-block h-5 -translate-y-0.5"
-		alt={event.sender.displayname}
-		src="/images/services/{event.sender.username}/icon.svg"
+		data-icon="service/{event.sender.username.toLowerCase()}"
 	/>
 	&gt;
 	<i>{@html event.html}</i>

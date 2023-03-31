@@ -176,7 +176,7 @@ public class AppUI extends JavascriptObject {
 
     public void navigate(String path) {
         if (this.uiFinishedLoad) {
-            CaffeinatedApp.getInstance().getAppBridge().emit("goto", JsonObject.singleton("path", path));
+            CaffeinatedApp.getInstance().getAppBridge().emit("goto", JsonObject.singleton("path", "/$caffeinated-sdk-root$" + path));
         }
     }
 

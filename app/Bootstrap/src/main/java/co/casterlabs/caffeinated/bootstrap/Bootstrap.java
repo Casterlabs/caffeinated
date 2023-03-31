@@ -254,7 +254,7 @@ public class Bootstrap implements Runnable {
         uiServer.setHandler(new AppSchemeHandler());
         uiServer.start();
 
-        String appUrl = isDev ? this.devAddress : uiServer.getLocalAddress();
+        String appUrl = (isDev ? this.devAddress : uiServer.getLocalAddress()) + "/$caffeinated-sdk-root$";
 
         // Setup the webview.
         WebviewFactory factory = WebviewFactory.getFactory(app.getAppPreferences().get().getRendererPreference());

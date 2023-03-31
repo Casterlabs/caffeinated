@@ -6,10 +6,10 @@
 
 	// prettier-ignore
 	const tabs = [
-		['page.chat_bot.commands', '/chat-bot/commands'],
-		['page.chat_bot.shouts',   '/chat-bot/shouts'],
-		['page.chat_bot.timers',   '/chat-bot/timers'],
-		['page.chat_bot.settings', '/chat-bot/settings']
+		['page.chat_bot.commands', '/$caffeinated-sdk-root$/chat-bot/commands'],
+		['page.chat_bot.shouts',   '/$caffeinated-sdk-root$/chat-bot/shouts'],
+		['page.chat_bot.timers',   '/$caffeinated-sdk-root$/chat-bot/timers'],
+		['page.chat_bot.settings', '/$caffeinated-sdk-root$/chat-bot/settings']
 	];
 
 	// Filter the list of tabs for a match.

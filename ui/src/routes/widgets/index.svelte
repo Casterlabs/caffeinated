@@ -91,7 +91,7 @@
 	<Modal on:close={() => (showingTutorialModal = false)}>
 		<LocalizedText slot="title" key="page.widgets.info.show_me_how.modal.title" />
 
-		<img src="/tutorials/create_obs_source_widget.gif" alt="" />
+		<img src="/$caffeinated-sdk-root$/tutorials/create_obs_source_widget.gif" alt="" />
 	</Modal>
 {/if}
 
@@ -150,7 +150,11 @@
 <div class="mt-8">
 	<CardList>
 		{#each widgets as widget}
-			<Card icon={widget.details.icon} text={widget.name} href="/widgets/edit?id={widget.id}">
+			<Card
+				icon={widget.details.icon}
+				text={widget.name}
+				href="/$caffeinated-sdk-root$/widgets/edit?id={widget.id}"
+			>
 				<div class="text-right flex items-center space-x-1">
 					<button
 						class="text-base-12 hover:text-base-11"

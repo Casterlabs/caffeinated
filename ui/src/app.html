@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html class="h-full">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="shortcut icon" href="/favicon.ico" />
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="/$caffeinated-sdk-root$/css/toastify.min.css" />
 
-    <link rel="stylesheet" href="/css/toastify.min.css" />
+		<title>Casterlabs-Caffeinated</title>
 
-    <title>Casterlabs-Caffeinated</title>
+		%sveltekit.head%
+	</head>
 
-    %sveltekit.head%
-</head>
+	<body class="h-full">
+		<div class="h-full">%sveltekit.body%</div>
 
-<body class="h-full">
-    <div class="h-full">%sveltekit.body%</div>
+		<canvas
+			id="doot-canvas"
+			class="absolute inset-0"
+			style="pointer-events: none; transition: 250ms opacity; opacity: 0"
+		></canvas>
 
-    <canvas id="doot-canvas" class="absolute inset-0" style="pointer-events: none; transition: 250ms opacity; opacity: 0"></canvas>
-
-    <script src="/js/toastify.js"></script>
-</body>
-
+		<script src="/$caffeinated-sdk-root$/js/toastify.js"></script>
+	</body>
 </html>

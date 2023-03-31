@@ -7,29 +7,29 @@
 	const sections = [
 		[
 			{
-				href: '/dashboard',
+				href: '/$caffeinated-sdk-root$/dashboard',
 				name: 'page.dashboard',
 				useStartsWith: false
 			},
 			{
-				href: '/chat-bot/commands',
+				href: '/$caffeinated-sdk-root$/chat-bot/commands',
 				name: 'page.chat_bot',
 				useStartsWith: true
 			}
 		],
 		[
 			{
-				href: '/widgets',
+				href: '/$caffeinated-sdk-root$/widgets',
 				name: 'page.widgets',
 				useStartsWith: true
 			},
 			{
-				href: '/docks',
+				href: '/$caffeinated-sdk-root$/docks',
 				name: 'page.docks',
 				useStartsWith: false
 			},
 			{
-				href: '/settings/appearance',
+				href: '/$caffeinated-sdk-root$/settings/appearance',
 				name: 'page.settings',
 				useStartsWith: true
 			}

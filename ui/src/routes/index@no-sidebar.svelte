@@ -32,10 +32,14 @@
 <div class="mt-10 flex flex-col items-center justify-center">
 	<div class="w-64">
 		{#if mikeysModeEnabled}
-			<img src="/images/mikeys.png" class="h-auto w-auto" alt="Mikeys Logo" />
+			<img
+				src="/$caffeinated-sdk-root$/images/mikeys.png"
+				class="h-auto w-auto"
+				alt="Mikeys Logo"
+			/>
 		{:else}
 			<img
-				src="/images/brand/wordmark/{$icon}/{$iconColor}.svg"
+				src="/$caffeinated-sdk-root$/images/brand/wordmark/{$icon}/{$iconColor}.svg"
 				class="h-auto w-auto"
 				alt="Casterlabs Logo"
 			/>

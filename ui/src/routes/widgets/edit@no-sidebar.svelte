@@ -40,7 +40,7 @@
 			.then((w) => {
 				// If the widget is `undefined`, go back.
 				if (!w) {
-					goto('/widgets');
+					goto('/$caffeinated-sdk-root$/widgets');
 					return;
 				}
 
@@ -85,7 +85,10 @@
 <div class="overflow-x-hidden min-h-full">
 	{#if widget}
 		<div class="fixed left-2.5 top-2.5">
-			<CircularButton title={t('sr.navigation.back')} on:click={() => goto('/widgets')}>
+			<CircularButton
+				title={t('sr.navigation.back')}
+				on:click={() => goto('/$caffeinated-sdk-root$/widgets')}
+			>
 				<span class="sr-only">
 					<LocalizedText key="sr.navigation.back" />
 				</span>
@@ -123,7 +126,7 @@
 				title={t('sr.page.widgets.delete')}
 				on:click={() => {
 					window.Caffeinated.plugins.deleteWidget(widget.id);
-					goto('/widgets');
+					goto('/$caffeinated-sdk-root$/widgets');
 				}}
 			>
 				<span class="sr-only">
