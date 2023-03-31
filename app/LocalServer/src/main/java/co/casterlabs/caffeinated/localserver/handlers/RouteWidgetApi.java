@@ -43,7 +43,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                 // Avoid CORS issues.
                 String url;
                 if ("co.casterlabs.uidocks".equals(session.getQueryParameters().get("pluginId"))) {
-                    url = "http://localhost:3000/loader" + resource + session.getQueryString();
+                    url = "http://localhost:3000/$caffeinated-sdk-root$/loader" + resource + session.getQueryString();
                 } else {
                     url = "http://localhost:3002/$caffeinated-sdk-root$/loader" + resource + session.getQueryString();
                 }
