@@ -1,6 +1,6 @@
 export const SPECIAL_SIGNIN = {
-	CAFFEINE: '/signin/caffeine',
-	KICK: '/signin/kick'
+	CAFFEINE: '/$caffeinated-sdk-root$/signin/caffeine',
+	KICK: '/$caffeinated-sdk-root$/signin/kick'
 };
 
 export const ALL_STREAMING_SERVICES = [

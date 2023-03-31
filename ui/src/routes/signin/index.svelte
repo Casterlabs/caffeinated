@@ -121,7 +121,7 @@
 		{#each Object.entries(STREAMING_SERVICES) as [platform, { name, color }]}
 			{@const href = SPECIAL_SIGNIN[platform]
 				? `${SPECIAL_SIGNIN[platform]}?dontGoBack`
-				: `/signin/oauth?dontGoBack&type=koi&platform=${platform.toLowerCase()}`}
+				: `/$caffeinated-sdk-root$/signin/oauth?dontGoBack&type=koi&platform=${platform.toLowerCase()}`}
 
 			<a
 				{href}
