@@ -5,16 +5,15 @@ import java.nio.charset.StandardCharsets;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CaffeineHelper {
-    private static OkHttpClient client = new OkHttpClient();
 
     /**
      * @implSpec IllegalStateException means MFA prompt.
@@ -112,7 +111,7 @@ public class CaffeineHelper {
         builder.addHeader("x-client-type", "web");
 
         Request request = builder.build();
-        Response response = client.newCall(request).execute();
+        Response response = WebUtil.client.newCall(request).execute();
 
         return response;
     }

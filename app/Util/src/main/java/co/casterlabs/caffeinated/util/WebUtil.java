@@ -14,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class WebUtil {
-    private static final OkHttpClient client = new OkHttpClient.Builder()
+    public static final OkHttpClient client = new OkHttpClient.Builder()
         .addNetworkInterceptor(
             (chain) -> chain.proceed(
                 chain // OkHttp bug.

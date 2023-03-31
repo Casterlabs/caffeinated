@@ -32,21 +32,8 @@
 			if (ex.includes('MFA')) {
 				isMfaPrompt = true;
 			} else {
-				const error = JSON.parse(ex.substring(ex.indexOf('{'), ex.lastIndexOf('}') + 1));
-
-				if (error.otp) {
-					errorMessage = 'The Two Factor code is expired or incorrect.';
-				} else if (error._error) {
-					switch (error._error[0]) {
-						case 'The username or password provided is incorrect': {
-							errorMessage = 'The username or password provided is incorrect.';
-							break;
-						}
-					}
-				} else {
-					errorMessage = JSON.stringify(error);
-					console.error(error);
-				}
+				errorMessage = JSON.stringify(ex);
+				console.error(ex);
 			}
 		}
 	}
