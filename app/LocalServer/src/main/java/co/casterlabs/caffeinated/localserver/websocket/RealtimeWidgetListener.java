@@ -20,9 +20,9 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.rakurai.json.serialization.JsonParseException;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
@@ -114,9 +114,10 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
                 case "KOI": {
                     JsonObject data = message.getObject("data");
-                    String koiType = data.getString("type");
+                    FastLogger.logStatic(data);
 
-                    UserPlatform platform = Rson.DEFAULT.fromJson(data.get("platform"), UserPlatform.class);
+                    String koiType = data.getString("type");
+                    UserPlatform platform = UserPlatform.valueOf(data.getString("platform"));
 
                     switch (koiType) {
                         case "UPVOTE": {
@@ -133,13 +134,14 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                         }
 
                         case "MESSAGE": {
-                            KoiChatterType chatter = Rson.DEFAULT.fromJson(data.get("chatter"), KoiChatterType.class);
-                            String replyTarget = data.getString("replyTarget");
+                            KoiChatterType chatter = KoiChatterType.valueOf(data.getString("chatter"));
+                            String replyTarget = data.get("replyTarget").isJsonNull() ? null : data.getString("replyTarget");
                             boolean isUserGesture = data.getBoolean("isUserGesture");
+                            String text = data.getString("message");
 
                             Caffeinated.getInstance().getKoi().sendChat(
                                 platform,
-                                data.getString("message"),
+                                text,
                                 chatter,
                                 replyTarget,
                                 isUserGesture
@@ -174,8 +176,8 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                 }
 
             }
-        } catch (JsonParseException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            FastLogger.logException(e);
         }
     }
 
