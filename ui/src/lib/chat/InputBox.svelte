@@ -26,6 +26,7 @@
 		}
 
 		dispatch('send', { message, platform, replyTarget });
+		message = '';
 	}
 
 	let selectorOpen = false;
@@ -184,11 +185,10 @@
 			rows="1"
 			resize={false}
 			bind:value={message}
-			on:keyup={(e) => {
+			on:keypress={(e) => {
 				if (e.key == 'Enter' && !e.shiftKey) {
 					e.preventDefault();
 					send(); // Trigger a send on Enter, but just a regular newline on Shift+Enter.
-					message = '';
 				}
 			}}
 			title={isSupportedByPlatform ? undefined : t('unsupported_feature.item', { item: platform })}
