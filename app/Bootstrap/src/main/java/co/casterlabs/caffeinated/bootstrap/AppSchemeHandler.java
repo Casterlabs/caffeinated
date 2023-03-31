@@ -18,7 +18,7 @@ public class AppSchemeHandler implements Function<HttpSession, co.casterlabs.rak
     @SneakyThrows
     @Override
     public @Nullable HttpResponse apply(@Nullable HttpSession request) {
-        String uri = request.getUri();
+        String uri = request.getUri().substring("/$caffeinated-sdk-root$".length());
 
         // Append `index.html` to the end when required.
         if (!uri.contains(".")) {
