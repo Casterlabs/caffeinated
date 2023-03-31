@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -o pipefail
+
 # (Optional) Compile everything
 if [[ $@ != *"nocompile"* ]]; then
     # Delete any old builds.
