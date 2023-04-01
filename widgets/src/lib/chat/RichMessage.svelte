@@ -26,7 +26,7 @@
 	{#if badges == 'Before Username'}
 		<span class="richmessage-badges space-x-1" aria-hidden="true">
 			{#each event.sender.badges as badge}
-				<img class="inline-block h-4 -translate-y-0.5" alt="" src={badge} />
+				<img class="inline-block align-middle h-[1em] -translate-y-0.5" alt="" src={badge} />
 			{/each}
 		</span>
 	{/if}
@@ -36,7 +36,7 @@
 	{#if badges == 'After Username'}
 		<span class="richmessage-badges space-x-1" aria-hidden="true">
 			{#each event.sender.badges as badge}
-				<img class="inline-block h-4 -translate-y-0.5" alt="" src={badge} />
+				<img class="inline-block align-middle h-[1em] -translate-y-0.5" alt="" src={badge} />
 			{/each}
 		</span>
 	{/if}
