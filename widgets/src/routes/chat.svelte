@@ -109,6 +109,7 @@
 				const FRAME_RATE = 100; // fps, keep it even.
 				const FRAME_INTERVAL = 1000 / FRAME_RATE;
 				const TOTAL_FRAME_COUNT = ANIMATION_TIME / FRAME_INTERVAL;
+				const CHANGE_PER_FRAME = 100 / TOTAL_FRAME_COUNT;
 
 				const isTopDown = $settings['message_style.message_direction'] == 'Top-down';
 				const direction = $settings['message_style.slide_direction'];
@@ -133,18 +134,18 @@
 
 				let currentFrame = 0;
 				let animTaskId = setInterval(() => {
-					const progress = currentFrame / TOTAL_FRAME_COUNT;
-
-					if (progress >= 1) {
+					currentFrame++;
+					if (currentFrame == TOTAL_FRAME_COUNT) {
 						clearInterval(animTaskId);
 					}
 
 					if (isTopDown) {
-						itemYOffset += 4;
+						itemYOffset += CHANGE_PER_FRAME;
 					} else {
-						itemYOffset -= 4;
+						itemYOffset -= CHANGE_PER_FRAME;
 					}
 
+					const progress = currentFrame / TOTAL_FRAME_COUNT;
 					switch (direction) {
 						case 'From the left': {
 							card.offsetX = `-${(1 - progress) * 100}%`;
@@ -156,8 +157,6 @@
 							break;
 						}
 					}
-
-					currentFrame++;
 				}, FRAME_INTERVAL);
 
 				return;
@@ -166,17 +165,6 @@
 	}
 
 	onMount(() => {
-		Widget.on('init', () => {
-			Widget.broadcast('update');
-			Koi.on('*', (_, event) => onEvent(event));
-			Koi.eventHistory.forEach((event) => {
-				onEvent({
-					...event,
-					x_is_catchup: true
-				});
-			});
-		});
-
 		Widget.on('clear', () => {
 			chatBox.innerHTML = '';
 			chatElements = {};
@@ -185,6 +173,18 @@
 		Widget.on('update', () => {
 			settings.set(Widget.widgetData.settings);
 			changeFont(Widget.getSetting('text_style.font'));
+		});
+
+		Widget.on('init', () => {
+			Widget.broadcast('update');
+		});
+
+		Koi.on('*', (_, event) => onEvent(event));
+		Koi.eventHistory.forEach((event) => {
+			onEvent({
+				...event,
+				x_is_catchup: true
+			});
 		});
 	});
 </script>

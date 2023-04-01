@@ -6,7 +6,7 @@
 
 	export let settings; // svelte store
 	export let event;
-	export let offsetX = 0;
+	export let offsetX = '0%';
 
 	let visible = true;
 
