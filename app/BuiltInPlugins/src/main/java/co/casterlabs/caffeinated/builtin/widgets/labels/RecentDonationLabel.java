@@ -113,7 +113,7 @@ public class RecentDonationLabel extends GenericLabel {
 
             for (Donation d : e.getDonations()) {
                 try {
-                    Double convertedAmount = Currencies.convertCurrency(d.getAmount(), d.getCurrency(), Currencies.baseCurrency).await();
+                    Double convertedAmount = Currencies.convertCurrency(d.getAmount() * d.getCount(), d.getCurrency(), Currencies.baseCurrency).await();
 
                     total += convertedAmount;
                 } catch (Throwable t) {

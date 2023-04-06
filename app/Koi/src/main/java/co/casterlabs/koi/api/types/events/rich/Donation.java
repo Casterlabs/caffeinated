@@ -18,7 +18,7 @@ public class Donation {
      * multiple times in a single message. For the true value of a donation,
      * multiply this times amount.
      */
-    private int count;
+    private int count = 1;
 
     private String image;
 
