@@ -13,6 +13,7 @@ public class EmoteFragment extends ChatFragment {
     private String emoteName;
     private String imageLink;
     private @Nullable String provider;
+    private @Nullable Donation donation;
 
     @Override
     public FragmentType getType() {

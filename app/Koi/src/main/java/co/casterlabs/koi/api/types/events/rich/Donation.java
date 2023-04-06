@@ -13,6 +13,13 @@ public class Donation {
     private String currency;
     private double amount;
 
+    /**
+     * This is the amount of the item sent. For example, Caffeine props can be sent
+     * multiple times in a single message. For the true value of a donation,
+     * multiply this times amount.
+     */
+    private int count;
+
     private String image;
 
     @Deprecated
