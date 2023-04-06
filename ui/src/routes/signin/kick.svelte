@@ -1,13 +1,19 @@
 <script>
 	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import SlimPassword from '$lib/ui/SlimPassword.svelte';
 	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
 
 	let usernameInput = '';
+	let passwordInput = '';
+	let mfaInput = '';
+
 	let isLoading = false;
+	let isMfaPrompt = false;
+
 	let errorMessage = null;
 
-	async function submit() {
+	async function submit(e) {
 		if (isLoading) {
 			return;
 		}
@@ -18,20 +24,22 @@
 		try {
 			const shouldGoBack = location.search != '?dontGoBack'; // Default: true
 
-			await Caffeinated.auth.loginKick(usernameInput, shouldGoBack);
+			await Caffeinated.auth.loginKick(usernameInput, passwordInput, mfaInput, shouldGoBack);
 		} catch (ex) {
 			isLoading = false;
 
-			const error = JSON.parse(ex.substring(ex.indexOf('{'), ex.lastIndexOf('}') + 1));
-			errorMessage = JSON.stringify(error);
-			console.error(error);
+			if (ex.includes('MFA')) {
+				isMfaPrompt = true;
+			} else {
+				errorMessage = 'Username or password is incorrect.';
+				console.error(ex);
+			}
 		}
 	}
 </script>
 
 <div class="mt-8 flex flex-col items-center">
 	<h1 class="text-2xl font-medium">Sign in with Kick</h1>
-	<h2 class="text-sm">We just need your username for now.</h2>
 	<br />
 
 	<div class="mt-4 w-72">
@@ -39,11 +47,21 @@
 			on:keydown={(e) => {
 				if (e.code == 'Enter') {
 					e.preventDefault();
-					submit();
+					document.querySelector('input[type=password]').focus();
 				}
 			}}
 		>
 			<SlimTextArea placeholder="Username" rows="1" resize={false} bind:value={usernameInput} />
+		</span>
+
+		<span on:keydown={(e) => e.code == 'Enter' && submit()}>
+			<SlimPassword placeholder="Password" bind:value={passwordInput} />
+
+			{#if isMfaPrompt}
+				<div class="mt-1.5">
+					<SlimPassword placeholder="Two Factor Code" bind:value={mfaInput} autofocus={true} />
+				</div>
+			{/if}
 		</span>
 
 		<br />

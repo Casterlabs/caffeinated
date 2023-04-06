@@ -366,8 +366,8 @@ public class AppAuth extends JavascriptObject {
     }
 
     @JavascriptFunction
-    public void loginKick(@NonNull String username, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
-        final String koiToken = "kick:" + username.toLowerCase();
+    public void loginKick(@NonNull String username, @NonNull String password, @Nullable String mfa, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
+        String koiToken = KickHelper.login(username, password, mfa);
         final String tokenId = "kick";
 
         CaffeinatedApp
