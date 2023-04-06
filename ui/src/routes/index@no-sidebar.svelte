@@ -62,7 +62,9 @@
 		<br />
 		<!-- svelte-ignore a11y-missing-attribute -->
 		<small>
-			Having connection issues? Try <a on:click={disableBetaKoi}>disabling the Koi beta.</a></small
-		>
+			Having connection issues? Try <a class="text-link cursor-pointer" on:click={disableBetaKoi}>
+				disabling the Koi beta.
+			</a>
+		</small>
 	{/if}
 </div>
