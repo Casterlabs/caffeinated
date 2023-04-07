@@ -17,7 +17,7 @@
 		})();
 
 	async function doOpen(x, y) {
-		if (items.length == 0) return; // Ignore.
+		if (items.filter((i) => !i.hidden).length == 0) return; // Ignore.
 
 		// We need to wait for Svelte to mount our component, because we need it's size.
 		// We also don't want to keep the context menu mounted constantly, that'd be a waste.
