@@ -78,23 +78,25 @@ function replaceIcon(/** @type {HTMLElement} */ element) {
 export default function hook(base = '') {
 	baseUrl = base;
 
-	new MutationObserver((records) => {
-		for (const record of records) {
-			if (record.addedNodes.length > 0) {
-				for (const element of record.addedNodes) {
-					if (element.nodeName.toLowerCase() == 'icon') {
-						replaceIcon(element);
-						break;
-					}
-				}
-			}
+	new MutationObserver(() => {
+		// for (const record of records) {
+		// 	if (record.addedNodes.length > 0) {
+		// 		for (const element of record.addedNodes) {
+		// 			if (element.nodeName.toLowerCase() == 'icon') {
+		// 				replaceIcon(element);
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
 
-			// SvelteKit likes to undo all of our hard work. Let's prevent that.
-			const element = record.target;
-			if (element.nodeName.toLowerCase() == 'icon') {
-				replaceIcon(element);
-			}
-		}
+		// 	// SvelteKit likes to undo all of our hard work. Let's prevent that.
+		// 	const element = record.target;
+		// 	if (element.nodeName.toLowerCase() == 'icon') {
+		// 		replaceIcon(element);
+		// 	}
+		// }
+
+		document.querySelectorAll('icon').forEach(replaceIcon);
 	}).observe(document.body, {
 		subtree: true,
 		attributes: true,
