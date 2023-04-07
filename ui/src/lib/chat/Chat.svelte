@@ -234,6 +234,16 @@
 				return; // Avoid triggering the code below.
 			}
 
+			case 'MESSAGE_REACTION': {
+				const chatElement = chatElements[event.meta_id];
+
+				if (chatElement) {
+					chatElement.reactions.push(event.reaction);
+					chatElement.reactions = chatElement.reactions; // Re-render.
+				}
+				return; // Avoid triggering the code below.
+			}
+
 			case 'CLEARCHAT': {
 				if (event.user_upid) {
 					// Clear by user.

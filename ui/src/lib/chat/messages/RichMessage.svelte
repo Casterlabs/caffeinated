@@ -5,6 +5,7 @@
 	import ContextMenu from '../../ui/ContextMenu.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import { t } from '$lib/translate.mjs';
+	import EmojiText from '$lib/EmojiText.svelte';
 
 	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
 	const PLATFORMS_WITH_TIMEOUT = ['TWITCH', 'TROVO', 'BRIME'];
@@ -17,6 +18,7 @@
 
 	export let upvotes = event.upvotes;
 	export let isDeleted = false;
+	export let reactions = []; // An array of emojis.
 
 	// Either if `is_highlighted` or `donations` > 0.
 	$: highlighted = event?.is_highlighted || event?.donations.length > 0 || false;
@@ -114,7 +116,9 @@
 			{@html event.html}
 		</span>
 
-		<!-- TODO Donations -->
+		<!-- {#each reactions as reaction}
+			<EmojiText sequence={reaction} />
+		{/each} -->
 	</div>
 </ContextMenu>
 
