@@ -273,7 +273,8 @@
 					target: messageContainer,
 					props: {
 						event,
-						onContextMenuAction
+						onContextMenuAction,
+						supportedFeatures
 					}
 				});
 

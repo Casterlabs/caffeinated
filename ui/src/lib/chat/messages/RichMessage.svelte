@@ -8,11 +8,10 @@
 	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
 	const PLATFORMS_WITH_TIMEOUT = ['TWITCH', 'TROVO', 'BRIME'];
 	const PLATFORMS_WITH_RAID = ['CAFFEINE', 'TWITCH', 'TROVO'];
-	const PLATFORMS_WITH_DELETE = ['TWITCH', 'BRIME', 'TROVO', 'DLIVE' /*"YOUTUBE"*/];
-	const PLATFORMS_WITH_UPVOTE = ['CAFFEINE'];
 
 	export let event;
 	export let onContextMenuAction;
+	export let supportedFeatures;
 	let container;
 
 	export let upvotes = event.upvotes;
@@ -65,7 +64,7 @@
 			type: 'button',
 			icon: 'icon/arrow-up',
 			text: 'chat.viewer.action.upvote',
-			hidden: !PLATFORMS_WITH_UPVOTE.includes(event.sender.platform),
+			hidden: !supportedFeatures[event.sender.platform]?.includes('MESSAGE_UPVOTE'),
 			onclick() {
 				onContextMenuAction('upvote', event);
 			}
@@ -75,7 +74,7 @@
 			icon: 'icon/trash',
 			text: 'chat.viewer.action.delete_message',
 			color: 'error',
-			hidden: isDeleted || !PLATFORMS_WITH_DELETE.includes(event.sender.platform),
+			hidden: isDeleted || !supportedFeatures[event.sender.platform]?.includes('MESSAGE_DELETION'),
 			onclick() {
 				onContextMenuAction('delete', event);
 			}
