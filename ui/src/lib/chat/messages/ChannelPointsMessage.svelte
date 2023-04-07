@@ -11,7 +11,7 @@
 	opts={{
 		displayname: event.sender.displayname,
 		reward: event.reward.title,
-		platform: t(`platform.parenthesis.${event.streamer.platform}`)
+		platform: event.streamer.platform.toLowerCase()
 	}}
 	slotMapping={['image']}
 >

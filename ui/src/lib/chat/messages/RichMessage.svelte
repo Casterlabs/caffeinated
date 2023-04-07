@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import ContextMenu from '../../ui/ContextMenu.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import { t } from '$lib/translate.mjs';
 
 	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
 	const PLATFORMS_WITH_TIMEOUT = ['TWITCH', 'TROVO', 'BRIME'];
@@ -94,11 +95,12 @@
 			{/each}
 		</span>
 
-		<b
-			>{event.sender.displayname}<span class="user-platform">
-				<LocalizedText key="platform.parenthesis.{event.streamer.platform}" /></span
-			></b
-		><span aria-hidden="true">
+		<b>
+			<icon
+				class="user-platform w-[1em] h-[1em] mr-0.5 translate-y-0.5"
+				data-icon="service/{event.streamer.platform.toLowerCase()}"
+			/>{event.sender.displayname}
+		</b><span aria-hidden="true">
 			<span class="select-none"> : </span>
 			<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
 		</span>

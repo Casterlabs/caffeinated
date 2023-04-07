@@ -583,7 +583,7 @@
 	}
 
 	.show-platform :global(.user-platform) {
-		display: unset !important;
+		display: inline-block !important;
 	}
 
 	/* Timestamps */

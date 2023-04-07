@@ -13,6 +13,6 @@
 		displayname: event.subscriber?.displayname,
 		gifter: event.subscriber?.displayname,
 		recipient: event.gift_recipient?.displayname,
-		platform: t(`platform.parenthesis.${event.streamer.platform}`)
+		platform: event.streamer.platform.toLowerCase()
 	}}
 />

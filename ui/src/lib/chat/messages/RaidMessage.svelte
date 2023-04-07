@@ -11,6 +11,6 @@
 	opts={{
 		displayname: event.host.displayname,
 		viewers: event.viewers,
-		platform: t(`platform.parenthesis.${event.streamer.platform}`)
+		platform: event.streamer.platform.toLowerCase()
 	}}
 />

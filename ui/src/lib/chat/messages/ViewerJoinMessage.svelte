@@ -10,6 +10,6 @@
 	key="chat.viewer.message.VIEWER_JOIN"
 	opts={{
 		displayname: event.viewer.displayname,
-		platform: t(`platform.parenthesis.${event.streamer.platform}`)
+		platform: event.streamer.platform.toLowerCase()
 	}}
 />

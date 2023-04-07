@@ -220,23 +220,23 @@ export default {
 
 	'chat.viewer.message.CLEARCHAT': 'Chat was cleared',
 	'chat.viewer.message.CHANNELPOINTS':
-		'<b>{displayname} <span class="user-platform">{platform}</span></b> just redeemed %image%<b>{reward}</b>',
+		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{displayname}</b> just redeemed %image%<b>{reward}</b>',
 	'chat.viewer.message.RAID':
-		'<b>{displayname} <span class="user-platform">{platform}</span></b> just raided with <b>{viewers}</b> viewers',
+		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{displayname}</b> just raided with <b>{viewers}</b> viewers',
 	'chat.viewer.message.FOLLOW':
-		'<b>{displayname} <span class="user-platform">{platform}</span></b> just followed',
+		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{displayname}</b> just followed',
 	'chat.viewer.message.SUBSCRIPTION.SUB':
-		'<b>{displayname} <span class="user-platform">{platform}</span></b> just subscribed for <b>{months}</b> months',
+		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{displayname}</b> just subscribed for <b>{months}</b> months',
 	'chat.viewer.message.SUBSCRIPTION.RESUB':
-		'<b>{displayname} <span class="user-platform">{platform}</span></b> just resubscribed for <b>{months}</b> months',
+		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{displayname}</b> just resubscribed for <b>{months}</b> months',
 	'chat.viewer.message.SUBSCRIPTION.SUBGIFT':
-		'<b>{gifter} <span class="user-platform">{platform}</span></b> just gifted <b>{recipient}</b> a <b>{months}</b> month subscription',
+		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{gifter}</b> just gifted <b>{recipient}</b> a <b>{months}</b> month subscription',
 	'chat.viewer.message.SUBSCRIPTION.ANONSUBGIFT':
-		'Anonymous just gifted <b>{recipient} <span class="user-platform">{platform}</span></b> a <b>{months}</b> month subscription',
+		'Anonymous just gifted <b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{recipient}</b> a <b>{months}</b> month subscription',
 	'chat.viewer.message.VIEWER_JOIN':
-		'<b>{displayname} <span class="user-platform">{platform}</span></b> joined',
+		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{displayname}</b> joined',
 	'chat.viewer.message.VIEWER_LEAVE':
-		'<b>{displayname} <span class="user-platform">{platform}</span></b> left',
+		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{displayname}</b> left',
 
 	'chat.viewer.action.ban': 'Ban',
 	'chat.viewer.action.timeout': 'Timeout',
