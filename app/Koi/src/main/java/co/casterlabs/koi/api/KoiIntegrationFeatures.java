@@ -33,8 +33,8 @@ public enum KoiIntegrationFeatures {
     /* ---- Chat & Moderation ---- */
 
     MESSAGE_UPVOTE,
-    MESSAGE_DELETION,
     MESSAGE_REACTION,
+    MESSAGE_DELETION,
 
     CHAT_SEND_MESSAGE,
     CHAT_SEND_COMMAND,
