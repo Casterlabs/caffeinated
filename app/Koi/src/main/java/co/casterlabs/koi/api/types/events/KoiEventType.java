@@ -11,7 +11,6 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 public enum KoiEventType {
     // @formatter:off
     FOLLOW               (FollowEvent.class),
-    CHAT                 (ChatEvent.class),
     SUBSCRIPTION         (SubscriptionEvent.class),
     USER_UPDATE          (UserUpdateEvent.class),
     STREAM_STATUS        (StreamStatusEvent.class),
@@ -26,9 +25,12 @@ public enum KoiEventType {
     ROOMSTATE            (RoomstateEvent.class),
     PLATFORM_MESSAGE     (PlatformMessageEvent.class), 
     RICH_MESSAGE         (RichMessageEvent.class),
+    MESSAGE_REACTION     (MessageReactionEvent.class),
     
     @Deprecated
     DONATION             (DonationEvent.class),
+    @Deprecated
+    CHAT                 (ChatEvent.class),
     ;
     // @formatter:on
 
