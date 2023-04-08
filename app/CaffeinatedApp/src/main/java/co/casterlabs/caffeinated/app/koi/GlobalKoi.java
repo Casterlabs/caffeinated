@@ -35,6 +35,7 @@ import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
+import co.casterlabs.koi.api.types.events.ViewerCountEvent;
 import co.casterlabs.koi.api.types.events.ViewerListEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -73,6 +74,9 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, List<User>> viewers = new ConcurrentHashMap<>();
+
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private Map<UserPlatform, Integer> viewerCounts = new ConcurrentHashMap<>();
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, UserUpdateEvent> userStates = new ConcurrentHashMap<>();
@@ -226,6 +230,15 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         }
 
         switch (e.getType()) {
+            case VIEWER_COUNT: {
+                this.viewerCounts.put(
+                    e.getStreamer().getPlatform(),
+                    ((ViewerCountEvent) e).getCount()
+                );
+                this.updateBridgeData();
+                break;
+            }
+
             case VIEWER_LIST: {
                 this.viewers.put(
                     e.getStreamer().getPlatform(),

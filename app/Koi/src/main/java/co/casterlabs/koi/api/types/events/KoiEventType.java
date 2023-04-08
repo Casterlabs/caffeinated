@@ -7,7 +7,6 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @AllArgsConstructor
-@SuppressWarnings("deprecation")
 public enum KoiEventType {
     // @formatter:off
     FOLLOW               (FollowEvent.class),
@@ -18,6 +17,7 @@ public enum KoiEventType {
     VIEWER_JOIN          (ViewerJoinEvent.class),
     VIEWER_LEAVE         (ViewerLeaveEvent.class),
     VIEWER_LIST          (ViewerListEvent.class),
+    VIEWER_COUNT         (ViewerCountEvent.class),
     RAID                 (RaidEvent.class),
     CHANNEL_POINTS       (ChannelPointsEvent.class),
     CATCHUP              (CatchupEvent.class),
@@ -38,6 +38,8 @@ public enum KoiEventType {
 
     public static KoiEvent get(JsonObject eventJson) {
         String eventType = eventJson.getString("event_type");
+
+        FastLogger.logStatic(LogLevel.TRACE, "Deserializing: %s", eventJson);
 
         try {
             // 1) Lookup the event type
