@@ -20,6 +20,14 @@
 	export let isDeleted = false;
 	export let reactions = []; // An array of emojis.
 
+	$: reactionsWithCount = reactions.reduce(
+		(acc, value) => {
+			acc[value] = (acc[value] || 0) + 1;
+			return acc;
+		}, //
+		{}
+	);
+
 	// Either if `is_highlighted` or `donations` > 0.
 	$: highlighted = event?.is_highlighted || event?.donations.length > 0 || false;
 
@@ -116,9 +124,20 @@
 			{@html event.html}
 		</span>
 
-		<!-- {#each reactions as reaction}
-			<EmojiText sequence={reaction} />
-		{/each} -->
+		{#if reactions.length > 0}
+			<div class="w-full text-xs -mt-1 pt-1.5">
+				{#each Object.entries(reactionsWithCount) as [reaction, count]}
+					<span class="bg-base-6 rounded px-1 py-0.5">
+						<span class="inline-block -translate-y-px">
+							<EmojiText sequence={reaction} />
+							<small class="-ml-0.5 mr-px">
+								{count}
+							</small>
+						</span>
+					</span>
+				{/each}
+			</div>
+		{/if}
 	</div>
 </ContextMenu>
 
