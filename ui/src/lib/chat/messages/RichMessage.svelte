@@ -101,7 +101,7 @@
 			<icon
 				class="user-platform w-[1em] h-[1em] mr-0.5 translate-y-0.5"
 				data-icon="service/{event.streamer.platform.toLowerCase()}"
-			/>{event.sender.displayname}
+			/><a href={event.sender.link} target="_blank">{event.sender.displayname}</a>
 		</b><span aria-hidden="true">
 			<span class="select-none"> : </span>
 			<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
