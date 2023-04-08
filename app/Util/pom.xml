@@ -16,37 +16,33 @@
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
 		</repository>
-		<repository>
-			<id>local-repo</id>
-			<url>file://${project.basedir}/__LocalRepo</url>
-		</repository>
 	</repositories>
 
 	<dependencies>
 
 		<!-- Utilities -->
 		<dependency>
-			<groupId>co.casterlabs</groupId>
-			<artifactId>EmojiApi</artifactId>
-			<version>3.3.0</version>
+			<groupId>co.casterlabs.EmojiApi</groupId>
+			<artifactId>Index</artifactId>
+			<version>3.5.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.16.2</version>
+			<version>1.17.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Util</artifactId>
-			<version>1.16.2</version>
+			<version>1.17.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>FastLoggingFramework</artifactId>
-			<version>1.9.4</version>
+			<version>1.10.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
