@@ -23,7 +23,8 @@
 		system: 'page.settings.appearance.emojis.SYSTEM',
 		'noto-emoji': 'Noto Emoji',
 		twemoji: 'Twemoji',
-		openmoji: 'OpenMoji'
+		openmoji: 'OpenMoji',
+		'toss-face': 'Toss Face'
 	};
 	const APPEARANCES = {
 		FOLLOW_SYSTEM: 'page.settings.appearance.appearance.FOLLOW_SYSTEM',
