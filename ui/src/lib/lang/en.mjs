@@ -218,6 +218,8 @@ export default {
 	'chat.viewer.tts.event.SUBSCRIPTION.ANONSUBGIFT':
 		'Anonymous just gifted {recipient} a {months} month subscription.',
 
+	'chat.viewer.message.RICH_MESSAGE.replying_to': 'Replying to @{username} {}',
+	'chat.viewer.message.RICH_MESSAGE.replying_to_unknwon': 'Replying to another message.',
 	'chat.viewer.message.CLEARCHAT': 'Chat was cleared',
 	'chat.viewer.message.CHANNELPOINTS':
 		'<b><icon class="user-platform" style="width: 1em; height: 1em; margin-right: 0.125rem; transform: translateY(0.125rem);" data-icon="service/{platform}"></icon>{displayname}</b> just redeemed %image%<b>{reward}</b>',
