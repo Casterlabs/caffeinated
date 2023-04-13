@@ -104,7 +104,7 @@
 
 				// No need to animate :)
 				if (event.x_is_catchup) return;
-				if ($settings['message_style.message_animation'] == 'None') return;
+				if ($settings['message_style.messages_animation'] == 'None') return;
 
 				const FRAME_RATE = 100; // fps, keep it even.
 				const FRAME_INTERVAL = 1000 / FRAME_RATE;
