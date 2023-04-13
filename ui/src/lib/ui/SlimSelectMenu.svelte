@@ -75,7 +75,7 @@
 			<button
 				type="button"
 				role="listbox"
-				class="relative w-{width} h-fit cursor-pointer rounded-md border border-base-7 bg-base-1 py-1 pl-1.5 pr-5 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
+				class="align-middle relative w-{width} h-fit cursor-pointer rounded-md border border-base-7 bg-base-1 py-1 pl-1.5 pr-5 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 				title={t(options[value])}
 				aria-haspopup="listbox"
 				aria-expanded={open}

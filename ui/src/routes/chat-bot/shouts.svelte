@@ -51,11 +51,11 @@
 					key="page.chat_bot.shouts.format"
 					slotMapping={['platform', 'action', 'message']}
 				>
-					<span class="inline-block align-middle -translate-y-1 h-fit" slot="0">
+					<span class="inline-block h-fit" slot="0">
 						<SlimSelectMenu bind:value={shout.platform} options={PLATFORMS} on:value={saveDB} />
 					</span>
 
-					<span class="inline-block align-middle -translate-y-1 h-fit" slot="1">
+					<span class="inline-block h-fit" slot="1">
 						<SlimSelectMenu bind:value={shout.eventType} options={EVENT_TYPES} on:value={saveDB} />
 					</span>
 
