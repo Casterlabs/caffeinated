@@ -138,7 +138,7 @@ export default {
 		'Makes Caffeinated hide all timer messages from the chat widget.',
 	'page.chat_bot.settings.hide_from_chatbots': 'Hide these accounts from chat',
 	'page.chat_bot.settings.hide_from_chatbots.description':
-		'Hide some additional accounts from your chat widget, such as <pre>@Nightbot</pre>.',
+		'Hide some additional accounts from your chat widget, such as <pre>@Nightbot</pre> or <pre>@Botrix</pre>.',
 	'sr.page.chat_bot.settings.hide_from_chatbots.add': 'Hide another account',
 
 	/* ---- Settings ---- */
