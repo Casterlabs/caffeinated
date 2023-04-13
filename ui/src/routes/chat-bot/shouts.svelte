@@ -6,6 +6,7 @@
 	import Container from '$lib/ui/Container.svelte';
 
 	import { t } from '$lib/translate.mjs';
+	import { STREAMING_SERVICE_NAMES } from '../../components/caffeinatedAuth.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
 
@@ -13,11 +14,7 @@
 
 	const PLATFORMS = {
 		[null]: 'page.chat_bot.platform.ANY',
-		CAFFEINE: 'Caffeine',
-		TWITCH: 'Twitch',
-		TROVO: 'Trovo',
-		GLIMESH: 'Glimesh',
-		BRIME: 'Brime'
+		...STREAMING_SERVICE_NAMES
 	};
 
 	const EVENT_TYPES = {
