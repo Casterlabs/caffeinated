@@ -322,7 +322,7 @@
 		}
 
 		if (playDingOnMessage) {
-			const audio = new Audio('/sounds/dink.mp3');
+			const audio = new Audio('/$caffeinated-sdk-root$/sounds/dink.mp3');
 			audio.volume = ttsOrDingVolume;
 			audio.play();
 		}
