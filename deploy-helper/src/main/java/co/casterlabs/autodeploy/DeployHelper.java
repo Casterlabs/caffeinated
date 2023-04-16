@@ -81,6 +81,7 @@ public class DeployHelper {
 
         if (!anySucceeded) {
             logger.warn("No upload succeeded, not uploading commit hash.");
+            System.exit(1);
             return;
         }
 
@@ -102,7 +103,10 @@ public class DeployHelper {
             logger.info("Done!");
         } catch (B2Exception e) {
             logger.severe("An error occurred whilst uploading commit hash to backblaze:\n%s", e);
+            System.exit(1);
         }
+
+        System.exit(0);
     }
 
 }
