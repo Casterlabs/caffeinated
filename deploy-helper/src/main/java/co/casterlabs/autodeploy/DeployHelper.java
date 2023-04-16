@@ -34,7 +34,6 @@ public class DeployHelper {
             .createDefaultFactory()
             .create(System.getenv("BB_CLIENT_ID"), System.getenv("BB_CLIENT_KEY"), "AutoDeploy");
 
-        File baseDir = new File(System.getenv("CIRCLE_WORKING_DIRECTORY"));
         String commitShortHash = System.getenv("CIRCLE_SHA1").substring(0, 7);
         String branch = System.getenv("CIRCLE_BRANCH");
         int jobNumber = Integer.parseInt(System.getenv("CIRCLE_BUILD_NUM"));
@@ -46,7 +45,7 @@ public class DeployHelper {
 
         for (String artifact : CAFFEINATED_ARTIFACTS) {
             Promise<Void> promise = new Promise<>(() -> {
-                File artifactFile = new File(baseDir, "caffeinated/dist/artifacts/" + artifact);
+                File artifactFile = new File("./dist/artifacts/" + artifact);
 
                 logger.info("Uploading build artifact: %s (%d bytes)", artifactFile, artifactFile.length());
 

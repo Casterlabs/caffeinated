@@ -90,5 +90,4 @@ if [[ $@ != *"nodist"* ]]; then
     cd -
     echo ""
 
-    java -jar deploy-helper/target/deploy-helper.jar
 fi
