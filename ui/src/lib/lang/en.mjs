@@ -200,6 +200,7 @@ export default {
 	'chat.viewer.preferences.play_ding_on_message': 'Ding when a new message comes in',
 	'chat.viewer.preferences.read_messages_out_loud': 'Read messages out loud',
 	'chat.viewer.preferences.tts_voice': 'TTS Voice',
+	'chat.viewer.preferences.tts_or_ding_volume': 'TTS/Ding volume',
 	'chat.viewer.preferences.show_platform': "Show the user's platform",
 
 	'chat.viewer.tts.skip': 'Skip message',

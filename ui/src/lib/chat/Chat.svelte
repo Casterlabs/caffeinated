@@ -16,6 +16,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
 	import SelectMenu from '$lib/ui/SelectMenu.svelte';
+	import RangeInput from '$lib/ui/RangeInput.svelte';
 
 	import createConsole from '../console-helper.mjs';
 	import { fade } from 'svelte/transition';
@@ -44,6 +45,7 @@
 	let readMessagesAloud = false;
 	let ttsVoice = 'Brian';
 	let showPlatform = false;
+	let ttsOrDingVolume;
 
 	let isAtBottom = true;
 
@@ -66,6 +68,7 @@
 			checkTTSQueue();
 		});
 
+		ttsAudio.volume = ttsOrDingVolume;
 		ttsAudio.play();
 	}
 
@@ -204,7 +207,8 @@
 			playDingOnMessage,
 			readMessagesAloud,
 			ttsVoice,
-			showPlatform
+			showPlatform,
+			ttsOrDingVolume
 		});
 	}
 
@@ -218,6 +222,7 @@
 		readMessagesAloud = config.readMessagesAloud;
 		ttsVoice = config.ttsVoice;
 		showPlatform = config.showPlatform;
+		ttsOrDingVolume = config.ttsOrDingVolume;
 	}
 
 	export function processEvent(event) {
@@ -317,7 +322,9 @@
 		}
 
 		if (playDingOnMessage) {
-			new Audio('/sounds/dink.mp3').play();
+			const audio = new Audio('/sounds/dink.mp3');
+			audio.volume = ttsOrDingVolume;
+			audio.play();
 		}
 
 		if (readMessagesAloud) {
@@ -464,6 +471,24 @@
 						bind:value={ttsVoice}
 						on:value={savePreferences}
 					/>
+				</li>
+			{/if}
+			{#if readMessagesAloud || playDingOnMessage}
+				<li class="py-2">
+					<div class="w-full">
+						<!-- svelte-ignore a11y-label-has-associated-control -->
+						<label class="block text-sm font-medium text-base-12">
+							<LocalizedText key="chat.viewer.preferences.tts_or_ding_volume" />
+						</label>
+
+						<RangeInput
+							min={0}
+							max={1}
+							step={0.01}
+							bind:value={ttsOrDingVolume}
+							on:value={savePreferences}
+						/>
+					</div>
 				</li>
 			{/if}
 			<li class="py-2">

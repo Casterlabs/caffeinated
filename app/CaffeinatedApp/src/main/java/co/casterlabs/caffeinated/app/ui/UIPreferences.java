@@ -52,6 +52,7 @@ public class UIPreferences {
         private boolean readMessagesAloud = false;
         private String ttsVoice = "Brian";
         private boolean showPlatform = false;
+        private double ttsOrDingVolume = 1;
 
         // Still used by the popout dock.
         private @Deprecated boolean showModActions = true;
