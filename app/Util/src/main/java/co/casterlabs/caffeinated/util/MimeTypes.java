@@ -215,7 +215,7 @@ public class MimeTypes {
         mimeTypes.put("mov", "video/quicktime");
         mimeTypes.put("movie", "video/x-sgi-movie");
         mimeTypes.put("mp2", "audio/mpeg");
-        mimeTypes.put("mp3", "audio/mpeg3");
+        mimeTypes.put("mp3", "audio/mpeg");
         mimeTypes.put("mp4", "video/mp4");
         mimeTypes.put("mpa", "audio/mpeg");
         mimeTypes.put("mpc", "application/x-project");
