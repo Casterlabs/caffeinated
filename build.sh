@@ -40,8 +40,13 @@ if [[ $@ != *"nocompile"* ]]; then
     mkdir -p app/LocalServer/src/main/resources/loader
     cp -r widget-loader/* app/LocalServer/src/main/resources/loader
 
-    # Compile the maven project
+    # Compile the app maven project
     cd app
+    mvn clean package
+    cd ..
+
+    # Compile the deploy helper maven project
+    cd deploy-helper
     mvn clean package
     cd ..
 fi
@@ -85,4 +90,5 @@ if [[ $@ != *"nodist"* ]]; then
     cd -
     echo ""
 
+    java -jar deploy-helper/target/deploy-helper.jar
 fi
