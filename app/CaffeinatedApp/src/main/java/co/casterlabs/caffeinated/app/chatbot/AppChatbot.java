@@ -21,6 +21,7 @@ import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import lombok.NonNull;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class AppChatbot extends JavascriptObject {
     public static final char SYMBOL = '!';
@@ -161,6 +162,8 @@ public class AppChatbot extends JavascriptObject {
                 continue;
             }
 
+            FastLogger.logStatic(richMessage.getRaw());
+
             // Null means any, so we check if the event's platform matches the target.
             UserPlatform platform = richMessage.getSender().getPlatform();
             if ((command.getPlatform() == null) || (command.getPlatform() == platform)) {
@@ -168,7 +171,7 @@ public class AppChatbot extends JavascriptObject {
 
                 switch (command.getType()) {
                     case COMMAND:
-                        if (richMessage.getRaw().startsWith(SYMBOL + command.getTrigger())) {
+                        if (richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
                             send = true;
                         }
                         break;
