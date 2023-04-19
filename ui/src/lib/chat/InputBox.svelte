@@ -122,7 +122,7 @@
 								{#each Object.keys(userStates) as name}
 									{@const isSelected = platform == name}
 									{@const isHighlighted = selectorHighlighted == name}
-									{@const isSupported = supportedFeatures[name].includes('CHAT_SEND_MESSAGE')}
+									{@const isSupported = supportedFeatures[name]?.includes('CHAT_SEND_MESSAGE')}
 
 									<li
 										id="{ID}_{name}"
