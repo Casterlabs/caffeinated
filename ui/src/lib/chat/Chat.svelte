@@ -561,7 +561,7 @@
 		<button
 			class="absolute bottom-14 right-3 cursor-pointer rounded-full p-1 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
 			transition:fade
-			on:click={jumpToBottom}
+			on:click={() => jumpToBottom()}
 		>
 			<icon data-icon="icon/arrow-small-down" />
 		</button>
