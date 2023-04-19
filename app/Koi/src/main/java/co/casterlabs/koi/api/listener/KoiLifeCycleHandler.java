@@ -10,6 +10,8 @@ import co.casterlabs.koi.api.KoiIntegrationFeatures;
  */
 public interface KoiLifeCycleHandler {
 
+    default void onOpen() {}
+
     default void onClose(boolean remote) {}
 
     default void onServerMessage(String message) {}

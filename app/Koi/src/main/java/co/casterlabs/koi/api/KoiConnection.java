@@ -125,14 +125,7 @@ public class KoiConnection implements Closeable {
 
         @Override
         public void onOpen(ServerHandshake handshakedata) {
-            logger.info("Connected to Koi.");
-
-            if (request == null) {
-                this.close();
-            } else {
-                this.send(request.toString());
-                request = null;
-            }
+            logger.info("Connected to Koi, waiting for welcome.");
         }
 
         @Override
@@ -159,6 +152,20 @@ public class KoiConnection implements Closeable {
                 JsonObject packet = Rson.DEFAULT.fromJson(raw, JsonObject.class);
 
                 switch (packet.getString("type")) {
+                    case "WELCOME": {
+                        logger.info("Got welcome: %s", packet);
+
+                        if (request == null) {
+                            this.close();
+                        } else {
+                            this.send(request.toString());
+                            request = null;
+                        }
+
+                        listener.onOpen();
+                        return;
+                    }
+
                     case "KEEP_ALIVE": {
                         this.keepAlive(packet.get("nonce"));
                         return;
@@ -203,7 +210,6 @@ public class KoiConnection implements Closeable {
                     }
 
                     // We don't care about these or we already have them.
-                    case "WELCOME":
                     case "CLIENT_SCOPES":
                         return;
 
