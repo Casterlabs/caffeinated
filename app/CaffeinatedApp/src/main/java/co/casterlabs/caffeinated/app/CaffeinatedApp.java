@@ -254,7 +254,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             return false;
         }
 
-        return account.isHasCasterlabsPlus();
+        return account.hasCasterlabsPlus();
     }
 
     @JavascriptFunction

@@ -92,6 +92,21 @@ public class KoiConnection implements Closeable {
         }
     }
 
+    public KoiConnection loginPuppet(String token) {
+        if (this.isConnected()) {
+            JsonObject request = new JsonObject()
+                .put("type", "PUPPET_LOGIN")
+                .put("token", token)
+                .put("nonce", "_puppetlogin");
+
+            this.socket.send(request.toString());
+
+            return this;
+        } else {
+            throw new IllegalStateException("You need to be connected.");
+        }
+    }
+
     private class KoiSocket extends WebSocketClient {
 
         public KoiSocket(URI uri) {

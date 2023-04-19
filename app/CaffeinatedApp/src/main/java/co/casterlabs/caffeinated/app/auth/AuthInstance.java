@@ -142,7 +142,8 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @SuppressWarnings("deprecation")
     @KoiEventHandler
     public void onUserUpdate(UserUpdateEvent e) {
-        // Update the logger with the streamer's name.
+        boolean isAuthConfirmation = this.userData == null;
+
         this.userData = e.getStreamer();
 
         if (this.roomstate == null) {
@@ -150,6 +151,24 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
             // connect. (KOI)
             this.roomstate = new RoomstateEvent(e.getStreamer());
             CaffeinatedApp.getInstance().getKoi().onEvent(this.roomstate);
+        }
+
+        if (isAuthConfirmation) {
+            String puppetToken = CaffeinatedApp
+                .getInstance()
+                .getAuthPreferences()
+                .get()
+                .getToken("koiPuppet", this.tokenId);
+
+            if (puppetToken != null) {
+                boolean hasCasterlabsPlus = CaffeinatedApp.getInstance().hasCasterlabsPlus();
+
+                if (hasCasterlabsPlus) {
+                    this.koi.loginPuppet(puppetToken);
+                } else {
+                    this.logger.warn("User does not have Casterlabs plus, not logging in puppet.");
+                }
+            }
         }
 
         CaffeinatedApp.getInstance().getAuth().checkStatus();
@@ -189,6 +208,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 
         reconnectQueue.execute(() -> {
             try {
+                this.userData = null;
                 this.koi.login(this.token);
             } catch (Exception e) {
                 this.logger.exception(e);
