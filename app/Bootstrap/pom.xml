@@ -52,6 +52,10 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
+				<includes>
+					<include>**/*.json</include>
+					<include>**/*.txt</include>
+				</includes>
 			</resource>
 		</resources>
 	</build>
