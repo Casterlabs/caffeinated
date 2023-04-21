@@ -29,13 +29,9 @@ public class KoiConnection implements Closeable {
 
     private KoiLifeCycleHandler listener;
     private FastLogger logger;
+
     private KoiSocket socket;
-
     private URI uri;
-
-    private JsonObject request;
-
-    private boolean isFresh = true;
 
     @SneakyThrows
     public KoiConnection(@NonNull String url, @NonNull FastLogger logger, @NonNull KoiLifeCycleHandler listener, String clientId) {
@@ -46,86 +42,98 @@ public class KoiConnection implements Closeable {
 
     @Override
     public void close() {
-        this.socket.close();
+        if (this.isConnected()) {
+            this.socket.close();
+        }
     }
 
     public boolean isConnected() {
-        if (this.socket == null) {
-            return false;
-        } else {
-            return this.socket.isOpen();
-        }
+        return this.socket != null;
     }
 
-    public KoiConnection hookStreamStatus(String username, UserPlatform platform) throws InterruptedException {
+    public KoiConnection hookStreamStatus(String username, UserPlatform platform) throws InterruptedException, IOException {
         if (this.isConnected()) {
             throw new IllegalStateException("Already connected.");
-        } else {
-            this.request = new JsonObject();
-
-            this.request.put("type", "USER_STREAM_STATUS");
-            this.request.put("username", username);
-            this.request.put("platform", platform.name());
-            this.request.put("nonce", "_login");
-
-            this.socket = new KoiSocket(this.uri);
-            this.socket.connectBlocking();
-
-            return this;
         }
+
+        JsonObject request = new JsonObject()
+            .put("type", "USER_STREAM_STATUS")
+            .put("username", username)
+            .put("platform", platform.name())
+            .put("nonce", "_login");
+
+        try {
+            this.socket = new KoiSocket(this.uri, request);
+            this.socket.doConnect();
+        } catch (InterruptedException | IOException e) {
+            socket = null;
+            throw e;
+        }
+
+        return this;
     }
 
-    public KoiConnection login(String token) throws InterruptedException {
+    public KoiConnection login(String token) throws InterruptedException, IOException {
         if (this.isConnected()) {
             throw new IllegalStateException("Already connected.");
-        } else {
-            this.request = new JsonObject();
-
-            this.request.put("type", "LOGIN");
-            this.request.put("token", token);
-            this.request.put("nonce", "_login");
-
-            this.socket = new KoiSocket(this.uri);
-            this.socket.connectBlocking();
-
-            return this;
         }
+
+        JsonObject request = new JsonObject()
+            .put("type", "LOGIN")
+            .put("token", token)
+            .put("nonce", "_login");
+
+        try {
+            this.socket = new KoiSocket(this.uri, request);
+            this.socket.doConnect();
+        } catch (InterruptedException | IOException e) {
+            socket = null;
+            throw e;
+        }
+
+        return this;
     }
 
     public KoiConnection loginPuppet(String token) {
-        if (this.isConnected()) {
-            JsonObject request = new JsonObject()
-                .put("type", "PUPPET_LOGIN")
-                .put("token", token)
-                .put("nonce", "_puppetlogin");
-
-            this.socket.send(request.toString());
-
-            return this;
-        } else {
+        if (!this.isConnected()) {
             throw new IllegalStateException("You need to be connected.");
         }
+
+        JsonObject request = new JsonObject()
+            .put("type", "PUPPET_LOGIN")
+            .put("token", token)
+            .put("nonce", "_puppetlogin");
+
+        this.socket.send(request.toString());
+
+        return this;
     }
 
     private class KoiSocket extends WebSocketClient {
+        private final JsonObject loginRequest;
+        private boolean isFresh = true;
 
-        public KoiSocket(URI uri) {
+        public KoiSocket(URI uri, JsonObject loginRequest) {
             super(uri);
+            this.loginRequest = loginRequest;
 
             this.setConnectionLostTimeout(60 /* Seconds */);
             this.addHeader("User-Agent", "Casterlabs");
             this.setTcpNoDelay(true);
         }
 
-        @Override
-        public boolean connectBlocking() throws InterruptedException {
+        public void doConnect() throws InterruptedException, IOException {
             logger.info("Connecting to Koi...");
-            return super.connectBlocking();
+            boolean success = super.connectBlocking();
+            if (!success) throw new IOException("Failed to connect.");
         }
 
         @Override
         public void onOpen(ServerHandshake handshakedata) {
-            logger.info("Connected to Koi, waiting for welcome.");
+            logger.info("Connected to Koi, not waiting for welcome.");
+
+            this.send(this.loginRequest.toString());
+            listener.onOpen();
         }
 
         @Override
@@ -154,15 +162,6 @@ public class KoiConnection implements Closeable {
                 switch (packet.getString("type")) {
                     case "WELCOME": {
                         logger.info("Got welcome: %s", packet);
-
-                        if (request == null) {
-                            this.close();
-                        } else {
-                            this.send(request.toString());
-                            request = null;
-                        }
-
-                        listener.onOpen();
                         return;
                     }
 
@@ -198,14 +197,14 @@ public class KoiConnection implements Closeable {
 
                         if (event == null) {
                             logger.warn("Unsupported event type: %s", eventJson.getString("event_type"));
-                        } else {
-                            if ((event instanceof CatchupEvent) && isFresh) {
-                                ((CatchupEvent) event).setFresh(true);
-                                isFresh = false;
-                            }
-
-                            KoiEventUtil.reflectInvoke(listener, event);
                         }
+
+                        if ((event instanceof CatchupEvent) && isFresh) {
+                            ((CatchupEvent) event).setFresh(true);
+                            isFresh = false;
+                        }
+
+                        KoiEventUtil.reflectInvoke(listener, event);
                         return;
                     }
 
@@ -225,6 +224,8 @@ public class KoiConnection implements Closeable {
 
         @Override
         public void onClose(int code, String reason, boolean remote) {
+            socket = null;
+
             if (remote) {
                 logger.info("Lost connection to Koi.");
             } else {
