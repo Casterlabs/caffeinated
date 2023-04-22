@@ -6,9 +6,9 @@
 	let showNumbers;
 	let roundness;
 
-	let textHtml;
-	let titleHtml;
-	let titleCountHtml;
+	let textHtml = '';
+	let titleHtml = '';
+	let titleCountHtml = '';
 	let progress = 0;
 
 	let barColor;
@@ -24,6 +24,18 @@
 			return;
 		}
 
+		const IS_DONATION_RELATED = Widget.widgetData.namespace == 'co.casterlabs.donation_goal';
+
+		// We have to convert from the internal USD value to the currency so that the target is correct and the bar shows the right progress.
+		const currentCountNative = IS_DONATION_RELATED
+			? await Currencies.convertCurrency(
+					currentCount,
+					'USD',
+					Widget.getSetting('money.currency'),
+					false
+			  )
+			: currentCount;
+
 		let title = Widget.getSetting('goal.title');
 		let targetCount = Widget.getSetting('goal.target') || 0;
 
@@ -32,17 +44,15 @@
 		}
 
 		titleHtml = escapeHtml(title);
-		progress = currentCount / targetCount;
+		progress = currentCountNative / targetCount;
 
-		console.debug(currentCount, targetCount);
+		console.debug(currentCountNative, targetCount);
 
 		// We need to adjust the text for the donation goal.
-		if (Widget.widgetData.namespace == 'co.casterlabs.donation_goal') {
-			const displayedCurrentCount = await Currencies.convertCurrency(
-				currentCount,
-				'USD',
-				Widget.getSetting('money.currency'),
-				true
+		if (IS_DONATION_RELATED) {
+			const displayedCurrentCount = await Currencies.formatCurrency(
+				currentCountNative,
+				Widget.getSetting('money.currency')
 			);
 			const displayedTargetCount = await Currencies.formatCurrency(
 				targetCount,
@@ -52,8 +62,8 @@
 			textHtml = `${escapeHtml(title)}&nbsp;&nbsp;${displayedCurrentCount}/${displayedTargetCount}`;
 			titleCountHtml = `${displayedCurrentCount}/${displayedTargetCount}`;
 		} else {
-			textHtml = `${title}${currentCount}/${targetCount}`;
-			titleCountHtml = `${currentCount}/${targetCount}`;
+			textHtml = `${title}${currentCountNative}/${targetCount}`;
+			titleCountHtml = `${currentCountNative}/${targetCount}`;
 		}
 	}
 
@@ -106,7 +116,7 @@
 					/>
 
 					<div class="absolute inset-0 flex justify-center items-center">
-						<p>
+						<p class="titlespan">
 							<span>
 								{@html titleHtml}
 							</span>
@@ -122,3 +132,11 @@
 		{/if}
 	{/if}
 </div>
+
+<style>
+	:global(.titlespan svg),
+	:global(.titlespan img) {
+		display: inline-block;
+		transform: unset !important;
+	}
+</style>
