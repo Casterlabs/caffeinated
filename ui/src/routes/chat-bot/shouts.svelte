@@ -10,7 +10,7 @@
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
 
-	const debouncer = new Debouncer();
+	const debouncer = new Debouncer(1500);
 
 	const PLATFORMS = {
 		[null]: 'page.chat_bot.platform.ANY',
