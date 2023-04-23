@@ -16,6 +16,7 @@ import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.auth.AuthPreferences;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
+import co.casterlabs.caffeinated.app.chatbot.ChatbotScriptEngine;
 import co.casterlabs.caffeinated.app.controldeck.AppControlDeck;
 import co.casterlabs.caffeinated.app.controldeck.ControlDeckPreferences;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
@@ -157,6 +158,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         this.analytics.trackPageView("/", this.UI.getPreferences().getLanguage());
         this.analytics.startHeartbeat();
+
+        ChatbotScriptEngine.class.toString(); // Load.
     }
 
     @Override

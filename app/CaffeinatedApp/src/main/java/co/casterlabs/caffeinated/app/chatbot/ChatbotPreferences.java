@@ -1,7 +1,9 @@
 package co.casterlabs.caffeinated.app.chatbot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +30,8 @@ public class ChatbotPreferences {
 
     private KoiChatterType chatter = KoiChatterType.SYSTEM;
 
+    private Map<String, Object> store = new HashMap<>();
+
     public KoiChatterType getRealChatter() {
         boolean hasCasterlabsPlus = CaffeinatedApp.getInstance().hasCasterlabsPlus();
 
@@ -50,7 +54,7 @@ public class ChatbotPreferences {
         public static enum CommandType {
             COMMAND,
             CONTAINS,
-            // SCRIPT
+            SCRIPT
         }
     }
 

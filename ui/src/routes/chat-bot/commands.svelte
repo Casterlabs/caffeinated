@@ -19,7 +19,8 @@
 
 	const TYPES = {
 		COMMAND: 'page.chat_bot.commands.type.COMMAND',
-		CONTAINS: 'page.chat_bot.commands.type.CONTAINS'
+		CONTAINS: 'page.chat_bot.commands.type.CONTAINS',
+		SCRIPT: 'page.chat_bot.commands.type.SCRIPT'
 	};
 
 	const console = createConsole('Chat Bot/Commands');
@@ -54,7 +55,17 @@
 					</span>
 
 					<span class="inline-block h-fit" slot="1">
-						<SlimSelectMenu bind:value={command.type} options={TYPES} on:value={saveDB} />
+						<SlimSelectMenu
+							bind:value={command.type}
+							options={TYPES}
+							on:value={({ detail: value }) => {
+								if (value == 'SCRIPT' && command.response == t('page.chat_bot.commands.example')) {
+									command.trigger = 'shoutout';
+									command.response = t('page.chat_bot.commands.example.SCRIPT');
+								}
+								saveDB();
+							}}
+						/>
 					</span>
 
 					<div class="w-28 inline-block translate-y-3" slot="2">
@@ -70,7 +81,7 @@
 					<span slot="3" class="block mt-1.5">
 						<TextArea
 							placeholder="page.chat_bot.commands.example"
-							rows={2}
+							rows={command.type == 'SCRIPT' ? 8 : 2}
 							bind:value={command.response}
 							on:value={saveDB}
 						/>

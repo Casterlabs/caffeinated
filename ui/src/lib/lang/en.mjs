@@ -107,11 +107,16 @@ export default {
 	'page.chat_bot.commands': 'Commands',
 	'page.chat_bot.commands.type.COMMAND': 'runs',
 	'page.chat_bot.commands.type.CONTAINS': 'mentions',
+	'page.chat_bot.commands.type.SCRIPT': 'runs (script)',
 	'page.chat_bot.commands.format.COMMAND':
 		'When someone from %platform% %action% <b>!</b>%action_target%, send: %message%',
 	'page.chat_bot.commands.format.CONTAINS':
 		'When someone from %platform% %action% <b>[generic.quote.left]</b>%action_target%<b>[generic.quote.right]</b>, reply with: %message%',
+	'page.chat_bot.commands.format.SCRIPT':
+		'When someone from %platform% %action% <b>!</b>%action_target%, execute: %message%',
 	'page.chat_bot.commands.example': 'Checkout casterlabs.co!',
+	'page.chat_bot.commands.example.SCRIPT':
+		'[page.chat_bot.commands.example.SCRIPT.examples.shoutout.command]',
 	'sr.page.chat_bot.commands.add': 'Create another command',
 
 	'page.chat_bot.shouts': 'Shouts',
