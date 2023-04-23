@@ -10,7 +10,7 @@
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
 
-	const debouncer = new Debouncer(1500);
+	const debouncer = new Debouncer();
 
 	const PLATFORMS = {
 		[null]: 'page.chat_bot.platform.ANY',
@@ -95,6 +95,7 @@
 				on:click={() => {
 					commands.splice(idx, 1);
 					save();
+					commands = commands;
 				}}
 			>
 				<span class="sr-only">
@@ -116,6 +117,7 @@
 					response: t('page.chat_bot.commands.example'),
 					type: 'COMMAND'
 				});
+				commands = commands;
 				save();
 			}}
 		>

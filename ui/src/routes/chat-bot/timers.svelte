@@ -45,6 +45,7 @@
 				on:click={() => {
 					timers.splice(idx, 1);
 					save();
+					timers = timers;
 				}}
 			>
 				<span class="sr-only">
@@ -62,6 +63,7 @@
 			on:click={() => {
 				timers.push(t('page.chat_bot.timers.example'));
 				save();
+				timers = timers;
 			}}
 		>
 			<div>

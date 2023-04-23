@@ -12,6 +12,7 @@
 	const preferences = st || Caffeinated.chatbot.svelte('preferences');
 
 	$: preferences, $preferences && console.debug('Chat Bot Preferences:', $preferences);
+	let state = 0;
 
 	async function setPreferenceItem(name, value) {
 		Caffeinated.chatbot.preferences = {
@@ -63,38 +64,41 @@
 		</div>
 
 		<div class="mt-2">
-			<ul class="space-y-2">
-				{#each $preferences?.chatbots || [] as chatbot, idx}
-					<li class="relative">
-						<TextArea
-							placeholder="Nightbot"
-							rows="1"
-							resize={false}
-							value={chatbot}
-							on:value={({ detail: value }) => {
-								const chatbots = $preferences.chatbots;
-								chatbots[idx] = value; // Update the value.
-								setPreferenceItem('chatbots', chatbots);
-							}}
-						/>
+			{#key state}
+				<ul class="space-y-2">
+					{#each $preferences?.chatbots || [] as chatbot, idx}
+						<li class="relative">
+							<TextArea
+								placeholder="Nightbot"
+								rows="1"
+								resize={false}
+								value={chatbot}
+								on:value={({ detail: value }) => {
+									const chatbots = $preferences.chatbots;
+									chatbots[idx] = value; // Update the value.
+									setPreferenceItem('chatbots', chatbots);
+								}}
+							/>
 
-						<button
-							class="absolute inset-y-1 right-1 text-error hover:opacity-80"
-							title={t('sr.page.chat_bot.remove')}
-							on:click={() => {
-								const chatbots = $preferences.chatbots;
-								chatbots.splice(idx, 1);
-								setPreferenceItem('chatbots', chatbots);
-							}}
-						>
-							<span class="sr-only">
-								<LocalizedText key="sr.page.chat_bot.remove" />
-							</span>
-							<icon class="h-5" data-icon="icon/trash" />
-						</button>
-					</li>
-				{/each}
-			</ul>
+							<button
+								class="absolute inset-y-1 right-1 text-error hover:opacity-80"
+								title={t('sr.page.chat_bot.remove')}
+								on:click={() => {
+									const chatbots = $preferences.chatbots;
+									chatbots.splice(idx, 1);
+									setPreferenceItem('chatbots', chatbots);
+									state++;
+								}}
+							>
+								<span class="sr-only">
+									<LocalizedText key="sr.page.chat_bot.remove" />
+								</span>
+								<icon class="h-5" data-icon="icon/trash" />
+							</button>
+						</li>
+					{/each}
+				</ul>
+			{/key}
 
 			<button
 				class="mt-2 w-full relative flex items-center justify-center rounded-lg border transition border-base-5 text-base-11 hover:text-base-12 hover:shadow-sm hover:border-base-7 hover:bg-base-2 p-1 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
@@ -103,6 +107,7 @@
 					const chatbots = $preferences.chatbots;
 					chatbots.push(''); // Add a new blank entry.
 					setPreferenceItem('chatbots', chatbots);
+					state++;
 				}}
 			>
 				<div>

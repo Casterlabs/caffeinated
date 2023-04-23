@@ -25,7 +25,7 @@ import lombok.NonNull;
 public class AppChatbot extends JavascriptObject {
     public static final char SYMBOL = '!';
 
-    @JavascriptValue(allowSet = false, watchForMutate = true)
+    @JavascriptValue(allowSet = false, watchForMutate = false)
     private PreferenceFile<ChatbotPreferences> preferences;
 
     @JavascriptValue(allowSet = false)
