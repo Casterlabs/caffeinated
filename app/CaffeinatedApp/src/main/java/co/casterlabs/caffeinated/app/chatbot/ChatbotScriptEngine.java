@@ -6,10 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.jetbrains.annotations.Nullable;
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
@@ -28,14 +28,17 @@ public class ChatbotScriptEngine {
 
     static {
         System.setProperty("nashorn.args", "--language=es6");
-        engine = new ScriptEngineManager().getEngineByName("nashorn");
+        engine = new NashornScriptEngineFactory().getScriptEngine();
 
         engine.put("store", CaffeinatedApp.getInstance().getChatbotPreferences().get().getStore());
-        engine.put("Koi", new ScriptKoi());
+        engine.put("__internal_handle", new ScriptHandle());
 
         try {
             engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
-        } catch (ScriptException ignored) {}
+            engine.eval("load('classpath:nashornPolyfill.js')");
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -56,10 +59,18 @@ public class ChatbotScriptEngine {
             args.remove(0);
 
             String[] script = {
-                    "{",
+                    "(() => {",
 
                     // "Globals"
                     String.format("const Music = %s;", CaffeinatedApp.getInstance().getMusic().toJson()),
+                    String.format(
+                        "const Koi = {"
+                            + "sendChat(platform, message, chatter, replyTarget) {return __internal_handle.koi_sendChat(platform, message, chatter, replyTarget);},"
+                            + "upvoteChat(platform, messageId) {return __internal_handle.koi_upvoteChat(platform, messageId);},"
+                            + "deleteChat(platform, messageId) {return __internal_handle.koi_deleteChat(platform, messageId);},"
+                            + "%s;",
+                        CaffeinatedApp.getInstance().getKoi().toJson().toString().substring(1) // Chop off the leading '{'
+                    ),
                     "",
 
                     // Per-event.
@@ -68,10 +79,10 @@ public class ChatbotScriptEngine {
                     "",
 
                     scriptToExecute,
-                    "};"
+                    "})();"
             };
 
-            engine.eval(String.join("\n", script));
+            engine.eval(String.join("\n", script), engine.getContext());
             CaffeinatedApp.getInstance().getChatbotPreferences().save(); // Save any changes to store.
         } catch (ScriptException e) {
             String message = LogUtil.parseFormat("An error occurred whilst executing script command:\n%s", e);
@@ -80,18 +91,17 @@ public class ChatbotScriptEngine {
         }
     }
 
-    @SuppressWarnings("unused")
-    public static class ScriptKoi {
+    public static class ScriptHandle {
 
-        public void sendChat(@NonNull String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
+        public void koi_sendChat(@NonNull String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
             CaffeinatedApp.getInstance().getKoi().sendChat(UserPlatform.valueOf(platform), message, KoiChatterType.valueOf(chatter), replyTarget, false);
         }
 
-        public void upvoteChat(@NonNull String platform, @NonNull String messageId) {
+        public void koi_upvoteChat(@NonNull String platform, @NonNull String messageId) {
             CaffeinatedApp.getInstance().getKoi().upvoteChat(UserPlatform.valueOf(platform), messageId);
         }
 
-        public void deleteChat(@NonNull String platform, @NonNull String messageId) {
+        public void koi_deleteChat(@NonNull String platform, @NonNull String messageId) {
             CaffeinatedApp.getInstance().getKoi().deleteChat(UserPlatform.valueOf(platform), messageId, false);
         }
 

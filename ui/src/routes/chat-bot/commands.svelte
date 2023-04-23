@@ -9,6 +9,7 @@
 	import { STREAMING_SERVICE_NAMES } from '../../components/caffeinatedAuth.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
+	import SlimButton from '$lib/ui/SlimButton.svelte';
 
 	const debouncer = new Debouncer();
 
@@ -60,7 +61,7 @@
 							options={TYPES}
 							on:value={({ detail: value }) => {
 								if (value == 'SCRIPT' && command.response == t('page.chat_bot.commands.example')) {
-									command.trigger = 'shoutout';
+									command.trigger = 'test';
 									command.response = t('page.chat_bot.commands.example.SCRIPT');
 								}
 								saveDB();
@@ -130,3 +131,41 @@
 		</button>
 	</li>
 </ul>
+
+<div class="mt-4">
+	<h1 class="font-bold text-lg">
+		<LocalizedText key="page.chat_bot.commands.examples" />
+	</h1>
+
+	<ul class="space-y-4">
+		<!-- Script Examples -->
+		{#each ['song', 'where', 'shoutout'] as example}
+			<li>
+				<h2 class="font-semibold">
+					!{example}
+
+					<SlimButton
+						on:click={() => {
+							const trigger = example;
+							const code = t(`page.chat_bot.commands.examples.${example}.code`);
+
+							commands.push({
+								platform: null,
+								trigger: trigger,
+								response: code,
+								type: 'SCRIPT'
+							});
+							commands = commands;
+							save();
+						}}
+					>
+						<LocalizedText key="page.chat_bot.commands.examples.add" />
+					</SlimButton>
+				</h2>
+				<p>
+					<LocalizedText key="page.chat_bot.commands.examples.{example}.description" />
+				</p>
+			</li>
+		{/each}
+	</ul>
+</div>

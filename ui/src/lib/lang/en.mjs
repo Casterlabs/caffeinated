@@ -14,6 +14,8 @@ export default {
 
 	'generic.quote.left': "'",
 	'generic.quote.right': "'",
+	'generic.bracket.left': '[',
+	'generic.bracket.right': ']',
 
 	'app.love': 'Made with ♥ by Casterlabs',
 	'app.copyright': 'Copyright © {year} Casterlabs. All rights reserved.',
@@ -116,8 +118,23 @@ export default {
 		'When someone from %platform% %action% <b>!</b>%action_target%, execute: %message%',
 	'page.chat_bot.commands.example': 'Checkout casterlabs.co!',
 	'page.chat_bot.commands.example.SCRIPT':
-		'[page.chat_bot.commands.example.SCRIPT.examples.shoutout.command]',
+		'Koi.sendChat(event.streamer.platform, "Hello world!", "SYSTEM", event.id);',
 	'sr.page.chat_bot.commands.add': 'Create another command',
+
+	'page.chat_bot.commands.examples': 'Examples:',
+	'page.chat_bot.commands.examples.add': 'Add',
+	'page.chat_bot.commands.examples.shoutout.description':
+		'Lets you shoutout another streamer. Usage: !shoutout <username>',
+	'page.chat_bot.commands.examples.shoutout.code':
+		'if (args.length == 0) {\n    Koi.sendChat(event.streamer.platform, `You must specify a streamer to shout out!`, "SYSTEM", event.id);\n} else {\n    Koi.sendChat(event.streamer.platform, `Everybody go check out @${args[generic.bracket.left]0[generic.bracket.right]}!`, "SYSTEM", null);\n}',
+	'page.chat_bot.commands.examples.song.description':
+		"Displays the current song you're listening to and provides a link. Usage: !song",
+	'page.chat_bot.commands.examples.song.code':
+		'if (Music.activePlayback) {\n    const title = Music.activePlayback.currentTrack.title;\n    const artists = Music.activePlayback.currentTrack.artists.join(", ");\n    const link= Music.activePlayback.currentTrack.link;\n    Koi.sendChat(event.streamer.platform, `Now playing: ${title} by ${artists} - ${link}`, "SYSTEM", event.id);\n} else {\n    Koi.sendChat(event.streamer.platform, `No song is playing.`, "SYSTEM", event.id);\n}',
+	'page.chat_bot.commands.examples.where.description':
+		'Lists which platforms you are live on and provides links to your other accounts. Usage: !where',
+	'page.chat_bot.commands.examples.where.code':
+		'const listOfLinks = [];\n\nfor (const state of Object.values(Koi.streamStates)) {\n    if (state.is_live) {\n        listOfLinks.push(state.streamer.link);\n    }\n}\n\n// We\'re not live anywhere, just dump all of the links.\nif (listOfLinks.length == 0) {\n    for (const state of Object.values(Koi.userStates)) {\n        listOfLinks.push(state.streamer.link);\n    }\n\n    Koi.sendChat(event.streamer.platform, `We stream at: ${listOfLinks.join(", ")}`, "SYSTEM", event.id);\n    return;\n}\n\nKoi.sendChat(event.streamer.platform, `We\'re currently live at: ${listOfLinks.join(", ")}`, "SYSTEM", event.id);',
 
 	'page.chat_bot.shouts': 'Shouts',
 	'page.chat_bot.shouts.format': 'When someone from %platform% %action% say: %message%',
