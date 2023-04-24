@@ -27,7 +27,6 @@
 	let chatElements = {};
 
 	const settings = writable({});
-	let itemYOffset = 0;
 
 	function onEvent(event) {
 		switch (event.event_type) {
@@ -106,12 +105,10 @@
 				if (event.x_is_catchup) return;
 				if ($settings['message_style.messages_animation'] == 'None') return;
 
-				const FRAME_RATE = 100; // fps, keep it even.
+				const FRAME_RATE = 60; // fps, keep it even.
 				const FRAME_INTERVAL = 1000 / FRAME_RATE;
 				const TOTAL_FRAME_COUNT = ANIMATION_TIME / FRAME_INTERVAL;
-				const CHANGE_PER_FRAME = 100 / TOTAL_FRAME_COUNT;
 
-				const isTopDown = $settings['message_style.message_direction'] == 'Top-down';
 				const direction = $settings['message_style.slide_direction'];
 
 				switch (direction) {
@@ -126,23 +123,11 @@
 					}
 				}
 
-				if (isTopDown) {
-					itemYOffset -= 100;
-				} else {
-					itemYOffset += 100;
-				}
-
 				let currentFrame = 0;
 				let animTaskId = setInterval(() => {
 					currentFrame++;
-					if (currentFrame == TOTAL_FRAME_COUNT) {
+					if (currentFrame >= TOTAL_FRAME_COUNT) {
 						clearInterval(animTaskId);
-					}
-
-					if (isTopDown) {
-						itemYOffset += CHANGE_PER_FRAME;
-					} else {
-						itemYOffset -= CHANGE_PER_FRAME;
 					}
 
 					const progress = currentFrame / TOTAL_FRAME_COUNT;
@@ -193,7 +178,6 @@
 	bind:this={chatBox}
 	id="chatbox"
 	style:--animation-time={ANIMATION_TIME}
-	style:--item-offset="{itemYOffset}%"
 	style:color={$settings['text_style.text_color']}
 	style:font-size="{$settings['text_style.font_size']}px"
 	style:padding="{$settings['message_style.margin']}px"

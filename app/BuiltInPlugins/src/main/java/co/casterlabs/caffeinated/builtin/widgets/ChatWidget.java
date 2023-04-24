@@ -51,20 +51,11 @@ public class ChatWidget extends Widget {
 
             messageStyle.addItem(WidgetSettingsItem.asDropdown("messages_animation", "Message Animation", "None", "None", "Slide-in"));
             if ("Slide-in".equals(this.settings().getString("message_style.messages_animation"))) {
-                // If the direction is Bottom-up then allow the messages to slide in from the
-                // bottom, otherwise from the top.
-                String uniqueOption;
-                if ("Bottom-up".equals(this.settings().getString("message_style.message_direction"))) {
-                    uniqueOption = "From the bottom";
-                } else {
-                    uniqueOption = "From the top";
-                }
-
                 messageStyle.addItem(
                     WidgetSettingsItem.asDropdown(
                         "slide_direction", "Slide direction",
                         "From the left",
-                        "From the left", "From the right", uniqueOption
+                        "From the left", "From the right"
                     )
                 );
             }

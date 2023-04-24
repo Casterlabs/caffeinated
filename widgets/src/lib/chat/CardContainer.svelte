@@ -46,6 +46,6 @@
 
 <style>
 	div {
-		transform: translate(var(--x-offset), var(--item-offset));
+		transform: translateX(var(--x-offset));
 	}
 </style>
