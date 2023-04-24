@@ -182,7 +182,7 @@ public class AppChatbot extends JavascriptObject {
                     case SCRIPT:
                         if (richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
                             ChatbotScriptEngine.execute(richMessage, command.getResponse());
-                            return true; // We've processed a command!
+                            return false; // !We don't want to hide the trigger message!
                         }
                         break;
                 }
