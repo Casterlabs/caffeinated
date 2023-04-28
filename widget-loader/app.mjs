@@ -19,7 +19,7 @@ function recomputeStyle() {
     } else {
         appStyleElement.innerHTML = `
         [data-rich-type="emoji"] > [data-emoji-provider="system"] {
-            display: none;
+            display: none !important;
         }
         
         [data-rich-type="emoji"] > [data-emoji-provider="${emojiProvider}"] {
