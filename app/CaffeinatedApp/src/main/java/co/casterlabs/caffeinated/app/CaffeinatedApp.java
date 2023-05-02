@@ -60,7 +60,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     public static final String AUTH_URL = "https://casterlabs.co/auth/redirect";
     public static final Map<String, String> OVERRIDE_AUTH_URLS = Map.of(
-        "spotify", "https://api.casterlabs.co/v2/caffeinated/spotify/auth/redirect"
+        "spotify", "https://api.casterlabs.co/v2/caffeinated/spotify/auth/redirect",
+        "streamlabs", "https://api.casterlabs.co/v2/caffeinated/streamlabs/auth/redirect"
     );
 
     private static @Getter CaffeinatedApp instance;
@@ -79,16 +80,16 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // @formatter:off
 
     // Integrations
-    private PluginIntegration plugins      = new PluginIntegration();
-    private MusicIntegration  music        = new MusicIntegration();
-    private AppControlDeck    controlDeck  = new AppControlDeck();
-    private ThemeManager      themeManager = new ThemeManager();
-    private AppChatbot        chatbot      = new AppChatbot();
-    private GlobalKoi         koi          = new GlobalKoi();
-    private AppAuth           auth         = new AppAuth();
-    private EmojisObj         emojis       = new EmojisObj();
-    private AppApi            api          = new AppApi();
-    private AppUI             UI           = new AppUI();
+    private PluginIntegration  plugins            = new PluginIntegration();
+    private MusicIntegration   music              = new MusicIntegration();
+    private AppControlDeck     controlDeck        = new AppControlDeck();
+    private ThemeManager       themeManager       = new ThemeManager();
+    private AppChatbot         chatbot            = new AppChatbot();
+    private GlobalKoi          koi                = new GlobalKoi();
+    private AppAuth            auth               = new AppAuth();
+    private EmojisObj          emojis             = new EmojisObj();
+    private AppApi             api                = new AppApi();
+    private AppUI              UI                 = new AppUI();
 
     // Preferences
     private PreferenceFile<PluginIntegrationPreferences> pluginIntegrationPreferences = new PreferenceFile<>("plugins", PluginIntegrationPreferences.class);

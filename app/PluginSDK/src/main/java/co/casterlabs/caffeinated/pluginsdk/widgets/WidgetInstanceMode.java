@@ -5,6 +5,7 @@ public enum WidgetInstanceMode {
     WIDGET_ALT,
     DEMO,
     DOCK,
-    APPLET;
+    APPLET,
+    SETTINGS_APPLET;
 
 }

@@ -104,13 +104,19 @@
                 const { address, port, pluginId, widgetId, authorization, widgetMode, basePath } = params;
 
                 // Map the url elsewhere if we're in dev mode.
-                if (location.origin == "http://localhost:3002" && pluginId == "co.casterlabs.defaultwidgets") {
-                    sandboxFrame.src = `http://localhost:3002/$caffeinated-sdk-root$${basePath}`;
-                } else if (location.origin == "http://localhost:3000" && pluginId == "co.casterlabs.uidocks") {
-                    sandboxFrame.src = `http://localhost:3000/$caffeinated-sdk-root$${basePath}`;
+                console.debug("Origin:", location.origin, "Plugin ID:", pluginId)
+
+                if (["http://localhost:3000", "http://localhost:3002"].includes(location.origin)) {
+                    if (["co.casterlabs.uidocks", "co.casterlabs.thirdparty.streamlabs"].includes(pluginId)) {
+                        sandboxFrame.src = `http://localhost:3000/$caffeinated-sdk-root$${basePath}`;
+                    } else {
+                        sandboxFrame.src = `http://localhost:3002/$caffeinated-sdk-root$${basePath}`;
+                    }
                 } else {
                     sandboxFrame.src = `http://${address}:${port}/api/plugin/${pluginId}/${authorization}/html${basePath}`;
                 }
+
+                console.debug("frameSrc:" + sandboxFrame.src);
 
                 return false;
             }

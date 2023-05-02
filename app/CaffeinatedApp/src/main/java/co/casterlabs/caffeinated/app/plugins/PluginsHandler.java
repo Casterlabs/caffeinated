@@ -73,6 +73,10 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         return this.createWidget(namespace, namespace + ".applet", "Applet", settings, WidgetType.APPLET);
     }
 
+    public WidgetHandle createSettingsApplet(@NonNull String namespace, @Nullable JsonObject settings) {
+        return this.createWidget(namespace, namespace + ".settings_applet", "Settings Applet", settings, WidgetType.SETTINGS_APPLET);
+    }
+
     public WidgetHandle createDock(@NonNull String namespace, @Nullable JsonObject settings) {
         return this.createWidget(namespace, namespace + ".dock", "Dock", settings, WidgetType.DOCK);
     }
@@ -176,7 +180,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         this.$creatableWidgets.add(widgetDetails);
 
         // Automatically create the docks and applets when registered.
-        if ((widgetDetails.getType() == WidgetType.DOCK) || (widgetDetails.getType() == WidgetType.APPLET)) {
+        if ((widgetDetails.getType() == WidgetType.DOCK) || (widgetDetails.getType() == WidgetType.APPLET) || (widgetDetails.getType() == WidgetType.SETTINGS_APPLET)) {
             JsonObject settings = null;
 
             // Now we need to find the widget's settings (if they exist)
@@ -192,13 +196,16 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
                     this.createApplet(widgetDetails.getNamespace(), settings);
                     break;
 
+                case SETTINGS_APPLET:
+                    this.createSettingsApplet(widgetDetails.getNamespace(), settings);
+                    break;
+
                 case DOCK:
                     this.createDock(widgetDetails.getNamespace(), settings);
                     break;
 
                 default:
                     break;
-
             }
         }
 

@@ -16,6 +16,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.plugins.PluginContext.ContextType;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences.WidgetSettingsDetails;
+import co.casterlabs.caffeinated.app.thirdparty.ThirdPartyServices;
 import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
@@ -81,6 +82,14 @@ public class PluginIntegration extends JavascriptObject {
 
             ReflectionLib.setValue(uiDocksPlugin, "plugins", this.plugins);
             PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(uiDocksPlugin), "Caffeinated");
+            ctx.setPluginType(ContextType.INTERNAL);
+            this.contexts.add(ctx);
+        }
+
+        // Load the Third Party Services
+        for (CaffeinatedPlugin service : ThirdPartyServices.init()) {
+            ReflectionLib.setValue(service, "plugins", this.plugins);
+            PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(service), "Caffeinated");
             ctx.setPluginType(ContextType.INTERNAL);
             this.contexts.add(ctx);
         }
