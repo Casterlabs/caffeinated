@@ -7,7 +7,9 @@
 
 	onMount(() => {
 		Widget.on('hasToken', (has) => (hasToken = has));
-		Widget.emit('hasToken');
+		Widget.on('init', () => {
+			Widget.emit('hasToken');
+		});
 		console.log(Widget);
 	});
 </script>
