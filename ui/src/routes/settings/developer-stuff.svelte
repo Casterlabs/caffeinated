@@ -23,3 +23,13 @@
 		}
 	}}
 />
+
+<br />
+<br />
+
+<a
+	class="text-link"
+	href="/$caffeinated-sdk-root$/settings/applet?id=co.casterlabs.thirdparty.streamlabs.settings.settings_applet"
+>
+	Streamlabs Integration
+</a>

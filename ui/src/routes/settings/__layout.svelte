@@ -19,20 +19,21 @@
 	];
 
 	// Filter the list of tabs for a match.
-	$: currentPage = tabs.filter(([_, href]) => $page.url.pathname + $page.url.search == href)[0][0];
+	$: currentPage = (tabs.filter(([_, href]) => $page.url.pathname + $page.url.search == href)[0] ||
+		[])[0];
 
 	onMount(() => {
-		Caffeinated.plugins.widgets
-			.then((widgets) => widgets.filter((w) => w.details.type == 'SETTINGS_APPLET'))
-			.then((settingsApplets) => {
-				for (const settingsApplet of settingsApplets) {
-					tabs.push([
-						settingsApplet.details.friendlyName,
-						'/$caffeinated-sdk-root$/settings/applet?id=' + settingsApplet.id
-					]);
-				}
-				loadedWidgets = true;
-			});
+		// Caffeinated.plugins.widgets
+		// 	.then((widgets) => widgets.filter((w) => w.details.type == 'SETTINGS_APPLET'))
+		// 	.then((settingsApplets) => {
+		// 		for (const settingsApplet of settingsApplets) {
+		// 			tabs.push([
+		// 				settingsApplet.details.friendlyName,
+		// 				'/$caffeinated-sdk-root$/settings/applet?id=' + settingsApplet.id
+		// 			]);
+		// 		}
+		// 		loadedWidgets = true;
+		// 	});
 	});
 </script>
 
