@@ -16,6 +16,10 @@ public class Config {
     private String spotifySecret = "";
     private String spotifyRedirectUri = "";
 
+    private String streamlabsClientId = "";
+    private String streamlabsSecret = "";
+    private String streamlabsRedirectUri = "";
+
     public static Config load() throws IOException {
         return Rson.DEFAULT.fromJson(
             new String(

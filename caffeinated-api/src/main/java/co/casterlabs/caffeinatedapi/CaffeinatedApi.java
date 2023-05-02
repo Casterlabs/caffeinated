@@ -3,6 +3,7 @@ package co.casterlabs.caffeinatedapi;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinatedapi.routes.SpotifyAuthProxy;
+import co.casterlabs.caffeinatedapi.routes.StreamlabsAuthProxy;
 import co.casterlabs.sora.Sora;
 import co.casterlabs.sora.api.PluginImplementation;
 import co.casterlabs.sora.api.SoraPlugin;
@@ -19,6 +20,7 @@ public class CaffeinatedApi extends SoraPlugin {
         this.config = Config.load();
 
         sora.addProvider(this, new SpotifyAuthProxy(this.config));
+        sora.addProvider(this, new StreamlabsAuthProxy(this.config));
     }
 
     @Override
