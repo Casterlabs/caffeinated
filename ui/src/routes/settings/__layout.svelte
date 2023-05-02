@@ -19,8 +19,9 @@
 	];
 
 	// Filter the list of tabs for a match.
-	$: currentPage = (tabs.filter(([_, href]) => $page.url.pathname + $page.url.search == href)[0] ||
-		[])[0];
+	$: currentPage = (tabs.filter(
+		([_, href]) => $page.url.pathname /*+ $page.url.search*/ == href
+	)[0] || [])[0];
 
 	onMount(() => {
 		// Caffeinated.plugins.widgets
