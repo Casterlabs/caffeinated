@@ -67,7 +67,7 @@ export function init({ initHandler, disconnectHandler }) {
             return conn.widgetData.settings[key];
         },
 
-        emit(type, data) {
+        emit(type, data = {}) {
             if (type.startsWith("__internal:")) {
                 throw "__internal is a reserved prefix.";
             }
