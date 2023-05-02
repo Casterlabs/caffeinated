@@ -22,7 +22,6 @@ import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings> {
-    private static final String AUTH_PROXY_URL = "https://api.casterlabs.co/v2/natsukashii/spotify";
     private static final long POLL_RATE = TimeUnit.SECONDS.toMillis(15);
 
     private FastLogger logger = new FastLogger();
@@ -67,7 +66,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
                 JsonObject response = Rson.DEFAULT.fromJson(
                     WebUtil.sendHttpRequest(
                         new Request.Builder()
-                            .url(String.format("%s?refresh_token=%s", AUTH_PROXY_URL, this.refreshToken))
+                            .url("https://api.casterlabs.co/v2/caffeinated/spotify/auth/refresh?refresh_token=" + this.refreshToken)
                     ), JsonObject.class
                 );
 
@@ -193,7 +192,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
             JsonObject response = Rson.DEFAULT.fromJson(
                 WebUtil.sendHttpRequest(
                     new Request.Builder()
-                        .url(String.format("%s?code=%s", AUTH_PROXY_URL, code))
+                        .url("https://api.casterlabs.co/v2/caffeinated/spotify/auth/code?code=" + code)
                 ), JsonObject.class
             );
 
