@@ -59,7 +59,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         KoiEventType.CLEARCHAT,
         KoiEventType.PLATFORM_MESSAGE,
         KoiEventType.RICH_MESSAGE,
-        KoiEventType.MESSAGE_REACTION,
+        KoiEventType.LIKE,
 
         // Deprecated
         KoiEventType.CHAT,

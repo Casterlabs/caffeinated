@@ -11,17 +11,15 @@ import lombok.ToString;
 @ToString
 @JsonClass(exposeAll = true)
 @EqualsAndHashCode(callSuper = true)
-public class MessageReactionEvent extends KoiEvent {
+public class LikeEvent extends KoiEvent {
     private @Getter SimpleProfile streamer;
 
-    @JsonField("meta_id")
-    private String metaId;
-
-    private String reaction; // Usually just an emoji.
+    @JsonField("total_likes")
+    private long totalLikes;
 
     @Override
     public KoiEventType getType() {
-        return KoiEventType.MESSAGE_REACTION;
+        return KoiEventType.LIKE;
     }
 
 }

@@ -25,7 +25,7 @@ public enum KoiEventType {
     ROOMSTATE            (RoomstateEvent.class),
     PLATFORM_MESSAGE     (PlatformMessageEvent.class), 
     RICH_MESSAGE         (RichMessageEvent.class),
-    MESSAGE_REACTION     (MessageReactionEvent.class),
+    LIKE                 (LikeEvent.class),
     
     @Deprecated
     DONATION             (DonationEvent.class),
