@@ -1,0 +1,15 @@
+.DS_store
+
+# IntelliJ
+*.iml
+.idea/
+
+# Eclipse
+.settings/
+.project
+.classpath
+
+# Common
+target/
+*pom.xml.versionsBackup
+plugins/
