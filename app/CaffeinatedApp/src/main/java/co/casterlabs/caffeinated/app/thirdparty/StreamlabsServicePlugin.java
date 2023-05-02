@@ -95,6 +95,11 @@ public class StreamlabsServicePlugin extends CaffeinatedPlugin {
 
         @Override
         public void onNewInstance(@NonNull WidgetInstance instance) {
+            try {
+                String accessToken = CaffeinatedApp.getInstance().getAuthPreferences().get().getToken("thirdparty", "streamlabs");
+                instance.emit("hasToken", new JsonBoolean(accessToken != null));
+            } catch (IOException ignored) {}
+
             instance.on("hasToken", () -> {
                 String accessToken = CaffeinatedApp.getInstance().getAuthPreferences().get().getToken("thirdparty", "streamlabs");
 
