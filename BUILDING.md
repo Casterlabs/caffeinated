@@ -53,6 +53,14 @@ b) Follow these directions:
   
   
 
+# Developing
+1) Clone the repo
+2) Open the folder in your terminal of choice (Windows users: R-Click the directory > Open Git Bash Here)
+3) Run `sh dev.sh`
+4) Profit! You can now launch the Bootstrap class with `-D http://localhost:3000` and start developing!
+
+The build files will automatically download the runtime zips and make the executables.
+
 # Building
 1) Clone the repo
 2) Open the folder in your terminal of choice (Windows users: R-Click the directory > Open Git Bash Here)
