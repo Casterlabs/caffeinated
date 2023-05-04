@@ -1,6 +1,7 @@
 <svelte:options accessors />
 
 <script>
+	import streamingServices from '$lib/streamingServices.mjs';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
@@ -39,6 +40,7 @@
 	<div
 		id="slot"
 		style:--x-offset={offsetX}
+		style:--platform-color={streamingServices[event.streamer.platform]?.color || 'red'}
 		in:fade={{ duration: 200 }}
 		out:fade={{ duration: 750 }}
 	/>
@@ -47,5 +49,17 @@
 <style>
 	div {
 		transform: translateX(var(--x-offset));
+	}
+
+	div :global(b) {
+		color: var(--user-color);
+	}
+
+	:global(.username-color-platform) div :global(b) {
+		color: var(--platform-color);
+	}
+
+	:global(.username-color-static) div :global(b) {
+		color: var(--static-username-color);
 	}
 </style>

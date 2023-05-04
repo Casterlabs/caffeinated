@@ -31,7 +31,7 @@
 		</span>
 	{/if}
 
-	<b style:color={event.sender.color || 'red'}>{event.sender.displayname}</b><span>:</span>
+	<b style:--user-color={event.sender.color || 'red'}>{event.sender.displayname}</b><span>:</span>
 
 	{#if badges == 'After Username'}
 		<span class="richmessage-badges space-x-1" aria-hidden="true">

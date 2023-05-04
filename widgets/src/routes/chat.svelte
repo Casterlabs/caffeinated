@@ -186,6 +186,10 @@
 	class:flex-col-reverse={$settings['message_style.message_direction'] == 'Top-down'}
 	class:bottom-0={$settings['message_style.message_direction'] == 'Bottom-up'}
 	class:text-right={$settings['text_style.text_align'] == 'Right'}
+	style:--static-username-color={$settings['message_style.username_color.static'] || '#f04f88'}
+	class:username-color-platform={$settings['message_style.username_color'] ==
+		"Match Platform's Theme"}
+	class:username-color-static={$settings['message_style.username_color'] == 'Static Color'}
 >
 	<!---->
 </ul>

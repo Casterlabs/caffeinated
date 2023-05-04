@@ -41,8 +41,19 @@ public class ChatWidget extends Widget {
             WidgetSettingsSection messageStyle = new WidgetSettingsSection("message_style", "Message Style")
                 .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE))
                 .addItem(WidgetSettingsItem.asDropdown("message_direction", "Messages Direction", "Bottom-up", "Bottom-up", "Top-down"))
-                .addItem(WidgetSettingsItem.asDropdown("badges", "Badges", "Before Username", "Hidden", "Before Username", "After Username"));
+                .addItem(WidgetSettingsItem.asDropdown("badges", "Badges", "Before Username", "Hidden", "Before Username", "After Username"))
+                .addItem(
+                    WidgetSettingsItem.asDropdown(
+                        "username_color", "Username color",
+                        "User's Preference",
+                        "User's Preference", "Static Color", "Match Platform's Theme"
+                    )
+                );
 //                .addItem(WidgetSettingsItem.asCheckbox("show_avatars", "Show user avatars", false));
+
+            if ("Static Color".equals(this.settings().getString("message_style.username_color"))) {
+                messageStyle.addItem(WidgetSettingsItem.asColor("username_color.static", "Static Username Color", "#f04f88"));
+            }
 
             messageStyle.addItem(WidgetSettingsItem.asCheckbox("disappearing", "Make messages disappear", false));
             if (this.settings().getBoolean("message_style.disappearing", false)) {
