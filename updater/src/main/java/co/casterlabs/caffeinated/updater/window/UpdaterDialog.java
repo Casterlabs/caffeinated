@@ -37,6 +37,8 @@ public class UpdaterDialog extends JFrame implements Closeable {
     private @Getter UpdaterPane pane;
     private @Getter UpdaterUI ui;
 
+    private int currentProgress = 0;
+
     public UpdaterDialog(DialogAnimation animation) throws IOException {
 //        super((Window) null);
 
@@ -144,19 +146,25 @@ public class UpdaterDialog extends JFrame implements Closeable {
     }
 
     public void setProgress(double progress) {
-        if (Taskbar.isTaskbarSupported()) {
-            Taskbar taskbar = Taskbar.getTaskbar();
+        if (!Taskbar.isTaskbarSupported()) return;
 
-            if (taskbar.isSupported(Taskbar.Feature.PROGRESS_STATE_WINDOW)) {
-                if (progress < 0) {
-                    taskbar.setWindowProgressState(this, Taskbar.State.OFF);
-                } else {
-                    int percent = (int) Math.round(progress * 100); // 0-1 -> 0-100
+        Taskbar taskbar = Taskbar.getTaskbar();
+        if (!taskbar.isSupported(Taskbar.Feature.PROGRESS_STATE_WINDOW)) return;
 
-                    taskbar.setWindowProgressState(this, Taskbar.State.NORMAL);
-                    taskbar.setWindowProgressValue(this, percent);
-                }
+        if (progress < 0) {
+            this.currentProgress = 0;
+            taskbar.setWindowProgressValue(this, -1);
+            taskbar.setWindowProgressState(this, Taskbar.State.OFF);
+        } else {
+            int percent = (int) Math.round(progress * 100); // 0-1 -> 0-100
+
+            if (this.currentProgress == percent) {
+                return;
             }
+
+            this.currentProgress = percent;
+            taskbar.setWindowProgressState(this, Taskbar.State.NORMAL);
+            taskbar.setWindowProgressValue(this, percent);
         }
     }
 
