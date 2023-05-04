@@ -1,11 +1,13 @@
 <svelte:options accessors />
 
 <script>
-	import { onMount } from 'svelte';
-	import ContextMenu from '../../ui/ContextMenu.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
-	import { t } from '$lib/translate.mjs';
+	import ContextMenu from '../../ui/ContextMenu.svelte';
 	import EmojiText from '$lib/EmojiText.svelte';
+
+	import streamingServices from '$lib/streamingServices.mjs';
+	import { onMount } from 'svelte';
+	import { t } from '$lib/translate.mjs';
 
 	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
 	const PLATFORMS_WITH_TIMEOUT = ['TWITCH', 'TROVO', 'BRIME'];
@@ -105,7 +107,7 @@
 			{/each}
 		</span>
 
-		<b>
+		<b style:--platform-color={streamingServices[event.streamer.platform]?.color}>
 			<icon
 				class="user-platform w-[1em] h-[1em] mr-0.5 translate-y-0.5"
 				data-icon="service/{event.streamer.platform.toLowerCase()}"

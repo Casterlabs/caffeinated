@@ -45,6 +45,7 @@
 	let readMessagesAloud = false;
 	let ttsVoice = 'Brian';
 	let showPlatform = false;
+	let colorByPlatform = false;
 	let ttsOrDingVolume;
 
 	let isAtBottom = true;
@@ -208,6 +209,7 @@
 			readMessagesAloud,
 			ttsVoice,
 			showPlatform,
+			colorByPlatform,
 			ttsOrDingVolume
 		});
 	}
@@ -222,6 +224,7 @@
 		readMessagesAloud = config.readMessagesAloud;
 		ttsVoice = config.ttsVoice;
 		showPlatform = config.showPlatform;
+		colorByPlatform = config.colorByPlatform;
 		ttsOrDingVolume = config.ttsOrDingVolume;
 	}
 
@@ -531,6 +534,14 @@
 					on:value={savePreferences}
 				/>
 			</li>
+			<li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.color_users_by_platform"
+					description=""
+					bind:checked={colorByPlatform}
+					on:value={savePreferences}
+				/>
+			</li>
 		</ul>
 	</Modal>
 {/if}
@@ -541,6 +552,7 @@
 	class:show-badges={showBadges}
 	class:show-viewers={showViewers}
 	class:show-platform={showPlatform}
+	class:color-by-platform={colorByPlatform}
 >
 	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
 		<ul bind:this={chatBox} />
@@ -597,6 +609,11 @@
 	ul :global(b) {
 		font-weight: 600;
 		color: var(--primary11);
+	}
+
+	.color-by-platform ul :global(b) {
+		font-weight: 600;
+		color: var(--platform-color, var(--primary11));
 	}
 
 	:global(.message-container) {

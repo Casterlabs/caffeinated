@@ -224,6 +224,7 @@ export default {
 	'chat.viewer.preferences.tts_voice': 'TTS Voice',
 	'chat.viewer.preferences.tts_or_ding_volume': 'TTS/Ding volume',
 	'chat.viewer.preferences.show_platform': "Show the user's platform",
+	'chat.viewer.preferences.color_users_by_platform': 'Color users by platform',
 
 	'chat.viewer.tts.skip': 'Skip message',
 	'chat.viewer.tts.event.RICH_MESSAGE.ASKS': '{name} asks "{message}"',
