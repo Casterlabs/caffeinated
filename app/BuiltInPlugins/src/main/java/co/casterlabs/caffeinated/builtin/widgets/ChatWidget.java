@@ -42,6 +42,7 @@ public class ChatWidget extends Widget {
                 .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE))
                 .addItem(WidgetSettingsItem.asDropdown("message_direction", "Messages Direction", "Bottom-up", "Bottom-up", "Top-down"))
                 .addItem(WidgetSettingsItem.asDropdown("badges", "Badges", "Before Username", "Hidden", "Before Username", "After Username"))
+                .addItem(WidgetSettingsItem.asCheckbox("show_platform_icon", "Show User's Platform", false))
                 .addItem(
                     WidgetSettingsItem.asDropdown(
                         "username_color", "Username color",

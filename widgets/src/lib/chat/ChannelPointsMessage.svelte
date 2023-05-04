@@ -2,7 +2,14 @@
 	export let event;
 </script>
 
-<b style:--user-color={event.sender.color || 'red'}>{event.sender.displayname}</b>
+<b style:--user-color={event.sender.color || 'red'}>
+	<icon
+		class="user-platform-icon align-middle inline-block w-[1em] h-[1em] mr-0.5"
+		data-icon="service/{event.streamer.platform.toLowerCase()}"
+		alt=""
+	/>
+	{event.sender.displayname}
+</b>
 just redeemed
 <img
 	alt=""

@@ -190,6 +190,13 @@
 	class:username-color-platform={$settings['message_style.username_color'] ==
 		"Match Platform's Theme"}
 	class:username-color-static={$settings['message_style.username_color'] == 'Static Color'}
+	class:show-platform-icon={$settings['message_style.show_platform_icon']}
 >
 	<!---->
 </ul>
+
+<style>
+	:not(.show-platform-icon) :global(.user-platform-icon) {
+		display: none;
+	}
+</style>
