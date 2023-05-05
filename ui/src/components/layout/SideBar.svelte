@@ -29,7 +29,7 @@
 				useStartsWith: false
 			},
 			{
-				href: '/$caffeinated-sdk-root$/settings/appearance',
+				href: '/$caffeinated-sdk-root$/settings',
 				name: 'page.settings',
 				useStartsWith: true
 			}

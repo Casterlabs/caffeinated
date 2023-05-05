@@ -11,7 +11,7 @@
 
 	// prettier-ignore
 	const tabs = [
-		['page.settings.appearance', '/$caffeinated-sdk-root$/settings/appearance'],
+		['page.settings.appearance', '/$caffeinated-sdk-root$/settings'],
 		['page.settings.accounts',   '/$caffeinated-sdk-root$/settings/accounts'],
 		['page.settings.plugins',    '/$caffeinated-sdk-root$/settings/plugins'],
 		['page.settings.about',      '/$caffeinated-sdk-root$/settings/about'],
