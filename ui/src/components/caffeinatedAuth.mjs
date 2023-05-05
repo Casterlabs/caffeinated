@@ -56,7 +56,7 @@ export const STREAMING_SERVICES = {
 	},
 	TIKTOK: {
 		name: 'TikTok (BETA)',
-		color: '#000000'
+		color: '#e5004e'
 	}
 };
 
