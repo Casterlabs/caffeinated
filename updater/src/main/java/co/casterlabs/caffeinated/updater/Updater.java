@@ -6,13 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ProcessBuilder.Redirect;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 import co.casterlabs.caffeinated.updater.util.FileUtil;
@@ -23,7 +18,6 @@ import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import net.harawata.appdirs.AppDirsFactory;
@@ -45,10 +39,6 @@ public class Updater {
     private static File updateFile = new File(appDirectory, "update.zip");
     private static File buildInfoFile = new File(appDirectory, "current_build_info.json");
     private static File expectUpdaterFile = new File(appDirectory, "expect-updater");
-
-    private static final List<OSDistribution> INLINE_PLATFORMS = Arrays.asList(
-        // OSDistribution.WINDOWS_NT
-    );
 
     private static @Getter boolean isLauncherOutOfDate = false;
     private static @Getter boolean isPlatformSupported = true;
@@ -230,45 +220,45 @@ public class Updater {
 
     public static void launch(UpdaterDialog dialog) throws UpdaterException {
         try {
-            if (INLINE_PLATFORMS.contains(Platform.osDistribution)) {
-                // Here's where the fun starts, we load all the jars and run the in the same
-                // process 👀
-
-                // Change directory to the app dir, otherwise the app will pollute the updater's
-                // installation directory and the world would melt.
-                ChangeDir.changeProcessDir(appDirectory);
-
-                // Load and parse the manifest.
-                String manifestContent = FileUtil.readFile(new File(appDirectory, "Casterlabs-Caffeinated.json"))
-                    .replace("\n", "");
-
-                JsonObject manifest = Rson.DEFAULT.fromJson(
-                    manifestContent,
-                    JsonObject.class
-                );
-
-                JsonArray classpathDecl = manifest.getArray("classPath");
-
-                URL[] classpath = new URL[classpathDecl.size()];
-                String mainClassName = manifest.getString("mainClass");
-                String[] args = new String[0];
-
-                for (int idx = 0; idx < classpath.length; idx++) {
-                    classpath[idx] = new File(appDirectory, classpathDecl.getString(idx))
-                        .toURI()
-                        .toURL();
-                }
-
-                // Load the app's classpath but keep it separated from the updater's
-                ClassLoader loader = new URLClassLoader(classpath, ClassLoader.getPlatformClassLoader());
-                Class<?> mainClass = Class.forName(mainClassName, true, loader);
-                Method mainMethod = mainClass.getMethod("main", String[].class);
-
-                // Hide the updater dialog, invoke the main method, and pray.
-                dialog.dispose();
-                mainMethod.invoke(null, (Object) args);
-                return;
-            }
+//            if (INLINE_PLATFORMS.contains(Platform.osDistribution)) {
+//                // Here's where the fun starts, we load all the jars and run the in the same
+//                // process 👀
+//
+//                // Change directory to the app dir, otherwise the app will pollute the updater's
+//                // installation directory and the world would melt.
+//                ChangeDir.changeProcessDir(appDirectory);
+//
+//                // Load and parse the manifest.
+//                String manifestContent = FileUtil.readFile(new File(appDirectory, "Casterlabs-Caffeinated.json"))
+//                    .replace("\n", "");
+//
+//                JsonObject manifest = Rson.DEFAULT.fromJson(
+//                    manifestContent,
+//                    JsonObject.class
+//                );
+//
+//                JsonArray classpathDecl = manifest.getArray("classPath");
+//
+//                URL[] classpath = new URL[classpathDecl.size()];
+//                String mainClassName = manifest.getString("mainClass");
+//                String[] args = new String[0];
+//
+//                for (int idx = 0; idx < classpath.length; idx++) {
+//                    classpath[idx] = new File(appDirectory, classpathDecl.getString(idx))
+//                        .toURI()
+//                        .toURL();
+//                }
+//
+//                // Load the app's classpath but keep it separated from the updater's
+//                ClassLoader loader = new URLClassLoader(classpath, ClassLoader.getPlatformClassLoader());
+//                Class<?> mainClass = Class.forName(mainClassName, true, loader);
+//                Method mainMethod = mainClass.getMethod("main", String[].class);
+//
+//                // Hide the updater dialog, invoke the main method, and pray.
+//                dialog.dispose();
+//                mainMethod.invoke(null, (Object) args);
+//                return;
+//            }
 
             String updaterCommandLine = Platform.tryGetCommandLine();
             FastLogger.logStatic("Updater CommandLine: %s", updaterCommandLine);
