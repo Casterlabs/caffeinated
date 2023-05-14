@@ -8,17 +8,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.time.Instant;
-import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.UIManager;
 
-import co.casterlabs.caffeinated.updater.animations.BlankAnimation;
 import co.casterlabs.caffeinated.updater.animations.DialogAnimation;
-import co.casterlabs.caffeinated.updater.animations.KamihinokinaiAnimation;
-import co.casterlabs.caffeinated.updater.animations.PrideAnimation;
-import co.casterlabs.caffeinated.updater.animations.ValentinesAnimation;
-import co.casterlabs.caffeinated.updater.animations.WinterSeasonAnimation;
 import co.casterlabs.caffeinated.updater.util.WebUtil;
 import co.casterlabs.caffeinated.updater.window.UpdaterDialog;
 import co.casterlabs.commons.platform.OSFamily;
@@ -87,56 +81,7 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
         updaterThread = Thread.currentThread();
 
-        DialogAnimation animation = new BlankAnimation();
-
-        {
-            Calendar calendar = Calendar.getInstance();
-
-            int calendarMonth = calendar.get(Calendar.MONTH);
-            int calendarDate = calendar.get(Calendar.DATE);
-
-            // Enable the winter season animation between NOV 25 - JAN 15.
-            {
-                boolean isDecember = calendarMonth == Calendar.DECEMBER;
-                boolean isNovemberTimeframe = (calendarMonth == Calendar.NOVEMBER) && (calendarDate >= 25);
-                boolean isJanuaryTimeframe = (calendarMonth == Calendar.JANUARY) && (calendarDate <= 15);
-
-                if (isDecember || isNovemberTimeframe || isJanuaryTimeframe) {
-                    animation = new WinterSeasonAnimation();
-                }
-            }
-
-            // Enable the Kamihinokinai animation on FEB 10.
-            {
-                boolean isFeburay = calendarMonth == Calendar.FEBRUARY;
-                boolean isTheTenth = calendarDate == 10;
-
-                if (isFeburay && isTheTenth) {
-                    animation = new KamihinokinaiAnimation();
-                }
-            }
-
-            // Enable the Valentine's animation on FEB 14.
-            {
-                boolean isFeburay = calendarMonth == Calendar.FEBRUARY;
-                boolean isTheFourteenth = calendarDate == 14;
-
-                if (isFeburay && isTheFourteenth) {
-                    animation = new ValentinesAnimation();
-                }
-            }
-
-            // Enable the Pride month animation during June.
-            {
-                boolean isJune = calendarMonth == Calendar.JUNE;
-
-                if (isJune) {
-                    animation = new PrideAnimation();
-                }
-            }
-        }
-
-        dialog = new UpdaterDialog(animation);
+        dialog = new UpdaterDialog(DialogAnimation.getCurrentAnimation());
 
         dialog.setStatus("");
         dialog.setVisible(true);
