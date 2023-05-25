@@ -47,9 +47,18 @@ export function init({ initHandler, disconnectHandler }) {
         conn.send("OPEN_LINK", {link});
     };
 
+    const widgetInstanceEventHandler = new EventHandler();
+
     // The `Widget` global.
     const widgetInstance = {
-        ...new EventHandler(),
+        ...widgetInstanceEventHandler,
+
+        on(type, handler) {
+            if ( conn.connectionId && ["init", "update"].includes(type.toLowerCase())) {
+                setTimeout(handler, 2); // Execute the handler after a couple of browser ticks.
+            }
+            widgetInstanceEventHandler.on(type,handler);
+        },
 
         get connectionId() {
             return conn.connectionId;
@@ -199,6 +208,7 @@ export function init({ initHandler, disconnectHandler }) {
         if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, basePath, openLink })) {
             App.init();
             widgetInstance.broadcast("init");
+            widgetInstance.broadcast("update");
             koiInstance.broadcast("koi_statics", koi_statics);
             conn.send("READY", {});
         }
