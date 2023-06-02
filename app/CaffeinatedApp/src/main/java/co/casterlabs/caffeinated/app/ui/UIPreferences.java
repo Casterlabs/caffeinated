@@ -1,7 +1,5 @@
 package co.casterlabs.caffeinated.app.ui;
 
-import java.util.Calendar;
-
 import co.casterlabs.caffeinated.util.MiscUtil;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
@@ -12,7 +10,6 @@ import lombok.Data;
 @JsonClass(exposeAll = true)
 public class UIPreferences {
     private static final String CURRENT_SKITTLE = MiscUtil.random("green_skittle", "orange_skittle", "purple_skittle", "red_skittle", "yellow_skittle");
-    private static final boolean IS_PRIDE_MONTH = Calendar.getInstance().get(Calendar.MONTH) == Calendar.JUNE;
 
     private String emojiProvider = Platform.osDistribution == OSDistribution.MACOS ? "system" : "twemoji"; // Use system emojis by default on macOS, Twemoji elsewhere.
     private String icon = "casterlabs";
@@ -30,9 +27,7 @@ public class UIPreferences {
     private boolean mikeysMode = false; // https://twitter.com/Casterlabs/status/1508475284944736268
 
     public String getIcon() {
-        if (IS_PRIDE_MONTH) {
-            return "pride";
-        } else if ("skittles".equals(this.icon)) {
+        if ("skittles".equals(this.icon)) {
             return CURRENT_SKITTLE; // Randomize the skittle shown in the taskbar.
                                     // https://twitter.com/Skittles/status/1510008458489249796
         } else {
