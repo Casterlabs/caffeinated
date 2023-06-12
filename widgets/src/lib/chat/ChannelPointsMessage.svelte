@@ -20,6 +20,7 @@ just redeemed
 
 <style>
 	.channel-points-reward-image {
+		display: inline-block;
 		height: 0.8em;
 	}
 </style>
