@@ -54,7 +54,9 @@ public class AppChatbot extends JavascriptObject {
                 while (true) {
                     try {
                         Thread.sleep(timerIntervalSeconds * 1000);
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) {
+                        return;
+                    }
 
                     List<String> timerTexts = this.preferences.get().getTimers();
 
