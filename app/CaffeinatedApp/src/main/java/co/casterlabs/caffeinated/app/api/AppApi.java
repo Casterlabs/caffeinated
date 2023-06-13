@@ -11,7 +11,7 @@ public class AppApi {
     public final MusicApi musicApi = new MusicApi();
 
     public void init() {
-        musicApi.onClose(true);
+//        musicApi.onClose(true);
     }
 
     public static class MusicApi implements KinokoV1Listener {
