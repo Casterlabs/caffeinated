@@ -10,6 +10,8 @@ import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.NonNull;
 import okhttp3.Request;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class KickHelper {
 
@@ -31,17 +33,19 @@ public class KickHelper {
 
         JsonObject json = Rson.DEFAULT.fromJson(response, JsonObject.class);
 
-        if (json
-            .getArray("errors")
-            .contains(new JsonString("KICK_2FA_PROMPT"))) {
-            throw new IllegalStateException("MFA");
-        } else if (json.get("data").isJsonNull()) {
-            throw new IllegalArgumentException();
+        if (json.get("data").isJsonNull()) {
+            if (json
+                .getArray("errors")
+                .contains(new JsonString("KICK_2FA_PROMPT"))) {
+                FastLogger.logStatic(LogLevel.INFO, "Kick 2FA Prompt.");
+                throw new IllegalStateException("MFA");
+            } else {
+                FastLogger.logStatic(LogLevel.SEVERE, "Error whilst logging in: %s", json);
+                throw new IllegalArgumentException();
+            }
         }
 
-        return json
-            .getObject("data")
-            .getString("token");
+        return json.getObject("data").getString("token");
     }
 
 }

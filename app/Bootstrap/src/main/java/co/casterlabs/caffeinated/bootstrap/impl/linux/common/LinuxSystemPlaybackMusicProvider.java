@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
-import co.casterlabs.caffeinated.bootstrap.NativeSystem.SystemPlaybackMusicProvider;
+import co.casterlabs.caffeinated.bootstrap.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.commons.async.AsyncTask;

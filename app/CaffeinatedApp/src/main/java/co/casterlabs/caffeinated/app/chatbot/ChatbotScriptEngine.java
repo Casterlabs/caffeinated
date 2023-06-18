@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
+import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -87,7 +87,7 @@ public class ChatbotScriptEngine {
         } catch (ScriptException e) {
             String message = LogUtil.parseFormat("An error occurred whilst executing script command:\n%s", e);
             FastLogger.logStatic(LogLevel.WARNING, message);
-            CaffeinatedApp.getInstance().getUI().showToast(message, UIBackgroundColor.WARNING);
+            CaffeinatedApp.getInstance().getUI().showToast(message, NotificationType.WARNING);
         }
     }
 

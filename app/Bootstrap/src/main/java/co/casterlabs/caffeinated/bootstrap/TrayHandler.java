@@ -15,6 +15,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.commons.platform.OSDistribution;
@@ -39,6 +40,13 @@ public class TrayHandler {
                 // to be diligent and check for platform before compat.
                 return false;
             }
+
+            // Need to do this somewhere, here is good.
+            App.getMainThread().execute(() -> {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception ignored) {}
+            });
 
             tray = SystemTray.getSystemTray();
             PopupMenu popup = new PopupMenu();
@@ -123,6 +131,10 @@ public class TrayHandler {
     }
 
     public static void notify(@NonNull String message, @NonNull MessageType type) {
+        if (icon == null) {
+            throw new IllegalStateException();
+        }
+
         icon.displayMessage("Casterlabs Caffeinated", message, type);
     }
 

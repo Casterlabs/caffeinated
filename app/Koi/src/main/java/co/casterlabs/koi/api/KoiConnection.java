@@ -130,10 +130,7 @@ public class KoiConnection implements Closeable {
 
         @Override
         public void onOpen(ServerHandshake handshakedata) {
-            logger.info("Connected to Koi, not waiting for welcome.");
-
-            this.send(this.loginRequest.toString());
-            listener.onOpen();
+            logger.info("Connected to Koi, waiting for welcome.");
         }
 
         @Override
@@ -162,6 +159,8 @@ public class KoiConnection implements Closeable {
                 switch (packet.getString("type")) {
                     case "WELCOME": {
                         logger.info("Got welcome: %s", packet);
+                        this.send(this.loginRequest.toString());
+                        listener.onOpen();
                         return;
                     }
 

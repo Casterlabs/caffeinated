@@ -9,14 +9,12 @@ import java.util.Comparator;
 
 import co.casterlabs.caffeinated.app.BuildInfo;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.bootstrap.impl.NativeBootstrap;
 import co.casterlabs.caffeinated.bootstrap.impl.linux.common.LinuxBootstrap;
 import co.casterlabs.caffeinated.bootstrap.impl.macos.common.MacOSBootstrap;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.WindowsBootstrap;
 import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
-import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
@@ -199,11 +197,6 @@ public class Bootstrap implements Runnable {
         // Update the log level.
         logger.setCurrentLevel(FastLoggingFramework.getDefaultLevel());
 
-        Currencies.getCurrencies(); // Load the class.
-
-        // Setup the native system
-        ReflectionLib.setStaticValue(MusicIntegration.class, "systemPlaybackMusicProvider", NativeSystem.getSystemPlaybackMusicProvider());
-
         this.startApp();
     }
 
@@ -227,7 +220,7 @@ public class Bootstrap implements Runnable {
     }
 
     private void startApp() throws Exception {
-        CaffeinatedApp app = new CaffeinatedApp(buildInfo, isDev);
+        CaffeinatedApp app = new CaffeinatedApp(buildInfo, isDev, new NativeSystemImpl());
 
         logger.info("Entry                        | Value", buildInfo.getVersionString());
         logger.info("-----------------------------+-------------------------");

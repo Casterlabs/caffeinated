@@ -29,7 +29,6 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
     private String refreshToken;
     private String accessToken;
 
-    @SuppressWarnings("deprecation")
     public SpotifyMusicProvider(@NonNull MusicIntegration musicIntegration) {
         super("Spotify", "spotify", SpotifySettings.class);
         musicIntegration.getProviders().put(this.getServiceId(), this);

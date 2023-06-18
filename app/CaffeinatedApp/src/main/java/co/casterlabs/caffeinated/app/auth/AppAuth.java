@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.PreferenceFile;
-import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
@@ -167,16 +167,18 @@ public class AppAuth extends JavascriptObject {
         boolean isAlive = false;
 
         for (AuthInstance inst : this.authInstances.values()) {
-            if (inst.isConnected()) {
+            if (inst.isWelcomed()) {
                 isAlive = true;
                 break;
             }
         }
 
         if (this.isKoiAlive != isAlive) {
-            if (!isAlive) {
+            if (isAlive) {
+                CaffeinatedApp.getInstance().notify("Reconnected to Casterlabs successfully.", NotificationType.INFO);
+            } else {
                 // Show an error to the user.
-                CaffeinatedApp.getInstance().getUI().showToast("Lost connection to Casterlabs, reconnecting.", UIBackgroundColor.DANGER);
+                CaffeinatedApp.getInstance().notify("Lost connection to Casterlabs, reconnecting.", NotificationType.ERROR);
             }
         }
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.EmojisObj;
+import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
@@ -147,8 +148,15 @@ public class AppUI extends JavascriptObject {
             .browse(new URI(link));
     }
 
+    /**
+     * @deprecated This is not to be used by the app unless it's for very good
+     *             reasons. Use
+     *             {@link CaffeinatedApp#notify(String, co.casterlabs.caffeinated.app.NativeSystem.NotificationType)}
+     *             instead.
+     */
+    @Deprecated
     @JavascriptFunction
-    public void showToast(@NonNull String message, @NonNull UIBackgroundColor background) {
+    public void showToast(@NonNull String message, @NonNull NotificationType type) {
         if (this.uiFinishedLoad) {
             String line = String.format(
                 "Toastify(%s).showToast();",
@@ -160,7 +168,7 @@ public class AppUI extends JavascriptObject {
                     .put("close", true)
                     .put(
                         "style", new JsonObject()
-                            .put("background", background.getColor())
+                            .put("background", type.getColor())
                     )
             );
 

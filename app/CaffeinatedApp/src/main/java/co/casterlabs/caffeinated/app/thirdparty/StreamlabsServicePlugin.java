@@ -31,9 +31,9 @@ import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+@SuppressWarnings("deprecation")
 public class StreamlabsServicePlugin extends CaffeinatedPlugin {
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onInit() {
         CaffeinatedApp
@@ -139,7 +139,6 @@ public class StreamlabsServicePlugin extends CaffeinatedPlugin {
             this.triggerAlert("subscription", "", "");
         }
 
-        @SuppressWarnings("deprecation")
         @KoiEventHandler
         public void onDonation(DonationEvent e) {
             this.triggerAlert("donation", e.getSender().getDisplayname(), "");

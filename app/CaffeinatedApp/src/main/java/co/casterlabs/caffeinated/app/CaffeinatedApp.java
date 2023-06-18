@@ -26,9 +26,9 @@ import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
-import co.casterlabs.caffeinated.app.ui.UIBackgroundColor;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
+import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.kaimen.webview.Webview;
@@ -107,6 +107,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // Event stuff
     private Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
 
+    private final NativeSystem nativeSystem;
+
     static {
         AppDirs appDirs = AppDirsFactory.getInstance();
         appDataDir = appDirs.getUserDataDir("casterlabs-caffeinated", null, null, true);
@@ -129,10 +131,13 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
     }
 
-    public CaffeinatedApp(@NonNull BuildInfo buildInfo, boolean isDev) {
+    public CaffeinatedApp(@NonNull BuildInfo buildInfo, boolean isDev, NativeSystem nativeHelper) {
         this.buildInfo = buildInfo;
         this.isDev = isDev;
+        this.nativeSystem = nativeHelper;
         instance = this;
+
+        Currencies.getCurrencies(); // Load the class.
 
         this.UI.updateIcon();
 
@@ -213,6 +218,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         return MimeTypes.getMimeForFile(new File(path));
     }
 
+    @SuppressWarnings("deprecation")
     @JavascriptFunction
     @Override
     public void copyText(@NonNull String text, @Nullable String toastText) {
@@ -221,7 +227,21 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
 
         ClipboardUtil.copy(text);
-        this.UI.showToast(toastText, UIBackgroundColor.PRIMARY);
+        this.UI.showToast(toastText, NotificationType.NONE);
+    }
+
+    /**
+     * Sends a system notification, if that fails then it'll fallback on a UI-based
+     * notification instead.
+     */
+    @SuppressWarnings("deprecation")
+    @JavascriptFunction
+    public void notify(@NonNull String message, @NonNull NotificationType type) {
+        try {
+            this.nativeSystem.notify(message, type);
+        } catch (IllegalStateException ignored) {
+            this.UI.showToast(message, NotificationType.NONE);
+        }
     }
 
     @JavascriptGetter("useBetaKoiPath")

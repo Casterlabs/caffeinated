@@ -42,6 +42,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     private KoiConnection koi;
 
     private boolean disposed = false;
+    private boolean isConnecting = false;
 
     private @JsonField @Getter @Nullable User userData;
     private @JsonField @Getter @Nullable StreamStatusEvent streamData;
@@ -49,6 +50,8 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     private @JsonField @Getter @Nullable RoomstateEvent roomstate;
 
     private @Getter @Nullable List<KoiIntegrationFeatures> features = new ArrayList<>();
+
+    private @Getter boolean isWelcomed = false;
 
     public AuthInstance(String tokenId) {
         this.tokenId = tokenId;
@@ -79,6 +82,11 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         );
 
         this.reconnect();
+    }
+
+    @Override
+    public void onOpen() {
+        this.isWelcomed = true;
     }
 
     public void invalidate() {
@@ -203,8 +211,10 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     /* ---------------- */
 
     private void reconnect() {
-        if (this.disposed) return;
-        if (this.koi.isConnected()) return;
+        if (this.disposed || this.isConnecting || this.koi.isConnected()) return;
+
+        this.isWelcomed = false;
+        this.isConnecting = true;
 
         reconnectQueue.execute(() -> {
             try {
@@ -215,6 +225,8 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
                 this.onClose(true);
             }
         });
+
+        this.isConnecting = false;
     }
 
     @Override

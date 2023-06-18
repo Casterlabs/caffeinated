@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
-import co.casterlabs.caffeinated.bootstrap.NativeSystem.SystemPlaybackMusicProvider;
+import co.casterlabs.caffeinated.bootstrap.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.PlaybackEvent;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.PlaybackEvent.PlaybackEventType;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.PlaybackStateEvent;

@@ -28,6 +28,7 @@ public class AppChatbot extends JavascriptObject {
     @JavascriptValue(allowSet = false, watchForMutate = false)
     private PreferenceFile<ChatbotPreferences> preferences;
 
+    @SuppressWarnings("deprecation")
     @JavascriptValue(allowSet = false)
     private List<KoiEventType> supportedShoutEvents = Arrays.asList(
         KoiEventType.DONATION, KoiEventType.FOLLOW,
@@ -96,6 +97,7 @@ public class AppChatbot extends JavascriptObject {
     // Accessed from Koi.
     public void processEventForShout(KoiEvent e) {
         for (Shout shout : this.preferences.get().getShouts()) {
+            @SuppressWarnings("deprecation")
             KoiEventType shoutType = shout.getEventType() == KoiEventType.DONATION ? //
                 KoiEventType.RICH_MESSAGE : shout.getEventType();
 
