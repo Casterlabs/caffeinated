@@ -52,12 +52,12 @@ public class AppControlDeck extends JavascriptObject {
 
     @SneakyThrows
     private void reconnect() {
-        this.connection.connect(
-            String.format(
-                "caffeinated_app:%s:controldeck",
-                CaffeinatedApp.getInstance().getAppPreferences().get().getDeveloperApiKey()
-            )
-        );
+//        this.connection.connect(
+//            String.format(
+//                "caffeinated_app:%s:controldeck",
+//                CaffeinatedApp.getInstance().getAppPreferences().get().getDeveloperApiKey()
+//            )
+//        );
     }
 
     private class ApiListener implements KinokoV2Listener {
