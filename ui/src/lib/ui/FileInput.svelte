@@ -53,7 +53,7 @@
 			filename = filename.substring(filename.indexOf('filename=') + 'filename='.length);
 			filename = filename.substring(0, filename.indexOf(';'));
 
-			return filename;
+			return decodeURIComponent(filename);
 		} else {
 			return 'Unknown File Name';
 		}
@@ -149,7 +149,7 @@
 
 					// We sneak in our own filename property :^)
 					// God, I am so fucking big brained it hurts.
-					resolve(`data:${filetype};filename=${filename};${result}`);
+					resolve(`data:${filetype};filename=${encodeURIComponent(filename)};${result}`);
 				};
 			} catch (e) {
 				console.warn(e);
