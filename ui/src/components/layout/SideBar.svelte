@@ -69,7 +69,7 @@
 <div class="flex-0 w-[var(--actual-sidebar-width)] h-full flex flex-col overflow-hidden">
 	<div
 		class="w-[var(--base-sidebar-width)] flex flex-grow flex-col overflow-y-auto bg-base-2 pb-4"
-		style="transform: translateX(calc(-1% * calc(100 - var(--sidebar-width-mul, 1)))"
+		style="transform: translateX(calc(-1% * calc(100 - var(--sidebar-width-mul, 100)))"
 	>
 		<nav
 			class="flex flex-1 flex-col divide-y divide-current text-base-6 overflow-y-auto"
