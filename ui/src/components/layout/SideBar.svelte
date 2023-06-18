@@ -38,15 +38,39 @@
 
 	let updateAvailable = false;
 
+	let sidebarWidthMul = 100;
+	let sidebarAnimTask = -1;
+	let sidebarAnimDirection = 10;
+
+	export function toggleSideBar() {
+		clearInterval(sidebarAnimTask);
+
+		sidebarAnimDirection *= -1;
+
+		sidebarAnimTask = setInterval(() => {
+			sidebarWidthMul += sidebarAnimDirection;
+			document.body.style.setProperty('--sidebar-width-mul', sidebarWidthMul);
+
+			if (sidebarWidthMul == 0 || sidebarWidthMul == 100) {
+				clearInterval(sidebarAnimTask);
+			}
+		}, 16);
+	}
+
 	onMount(() => {
+		window.toggleSideBar = toggleSideBar;
+
 		setInterval(async () => {
 			updateAvailable = await Caffeinated.hasUpdate();
 		}, 2 /*min*/ * 60 * 1000);
 	});
 </script>
 
-<div class="flex-0 w-[var(--sidebar-width)] h-full flex flex-col">
-	<div class="flex flex-grow flex-col overflow-y-auto bg-base-2 pb-4">
+<div class="flex-0 w-[var(--actual-sidebar-width)] h-full flex flex-col overflow-hidden">
+	<div
+		class="w-[var(--base-sidebar-width)] flex flex-grow flex-col overflow-y-auto bg-base-2 pb-4"
+		style="transform: translateX(calc(-1% * calc(100 - var(--sidebar-width-mul, 1)))"
+	>
 		<nav
 			class="flex flex-1 flex-col divide-y divide-current text-base-6 overflow-y-auto"
 			aria-label="Sidebar"
@@ -94,7 +118,10 @@
 </div>
 
 <style>
-	:root {
-		--sidebar-width: 12rem;
+	:global(body) {
+		--base-sidebar-width: 12rem;
+		--actual-sidebar-width: calc(
+			var(--base-sidebar-width) * calc(var(--sidebar-width-mul, 100) / 100)
+		);
 	}
 </style>
