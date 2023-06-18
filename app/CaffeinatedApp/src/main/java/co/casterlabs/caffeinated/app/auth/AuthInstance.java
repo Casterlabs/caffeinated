@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.async.queue.ExecutionQueue;
 import co.casterlabs.commons.async.queue.SyncExecutionQueue;
@@ -233,6 +234,12 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     public void onError(String errorCode) {
         switch (errorCode) {
             case "USER_AUTH_INVALID": {
+                if (this.userData != null) {
+                    CaffeinatedApp.getInstance().notify(
+                        String.format("You have been logged out from %s, you may need to sign back in.", this.userData.getPlatform()),
+                        NotificationType.WARNING
+                    );
+                }
                 this.invalidate();
                 return;
             }
