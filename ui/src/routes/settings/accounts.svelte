@@ -47,7 +47,9 @@
 				{@const { tokenId, userData } =
 					Object.values($authInstances || {}) //
 						.filter(({ userData }) => userData?.platform == platform)[0] || {}}
-				<!-- {@const isLoading = loading.includes(platform)} -->
+				{@const isLoading =
+					loading.includes(platform) ||
+					(!userData && Object.keys($authInstances || {}).includes(platform.toLowerCase()))}
 
 				<li>
 					<Container>
@@ -68,7 +70,7 @@
 							</p>
 
 							<div class="flex-0">
-								{#if loading.includes(platform)}
+								{#if isLoading}
 									<div class="w-6 mr-4">
 										<LoadingSpinner />
 									</div>
