@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import co.casterlabs.caffeinated.updater.util.FileUtil;
@@ -27,7 +29,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Updater {
-    private static final int VERSION = 28;
+    private static final int VERSION = 29;
     private static final String CHANNEL = System.getProperty("caffeinated.channel", "stable");
 
     private static String REMOTE_ZIP_DOWNLOAD_URL = "https://cdn.casterlabs.co/dist/" + CHANNEL + "/";
@@ -40,6 +42,8 @@ public class Updater {
     private static File buildInfoFile = new File(appDirectory, "current_build_info.json");
     private static File expectUpdaterFile = new File(appDirectory, "expect-updater");
 
+    private static final List<OSDistribution> NO_JRE_DISTS = Arrays.asList(OSDistribution.WINDOWS_NT);
+
     private static @Getter boolean isLauncherOutOfDate = false;
     private static @Getter boolean isPlatformSupported = true;
 
@@ -51,17 +55,17 @@ public class Updater {
         switch (Platform.osDistribution) {
             case MACOS:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.app/Contents/MacOS/Casterlabs-Caffeinated";
-                REMOTE_ZIP_DOWNLOAD_URL += "macOS-amd64.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "macOS-amd64";
                 break;
 
             case LINUX:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated";
-                REMOTE_ZIP_DOWNLOAD_URL += "Linux-amd64-nojre.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "Linux-amd64";
                 break;
 
             case WINDOWS_NT:
                 launchCommand = appDirectory + "/Casterlabs-Caffeinated.exe";
-                REMOTE_ZIP_DOWNLOAD_URL += "Windows-amd64-nojre.zip";
+                REMOTE_ZIP_DOWNLOAD_URL += "Windows-amd64";
                 break;
 
             default:
@@ -69,6 +73,12 @@ public class Updater {
                 isPlatformSupported = false;
                 break;
         }
+
+        if (NO_JRE_DISTS.contains(Platform.osDistribution)) {
+            REMOTE_ZIP_DOWNLOAD_URL += "-nojre";
+        }
+
+        REMOTE_ZIP_DOWNLOAD_URL += ".zip";
 
         try {
             int remoteLauncherVersion = Integer.parseInt(WebUtil.sendHttpRequest(new Request.Builder().url(LAUNCHER_VERSION_URL)).trim());
@@ -192,7 +202,7 @@ public class Updater {
                         break;
                 }
 
-                if (Platform.osDistribution != OSDistribution.MACOS) {
+                if (NO_JRE_DISTS.contains(Platform.osDistribution)) {
                     // Use the updater's built-in JRE instead of needing to ship one with
                     // Caffeinated. We use the fat build on macOS.
 
