@@ -51,11 +51,11 @@ public class ViewersCountLabel extends GenericLabel {
         UserPlatform platform = this.getSelectedPlatform();
 
         if (platform != null) {
-            this.updateText(Caffeinated.getInstance().getKoi().getViewers().get(platform).size());
+            this.updateText(Caffeinated.getInstance().getKoi().getViewerCounts().get(platform));
         }
     }
 
-    private void updateText(long viewersCount) {
+    private void updateText(int viewersCount) {
         String html = String.valueOf(viewersCount);
 
         String prefix = WebUtil.escapeHtml(this.settings().getString("text.prefix")).replace(" ", "&nbsp;");

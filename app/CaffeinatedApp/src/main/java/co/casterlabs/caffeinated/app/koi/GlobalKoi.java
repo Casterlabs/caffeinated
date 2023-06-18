@@ -135,6 +135,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                             switch (instance.getInstanceMode()) {
                                 case APPLET:
                                 case DOCK:
+                                case SETTINGS_APPLET:
                                     instance.onKoiStaticsUpdate(extendedStatics);
                                     break;
 
@@ -348,6 +349,11 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
     @Override
     public Map<UserPlatform, List<User>> getViewers() {
         return Collections.unmodifiableMap(this.viewers);
+    }
+
+    @Override
+    public Map<UserPlatform, Integer> getViewerCounts() {
+        return Collections.unmodifiableMap(this.viewerCounts);
     }
 
     @Override

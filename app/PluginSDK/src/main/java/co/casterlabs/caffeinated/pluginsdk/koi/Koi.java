@@ -24,6 +24,8 @@ public interface Koi {
 
     public Map<UserPlatform, List<User>> getViewers();
 
+    public Map<UserPlatform, Integer> getViewerCounts();
+
     public Map<UserPlatform, UserUpdateEvent> getUserStates();
 
     public Map<UserPlatform, StreamStatusEvent> getStreamStates();
