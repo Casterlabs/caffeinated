@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>co.casterlabs.Yen</groupId>
 			<artifactId>SQLBackedCache</artifactId>
-			<version>1d7deea</version>
+			<version>32c360b</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

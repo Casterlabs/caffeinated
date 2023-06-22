@@ -45,7 +45,7 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
     protected void updateSettings(@NonNull Object settings) {
         this.settings = (T) settings;
         this.onSettingsUpdate();
-        CaffeinatedApp.getInstance().getMusic().save(); // Auto updates bridge data.
+        CaffeinatedApp.getInstance().getMusic().save(this); // Auto updates bridge data.
     }
 
     @SuppressWarnings("deprecation")

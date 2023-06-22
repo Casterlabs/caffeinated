@@ -2,12 +2,13 @@ package co.casterlabs.caffeinated.app.music_integration;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider;
@@ -22,9 +23,15 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.yen.Cache;
+import co.casterlabs.yen.impl.SQLBackedCache;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.SneakyThrows;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 public class MusicIntegration extends JavascriptObject implements Music {
@@ -36,7 +43,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private InternalMusicProvider<?> activePlayback;
 
-    private boolean loaded = false;
+    private Cache<MusicProviderSettings> preferenceData;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -44,8 +51,12 @@ public class MusicIntegration extends JavascriptObject implements Music {
         return (Map<String, MusicProvider>) ((Object) this.providers); // Yucky cast
     }
 
+    @SneakyThrows
     public void init() {
-        this.updateBridgeData(); // Populate
+        this.preferenceData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "music");
+
+        // Migrate.
+        this.importOldJson();
 
         // Register the providers (in order of preference)
         new SpotifyMusicProvider(this);
@@ -53,36 +64,22 @@ public class MusicIntegration extends JavascriptObject implements Music {
         if (systemPlaybackMusicProvider != null) this.providers.put(systemPlaybackMusicProvider.getServiceId(), systemPlaybackMusicProvider);
 
         // Load their settings and init.
-        PreferenceFile<MusicIntegrationPreferences> prefs = CaffeinatedApp.getInstance().getMusicIntegrationPreferences();
-        JsonObject prefsSettings = prefs.get().getSettings();
         for (Map.Entry<String, InternalMusicProvider<?>> entry : this.providers.entrySet()) {
             InternalMusicProvider<?> provider = entry.getValue();
             String providerId = entry.getKey();
 
-            // Doesn't matter if it's null, we check for that inside of
-            // MusicProvider#updateSettingsFromJson
-            provider.updateSettingsFromJson(prefsSettings.get(providerId));
+            MusicProviderSettings settings = this.preferenceData.get(providerId);
+            if (settings != null) provider.updateSettingsFromJson(settings.getJson());
 
             provider.init();
         }
 
-        this.loaded = true;
-        this.save();
+        this.updateBridgeData(); // Populate
     }
 
-    public void save() {
-        if (this.loaded) {
-            PreferenceFile<MusicIntegrationPreferences> prefs = CaffeinatedApp.getInstance().getMusicIntegrationPreferences();
-            JsonObject prefsSettings = prefs.get().getSettings();
-
-            for (InternalMusicProvider<?> provider : this.providers.values()) {
-                prefsSettings.put(provider.getServiceId(), Rson.DEFAULT.toJson(provider.getSettings()));
-            }
-
-            prefs.save();
-
-            this.updateBridgeData();
-        }
+    public void save(InternalMusicProvider<?> provider) {
+        this.preferenceData.submit(MusicProviderSettings.from(provider));
+        this.updateBridgeData();
     }
 
     @JavascriptFunction
@@ -162,6 +159,28 @@ public class MusicIntegration extends JavascriptObject implements Music {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void importOldJson() {
+        File oldJson = new File(CaffeinatedApp.appDataDir, "preferences/music.json");
+        if (!oldJson.exists()) return;
+
+        try {
+            FastLogger.logStatic(LogLevel.INFO, "Found old music.json, importing...");
+
+            JsonObject json = Rson.DEFAULT.fromJson(new String(Files.readAllBytes(oldJson.toPath()), StandardCharsets.UTF_8), JsonObject.class);
+            JsonObject settings = json.getObject("settings");
+
+            for (Entry<String, JsonElement> entry : settings.entrySet()) {
+                this.preferenceData.submit(MusicProviderSettings.from(entry.getKey(), entry.getValue()));
+            }
+        } catch (Exception e) {
+            FastLogger.logStatic(LogLevel.WARNING, "Could not import old plugins.json:\n%s", e);
+        } finally {
+            // Keep a backup of the file.
+            FastLogger.logStatic(LogLevel.INFO, "Done!");
+            oldJson.renameTo(new File(CaffeinatedApp.appDataDir, "preferences/old/music.json"));
+        }
     }
 
 }

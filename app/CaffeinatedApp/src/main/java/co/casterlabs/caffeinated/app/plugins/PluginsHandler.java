@@ -184,7 +184,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
             JsonObject settings = null;
 
             // Now we need to find the widget's settings (if they exist)
-            try (CacheIterator<WidgetSettingsDetails> it = CaffeinatedApp.getInstance().getPlugins().getPluginsData().enumerate()) {
+            try (CacheIterator<WidgetSettingsDetails> it = CaffeinatedApp.getInstance().getPlugins().getPreferenceData().enumerate()) {
                 while (it.hasNext()) {
                     WidgetSettingsDetails otherDetails = it.next();
 

@@ -23,7 +23,6 @@ import co.casterlabs.caffeinated.app.controldeck.AppControlDeck;
 import co.casterlabs.caffeinated.app.controldeck.ControlDeckPreferences;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
-import co.casterlabs.caffeinated.app.music_integration.MusicIntegrationPreferences;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
@@ -96,7 +95,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private AppUI              UI                 = new AppUI();
 
     // Preferences
-    private PreferenceFile<MusicIntegrationPreferences>  musicIntegrationPreferences = new PreferenceFile<>("music", MusicIntegrationPreferences.class);
     private PreferenceFile<ControlDeckPreferences>       controlDeckPreferences = new PreferenceFile<>("controldeck", ControlDeckPreferences.class);
     private PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
     private PreferenceFile<WebviewWindowState>           windowPreferences = new PreferenceFile<>("window", WebviewWindowState.class);
@@ -117,6 +115,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         appDataDir = appDirs.getUserDataDir("casterlabs-caffeinated", null, null, true);
 
         new File(appDataDir, "preferences").mkdirs();
+        new File(appDataDir, "preferences/old").mkdir();
 
         final File logsDir = new File(appDataDir, "logs");
         final File logFile = new File(logsDir, "app.log");

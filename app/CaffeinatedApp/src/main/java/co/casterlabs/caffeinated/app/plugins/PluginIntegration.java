@@ -51,9 +51,7 @@ public class PluginIntegration extends JavascriptObject {
     @JavascriptValue(allowSet = false)
     private List<PluginContext> contexts = new ArrayList<>();
 
-    private boolean isLoading = true;
-
-    private Cache<WidgetSettingsDetails> pluginsData;
+    private Cache<WidgetSettingsDetails> preferenceData;
 
     // Pointers to forward values from PluginsHandler.
 
@@ -70,10 +68,10 @@ public class PluginIntegration extends JavascriptObject {
 
     @SneakyThrows
     public void init() {
-        this.pluginsData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "plugins");
+        this.preferenceData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "plugins");
 
         // Migrate from the old format to the new KV.
-        PluginImporter.importOldJson().forEach(this.pluginsData::submit);
+        PluginImporter.importOldJson().forEach(this.preferenceData::submit);
 
         // Load the built-in widgets.
         {
@@ -113,7 +111,7 @@ public class PluginIntegration extends JavascriptObject {
         }
 
         // Load all widgets.
-        try (CacheIterator<WidgetSettingsDetails> it = this.pluginsData.enumerate()) {
+        try (CacheIterator<WidgetSettingsDetails> it = this.preferenceData.enumerate()) {
             while (it.hasNext()) {
                 WidgetSettingsDetails details = it.next();
 
@@ -139,14 +137,11 @@ public class PluginIntegration extends JavascriptObject {
             }
         }
 
-        this.isLoading = false;
         this.widgets.forEach(this::save);
     }
 
     public void save(WidgetHandle handle) {
-        if (!this.isLoading) {
-            this.pluginsData.submit(WidgetSettingsDetails.from(handle.widget));
-        }
+        this.preferenceData.submit(WidgetSettingsDetails.from(handle.widget));
     }
 
     @SneakyThrows
@@ -241,7 +236,7 @@ public class PluginIntegration extends JavascriptObject {
     @JavascriptFunction
     public void deleteWidget(@NonNull String widgetId) {
         this.plugins.destroyWidget(widgetId);
-        this.pluginsData.remove(widgetId);
+        this.preferenceData.remove(widgetId);
     }
 
     @JavascriptFunction
