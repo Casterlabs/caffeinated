@@ -12,6 +12,7 @@ import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
+import co.casterlabs.caffeinated.app.ui.UIPreferences.ActivityViewerPreferences;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -62,6 +63,17 @@ public class AppUI extends JavascriptObject {
     @JavascriptSetter("chatPreferences")
     public void updateChatPreferences(@NonNull ChatViewerPreferences prefs) {
         this.preferences.setChatViewerPreferences(prefs);
+        this.preferenceFile.save();
+    }
+
+    @JavascriptGetter("activityPreferences")
+    public ActivityViewerPreferences getActivityPreferences() {
+        return this.preferences.getActivityViewerPreferences();
+    }
+
+    @JavascriptSetter("activityPreferences")
+    public void updateActivityPreferences(@NonNull ActivityViewerPreferences prefs) {
+        this.preferences.setActivityViewerPreferences(prefs);
         this.preferenceFile.save();
     }
 

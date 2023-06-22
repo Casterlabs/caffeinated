@@ -7,6 +7,7 @@
 	import component_Chat from '../components/dashboard/Chat.svelte';
 	import component_Viewers from '../components/dashboard/Viewers.svelte';
 	import component_ChannelInfo from '../components/dashboard/ChannelInfo/index.svelte';
+	import component_ActivityFeed from '../components/dashboard/ActivityFeed.svelte';
 
 	import { onMount } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
@@ -19,14 +20,16 @@
 		welcomewagon: component_WelcomeWagon,
 		'co.casterlabs.dock.stream_chat.dock': component_Chat,
 		'co.casterlabs.dock.viewers.dock': component_Viewers,
-		'co.casterlabs.dock.channel_info': component_ChannelInfo
+		'co.casterlabs.dock.channel_info.dock': component_ChannelInfo,
+		'co.casterlabs.dock.activity_feed.dock': component_ActivityFeed
 	};
 
 	const componentChoices = {
 		[null]: 'dashboard.customize.options.none',
 		// welcomewagon: 'WelcomeWagon',
 		'co.casterlabs.dock.viewers.dock': 'Viewers', // Temporary.
-		'co.casterlabs.dock.channel_info': 'Channel Info' // Temporary.
+		'co.casterlabs.dock.channel_info.dock': 'Channel Info', // Temporary.
+		'co.casterlabs.dock.activity_feed.dock': 'Activity Feed' // Temporary.
 	};
 
 	let layoutElement;

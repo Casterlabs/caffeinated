@@ -17,6 +17,7 @@ public class UIPreferences {
     private String language = "en-US";
     private boolean closeToTray = true;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
+    private ActivityViewerPreferences activityViewerPreferences = new ActivityViewerPreferences();
     private boolean enableStupidlyUnsafeSettings = false;
     private boolean enableAlternateThemes = false;
     private double zoom = 1.0;
@@ -53,6 +54,16 @@ public class UIPreferences {
         // Still used by the popout dock.
         private @Deprecated boolean showModActions = true;
         private @Deprecated boolean showViewersList = true;
+
+    }
+
+    @Data
+    @JsonClass(exposeAll = true)
+    public static class ActivityViewerPreferences {
+        private boolean showTimestamps = true;
+        private boolean showProfilePictures = false;
+        private boolean showPlatform = false;
+        private boolean colorByPlatform = true;
 
     }
 
