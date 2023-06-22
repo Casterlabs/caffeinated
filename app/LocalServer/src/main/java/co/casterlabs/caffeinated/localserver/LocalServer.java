@@ -17,8 +17,7 @@ import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.impl.http.undertow.UndertowHttpServer;
 import co.casterlabs.rakurai.io.http.HttpMethod;
-import co.casterlabs.rakurai.io.http.server.HttpServerImplementation;
-import co.casterlabs.rakurai.io.http.websocket.Websocket;
+import co.casterlabs.rakurai.io.http.server.websocket.Websocket;
 import co.casterlabs.sora.Sora;
 import co.casterlabs.sora.SoraFramework;
 import co.casterlabs.sora.SoraLauncher;
@@ -51,7 +50,6 @@ public class LocalServer implements Closeable, HttpProvider {
         this.port = port;
         this.framework = new SoraLauncher()
             .setPort(this.port)
-            .setImplementation(HttpServerImplementation.UNDERTOW)
             .buildWithoutPluginLoader();
 
         UndertowHttpServer server = ((UndertowHttpServer) this.framework.getServer());
@@ -68,12 +66,9 @@ public class LocalServer implements Closeable, HttpProvider {
 
         @Override
         public void onInit(Sora sora) {
-            RouteWidgetApi widgetApi = new RouteWidgetApi();
-
-            sora.addHttpProvider(this, new RouteLocalServer());
-            sora.addHttpProvider(this, new RoutePluginApi());
-            sora.addHttpProvider(this, widgetApi);
-            sora.addWebsocketProvider(this, widgetApi);
+            sora.addProvider(this, new RouteLocalServer());
+            sora.addProvider(this, new RoutePluginApi());
+            sora.addProvider(this, new RouteWidgetApi());
 
             AsyncTask.create(this::pingHandler);
         }
