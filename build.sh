@@ -55,7 +55,7 @@ fi
 rm -rf dist/*
 mkdir -p -p dist
 
-KAIMEN_VERSION="9975034"
+KAIMEN_VERSION="286040f"
 VM_OPTIONS="-vm Xms1M -vm XX:+UseCompressedOops -vm XX:+UseSerialGC -vm XX:MaxHeapFreeRatio=1 -vm XX:MinHeapFreeRatio=1"
 
 if [[ $@ != *"nodist"* ]]; then
