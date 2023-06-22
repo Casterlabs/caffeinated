@@ -13,9 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.plugins.PluginContext.ContextType;
-import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences.WidgetSettingsDetails;
 import co.casterlabs.caffeinated.app.thirdparty.ThirdPartyServices;
 import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
@@ -34,6 +32,9 @@ import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.yen.Cache;
+import co.casterlabs.yen.CacheIterator;
+import co.casterlabs.yen.impl.SQLBackedCache;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -52,6 +53,8 @@ public class PluginIntegration extends JavascriptObject {
 
     private boolean isLoading = true;
 
+    private Cache<WidgetSettingsDetails> pluginsData;
+
     // Pointers to forward values from PluginsHandler.
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
@@ -67,6 +70,11 @@ public class PluginIntegration extends JavascriptObject {
 
     @SneakyThrows
     public void init() {
+        this.pluginsData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "plugins");
+
+        // Migrate from the old format to the new KV.
+        PluginImporter.importOldJson().forEach(this.pluginsData::submit);
+
         // Load the built-in widgets.
         {
             CaffeinatedPlugin defaultPlugin = new CaffeinatedDefaultPlugin();
@@ -104,42 +112,40 @@ public class PluginIntegration extends JavascriptObject {
             }
         }
 
-        for (WidgetSettingsDetails details : CaffeinatedApp.getInstance().getPluginIntegrationPreferences().get().getWidgetSettings()) {
-            try {
-                String id = details.getId();
+        // Load all widgets.
+        try (CacheIterator<WidgetSettingsDetails> it = this.pluginsData.enumerate()) {
+            while (it.hasNext()) {
+                WidgetSettingsDetails details = it.next();
 
-                // Reconstruct the widget and ignore the applet and dock.
-                if (!id.contains("applet") && !id.contains("dock")) {
-                    this.plugins.createWidget(details.getNamespace(), id, details.getName(), details.getSettings());
-                }
-            } catch (AssertionError | SecurityException | NullPointerException | IllegalArgumentException e) {
-                if ("That widget is not of the expected type of WIDGET".equals(e.getMessage())) {
-                    continue; // Ignore.
-                } else if ("A factory associated to that widget is not registered.".equals(e.getMessage())) {
-                    // We can safely ignore it.
-                    // TODO let the user know that the widget could not be found.
-                    FastLogger.logStatic(LogLevel.WARNING, "Unable to create missing widget: %s (%s)", details.getName(), details.getNamespace());
-                } else {
-                    e.printStackTrace();
+                try {
+                    String id = details.getId();
+
+                    // Reconstruct the widget and ignore the applet and dock.
+                    if (!id.contains("applet") && !id.contains("dock")) {
+                        this.plugins.createWidget(details.getNamespace(), id, details.getName(), details.getSettings());
+                    }
+                } catch (AssertionError | SecurityException | NullPointerException | IllegalArgumentException e) {
+                    if ("That widget is not of the expected type of WIDGET".equals(e.getMessage())) {
+                        continue; // Ignore.
+                    } else if ("A factory associated to that widget is not registered.".equals(e.getMessage())) {
+                        // We can safely ignore it.
+                        // TODO let the user know that the widget could not be found.
+                        FastLogger.logStatic(LogLevel.WARNING, "Unable to create missing widget: %s (%s)", details.getName(), details.getNamespace());
+                        FastLogger.logStatic(LogLevel.WARNING, "Note that this widget will NOT be deleted from the database, it will persist until the user reinstalls the plugin and deletes it themselves.");
+                    } else {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
         this.isLoading = false;
-        this.save();
+        this.widgets.forEach(this::save);
     }
 
-    public void save() {
+    public void save(WidgetHandle handle) {
         if (!this.isLoading) {
-            PreferenceFile<PluginIntegrationPreferences> prefs = CaffeinatedApp.getInstance().getPluginIntegrationPreferences();
-
-            List<WidgetSettingsDetails> widgetSettings = new LinkedList<>();
-            for (WidgetHandle handle : this.plugins.getWidgetHandles()) {
-                widgetSettings.add(WidgetSettingsDetails.from(handle.widget));
-            }
-
-            prefs.get().setWidgetSettings(widgetSettings);
-            prefs.save();
+            this.pluginsData.submit(WidgetSettingsDetails.from(handle.widget));
         }
     }
 
@@ -217,7 +223,7 @@ public class PluginIntegration extends JavascriptObject {
 
         handle.onSettingsUpdate(new JsonObject());
 
-        this.save();
+        this.save(handle);
         CaffeinatedApp.getInstance().getUI().navigate("/widgets/edit?widget=" + handle.id);
     }
 
@@ -227,7 +233,7 @@ public class PluginIntegration extends JavascriptObject {
         WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
 
         handle.name = newName;
-        this.save();
+        this.save(handle);
 
         handle.widget.onNameUpdate();
     }
@@ -235,7 +241,7 @@ public class PluginIntegration extends JavascriptObject {
     @JavascriptFunction
     public void deleteWidget(@NonNull String widgetId) {
         this.plugins.destroyWidget(widgetId);
-        this.save();
+        this.pluginsData.remove(widgetId);
     }
 
     @JavascriptFunction
@@ -253,7 +259,7 @@ public class PluginIntegration extends JavascriptObject {
 
         handle.onSettingsUpdate(settings);
 
-        this.save();
+        this.save(handle);
     }
 
     @SuppressWarnings("deprecation")

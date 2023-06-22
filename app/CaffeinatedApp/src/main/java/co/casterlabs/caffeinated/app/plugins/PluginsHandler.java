@@ -14,7 +14,6 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences.WidgetSettingsDetails;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugins;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -26,6 +25,7 @@ import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.functional.tuples.Triple;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.yen.CacheIterator;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -102,7 +102,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
             @Override
             public void onSettingsUpdate() {
                 CaffeinatedApp.getInstance().getAppBridge().emit("widgets:" + this.id, this.widget.toJson());
-                CaffeinatedApp.getInstance().getPlugins().save();
+                CaffeinatedApp.getInstance().getPlugins().save(this);
             }
         };
 
@@ -184,10 +184,14 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
             JsonObject settings = null;
 
             // Now we need to find the widget's settings (if they exist)
-            for (WidgetSettingsDetails otherDetails : CaffeinatedApp.getInstance().getPluginIntegrationPreferences().get().getWidgetSettings()) {
-                if (otherDetails.getNamespace().equals(widgetDetails.getNamespace())) {
-                    settings = otherDetails.getSettings();
-                    break;
+            try (CacheIterator<WidgetSettingsDetails> it = CaffeinatedApp.getInstance().getPlugins().getPluginsData().enumerate()) {
+                while (it.hasNext()) {
+                    WidgetSettingsDetails otherDetails = it.next();
+
+                    if (otherDetails.getNamespace().equals(widgetDetails.getNamespace())) {
+                        settings = otherDetails.getSettings();
+                        break;
+                    }
                 }
             }
 

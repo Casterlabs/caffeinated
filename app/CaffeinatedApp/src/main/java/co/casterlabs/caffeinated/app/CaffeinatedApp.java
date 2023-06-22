@@ -2,6 +2,8 @@ package co.casterlabs.caffeinated.app;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,7 +25,6 @@ import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegrationPreferences;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
-import co.casterlabs.caffeinated.app.plugins.PluginIntegrationPreferences;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
@@ -45,6 +46,7 @@ import co.casterlabs.swetrix.Swetrix;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
 import okhttp3.Request;
@@ -77,6 +79,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     private Swetrix analytics;
 
+    private Connection preferencesConnection;
+
     // @formatter:off
 
     // Integrations
@@ -92,7 +96,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private AppUI              UI                 = new AppUI();
 
     // Preferences
-    private PreferenceFile<PluginIntegrationPreferences> pluginIntegrationPreferences = new PreferenceFile<>("plugins", PluginIntegrationPreferences.class);
     private PreferenceFile<MusicIntegrationPreferences>  musicIntegrationPreferences = new PreferenceFile<>("music", MusicIntegrationPreferences.class);
     private PreferenceFile<ControlDeckPreferences>       controlDeckPreferences = new PreferenceFile<>("controldeck", ControlDeckPreferences.class);
     private PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
@@ -147,8 +150,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             .build();
     }
 
+    @SneakyThrows
     public void init(boolean traySupported) {
         this.isTraySupported = traySupported;
+
+        this.preferencesConnection = DriverManager.getConnection("jdbc:sqlite:" + new File(CaffeinatedApp.appDataDir, "preferences/kv.sqlite").getCanonicalPath());
 
         this.chatbot.init();
         this.UI.init();
