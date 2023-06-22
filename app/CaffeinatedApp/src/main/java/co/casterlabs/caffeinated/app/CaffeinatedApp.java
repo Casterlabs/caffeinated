@@ -25,6 +25,7 @@ import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
 import co.casterlabs.caffeinated.app.ui.AppUI;
+import co.casterlabs.caffeinated.app.ui.CaffeinatedWindowState;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
@@ -32,7 +33,6 @@ import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.kaimen.webview.Webview;
-import co.casterlabs.kaimen.webview.WebviewWindowState;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
@@ -97,7 +97,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // Preferences
     private PreferenceFile<ControlDeckPreferences>       controlDeckPreferences = new PreferenceFile<>("controldeck", ControlDeckPreferences.class);
     private PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
-    private PreferenceFile<WebviewWindowState>           windowPreferences = new PreferenceFile<>("window", WebviewWindowState.class);
+    private PreferenceFile<CaffeinatedWindowState>       windowPreferences = new PreferenceFile<>("window", CaffeinatedWindowState.class);
     private PreferenceFile<AuthPreferences>              authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
 
     // @formatter:on
