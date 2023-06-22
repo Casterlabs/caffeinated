@@ -6,14 +6,14 @@ import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.util.MimeTypes;
-import co.casterlabs.rakurai.io.http.HttpResponse;
-import co.casterlabs.rakurai.io.http.HttpSession;
 import co.casterlabs.rakurai.io.http.StandardHttpStatus;
+import co.casterlabs.rakurai.io.http.server.HttpResponse;
+import co.casterlabs.rakurai.io.http.server.HttpSession;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class AppSchemeHandler implements Function<HttpSession, co.casterlabs.rakurai.io.http.HttpResponse> {
+public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
 
     @SneakyThrows
     @Override

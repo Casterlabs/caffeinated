@@ -6,12 +6,11 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.commons.async.AsyncTask;
-import co.casterlabs.rakurai.io.http.HttpResponse;
-import co.casterlabs.rakurai.io.http.HttpSession;
 import co.casterlabs.rakurai.io.http.HttpStatus;
-import co.casterlabs.rakurai.io.http.websocket.Websocket;
-import co.casterlabs.rakurai.io.http.websocket.WebsocketCloseCode;
-import co.casterlabs.rakurai.io.http.websocket.WebsocketListener;
+import co.casterlabs.rakurai.io.http.server.HttpResponse;
+import co.casterlabs.rakurai.io.http.server.HttpSession;
+import co.casterlabs.rakurai.io.http.server.websocket.Websocket;
+import co.casterlabs.rakurai.io.http.server.websocket.WebsocketListener;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -131,7 +130,7 @@ public interface RouteHelper {
     default void safeClose(@Nullable Websocket websocket) {
         if (websocket != null) {
             try {
-                websocket.close(WebsocketCloseCode.NORMAL);
+                websocket.close();
             } catch (IOException e) {
                 FastLogger.logStatic(LogLevel.SEVERE, "An error occurred whilst closing a connection:");
                 FastLogger.logException(e);

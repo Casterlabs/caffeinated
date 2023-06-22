@@ -9,9 +9,8 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.types.events.KoiEvent;
-import co.casterlabs.rakurai.io.http.websocket.Websocket;
-import co.casterlabs.rakurai.io.http.websocket.WebsocketCloseCode;
-import co.casterlabs.rakurai.io.http.websocket.WebsocketListener;
+import co.casterlabs.rakurai.io.http.server.websocket.Websocket;
+import co.casterlabs.rakurai.io.http.server.websocket.WebsocketListener;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -101,7 +100,7 @@ public class RealtimeHeartbeatListener implements WebsocketListener, RouteHelper
 
         @Override
         public void close() throws IOException {
-            websocket.close(WebsocketCloseCode.NORMAL);
+            websocket.close();
         }
 
     }
@@ -134,7 +133,7 @@ public class RealtimeHeartbeatListener implements WebsocketListener, RouteHelper
 
         @Override
         public void close() throws IOException {
-            websocket.close(WebsocketCloseCode.NORMAL);
+            websocket.close();
         }
 
         @Override

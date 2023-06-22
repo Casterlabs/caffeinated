@@ -13,9 +13,8 @@ import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
-import co.casterlabs.rakurai.io.http.websocket.Websocket;
-import co.casterlabs.rakurai.io.http.websocket.WebsocketCloseCode;
-import co.casterlabs.rakurai.io.http.websocket.WebsocketListener;
+import co.casterlabs.rakurai.io.http.server.websocket.Websocket;
+import co.casterlabs.rakurai.io.http.server.websocket.WebsocketListener;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -58,6 +57,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
         switch (this.mode) {
             case APPLET:
             case DOCK:
+            case SETTINGS_APPLET:
                 statics = Caffeinated.getInstance().getKoi().toJsonExtended();
                 break;
 
@@ -213,7 +213,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
         @Override
         public void close() throws IOException {
-            websocket.close(WebsocketCloseCode.NORMAL);
+            websocket.close();
         }
 
     }
@@ -259,7 +259,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
         @Override
         public void close() throws IOException {
-            websocket.close(WebsocketCloseCode.NORMAL);
+            websocket.close();
         }
 
         @Override

@@ -15,7 +15,6 @@ import co.casterlabs.caffeinated.localserver.handlers.RouteWidgetApi;
 import co.casterlabs.caffeinated.localserver.websocket.RealtimeConnection;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.functional.tuples.Pair;
-import co.casterlabs.rakurai.impl.http.undertow.UndertowHttpServer;
 import co.casterlabs.rakurai.io.http.HttpMethod;
 import co.casterlabs.rakurai.io.http.server.websocket.Websocket;
 import co.casterlabs.sora.Sora;
@@ -27,7 +26,6 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
-import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 public class LocalServer implements Closeable, HttpProvider {
     public static final String ALLOWED_METHODS;
@@ -52,10 +50,10 @@ public class LocalServer implements Closeable, HttpProvider {
             .setPort(this.port)
             .buildWithoutPluginLoader();
 
-        UndertowHttpServer server = ((UndertowHttpServer) this.framework.getServer());
-        FastLogger logger = ReflectionLib.getValue(server, "logger");
-
-        logger.setCurrentLevel(LogLevel.SEVERE);
+        this.framework
+            .getServer()
+            .getLogger()
+            .setCurrentLevel(LogLevel.SEVERE);
 
         this.framework
             .getSora()
