@@ -142,7 +142,7 @@ export default {
 	'page.chat_bot.shouts.FOLLOW': 'Follows',
 	'page.chat_bot.shouts.RAID': 'Raids',
 	'page.chat_bot.shouts.SUBSCRIPTION': 'Subscribes',
-	'page.chat_bot.shouts.example': 'Thank you for the follow!',
+	'page.chat_bot.shouts.example': 'Thank you for the follow @%username%!',
 
 	'page.chat_bot.timers': 'Timers',
 	'page.chat_bot.timers.format': 'Every %seconds% seconds, send one of the following:',

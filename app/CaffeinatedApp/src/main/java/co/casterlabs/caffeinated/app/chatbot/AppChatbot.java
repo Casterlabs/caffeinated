@@ -143,7 +143,14 @@ public class AppChatbot extends JavascriptObject {
                 continue;
             }
 
-            String message = String.format("@%s %s", eventSender.getDisplayname(), shout.getText());
+            String message = shout.getText()
+                .replace("%username%", eventSender.getDisplayname());
+
+            if (!message.contains(eventSender.getDisplayname())) {
+                // Try to always mention the actual user, this is to prevent issues with spam
+                // detection systems.
+                message = String.format("@%s %s", eventSender.getDisplayname(), message);
+            }
 
             CaffeinatedApp.getInstance().getKoi().sendChat(
                 platform,
