@@ -68,7 +68,7 @@ public class PluginIntegration extends JavascriptObject {
 
     @SneakyThrows
     public void init() {
-        this.preferenceData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "plugins");
+        this.preferenceData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "kv_plugins");
 
         // Migrate from the old format to the new KV.
         PluginImporter.importOldJson().forEach(this.preferenceData::submit);

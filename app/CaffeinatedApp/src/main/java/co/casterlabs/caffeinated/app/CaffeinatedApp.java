@@ -153,7 +153,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public void init(boolean traySupported) {
         this.isTraySupported = traySupported;
 
-        this.preferencesConnection = DriverManager.getConnection("jdbc:sqlite:" + new File(CaffeinatedApp.appDataDir, "preferences/kv.sqlite").getCanonicalPath());
+        this.preferencesConnection = DriverManager.getConnection("jdbc:sqlite:" + new File(CaffeinatedApp.appDataDir, "preferences/database.sqlite").getCanonicalPath());
 
         this.chatbot.init();
         this.UI.init();

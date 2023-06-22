@@ -53,7 +53,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
 
     @SneakyThrows
     public void init() {
-        this.preferenceData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "music");
+        this.preferenceData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "kv_music");
 
         // Migrate.
         this.importOldJson();
