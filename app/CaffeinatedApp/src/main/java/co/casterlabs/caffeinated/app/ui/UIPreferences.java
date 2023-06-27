@@ -25,11 +25,11 @@ public class UIPreferences {
     private DashboardConfig mainDashboard = new DashboardConfig();
     private DashboardConfig dockDashboard = new DashboardConfig();
 
-    private boolean mikeysMode = false; // https://twitter.com/Casterlabs/status/1508475284944736268
+//    private boolean mikeysMode = false; // R.I.P. Mikey's Mode, you will be missed. https://twitter.com/Casterlabs/status/1508475284944736268
 
     public String getIcon() {
         if ("skittles".equals(this.icon)) {
-            return CURRENT_SKITTLE; // Randomize the skittle shown in the taskbar.
+            return CURRENT_SKITTLE; // Randomize the Skittle shown in the taskbar.
                                     // https://twitter.com/Skittles/status/1510008458489249796
         } else {
             return this.icon;

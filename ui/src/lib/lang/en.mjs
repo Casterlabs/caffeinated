@@ -189,9 +189,6 @@ export default {
 	'page.settings.appearance.close_to_tray': 'Close button sends to tray',
 	'page.settings.appearance.close_to_tray.description':
 		'Makes Caffeinated cozy up in the background when you close it.',
-	'page.settings.appearance.mikeys_mode': "Mikey's Mode",
-	'page.settings.appearance.mikeys_mode.description':
-		'<a class="text-link" href="https://twitter.com/Casterlabs/status/1508475284944736268" target="_blank">For those of you who need more time to cook your pockets :^)</a>',
 
 	'page.settings.plugins': 'Plugins',
 	'page.settings.plugins.open_directory': 'Open Plugins Folder',

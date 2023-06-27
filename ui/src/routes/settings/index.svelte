@@ -206,12 +206,4 @@
 			on:value={({ detail: value }) => setPreferenceItem('closeToTray', value)}
 		/>
 	</li>
-	<li class="py-4">
-		<Switch
-			title="page.settings.appearance.mikeys_mode"
-			description="page.settings.appearance.mikeys_mode.description"
-			checked={$preferences?.mikeysMode}
-			on:value={({ detail: value }) => setPreferenceItem('mikeysMode', value)}
-		/>
-	</li>
 </ul>

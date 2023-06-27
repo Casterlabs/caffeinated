@@ -81,7 +81,6 @@ public class AppUI extends JavascriptObject {
     public void updateAppearance(@NonNull UIPreferences newPreferences) {
         this.preferences.setIcon(newPreferences.getIcon());
         this.preferences.setCloseToTray(newPreferences.isCloseToTray());
-        this.preferences.setMikeysMode(newPreferences.isMikeysMode());
         this.preferences.setEmojiProvider(newPreferences.getEmojiProvider());
         this.preferences.setLanguage(newPreferences.getLanguage());
         this.preferences.setEnableStupidlyUnsafeSettings(newPreferences.isEnableStupidlyUnsafeSettings());
