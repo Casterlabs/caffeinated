@@ -25,11 +25,8 @@
 	};
 
 	const componentChoices = {
-		[null]: 'dashboard.customize.options.none',
+		[null]: 'dashboard.customize.options.none'
 		// welcomewagon: 'WelcomeWagon',
-		'co.casterlabs.dock.viewers.dock': 'Viewers', // Temporary.
-		'co.casterlabs.dock.channel_info.dock': 'Channel Info', // Temporary.
-		'co.casterlabs.dock.activity_feed.dock': 'Activity Feed' // Temporary.
 	};
 
 	let layoutElement;

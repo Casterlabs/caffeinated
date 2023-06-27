@@ -3,6 +3,7 @@ package co.casterlabs.caffeinated.app.ui;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -28,17 +29,49 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
         .withType(WidgetType.DOCK)
         .withFriendlyName("Stream Chat");
 
+    public static final WidgetDetails VIEWERS_DETAILS = new WidgetDetails()
+        .withNamespace("co.casterlabs.dock.viewers")
+        .withIcon("users")
+        .withType(WidgetType.DOCK)
+        .withFriendlyName("Viewers List");
+
+    public static final WidgetDetails CHANNEL_INFO_DETAILS = new WidgetDetails()
+        .withNamespace("co.casterlabs.dock.channel_info")
+        .withIcon("document-text")
+        .withType(WidgetType.DOCK)
+        .withFriendlyName("Channel Info");
+
+    public static final WidgetDetails ACTIVITY_FEED_DETAILS = new WidgetDetails()
+        .withNamespace("co.casterlabs.dock.activity_feed")
+        .withIcon("list-bullet")
+        .withType(WidgetType.DOCK)
+        .withFriendlyName("Activity Feed");
+
     @Override
     public void onInit() {
-        this.getPlugins().registerWidgetFactory(this, STREAM_CHAT_DETAILS, (details) -> {
+        Function<WidgetDetails, Widget> factory = (details) -> {
             switch (details.getNamespace()) {
                 case "co.casterlabs.dock.stream_chat":
                     return new DockBase("/popout/chat");
 
+                case "co.casterlabs.dock.viewers":
+                    return new DockBase("/popout/viewers");
+
+                case "co.casterlabs.dock.channel_info":
+                    return new DockBase("/popout/channel-info");
+
+                case "co.casterlabs.dock.activity_feed":
+                    return new DockBase("/popout/activity-feed");
+
                 default:
                     return null; // Shut up Mr. Compiley
             }
-        });
+        };
+
+        this.getPlugins().registerWidgetFactory(this, STREAM_CHAT_DETAILS, factory);
+        this.getPlugins().registerWidgetFactory(this, VIEWERS_DETAILS, factory);
+        this.getPlugins().registerWidgetFactory(this, CHANNEL_INFO_DETAILS, factory);
+        this.getPlugins().registerWidgetFactory(this, ACTIVITY_FEED_DETAILS, factory);
     }
 
     @Override
