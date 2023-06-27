@@ -98,6 +98,10 @@
 									{/if}
 								</button>
 							</div>
+
+							<span class="mt-4">
+								<LocalizedText key="sdk_documentation" />
+							</span>
 						{:else}
 							<TextArea
 								placeholder="page.chat_bot.commands.example"

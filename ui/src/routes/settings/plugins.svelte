@@ -77,7 +77,11 @@
 	{/each}
 </ul>
 
-<div class="w-fit mt-6 ml-auto">
+<div class="mt-6 flex flex-row items-center">
+	<div class="flex-1">
+		<LocalizedText key="sdk_documentation" />
+	</div>
+
 	<Button
 		on:click={() => {
 			window.Caffeinated.plugins.openPluginsDir();

@@ -35,6 +35,9 @@ export default {
 	unsupported_feature: 'Not supported',
 	'unsupported_feature.item': 'Not supported by {item}.',
 
+	sdk_documentation:
+		'Looking for documentation? Look at the <a class="text-link underline" href="https://casterlabs.github.io/caffeinated-sdk/" target="_blank">Caffeinated SDK Wiki</a>.',
+
 	/* ---- Platforms ---- */
 	'platform.CAFFEINE': 'Caffeine',
 	'platform.parenthesis.CAFFEINE': '(Caffeine)',
