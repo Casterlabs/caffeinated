@@ -130,6 +130,11 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
                 Caffeinated.getInstance().openLink(url);
             });
 
+            instance.on("copyText", (e) -> {
+                String text = e.getAsString();
+                Caffeinated.getInstance().copyText(text, null);
+            });
+
             instance.on("savePreferences", (data) -> {
                 this.settings().set("preferences", data);
             });
