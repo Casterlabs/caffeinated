@@ -8,6 +8,7 @@
 
 	const console = createConsole('Settings/Plugins');
 
+	const preferences = st || Caffeinated.UI.svelte('preferences');
 	const contexts = st || Caffeinated.plugins.svelte('contexts');
 
 	$: contexts, $contexts && console.debug('Plugins Contexts:', $contexts);
@@ -22,37 +23,40 @@
 
 <ul class="space-y-2">
 	{#each $contexts || [] as context}
-		<li>
-			<Container>
-				<div class="h-6 flex flex-row items-center">
-					<p class="flex-1">
-						{#if context.file}
-							{context.file}
-						{:else}
-							<LocalizedText key="page.settings.plugins.internal_plugin" />
-						{/if}
+		<!-- Hide the internal plugins IF they don't have developer mode enabled. -->
+		{#if context.file || $preferences?.enableStupidlyUnsafeSettings}
+			<li>
+				<Container>
+					<div class="h-6 flex flex-row items-center">
+						<p class="flex-1">
+							{#if context.file}
+								{context.file}
+							{:else}
+								<LocalizedText key="page.settings.plugins.internal_plugin" />
+							{/if}
 
-						{#if context.pluginIds.length > 0}
-							<span class="text-base-11 text-xs">
-								&bull;
-								{context.pluginIds.join(',')}
-							</span>
-						{/if}
-					</p>
-					<div class="flex-0">
-						{#if context.file}
-							<SlimButton
-								on:click={() => {
-									window.Caffeinated.plugins.unload(context.id);
-								}}
-							>
-								<LocalizedText key="page.settings.plugins.file.unload" />
-							</SlimButton>
-						{/if}
+							{#if context.pluginIds.length > 0}
+								<span class="text-base-11 text-xs">
+									&bull;
+									{context.pluginIds.join(',')}
+								</span>
+							{/if}
+						</p>
+						<div class="flex-0">
+							{#if context.file}
+								<SlimButton
+									on:click={() => {
+										window.Caffeinated.plugins.unload(context.id);
+									}}
+								>
+									<LocalizedText key="page.settings.plugins.file.unload" />
+								</SlimButton>
+							{/if}
+						</div>
 					</div>
-				</div>
-			</Container>
-		</li>
+				</Container>
+			</li>
+		{/if}
 	{/each}
 
 	{#each files as file}
