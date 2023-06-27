@@ -26,5 +26,14 @@
 		></canvas>
 
 		<script src="/$caffeinated-sdk-root$/js/toastify.js"></script>
+
+		<!-- Vite is broken, this is the work around. -->
+		<script src="/$caffeinated-sdk-root$/js/monaco-editor/min/vs/loader.js"></script>
+		<script>
+			require.config({ paths: { vs: '/$caffeinated-sdk-root$/js/monaco-editor/min/vs' } });
+			require(['vs/editor/editor.main'], function () {
+				console.debug('[Patches] Monaco loaded.');
+			});
+		</script>
 	</body>
 </html>

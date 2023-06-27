@@ -1,7 +1,6 @@
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { appearance } from '$lib/app.mjs';
-	import * as monaco from 'monaco-editor';
 
 	const dispatch = createEventDispatcher();
 

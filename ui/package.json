@@ -28,7 +28,6 @@
     "type": "module",
     "dependencies": {
         "@radix-ui/colors": "^0.1.8",
-        "monaco-editor": "^0.39.0",
         "svelte-portal": "^2.2.0"
     }
 }
