@@ -10,6 +10,7 @@
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
 	import SlimButton from '$lib/ui/SlimButton.svelte';
+	import CodeInput from '$lib/ui/CodeInput.svelte';
 
 	const debouncer = new Debouncer();
 
@@ -30,6 +31,8 @@
 	$: preferences, $preferences && console.debug('Chat Bot Preferences:', $preferences);
 
 	$: commands = $preferences?.commands || [];
+
+	let codeExpandedOn = null;
 
 	function saveDB() {
 		debouncer.debounce(save);
@@ -80,12 +83,29 @@
 					</div>
 
 					<span slot="3" class="block mt-1.5">
-						<TextArea
-							placeholder="page.chat_bot.commands.example"
-							rows={command.type == 'SCRIPT' ? 8 : 2}
-							bind:value={command.response}
-							on:value={saveDB}
-						/>
+						{#if command.type == 'SCRIPT'}
+							<div class="relative h-20" class:h-[70vh]={codeExpandedOn == command}>
+								<CodeInput bind:value={command.response} on:value={saveDB} language="javascript" />
+
+								<button
+									class="absolute right-0 bottom-0 p-0.5 rounded-tl bg-base-2 hover:bg-base-7 border-t border-l border-base-8 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-base-12"
+									on:click={() => (codeExpandedOn = codeExpandedOn == command ? null : command)}
+								>
+									{#if codeExpandedOn == command}
+										<icon class="h-5 w-5" data-icon="icon/arrows-pointing-in" />
+									{:else}
+										<icon class="h-5 w-5" data-icon="icon/arrows-pointing-out" />
+									{/if}
+								</button>
+							</div>
+						{:else}
+							<TextArea
+								placeholder="page.chat_bot.commands.example"
+								rows={2}
+								bind:value={command.response}
+								on:value={saveDB}
+							/>
+						{/if}
 					</span>
 				</LocalizedText>
 			</Container>
