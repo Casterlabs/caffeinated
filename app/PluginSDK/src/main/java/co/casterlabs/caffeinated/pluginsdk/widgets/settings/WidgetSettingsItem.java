@@ -123,7 +123,7 @@ public class WidgetSettingsItem {
     /* Text Area */
 
     public static WidgetSettingsItem asTextArea(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String placeholder) {
-        return asTextArea(id, name, defaultValue, placeholder);
+        return asTextArea(id, name, defaultValue, placeholder, 4);
     }
 
     public static WidgetSettingsItem asTextArea(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String placeholder, int rows) {
