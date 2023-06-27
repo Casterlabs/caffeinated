@@ -44,7 +44,7 @@
 		chatViewer.supportedFeatures = Koi.features;
 
 		// Kickstart.
-		chatViewer.loadConfig(Widget.getSetting('preferences'));
+		chatViewer.loadConfig(Widget.getSetting('preferences') || {});
 
 		// Unsubscribe when this page exits.
 		Koi.on('*', (_, event) => chatViewer.processEvent(event));
