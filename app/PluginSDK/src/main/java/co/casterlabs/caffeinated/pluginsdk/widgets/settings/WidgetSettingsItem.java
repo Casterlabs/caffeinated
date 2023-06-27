@@ -141,6 +141,19 @@ public class WidgetSettingsItem {
         );
     }
 
+    /* Code */
+
+    public static WidgetSettingsItem asCode(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String language) {
+        return new WidgetSettingsItem(
+            id,
+            name,
+            WidgetSettingsItemType.CODE,
+            new JsonObject()
+                .put("defaultValue", defaultValue)
+                .put("language", language)
+        );
+    }
+
     /* Password */
 
     public static WidgetSettingsItem asPassword(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String placeholder) {
@@ -220,6 +233,7 @@ public class WidgetSettingsItem {
         FONT,
         RANGE,
         FILE,
+        CODE,
 
     }
 
