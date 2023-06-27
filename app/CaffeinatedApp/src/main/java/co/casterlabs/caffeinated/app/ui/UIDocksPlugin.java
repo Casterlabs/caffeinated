@@ -17,13 +17,28 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.IOUtil;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 public class UIDocksPlugin extends CaffeinatedPlugin {
 
+    public static final WidgetDetails STREAM_CHAT_DETAILS = new WidgetDetails()
+        .withNamespace("co.casterlabs.dock.stream_chat")
+        .withIcon("chat-bubble-left")
+        .withType(WidgetType.DOCK)
+        .withFriendlyName("Stream Chat");
+
     @Override
     public void onInit() {
-        this.getPlugins().registerWidget(this, StreamChatDock.DETAILS, StreamChatDock.class);
+        this.getPlugins().registerWidgetFactory(this, STREAM_CHAT_DETAILS, (details) -> {
+            switch (details.getNamespace()) {
+                case "co.casterlabs.dock.stream_chat":
+                    return new DockBase("/popout/chat");
+
+                default:
+                    return null; // Shut up Mr. Compiley
+            }
+        });
     }
 
     @Override
@@ -71,12 +86,9 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
         }
     }
 
-    public static class StreamChatDock extends Widget {
-        public static final WidgetDetails DETAILS = new WidgetDetails()
-            .withNamespace("co.casterlabs.dock.stream_chat")
-            .withIcon("chat-bubble-left")
-            .withType(WidgetType.DOCK)
-            .withFriendlyName("Stream Chat");
+    @AllArgsConstructor
+    public static class DockBase extends Widget {
+        private String basePath;
 
         @Override
         public void onNewInstance(@NonNull WidgetInstance instance) {
@@ -92,7 +104,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
 
         @Override
         public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
-            return "/popout/chat";
+            return this.basePath;
         }
 
     }
