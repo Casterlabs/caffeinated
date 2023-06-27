@@ -286,7 +286,7 @@ public class PluginIntegration extends JavascriptObject {
     public void copyWidgetUrl(@NonNull String widgetId) {
         WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
 
-        CaffeinatedApp.getInstance().copyText(handle.getUrl(), null);
+        CaffeinatedApp.getInstance().copyText(handle.getUrl(), "Copied link to clipboard");
     }
 
     @JavascriptGetter("loadedPlugins")

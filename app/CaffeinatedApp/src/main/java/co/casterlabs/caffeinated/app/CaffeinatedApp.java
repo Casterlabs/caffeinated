@@ -227,12 +227,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @JavascriptFunction
     @Override
     public void copyText(@NonNull String text, @Nullable String toastText) {
-        if (toastText == null) {
-            toastText = "Copied link to clipboard";
-        }
-
         ClipboardUtil.copy(text);
-        this.UI.showToast(toastText, NotificationType.NONE);
+
+        if (toastText != null) {
+            this.UI.showToast(toastText, NotificationType.NONE);
+        }
     }
 
     /**
