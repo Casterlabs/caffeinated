@@ -1,7 +1,7 @@
 package co.casterlabs.caffeinated.pluginsdk;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -33,13 +33,13 @@ public interface CaffeinatedPlugins {
     /**
      * Registers a widget that can be created by the user.
      *
-     * @param  plugin         the plugin registering the widget
-     * @param  widgetDetails  the details of the widget
-     * @param  widgetProducer the {@code Producer} factory
+     * @param  plugin        the plugin registering the widget
+     * @param  widgetDetails the details of the widget
+     * @param  widgetfactory the factory that creates the widget instances
      * 
-     * @return                this instance, for chaining.
+     * @return               this instance, for chaining.
      */
-    public CaffeinatedPlugins registerWidgetFactory(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Supplier<Widget> widgetProducer);
+    public CaffeinatedPlugins registerWidgetFactory(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Function<WidgetDetails, Widget> widgetFactory);
 
     /**
      * Registers a widget that can be created by the user.
@@ -62,7 +62,7 @@ public interface CaffeinatedPlugins {
      * @return                 this instance, for chaining
      */
     default CaffeinatedPlugins registerWidget(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Class<? extends Widget> widgetClass) {
-        return this.registerWidgetFactory(plugin, widgetDetails, () -> {
+        return this.registerWidgetFactory(plugin, widgetDetails, (_details) -> {
             try {
                 // Try to use the no-args constructor.
                 return widgetClass.getDeclaredConstructor().newInstance();

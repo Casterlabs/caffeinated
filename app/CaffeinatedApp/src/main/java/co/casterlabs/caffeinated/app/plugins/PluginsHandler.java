@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +34,7 @@ import xyz.e3ndr.reflectionlib.ReflectionLib;
 public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugins {
     private static final FastLogger logger = new FastLogger();
 
-    private Map<String, Triple<CaffeinatedPlugin, Supplier<Widget>, WidgetDetails>> widgetFactories = new HashMap<>();
+    private Map<String, Triple<CaffeinatedPlugin, Function<WidgetDetails, Widget>, WidgetDetails>> widgetFactories = new HashMap<>();
     private Map<String, CaffeinatedPlugin> plugins = new HashMap<>();
     private Map<String, WidgetHandle> widgetHandles = new HashMap<>();
 
@@ -58,7 +58,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
     public List<WidgetDetails> getCreatableWidgets() {
         List<WidgetDetails> details = new LinkedList<>();
 
-        for (Triple<CaffeinatedPlugin, Supplier<Widget>, WidgetDetails> factory : this.widgetFactories.values()) {
+        for (Triple<CaffeinatedPlugin, Function<WidgetDetails, Widget>, WidgetDetails> factory : this.widgetFactories.values()) {
             details.add(factory.c());
         }
 
@@ -87,7 +87,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
 
     @SneakyThrows
     private WidgetHandle createWidget(@NonNull String namespace, @NonNull String id, @NonNull String name, @Nullable JsonObject settings, @NonNull WidgetType expectedType) {
-        Triple<CaffeinatedPlugin, Supplier<Widget>, WidgetDetails> factory = this.widgetFactories.get(namespace);
+        Triple<CaffeinatedPlugin, Function<WidgetDetails, Widget>, WidgetDetails> factory = this.widgetFactories.get(namespace);
 
         assert factory != null : "A factory associated to that widget is not registered.";
         assert factory.c().getType() == expectedType : "That widget is not of the expected type of " + expectedType;
@@ -97,7 +97,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         String conductorKey = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorKey();
         int conductorPort = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorPort();
 
-        WidgetHandle handle = new WidgetHandle(factory.b().get(), conductorKey, conductorPort) {
+        WidgetHandle handle = new WidgetHandle(factory.b().apply(factory.c()), conductorKey, conductorPort) {
             @SuppressWarnings("deprecation")
             @Override
             public void onSettingsUpdate() {
@@ -168,7 +168,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
 
     @SneakyThrows
     @Override
-    public CaffeinatedPlugins registerWidgetFactory(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Supplier<Widget> widgetSupplier) {
+    public CaffeinatedPlugins registerWidgetFactory(@NonNull CaffeinatedPlugin plugin, @NonNull WidgetDetails widgetDetails, @NonNull Function<WidgetDetails, Widget> widgetSupplier) {
         assert !this.widgetFactories.containsKey(widgetDetails.getNamespace()) : "A widget of that namespace is already registered.";
 
         widgetDetails.validate();
@@ -305,7 +305,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         List<String> pluginWidgetNamespacesField = ReflectionLib.getValue(plugin, "widgetNamespaces");
 
         for (String widgetNamespace : pluginWidgetNamespacesField) {
-            Triple<CaffeinatedPlugin, Supplier<Widget>, WidgetDetails> removed = this.widgetFactories.remove(widgetNamespace);
+            Triple<CaffeinatedPlugin, Function<WidgetDetails, Widget>, WidgetDetails> removed = this.widgetFactories.remove(widgetNamespace);
             this.$creatableWidgets.remove(removed.c());
         }
 
