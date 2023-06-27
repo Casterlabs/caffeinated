@@ -1,5 +1,8 @@
 package co.casterlabs.caffeinated.pluginsdk.widgets.settings;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.rakurai.json.Rson;
@@ -30,17 +33,6 @@ public class WidgetSettingsItem {
 
     public @Nullable JsonElement getDefaultValue() {
         return this.getExtraData().get("defaultValue");
-    }
-
-    /* Unknown */
-
-    public static WidgetSettingsItem asUnknown(@NonNull String id, @NonNull String name, Object... ignored) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.UNKNOWN,
-            new JsonObject()
-        );
     }
 
     /* Html */
@@ -96,14 +88,25 @@ public class WidgetSettingsItem {
 
     /* Dropdown */
 
+    /**
+     * You may also prefer {@link #asDropdown(String, String, String, Map)}.
+     */
     public static WidgetSettingsItem asDropdown(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String... options) {
+        Map<String, String> map = new HashMap<>();
+        for (String option : options) {
+            map.put(option, option);
+        }
+        return asDropdown(id, name, defaultValue, map);
+    }
+
+    public static WidgetSettingsItem asDropdown(@NonNull String id, @NonNull String name, @NonNull String defaultKey, @NonNull Map<String, String> options) {
         return new WidgetSettingsItem(
             id,
             name,
             WidgetSettingsItemType.DROPDOWN,
             new JsonObject()
-                .put("defaultValue", defaultValue)
-                .put("options", JsonArray.of((Object[]) options))
+                .put("defaultValue", defaultKey)
+                .put("options", Rson.DEFAULT.toJson(options))
         );
     }
 
