@@ -114,13 +114,13 @@
 		<dependency>
 			<groupId>co.casterlabs.Commons</groupId>
 			<artifactId>Platform</artifactId>
-			<version>67c0935</version>
+			<version>529b657</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs.Commons</groupId>
 			<artifactId>Async</artifactId>
-			<version>67c0935</version>
+			<version>529b657</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
