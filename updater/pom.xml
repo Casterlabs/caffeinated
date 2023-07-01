@@ -102,25 +102,25 @@
 		<dependency>
 			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Json</artifactId>
-			<version>1.17.1</version>
+			<version>1.17.5</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs.Rakurai</groupId>
 			<artifactId>Util</artifactId>
-			<version>1.17.1</version>
+			<version>1.17.5</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs.Commons</groupId>
 			<artifactId>Platform</artifactId>
-			<version>809fe5e</version>
+			<version>34b7b84</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs.Commons</groupId>
 			<artifactId>Async</artifactId>
-			<version>809fe5e</version>
+			<version>34b7b84</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
