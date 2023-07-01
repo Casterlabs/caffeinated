@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider;
 import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider;
@@ -137,12 +138,12 @@ public class MusicIntegration extends JavascriptObject implements Music {
             }
         });
 
+        @SuppressWarnings("deprecation")
+        JsonObject music = this.toJson();
+
         // Broadcast to the plugins & the music api.
         AsyncTask.create(() -> {
             try {
-                @SuppressWarnings("deprecation")
-                JsonObject music = this.toJson();
-
                 // Send the events to the widget instances.
                 for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPlugins().getLoadedPlugins()) {
                     for (Widget widget : plugin.getWidgets()) {
@@ -155,6 +156,18 @@ public class MusicIntegration extends JavascriptObject implements Music {
                 }
 
                 CaffeinatedApp.getInstance().getApi().musicApi.sendSong();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Broadcast to the local api.
+        AsyncTask.create(() -> {
+            try {
+                // Send the events to the widget instances.
+                for (RealtimeApiListener listener : CaffeinatedApp.getInstance().getApiListeners().toArray(new RealtimeApiListener[0])) {
+                    listener.onMusicUpdate(music);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

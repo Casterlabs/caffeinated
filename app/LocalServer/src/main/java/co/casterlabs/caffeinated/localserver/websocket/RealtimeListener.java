@@ -3,12 +3,9 @@ package co.casterlabs.caffeinated.localserver.websocket;
 import java.io.IOException;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
-import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
-import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
-import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
-import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEvent;
@@ -16,26 +13,20 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.io.http.server.websocket.Websocket;
 import co.casterlabs.rakurai.io.http.server.websocket.WebsocketListener;
 import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.reflectionlib.ReflectionLib;
 
-public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
-    private WidgetHandle handle;
-    private WidgetInstanceMode mode;
+public class RealtimeListener implements WebsocketListener, RouteHelper {
     private String connectionId;
 
-    private WidgetInstanceProvider wInstance;
+    private AppListener appListener;
     private RealtimeConnection connInstance;
     private Websocket websocket;
 
     @SneakyThrows
-    public RealtimeWidgetListener(Widget widget, WidgetInstanceMode mode, String connectionId) {
-        this.handle = ReflectionLib.getValue(widget, "$handle");
-        this.mode = mode;
+    public RealtimeListener(String connectionId) {
         this.connectionId = connectionId;
     }
 
@@ -44,27 +35,13 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
     public void onOpen(Websocket websocket) {
         this.websocket = websocket;
 
+        this.appListener = new AppListener();
         this.connInstance = new ConnectionWrapper();
-        this.wInstance = new WidgetInstanceProvider();
 
-        Pair<RealtimeConnection, WidgetInstance> connPair = new Pair<>(this.connInstance, this.wInstance);
+        Pair<RealtimeConnection, AppListener> connPair = new Pair<>(this.connInstance, this.appListener);
         websocket.setAttachment(connPair);
 
-        JsonObject statics = null;
-
-        switch (this.mode) {
-            case APPLET:
-            case DOCK:
-            case SETTINGS_APPLET:
-                statics = Caffeinated.getInstance().getKoi().toJsonExtended();
-                break;
-
-            case DEMO:
-            case WIDGET:
-            case WIDGET_ALT:
-                statics = Caffeinated.getInstance().getKoi().toJson();
-                break;
-        }
+        JsonObject statics = Caffeinated.getInstance().getKoi().toJsonExtended();
 
         this.sendMessage(
             "KOI_STATICS",
@@ -85,9 +62,9 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
             "INIT",
             new JsonObject()
                 .put("connectionId", this.connectionId)
-                .put("widget", Rson.DEFAULT.toJson(this.handle))
+                .putNull("widget")
                 .put("koi", Caffeinated.getInstance().getKoi().toJson())
-                .put("basePath", this.handle.widget.getWidgetBasePath(this.mode))
+                .putNull("basePath")
         );
     }
 
@@ -101,8 +78,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
             switch (type) {
 
                 case "READY": {
-                    this.handle.widgetInstances.add(this.wInstance);
-                    this.handle.widget.onNewInstance(this.wInstance);
+                    CaffeinatedApp.getInstance().getApiListeners().add(this.appListener);
                     return;
                 }
 
@@ -155,14 +131,9 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                     return;
                 }
 
-                case "EMISSION": {
-                    JsonObject data = message.getObject("data");
-                    String emissionType = data.getString("type");
-                    JsonElement emissionPayload = data.get("data");
-
-                    this.wInstance.broadcast(emissionType, emissionPayload);
+                case "EMISSION":
+                    // Ignored.
                     return;
-                }
 
                 case "PONG": {
                     this.connInstance.resetTimeout();
@@ -177,11 +148,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
     @Override
     public void onClose(Websocket websocket) {
-        try {
-            this.wInstance.onClose();
-        } finally {
-            this.handle.widgetInstances.remove(this.wInstance);
-        }
+        CaffeinatedApp.getInstance().getApiListeners().remove(this.appListener);
     }
 
     @SneakyThrows
@@ -212,62 +179,11 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
     }
 
-    private class WidgetInstanceProvider extends WidgetInstance {
-
-        public WidgetInstanceProvider() {
-            super(mode, connectionId, handle.widget);
-        }
-
-        /* ---------------- */
-        /* Expose these     */
-        /* ---------------- */
-
-        @Deprecated
-        @Override
-        public void broadcast(@NonNull String type, @NonNull JsonElement message) {
-            super.broadcast(type, message);
-        }
-
-        @Deprecated
-        @Override
-        public void onClose() {
-            super.onClose();
-        }
-
-        /* ---------------- */
-
-        @Override
-        protected void emit0(@NonNull String type, @NonNull JsonElement message) throws IOException {
-            sendMessage(
-                "EMISSION",
-                new JsonObject()
-                    .put("type", type)
-                    .put("data", message)
-            );
-        }
-
-        @Override
-        public @NonNull String getRemoteIpAddress() {
-            return websocket.getSession().getRemoteIpAddress();
-        }
-
-        @Override
-        public void close() throws IOException {
-            websocket.close();
-        }
+    private class AppListener implements RealtimeApiListener {
 
         @Override
         public void onKoiEvent(@NonNull KoiEvent event) throws IOException {
             sendMessage("KOI", Rson.DEFAULT.toJson(event).getAsObject());
-        }
-
-        @Override
-        public void onSettingsUpdate() {
-            sendMessage(
-                "UPDATE",
-                new JsonObject()
-                    .put("widget", Rson.DEFAULT.toJson(handle))
-            );
         }
 
         @Override

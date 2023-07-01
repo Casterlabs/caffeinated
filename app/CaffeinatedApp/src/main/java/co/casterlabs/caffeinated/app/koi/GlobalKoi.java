@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.app.auth.AuthInstance;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
@@ -123,11 +124,11 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             }
         }
 
+        JsonObject statics = this.toJson();
+        JsonObject extendedStatics = this.toJsonExtended();
+
         // Send update to the widget instances.
         AsyncTask.create(() -> {
-            JsonObject statics = this.toJson();
-            JsonObject extendedStatics = this.toJsonExtended();
-
             for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
                 for (Widget widget : plugin.getWidgets()) {
                     for (WidgetInstance instance : widget.getWidgetInstances()) {
@@ -148,6 +149,18 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                         } catch (IOException ignored) {}
                     }
                 }
+            }
+        });
+
+        // Send update to the local api.
+        AsyncTask.create(() -> {
+            try {
+                // Send the events to the widget instances.
+                for (RealtimeApiListener listener : CaffeinatedApp.getInstance().getApiListeners().toArray(new RealtimeApiListener[0])) {
+                    listener.onKoiStaticsUpdate(extendedStatics);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -292,9 +305,23 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         }
 
         // Notify the plugins
-        for (CaffeinatedPlugin pl : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
-            pl.fireKoiEventListeners(e);
-        }
+        AsyncTask.create(() -> {
+            for (CaffeinatedPlugin pl : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
+                pl.fireKoiEventListeners(e);
+            }
+        });
+
+        // Send update to the local api.
+        AsyncTask.create(() -> {
+            try {
+                // Send the events to the widget instances.
+                for (RealtimeApiListener listener : CaffeinatedApp.getInstance().getApiListeners().toArray(new RealtimeApiListener[0])) {
+                    listener.onKoiEvent(e);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         FastLogger.logStatic(
             LogLevel.DEBUG,

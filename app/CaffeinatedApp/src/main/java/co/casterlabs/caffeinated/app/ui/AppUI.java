@@ -11,6 +11,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.PreferenceFile;
+import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ActivityViewerPreferences;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
@@ -24,7 +25,7 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
-import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
@@ -77,6 +78,14 @@ public class AppUI extends JavascriptObject {
         this.preferenceFile.save();
     }
 
+    public JsonObject constructSDKPreferences() {
+        return new JsonObject()
+            .put("emojiProvider", this.preferences.getEmojiProvider())
+            .put("language", this.preferences.getLanguage())
+            .put("appearance", CaffeinatedApp.getInstance().getThemeManager().getEffectiveAppearance().name())
+            .put("theme", JsonArray.of(CaffeinatedApp.getInstance().getThemeManager().getBaseColor(), CaffeinatedApp.getInstance().getThemeManager().getPrimaryColor()));
+    }
+
     @JavascriptFunction
     public void updateAppearance(@NonNull UIPreferences newPreferences) {
         this.preferences.setIcon(newPreferences.getIcon());
@@ -90,11 +99,11 @@ public class AppUI extends JavascriptObject {
 
         this.updateEmojiProvider();
 
+        JsonObject preferences = this.constructSDKPreferences();
+
         // Broadcast to the plugins.
         AsyncTask.create(() -> {
             try {
-                JsonObject preferences = (JsonObject) Rson.DEFAULT.toJson(this.preferences);
-
                 // Send the events to the widget instances.
                 for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPlugins().getLoadedPlugins()) {
                     for (Widget widget : plugin.getWidgets()) {
@@ -104,6 +113,18 @@ public class AppUI extends JavascriptObject {
                             } catch (IOException ignored) {}
                         }
                     }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Broadcast to the local api.
+        AsyncTask.create(() -> {
+            try {
+                // Send the events to the widget instances.
+                for (RealtimeApiListener listener : CaffeinatedApp.getInstance().getApiListeners().toArray(new RealtimeApiListener[0])) {
+                    listener.onAppearanceUpdate(preferences);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

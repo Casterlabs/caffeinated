@@ -110,6 +110,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     private final NativeSystem nativeSystem;
 
+    private @Getter List<RealtimeApiListener> apiListeners = new LinkedList<>();
+
     static {
         AppDirs appDirs = AppDirsFactory.getInstance();
         appDataDir = appDirs.getUserDataDir("casterlabs-caffeinated", null, null, true);

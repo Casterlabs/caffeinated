@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.localserver.handlers.RouteMiscApi;
 import co.casterlabs.caffeinated.localserver.handlers.RouteLocalServer;
 import co.casterlabs.caffeinated.localserver.handlers.RoutePluginApi;
 import co.casterlabs.caffeinated.localserver.handlers.RouteWidgetApi;
@@ -65,6 +66,7 @@ public class LocalServer implements Closeable, HttpProvider {
         @Override
         public void onInit(Sora sora) {
             sora.addProvider(this, new RouteLocalServer());
+            sora.addProvider(this, new RouteMiscApi());
             sora.addProvider(this, new RoutePluginApi());
             sora.addProvider(this, new RouteWidgetApi());
 
