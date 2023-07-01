@@ -17,6 +17,7 @@ java -jar "packr.jar" \
     --executable Casterlabs-Caffeinated-Updater \
     --classpath target/Casterlabs-Caffeinated-Updater.jar \
     --mainclass $MAIN_CLASS \
+    --vmargs caffeinated.channel=stable \
     --output dist/linux
 
 echo "Finished building for Linux."

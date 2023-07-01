@@ -19,6 +19,7 @@ java -jar "packr.jar" \
     --bundle co.casterlabs.caffeinated \
     --classpath target/Casterlabs-Caffeinated-Updater.jar \
     --mainclass $MAIN_CLASS \
+    --vmargs caffeinated.channel=stable \
     --output dist/macos/Casterlabs-Caffeinated.app
 
 echo "Finished building for MacOS."
