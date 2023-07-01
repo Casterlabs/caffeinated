@@ -20,9 +20,6 @@ import co.casterlabs.rakurai.io.http.MimeTypes;
 import co.casterlabs.rakurai.io.http.StandardHttpStatus;
 import co.casterlabs.rakurai.io.http.server.HttpResponse;
 import co.casterlabs.rakurai.io.http.server.websocket.WebsocketListener;
-import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.element.JsonArray;
-import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.sora.api.http.HttpProvider;
 import co.casterlabs.sora.api.http.SoraHttpSession;
 import co.casterlabs.sora.api.http.annotations.HttpEndpoint;
@@ -196,38 +193,6 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
         } catch (Exception e) {
             e.printStackTrace();
             return newWebsocketErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
-        }
-    }
-
-    @HttpEndpoint(uri = "/api/plugin/:pluginId/widgets")
-    public HttpResponse onGetWidgetsRequest(SoraHttpSession session) {
-        try {
-            if (!authorize(session)) {
-                return newErrorResponse(StandardHttpStatus.UNAUTHORIZED, RequestError.UNAUTHORIZED);
-            }
-
-            String pluginId = session.getUriParameters().get("pluginId");
-
-            CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPlugins().getPlugins().getPluginById(pluginId);
-
-            if (owningPlugin == null) {
-                return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
-            }
-
-            JsonArray widgetsJson = new JsonArray();
-
-            for (Widget widget : owningPlugin.getWidgets()) {
-                JsonObject widgetJson = Rson.DEFAULT.toJson(widget).getAsObject();
-
-                widgetJson.remove("settings");
-                widgetJson.remove("settingsLayout");
-
-                widgetsJson.add(widgetJson);
-            }
-
-            return newResponse(StandardHttpStatus.OK, new JsonObject().put("widgets", widgetsJson));
-        } catch (Exception e) {
-            return newErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
         }
     }
 
