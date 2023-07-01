@@ -71,6 +71,22 @@ export default {
 	'page.signin.disclaimer.privacy_policy': 'Privacy Policy',
 	'page.signin.disclaimer.here': 'here',
 
+	'page.signin.kick.looking_for_oauth': 'Looking to Sign In with Google or Apple?',
+	'page.signin.kick.looking_for_oauth.modal.title': 'How to create an account password on Kick',
+	'page.signin.kick.looking_for_oauth.modal.content':
+		'Unfortunately, we are unable to accept Google or Apple logins for Kick and you will need to use your username and password. ' +
+		'If you don\'t have a password, then you can create one by logging out of Kick, clicking Log In, clicking "Forgot Password?" ' +
+		'and entering your GMail or iCloud email. After clicking "Reset Password", you will receive an email which allows you to create ' +
+		"a password for your account. Once that's done, you can log into Casterlabs with that new password while still being able to log " +
+		'into Kick with Google/Apple.',
+
+	'page.signin.kick.keeps_saying_incorrect': 'Keep getting "Username or password is incorrect?"',
+	'page.signin.kick.keeps_saying_incorrect.modal.title': 'Fixing Kick login bugs',
+	'page.signin.kick.keeps_saying_incorrect.modal.content':
+		'If you keep getting "Username or password is incorrect" even though you know that it is correct, then you do not have a mobile ' +
+		'login yet. To create one, simply reset your password and reuse your current password. This fixes the login issue with both ' +
+		'Casterlabs and the official Kick mobile app.',
+
 	/* ---- Widgets & Alerts ---- */
 
 	'page.widgets': 'Widgets & Alerts',

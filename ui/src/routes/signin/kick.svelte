@@ -1,6 +1,7 @@
 <script>
 	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import Modal from '$lib/ui/Modal.svelte';
 	import SlimPassword from '$lib/ui/SlimPassword.svelte';
 	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
 
@@ -12,6 +13,8 @@
 	let isMfaPrompt = false;
 
 	let errorMessage = null;
+
+	let currentModal = null;
 
 	async function submit(e) {
 		if (isLoading) {
@@ -37,6 +40,18 @@
 		}
 	}
 </script>
+
+{#if currentModal == 'looking_for_oauth'}
+	<Modal on:close={() => (currentModal = null)}>
+		<LocalizedText slot="title" key="page.signin.kick.looking_for_oauth.modal.title" />
+		<LocalizedText key="page.signin.kick.looking_for_oauth.modal.content" />
+	</Modal>
+{:else if currentModal == 'keeps_saying_incorrect'}
+	<Modal on:close={() => (currentModal = null)}>
+		<LocalizedText slot="title" key="page.signin.kick.keeps_saying_incorrect.modal.title" />
+		<LocalizedText key="page.signin.kick.keeps_saying_incorrect.modal.content" />
+	</Modal>
+{/if}
 
 <div class="mt-8 flex flex-col items-center">
 	<h1 class="text-2xl font-medium">Sign in with Kick</h1>
@@ -88,8 +103,21 @@
 		</button>
 	</div>
 
-	<!-- svelte-ignore a11y-missing-attribute -->
-	<a onclick="history.back()" class="mt-4 text-md text-nqp cursor-pointer">
+	<button on:click={() => history.back()} class="mt-4 mb-2 text-md text-nqp cursor-pointer">
 		<LocalizedText key="navigation.want_to_go_back" />
-	</a>
+	</button>
+
+	<button
+		on:click={() => (currentModal = 'looking_for_oauth')}
+		class="mt-1 text-xs text-nqp cursor-pointer"
+	>
+		<LocalizedText key="page.signin.kick.looking_for_oauth" />
+	</button>
+
+	<button
+		on:click={() => (currentModal = 'keeps_saying_incorrect')}
+		class="mt-1 text-xs text-nqp cursor-pointer"
+	>
+		<LocalizedText key="page.signin.kick.keeps_saying_incorrect" />
+	</button>
 </div>
