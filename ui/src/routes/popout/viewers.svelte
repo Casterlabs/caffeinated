@@ -1,68 +1,37 @@
 <script>
 	import { onMount } from 'svelte';
+	import ViewersList from '$lib/chat/ViewersList.svelte';
 
-	let platforms = {};
-	let viewersList = [];
-
-	function onViewersList(e) {
-		console.log(e);
-		platforms[e.streamer.platform] = e.viewers;
-
-		updateViewersList();
-	}
-
-	function updateViewersList() {
-		let list = [];
-
-		for (const viewers of Object.values(platforms)) {
-			list.push(...viewers);
-		}
-
-		viewersList = list;
-	}
-
-	function copyViewersList(e) {
-		e.preventDefault();
-
-		const list = [];
-
-		for (const viewer of viewersList) {
-			list.push(viewer.displayname);
-		}
-
-		Widget.emit('copyText', list.join('\n'));
-		alert('Copied the viewer list to your clipboard');
-	}
+	let listElement;
 
 	onMount(() => {
-		Koi.on('VIEWER_LIST', onViewersList);
+		Koi.on('VIEWER_LIST', listElement.onViewersList);
+		Koi.on('VIEWER_COUNT', listElement.onViewerCount);
 
 		for (const [platform, viewers] of Object.entries(Koi.viewers)) {
-			onViewersList({
+			listElement.onViewersList({
 				streamer: {
 					platform
 				},
 				viewers
 			});
 		}
+
+		for (const [platform, count] of Object.entries(Koi.viewerCounts)) {
+			listElement.onViewersCount({
+				streamer: {
+					platform
+				},
+				count
+			});
+		}
 	});
 </script>
 
-<div
-	class="relative overflow-y-auto overflow-x-hidden h-full p-1"
-	on:contextmenu={copyViewersList}
-	on:dblclick={copyViewersList}
->
-	<span class="absolute top-1 right-1 text-right">
-		<icon class="inline-block h-4 w-4 translate-y-0.5" data-icon="icon/eye" />
-		{viewersList.length}
-	</span>
-
-	<ul>
-		{#each viewersList as viewer}
-			<li>
-				{viewer.displayname}
-			</li>
-		{/each}
-	</ul>
-</div>
+<ViewersList
+	bind:this={listElement}
+	on:copy={({ detail: text }) => {
+		window.Widget.emit('copyText', text);
+		alert('Copied the viewer list to your clipboard');
+	}}
+/>

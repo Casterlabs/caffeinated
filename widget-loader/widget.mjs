@@ -106,6 +106,10 @@ export function init({ initHandler, disconnectHandler }) {
             return koi_statics.viewers;
         },
 
+        get viewerCounts() {
+            return koi_statics.viewerCounts;
+        },
+
         get userStates() {
             return koi_statics.userStates;
         },

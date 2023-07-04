@@ -1,41 +1,33 @@
-<svelte:options accessors />
-
 <script>
-	import Movable from '../layout/Movable.svelte';
+	import { createEventDispatcher } from 'svelte';
 
-	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	let platforms = {};
-	let viewersList = [];
+	let viewersListByPlatform = {};
+	let viewersCountByPlatform = {};
 
-	let movable = null;
-
-	export let visible = false;
-
-	function onUpdate(positionData) {
-		dispatch('update', positionData);
-	}
-
-	export function getPositionData() {
-		return movable.getPositionData();
-	}
-
-	export function setPositionData(x, y, width, height) {
-		movable.setPositionData(x, y, width, height);
-	}
+	let viewersList_computed = [];
+	let viewersCount_computed = 0;
 
 	export function onViewersList(e) {
 		console.log(e);
-		platforms[e.streamer.platform] = e.viewers;
+		viewersListByPlatform[e.streamer.platform] = e.viewers;
+
+		updateViewersList();
+	}
+
+	export function onViewersCount(e) {
+		console.log(e);
+		viewersCountByPlatform[e.streamer.platform] = e.count;
 
 		updateViewersList();
 	}
 
 	export function onAuthUpdate(signedInPlatforms) {
-		for (const platform of Object.keys(platforms)) {
+		for (const platform of Object.keys(viewersListByPlatform)) {
 			if (!signedInPlatforms.includes(platform)) {
-				delete platforms[platform];
+				delete viewersListByPlatform[platform];
+				delete viewersCountByPlatform[platform];
 			}
 		}
 
@@ -43,50 +35,44 @@
 	}
 
 	function updateViewersList() {
-		let list = [];
+		const wholeList = [];
 
-		for (const viewers of Object.values(platforms)) {
-			list.push(...viewers);
+		for (const viewers of Object.values(viewersListByPlatform)) {
+			viewers.forEach((v) => wholeList.push(v.displayname));
 		}
 
-		viewersList = list;
+		viewersList_computed = wholeList;
+
+		let wholeCount = 0;
+
+		for (const count of Object.values(viewersCountByPlatform)) {
+			wholeCount += count;
+		}
+
+		viewersCount_computed = wholeCount;
 	}
 
 	function copyViewersList(e) {
 		e.preventDefault();
-
-		const list = [];
-
-		for (const viewer of viewersList) {
-			list.push(viewer.displayname);
-		}
-
-		dispatch('copy', list.join('\n'));
+		dispatch('copy', viewersList_computed.join('\n'));
 	}
 </script>
 
 <div
-	class="pointer-events-none fixed inset-0 z-index-[2000] opacity-60 hover:opacity-80 focus:opacity-80 transition duration-200"
-	class:hidden={!visible}
+	class="relative overflow-y-auto overflow-x-hidden h-full p-1"
 	on:contextmenu={copyViewersList}
 	on:dblclick={copyViewersList}
 >
-	<Movable bind:this={movable} on:update={onUpdate}>
-		{#if visible}
-			<div class="relative overflow-y-auto overflow-x-hidden h-full">
-				<span class="absolute top-0 right-0 text-right">
-					<icon class="inline-block h-4 w-4 translate-y-0.5" data-icon="icon/eye" />
-					{viewersList.length}
-				</span>
+	<span class="absolute top-1 right-1 text-right">
+		<icon class="inline-block h-4 w-4 translate-y-0.5" data-icon="icon/eye" />
+		{viewersCount_computed}
+	</span>
 
-				<ul>
-					{#each viewersList as viewer}
-						<li>
-							{viewer.displayname}
-						</li>
-					{/each}
-				</ul>
-			</div>
-		{/if}
-	</Movable>
+	<ul>
+		{#each viewersList_computed as viewer}
+			<li>
+				{viewer}
+			</li>
+		{/each}
+	</ul>
 </div>
