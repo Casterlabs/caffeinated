@@ -12,7 +12,7 @@ import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
-import co.casterlabs.koi.api.types.events.ViewerListEvent;
+import co.casterlabs.koi.api.types.events.ViewerCountEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -42,7 +42,7 @@ public class ViewersCountLabel extends GenericLabel {
     }
 
     @KoiEventHandler
-    public void onViewersList(@Nullable ViewerListEvent _ignored) {
+    public void onViewersList(@Nullable ViewerCountEvent _ignored) {
         this.onUserUpdate(null);
     }
 
@@ -51,7 +51,7 @@ public class ViewersCountLabel extends GenericLabel {
         UserPlatform platform = this.getSelectedPlatform();
 
         if (platform != null) {
-            this.updateText(Caffeinated.getInstance().getKoi().getViewerCounts().get(platform));
+            this.updateText(Caffeinated.getInstance().getKoi().getViewerCounts().getOrDefault(platform, 0));
         }
     }
 
