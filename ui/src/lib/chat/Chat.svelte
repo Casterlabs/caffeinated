@@ -673,7 +673,7 @@
 	/* Viewer Join/Leave Messages */
 
 	:global(.viewer-joinleave) {
-		display: none;
+		display: none !important;
 	}
 
 	.show-viewers :global(.viewer-joinleave) {
