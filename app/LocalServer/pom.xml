@@ -40,6 +40,12 @@
 			<version>2.12.2</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>co.casterlabs.Rakurai</groupId>
+			<artifactId>ImplRakurai</artifactId>
+			<version>2bdeae7</version>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 </project>
