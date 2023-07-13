@@ -11,6 +11,7 @@
 	import Debouncer from '$lib/debouncer.mjs';
 	import SlimButton from '$lib/ui/SlimButton.svelte';
 	import CodeInput from '$lib/ui/CodeInput.svelte';
+	import { onMount, tick } from 'svelte';
 
 	const debouncer = new Debouncer();
 
@@ -26,13 +27,15 @@
 	};
 
 	const console = createConsole('Chat Bot/Commands');
-	const preferences = st || Caffeinated.chatbot.svelte('preferences');
-
-	$: preferences, $preferences && console.debug('Chat Bot Preferences:', $preferences);
-
-	$: commands = $preferences?.commands || [];
+	let commands = [];
 
 	let codeExpandedOn = null;
+
+	onMount(async () => {
+		Caffeinated.chatbot.preferences.then((preferences) => {
+			commands = preferences.commands;
+		});
+	});
 
 	function saveDB() {
 		debouncer.debounce(save);
@@ -118,9 +121,13 @@
 				class="absolute top-2 right-1 text-error hover:opacity-80"
 				title={t('sr.page.chat_bot.remove')}
 				on:click={() => {
-					commands.splice(idx, 1);
+					// Yucky code to avoid rerender bugs.
+					let interim = commands;
+					commands = [];
+
+					interim.splice(idx, 1);
+					tick().then(() => (commands = interim));
 					save();
-					commands = commands;
 				}}
 			>
 				<span class="sr-only">
