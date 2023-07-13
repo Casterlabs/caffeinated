@@ -10,6 +10,8 @@
 	import * as App from '$lib/app.mjs';
 	import * as Currencies from '$lib/currencies.mjs';
 
+	import { icon } from '$lib/app.mjs';
+
 	onMount(() => {
 		appShim();
 
@@ -22,6 +24,22 @@
 		window.debug_Currencies = Currencies;
 	});
 </script>
+
+<svelte:head>
+	{#if $icon == 'handdrawn'}
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap"
+			rel="stylesheet"
+		/>
+		<style id="silly-font-style">
+			* {
+				font-family: 'Reenie Beanie', cursive !important;
+			}
+		</style>
+	{/if}
+</svelte:head>
 
 <CSSIntermediate>
 	<slot />

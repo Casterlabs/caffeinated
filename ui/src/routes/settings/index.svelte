@@ -17,7 +17,8 @@
 		casterlabs: 'Casterlabs',
 		pride: 'Pride',
 		moonlabs: 'Moonlabs',
-		skittles: 'Skittles'
+		skittles: 'Skittles',
+		handdrawn: 'Hand Drawn'
 	};
 	const EMOJI_PROVIDERS = {
 		system: 'page.settings.appearance.emojis.SYSTEM',

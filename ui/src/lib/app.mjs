@@ -10,7 +10,7 @@ export const primaryColor = writable('gray'); // Any of the radix colors
 export const appearance = writable('DARK'); // "LIGHT", "DARK"
 
 // Misc theme.
-export const icon = writable('casterlabs'); // "casterlabs", "moonlabs", "pride", "skittles"
+export const icon = writable('casterlabs'); // "casterlabs", "moonlabs", "pride", "skittles", "handdrawn"
 export const iconColor = writable('white'); // "black", "white"
 appearance.subscribe((v) => iconColor.set(v == 'DARK' ? 'white' : 'black')); // We derive iconColor from the app's appearance.
 
