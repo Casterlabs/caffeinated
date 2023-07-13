@@ -13,11 +13,14 @@ import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
+import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import lombok.NonNull;
+import lombok.SneakyThrows;
+import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.LogUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
@@ -71,6 +74,10 @@ public class ChatbotScriptEngine {
                             + "%s;",
                         CaffeinatedApp.getInstance().getKoi().toJson().toString().substring(1) // Chop off the leading '{'
                     ),
+                    "const fetch = {"
+                        + "asText(url) {return __internal_handle.fetch_asText(url);},"
+                        + "asJson(url) {return JSON.parse(__internal_handle.fetch_asText(url));}"
+                        + "};",
                     "",
 
                     // Per-event.
@@ -103,6 +110,15 @@ public class ChatbotScriptEngine {
 
         public void koi_deleteChat(@NonNull String platform, @NonNull String messageId) {
             CaffeinatedApp.getInstance().getKoi().deleteChat(UserPlatform.valueOf(platform), messageId, false);
+        }
+
+        @SneakyThrows
+        public String fetch_asText(@NonNull String url) {
+            return WebUtil.sendHttpRequest(
+                new Request.Builder()
+                    .addHeader("User-Agent", "Casterlabs/Bot")
+                    .url(url)
+            );
         }
 
     }
