@@ -1,0 +1,79 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: ["dev"]
+  pull_request:
+    branches: ["dev"]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Compile the app.
+        run: bash build.sh nodist
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Package the app.
+        run: bash build.sh nocompile
+
+  deploy-artifacts:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy the app.
+        run: java -jar deploy-helper/target/deploy-helper.jar
+
+  publish-artifacts-to-github:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload the Windows (nojre) artifact.
+        uses: actions/upload-artifact@v3
+        with:
+          name: Windows-amd64-nojre.zip
+          path: dist/artifacts/Windows-amd64-nojre.zip
+      - name: Upload the Windows artifact.
+        uses: actions/upload-artifact@v3
+        with:
+          name: Windows-amd64.zip
+          path: dist/artifacts/Windows-amd64.zip
+
+      - name: Upload the Linux (nojre) artifact.
+        uses: actions/upload-artifact@v3
+        with:
+          name: Linux-amd64-nojre.zip
+          path: dist/artifacts/Linux-amd64-nojre.zip
+      - name: Upload the Linux artifact.
+        uses: actions/upload-artifact@v3
+        with:
+          name: Linux-amd64.zip
+          path: dist/artifacts/Linux-amd64.zip
+
+      - name: Upload the macOS (nojre) artifact.
+        uses: actions/upload-artifact@v3
+        with:
+          name: macOS-amd64-nojre.zip
+          path: dist/artifacts/macOS-amd64-nojre.zip
+      - name: Upload the macOS artifact.
+        uses: actions/upload-artifact@v3
+        with:
+          name: macOS-amd64.zip
+          path: dist/artifacts/macOS-amd64.zip
