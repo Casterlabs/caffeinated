@@ -30,6 +30,7 @@ jobs:
         run: bash build.sh nodist
 
   package:
+    needs: compile
     runs-on: ubuntu-latest
     steps:
       - name: Package the app.
@@ -37,12 +38,14 @@ jobs:
 
   deploy-artifacts:
     if: github.ref_type == 'tag'
+    needs: package
     runs-on: ubuntu-latest
     steps:
       - name: Deploy the app.
         run: java -jar deploy-helper/target/deploy-helper.jar
 
   publish-artifacts-to-github:
+    needs: package
     runs-on: ubuntu-latest
     steps:
       - name: Upload the Windows (nojre) artifact.
