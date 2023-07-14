@@ -5,49 +5,13 @@ set -o pipefail
 
 # (Optional) Compile everything
 if [[ $@ != *"nocompile"* ]]; then
-    # Delete any old builds.
-    rm -rf ui/build
-    rm -rf widgets/static/loader
-    rm -rf app/Bootstrap/src/main/resources/app
-    rm -rf app/LocalServer/src/main/resources/loader
-    rm -rf app/BuiltInPlugins/src/main/resources/widgets
-
-    # Build UI
-    cd ui
-    npm i
-    npm run build
-
-    # Copy UI output to app/Bootstrap/src/main/resources/app
-    cd ..
-    mkdir -p app/Bootstrap/src/main/resources/app
-    cd ui/build
-    cp -r * ../../app/Bootstrap/src/main/resources/app
-    cd ../..
-
-    # Build Widgets
-    cd widgets
-    npm i
-    npm run build
-
-    # Copy Widgets output to app/BuiltInPlugins/src/main/resources/widgets
-    cd ..
-    mkdir -p app/BuiltInPlugins/src/main/resources/widgets
-    cd widgets/build
-    cp -r * ../../app/BuiltInPlugins/src/main/resources/widgets
-    cd ../..
-
-    # Copy the widget loader
-    mkdir -p app/LocalServer/src/main/resources/loader
-    cp -r widget-loader/* app/LocalServer/src/main/resources/loader
-
-    # Compile the app maven project
     cd app
-    mvn clean package
+    ./mvnw clean package
     cd ..
 
     # Compile the deploy helper maven project
     cd deploy-helper
-    mvn clean package
+    ./mvnw clean package
     cd ..
 fi
 
