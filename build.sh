@@ -1,7 +1,6 @@
 #!/bin/bash
 
-set -e
-set -o pipefail
+set -euxo pipefail
 
 # (Optional) Compile everything
 if [[ $@ != *"nocompile"* ]]; then
