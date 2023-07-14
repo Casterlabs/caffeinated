@@ -13,7 +13,7 @@ rm -rf dist/*
 mkdir -p -p dist
 
 KAIMEN_VERSION="37f6491"
-VM_OPTIONS="" #"-vm Xms1M -vm XX:+UseCompressedOops -vm XX:+UseSerialGC -vm XX:MaxHeapFreeRatio=1 -vm XX:MinHeapFreeRatio=1"
+VM_OPTIONS="-vm Xms1M -vm XX:+UseCompressedOops -vm XX:+UseSerialGC -vm XX:MaxHeapFreeRatio=1 -vm XX:MinHeapFreeRatio=1"
 
 if [[ $@ != *"nopackage"* ]]; then
     cp app/Bootstrap/target/classes/commit.txt dist
@@ -23,7 +23,7 @@ if [[ $@ != *"nopackage"* ]]; then
     echo "Completing packaging of application."
     echo ""
 
-    java -jar ProjectBuilder.jar $VM_OPTIONS -os MACOSX -arch AMD64 -wi WEBKIT -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -cp app/Bootstrap/target/Caffeinated.jar -i icon.icns -id co.casterlabs.caffeinated
+    java -jar ProjectBuilder.jar $VM_OPTIONS -os MACOS -arch AMD64 -wi WEBKIT -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -cp app/Bootstrap/target/Caffeinated.jar -i icon.icns -id co.casterlabs.caffeinated
     cd dist/macOS-amd64
     zip -r ../artifacts/macOS-amd64.zip *
     rm -rf ./jre
