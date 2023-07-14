@@ -2,14 +2,8 @@
 
 set -euxo pipefail
 
-# (Optional) Compile everything
 if [[ $@ != *"nocompile"* ]]; then
     cd app
-    bash ./mvnw clean package
-    cd ..
-
-    # Compile the deploy helper maven project
-    cd deploy-helper
     bash ./mvnw clean package
     cd ..
 fi
@@ -21,7 +15,7 @@ mkdir -p -p dist
 KAIMEN_VERSION="37f6491"
 VM_OPTIONS="-vm Xms1M -vm XX:+UseCompressedOops -vm XX:+UseSerialGC -vm XX:MaxHeapFreeRatio=1 -vm XX:MinHeapFreeRatio=1"
 
-if [[ $@ != *"nodist"* ]]; then
+if [[ $@ != *"nopackage"* ]]; then
     cp app/Bootstrap/target/classes/commit.txt dist
     mkdir dist/artifacts
 

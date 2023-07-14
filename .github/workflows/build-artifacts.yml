@@ -1,16 +1,8 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Java CI with Maven
+name: Build Artifacts
 
 on:
   push:
-    branches: ["dev"]
+    branches: ["dev", "deploy-beta", "deploy-stable"]
   pull_request:
     branches: ["dev"]
 
@@ -32,44 +24,46 @@ jobs:
           cache: maven
 
       - name: Compile the app.
-        run: bash build.sh nodist
+        run: bash build.sh nopackage
 
       - name: Package the app.
         run: bash build.sh nocompile
-
-      - name: Deploy the app.
-        if: github.ref_type == 'tag'
-        run: java -jar deploy-helper/target/deploy-helper.jar
 
       - name: Upload the Windows (nojre) artifact to GitHub.
         uses: actions/upload-artifact@v3
         with:
           name: Windows-amd64-nojre.zip
           path: dist/artifacts/Windows-amd64-nojre.zip
+          if-no-files-found: error
       - name: Upload the Windows artifact to GitHub.
         uses: actions/upload-artifact@v3
         with:
           name: Windows-amd64.zip
           path: dist/artifacts/Windows-amd64.zip
+          if-no-files-found: error
 
       - name: Upload the Linux (nojre) artifact to GitHub.
         uses: actions/upload-artifact@v3
         with:
           name: Linux-amd64-nojre.zip
           path: dist/artifacts/Linux-amd64-nojre.zip
+          if-no-files-found: error
       - name: Upload the Linux artifact to GitHub.
         uses: actions/upload-artifact@v3
         with:
           name: Linux-amd64.zip
           path: dist/artifacts/Linux-amd64.zip
+          if-no-files-found: error
 
       - name: Upload the macOS (nojre) artifact to GitHub.
         uses: actions/upload-artifact@v3
         with:
           name: macOS-amd64-nojre.zip
           path: dist/artifacts/macOS-amd64-nojre.zip
+          if-no-files-found: error
       - name: Upload the macOS artifact to GitHub.
         uses: actions/upload-artifact@v3
         with:
           name: macOS-amd64.zip
           path: dist/artifacts/macOS-amd64.zip
+          if-no-files-found: error
