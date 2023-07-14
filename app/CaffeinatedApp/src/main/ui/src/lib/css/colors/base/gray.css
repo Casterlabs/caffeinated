@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/gray.css"; @import "@radix-ui/colors/grayDark.css";#css-intermediate[data-theme-base="gray"] {
+    --base1: var(--gray1);
+        
+    --base2: var(--gray2);
+        
+    --base3: var(--gray3);
+        
+    --base4: var(--gray4);
+        
+    --base5: var(--gray5);
+        
+    --base6: var(--gray6);
+        
+    --base7: var(--gray7);
+        
+    --base8: var(--gray8);
+        
+    --base9: var(--gray9);
+        
+    --base10: var(--gray10);
+        
+    --base11: var(--gray11);
+        
+    --base12: var(--gray12);
+        }

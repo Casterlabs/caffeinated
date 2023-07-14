@@ -1,0 +1,1 @@
+https://github.com/tailwindlabs/heroicons/tree/master/optimized/20/solid

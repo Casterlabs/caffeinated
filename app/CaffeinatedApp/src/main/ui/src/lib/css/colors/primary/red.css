@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/red.css"; @import "@radix-ui/colors/redDark.css";#css-intermediate[data-theme-primary="red"] {
+    --primary1: var(--red1);
+        
+    --primary2: var(--red2);
+        
+    --primary3: var(--red3);
+        
+    --primary4: var(--red4);
+        
+    --primary5: var(--red5);
+        
+    --primary6: var(--red6);
+        
+    --primary7: var(--red7);
+        
+    --primary8: var(--red8);
+        
+    --primary9: var(--red9);
+        
+    --primary10: var(--red10);
+        
+    --primary11: var(--red11);
+        
+    --primary12: var(--red12);
+        }

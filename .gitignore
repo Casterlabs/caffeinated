@@ -1,4 +1,21 @@
-
-.metadata/
+# Common
 dist/
 .DS_Store
+.env
+.env.*
+!.env.example
+
+# IntelliJ
+*.iml
+.idea/
+
+# VSCode
+.vscode
+
+# Eclipse
+.settings/
+.project
+.classpath
+.metadata/
+
+# Misc

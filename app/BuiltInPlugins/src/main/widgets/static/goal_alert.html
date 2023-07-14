@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Caffeinated Goal Alert</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+        <style>
+            .highlight {
+                color: var(--highlight-color);
+            }
+
+            #alert-text {
+                color: var(--text-color);
+            }
+
+            body {
+                text-shadow: 1.5px 1.5px rgba(0, 0, 0, 0.3);
+                padding: 0;
+                margin: auto;
+                height: 100vmin;
+                width: 100vmin;
+            }
+
+            #image,
+            #video {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                object-fit: cover;
+                min-height: 25vh;
+                max-height: 70vh;
+                max-width: 100vw;
+            }
+
+            .container {
+                margin: auto;
+                width: 100vmin;
+                height: 100vmin;
+            }
+
+            #alert-text {
+                text-align: center;
+            }
+
+            .emote {
+                object-fit: cover;
+                height: 2ex;
+                width: auto;
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .hide {
+                display: none !important;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container" style="opacity: 0;">
+            <div id="alert-image">
+                <img src="" id="image" class="hide" />
+                <video src="" id="video" class="hide"></video>
+            </div>
+            <div id="alert-text">
+                <span class="title"></span>
+                <br />
+                <span class="text"></span>
+            </div>
+        </div>
+    </body>
+
+    <footer>
+        <script>
+            const ANIMATION_DURATION = 750;
+
+            const alertTextTitle = document.querySelector("#alert-text .title");
+            const alertTextText = document.querySelector("#alert-text .text");
+            const alertImageContainer = document.querySelector("#alert-image");
+            const alertContainer = document.querySelector(".container");
+
+            const alertVideo = alertImageContainer.querySelector("#video");
+            const alertImage = alertImageContainer.querySelector("#image");
+
+            let currentAudio = null;
+            let currentAudioIsTTS = false;
+
+            let alertQueue = [];
+            let executingAlert = false;
+
+            let currentCompletionState = true; // Intentioally set to true so that we don't immediately start the animation.
+
+            function changeFont(fontname) {
+                fontname = fontname || "Poppins";
+
+                document.documentElement.style = "font-family: '" + fontname + "';";
+
+                WebFont.load({
+                    google: {
+                        families: [fontname]
+                    }
+                });
+            }
+
+            changeFont("Poppins");
+
+            Widget.on("init", () => {
+                console.log("Init!");
+
+                // Manually trigger an update.
+                Widget.broadcast("update");
+            });
+
+            Widget.on("update", () => {
+                changeFont(Widget.getSetting("alert.font"));
+
+                if (currentAudio) {
+                    currentAudio.volume = currentAudioIsTTS ? Widget.getSetting("tts.volume") : Widget.getSetting("audio.volume");
+                }
+
+                document.body.style =
+                    `--highlight-color: ${Widget.getSetting("alert.highlight_color")};` +
+                    `--text-color: ${Widget.getSetting("alert.text_color")};` +
+                    `font-size: ${Widget.getSetting("alert.font_size")}px;` +
+                    `text-align: ${Widget.getSetting("alert.text_align").toLowerCase()};`;
+            });
+
+            Widget.on("count", ({ count }) => {
+                const isCompleted = count >= Widget.getSetting("goal.target");
+
+                console.log("count: " + count + ", isCompleted: " + isCompleted);
+
+                if (isCompleted != currentCompletionState) {
+                    currentCompletionState = isCompleted;
+
+                    if (isCompleted) {
+                        let imageFile = null;
+                        let audioFile = null;
+
+                        if (Widget.getSetting("alert.image.enabled")) {
+                            imageFile = Widget.getSetting("alert.image.file");
+                        }
+
+                        if (Widget.getSetting("alert.udio.enabled")) {
+                            audioFile = Widget.getSetting("alert.audio.file");
+                        }
+
+                        alertQueue.push({
+                            title: Widget.getSetting("alert.text"),
+                            chatEvent: null,
+                            image: imageFile,
+                            audio: audioFile,
+                            ttsAudio: null
+                        });
+                        tryProcessQueue();
+                    }
+                }
+            });
+
+            Widget.on("skip-tts", () => {
+                if (currentAudio && currentAudioIsTTS) {
+                    currentAudio.currentTime = Number.MAX_SAFE_INTEGER;
+                }
+            });
+
+            async function tryProcessQueue() {
+                if (!executingAlert) {
+                    const { title, chatEvent, image, audio, ttsAudio } = alertQueue.shift();
+                    const duration = (Widget.getSetting("alert.duration") * 1000) - (ANIMATION_DURATION * 2); // Seconds -> Milliseconds, minus the fade-in and fade-out times.
+                    executingAlert = true;
+
+                    // Image
+                    {
+                        alertVideo.classList = "hide";
+                        alertImage.classList = "hide";
+
+                        if (image) {
+                            if (image.startsWith("data:video")) {
+                                alertVideo.src = image;
+                                alertVideo.play();
+                                alertVideo.classList = "";
+                                // alertVideo.addEventListener("loadeddata", () => {
+                                //     const duration = alertVideo.duration * 1000;
+                                //     displayTime += (duration - DISPLAY_TIME);
+                                // });
+                            } else {
+                                alertImage.classList = "";
+                                alertImage.src = image;
+                            }
+                        }
+                    }
+
+                    // Text
+                    {
+                        if (chatEvent) {
+                            let text = escapeHtml(chatEvent.message);
+
+                            for (const [name, image] of Object.entries(chatEvent.emotes)) {
+                                text = text.split(name).join(`<img class="emote" title="${name}" src="${image}" />`);
+                            }
+
+                            alertTextText.innerHTML = text;
+                        }
+
+                        alertTextTitle.innerHTML = title;
+                    }
+
+                    // Alert audio.
+                    {
+                        function tryPlayTTS() {
+                            if (ttsAudio && Widget.getSetting("tts.enabled")) {
+                                playAudio(ttsAudio, true);
+                            }
+                        }
+
+                        // If audio == null then try to play TTS.
+                        // Otherwise, play the audio and then try to play TTS.
+                        if (audio) {
+                            playAudio(audio, false)
+                                .then(tryPlayTTS);
+                        } else {
+                            tryPlayTTS();
+                        }
+                    }
+
+                    await anime({
+                        targets: alertContainer,
+                        easing: "linear",
+                        opacity: 1,
+                        duration: ANIMATION_DURATION
+                    }).finished
+
+                    await sleep(duration);
+
+                    await anime({
+                        targets: alertContainer,
+                        easing: "linear",
+                        opacity: 0,
+                        duration: ANIMATION_DURATION
+                    }).finished;
+
+                    executingAlert = false;
+
+                    if (alertQueue.length > 0) {
+                        tryProcessQueue();
+                    }
+                }
+            }
+
+            function playAudio(audioFile, isTTS) {
+                return new Promise((resolve) => {
+                    currentAudio = new Audio(audioFile);
+                    currentAudioIsTTS = isTTS;
+
+                    currentAudio.addEventListener("ended", () => {
+                        currentAudio = null;
+                        currentAudioIsTTS = false;
+                        resolve();
+                    });
+
+                    currentAudio.volume = currentAudioIsTTS ? Widget.getSetting("tts.volume") : Widget.getSetting("audio.volume");
+                    currentAudio.play();
+                });
+            }
+
+            function sleep(millis) {
+                return new Promise((resolve) => setTimeout(resolve, millis));
+            }
+
+        </script>
+    </footer>
+
+</html>

@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/teal.css"; @import "@radix-ui/colors/tealDark.css";#css-intermediate[data-theme-primary="teal"] {
+    --primary1: var(--teal1);
+        
+    --primary2: var(--teal2);
+        
+    --primary3: var(--teal3);
+        
+    --primary4: var(--teal4);
+        
+    --primary5: var(--teal5);
+        
+    --primary6: var(--teal6);
+        
+    --primary7: var(--teal7);
+        
+    --primary8: var(--teal8);
+        
+    --primary9: var(--teal9);
+        
+    --primary10: var(--teal10);
+        
+    --primary11: var(--teal11);
+        
+    --primary12: var(--teal12);
+        }

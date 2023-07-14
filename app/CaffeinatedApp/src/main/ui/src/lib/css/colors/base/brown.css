@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/brown.css"; @import "@radix-ui/colors/brownDark.css";#css-intermediate[data-theme-base="brown"] {
+    --base1: var(--brown1);
+        
+    --base2: var(--brown2);
+        
+    --base3: var(--brown3);
+        
+    --base4: var(--brown4);
+        
+    --base5: var(--brown5);
+        
+    --base6: var(--brown6);
+        
+    --base7: var(--brown7);
+        
+    --base8: var(--brown8);
+        
+    --base9: var(--brown9);
+        
+    --base10: var(--brown10);
+        
+    --base11: var(--brown11);
+        
+    --base12: var(--brown12);
+        }

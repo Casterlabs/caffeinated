@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/cyan.css"; @import "@radix-ui/colors/cyanDark.css";#css-intermediate[data-theme-primary="cyan"] {
+    --primary1: var(--cyan1);
+        
+    --primary2: var(--cyan2);
+        
+    --primary3: var(--cyan3);
+        
+    --primary4: var(--cyan4);
+        
+    --primary5: var(--cyan5);
+        
+    --primary6: var(--cyan6);
+        
+    --primary7: var(--cyan7);
+        
+    --primary8: var(--cyan8);
+        
+    --primary9: var(--cyan9);
+        
+    --primary10: var(--cyan10);
+        
+    --primary11: var(--cyan11);
+        
+    --primary12: var(--cyan12);
+        }

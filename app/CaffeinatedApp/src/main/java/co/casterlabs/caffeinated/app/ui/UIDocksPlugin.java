@@ -105,7 +105,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
         }
 
-        resource = "app" + resource; // Load from the app's actual resources.
+        resource = "co/casterlabs/caffeinated/app/ui/html" + resource; // Load from the app's actual resources.
         this.getLogger().debug("Loading resource: %s", resource);
 
         try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {

@@ -59,7 +59,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                     .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
             }
 
-            InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("loader" + resource);
+            InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("co/casterlabs/caffeinated/app/ui/html/loader" + resource);
 
             String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
             String mime = MimeTypes.getMimeForFile(new File(resource));

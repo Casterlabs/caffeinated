@@ -1,0 +1,267 @@
+
+    @import "@radix-ui/colors/blackA.css";
+    
+            /* overlay-black 1 */
+            .text-overlay-black-1,
+            .hover\:text-overlay-black-1:hover,
+            .focus\:text-overlay-black-1:focus {
+                color: var(--blackA1)
+            }
+            .border-overlay-black-1,
+            .hover\:border-overlay-black-1:hover,
+            .focus\:border-overlay-black-1:focus {
+                border-color: var(--blackA1)
+            }
+            .ring-overlay-black-1,
+            .hover\:ring-overlay-black-1:hover,
+            .focus\:ring-overlay-black-1:focus {
+                --tw-ring-color: var(--blackA1)
+            }
+            .bg-overlay-black-1,
+            .hover\:bg-overlay-black-1:hover,
+            .focus\:bg-overlay-black-1:focus {
+                background-color: var(--blackA1)
+            }
+        
+            /* overlay-black 2 */
+            .text-overlay-black-2,
+            .hover\:text-overlay-black-2:hover,
+            .focus\:text-overlay-black-2:focus {
+                color: var(--blackA2)
+            }
+            .border-overlay-black-2,
+            .hover\:border-overlay-black-2:hover,
+            .focus\:border-overlay-black-2:focus {
+                border-color: var(--blackA2)
+            }
+            .ring-overlay-black-2,
+            .hover\:ring-overlay-black-2:hover,
+            .focus\:ring-overlay-black-2:focus {
+                --tw-ring-color: var(--blackA2)
+            }
+            .bg-overlay-black-2,
+            .hover\:bg-overlay-black-2:hover,
+            .focus\:bg-overlay-black-2:focus {
+                background-color: var(--blackA2)
+            }
+        
+            /* overlay-black 3 */
+            .text-overlay-black-3,
+            .hover\:text-overlay-black-3:hover,
+            .focus\:text-overlay-black-3:focus {
+                color: var(--blackA3)
+            }
+            .border-overlay-black-3,
+            .hover\:border-overlay-black-3:hover,
+            .focus\:border-overlay-black-3:focus {
+                border-color: var(--blackA3)
+            }
+            .ring-overlay-black-3,
+            .hover\:ring-overlay-black-3:hover,
+            .focus\:ring-overlay-black-3:focus {
+                --tw-ring-color: var(--blackA3)
+            }
+            .bg-overlay-black-3,
+            .hover\:bg-overlay-black-3:hover,
+            .focus\:bg-overlay-black-3:focus {
+                background-color: var(--blackA3)
+            }
+        
+            /* overlay-black 4 */
+            .text-overlay-black-4,
+            .hover\:text-overlay-black-4:hover,
+            .focus\:text-overlay-black-4:focus {
+                color: var(--blackA4)
+            }
+            .border-overlay-black-4,
+            .hover\:border-overlay-black-4:hover,
+            .focus\:border-overlay-black-4:focus {
+                border-color: var(--blackA4)
+            }
+            .ring-overlay-black-4,
+            .hover\:ring-overlay-black-4:hover,
+            .focus\:ring-overlay-black-4:focus {
+                --tw-ring-color: var(--blackA4)
+            }
+            .bg-overlay-black-4,
+            .hover\:bg-overlay-black-4:hover,
+            .focus\:bg-overlay-black-4:focus {
+                background-color: var(--blackA4)
+            }
+        
+            /* overlay-black 5 */
+            .text-overlay-black-5,
+            .hover\:text-overlay-black-5:hover,
+            .focus\:text-overlay-black-5:focus {
+                color: var(--blackA5)
+            }
+            .border-overlay-black-5,
+            .hover\:border-overlay-black-5:hover,
+            .focus\:border-overlay-black-5:focus {
+                border-color: var(--blackA5)
+            }
+            .ring-overlay-black-5,
+            .hover\:ring-overlay-black-5:hover,
+            .focus\:ring-overlay-black-5:focus {
+                --tw-ring-color: var(--blackA5)
+            }
+            .bg-overlay-black-5,
+            .hover\:bg-overlay-black-5:hover,
+            .focus\:bg-overlay-black-5:focus {
+                background-color: var(--blackA5)
+            }
+        
+            /* overlay-black 6 */
+            .text-overlay-black-6,
+            .hover\:text-overlay-black-6:hover,
+            .focus\:text-overlay-black-6:focus {
+                color: var(--blackA6)
+            }
+            .border-overlay-black-6,
+            .hover\:border-overlay-black-6:hover,
+            .focus\:border-overlay-black-6:focus {
+                border-color: var(--blackA6)
+            }
+            .ring-overlay-black-6,
+            .hover\:ring-overlay-black-6:hover,
+            .focus\:ring-overlay-black-6:focus {
+                --tw-ring-color: var(--blackA6)
+            }
+            .bg-overlay-black-6,
+            .hover\:bg-overlay-black-6:hover,
+            .focus\:bg-overlay-black-6:focus {
+                background-color: var(--blackA6)
+            }
+        
+            /* overlay-black 7 */
+            .text-overlay-black-7,
+            .hover\:text-overlay-black-7:hover,
+            .focus\:text-overlay-black-7:focus {
+                color: var(--blackA7)
+            }
+            .border-overlay-black-7,
+            .hover\:border-overlay-black-7:hover,
+            .focus\:border-overlay-black-7:focus {
+                border-color: var(--blackA7)
+            }
+            .ring-overlay-black-7,
+            .hover\:ring-overlay-black-7:hover,
+            .focus\:ring-overlay-black-7:focus {
+                --tw-ring-color: var(--blackA7)
+            }
+            .bg-overlay-black-7,
+            .hover\:bg-overlay-black-7:hover,
+            .focus\:bg-overlay-black-7:focus {
+                background-color: var(--blackA7)
+            }
+        
+            /* overlay-black 8 */
+            .text-overlay-black-8,
+            .hover\:text-overlay-black-8:hover,
+            .focus\:text-overlay-black-8:focus {
+                color: var(--blackA8)
+            }
+            .border-overlay-black-8,
+            .hover\:border-overlay-black-8:hover,
+            .focus\:border-overlay-black-8:focus {
+                border-color: var(--blackA8)
+            }
+            .ring-overlay-black-8,
+            .hover\:ring-overlay-black-8:hover,
+            .focus\:ring-overlay-black-8:focus {
+                --tw-ring-color: var(--blackA8)
+            }
+            .bg-overlay-black-8,
+            .hover\:bg-overlay-black-8:hover,
+            .focus\:bg-overlay-black-8:focus {
+                background-color: var(--blackA8)
+            }
+        
+            /* overlay-black 9 */
+            .text-overlay-black-9,
+            .hover\:text-overlay-black-9:hover,
+            .focus\:text-overlay-black-9:focus {
+                color: var(--blackA9)
+            }
+            .border-overlay-black-9,
+            .hover\:border-overlay-black-9:hover,
+            .focus\:border-overlay-black-9:focus {
+                border-color: var(--blackA9)
+            }
+            .ring-overlay-black-9,
+            .hover\:ring-overlay-black-9:hover,
+            .focus\:ring-overlay-black-9:focus {
+                --tw-ring-color: var(--blackA9)
+            }
+            .bg-overlay-black-9,
+            .hover\:bg-overlay-black-9:hover,
+            .focus\:bg-overlay-black-9:focus {
+                background-color: var(--blackA9)
+            }
+        
+            /* overlay-black 10 */
+            .text-overlay-black-10,
+            .hover\:text-overlay-black-10:hover,
+            .focus\:text-overlay-black-10:focus {
+                color: var(--blackA10)
+            }
+            .border-overlay-black-10,
+            .hover\:border-overlay-black-10:hover,
+            .focus\:border-overlay-black-10:focus {
+                border-color: var(--blackA10)
+            }
+            .ring-overlay-black-10,
+            .hover\:ring-overlay-black-10:hover,
+            .focus\:ring-overlay-black-10:focus {
+                --tw-ring-color: var(--blackA10)
+            }
+            .bg-overlay-black-10,
+            .hover\:bg-overlay-black-10:hover,
+            .focus\:bg-overlay-black-10:focus {
+                background-color: var(--blackA10)
+            }
+        
+            /* overlay-black 11 */
+            .text-overlay-black-11,
+            .hover\:text-overlay-black-11:hover,
+            .focus\:text-overlay-black-11:focus {
+                color: var(--blackA11)
+            }
+            .border-overlay-black-11,
+            .hover\:border-overlay-black-11:hover,
+            .focus\:border-overlay-black-11:focus {
+                border-color: var(--blackA11)
+            }
+            .ring-overlay-black-11,
+            .hover\:ring-overlay-black-11:hover,
+            .focus\:ring-overlay-black-11:focus {
+                --tw-ring-color: var(--blackA11)
+            }
+            .bg-overlay-black-11,
+            .hover\:bg-overlay-black-11:hover,
+            .focus\:bg-overlay-black-11:focus {
+                background-color: var(--blackA11)
+            }
+        
+            /* overlay-black 12 */
+            .text-overlay-black-12,
+            .hover\:text-overlay-black-12:hover,
+            .focus\:text-overlay-black-12:focus {
+                color: var(--blackA12)
+            }
+            .border-overlay-black-12,
+            .hover\:border-overlay-black-12:hover,
+            .focus\:border-overlay-black-12:focus {
+                border-color: var(--blackA12)
+            }
+            .ring-overlay-black-12,
+            .hover\:ring-overlay-black-12:hover,
+            .focus\:ring-overlay-black-12:focus {
+                --tw-ring-color: var(--blackA12)
+            }
+            .bg-overlay-black-12,
+            .hover\:bg-overlay-black-12:hover,
+            .focus\:bg-overlay-black-12:focus {
+                background-color: var(--blackA12)
+            }
+        

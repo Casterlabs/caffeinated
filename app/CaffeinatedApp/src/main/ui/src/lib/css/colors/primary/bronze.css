@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/bronze.css"; @import "@radix-ui/colors/bronzeDark.css";#css-intermediate[data-theme-primary="bronze"] {
+    --primary1: var(--bronze1);
+        
+    --primary2: var(--bronze2);
+        
+    --primary3: var(--bronze3);
+        
+    --primary4: var(--bronze4);
+        
+    --primary5: var(--bronze5);
+        
+    --primary6: var(--bronze6);
+        
+    --primary7: var(--bronze7);
+        
+    --primary8: var(--bronze8);
+        
+    --primary9: var(--bronze9);
+        
+    --primary10: var(--bronze10);
+        
+    --primary11: var(--bronze11);
+        
+    --primary12: var(--bronze12);
+        }

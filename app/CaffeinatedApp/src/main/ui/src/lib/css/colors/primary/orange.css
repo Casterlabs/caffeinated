@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/orange.css"; @import "@radix-ui/colors/orangeDark.css";#css-intermediate[data-theme-primary="orange"] {
+    --primary1: var(--orange1);
+        
+    --primary2: var(--orange2);
+        
+    --primary3: var(--orange3);
+        
+    --primary4: var(--orange4);
+        
+    --primary5: var(--orange5);
+        
+    --primary6: var(--orange6);
+        
+    --primary7: var(--orange7);
+        
+    --primary8: var(--orange8);
+        
+    --primary9: var(--orange9);
+        
+    --primary10: var(--orange10);
+        
+    --primary11: var(--orange11);
+        
+    --primary12: var(--orange12);
+        }

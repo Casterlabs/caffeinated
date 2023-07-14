@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/red.css"; @import "@radix-ui/colors/redDark.css";#css-intermediate[data-theme-base="red"] {
+    --base1: var(--red1);
+        
+    --base2: var(--red2);
+        
+    --base3: var(--red3);
+        
+    --base4: var(--red4);
+        
+    --base5: var(--red5);
+        
+    --base6: var(--red6);
+        
+    --base7: var(--red7);
+        
+    --base8: var(--red8);
+        
+    --base9: var(--red9);
+        
+    --base10: var(--red10);
+        
+    --base11: var(--red11);
+        
+    --base12: var(--red12);
+        }

@@ -30,7 +30,7 @@ public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
         }
 
         try {
-            byte[] content = FileUtil.loadResourceBytes("app" + uri);
+            byte[] content = FileUtil.loadResourceBytes("co/casterlabs/caffeinated/app/ui/html" + uri);
             String mimeType = "application/octet-stream";
 
             String[] split = uri.split("\\.");

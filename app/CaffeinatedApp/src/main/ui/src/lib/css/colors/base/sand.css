@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/sand.css"; @import "@radix-ui/colors/sandDark.css";#css-intermediate[data-theme-base="sand"] {
+    --base1: var(--sand1);
+        
+    --base2: var(--sand2);
+        
+    --base3: var(--sand3);
+        
+    --base4: var(--sand4);
+        
+    --base5: var(--sand5);
+        
+    --base6: var(--sand6);
+        
+    --base7: var(--sand7);
+        
+    --base8: var(--sand8);
+        
+    --base9: var(--sand9);
+        
+    --base10: var(--sand10);
+        
+    --base11: var(--sand11);
+        
+    --base12: var(--sand12);
+        }

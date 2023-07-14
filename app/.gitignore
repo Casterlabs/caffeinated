@@ -1,15 +1,9 @@
-# IntelliJ
-*.iml
-.idea/
-
-# Eclipse
-.settings/
-.project
-.classpath
-.metadata
-
-# Common
+# Maven
 target/
+*pom.xml.versionsBackup
+
+# Misc
+dist/
 cef_bundle/
 Bootstrap/src/main/resources/app
 debug.log

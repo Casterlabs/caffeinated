@@ -117,7 +117,7 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
             mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
         }
 
-        resource = "widgets" + resource;
+        resource = "co/casterlabs/caffeinated/builtin/html" + resource;
         this.getLogger().debug("Loading resource: %s", resource);
 
         try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {
@@ -125,7 +125,7 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
                 IOUtil.readInputStreamString(in, StandardCharsets.UTF_8),
                 mimeType
             );
-        } catch (Exception e) {
+        } catch (Throwable e) {
             this.getLogger().debug("An error occurred whilst loading resource %s:\n%s", resource, e);
             return new Pair<>("", "text/plain");
         }

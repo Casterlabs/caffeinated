@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/purple.css"; @import "@radix-ui/colors/purpleDark.css";#css-intermediate[data-theme-primary="purple"] {
+    --primary1: var(--purple1);
+        
+    --primary2: var(--purple2);
+        
+    --primary3: var(--purple3);
+        
+    --primary4: var(--purple4);
+        
+    --primary5: var(--purple5);
+        
+    --primary6: var(--purple6);
+        
+    --primary7: var(--purple7);
+        
+    --primary8: var(--purple8);
+        
+    --primary9: var(--purple9);
+        
+    --primary10: var(--purple10);
+        
+    --primary11: var(--purple11);
+        
+    --primary12: var(--purple12);
+        }

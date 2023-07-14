@@ -1,0 +1,25 @@
+@import "@radix-ui/colors/green.css"; @import "@radix-ui/colors/greenDark.css";#css-intermediate[data-theme-primary="green"] {
+    --primary1: var(--green1);
+        
+    --primary2: var(--green2);
+        
+    --primary3: var(--green3);
+        
+    --primary4: var(--green4);
+        
+    --primary5: var(--green5);
+        
+    --primary6: var(--green6);
+        
+    --primary7: var(--green7);
+        
+    --primary8: var(--green8);
+        
+    --primary9: var(--green9);
+        
+    --primary10: var(--green10);
+        
+    --primary11: var(--green11);
+        
+    --primary12: var(--green12);
+        }
