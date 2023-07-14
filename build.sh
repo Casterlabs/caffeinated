@@ -6,12 +6,12 @@ set -o pipefail
 # (Optional) Compile everything
 if [[ $@ != *"nocompile"* ]]; then
     cd app
-    ./mvnw clean package
+    bash ./mvnw clean package
     cd ..
 
     # Compile the deploy helper maven project
     cd deploy-helper
-    ./mvnw clean package
+    bash ./mvnw clean package
     cd ..
 fi
 
