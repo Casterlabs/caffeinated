@@ -28,17 +28,41 @@ public class DeployHelper {
     private static final FastLogger logger = new FastLogger();
 
     public static void main(String[] args) {
+        if (!System.getenv().containsKey("BB_BUCKET_ID")) {
+            logger.fatal("Could not find BB_BUCKET_ID in the current env, aborting.");
+            return;
+        }
+
+        if (!System.getenv().containsKey("BB_CLIENT_ID")) {
+            logger.fatal("Could not find BB_CLIENT_ID in the current env, aborting.");
+            return;
+        }
+
+        if (!System.getenv().containsKey("BB_CLIENT_KEY")) {
+            logger.fatal("Could not find BB_CLIENT_KEY in the current env, aborting.");
+            return;
+        }
+
+        if (!System.getenv().containsKey("GITHUB_SHA")) {
+            logger.fatal("Could not find GITHUB_SHA in the current env, aborting.");
+            return;
+        }
+
+        if (!System.getenv().containsKey("GITHUB_REF_NAME")) {
+            logger.fatal("Could not find GITHUB_REF_NAME in the current env, aborting.");
+            return;
+        }
+
         String bucketId = System.getenv("BB_BUCKET_ID");
 
         B2StorageClient b2 = B2StorageClientFactory
             .createDefaultFactory()
             .create(System.getenv("BB_CLIENT_ID"), System.getenv("BB_CLIENT_KEY"), "AutoDeploy");
 
-        String commitShortHash = System.getenv("CIRCLE_SHA1").substring(0, 7);
-        String branch = System.getenv("CIRCLE_BRANCH");
-        int jobNumber = Integer.parseInt(System.getenv("CIRCLE_BUILD_NUM"));
+        String commitShortHash = System.getenv("GITHUB_SHA").substring(0, 7);
+        String branch = System.getenv("GITHUB_REF_NAME").substring("deploy-".length());
 
-        logger.info("Incoming build: %s (%s) (#%d)", commitShortHash, branch, jobNumber);
+        logger.info("Deploying build: %s (%s)", commitShortHash, branch);
 
         // Start all of the tasks in parallel.
         List<Promise<Void>> tasks = new LinkedList<>();
