@@ -1,6 +1,9 @@
 package co.casterlabs.autodeploy;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +16,7 @@ import com.backblaze.b2.client.exceptions.B2Exception;
 import com.backblaze.b2.client.structures.B2UploadFileRequest;
 
 import co.casterlabs.commons.async.Promise;
+import co.casterlabs.rakurai.io.IOUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class DeployHelper {
@@ -27,30 +31,36 @@ public class DeployHelper {
 
     private static final FastLogger logger = new FastLogger();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+        String rawGithubEvent = IOUtil.readString(new FileInputStream(args[0] /* github event */));
+
+        logger.info(rawGithubEvent);
+    }
+
+    private static void uploadArtifacts() {
         if (!System.getenv().containsKey("BB_BUCKET_ID")) {
             logger.fatal("Could not find BB_BUCKET_ID in the current env, aborting.");
-            return;
+            System.exit(1);
         }
 
         if (!System.getenv().containsKey("BB_CLIENT_ID")) {
             logger.fatal("Could not find BB_CLIENT_ID in the current env, aborting.");
-            return;
+            System.exit(1);
         }
 
         if (!System.getenv().containsKey("BB_CLIENT_KEY")) {
             logger.fatal("Could not find BB_CLIENT_KEY in the current env, aborting.");
-            return;
+            System.exit(1);
         }
 
         if (!System.getenv().containsKey("GITHUB_SHA")) {
             logger.fatal("Could not find GITHUB_SHA in the current env, aborting.");
-            return;
+            System.exit(1);
         }
 
         if (!System.getenv().containsKey("GITHUB_REF_NAME")) {
             logger.fatal("Could not find GITHUB_REF_NAME in the current env, aborting.");
-            return;
+            System.exit(1);
         }
 
         String bucketId = System.getenv("BB_BUCKET_ID");
@@ -129,8 +139,6 @@ public class DeployHelper {
             logger.severe("An error occurred whilst uploading commit hash to backblaze:\n%s", e);
             System.exit(1);
         }
-
-        System.exit(0);
     }
 
 }
