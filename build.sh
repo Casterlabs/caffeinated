@@ -31,7 +31,7 @@ if [[ $@ != *"nopackage"* ]]; then
     cd -
     echo ""
 
-    java -jar ProjectBuilder.jar $VM_OPTIONS -os WINDOWS -arch X86 -archWord 64 -wi CHROMIUM_EMBEDDED_FRAMEWORK -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -res app/WMC-JsonConsoleWrapper.exe -cp app/Bootstrap/target/Caffeinated.jar -i icon.ico
+    java -jar ProjectBuilder.jar $VM_OPTIONS -os WINDOWS_NT -arch X86 -archWord 64 -wi CHROMIUM_EMBEDDED_FRAMEWORK -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -res app/WMC-JsonConsoleWrapper.exe -cp app/Bootstrap/target/Caffeinated.jar -i icon.ico
     cd dist/Windows-x86_64
     zip -r ../artifacts/Windows-amd64.zip *
     rm -rf ./jre
