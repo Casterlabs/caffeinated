@@ -76,7 +76,7 @@
 
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Windows-amd64</artifactId>
+				<artifactId>Windows-x86_64</artifactId>
 				<version>${kaimen.version}</version>
 			</dependency>
 			<dependency>
@@ -92,7 +92,7 @@
 
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>MacOS-amd64</artifactId>
+				<artifactId>MacOS-x86_64</artifactId>
 				<version>${kaimen.version}</version>
 			</dependency>
 			<dependency>
@@ -103,7 +103,7 @@
 
 			<dependency>
 				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Linux-amd64</artifactId>
+				<artifactId>Linux-x86_64</artifactId>
 				<version>${kaimen.version}</version>
 			</dependency>
 			<dependency>
