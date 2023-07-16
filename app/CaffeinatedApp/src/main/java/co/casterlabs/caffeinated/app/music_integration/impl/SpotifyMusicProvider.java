@@ -148,8 +148,8 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
             }
         } catch (StringIndexOutOfBoundsException | JsonParseException ignored) {
             // ignored.
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
         }
     }
 
