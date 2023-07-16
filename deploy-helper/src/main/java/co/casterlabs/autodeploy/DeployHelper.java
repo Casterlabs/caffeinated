@@ -156,6 +156,19 @@ public class DeployHelper {
                     .build()
             );
 
+            if (branch.equals("stable")) {
+                // We need to also update the beta branch to keep them up-to-date.
+                b2.uploadSmallFile(
+                    B2UploadFileRequest
+                        .builder(
+                            bucketId,
+                            "dist/beta/commit",
+                            B2ContentTypes.TEXT_PLAIN, B2ByteArrayContentSource.build(commitShortHash.getBytes())
+                        )
+                        .build()
+                );
+            }
+
             logger.info("Done!");
         } catch (B2Exception e) {
             logger.severe("An error occurred whilst uploading commit hash to backblaze:\n%s", e);
