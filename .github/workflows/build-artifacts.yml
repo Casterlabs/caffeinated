@@ -2,7 +2,7 @@ name: Build Artifacts
 
 on:
   push:
-    branches: ["dev", "deploy-beta", "deploy-stable"]
+    branches: ["dev"]
   pull_request:
     branches: ["dev"]
 
