@@ -1,7 +1,6 @@
 package co.casterlabs.autodeploy;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -16,7 +15,6 @@ import com.backblaze.b2.client.exceptions.B2Exception;
 import com.backblaze.b2.client.structures.B2UploadFileRequest;
 
 import co.casterlabs.commons.async.Promise;
-import co.casterlabs.rakurai.io.IOUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class DeployHelper {
@@ -32,12 +30,11 @@ public class DeployHelper {
     private static final FastLogger logger = new FastLogger();
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        String rawGithubEvent = IOUtil.readString(new FileInputStream(args[0] /* github event */));
+//        JsonObject githubEvent = Rson.DEFAULT.fromJson(
+//            IOUtil.readString(new FileInputStream(args[0] /* github event */)),
+//            JsonObject.class
+//        );
 
-        logger.info(rawGithubEvent);
-    }
-
-    private static void uploadArtifacts() {
         if (!System.getenv().containsKey("BB_BUCKET_ID")) {
             logger.fatal("Could not find BB_BUCKET_ID in the current env, aborting.");
             System.exit(1);
@@ -70,7 +67,7 @@ public class DeployHelper {
             .create(System.getenv("BB_CLIENT_ID"), System.getenv("BB_CLIENT_KEY"), "AutoDeploy");
 
         String commitShortHash = System.getenv("GITHUB_SHA").substring(0, 7);
-        String branch = System.getenv("GITHUB_REF_NAME").substring("deploy-".length());
+        String branch = System.getenv("DEPLOY_CHANNEL");
 
         logger.info("Deploying build: %s (%s)", commitShortHash, branch);
 

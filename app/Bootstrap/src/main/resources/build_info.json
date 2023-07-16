@@ -1,6 +1,6 @@
 {
     "version": "${project.parent.version}",
     "commit": "${git.commit.id.describe-short}",
-    "buildChannel": "${git.branch}",
+    "buildChannel": "${env.DEPLOY_CHANNEL}",
     "author": "Casterlabs"
 }

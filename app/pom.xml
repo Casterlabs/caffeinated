@@ -23,6 +23,21 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
+	<profiles>
+		<profile>
+			<!-- This helps alleviate mangled builds -->
+			<id>DEPLOY_CHANNEL default value</id>
+			<activation>
+				<property>
+					<name>!env.DEPLOY_CHANNEL</name>
+				</property>
+			</activation>
+			<properties>
+				<env.DEPLOY_CHANNEL>dev</env.DEPLOY_CHANNEL>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>

@@ -23,6 +23,9 @@ jobs:
           distribution: "temurin"
           cache: maven
 
+      - name: Set deploy channel env.
+        run: echo "DEPLOY_CHANNEL=dev" >> $GITHUB_ENV
+
       - name: Compile the app.
         run: bash build.sh nopackage
 
