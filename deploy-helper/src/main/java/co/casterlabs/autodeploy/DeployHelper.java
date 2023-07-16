@@ -78,7 +78,7 @@ public class DeployHelper {
             Promise<Void> promise = new Promise<>(() -> {
                 File artifactFile = new File("./dist/artifacts/" + artifact);
 
-                logger.info("Uploading build artifact: %s (%d bytes)", artifactFile, artifactFile.length());
+                logger.info("Uploading build artifact: %s to /dist/%s/%s (%d bytes)", artifactFile, branch, artifact, artifactFile.length());
 
                 b2.uploadSmallFile(
                     B2UploadFileRequest
@@ -102,7 +102,7 @@ public class DeployHelper {
                 Promise<Void> promise = new Promise<>(() -> {
                     File artifactFile = new File("./dist/artifacts/" + artifact);
 
-                    logger.info("Uploading build artifact: %s (%d bytes)", artifactFile, artifactFile.length());
+                    logger.info("Uploading build artifact: %s to /dist/beta/%s (%d bytes)", artifactFile, artifact, artifactFile.length());
 
                     b2.uploadSmallFile(
                         B2UploadFileRequest
@@ -170,6 +170,7 @@ public class DeployHelper {
             }
 
             logger.info("Done!");
+            System.exit(0);
         } catch (B2Exception e) {
             logger.severe("An error occurred whilst uploading commit hash to backblaze:\n%s", e);
             System.exit(1);
