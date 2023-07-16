@@ -23,7 +23,7 @@ jobs:
           cache: maven
 
       - name: Set deploy channel env.
-        run: echo "DEPLOY_CHANNEL=${{ 'beta' && github.event.release.prerelease || 'stable' }}" >> $GITHUB_ENV
+        run: echo "DEPLOY_CHANNEL=${{ (github.event.release.prerelease && 'beta') || 'stable' }}" >> $GITHUB_ENV
 
       - name: Compile the deploy helper.
         run: cd deploy-helper && bash ./mvnw clean package
