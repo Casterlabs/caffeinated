@@ -6,7 +6,7 @@ on:
 
 jobs:
   release-deploy:
-    environment: "Configure Caffeinated Deploy"
+    environment: "Caffeinated Deploy"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code.
