@@ -35,4 +35,8 @@ jobs:
         run: bash build.sh nocompile
 
       - name: Deploy the app.
+        env:
+          BB_BUCKET_ID: ${{ secrets.BB_BUCKET_ID }}
+          BB_CLIENT_ID: ${{ secrets.BB_CLIENT_ID }}
+          BB_CLIENT_KEY: ${{ secrets.BB_CLIENT_KEY }}
         run: java -jar deploy-helper/target/deploy-helper.jar "${{ github.event_path }}"
