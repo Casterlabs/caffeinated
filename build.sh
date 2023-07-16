@@ -2,6 +2,8 @@
 
 set -euxo pipefail
 
+echo "Build channel: ${DEPLOY_CHANNEL:-default}"
+
 if [[ $@ != *"nocompile"* ]]; then
     cd app
     bash ./mvnw clean package
