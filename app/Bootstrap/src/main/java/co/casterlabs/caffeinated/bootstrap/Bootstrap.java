@@ -227,7 +227,7 @@ public class Bootstrap implements Runnable {
         logger.info("buildInfo.versionString      | %s", buildInfo.getVersionString());
         logger.info("buildInfo.author             | %s", buildInfo.getAuthor());
         logger.info("buildInfo.isDev              | %b", isDev);
-        logger.info("platform.arch                | %s", Platform.arch);
+        logger.info("platform.arch                | %s", Platform.archFamily.getArchTarget(Platform.wordSize, Platform.isBigEndian));
         logger.info("platform.osFamily            | %s", Platform.osFamily);
         logger.info("platform.osDistribution      | %s", Platform.osDistribution);
         logger.info("bootstrap.args               | %s", System.getProperty("sun.java.command"));
