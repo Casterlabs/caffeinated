@@ -70,7 +70,11 @@ public class MusicIntegration extends JavascriptObject implements Music {
             String providerId = entry.getKey();
 
             MusicProviderSettings settings = this.preferenceData.get(providerId);
-            if (settings != null) provider.updateSettingsFromJson(settings.getJson());
+            if (settings == null) {
+                provider.updateSettingsFromJson(null);
+            } else {
+                provider.updateSettingsFromJson(settings.getJson());
+            }
 
             provider.init();
         }

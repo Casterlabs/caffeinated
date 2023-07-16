@@ -188,7 +188,7 @@
 								{#if MUSIC_SERVICES_WITH_ENABLE.includes(provider.serviceId)}
 									<SlimSwitch
 										title="page.settings.accounts.music_services.enable"
-										checked={provider.settings.enabled}
+										checked={provider.settings?.enabled}
 										on:value={({ detail: value }) => {
 											window.Caffeinated.music.updateMusicProviderSettings(provider.serviceId, {
 												enabled: value
