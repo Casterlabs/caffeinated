@@ -33,6 +33,7 @@ public class PluginImporter {
             // Keep a backup of the file.
             logger.info("Done!");
             oldJson.renameTo(new File(CaffeinatedApp.appDataDir, "preferences/old/plugins.json"));
+            oldJson.delete();
         }
     }
 

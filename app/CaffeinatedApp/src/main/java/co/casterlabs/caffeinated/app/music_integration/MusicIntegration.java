@@ -193,6 +193,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
             // Keep a backup of the file.
             FastLogger.logStatic(LogLevel.INFO, "Done!");
             oldJson.renameTo(new File(CaffeinatedApp.appDataDir, "preferences/old/music.json"));
+            oldJson.delete();
         }
     }
 
