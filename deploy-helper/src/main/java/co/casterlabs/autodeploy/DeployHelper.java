@@ -96,6 +96,31 @@ public class DeployHelper {
             tasks.add(promise);
         }
 
+        if (branch.equals("stable")) {
+            // We need to also deploy to the beta branch to keep them up-to-date.
+            for (String artifact : CAFFEINATED_ARTIFACTS) {
+                Promise<Void> promise = new Promise<>(() -> {
+                    File artifactFile = new File("./dist/artifacts/" + artifact);
+
+                    logger.info("Uploading build artifact: %s (%d bytes)", artifactFile, artifactFile.length());
+
+                    b2.uploadSmallFile(
+                        B2UploadFileRequest
+                            .builder(
+                                bucketId,
+                                String.format("dist/beta/%s", artifact),
+                                B2ContentTypes.APPLICATION_OCTET,
+                                B2FileContentSource.build(artifactFile)
+                            )
+                            .build()
+                    );
+
+                    return null; // aVoid
+                });
+                tasks.add(promise);
+            }
+        }
+
         boolean anySucceeded = false;
         boolean anyFailed = false;
 
