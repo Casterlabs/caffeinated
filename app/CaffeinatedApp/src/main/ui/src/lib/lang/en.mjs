@@ -100,6 +100,8 @@ export default {
 	'sr.page.widgets.create': 'Create a new widget',
 	'page.widgets.create.new': '(New)',
 	'page.widgets.preview': 'Preview',
+	'sr.page.widgets.open_context_menu': 'Open menu',
+	'sr.page.widgets.edit_widget': 'Edit',
 	'sr.page.widgets.delete': 'Delete',
 	'sr.page.widgets.copy_link': 'Copy Link',
 	'page.widgets.create.category.ALERTS': 'Alerts',

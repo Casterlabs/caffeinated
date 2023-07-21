@@ -4,11 +4,13 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import CardList from '$lib/ui/CardList/index.svelte';
 	import Card from '$lib/ui/CardList/Card.svelte';
+	import ContextMenu from '$lib/ui/ContextMenu.svelte';
 
 	import { onMount } from 'svelte';
 	import { t } from '$lib/translate.mjs';
 	import { STREAMING_SERVICE_NAMES } from '../../components/caffeinatedAuth.mjs';
 	import Button from '$lib/ui/Button.svelte';
+	import { goto } from '$app/navigation';
 
 	const CATEGORY_ICONS = {
 		ALERTS: 'icon/bell-alert',
@@ -32,7 +34,10 @@
 	let showingTutorialModal = false;
 	let showCreationWarningFeaturesModalFor = null;
 
+	let contextMenuMap = {};
+
 	async function refreshWidgetsList() {
+		contextMenuMap = {};
 		widgets = (await Caffeinated.plugins.widgets) //
 			.filter((w) => w.details.type == 'WIDGET');
 	}
@@ -150,40 +155,60 @@
 <div class="mt-8">
 	<CardList>
 		{#each widgets as widget}
-			<Card
-				icon={widget.details.icon}
-				text={widget.name}
-				href="/$caffeinated-sdk-root$/widgets/edit?id={widget.id}"
-			>
-				<div class="text-right flex items-center space-x-1">
-					<button
-						class="text-base-12 hover:text-base-11"
-						title={t('sr.page.widgets.copy_link')}
-						on:click|stopPropagation={() => {
+			<ContextMenu
+				bind:this={contextMenuMap[widget.id]}
+				items={[
+					{
+						type: 'button',
+						icon: 'icon/pencil-square',
+						text: 'sr.page.widgets.edit_widget',
+						onclick() {
+							goto(`/$caffeinated-sdk-root$/widgets/edit?id=${widget.id}`);
+						}
+					},
+					{
+						type: 'button',
+						icon: 'icon/document-duplicate',
+						text: 'sr.page.widgets.copy_link',
+						onclick() {
 							window.Caffeinated.plugins.copyWidgetUrl(widget.id);
-						}}
-					>
-						<span class="sr-only">
-							<LocalizedText key="sr.page.widgets.copy_link" />
-						</span>
-						<icon class="w-5 h-5" data-icon="icon/document-duplicate" />
-					</button>
-
-					<button
-						class="text-error hover:opacity-80"
-						title={t('sr.page.widgets.delete')}
-						on:click|stopPropagation={() => {
+						}
+					},
+					{ type: 'divider' },
+					{
+						type: 'button',
+						icon: 'icon/trash',
+						text: 'sr.page.widgets.delete',
+						color: 'error',
+						onclick() {
 							window.Caffeinated.plugins.deleteWidget(widget.id);
 							refreshWidgetsList();
-						}}
-					>
-						<span class="sr-only">
-							<LocalizedText key="sr.page.widgets.delete" />
-						</span>
-						<icon class="w-5 h-5" data-icon="icon/trash" />
-					</button>
-				</div>
-			</Card>
+						}
+					}
+				]}
+			>
+				<Card
+					icon={widget.details.icon}
+					text={widget.name}
+					href="/$caffeinated-sdk-root$/widgets/edit?id={widget.id}"
+				>
+					<div class="text-right flex items-center space-x-1">
+						<button
+							class="text-base-12 hover:text-base-11"
+							title={t('sr.page.widgets.open_context_menu')}
+							on:click|stopPropagation={(e) => {
+								console.log(e);
+								contextMenuMap[widget.id].doOpen(e.pageX, e.pageY);
+							}}
+						>
+							<span class="sr-only">
+								<LocalizedText key="sr.page.widgets.open_context_menu" />
+							</span>
+							<icon class="w-5 h-5" data-icon="icon/ellipsis-vertical" />
+						</button>
+					</div>
+				</Card>
+			</ContextMenu>
 		{/each}
 	</CardList>
 

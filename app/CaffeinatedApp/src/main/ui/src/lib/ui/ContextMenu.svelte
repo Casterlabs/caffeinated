@@ -16,7 +16,7 @@
 			contextMenuCoords = [-1000, -1000];
 		})();
 
-	async function doOpen(x, y) {
+	export async function doOpen(x, y) {
 		if (items.filter((i) => !i.hidden).length == 0) return; // Ignore.
 
 		// We need to wait for Svelte to mount our component, because we need it's size.
