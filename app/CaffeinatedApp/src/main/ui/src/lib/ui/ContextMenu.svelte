@@ -91,7 +91,7 @@
 			style="top: {contextMenuCoords[1]}px; left: {contextMenuCoords[0]}px;"
 		>
 			<ul
-				class="rounded context-menu overflow-hidden py-1 border border-base-5 bg-base-1 text-base-12 shadow-lg"
+				class="rounded-md context-menu overflow-hidden py-1.5 border border-base-5 bg-base-1 text-base-12 shadow-lg"
 				style="outline: none;"
 				role="menu"
 				tabindex="-1"
@@ -127,7 +127,7 @@
 						</li>
 					{:else if item.type == 'divider'}
 						<!-- svelte-ignore a11y-no-redundant-roles -->
-						<hr role="separator" class="my-1 border-none h-px bg-base-5" />
+						<hr role="separator" class="my-1.5 border-none h-px bg-base-5" />
 					{/if}
 				{/each}
 			</ul>
