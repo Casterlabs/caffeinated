@@ -12,6 +12,13 @@
 	import Button from '$lib/ui/Button.svelte';
 	import { goto } from '$app/navigation';
 
+	const TAGS = {
+		[null]: 'sr.page.widgets.tag.none',
+		red: 'sr.page.widgets.tag.red',
+		green: 'sr.page.widgets.tag.green',
+		blue: 'sr.page.widgets.tag.blue'
+	};
+
 	const CATEGORY_ICONS = {
 		ALERTS: 'icon/bell-alert',
 		LABELS: 'icon/tag',
@@ -20,7 +27,8 @@
 		OTHER: 'icon/star'
 	};
 
-	let widgets = [];
+	let widgetsByTag = {};
+	let tagsExpanded = { [null]: true };
 	let creatableWidgetByCategory = {
 		ALERTS: [],
 		LABELS: [],
@@ -38,8 +46,21 @@
 
 	async function refreshWidgetsList() {
 		contextMenuMap = {};
-		widgets = (await Caffeinated.plugins.widgets) //
+		widgetsByTag = {
+			[null]: [],
+			red: [],
+			green: [],
+			blue: []
+		};
+
+		const widgets = (await Caffeinated.plugins.widgets) //
 			.filter((w) => w.details.type == 'WIDGET');
+
+		for (const widget of widgets) {
+			widgetsByTag[widget.tag].push(widget);
+		}
+
+		widgetsByTag = widgetsByTag;
 	}
 
 	onMount(async () => {
@@ -153,64 +174,100 @@
 {/if}
 
 <div class="mt-8">
-	<CardList>
-		{#each widgets as widget}
-			<ContextMenu
-				bind:this={contextMenuMap[widget.id]}
-				items={[
-					{
-						type: 'button',
-						icon: 'icon/pencil-square',
-						text: 'sr.page.widgets.edit_widget',
-						onclick() {
-							goto(`/$caffeinated-sdk-root$/widgets/edit?id=${widget.id}`);
-						}
-					},
-					{
-						type: 'button',
-						icon: 'icon/document-duplicate',
-						text: 'sr.page.widgets.copy_link',
-						onclick() {
-							window.Caffeinated.plugins.copyWidgetUrl(widget.id);
-						}
-					},
-					{ type: 'divider' },
-					{
-						type: 'button',
-						icon: 'icon/trash',
-						text: 'sr.page.widgets.delete',
-						color: 'error',
-						onclick() {
-							window.Caffeinated.plugins.deleteWidget(widget.id);
-							refreshWidgetsList();
-						}
-					}
-				]}
+	{#each Object.entries(widgetsByTag) as [tag, widgets]}
+		{#if widgets.length > 0}
+			<button
+				class="block w-full my-2 rounded-lg border border-base-6 bg-base-2 p-5 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
+				style:background={tag == 'red'
+					? 'var(--error)'
+					: tag == 'green'
+					? 'var(--success)'
+					: tag == 'blue'
+					? 'var(--link)'
+					: undefined}
+				title={tagsExpanded[tag]
+					? t('sr.page.widgets.click_to_shrink')
+					: t('sr.page.widgets.click_to_expand')}
+				on:click={() => (tagsExpanded[tag] = !tagsExpanded[tag])}
 			>
-				<Card
-					icon={widget.details.icon}
-					text={widget.name}
-					href="/$caffeinated-sdk-root$/widgets/edit?id={widget.id}"
-				>
-					<div class="text-right flex items-center space-x-1">
-						<button
-							class="text-base-12 hover:text-base-11"
-							title={t('sr.page.widgets.open_context_menu')}
-							on:click|stopPropagation={(e) => {
-								console.log(e);
-								contextMenuMap[widget.id].doOpen(e.pageX, e.pageY);
-							}}
-						>
-							<span class="sr-only">
-								<LocalizedText key="sr.page.widgets.open_context_menu" />
-							</span>
-							<icon class="w-5 h-5" data-icon="icon/ellipsis-vertical" />
-						</button>
-					</div>
-				</Card>
-			</ContextMenu>
-		{/each}
-	</CardList>
+				{#if tagsExpanded[tag]}
+					<CardList>
+						{#each widgets as widget}
+							<ContextMenu
+								bind:this={contextMenuMap[widget.id]}
+								items={[
+									{
+										type: 'button',
+										icon: 'icon/pencil-square',
+										text: 'sr.page.widgets.edit_widget',
+										onclick() {
+											goto(`/$caffeinated-sdk-root$/widgets/edit?id=${widget.id}`);
+										}
+									},
+									{
+										type: 'select',
+										icon: 'icon/tag',
+										text: 'sr.page.widgets.assign_tag',
+										selected: widget.tag,
+										options: TAGS,
+										onselect(tag) {
+											console.debug('User selected:', widget.tag, tag);
+											window.Caffeinated.plugins.assignTag(widget.id, tag);
+											refreshWidgetsList();
+										}
+									},
+									{
+										type: 'button',
+										icon: 'icon/document-duplicate',
+										text: 'sr.page.widgets.copy_link',
+										onclick() {
+											window.Caffeinated.plugins.copyWidgetUrl(widget.id);
+										}
+									},
+									{ type: 'divider' },
+									{
+										type: 'button',
+										icon: 'icon/trash',
+										text: 'sr.page.widgets.delete',
+										color: 'error',
+										onclick() {
+											window.Caffeinated.plugins.deleteWidget(widget.id);
+											refreshWidgetsList();
+										}
+									}
+								]}
+							>
+								<Card
+									icon={widget.details.icon}
+									text={widget.name}
+									href="/$caffeinated-sdk-root$/widgets/edit?id={widget.id}"
+									title={t('sr.page.widgets.edit_widget')}
+								>
+									<div class="text-right flex items-center space-x-1">
+										<button
+											class="text-base-12 hover:text-base-11"
+											title={t('sr.page.widgets.open_context_menu')}
+											on:click|stopPropagation={(e) => {
+												console.log(e);
+												contextMenuMap[widget.id].doOpen(e.pageX, e.pageY);
+											}}
+										>
+											<span class="sr-only">
+												<LocalizedText key="sr.page.widgets.open_context_menu" />
+											</span>
+											<icon class="w-5 h-5" data-icon="icon/ellipsis-vertical" />
+										</button>
+									</div>
+								</Card>
+							</ContextMenu>
+						{/each}
+					</CardList>
+				{:else}
+					<LocalizedText key="sr.page.widgets.click_to_expand" />
+				{/if}
+			</button>
+		{/if}
+	{/each}
 
 	<button
 		class="fixed bottom-3 -translate-x-3 flex items-center justify-center shadow-sm rounded-lg border border-base-5 bg-base-1 p-2 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 overflow-hidden hover:overflow-visible"

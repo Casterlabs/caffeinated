@@ -233,6 +233,15 @@ public class PluginIntegration extends JavascriptObject {
         handle.widget.onNameUpdate();
     }
 
+    @SneakyThrows
+    @JavascriptFunction
+    public void assignTag(@NonNull String widgetId, @Nullable String tagOrNull) {
+        WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+
+        handle.tag = tagOrNull;
+        this.save(handle);
+    }
+
     @JavascriptFunction
     public void deleteWidget(@NonNull String widgetId) {
         this.plugins.destroyWidget(widgetId);

@@ -8,6 +8,7 @@
 
 	export let icon = null;
 	export let text = null;
+	export let title = null;
 
 	export let href = null;
 
@@ -24,6 +25,7 @@
 	role={href ? 'link' : 'button'}
 	class="rounded-lg border border-base-6 bg-base-2 p-5 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
 	on:click={onClick}
+	{title}
 >
 	<div class="w-full relative flex items-center text-base-12 space-x-3">
 		<div class="flex-0">

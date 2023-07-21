@@ -38,6 +38,7 @@ public abstract class Widget {
         public @JsonField String namespace;
         public @JsonField String id;
         public @JsonField String name; // This is mutable by the end user.
+        public @JsonField @Nullable String tag; // This is mutable by the end user.
 
         public @Reflective Set<KoiEventListener> koiListeners = new HashSet<>();
 
