@@ -5,6 +5,7 @@
 	import Portal from 'svelte-portal';
 
 	import { tick } from 'svelte';
+	import { t } from '$lib/translate.mjs';
 
 	let contextMenuOpen = false;
 	let contextMenuCoords = [-1000, -1000];
@@ -28,12 +29,25 @@
 		const { clientWidth: documentWidth, clientHeight: documentHeight } = document.documentElement;
 		const { clientWidth: menuWidth, clientHeight: menuHeight } = contextMenuElement;
 
+		let hasSelectMenu = false;
+		for (const item of items) {
+			if (item.type == 'select') {
+				hasSelectMenu = true;
+				break;
+			}
+		}
+
 		// Clamp top-left.
 		x = Math.max(x, 0);
 		y = Math.max(y, 0);
 
 		// Clamp bottom-right.
-		x = Math.min(x, documentWidth - menuWidth);
+		x = Math.min(
+			x,
+			documentWidth -
+				menuWidth -
+				(hasSelectMenu ? 200 : 0) /* Additional marign for any select menus */
+		);
 		y = Math.min(y, documentHeight - menuHeight);
 
 		contextMenuCoords = [x, y];
@@ -91,7 +105,7 @@
 			style="top: {contextMenuCoords[1]}px; left: {contextMenuCoords[0]}px;"
 		>
 			<ul
-				class="rounded-md context-menu overflow-hidden py-1.5 border border-base-5 bg-base-1 text-base-12 shadow-lg"
+				class="rounded-md context-menu py-1.5 border border-base-5 bg-base-1 text-base-12 shadow-lg"
 				style="outline: none;"
 				role="menu"
 				tabindex="-1"
@@ -123,6 +137,63 @@
 							>
 								<icon class="mr-1 w-5 h-5" data-icon={icon} />
 								<LocalizedText key={text} />
+							</button>
+						</li>
+					{:else if item.type == 'select'}
+						{@const ID = Math.random().toString(28)}
+						{@const { icon, text, options, selected, onselect } = item}
+
+						<li>
+							<button
+								class="relative block w-full h-10 overflow-hidden hover:overflow-visible"
+								aria-haspopup="true"
+								aria-controls="widget-creation-dropright-{ID}"
+							>
+								<div class="p-2 flex flex-row items-center text-md space-x-2 text-base-12 w-full">
+									<icon class="flex-0 w-5 h-5" data-icon={icon} />
+									<span class="flex-1 text-left">
+										<LocalizedText key={text} />
+									</span>
+									<icon class="flex-0 w-5 h-5" data-icon="icon/chevron-right" />
+								</div>
+
+								<div
+									class="pl-1.5 translate-y-px absolute left-full top-0 -ml-1 overflow-x-hidden overflow-y-auto h-fit w-40"
+								>
+									<div
+										class="shadow-sm rounded-lg border border-base-5 bg-base-1 w-36 divide-y divide-current text-base-5"
+										id="context-menu-dropright-{ID}"
+									>
+										{#each Object.entries(options) as [id, value]}
+											{@const isSelected = selected == (id == 'null' ? null : id)}
+											<button
+												class="block w-full h-10 relative"
+												title={t(value)}
+												role="option"
+												aria-selected={isSelected}
+												on:click={async () => {
+													// You can return 'false' to keep the context menu open.
+													// Any other value closes it.
+													if ((await onselect(id)) !== false) {
+														contextMenuOpen = false;
+													}
+												}}
+											>
+												<div class="truncate text-left p-2 text-sm text-base-12 w-full">
+													<LocalizedText key={value} />
+												</div>
+
+												{#if isSelected}
+													<span
+														class="absolute inset-y-0 right-0 flex items-center pr-4 text-white"
+													>
+														<icon class="h-5 w-5" data-icon="icon/check" />
+													</span>
+												{/if}
+											</button>
+										{/each}
+									</div>
+								</div>
 							</button>
 						</li>
 					{:else if item.type == 'divider'}
