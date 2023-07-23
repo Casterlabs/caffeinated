@@ -16,7 +16,7 @@ public enum LightStyle {
         public void paint(Graphics2D g, int width, int height) {
             final int stroke = 60;
             g.setStroke(new BasicStroke(stroke * 2));
-            g.drawOval(stroke, stroke, width - stroke - stroke - 2, height - stroke - stroke - 2);
+            g.drawOval(stroke, stroke, width - stroke - stroke, height - stroke - stroke);
         }
     }
 

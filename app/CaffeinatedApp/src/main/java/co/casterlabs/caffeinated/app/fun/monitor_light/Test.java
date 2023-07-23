@@ -6,7 +6,7 @@ public class Test {
         MonitorLight light = new MonitorLight();
         light.setSize(500, 500);
         light.setOpacity(.7f);
-        light.setStyle(LightStyle.ROUND);
+        light.setStyle(LightStyle.FULL);
         light.show();
     }
 
