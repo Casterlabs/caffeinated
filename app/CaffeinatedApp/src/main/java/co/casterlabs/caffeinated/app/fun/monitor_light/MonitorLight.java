@@ -142,9 +142,9 @@ public class MonitorLight implements Closeable {
 
                     float newOpacity = frame.getOpacity() + (float) (e.getPreciseWheelRotation() * -1 / 10);
 
-                    if (newOpacity > 1) {
-                        newOpacity = 1;
-                    } else if (newOpacity < .25) {
+                    if (newOpacity > .9f) {
+                        newOpacity = .9f;
+                    } else if (newOpacity < .25f) {
                         newOpacity = .25f;
                     }
 
