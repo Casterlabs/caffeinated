@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.github.kwhat</groupId>
+  <artifactId>jnativehook</artifactId>
+  <versioning>
+    <release>2.2.2-local</release>
+    <versions>
+      <version>2.2.2-local</version>
+    </versions>
+    <lastUpdated>20220731002311</lastUpdated>
+  </versioning>
+</metadata>

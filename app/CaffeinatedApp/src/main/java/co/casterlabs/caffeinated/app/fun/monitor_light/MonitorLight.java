@@ -12,43 +12,123 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.Closeable;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
+
+import co.casterlabs.commons.platform.OSDistribution;
+import co.casterlabs.commons.platform.Platform;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
-public class MonitorLight {
+public class MonitorLight implements Closeable {
     private static final Cursor DRAG_CURSOR = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
-    private static final int BORDER_WIDTH = 12;
+    private static final int BORDER_WIDTH = 15;
+    private static final Color BORDER_COLOR = new Color(200, 200, 200);
 
-    private final JFrame frame = new JFrame("Casterlabs Caffeinated Light");
+    static {
+        if (Platform.osDistribution != OSDistribution.WINDOWS_NT) {
+            throw new RuntimeException("MonitorLight is only supported on windows.");
+        }
+
+        try {
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private final JFrame frame = new JFrame("Casterlabs Caffeinated Light") {
+        private static final long serialVersionUID = 913917615526213056L;
+
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+            if (isMovable) {
+                int width = this.getWidth();
+                int height = this.getHeight();
+
+                g.setColor(BORDER_COLOR);
+                g.fillRect(0, 0, width, BORDER_WIDTH); // NORTH
+                g.fillRect(0, height - BORDER_WIDTH, width, BORDER_WIDTH); // SOUTH
+                g.fillRect(0, 0, BORDER_WIDTH, height); // EAST
+                g.fillRect(width - BORDER_WIDTH, 0, BORDER_WIDTH, height); // WEST
+            }
+        };
+
+    };
 
     private final Canvas canvas = new Canvas() {
         private static final long serialVersionUID = 5366178863004795132L;
 
         @Override
         public void paint(Graphics g) {
-            g.setColor(new Color(1, 1, 1, opacity));
-            style.paint(
-                (Graphics2D) g,
-                frame.getWidth() - BORDER_WIDTH - BORDER_WIDTH,
-                frame.getHeight() - BORDER_WIDTH - BORDER_WIDTH
-            );
+            int width = canvas.getWidth();
+            int height = canvas.getHeight();
 
+            g.setColor(Color.WHITE);
+            g.clearRect(0, 0, width, height);
+            style.paint((Graphics2D) g, width, height);
             g.clearRect(mouseX, mouseY, 1, 1);
         }
     };
 
-    private Point mouseDownCompCoords = null;
+    private final NativeMouseInputListener holeListener = new NativeMouseInputListener() {
+        @Override
+        public void nativeMouseMoved(NativeMouseEvent e) {
+            Point pt = e.getPoint();
+            SwingUtilities.convertPointFromScreen(pt, canvas);
+
+            mouseX = (int) pt.getX();
+            mouseY = (int) pt.getY();
+            frame.repaint();
+        }
+
+        @Override
+        public void nativeMouseDragged(NativeMouseEvent e) {
+            this.nativeMouseMoved(e);
+        };
+    };
+
+    private final NativeKeyListener shiftListener = new NativeKeyListener() {
+        @Override
+        public void nativeKeyPressed(NativeKeyEvent e) {
+            SwingUtilities.invokeLater(() -> {
+                if (e.getKeyCode() == NativeKeyEvent.VC_SHIFT) {
+                    isMovable = true;
+                    frame.repaint();
+                }
+            });
+        }
+
+        @Override
+        public void nativeKeyReleased(NativeKeyEvent e) {
+            SwingUtilities.invokeLater(() -> {
+                if (e.getKeyCode() == NativeKeyEvent.VC_SHIFT) {
+                    isMovable = false;
+                    frame.repaint();
+                }
+            });
+        }
+    };
+
     private int mouseX = -1;
     private int mouseY = -1;
+    private boolean isMovable = false;
+
+    private Point mouseDownCompCoords = null;
 
     private @Getter @Setter LightStyle style = LightStyle.FULL;
-    private float opacity = .75f;
 
     @SneakyThrows
     public MonitorLight() {
@@ -61,12 +141,14 @@ public class MonitorLight {
             this.frame.setLayout(new BorderLayout());
             this.frame.add(this.canvas, BorderLayout.CENTER);
 
-            this.frame.getRootPane().setBorder(BorderFactory.createMatteBorder(BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, Color.GRAY));
+            this.frame.getRootPane().setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 0), BORDER_WIDTH));
 
             this.frame.addMouseWheelListener(new MouseWheelListener() {
                 @Override
                 public void mouseWheelMoved(MouseWheelEvent e) {
-                    float newOpacity = opacity + (float) (e.getPreciseWheelRotation() * -1 / 10);
+                    if (!isMovable) return;
+
+                    float newOpacity = frame.getOpacity() + (float) (e.getPreciseWheelRotation() * -1 / 10);
 
                     if (newOpacity > 1) {
                         newOpacity = 1;
@@ -74,7 +156,7 @@ public class MonitorLight {
                         newOpacity = .25f;
                     }
 
-                    opacity = newOpacity;
+                    frame.setOpacity(newOpacity);
                     frame.repaint();
                 }
             });
@@ -87,12 +169,14 @@ public class MonitorLight {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
+                    if (!isMovable) return;
                     mouseDownCompCoords = e.getPoint();
                 }
             });
             this.frame.addMouseMotionListener(new MouseAdapter() {
                 @Override
                 public void mouseDragged(MouseEvent e) {
+                    if (!isMovable) return;
                     if (mouseDownCompCoords == null) return;
                     if (frame.getCursor() != DRAG_CURSOR) return; // Stupid check to get around ComponentResizer.
 
@@ -107,14 +191,9 @@ public class MonitorLight {
             this.frame.setCursor(DRAG_CURSOR);
 
             this.canvas.setCursor(Cursor.getDefaultCursor());
-            this.canvas.addMouseMotionListener(new MouseAdapter() {
-                @Override
-                public void mouseMoved(MouseEvent e) {
-                    mouseX = e.getX();
-                    mouseY = e.getY();
-                    frame.repaint();
-                }
-            });
+            GlobalScreen.addNativeMouseMotionListener(this.holeListener);
+
+            GlobalScreen.addNativeKeyListener(shiftListener);
 
             ComponentResizer cr = new ComponentResizer();
             cr.registerComponent(this.frame);
@@ -123,8 +202,9 @@ public class MonitorLight {
     }
 
     public void setOpacity(float opacity) {
-        this.opacity = opacity;
-        SwingUtilities.invokeLater(canvas::repaint);
+        SwingUtilities.invokeLater(() -> {
+            this.frame.setOpacity(opacity);
+        });
     }
 
     @SneakyThrows
@@ -143,8 +223,10 @@ public class MonitorLight {
     }
 
     @Override
-    protected void finalize() throws Throwable {
+    public void close() {
         this.frame.dispose();
+        GlobalScreen.removeNativeMouseMotionListener(this.holeListener);
+        GlobalScreen.removeNativeKeyListener(shiftListener);
     }
 
 }
