@@ -36,18 +36,6 @@ public class MonitorLight implements Closeable {
     private static final int BORDER_WIDTH = 15;
     private static final Color BORDER_COLOR = new Color(200, 200, 200);
 
-    static {
-        if (Platform.osDistribution != OSDistribution.WINDOWS_NT) {
-            throw new RuntimeException("MonitorLight is only supported on windows.");
-        }
-
-        try {
-            GlobalScreen.registerNativeHook();
-        } catch (NativeHookException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private final JFrame frame = new JFrame("Casterlabs Caffeinated Light") {
         private static final long serialVersionUID = 913917615526213056L;
 
@@ -132,6 +120,10 @@ public class MonitorLight implements Closeable {
 
     @SneakyThrows
     public MonitorLight() {
+        if (Platform.osDistribution != OSDistribution.WINDOWS_NT) {
+            throw new RuntimeException("MonitorLight is only supported on windows.");
+        }
+
         SwingUtilities.invokeAndWait(() -> {
             this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             this.frame.setUndecorated(true);
@@ -191,14 +183,20 @@ public class MonitorLight implements Closeable {
             this.frame.setCursor(DRAG_CURSOR);
 
             this.canvas.setCursor(Cursor.getDefaultCursor());
-            GlobalScreen.addNativeMouseMotionListener(this.holeListener);
-
-            GlobalScreen.addNativeKeyListener(shiftListener);
 
             ComponentResizer cr = new ComponentResizer();
             cr.registerComponent(this.frame);
             cr.setMinimumSize(new Dimension(100, 100));
         });
+
+        try {
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException e) {
+            throw new RuntimeException(e);
+        }
+
+        GlobalScreen.addNativeMouseMotionListener(this.holeListener);
+        GlobalScreen.addNativeKeyListener(this.shiftListener);
     }
 
     public void setOpacity(float opacity) {
@@ -226,7 +224,10 @@ public class MonitorLight implements Closeable {
     public void close() {
         this.frame.dispose();
         GlobalScreen.removeNativeMouseMotionListener(this.holeListener);
-        GlobalScreen.removeNativeKeyListener(shiftListener);
+        GlobalScreen.removeNativeKeyListener(this.shiftListener);
+        try {
+            GlobalScreen.unregisterNativeHook();
+        } catch (NativeHookException ignored) {}
     }
 
 }
