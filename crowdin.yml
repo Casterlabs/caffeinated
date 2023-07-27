@@ -1,0 +1,3 @@
+files:
+  - source: app/CaffeinatedApp/src/main/ui/src/lib/locale
+    translation: app/CaffeinatedApp/src/main/ui/src/lib/locale
