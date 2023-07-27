@@ -1,8 +1,4 @@
-import { FALLBACK_LANGUAGE } from './translate.mjs';
 import { writable } from 'svelte/store';
-
-// Locale
-export const language = writable(FALLBACK_LANGUAGE);
 
 // Theme
 export const baseColor = writable('gray'); // Any of the radix colors

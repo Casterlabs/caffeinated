@@ -1,6 +1,5 @@
 <script>
 	import { t } from '$lib/translate.mjs';
-	import { language } from '$lib/app.mjs';
 	import { onDestroy } from 'svelte';
 
 	const BASE = 'Casterlabs-Caffeinated';
@@ -23,7 +22,6 @@
 		}
 	}
 
-	$: language, recalculateTitle();
 	$: title, recalculateTitle();
 
 	onDestroy(() => {

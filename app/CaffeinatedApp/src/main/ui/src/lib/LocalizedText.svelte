@@ -1,6 +1,6 @@
 <script>
 	import createConsole from '$lib/console-helper.mjs';
-	import { language, emojiProvider, matchAndReturnEmojiHTML } from '$lib/app.mjs';
+	import { emojiProvider, matchAndReturnEmojiHTML } from '$lib/app.mjs';
 	import { translate } from '$lib/translate.mjs';
 	import { tick } from 'svelte';
 
@@ -14,15 +14,13 @@
 
 	let contents = [];
 
-	async function render(lang) {
-		if (!lang) return;
-
-		const { result, usedFallback } = translate(lang, key, opts, false);
+	async function render() {
+		const { result, usedFallback } = translate(key, opts, false);
 		let newContents;
 
 		if (usedFallback) {
 			newContents = [
-				`<span style="background: red" title="NO TRANSLATION: ${key}">${result}</span>`
+				`<span style="x-background: red" title="NO TRANSLATION: ${key}">${result}</span>`
 			];
 		} else if (!result) {
 			newContents = [];
@@ -66,11 +64,10 @@
 	}
 
 	// Rerender on change
-	$: key, render($language);
-	$: opts, render($language);
-	$: slotContents, render($language);
-	$: $emojiProvider, render($language);
-	language.subscribe(render);
+	$: key, render();
+	$: opts, render();
+	$: slotContents, render();
+	$: $emojiProvider, render();
 </script>
 
 <div style="display: none;" aria-hidden="true">
