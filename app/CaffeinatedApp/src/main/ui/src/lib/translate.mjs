@@ -16,7 +16,8 @@ const console = createConsole("translate");
 let currentLang;
 
 export const supportedLanguages = {
-    "en-US": "English (United States)"
+    "en-US": "English (United States)",
+    "id-ID": "Indonesia",
 };
 
 language.subscribe(async (language) => {
