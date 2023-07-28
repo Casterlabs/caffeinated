@@ -1,5 +1,5 @@
 {
-	"meta.name": "Indonesia",
+	"meta.name": "Bahasa Indonesia",
 	"meta.code": "id-ID",
 	"meta.flag": "🇮🇩",
 	"meta.direction": "ltr",
@@ -156,6 +156,7 @@
 	"page.settings.about": "Tentang",
 	"page.settings.about.enable_unsafe": "Hidupkan pengaturan bodoh yang tidak aman",
 	"page.settings.about.enable_alternate_themes": "Gunakan tema alternatif",
+	"page.settings.about.translated_by": "Translated by: {names}",
 	"chat.viewer": "Percakapan",
 	"chat.viewer.send_message": "Kirim",
 	"chat.viewer.send_message.placeholder": "Kirim sebuah pesan",

@@ -19,7 +19,7 @@ let currentLang;
 
 export const supportedLanguages = {
     "en-US": "English (United States)",
-    "id-ID": "Indonesia",
+    "id-ID": "Bahasa Indonesia",
 };
 
 language.subscribe(async (language) => {
