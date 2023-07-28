@@ -27,7 +27,7 @@
                 let vars = {};
 
                 location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
-                    vars[key] = value;
+                    vars[key] = decodeURIComponent(value);
                 });
 
                 return vars;
