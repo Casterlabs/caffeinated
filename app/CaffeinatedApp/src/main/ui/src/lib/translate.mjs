@@ -2,6 +2,8 @@ import { writable, get } from 'svelte/store';
 import { language } from "$lib/app.mjs";
 import createConsole from "./console-helper.mjs";
 
+import BASE_TRANSLATION from "$lib/locale/en-US.json";
+
 export const currentLocale = writable(null); // "en-US", etc
 
 const console = createConsole("translate");
@@ -28,7 +30,12 @@ language.subscribe(async (language) => {
 
     if (language == get(currentLocale)) return;
 
-    currentLang = (await import(`$lib/locale/${language}.json`)).default;
+    const newLocale = (await import(`$lib/locale/${language}.json`)).default;
+    currentLang = {
+        ...BASE_TRANSLATION,
+        ...newLocale
+    };
+
     console.debug("Loaded lang:", currentLang);
     currentLocale.set(language);
 })
