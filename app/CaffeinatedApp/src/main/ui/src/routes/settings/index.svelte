@@ -3,6 +3,7 @@
 	import Switch from '$lib/ui/Switch.svelte';
 
 	import { supportedLanguages } from '$lib/translate.mjs';
+	import { language } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 	import RangeInput from '$lib/ui/RangeInput.svelte';
 	import Button from '$lib/ui/Button.svelte';
@@ -153,6 +154,17 @@
 		/>
 	</li>
 	<li class="py-4">
+		<SelectMenu
+			title="page.settings.appearance.language"
+			value={$preferences?.language}
+			options={supportedLanguages}
+			on:value={({ detail: value }) => {
+				setPreferenceItem('language', value);
+				// language.set(value); // Triggers a UI re-render.
+			}}
+		/>
+	</li>
+	<li class="py-4">
 		<div class="flex items-center justify-between w-full">
 			<div class="flex flex-col">
 				<p class="text-sm font-medium text-base-12" id="zoominput-label">
@@ -185,20 +197,6 @@
 			</span>
 		</div>
 	</li>
-	<!-- <li class="py-4">
-		<SelectMenu
-			title="page.settings.appearance.language"
-			value={$preferences?.language}
-			options={supportedLanguages.reduce(
-				(obj, curr) => ({
-					...obj,
-					[curr.code]: `${curr.name}`
-				}),
-				{}
-			)}
-			on:value={({ detail: value }) => setPreferenceItem('language', value)}
-		/>
-	</li> -->
 	<li class="py-4">
 		<Switch
 			title="page.settings.appearance.close_to_tray"

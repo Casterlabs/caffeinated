@@ -43,8 +43,10 @@
 </svelte:head>
 
 <CSSIntermediate>
-	{#if $currentLocale}
-		<!-- Stupid decision. -->
-		<slot />
-	{/if}
+	{#key $currentLocale}
+		{#if $currentLocale}
+			<!-- Stupid decision. -->
+			<slot />
+		{/if}
+	{/key}
 </CSSIntermediate>
