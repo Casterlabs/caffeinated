@@ -21,7 +21,9 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
+import co.casterlabs.caffeinated.util.network.InterfaceUtil;
 import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.emoji.generator.WebUtil;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
@@ -45,6 +47,7 @@ import xyz.e3ndr.reflectionlib.ReflectionLib;
 @Getter
 public class PluginIntegration extends JavascriptObject {
     private static final File pluginsDir = new File(CaffeinatedApp.appDataDir, "plugins");
+    private static final String addressesStringList = String.join(",", InterfaceUtil.getLocalIpAddresses());
 
     private PluginsHandler plugins = new PluginsHandler();
 
@@ -294,8 +297,11 @@ public class PluginIntegration extends JavascriptObject {
     @JavascriptFunction
     public void copyWidgetUrl(@NonNull String widgetId) {
         WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+        String url = handle.getUrl();
+        url += "&addresses=";
+        url += WebUtil.encodeURIComponent(addressesStringList);
 
-        CaffeinatedApp.getInstance().copyText(handle.getUrl(), "Copied link to clipboard");
+        CaffeinatedApp.getInstance().copyText(url, "Copied link to clipboard");
     }
 
     @JavascriptGetter("loadedPlugins")
