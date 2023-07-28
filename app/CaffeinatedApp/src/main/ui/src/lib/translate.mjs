@@ -1,5 +1,9 @@
-
+import { writable, get } from 'svelte/store';
+import { language } from "$lib/app.mjs";
 import createConsole from "./console-helper.mjs";
+
+export const currentLocale = writable(null); // "en-US", etc
+
 const console = createConsole("translate");
 
 // ----------------------------------------------------------------
@@ -12,15 +16,21 @@ const console = createConsole("translate");
 let currentLang;
 
 export const supportedLanguages = {
-    "en": "English"
+    "en-US": "English (United States)"
 };
 
-if (typeof Caffeinated != "undefined") {
-    Caffeinated.UI.preferences.then(async ({ language }) => {
-        currentLang = (await import(`$lib/locale/${language}.json`)).default;
-        console.debug("Loaded lang:", currentLang)
-    });
-}
+language.subscribe(async (language) => {
+    if (!language) {
+        currentLang = null;
+        return;
+    }
+
+    if (language == get(currentLocale)) return;
+
+    currentLang = (await import(`$lib/locale/${language}.json`)).default;
+    console.debug("Loaded lang:", currentLang);
+    currentLocale.set(language);
+})
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

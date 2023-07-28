@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 
+export const language = writable(null); // "en-US", etc
+
 // Theme
 export const baseColor = writable('gray'); // Any of the radix colors
 export const primaryColor = writable('gray'); // Any of the radix colors

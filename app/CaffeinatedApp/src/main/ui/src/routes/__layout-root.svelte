@@ -11,6 +11,7 @@
 	import * as Currencies from '$lib/currencies.mjs';
 
 	import { icon } from '$lib/app.mjs';
+	import { currentLocale } from '$lib/translate.mjs';
 
 	onMount(() => {
 		appShim();
@@ -42,5 +43,8 @@
 </svelte:head>
 
 <CSSIntermediate>
-	<slot />
+	{#if $currentLocale}
+		<!-- Stupid decision. -->
+		<slot />
+	{/if}
 </CSSIntermediate>
