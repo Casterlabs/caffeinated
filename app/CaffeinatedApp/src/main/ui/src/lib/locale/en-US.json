@@ -156,6 +156,7 @@
 	"page.settings.about": "About",
 	"page.settings.about.enable_unsafe": "Enable Stupidly Unsafe Settings",
 	"page.settings.about.enable_alternate_themes": "Use Alternate Themes",
+	"page.settings.about.translated_by": "Translated by: {names}",
 	"chat.viewer": "Chat",
 	"chat.viewer.send_message": "Send",
 	"chat.viewer.send_message.placeholder": "Send a message",
