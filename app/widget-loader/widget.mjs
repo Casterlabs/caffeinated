@@ -15,7 +15,7 @@ const queryParams = (() => {
 
 const { pluginId, widgetId, authorization } = queryParams;
 const port = queryParams.port || "8092";
-const address = queryParams.address || "127.0.0.1";
+const address = queryParams.validAddress || "localhost";
 const widgetMode = (queryParams.mode || "WIDGET").toUpperCase();
 
 export function deepFreeze(object) {
