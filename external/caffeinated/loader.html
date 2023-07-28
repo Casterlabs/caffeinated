@@ -92,11 +92,16 @@
                         console.debug("[widgets.casterlabs.co loader] Successfully tested address, connecting to that.");
 
                         connectToRealtime(address);
-                        break;
+                        return;
                     } catch (e) {
                         console.debug("[widgets.casterlabs.co loader] Address failed:", e);
                     }
                 }
+				
+                console.debug("[widgets.casterlabs.co loader] Couldn't connect to Caffeinated, retrying in 3s.");
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
             })();
         </script>
     </footer>
