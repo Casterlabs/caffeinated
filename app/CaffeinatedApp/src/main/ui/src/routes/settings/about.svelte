@@ -2,6 +2,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { icon, iconColor } from '$lib/app.mjs';
+	import { t } from '$lib/translate.mjs';
 
 	const buildInfo = st || Caffeinated.svelte('buildInfo');
 	const preferences = st || Caffeinated.UI.svelte('preferences');
@@ -38,6 +39,15 @@
 		<LocalizedText key="app.love" />
 		<br />
 		<LocalizedText key="app.copyright" opts={{ year: new Date().getFullYear() }} />
+
+		{#if t('meta.translators') != 'meta.translators'}
+			<br />
+			<br />
+			<LocalizedText
+				key="page.settings.about.translated_by"
+				opts={{ names: t('meta.translators') }}
+			/>
+		{/if}
 
 		<br />
 		<br />
