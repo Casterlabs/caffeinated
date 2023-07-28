@@ -35,26 +35,69 @@
 
             const { pluginId, widgetId, authorization } = queryParams;
             const port = queryParams.port || "8092";
-            const address = queryParams.address || "127.0.0.1";
+            const addresses = (queryParams.addresses || "localhost").split(",");
 
-            const conn = new Conn(`ws://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/realtime/heartbeat?authorization=${authorization}`);
+            if (queryParams.address) {
+                // Old style.
+                addresses.push(queryParams.address);
+            }
 
-            conn.on("init", () => {
-                const sandboxFrame = document.createElement("iframe");
-                sandboxFrame.src = `http://${address}:${port}/api/plugin/widget/loader/widget.html${location.search}`;
+            function connectToRealtime(address) {
+                console.debug("[widgets.casterlabs.co loader] Connecting to realtime on:", `ws://${address}:${port}`);
+                const conn = new Conn(`ws://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/realtime/heartbeat?authorization=${authorization}`);
 
-                document.body.appendChild(sandboxFrame);
-            });
+                conn.on("init", () => {
+                    console.debug("[widgets.casterlabs.co loader] Successfully connected to realtime, loading iframe.");
+                    const sandboxFrame = document.createElement("iframe");
+                    sandboxFrame.src = `http://${address}:${port}/api/plugin/widget/loader/widget.html${location.search}&validAddress=${encodeURIComponent(address)}`;
 
-            // We completely reset the widget everytime it loses connection.
-            conn.on("close", () => {
-                setTimeout(() => {
-                    location.reload();
-                }, 2500);
-            });
+                    document.body.appendChild(sandboxFrame);
+                });
 
-            // Connect.
-            conn.connect();
+                // We completely reset the widget everytime it loses connection.
+                conn.on("close", () => {
+                    console.debug("[widgets.casterlabs.co loader] Lost connection to Caffeinated, retrying in 3s.");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                });
+
+                // Connect.
+                conn.connect();
+            }
+
+            function testAddress(address) {
+                return new Promise((resolve, reject) => {
+                    const specialCode = Math.random().toString(28);
+
+                    fetch(`http://${address}:${port}/api/test/${specialCode}`)
+                        .then((response) => response.text())
+                        .then((result) => {
+                            if (result == specialCode) {
+                                resolve();
+                            } else {
+                                throw "Invalid response: " + result;
+                            }
+                        })
+                        .catch(reject);
+                });
+            }
+
+            (async () => {
+                for (const address of addresses) {
+                    try {
+                        console.debug("[widgets.casterlabs.co loader] Trying address:", `http://${address}:${port}`);
+                        await testAddress(address);
+                        // Success!
+                        console.debug("[widgets.casterlabs.co loader] Successfully tested address, connecting to that.");
+
+                        connectToRealtime(address);
+                        break;
+                    } catch (e) {
+                        console.debug("[widgets.casterlabs.co loader] Address failed:", e);
+                    }
+                }
+            })();
         </script>
     </footer>
 </html>
