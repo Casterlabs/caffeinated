@@ -1,7 +1,9 @@
 package co.casterlabs.koi.api.types.events.rich;
 
 import co.casterlabs.rakurai.json.annotating.JsonClass;
-import co.casterlabs.rakurai.json.annotating.JsonField;
+import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
+import co.casterlabs.rakurai.json.element.JsonElement;
+import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,12 +28,14 @@ public class Donation {
 
     private String image;
 
-    @Deprecated
-    @JsonField("animated_image")
-    private String animatedImage;
+    @JsonSerializationMethod("animated_image")
+    private JsonElement $serialize_animated_image() { // This is deprecated.
+        return new JsonString(this.image);
+    }
 
     public static enum DonationType {
         CASTERLABS_TEST,
+        OTHER, // Never exclude other!
 
         CAFFEINE_PROP,
 
