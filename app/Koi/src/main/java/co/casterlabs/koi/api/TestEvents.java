@@ -22,7 +22,7 @@ import xyz.e3ndr.reflectionlib.ReflectionLib;
 @SuppressWarnings("deprecation")
 public class TestEvents {
 
-    private static User testUser = new User(
+    private static final User testUser = new User(
         "CASTERLABS",
         "CASTERLABS",
         UserPlatform.CASTERLABS_SYSTEM,
@@ -83,8 +83,9 @@ public class TestEvents {
 
                 result = KoiEventType.get(
                     Rson.DEFAULT.fromJson(
-                        "{\"event_type\":\"DONATION\",\"upvotes\":0,\"visible\":true,\"is_highlighted\":false,\"mentions\":[],\"links\":[],\"sender\":{SENDER},\"message\":\"Have some candy!\",\"id\":\"-1\",\"meta_id\":\"-1\",\"emotes\":{},\"external_emotes\":{},\"donations\":[{\"type\":\"CASTERLABS_TEST\",\"name\":\"Test Donation\",\"currency\":\"{CURRENCY}\",\"amount\":0,\"image\":\"{IMAGE}\",\"animated_image\":\"{IMAGE}\"}]}"
+                        "{\"event_type\":\"DONATION\",\"upvotes\":0,\"visible\":true,\"is_highlighted\":false,\"mentions\":[],\"links\":[],\"sender\":{SENDER},\"streamer\":{STREAMER},\"message\":\"Have some candy!\",\"id\":\"-1\",\"meta_id\":\"-1\",\"emotes\":{},\"external_emotes\":{},\"donations\":[{\"type\":\"CASTERLABS_TEST\",\"name\":\"Test Donation\",\"currency\":\"{CURRENCY}\",\"amount\":0,\"image\":\"{IMAGE}\",\"animated_image\":\"{IMAGE}\"}]}"
                             .replace("{SENDER}", Rson.DEFAULT.toJson(testUser).toString())
+                            .replace("{STREAMER}", Rson.DEFAULT.toJson(streamer).toString())
                             .replace("{CURRENCY}", currency)
                             .replace("{IMAGE}", image),
                         JsonObject.class
@@ -101,7 +102,7 @@ public class TestEvents {
                 break;
 
             case SUBSCRIPTION:
-                result = new SubscriptionEvent(testUser, 0, null, SubscriptionType.SUB, SubscriptionLevel.UNKNOWN);
+                result = new SubscriptionEvent(streamer, testUser, null, 0, SubscriptionType.SUB, SubscriptionLevel.UNKNOWN);
                 break;
 
             case RICH_MESSAGE:

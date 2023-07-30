@@ -5,12 +5,16 @@ import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
 import co.casterlabs.emoji.generator.WebUtil;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
+import co.casterlabs.koi.api.types.events.SubscriptionEvent;
+import co.casterlabs.koi.api.types.events.SubscriptionEvent.SubscriptionLevel;
+import co.casterlabs.koi.api.types.events.SubscriptionEvent.SubscriptionType;
 import co.casterlabs.koi.api.types.events.rich.ChatFragment;
 import co.casterlabs.koi.api.types.events.rich.Donation;
 import co.casterlabs.koi.api.types.events.rich.Donation.DonationType;
@@ -43,20 +47,18 @@ public class KofiApi extends JavascriptObject implements KinokoV1Listener {
 
         switch (json.getString("type")) {
             case "Donation": {
-                String avatar = getRandomAvatar();
+                User sender = new User(
+                    json.getString("from_name"), json.getString("from_name"), UserPlatform.CUSTOM_INTEGRATION,
+                    Collections.emptyList(), Collections.emptyList(),
+                    "#00aff1", json.getString("from_name"), json.getString("from_name"), "", json.getString("url"), getRandomAvatar(),
+                    0, 0
+                );
 
                 ChatFragment message = new TextFragment(json.getString("message"));
                 Donation donation = new Donation(
                     DonationType.OTHER, "Donation",
                     json.getString("currency"), json.getNumber("amount").doubleValue(), 1,
-                    avatar
-                );
-
-                User sender = new User(
-                    json.getString("from_name"), json.getString("from_name"), UserPlatform.CUSTOM_INTEGRATION,
-                    Collections.emptyList(), Collections.emptyList(),
-                    "#00aff1", json.getString("from_name"), json.getString("from_name"), "", json.getString("url"), avatar,
-                    0, 0
+                    sender.getImageLink()
                 );
 
                 RichMessageEvent rich = new RichMessageEvent(
@@ -71,10 +73,29 @@ public class KofiApi extends JavascriptObject implements KinokoV1Listener {
             }
 
             case "Subscription": {
+                User subscriber = new User(
+                    json.getString("from_name"), json.getString("from_name"), UserPlatform.CUSTOM_INTEGRATION,
+                    Collections.emptyList(), Collections.emptyList(),
+                    "#00aff1", json.getString("from_name"), json.getString("from_name"), "", json.getString("url"), getRandomAvatar(),
+                    0, 0
+                );
+
+                CaffeinatedApp.getInstance().getKoi().onEvent(
+                    new SubscriptionEvent(
+                        KOFI_STREAMER, subscriber, null,
+                        1,
+                        json.getBoolean("is_first_subscription_payment") ? SubscriptionType.SUB : SubscriptionType.RESUB,
+                        SubscriptionLevel.UNKNOWN
+                    )
+                );
                 break;
             }
 
             case "Shop Order": {
+                CaffeinatedApp.getInstance().notify(
+                    String.format("%s just made an order on your Ko-fi shop!", json.getString("from_name")),
+                    NotificationType.INFO
+                );
                 break;
             }
         }
@@ -82,7 +103,7 @@ public class KofiApi extends JavascriptObject implements KinokoV1Listener {
 
     @Override
     public void onOpen() {
-        this.connection.getLogger().setCurrentLevel(LogLevel.INFO);
+        this.connection.getLogger().setCurrentLevel(LogLevel.ALL);
     }
 
     @SneakyThrows

@@ -31,13 +31,7 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
 
     @KoiEventHandler
     public void onDonation(DonationEvent e) {
-        // Images.
         Donation donation = e.getDonations().get(0);
-
-        String[] customImages = {
-                donation.getImage(),
-                donation.getAnimatedImage()
-        };
 
         // Generate the title html.
         String title = String.format("<span class='highlight'>%s</span>", e.getSender().getDisplayname());
@@ -49,7 +43,7 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
             ttsText = ttsText.replace(link, "(link)");
         }
 
-        this.queueAlert(title, e, customImages, e.getMessage());
+        this.queueAlert(title, e, donation.getImage(), e.getMessage());
     }
 
     @Override
@@ -61,7 +55,7 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
                 .addItem(WidgetSettingsItem.asCheckbox("enabled", "Show Image", true));
 
             if (this.settings().getBoolean("image.enabled", true)) {
-                imageSection.addItem(WidgetSettingsItem.asDropdown("source", "Source", "Donation Image (Animated)", "Donation Image", "Donation Image (Animated)", "Custom Image"));
+                imageSection.addItem(WidgetSettingsItem.asDropdown("source", "Source", "Donation Image", "Custom Image"));
 
                 if (this.settings().getString("image.source", "").equals("Custom Image")) {
                     imageSection.addItem(WidgetSettingsItem.asFile("file", "Image File", "image", "video"));
@@ -75,22 +69,17 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
     }
 
     @Override
-    protected @Nullable String getImage(@Nullable String[] customImages) {
-        if ((customImages != null) &&
-            (customImages.length == 2)) {
-
+    protected @Nullable String getImage(@Nullable String customImage) {
+        if (customImage != null) {
             switch (this.settings().getString("image.source", "")) {
+                case "Donation Image (Animated)":
                 case "Donation Image": {
-                    return customImages[0];
-                }
-
-                case "Donation Image (Animated)": {
-                    return customImages[1];
+                    return customImage;
                 }
             }
         }
 
-        return super.getImage(customImages);
+        return super.getImage(customImage);
     }
 
     @Override

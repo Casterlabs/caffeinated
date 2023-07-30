@@ -123,11 +123,11 @@ public abstract class GenericAlert extends Widget {
         return "/alert.html";
     }
 
-    public void queueAlert(@NonNull String titleHtml, @Nullable ChatEvent chatEvent, @Nullable String[] customImages, @Nullable String ttsText) {
-        this.queueAlert(titleHtml, null, chatEvent, customImages, ttsText);
+    public void queueAlert(@NonNull String titleHtml, @Nullable ChatEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
+        this.queueAlert(titleHtml, null, chatEvent, customImage, ttsText);
     }
 
-    public void queueAlert(@NonNull String titleHtml, @Nullable String titleHtml2, @Nullable ChatEvent chatEvent, @Nullable String[] customImages, @Nullable String ttsText) {
+    public void queueAlert(@NonNull String titleHtml, @Nullable String titleHtml2, @Nullable ChatEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
         String ttsAudio = null;
 
         // Generate the base64 audio data for TTS if enabled.
@@ -165,7 +165,7 @@ public abstract class GenericAlert extends Widget {
             new JsonObject()
                 .put("title", titleHtml)
                 .put("chatEvent", Rson.DEFAULT.toJson(chatEvent))
-                .put("image", this.getImage(customImages))
+                .put("image", this.getImage(customImage))
                 .put("audio", this.getAudio())
                 .put("ttsAudio", ttsAudio)
         );
@@ -175,7 +175,7 @@ public abstract class GenericAlert extends Widget {
         return Collections.emptyList();
     }
 
-    protected @Nullable String getImage(@Nullable String[] customImages) {
+    protected @Nullable String getImage(@Nullable String customImage) {
         return this.settings().getString("image.file");
     }
 

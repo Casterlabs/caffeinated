@@ -1,9 +1,9 @@
 package co.casterlabs.koi.api.types.events;
 
+import co.casterlabs.koi.api.types.user.SimpleProfile;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +12,13 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @JsonClass(exposeAll = true)
 @EqualsAndHashCode(callSuper = true)
 public class SubscriptionEvent extends KoiEvent {
     private User subscriber;
+
+    @JsonField("gift_recipient")
+    private User giftRecipient;
 
     /**
      * @deprecated This is ultimately unknowable on some platforms. Be mindful of
@@ -24,9 +26,6 @@ public class SubscriptionEvent extends KoiEvent {
      */
     @Deprecated
     private int months;
-
-    @JsonField("gift_recipient")
-    private User giftRecipient;
 
     @JsonField("sub_type")
     private SubscriptionType subType;
@@ -37,6 +36,15 @@ public class SubscriptionEvent extends KoiEvent {
     @Override
     public KoiEventType getType() {
         return KoiEventType.SUBSCRIPTION;
+    }
+
+    public SubscriptionEvent(SimpleProfile streamer, User subscriber, User giftRecipient, int months, SubscriptionType subType, SubscriptionLevel subLevel) {
+        this.streamer = streamer;
+        this.subscriber = subscriber;
+        this.giftRecipient = giftRecipient;
+        this.months = months;
+        this.subType = subType;
+        this.subLevel = subLevel;
     }
 
     public static enum SubscriptionType {
