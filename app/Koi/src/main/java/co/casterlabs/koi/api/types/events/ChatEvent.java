@@ -1,13 +1,16 @@
 package co.casterlabs.koi.api.types.events;
 
+import java.util.Collections;
 import java.util.List;
 
+import co.casterlabs.koi.api.types.user.SimpleProfile;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -16,6 +19,7 @@ import lombok.ToString;
 @Deprecated
 @Getter
 @ToString
+@NoArgsConstructor
 @JsonClass(exposeAll = true)
 @EqualsAndHashCode(callSuper = true)
 public class ChatEvent extends MessageMeta {
@@ -34,6 +38,18 @@ public class ChatEvent extends MessageMeta {
     private JsonObject emotes;
     @JsonField("external_emotes")
     private JsonObject externalEmotes;
+
+    ChatEvent(SimpleProfile streamer, User sender, String id, String message) {
+        this.streamer = streamer;
+        this.sender = sender;
+        this.id = id;
+        this.metaId = id;
+        this.message = message;
+        this.mentions = Collections.emptyList();
+        this.links = Collections.emptyList();
+        this.emotes = new JsonObject();
+        this.externalEmotes = new JsonObject();
+    }
 
     @Override
     public KoiEventType getType() {

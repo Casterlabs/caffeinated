@@ -2,9 +2,13 @@ package co.casterlabs.koi.api.types.events.rich;
 
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonClass(exposeAll = true)
 public class Donation {
     private Donation.DonationType type;
