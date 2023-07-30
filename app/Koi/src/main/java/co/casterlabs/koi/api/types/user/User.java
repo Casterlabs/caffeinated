@@ -39,17 +39,17 @@ public class User extends SimpleProfile {
     @JsonField("subscriber_count")
     private long subCount = -1;
 
-    @Deprecated
     public User(
-        String UPID, String id, String channelId, UserPlatform platform,
-        List<UserRoles> roles, List<String> badges, String color, String username,
-        String displayname, String bio, String link, String imageLink, int followersCount, int subCount
+        String id, String channelId, UserPlatform platform,
+        List<UserRoles> roles, List<String> badges,
+        String color, String username, String displayname, String bio, String link, String imageLink,
+        int followersCount, int subCount
     ) {
         this(roles, badges, color, username, displayname, bio, link, imageLink, followersCount, subCount);
-        this.UPID = UPID;
         this.id = id;
         this.channelId = channelId;
         this.platform = platform;
+        this.UPID = this.id + ';' + this.platform.name();
     }
 
     public static enum UserRoles {

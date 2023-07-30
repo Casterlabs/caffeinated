@@ -23,7 +23,6 @@ import xyz.e3ndr.reflectionlib.ReflectionLib;
 public class TestEvents {
 
     private static User testUser = new User(
-        "CASTERLABS;CASTERLABS_SYSTEM",
         "CASTERLABS",
         "CASTERLABS",
         UserPlatform.CASTERLABS_SYSTEM,
