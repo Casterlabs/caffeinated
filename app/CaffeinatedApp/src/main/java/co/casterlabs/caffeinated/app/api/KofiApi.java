@@ -37,6 +37,7 @@ public class KofiApi extends JavascriptObject implements KinokoV1Listener {
     public void onMessage(String raw) {
         if (raw.startsWith("data=")) {
             raw = raw.substring("data=".length());
+            raw = WebUtil.decodeURIComponent(raw);
         }
 
         JsonObject json = Rson.DEFAULT.fromJson(raw, JsonObject.class);
@@ -103,7 +104,7 @@ public class KofiApi extends JavascriptObject implements KinokoV1Listener {
 
     @Override
     public void onOpen() {
-        this.connection.getLogger().setCurrentLevel(LogLevel.ALL);
+        this.connection.getLogger().setCurrentLevel(LogLevel.INFO);
     }
 
     @SneakyThrows
