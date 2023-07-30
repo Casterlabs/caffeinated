@@ -2,12 +2,12 @@ package co.casterlabs.caffeinated.pluginsdk.kinoko;
 
 import java.io.Closeable;
 import java.net.URI;
-import java.net.URLEncoder;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.util.WebUtil;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -33,10 +33,9 @@ public class KinokoV1Connection implements Closeable {
 
             this.logger = new FastLogger(String.format("KinokoV1 (%s) %s", channel, typeString));
 
-            @SuppressWarnings("deprecation")
             String uri = String.format(
                 KINOKOV1_URL,
-                URLEncoder.encode(channel),
+                WebUtil.encodeURIComponent(channel),
                 typeString,
                 shouldProxy
             );
