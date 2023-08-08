@@ -18,10 +18,8 @@ const console = createConsole("translate");
 // All keys prefixed with `sr.` are for screen readers.
 let currentLang;
 
-export const supportedLanguages = {
-    "en-US": "English (United States)",
-    "id-ID": "Bahasa Indonesia",
-};
+import ___SUPPORTED_LANGUAGES from "$lib/locale/_index.json";
+export const supportedLanguages = ___SUPPORTED_LANGUAGES;
 
 language.subscribe(async (language) => {
     if (!language) {
