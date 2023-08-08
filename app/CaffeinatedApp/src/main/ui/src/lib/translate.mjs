@@ -3,6 +3,7 @@ import { language } from "$lib/app.mjs";
 import createConsole from "./console-helper.mjs";
 
 import BASE_TRANSLATION from "$lib/locale/en-US.json";
+const BASE_TRANSLATION_LOCALE = "en-US";
 
 export const currentLocale = writable(null); // "en-US", etc
 
@@ -30,14 +31,21 @@ language.subscribe(async (language) => {
 
     if (language == get(currentLocale)) return;
 
-    const newLocale = (await import(`$lib/locale/${language}.json`)).default;
-    currentLang = {
-        ...BASE_TRANSLATION,
-        ...newLocale
-    };
+    try {
 
-    console.debug("Loaded lang:", currentLang);
-    currentLocale.set(language);
+        const newLocale = (await import(`$lib/locale/${language}.json`)).default;
+        currentLang = {
+            ...BASE_TRANSLATION,
+            ...newLocale
+        };
+        console.debug("Loaded lang:", currentLang);
+
+        currentLocale.set(language);
+    } catch (e) {
+        console.error("An error occurred whilst loading lang, defaulting to en-US:\n\n", e);
+        currentLang = BASE_TRANSLATION;
+        currentLocale.set(BASE_TRANSLATION_LOCALE);
+    }
 })
 
 // ----------------------------------------------------------------
