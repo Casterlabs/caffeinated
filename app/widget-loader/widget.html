@@ -107,7 +107,7 @@
                 console.debug("Origin:", location.origin, "Plugin ID:", pluginId)
 
                 if (["http://localhost:3000", "http://localhost:3002"].includes(location.origin)) {
-                    if (["co.casterlabs.uidocks", "co.casterlabs.thirdparty.streamlabs"].includes(pluginId)) {
+                    if (["co.casterlabs.uidocks", "co.casterlabs.thirdparty.streamlabs", "co.casterlabs.thirdparty.kofi"].includes(pluginId)) {
                         sandboxFrame.src = `http://localhost:3000/$caffeinated-sdk-root$${basePath}`;
                     } else {
                         sandboxFrame.src = `http://localhost:3002/$caffeinated-sdk-root$${basePath}`;

@@ -33,3 +33,10 @@
 >
 	Streamlabs Integration
 </a>
+
+<a
+	class="text-link"
+	href="/$caffeinated-sdk-root$/settings/applet?id=co.casterlabs.thirdparty.kofi.settings.settings_applet"
+>
+	Ko-fi Integration
+</a>
