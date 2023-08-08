@@ -38,5 +38,9 @@ export default {
 	TIKTOK: {
 		name: 'TikTok (BETA)',
 		color: '#e5004e'
+	},
+	CUSTOM_INTEGRATION: {
+		name: 'Custom Integration 🔧',
+		color: '#00aff1'
 	}
 };
