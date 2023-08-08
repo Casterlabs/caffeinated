@@ -301,6 +301,10 @@
 				li.appendChild(messageTimestamp);
 				li.appendChild(messageContainer);
 
+				if (event.is_highlighted || event.donations?.length > 0) {
+					li.classList.add('my-0.5');
+				}
+
 				if (['VIEWER_JOIN', 'VIEWER_LEAVE'].includes(event.event_type)) {
 					li.classList.add('viewer-joinleave');
 				}
