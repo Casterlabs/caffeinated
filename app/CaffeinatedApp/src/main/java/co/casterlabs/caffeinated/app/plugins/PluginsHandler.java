@@ -310,7 +310,11 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
         }
 
         for (Widget widget : new ArrayList<>(pluginWidgetsField)) {
-            this.destroyWidget(widget.getId());
+            try {
+                this.destroyWidget(widget.getId());
+            } catch (Throwable t) {
+                logger.warn("An error occurred whilst destroying widget for unload:\n%s", t);
+            }
         }
 
         try {

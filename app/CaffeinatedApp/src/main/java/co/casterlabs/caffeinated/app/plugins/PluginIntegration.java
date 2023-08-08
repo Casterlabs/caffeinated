@@ -5,10 +5,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +21,7 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
+import co.casterlabs.caffeinated.util.collections.IdentityCollection;
 import co.casterlabs.caffeinated.util.network.InterfaceUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.emoji.generator.WebUtil;
@@ -50,10 +51,7 @@ public class PluginIntegration extends JavascriptObject {
     private static final String addressesStringList = String.join(",", InterfaceUtil.getLocalIpAddresses());
 
     private PluginsHandler plugins = new PluginsHandler();
-
-    @JavascriptValue(allowSet = false)
     private List<PluginContext> contexts = new ArrayList<>();
-
     private Cache<WidgetSettingsDetails> preferenceData;
 
     // Pointers to forward values from PluginsHandler.
@@ -64,6 +62,8 @@ public class PluginIntegration extends JavascriptObject {
     private final Collection<WidgetDetails> creatableWidgets = this.plugins.$creatableWidgets;
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private final Collection<WidgetHandle> widgets = this.plugins.$widgetHandles;
+    @JavascriptValue(allowSet = false, watchForMutate = true, value = "contexts")
+    private final Collection<PluginContext> contexts_f = new IdentityCollection<>(this.contexts);
 
     public PluginIntegration() {
         pluginsDir.mkdir();
@@ -155,25 +155,19 @@ public class PluginIntegration extends JavascriptObject {
 
     @JavascriptFunction
     public List<String> listFiles() throws Exception {
-        List<File> files = new LinkedList<>(
-            Arrays.asList(
-                pluginsDir.listFiles()
-            )
-        );
-
-        // Remove the files that belong to already loaded contexts.
-        for (PluginContext ctx : this.contexts) {
-            if (ctx.getFile() != null) {
-                files.remove(ctx.getFile());
-            }
-        }
-
-        // Grab the file names.
-        List<String> names = new ArrayList<>(files.size());
-
-        files.forEach(f -> names.add(f.getName()));
-
-        return names;
+        return Arrays.asList(pluginsDir.listFiles())
+            .parallelStream()
+            .filter((file) -> {
+                // Remove the files that belong to already loaded contexts.
+                for (PluginContext ctx : this.contexts) {
+                    if (ctx.getFile() != null) {
+                        return false;
+                    }
+                }
+                return true;
+            })
+            .map((file) -> file.getName()) // Get the name of the files.
+            .collect(Collectors.toList());
     }
 
     @JavascriptFunction
@@ -208,11 +202,11 @@ public class PluginIntegration extends JavascriptObject {
         assert ctx != null;
         assert ctx.getPluginType() == ContextType.PLUGIN : "You cannot unload this plugin.";
 
+        this.contexts.remove(ctx);
+
         for (String id : ctx.getPluginIds()) {
             this.plugins.unregisterPlugin(id);
         }
-
-        this.contexts.remove(ctx);
     }
 
     @JavascriptFunction

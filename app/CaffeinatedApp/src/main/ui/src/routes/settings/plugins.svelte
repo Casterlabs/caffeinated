@@ -5,6 +5,7 @@
 	import Button from '$lib/ui/Button.svelte';
 
 	import createConsole from '$lib/console-helper.mjs';
+	import { onMount } from 'svelte';
 
 	const console = createConsole('Settings/Plugins');
 
@@ -12,13 +13,16 @@
 	const contexts = st || Caffeinated.plugins.svelte('contexts');
 
 	$: contexts, $contexts && console.debug('Plugins Contexts:', $contexts);
-	$: contexts, $contexts && listFiles();
 
 	let files = [];
 
-	function listFiles() {
-		Caffeinated.plugins.listFiles().then((v) => (files = v));
-	}
+	onMount(() => {
+		const int = setInterval(async () => {
+			files = await Caffeinated.plugins.listFiles();
+		}, 500);
+
+		return () => clearInterval(int);
+	});
 </script>
 
 <ul class="space-y-2">
