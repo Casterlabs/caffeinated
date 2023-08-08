@@ -1,12 +1,13 @@
 <script>
-	import { onMount } from 'svelte';
-
-	let url = '';
-
-	onMount(() => {
-		Widget.on('url', (u) => (url = u));
-		console.log(Widget);
-	});
+	import SlimButton from '$lib/ui/SlimButton.svelte';
 </script>
 
-{url}
+Copy this URL into your <a
+	class="text-link underline"
+	href="https://ko-fi.com/manage/webhooks?src=casterlabs"
+	target="_blank"
+>
+	Ko-fi API Settings Page
+</a>
+
+<SlimButton on:click={() => window.Widget.emit('copyUrl')}>Click to copy</SlimButton>

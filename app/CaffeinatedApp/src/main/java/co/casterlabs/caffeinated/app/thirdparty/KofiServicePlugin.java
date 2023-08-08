@@ -23,7 +23,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.emoji.generator.WebUtil;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent.SubscriptionLevel;
@@ -127,7 +126,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
     public void onClose(boolean remote) {
         if (remote) {
             this.connection.connect(
-                this.getChannel(),
+                getChannel(),
                 true,
                 false
             );
@@ -140,21 +139,9 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
     @Override
     public void onAdopted() {}
 
-    public String getChannel() {
-        return String.format(
-            "caffeinated_api:%s:kofi",
-            CaffeinatedApp.getInstance().getAppPreferences().get().getDeveloperApiKey()
-        );
-    }
-
-    @JavascriptFunction
-    public String getUrl() {
-        return "https://api.casterlabs.co/v1/kinoko?channel=" + WebUtil.encodeURIComponent(this.getChannel());
-    }
-
     @Override
     public void onInit() {
-        this.getPlugins().registerWidget(this, StreamlabsUI.DETAILS, StreamlabsUI.class);
+        this.getPlugins().registerWidget(this, KofiUI.DETAILS, KofiUI.class);
         this.onClose(false);
     }
 
@@ -171,7 +158,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
         return "co.casterlabs.thirdparty.kofi";
     }
 
-    public static class StreamlabsUI extends Widget {
+    public static class KofiUI extends Widget {
         public static final WidgetDetails DETAILS = new WidgetDetails()
             .withNamespace("co.casterlabs.thirdparty.kofi.settings")
             .withType(WidgetType.SETTINGS_APPLET)
@@ -184,9 +171,12 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
 
         @Override
         public void onNewInstance(@NonNull WidgetInstance instance) {
-            try {
-                instance.emit("url", this.getUrl());
-            } catch (IOException ignored) {}
+            instance.on("copyUrl", () -> {
+                CaffeinatedApp.getInstance().copyText(
+                    "https://api.casterlabs.co/v1/kinoko?channel=" + WebUtil.encodeURIComponent(getChannel()),
+                    "Copied webhook URL to clipboard."
+                );
+            });
         }
 
     }
@@ -225,6 +215,13 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
 
     private static String getRandomAvatar() {
         return String.format("https://ko-fi.com/img/anon%d.png?v=1", ThreadLocalRandom.current().nextInt(0, 19));
+    }
+
+    private static String getChannel() {
+        return String.format(
+            "caffeinated_api:%s:kofi",
+            CaffeinatedApp.getInstance().getAppPreferences().get().getDeveloperApiKey()
+        );
     }
 
 }
