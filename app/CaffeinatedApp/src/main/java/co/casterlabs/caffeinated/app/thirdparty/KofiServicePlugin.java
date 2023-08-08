@@ -60,6 +60,8 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
             return; // Don't show, per Kofi requirements.
         }
 
+        this.getLogger().debug("Ko-fi event: %s", json);
+
         switch (json.getString("type")) {
             case "Donation": {
                 User sender = new User(
@@ -72,7 +74,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
                 ChatFragment message = new TextFragment(json.getString("message"));
                 Donation donation = new Donation(
                     DonationType.OTHER, "Donation",
-                    json.getString("currency"), json.getNumber("amount").doubleValue(), 1,
+                    json.getString("currency"), Double.parseDouble(json.getString("amount")), 1,
                     sender.getImageLink()
                 );
 
@@ -142,7 +144,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
     @Override
     public void onInit() {
         this.getPlugins().registerWidget(this, KofiUI.DETAILS, KofiUI.class);
-        this.onClose(false);
+        this.onClose(true);
     }
 
     @Override

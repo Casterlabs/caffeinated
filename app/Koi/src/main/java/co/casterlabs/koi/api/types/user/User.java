@@ -4,8 +4,6 @@ import java.util.List;
 
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,7 +11,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonClass(exposeAll = true)
 public class User extends SimpleProfile {
     private List<UserRoles> roles;
@@ -45,11 +42,20 @@ public class User extends SimpleProfile {
         String color, String username, String displayname, String bio, String link, String imageLink,
         int followersCount, int subCount
     ) {
-        this(roles, badges, color, username, displayname, bio, link, imageLink, followersCount, subCount);
         this.id = id;
         this.channelId = channelId;
         this.platform = platform;
         this.UPID = this.id + ';' + this.platform.name();
+        this.roles = roles;
+        this.badges = badges;
+        this.color = color;
+        this.username = username;
+        this.displayname = displayname;
+        this.bio = bio;
+        this.link = link;
+        this.imageLink = imageLink;
+        this.followersCount = followersCount;
+        this.subCount = subCount;
     }
 
     public static enum UserRoles {
