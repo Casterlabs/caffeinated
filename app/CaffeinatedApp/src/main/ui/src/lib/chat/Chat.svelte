@@ -329,9 +329,17 @@
 		}
 
 		if (playDingOnMessage) {
-			const audio = new Audio('/$caffeinated-sdk-root$/sounds/dink.mp3');
-			audio.volume = ttsOrDingVolume;
-			audio.play();
+			switch (event.event_type) {
+				case 'CHANNEL_POINTS':
+				case 'RICH_MESSAGE':
+				case 'SUBSCRIPTION':
+				case 'FOLLOW':
+				case 'RAID':
+					const audio = new Audio('/$caffeinated-sdk-root$/sounds/dink.mp3');
+					audio.volume = ttsOrDingVolume;
+					audio.play();
+					break;
+			}
 		}
 
 		if (readMessagesAloud) {
