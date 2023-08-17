@@ -162,8 +162,8 @@ public abstract class CaffeinatedPlugin implements Closeable {
      * @implNote You cannot have a settings applet that both has a settingsLayout
      *           AND a basePath. You must choose between one or the other.
      */
-    protected final void createSettingsApplet(@NonNull WidgetDetails details, @NonNull String basePath) {
-        this.createSettingsApplet(details, new Widget() {
+    protected final void createSettingsApplet(@NonNull String basePath) {
+        this.createSettingsApplet(new Widget() {
             @Override
             protected void onSettingsUpdate() {
                 CaffeinatedPlugin.this.onSettingsUpdate(); // fwd
@@ -183,8 +183,8 @@ public abstract class CaffeinatedPlugin implements Closeable {
      * @implNote You cannot have a settings applet that both has a settingsLayout
      *           AND a basePath. You must choose between one or the other.
      */
-    protected final void createSettingsApplet(@NonNull WidgetDetails details) {
-        this.createSettingsApplet(details, new Widget() {
+    protected final void createSettingsApplet() {
+        this.createSettingsApplet(new Widget() {
             @Override
             protected void onSettingsUpdate() {
                 CaffeinatedPlugin.this.onSettingsUpdate(); // fwd
@@ -201,9 +201,12 @@ public abstract class CaffeinatedPlugin implements Closeable {
      * @deprecated Use this with caution.
      */
     @Deprecated
-    protected final void createSettingsApplet(@NonNull WidgetDetails details, @NonNull Widget widget) {
+    protected final void createSettingsApplet(@NonNull Widget widget) {
         assert this.settingsAppletWidget == null : "You've already create a settings applet for this plugin.";
-        details = details.withType(WidgetType.SETTINGS_APPLET);
+        WidgetDetails details = new WidgetDetails()
+            .withType(WidgetType.SETTINGS_APPLET)
+            .withNamespace(this.getId() + ".settings")
+            .withFriendlyName(this.getName());
         this.getPlugins().registerWidgetFactory(this, details, (_ignored) -> widget);
         this.settingsAppletWidget = widget; // It's going to be created already.
 
