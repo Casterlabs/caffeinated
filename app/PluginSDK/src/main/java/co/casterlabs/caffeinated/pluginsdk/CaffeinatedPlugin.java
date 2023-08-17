@@ -17,6 +17,11 @@ import java.util.Set;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetSettings;
+import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.commons.async.Promise;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.kaimen.util.reflection.Reflective;
@@ -49,6 +54,8 @@ public abstract class CaffeinatedPlugin implements Closeable {
     private @Reflective List<Widget> widgets = new LinkedList<>();
 
     private @Reflective Set<KoiEventListener> koiListeners = new HashSet<>();
+
+    private @Getter @Deprecated Widget settingsAppletWidget;
 
     /* ---------------- */
     /* Serialization    */
@@ -144,6 +151,91 @@ public abstract class CaffeinatedPlugin implements Closeable {
     public final List<Widget> getWidgets() {
         return new ArrayList<>(this.widgets);
     }
+
+    /* ---------------- */
+    /* Settings & Applets */
+    /* ---------------- */
+
+    /**
+     * Creates a Settings Applet using the basePath for the UI.
+     * 
+     * @implNote You cannot have a settings applet that both has a settingsLayout
+     *           AND a basePath. You must choose between one or the other.
+     */
+    protected final void createSettingsApplet(@NonNull WidgetDetails details, @NonNull String basePath) {
+        this.createSettingsApplet(details, new Widget() {
+            @Override
+            protected void onSettingsUpdate() {
+                CaffeinatedPlugin.this.onSettingsUpdate(); // fwd
+            }
+
+            @Override
+            public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+                return basePath;
+            }
+        });
+    }
+
+    /**
+     * Creates a Settings Applet, use
+     * {@link #setSettingsLayout(WidgetSettingsLayout)} to set your settings layout.
+     * 
+     * @implNote You cannot have a settings applet that both has a settingsLayout
+     *           AND a basePath. You must choose between one or the other.
+     */
+    protected final void createSettingsApplet(@NonNull WidgetDetails details) {
+        this.createSettingsApplet(details, new Widget() {
+            @Override
+            protected void onSettingsUpdate() {
+                CaffeinatedPlugin.this.onSettingsUpdate(); // fwd
+            }
+
+            @Override
+            public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
+                return "";
+            }
+        });
+    }
+
+    /**
+     * @deprecated Use this with caution.
+     */
+    @Deprecated
+    protected final void createSettingsApplet(@NonNull WidgetDetails details, @NonNull Widget widget) {
+        assert this.settingsAppletWidget == null : "You've already create a settings applet for this plugin.";
+        details = details.withType(WidgetType.SETTINGS_APPLET);
+        this.getPlugins().registerWidgetFactory(this, details, (_ignored) -> widget);
+        this.settingsAppletWidget = widget; // It's going to be created already.
+
+        if (!this.settingsAppletWidget.getWidgetBasePath(WidgetInstanceMode.SETTINGS_APPLET).isEmpty()) {
+            // Create a dummy layout to signal to the UI that it needs to show a frame
+            // instead. Otherwise, a NULL layout indicates that there are no actual settings
+            // and the UI should hide the applet from the user (since it's "empty").
+            this.settingsAppletWidget.setSettingsLayout(new WidgetSettingsLayout());
+        }
+    }
+
+    public final WidgetSettings settings() {
+        assert this.settingsAppletWidget != null : "You must call createSettingsApplet() inorder to use this feature.";
+        return this.settingsAppletWidget.settings();
+    }
+
+    public final void setSettings(@NonNull JsonObject newSettings) {
+        assert this.settingsAppletWidget != null : "You must call createSettingsApplet() inorder to use this feature.";
+        this.settingsAppletWidget.setSettings(newSettings);
+    }
+
+    /**
+     * @implNote You cannot have a settings applet that both has a settingsLayout
+     *           AND a basePath. You must choose between one or the other.
+     */
+    public final synchronized void setSettingsLayout(@NonNull WidgetSettingsLayout newSettingsLayout) {
+        assert this.settingsAppletWidget != null : "You must call createSettingsApplet() inorder to use this feature.";
+        assert this.settingsAppletWidget.getWidgetBasePath(WidgetInstanceMode.SETTINGS_APPLET).isEmpty() : "You cannot have a settings applet that both has a settingsLayout AND a basePath. You must choose between one or the other.";
+        this.settingsAppletWidget.setSettingsLayout(newSettingsLayout);
+    }
+
+    protected void onSettingsUpdate() {}
 
     /* ---------------- */
     /* Framework        */
