@@ -123,10 +123,11 @@
 			{#if applets.length > 0}
 				<div class="space-y-1 px-2 py-4" role="listitem">
 					{#each applets as applet}
-						{@const isSelected = false}
+						{@const href = `/$caffeinated-sdk-root$/applet?id=${applet.id}`}
+						{@const isSelected = $page.url.pathname == href}
 
 						<a
-							href="/$caffeinated-sdk-root$/applet?id={applet.id}"
+							{href}
 							class="group flex items-center px-3 py-2 text-sm leading-6 border-current transition font-medium rounded-md"
 							aria-current={isSelected ? 'page' : undefined}
 							class:hover:bg-base-4={!isSelected}
