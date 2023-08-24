@@ -66,7 +66,7 @@ public class StreamlabsServicePlugin extends CaffeinatedPlugin {
         public static final WidgetDetails DETAILS = new WidgetDetails()
             .withNamespace("co.casterlabs.thirdparty.streamlabs.settings")
             .withType(WidgetType.SETTINGS_APPLET)
-            .withFriendlyName("Streamlabs Integration");
+            .withFriendlyName("Streamlabs Alerts");
 
         @Override
         public @NonNull String getWidgetBasePath(WidgetInstanceMode mode) {
