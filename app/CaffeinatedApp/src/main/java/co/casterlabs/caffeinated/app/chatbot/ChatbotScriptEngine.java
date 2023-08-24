@@ -78,6 +78,9 @@ public class ChatbotScriptEngine {
                         + "asText(url) {return __internal_handle.fetch_asText(url);},"
                         + "asJson(url) {return JSON.parse(__internal_handle.fetch_asText(url));}"
                         + "};",
+                    "const Plugins = {"
+                        + "callServiceMethod(pluginId, serviceId, methodName, args) {return __internal_handle.callServiceMethod(pluginId, serviceId, methodName, args);}"
+                        + "};",
                     "",
 
                     // Per-event.
@@ -119,6 +122,10 @@ public class ChatbotScriptEngine {
                     .addHeader("User-Agent", "Casterlabs/Bot")
                     .url(url)
             );
+        }
+
+        public Object callServiceMethod(@NonNull String pluginId, @NonNull String serviceId, @NonNull String methodName, @Nullable Object... args) {
+            return CaffeinatedApp.getInstance().getPlugins().callServiceMethod(pluginId, serviceId, methodName, args);
         }
 
     }
