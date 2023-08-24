@@ -8,9 +8,11 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -53,6 +55,8 @@ public abstract class CaffeinatedPlugin implements Closeable {
     private @Reflective Set<KoiEventListener> koiListeners = new HashSet<>();
 
     private @Getter @Deprecated Widget settingsAppletWidget;
+
+    Map<String, Object> services = new HashMap<>();
 
     /* ---------------- */
     /* Serialization    */

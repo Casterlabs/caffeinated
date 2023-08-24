@@ -1,6 +1,8 @@
 package co.casterlabs.caffeinated.pluginsdk;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
@@ -8,8 +10,42 @@ import org.jetbrains.annotations.Nullable;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import lombok.NonNull;
+import lombok.SneakyThrows;
+import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 public interface CaffeinatedPlugins {
+
+    /**
+     * @param  pluginId  The plugin which has registered the service.
+     * @param  serviceId The service you wish to bind to the interface.
+     * @param  iface     The interface class.
+     * 
+     * @return           An instance of the provided interface.
+     */
+    @SuppressWarnings("unchecked")
+    default <T> T bindInterfaceToService(@NonNull String pluginId, @NonNull String serviceId, @NonNull Class<T> iface) {
+        return (T) Proxy.newProxyInstance(
+            iface.getClassLoader(),
+            new Class<?>[] {
+                    iface
+            },
+            (Object proxy, Method method, Object[] args) -> {
+                return this.callServiceMethod(pluginId, serviceId, method.getName(), args);
+            }
+        );
+    }
+
+    @SneakyThrows
+    default <T> T callServiceMethod(@NonNull String pluginId, @NonNull String serviceId, @NonNull String methodName, @Nullable Object... args) {
+        if (args == null) args = new Object[0];
+
+        CaffeinatedPlugin plugin = this.getPluginById(pluginId);
+        assert plugin != null : "The specified plugin cannot be found";
+        Object service = plugin.services.get(serviceId);
+        assert service != null : "The specified service cannot be found";
+
+        return ReflectionLib.invokeMethod(service, methodName, args);
+    }
 
     /**
      * Gets a plugin by it's id. The result is autocast to your type of choice.
