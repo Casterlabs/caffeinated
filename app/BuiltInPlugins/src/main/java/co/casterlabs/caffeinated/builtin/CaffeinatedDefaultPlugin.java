@@ -27,6 +27,7 @@ import co.casterlabs.caffeinated.builtin.widgets.labels.StreamUptimeLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.SubscriberCountLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.TopDonationLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.ViewersCountLabel;
+import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
@@ -50,37 +51,37 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
         this.getLogger().info(" ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ");
 
         // Interaction
-        this.getPlugins().registerWidget(this, ChatWidget.DETAILS, ChatWidget.class);
-        this.getPlugins().registerWidget(this, EmojiRainWidget.DETAILS, EmojiRainWidget.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, ChatWidget.DETAILS, ChatWidget.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, EmojiRainWidget.DETAILS, EmojiRainWidget.class);
 
         // Labels
-        this.getPlugins().registerWidget(this, FollowerCountLabel.DETAILS, FollowerCountLabel.class);
-        this.getPlugins().registerWidget(this, SubscriberCountLabel.DETAILS, SubscriberCountLabel.class);
-        this.getPlugins().registerWidget(this, ViewersCountLabel.DETAILS, ViewersCountLabel.class);
-        this.getPlugins().registerWidget(this, StreamUptimeLabel.DETAILS, StreamUptimeLabel.class);
-        this.getPlugins().registerWidget(this, RecentSubscriberLabel.DETAILS, RecentSubscriberLabel.class);
-        this.getPlugins().registerWidget(this, RecentFollowerLabel.DETAILS, RecentFollowerLabel.class);
-        this.getPlugins().registerWidget(this, RecentDonationLabel.DETAILS, RecentDonationLabel.class);
-        this.getPlugins().registerWidget(this, TopDonationLabel.DETAILS, TopDonationLabel.class);
-        this.getPlugins().registerWidget(this, DonationTotalLabel.DETAILS, DonationTotalLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, FollowerCountLabel.DETAILS, FollowerCountLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, SubscriberCountLabel.DETAILS, SubscriberCountLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, ViewersCountLabel.DETAILS, ViewersCountLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, StreamUptimeLabel.DETAILS, StreamUptimeLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, RecentSubscriberLabel.DETAILS, RecentSubscriberLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, RecentFollowerLabel.DETAILS, RecentFollowerLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, RecentDonationLabel.DETAILS, RecentDonationLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, TopDonationLabel.DETAILS, TopDonationLabel.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, DonationTotalLabel.DETAILS, DonationTotalLabel.class);
 
         // Other
-        this.getPlugins().registerWidget(this, NowPlayingWidget.DETAILS, NowPlayingWidget.class);
-        this.getPlugins().registerWidget(this, CamWidget.DETAILS, CamWidget.class);
-//        this.getPlugins().registerWidget(this, KeyboardWidget.DETAILS, KeyboardWidget.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, NowPlayingWidget.DETAILS, NowPlayingWidget.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, CamWidget.DETAILS, CamWidget.class);
+//        Caffeinated.getInstance().getPlugins().registerWidget(this, KeyboardWidget.DETAILS, KeyboardWidget.class);
         // TODO Video Share
 
         // Goals
-        this.getPlugins().registerWidget(this, FollowersGoal.DETAILS, FollowersGoal.class);
-        this.getPlugins().registerWidget(this, SubscribersGoal.DETAILS, SubscribersGoal.class);
-        this.getPlugins().registerWidget(this, CustomGoal.DETAILS, CustomGoal.class);
-        this.getPlugins().registerWidget(this, DonationGoal.DETAILS, DonationGoal.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, FollowersGoal.DETAILS, FollowersGoal.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, SubscribersGoal.DETAILS, SubscribersGoal.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, CustomGoal.DETAILS, CustomGoal.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, DonationGoal.DETAILS, DonationGoal.class);
 
         // Alerts
-        this.getPlugins().registerWidget(this, DonationAlert.DETAILS, DonationAlert.class);
-        this.getPlugins().registerWidget(this, FollowAlert.DETAILS, FollowAlert.class);
-        this.getPlugins().registerWidget(this, SubscriptionAlert.DETAILS, SubscriptionAlert.class);
-        this.getPlugins().registerWidget(this, RaidAlert.DETAILS, RaidAlert.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, DonationAlert.DETAILS, DonationAlert.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, FollowAlert.DETAILS, FollowAlert.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, SubscriptionAlert.DETAILS, SubscriptionAlert.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, RaidAlert.DETAILS, RaidAlert.class);
 
     }
 
