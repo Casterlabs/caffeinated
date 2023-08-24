@@ -15,7 +15,7 @@
 	onMount(() => {
 		const id = $page.url.searchParams.get('id');
 
-		Caffeinated.plugins.widgets
+		Caffeinated.pluginIntegration.widgets
 			.then((widgets) => {
 				// Filter for a widget object with a matching id.
 				// This'll return `undefined` if there's no matching result.

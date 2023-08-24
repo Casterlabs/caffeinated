@@ -10,7 +10,7 @@
 	const console = createConsole('Settings/Plugins');
 
 	const preferences = st || Caffeinated.UI.svelte('preferences');
-	const contexts = st || Caffeinated.plugins.svelte('contexts');
+	const contexts = st || Caffeinated.pluginIntegration.svelte('contexts');
 
 	$: contexts, $contexts && console.debug('Plugins Contexts:', $contexts);
 
@@ -18,7 +18,7 @@
 
 	onMount(() => {
 		const int = setInterval(async () => {
-			files = await Caffeinated.plugins.listFiles();
+			files = await Caffeinated.pluginIntegration.listFiles();
 		}, 500);
 
 		return () => clearInterval(int);
@@ -50,7 +50,7 @@
 							{#if context.file}
 								<SlimButton
 									on:click={() => {
-										window.Caffeinated.plugins.unload(context.id);
+										window.Caffeinated.pluginIntegration.unload(context.id);
 									}}
 								>
 									<LocalizedText key="page.settings.plugins.file.unload" />
@@ -73,7 +73,7 @@
 					<div class="flex-0">
 						<SlimButton
 							on:click={() => {
-								window.Caffeinated.plugins.load(file);
+								window.Caffeinated.pluginIntegration.load(file);
 							}}
 						>
 							<LocalizedText key="page.settings.plugins.file.load" />
@@ -92,7 +92,7 @@
 
 	<Button
 		on:click={() => {
-			window.Caffeinated.plugins.openPluginsDir();
+			window.Caffeinated.pluginIntegration.openPluginsDir();
 		}}
 	>
 		<LocalizedText key="page.settings.plugins.open_directory" />

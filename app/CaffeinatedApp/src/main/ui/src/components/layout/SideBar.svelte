@@ -62,7 +62,7 @@
 	onMount(() => {
 		window.toggleSideBar = toggleSideBar;
 
-		Caffeinated.plugins.widgets.then((widgets) => {
+		Caffeinated.pluginIntegration.widgets.then((widgets) => {
 			applets = widgets.filter((w) => w.details.type == 'APPLET');
 		});
 

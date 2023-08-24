@@ -23,7 +23,7 @@
 		[])[0];
 
 	onMount(() => {
-		Caffeinated.plugins.widgets
+		Caffeinated.pluginIntegration.widgets
 			.then((widgets) => widgets.filter((w) => w.details.type == 'SETTINGS_APPLET'))
 			.then((settingsApplets) => {
 				for (const settingsApplet of settingsApplets) {

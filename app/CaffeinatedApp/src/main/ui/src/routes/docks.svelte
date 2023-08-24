@@ -12,11 +12,11 @@
 	let showingTutorialModal = false;
 
 	function copyWidgetUrl(id) {
-		Caffeinated.plugins.copyWidgetUrl(id);
+		Caffeinated.pluginIntegration.copyWidgetUrl(id);
 	}
 
 	onMount(async () => {
-		docks = (await Caffeinated.plugins.widgets).filter((w) => w.details.type == 'DOCK');
+		docks = (await Caffeinated.pluginIntegration.widgets).filter((w) => w.details.type == 'DOCK');
 	});
 </script>
 
@@ -55,7 +55,7 @@
 						class="text-base-12 hover:text-base-11"
 						title={t('sr.page.widgets.copy_link')}
 						on:click|stopPropagation={() => {
-							window.Caffeinated.plugins.copyWidgetUrl(dock.id);
+							window.Caffeinated.pluginIntegration.copyWidgetUrl(dock.id);
 						}}
 					>
 						<span class="sr-only">

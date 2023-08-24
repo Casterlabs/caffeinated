@@ -37,7 +37,7 @@
 
 		if (!component) {
 			let widget;
-			for (const w of await Caffeinated.plugins.widgets) {
+			for (const w of await Caffeinated.pluginIntegration.widgets) {
 				if (w.id == current) {
 					widget = w;
 					break;

@@ -25,13 +25,13 @@
 	$: hasTestEvents = widget?.details.testEvents.length > 0;
 
 	function editName() {
-		Caffeinated.plugins.renameWidget(widget.id, nameEditorTextContent);
+		Caffeinated.pluginIntegration.renameWidget(widget.id, nameEditorTextContent);
 	}
 
 	onMount(() => {
 		const id = $page.url.searchParams.get('id');
 
-		Caffeinated.plugins.widgets
+		Caffeinated.pluginIntegration.widgets
 			.then((widgets) => {
 				// Filter for a widget object with a matching id.
 				// This'll return `undefined` if there's no matching result.
@@ -100,7 +100,7 @@
 			{#each settingsLayout?.buttons || [] as button}
 				<CircularButton
 					on:click={() =>
-						window.Caffeinated.plugins.clickWidgetSettingsButton(widget.id, button.id)}
+						window.Caffeinated.pluginIntegration.clickWidgetSettingsButton(widget.id, button.id)}
 					title={button.iconTitle}
 				>
 					{#if button.text}
@@ -114,7 +114,7 @@
 			<CircularButton
 				title={t('sr.page.widgets.copy_link')}
 				on:click={() => {
-					window.Caffeinated.plugins.copyWidgetUrl(widget.id);
+					window.Caffeinated.pluginIntegration.copyWidgetUrl(widget.id);
 				}}
 			>
 				<span class="sr-only">
@@ -125,7 +125,7 @@
 			<CircularButton
 				title={t('sr.page.widgets.delete')}
 				on:click={() => {
-					window.Caffeinated.plugins.deleteWidget(widget.id);
+					window.Caffeinated.pluginIntegration.deleteWidget(widget.id);
 					goto('/$caffeinated-sdk-root$/widgets');
 				}}
 			>
@@ -247,7 +247,7 @@
 									<div class="text-right w-40">
 										<Button
 											on:click={() =>
-												window.Caffeinated.plugins.fireTestEvent(widget.id, eventType)}
+												window.Caffeinated.pluginIntegration.fireTestEvent(widget.id, eventType)}
 										>
 											<LocalizedText key="page.widget.editor.test_events.send_test" />
 										</Button>

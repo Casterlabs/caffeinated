@@ -53,7 +53,7 @@
 			blue: []
 		};
 
-		const widgets = (await Caffeinated.plugins.widgets) //
+		const widgets = (await Caffeinated.pluginIntegration.widgets) //
 			.filter((w) => w.details.type == 'WIDGET');
 
 		for (const widget of widgets) {
@@ -77,7 +77,7 @@
 			console.debug('Supported features:', supportedFeatures);
 		});
 
-		Caffeinated.plugins.creatableWidgets.then((creatableWidgets) => {
+		Caffeinated.pluginIntegration.creatableWidgets.then((creatableWidgets) => {
 			for (const creatable of creatableWidgets) {
 				if (creatable.type != 'WIDGET') continue;
 
@@ -85,7 +85,7 @@
 					name: creatable.friendlyName,
 					requiredFeatures: creatable.requiredFeatures,
 					create: () => {
-						Caffeinated.plugins.createNewWidget(
+						Caffeinated.pluginIntegration.createNewWidget(
 							creatable.namespace,
 							`${t(creatable.friendlyName)} ${t('page.widgets.create.new')}`
 						);
@@ -212,7 +212,7 @@
 										options: TAGS,
 										onselect(tag) {
 											console.debug('User selected:', widget.tag, tag);
-											window.Caffeinated.plugins.assignTag(widget.id, tag);
+											window.Caffeinated.pluginIntegration.assignTag(widget.id, tag);
 											refreshWidgetsList();
 										}
 									},
@@ -221,7 +221,7 @@
 										icon: 'icon/document-duplicate',
 										text: 'sr.page.widgets.copy_link',
 										onclick() {
-											window.Caffeinated.plugins.copyWidgetUrl(widget.id);
+											window.Caffeinated.pluginIntegration.copyWidgetUrl(widget.id);
 										}
 									},
 									{ type: 'divider' },
@@ -231,7 +231,7 @@
 										text: 'sr.page.widgets.delete',
 										color: 'error',
 										onclick() {
-											window.Caffeinated.plugins.deleteWidget(widget.id);
+											window.Caffeinated.pluginIntegration.deleteWidget(widget.id);
 											refreshWidgetsList();
 										}
 									}

@@ -58,7 +58,7 @@
 
 	onMount(async () => {
 		// Load async.
-		Caffeinated.plugins.widgets.then((widgets) => {
+		Caffeinated.pluginIntegration.widgets.then((widgets) => {
 			for (const widget of widgets) {
 				if (widget.details.type == 'DOCK') {
 					componentChoices[widget.id] = widget.details.friendlyName;

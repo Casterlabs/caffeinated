@@ -29,7 +29,7 @@
 	}
 
 	function onInput() {
-		Caffeinated.plugins.editWidgetSettingsItem(widget.id, settingsKey, value);
+		Caffeinated.pluginIntegration.editWidgetSettingsItem(widget.id, settingsKey, value);
 	}
 </script>
 
