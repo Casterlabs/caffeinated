@@ -3,6 +3,8 @@ package co.casterlabs.caffeinated.builtin;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +19,7 @@ import co.casterlabs.caffeinated.builtin.widgets.alerts.SubscriptionAlert;
 import co.casterlabs.caffeinated.builtin.widgets.goals.CustomGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.DonationGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.FollowersGoal;
+import co.casterlabs.caffeinated.builtin.widgets.goals.GenericGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.SubscribersGoal;
 import co.casterlabs.caffeinated.builtin.widgets.labels.DonationTotalLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.FollowerCountLabel;
@@ -29,6 +32,7 @@ import co.casterlabs.caffeinated.builtin.widgets.labels.TopDonationLabel;
 import co.casterlabs.caffeinated.builtin.widgets.labels.ViewersCountLabel;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.IOUtil;
@@ -36,6 +40,7 @@ import lombok.NonNull;
 
 public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
+    @SuppressWarnings("unused")
     @Override
     public void onInit() {
         CaffeinatedYoutubePlugin.init(this);
@@ -83,6 +88,33 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
         Caffeinated.getInstance().getPlugins().registerWidget(this, SubscriptionAlert.DETAILS, SubscriptionAlert.class);
         Caffeinated.getInstance().getPlugins().registerWidget(this, RaidAlert.DETAILS, RaidAlert.class);
 
+        // Services
+        this.registerService("goals", new Object() {
+            public List<Widget> getAllGoals() {
+                return getWidgets()
+                    .stream()
+                    .filter((w) -> w instanceof GenericGoal)
+                    .collect(Collectors.toList());
+            }
+
+            public void incrementOrDecrement(@NonNull String id, double by) {
+                GenericGoal goal = (GenericGoal) getWidgets()
+                    .stream()
+                    .filter((w) -> w.getId().equals(id))
+                    .collect(Collectors.toList())
+                    .get(0);
+                goal.setCount(goal.getCount() + by);
+            }
+
+            public void set(@NonNull String id, double value) {
+                GenericGoal goal = (GenericGoal) getWidgets()
+                    .stream()
+                    .filter((w) -> w.getId().equals(id))
+                    .collect(Collectors.toList())
+                    .get(0);
+                goal.setCount(value);
+            }
+        });
     }
 
     @Override
