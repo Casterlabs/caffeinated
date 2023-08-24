@@ -241,8 +241,13 @@ public abstract class CaffeinatedPlugin implements Closeable {
     /* Framework        */
     /* ---------------- */
 
+    public void registerService(@NonNull String id, @Nullable Object iface) {
+        this.services.put(id, iface);
+    }
+
     /**
-     * Use {@link Caffeinated#getPlugins()} instead. Slated for removal soon.
+     * Use {@link Caffeinated#getPluginIntegration()} instead. Slated for removal
+     * soon.
      */
     @Deprecated
     public CaffeinatedPlugins getPlugins() {

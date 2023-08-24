@@ -87,7 +87,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                 resource = "/";
             }
 
-            CaffeinatedPlugin plugin = CaffeinatedApp.getInstance().getPlugins().getPlugins().getPluginById(pluginId);
+            CaffeinatedPlugin plugin = CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPluginById(pluginId);
             if (plugin == null) {
                 return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
             }
@@ -128,7 +128,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
             String pluginId = session.getUriParameters().get("pluginId");
             String widgetId = session.getUriParameters().get("widgetId");
 
-            CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPlugins().getPlugins().getPluginById(pluginId);
+            CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPluginById(pluginId);
 
             if (owningPlugin == null) {
                 return newWebsocketErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
@@ -170,7 +170,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                     .toUpperCase()
             );
 
-            CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPlugins().getPlugins().getPluginById(pluginId);
+            CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPluginById(pluginId);
 
             if (owningPlugin == null) {
                 return newWebsocketErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);

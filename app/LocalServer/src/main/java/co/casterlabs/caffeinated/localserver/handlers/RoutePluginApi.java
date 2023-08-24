@@ -20,7 +20,7 @@ public class RoutePluginApi implements HttpProvider, RouteHelper {
                 String pluginId = session.getUriParameters().get("pluginId");
                 String resourceId = session.getUriParameters().get("resourceId");
 
-                CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPlugins().getPlugins().getPluginById(pluginId);
+                CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPluginById(pluginId);
 
                 if (owningPlugin == null) {
                     return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);

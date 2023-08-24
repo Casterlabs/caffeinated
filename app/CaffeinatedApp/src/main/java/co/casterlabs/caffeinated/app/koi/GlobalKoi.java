@@ -129,7 +129,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
         // Send update to the widget instances.
         AsyncTask.create(() -> {
-            for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
+            for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPlugins()) {
                 for (Widget widget : plugin.getWidgets()) {
                     for (WidgetInstance instance : widget.getWidgetInstances()) {
                         try {
@@ -306,7 +306,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
         // Notify the plugins
         AsyncTask.create(() -> {
-            for (CaffeinatedPlugin pl : CaffeinatedApp.getInstance().getPlugins().getPlugins().getPlugins()) {
+            for (CaffeinatedPlugin pl : CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPlugins()) {
                 pl.fireKoiEventListeners(e);
             }
         });

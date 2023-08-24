@@ -28,6 +28,7 @@ import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.CaffeinatedWindowState;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
+import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugins;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
@@ -83,7 +84,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // @formatter:off
 
     // Integrations
-    private PluginIntegration  plugins            = new PluginIntegration();
+    private PluginIntegration  pluginIntegration  = new PluginIntegration();
     private MusicIntegration   music              = new MusicIntegration();
     private AppControlDeck     controlDeck        = new AppControlDeck();
     private ThemeManager       themeManager       = new ThemeManager();
@@ -163,7 +164,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.auth.init();
         this.controlDeck.init();
         this.api.init();
-        this.plugins.init();
+        this.pluginIntegration.init();
 //            this.koi.init();
         this.music.init();
 
@@ -223,6 +224,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @Override
     public String getMimeForPath(String path) {
         return MimeTypes.getMimeForFile(new File(path));
+    }
+
+    @Override
+    public CaffeinatedPlugins getPlugins() {
+        return this.pluginIntegration.getPlugins();
     }
 
     @SuppressWarnings("deprecation")

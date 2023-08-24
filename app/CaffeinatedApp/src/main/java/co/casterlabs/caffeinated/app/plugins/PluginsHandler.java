@@ -102,7 +102,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
             @Override
             public void onSettingsUpdate() {
                 CaffeinatedApp.getInstance().getAppBridge().emit("widgets:" + this.id, this.widget.toJson());
-                CaffeinatedApp.getInstance().getPlugins().save(this);
+                CaffeinatedApp.getInstance().getPluginIntegration().save(this);
             }
         };
 
@@ -184,7 +184,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
             JsonObject settings = null;
 
             // Now we need to find the widget's settings (if they exist)
-            try (CacheIterator<WidgetSettingsDetails> it = CaffeinatedApp.getInstance().getPlugins().getPreferenceData().enumerate()) {
+            try (CacheIterator<WidgetSettingsDetails> it = CaffeinatedApp.getInstance().getPluginIntegration().getPreferenceData().enumerate()) {
                 while (it.hasNext()) {
                     WidgetSettingsDetails otherDetails = it.next();
 
@@ -234,7 +234,7 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
 
     public PluginContext loadPluginsFromFile(@NonNull File file) throws Exception {
         try {
-            List<CaffeinatedPlugin> toLoad = PluginLoader.loadFile(this, file);
+            List<CaffeinatedPlugin> toLoad = PluginLoader.loadFile(file);
             PluginContext ctx = unsafe_loadPlugins(toLoad, file.getName());
 
             ctx.setFile(file);

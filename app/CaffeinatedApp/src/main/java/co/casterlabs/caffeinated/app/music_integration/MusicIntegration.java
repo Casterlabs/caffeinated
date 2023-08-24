@@ -149,7 +149,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
         AsyncTask.create(() -> {
             try {
                 // Send the events to the widget instances.
-                for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPlugins().getLoadedPlugins()) {
+                for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPluginIntegration().getLoadedPlugins()) {
                     for (Widget widget : plugin.getWidgets()) {
                         for (WidgetInstance instance : widget.getWidgetInstances()) {
                             try {

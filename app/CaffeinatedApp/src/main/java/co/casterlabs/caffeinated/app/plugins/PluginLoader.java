@@ -24,7 +24,7 @@ import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 public class PluginLoader {
 
-    public static List<CaffeinatedPlugin> loadFile(@NonNull PluginsHandler pluginsInst, @NonNull File file) throws IOException {
+    public static List<CaffeinatedPlugin> loadFile(@NonNull File file) throws IOException {
         if (file.isFile()) {
             URLClassLoader classLoader = null;
 
@@ -64,7 +64,7 @@ public class PluginLoader {
                     jarFile.close();
                 }
 
-                return loadFromClassCollection(pluginsInst, types, classLoader);
+                return loadFromClassCollection(types, classLoader);
             } catch (Exception e) {
                 if (classLoader != null) {
                     classLoader.close();
@@ -86,10 +86,10 @@ public class PluginLoader {
         reflections = null;
         System.gc();
 
-        return loadFromClassCollection(pluginsInst, types, classLoader);
+        return loadFromClassCollection(types, classLoader);
     }
 
-    public static List<CaffeinatedPlugin> loadFromClassCollection(@NonNull PluginsHandler pluginsInst, @NonNull Collection<Class<?>> types, @NonNull ClassLoader classLoader) throws IOException {
+    public static List<CaffeinatedPlugin> loadFromClassCollection(@NonNull Collection<Class<?>> types, @NonNull ClassLoader classLoader) throws IOException {
         if (types.isEmpty()) {
             if (classLoader instanceof Closeable) {
                 ((Closeable) classLoader).close();
@@ -111,7 +111,6 @@ public class PluginLoader {
 
                         ReflectionLib.setValue(plugin, "classLoader", classLoader);
                         ReflectionLib.setValue(plugin, "sqlDrivers", sqlDrivers);
-                        ReflectionLib.setValue(plugin, "plugins", pluginsInst);
 
                         // Load in the sql drivers.
                         for (Driver driver : sqlDrivers) {
