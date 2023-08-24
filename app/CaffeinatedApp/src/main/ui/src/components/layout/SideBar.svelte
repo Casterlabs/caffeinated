@@ -36,6 +36,8 @@
 		]
 	];
 
+	let applets = [];
+
 	let updateAvailable = false;
 
 	let sidebarWidthMul = 100;
@@ -59,6 +61,10 @@
 
 	onMount(() => {
 		window.toggleSideBar = toggleSideBar;
+
+		Caffeinated.plugins.widgets.then((widgets) => {
+			applets = widgets.filter((w) => w.details.type == 'APPLET');
+		});
 
 		setInterval(async () => {
 			updateAvailable = await Caffeinated.hasUpdate();
@@ -113,6 +119,24 @@
 					{/each}
 				</div>
 			{/each}
+
+			<div class="space-y-1 px-2 py-4" role="listitem">
+				{#each applets as applet}
+					{@const isSelected = false}
+
+					<a
+						href="/$caffeinated-sdk-root$/applet?id={applet.id}"
+						class="group flex items-center px-3 py-2 text-sm leading-6 border-current transition font-medium rounded-md"
+						aria-current={isSelected ? 'page' : undefined}
+						class:hover:bg-base-4={!isSelected}
+						class:bg-base-5={isSelected}
+					>
+						<span class="text-base-12">
+							<LocalizedText key={applet.details.friendlyName} />
+						</span>
+					</a>
+				{/each}
+			</div>
 		</nav>
 	</div>
 </div>
