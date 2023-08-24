@@ -21,6 +21,8 @@ public interface Caffeinated {
 
     public Emojis getEmojis();
 
+    public CaffeinatedPlugins getPlugins();
+
     public void copyText(@NonNull String text, @Nullable String toastText);
 
     public void openLink(String url);

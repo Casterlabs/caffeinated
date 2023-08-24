@@ -44,9 +44,6 @@ public abstract class CaffeinatedPlugin implements Closeable {
 
     private final @Getter FastLogger logger = new FastLogger(this.getName());
 
-    // Helpers so the plugin can interract with the framework.
-    private @Reflective @Getter CaffeinatedPlugins plugins;
-
     private @Reflective @Nullable ClassLoader classLoader;
     private @Reflective ServiceLoader<Driver> sqlDrivers;
 
@@ -207,7 +204,7 @@ public abstract class CaffeinatedPlugin implements Closeable {
             .withType(WidgetType.SETTINGS_APPLET)
             .withNamespace(this.getId() + ".settings")
             .withFriendlyName(this.getName());
-        this.getPlugins().registerWidgetFactory(this, details, (_ignored) -> widget);
+        Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, details, (_ignored) -> widget);
         this.settingsAppletWidget = widget; // It's going to be created already.
 
         if (!this.settingsAppletWidget.getWidgetBasePath(WidgetInstanceMode.SETTINGS_APPLET).isEmpty()) {
@@ -243,6 +240,14 @@ public abstract class CaffeinatedPlugin implements Closeable {
     /* ---------------- */
     /* Framework        */
     /* ---------------- */
+
+    /**
+     * Use {@link Caffeinated#getPlugins()} instead. Slated for removal soon.
+     */
+    @Deprecated
+    public CaffeinatedPlugins getPlugins() {
+        return Caffeinated.getInstance().getPlugins();
+    }
 
     /**
      * @return               A pair of strings, with A being the content and B being
