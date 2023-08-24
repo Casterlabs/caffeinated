@@ -22,7 +22,6 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 public abstract class GenericGoal extends Widget implements KoiEventListener {
     public static final double DEMO_ASPECT_RATIO = 1 / 10d;
@@ -30,7 +29,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
     private static String[] platforms;
 
     private boolean wasMultiPlatform;
-    private @Getter @Setter double count;
+    protected @Getter double count;
 
     static {
         List<String> platformsList = new ArrayList<>();

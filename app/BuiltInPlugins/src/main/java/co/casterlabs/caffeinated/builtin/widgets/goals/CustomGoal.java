@@ -1,12 +1,7 @@
 package co.casterlabs.caffeinated.builtin.widgets.goals;
 
-import java.io.IOException;
-
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
-import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
-import co.casterlabs.rakurai.json.element.JsonObject;
-import lombok.NonNull;
 
 public class CustomGoal extends GenericGoal {
     public static final WidgetDetails DETAILS = new WidgetDetails()
@@ -15,8 +10,6 @@ public class CustomGoal extends GenericGoal {
         .withCategory(WidgetDetailsCategory.GOALS)
         .withFriendlyName("Custom Goal")
         .withShowDemo(true, DEMO_ASPECT_RATIO);
-
-    private double count;
 
     @Override
     public void onInit() {
@@ -35,16 +28,8 @@ public class CustomGoal extends GenericGoal {
 
     @Override
     public void update(double count) {
-        this.count = count;
-
-        this.broadcastToAll("count", JsonObject.singleton("count", this.count));
-    }
-
-    @Override
-    public void onNewInstance(@NonNull WidgetInstance instance) {
-        try {
-            instance.emit("count", JsonObject.singleton("count", this.count));
-        } catch (IOException ignored) {}
+        this.settings().set("goal.value", count);
+        super.update(count);
     }
 
     @Override

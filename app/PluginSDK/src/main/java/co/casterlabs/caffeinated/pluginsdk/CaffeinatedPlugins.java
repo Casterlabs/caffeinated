@@ -11,6 +11,8 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 public interface CaffeinatedPlugins {
@@ -44,6 +46,7 @@ public interface CaffeinatedPlugins {
         Object service = plugin.services.get(serviceId);
         assert service != null : "The specified service cannot be found";
 
+        FastLogger.logStatic(LogLevel.DEBUG, "callServiceMethod -> %s(%s)", methodName, args);
         return ReflectionLib.invokeMethod(service, methodName, args);
     }
 
