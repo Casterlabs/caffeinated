@@ -94,6 +94,12 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
 
         List<Widget> pluginWidgetsField = ReflectionLib.getValue(factory.a(), "widgets");
 
+        for (Widget widget : pluginWidgetsField) {
+            if (widget.getId().equals(id)) {
+                assert false : "That widget is already registered.";
+            }
+        }
+
         String conductorKey = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorKey();
         int conductorPort = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorPort();
 

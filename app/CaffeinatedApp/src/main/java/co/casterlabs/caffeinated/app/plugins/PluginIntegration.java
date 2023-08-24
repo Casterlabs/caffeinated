@@ -122,7 +122,8 @@ public class PluginIntegration extends JavascriptObject {
                         this.plugins.createWidget(details.getNamespace(), id, details.getName(), details.getSettings());
                     }
                 } catch (AssertionError | SecurityException | NullPointerException | IllegalArgumentException e) {
-                    if ("That widget is not of the expected type of WIDGET".equals(e.getMessage())) {
+                    if ("That widget is not of the expected type of WIDGET".equals(e.getMessage()) ||
+                        "That widget is already registered.".equals(e.getMessage())) {
                         continue; // Ignore.
                     } else if ("A factory associated to that widget is not registered.".equals(e.getMessage())) {
                         // We can safely ignore it.
