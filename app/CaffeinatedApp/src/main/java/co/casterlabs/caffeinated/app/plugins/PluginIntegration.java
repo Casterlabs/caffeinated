@@ -43,7 +43,6 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
-import xyz.e3ndr.reflectionlib.ReflectionLib;
 
 @Getter
 public class PluginIntegration extends JavascriptObject {
@@ -79,7 +78,6 @@ public class PluginIntegration extends JavascriptObject {
         // Load the built-in widgets.
         {
             CaffeinatedPlugin defaultPlugin = new CaffeinatedDefaultPlugin();
-            ReflectionLib.setValue(defaultPlugin, "plugins", this.plugins);
             PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(defaultPlugin), "Caffeinated");
             ctx.setPluginType(ContextType.INTERNAL);
             this.contexts.add(ctx);
@@ -89,7 +87,6 @@ public class PluginIntegration extends JavascriptObject {
         {
             CaffeinatedPlugin uiDocksPlugin = new UIDocksPlugin();
 
-            ReflectionLib.setValue(uiDocksPlugin, "plugins", this.plugins);
             PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(uiDocksPlugin), "Caffeinated");
             ctx.setPluginType(ContextType.INTERNAL);
             this.contexts.add(ctx);
@@ -97,7 +94,6 @@ public class PluginIntegration extends JavascriptObject {
 
         // Load the Third Party Services
         for (CaffeinatedPlugin service : ThirdPartyServices.init()) {
-            ReflectionLib.setValue(service, "plugins", this.plugins);
             PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(service), "Caffeinated");
             ctx.setPluginType(ContextType.INTERNAL);
             this.contexts.add(ctx);
