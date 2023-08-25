@@ -1,11 +1,11 @@
-name: Release Deploy
+name: Release SDK
 
 on:
   release:
     types: [created]
 
 jobs:
-  release-deploy:
+  release-sdk:
     environment: "Caffeinated Deploy"
     runs-on: ubuntu-latest
     permissions:
@@ -23,9 +23,9 @@ jobs:
           cache: maven
 
       - name: Update the SDK version tag.
-        run: cd app && ./mvnw versions:set -DnewVersion="${{ github.event.release.tag_name }}"
+        run: cd app && bash ./mvnw versions:set -DnewVersion="${{ github.event.release.tag_name }}"
 
       - name: Deploy the SDK to GitHub packages.
-        run: cd app && ./mvnw --batch-mode deploy
+        run: cd app && bash ./mvnw --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
