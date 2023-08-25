@@ -1,0 +1,31 @@
+name: Release Deploy
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  release-deploy:
+    environment: "Caffeinated Deploy"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code.
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Update the SDK version tag.
+        run: cd app && ./mvnw versions:set -DnewVersion="${{ github.event.release.tag_name }}"
+
+      - name: Deploy the SDK to GitHub packages.
+        run: cd app && ./mvnw --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
