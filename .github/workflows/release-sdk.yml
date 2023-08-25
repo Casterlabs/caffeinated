@@ -21,14 +21,15 @@ jobs:
           java-version: "11"
           distribution: "temurin"
           cache: maven
+          server-id: github
+          server-username: GITHUB_ACTOR  # env variable name for username
+          server-password: GITHUB_TOKEN
 
       - name: Update the SDK version tag.
         run: cd app && bash ./mvnw versions:set -DnewVersion="${{ github.event.release.tag_name }}"
 
-      - name: Compile the app..
-        run: cd app && bash ./mvnw install
-
-      - name: Deploy the SDK to GitHub packages.
-        run: cd app && bash ./mvnw deploy -s $GITHUB_WORKSPACE/settings.xml
+      - name: Compile & Deploy the SDK to GitHub packages.
+        run: cd app && bash ./mvnw install -Pgithub deploy
         env:
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
