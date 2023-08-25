@@ -25,7 +25,10 @@ jobs:
       - name: Update the SDK version tag.
         run: cd app && bash ./mvnw versions:set -DnewVersion="${{ github.event.release.tag_name }}"
 
+      - name: Compile the app..
+        run: cd app && bash ./mvnw install
+
       - name: Deploy the SDK to GitHub packages.
-        run: cd app && bash ./mvnw -Dmaven.resolver.transport=wagon --batch-mode deploy
+        run: cd app && bash ./mvnw deploy -s $GITHUB_WORKSPACE/settings.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
