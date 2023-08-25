@@ -8,6 +8,9 @@ jobs:
   release-deploy:
     environment: "Caffeinated Deploy"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout code.
         uses: actions/checkout@v3
@@ -40,3 +43,9 @@ jobs:
           BB_CLIENT_ID: ${{ secrets.BB_CLIENT_ID }}
           BB_CLIENT_KEY: ${{ secrets.BB_CLIENT_KEY }}
         run: java -jar deploy-helper/target/deploy-helper.jar "${{ github.event_path }}"
+        
+      - name: Distribute SDK to GitHub packages.
+        run: cd app && mvn versions:set -DnewVersion="${{ github.event.release.tag_name }}" && mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
