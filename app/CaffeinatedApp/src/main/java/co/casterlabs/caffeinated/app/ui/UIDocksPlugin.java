@@ -20,6 +20,8 @@ import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.io.IOUtil;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class UIDocksPlugin extends CaffeinatedPlugin {
 
@@ -89,6 +91,10 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
 
     @Override
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
+        return resolveUIFile(resource);
+    }
+
+    public static @Nullable Pair<String, String> resolveUIFile(String resource) {
         // Append `index.html` to the end when required.
         if (!resource.contains(".")) {
             if (resource.endsWith("/")) {
@@ -106,7 +112,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
         }
 
         resource = "co/casterlabs/caffeinated/app/ui/html" + resource; // Load from the app's actual resources.
-        this.getLogger().debug("Loading resource: %s", resource);
+        FastLogger.logStatic(LogLevel.DEBUG, "Loading resource: %s", resource);
 
         try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {
             return new Pair<>(
@@ -114,7 +120,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
                 mimeType
             );
         } catch (Exception e) {
-            this.getLogger().debug("An error occurred whilst loading resource %s:\n%s", resource, e);
+            FastLogger.logStatic(LogLevel.DEBUG, "An error occurred whilst loading resource %s:\n%s", resource, e);
             return new Pair<>("", "text/plain");
         }
     }
