@@ -6,7 +6,7 @@ const config = {
 		adapter: adapter({
 			assets: '../../../target/classes/co/casterlabs/caffeinated/app/ui/html',
 			pages: '../../../target/classes/co/casterlabs/caffeinated/app/ui/html',
-			fallback: '__fallback.html'
+			fallback: 'index.html'
 		}),
 		files: {
 			lib: 'src/lib'
