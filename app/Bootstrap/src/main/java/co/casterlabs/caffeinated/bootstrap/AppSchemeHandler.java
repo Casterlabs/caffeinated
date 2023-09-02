@@ -18,7 +18,11 @@ public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
     @SneakyThrows
     @Override
     public @Nullable HttpResponse apply(@Nullable HttpSession request) {
-        String uri = request.getUri().substring("/$caffeinated-sdk-root$".length());
+        String uri = request.getUri();
+
+        if (uri.startsWith("/$caffeinated-sdk-root$")) {
+            uri = uri.substring("/$caffeinated-sdk-root$".length());
+        }
 
         // Append `index.html` to the end when required.
         if (!uri.contains(".")) {
