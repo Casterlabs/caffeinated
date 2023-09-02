@@ -18,7 +18,7 @@
 	import SelectMenu from '$lib/ui/SelectMenu.svelte';
 	import RangeInput from '$lib/ui/RangeInput.svelte';
 
-	import createConsole from '../console-helper.mjs';
+	import createConsole from '$lib/console-helper.mjs';
 	import { fade } from 'svelte/transition';
 	import { SUPPORTED_TTS_VOICES } from '$lib/app.mjs';
 	import { t } from '$lib/translate.mjs';

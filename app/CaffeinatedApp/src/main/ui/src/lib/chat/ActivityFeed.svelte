@@ -10,7 +10,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
 
-	import createConsole from '../console-helper.mjs';
+	import createConsole from '$lib/console-helper.mjs';
 	import { fade } from 'svelte/transition';
 
 	const console = createConsole('ChatViewer');

@@ -2,7 +2,7 @@
 
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
-	import ContextMenu from '../../ui/ContextMenu.svelte';
+	import ContextMenu from '$lib/ui/ContextMenu.svelte';
 	import EmojiText from '$lib/EmojiText.svelte';
 
 	import streamingServices from '$lib/streamingServices.mjs';

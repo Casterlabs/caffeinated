@@ -1,5 +1,5 @@
 <script>
-	import LocalizedText from '../LocalizedText.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 	import NumberInput from './NumberInput.svelte';
 	import Switch from './Switch.svelte';
 	import ColorInput from './ColorInput.svelte';

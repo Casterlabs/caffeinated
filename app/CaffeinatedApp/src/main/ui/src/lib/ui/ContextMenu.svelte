@@ -1,7 +1,7 @@
 <script>
-	import LocalizedText from '../LocalizedText.svelte';
-	import FocusListener from '../interaction/FocusListener.svelte';
-	import LongPressListener from '../interaction/LongPressListener.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import FocusListener from '$lib/interaction/FocusListener.svelte';
+	import LongPressListener from '$lib/interaction/LongPressListener.svelte';
 	import Portal from 'svelte-portal';
 
 	import { tick } from 'svelte';

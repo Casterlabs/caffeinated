@@ -1,6 +1,6 @@
 <script>
-	import LocalizedText from '../LocalizedText.svelte';
-	import FocusListener from '../interaction/FocusListener.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import FocusListener from '$lib/interaction/FocusListener.svelte';
 
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';

@@ -1,6 +1,6 @@
 <script>
 	import WidgetPreview from '$lib/WidgetPreview.svelte';
-	import ResizableGrid from '../ResizableGrid.svelte';
+	import ResizableGrid from '$lib/layout/ResizableGrid.svelte';
 	import SlimSelectMenu from '$lib/ui/SlimSelectMenu.svelte';
 
 	import { onMount } from 'svelte';

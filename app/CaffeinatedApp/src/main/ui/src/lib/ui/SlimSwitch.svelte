@@ -1,5 +1,5 @@
 <script>
-	import LocalizedText from '../LocalizedText.svelte';
+	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { t } from '$lib/translate.mjs';
 	import { createEventDispatcher } from 'svelte';

@@ -1,6 +1,6 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
-	import ResizableGrid from '../ResizableGrid.svelte';
+	import ResizableGrid from '$lib/layout/ResizableGrid.svelte';
 
 	/** @type {ResizableGrid} */
 	export let grid;
