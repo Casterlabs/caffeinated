@@ -24,12 +24,16 @@ public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
             uri = uri.substring("/$caffeinated-sdk-root$".length());
         }
 
-        // Append `index.html` to the end when required.
-        if (!uri.contains(".")) {
-            if (uri.endsWith("/")) {
-                uri += "index.html";
-            } else {
-                uri += ".html";
+        if (uri.isEmpty()) {
+            uri = "/index.html";
+        } else {
+            // Append `index.html` to the end when required.
+            if (!uri.contains(".")) {
+                if (uri.endsWith("/")) {
+                    uri += "index.html";
+                } else {
+                    uri += ".html";
+                }
             }
         }
 

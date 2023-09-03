@@ -95,12 +95,16 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
     }
 
     public static @Nullable Pair<String, String> resolveUIFile(String resource) {
-        // Append `index.html` to the end when required.
-        if (!resource.contains(".")) {
-            if (resource.endsWith("/")) {
-                resource += "index.html";
-            } else {
-                resource += ".html";
+        if (resource.isEmpty()) {
+            resource = "/index.html";
+        } else {
+            // Append `index.html` to the end when required.
+            if (!resource.contains(".")) {
+                if (resource.endsWith("/")) {
+                    resource += "index.html";
+                } else {
+                    resource += ".html";
+                }
             }
         }
 
