@@ -100,7 +100,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             if (resource.endsWith("/")) {
                 resource += "index.html";
             } else {
-                resource += ".html";
+                resource += "/index.html";
             }
         }
 
