@@ -197,7 +197,7 @@
 
 	<ul class="space-y-4">
 		<!-- Script Examples -->
-		{#each ['song', 'where', 'shoutout'] as example}
+		{#each ['song', 'shoutout', 'sound', 'tts'] as example}
 			<li>
 				<h2 class="font-semibold">
 					!{example}

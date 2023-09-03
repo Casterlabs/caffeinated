@@ -40,18 +40,22 @@ public class TTS {
         return voices.toArray(new String[0]);
     }
 
-    public static byte[] getSpeech(@NonNull String voice, @NonNull String text) throws IOException {
-        assert doesVoiceExist(voice) : "Invalid voice";
-
+    public static byte[] getSpeech(@NonNull String defaultVoice, @NonNull String text) throws IOException {
         return WebUtil.sendHttpRequestBytes(
             new Request.Builder()
                 .url(
-                    String.format(
-                        "https://api.casterlabs.co/v1/polly?request=speech&voice=%s&text=%s",
-                        voice,
-                        WebUtil.encodeURIComponent(text)
-                    )
+                    getSpeechAsUrl(defaultVoice, text)
                 )
+        );
+    }
+
+    public static String getSpeechAsUrl(@NonNull String defaultVoice, @NonNull String text) throws IOException {
+        assert doesVoiceExist(defaultVoice) : "Invalid voice";
+
+        return String.format(
+            "https://api.casterlabs.co/v1/polly?request=speech&voice=%s&text=%s",
+            defaultVoice,
+            WebUtil.encodeURIComponent(text)
         );
     }
 

@@ -287,6 +287,10 @@ public class Bootstrap implements Runnable {
             public void onBrowserOpen() {
                 logger.debug("onWindowOpen");
 
+                try {
+                    ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", true);
+                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
+
                 if (this.traySupported) {
                     TrayHandler.updateShowCheckbox(true);
                 }
@@ -295,6 +299,10 @@ public class Bootstrap implements Runnable {
             @Override
             public void onBrowserClose() {
                 logger.debug("onBrowserClose");
+
+                try {
+                    ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", false);
+                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
 
                 if (this.traySupported) {
                     TrayHandler.updateShowCheckbox(false);

@@ -26,7 +26,9 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.rakurai.json.element.JsonArray;
+import co.casterlabs.rakurai.json.element.JsonNumber;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -43,6 +45,8 @@ public class AppUI extends JavascriptObject {
     private UIPreferences preferences = this.preferenceFile.get();
 
     private @Getter boolean uiFinishedLoad = false;
+
+    private @Getter boolean uiVisible = false;
 
     @Getter
     @JavascriptValue(allowSet = false)
@@ -218,6 +222,24 @@ public class AppUI extends JavascriptObject {
         if (this.uiFinishedLoad) {
             CaffeinatedApp.getInstance().getAppBridge().emit("goto", JsonObject.singleton("path", "/$caffeinated-sdk-root$" + path));
         }
+    }
+
+    public void playAudio(@NonNull String audioUrl, float volume) {
+        if (!this.uiVisible) {
+            CaffeinatedApp.getInstance().notify(
+                "The app cannot play sounds without the window being open and visible on screen.",
+                NotificationType.WARNING
+            );
+            return;
+        }
+
+        CaffeinatedApp.getInstance().getAppBridge().eval(
+            "(() => {"
+                + "const audio = new Audio(" + new JsonString(audioUrl) + ");"
+                + "audio.volume = " + new JsonNumber(volume) + ";"
+                + "audio.play();"
+                + "})();"
+        );
     }
 
     @SneakyThrows

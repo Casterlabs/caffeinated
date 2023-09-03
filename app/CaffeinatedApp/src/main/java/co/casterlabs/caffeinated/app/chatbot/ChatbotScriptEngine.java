@@ -1,5 +1,6 @@
 package co.casterlabs.caffeinated.app.chatbot;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -13,12 +14,14 @@ import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
+import co.casterlabs.caffeinated.pluginsdk.TTS;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import okhttp3.Request;
@@ -49,6 +52,7 @@ public class ChatbotScriptEngine {
     public static synchronized void execute(KoiEvent event, String scriptToExecute) {
         try {
             List<String> args = new LinkedList<>();
+            String rawArgs = "";
 
             if (event instanceof RichMessageEvent) {
                 Matcher matcher = QUOTE_PATTERN.matcher(((RichMessageEvent) event).getRaw());
@@ -62,7 +66,10 @@ public class ChatbotScriptEngine {
                     }
                 }
 
-                args.remove(0);
+                if (args.get(0).startsWith("!")) {
+                    String cmd = args.remove(0);
+                    rawArgs = ((RichMessageEvent) event).getRaw().substring(cmd.length()).trim();
+                }
             }
 
             String[] script = {
@@ -85,11 +92,16 @@ public class ChatbotScriptEngine {
                     "const Plugins = {"
                         + "callServiceMethod(pluginId, serviceId, methodName, args) {return __internal_handle.callServiceMethod(pluginId, serviceId, methodName, args);}"
                         + "};",
+                    "const Sound = {"
+                        + "playAudio(audioUrl, volume) {return __internal_handle.playAudio(audioUrl, volume);},"
+                        + "playTTS(text, defaultVoice, volume) {return __internal_handle.playTTS(text, defaultVoice, volume);}"
+                        + "};",
                     "",
 
                     // Per-event.
                     String.format("const event = %s;", Rson.DEFAULT.toJson(event)), // Define the event.
                     String.format("const args = %s;", Rson.DEFAULT.toJson(args)),   // Define a list of arguments, only applicable for RichMessages.
+                    String.format("const rawArgs = %s;", new JsonString(rawArgs)),  // ^
                     "",
 
                     scriptToExecute,
@@ -130,6 +142,17 @@ public class ChatbotScriptEngine {
 
         public Object callServiceMethod(@NonNull String pluginId, @NonNull String serviceId, @NonNull String methodName, @Nullable Object[] args) {
             return CaffeinatedApp.getInstance().getPlugins().callServiceMethod(pluginId, serviceId, methodName, args);
+        }
+
+        public void playAudio(@NonNull String audioUrl, Number volume) {
+            if (volume == null) volume = 1;
+            CaffeinatedApp.getInstance().getUI().playAudio(audioUrl, volume.floatValue());
+        }
+
+        public void playTTS(@NonNull String text, String defaultVoice, Number volume) throws IOException {
+            if (defaultVoice == null) defaultVoice = "Brian";
+            if (volume == null) volume = 1;
+            playAudio(TTS.getSpeechAsUrl(defaultVoice, text), volume.floatValue());
         }
 
     }
