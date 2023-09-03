@@ -5,6 +5,7 @@ import java.util.List;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.PreferenceFile;
+import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Action;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Shout;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.TriggerType;
@@ -211,7 +212,8 @@ public class AppChatbot extends JavascriptObject {
                         break;
 
                     case ALWAYS:
-                        if (!this.isChatBot(richMessage.getSender())) { // Prevent infinite loops.
+                        if (!this.isChatBot(richMessage.getSender()) && command.getResponseAction() == Action.EXECUTE) {
+                            // Prevent infinite loops / dumb behavior.
                             actUpon = true;
                         }
                         break;

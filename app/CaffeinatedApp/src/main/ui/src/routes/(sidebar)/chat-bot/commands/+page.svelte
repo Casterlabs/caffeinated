@@ -116,7 +116,7 @@
 					</span>
 
 					<span slot="4" class="block mt-1.5">
-						{#if command.responseAction == 'EXECUTE'}
+						{#if command.responseAction == 'EXECUTE' || command.triggerType == 'ALWAYS'}
 							<div class="relative h-20" class:h-[70vh]={codeExpandedOn == command}>
 								<CodeInput bind:value={command.response} on:value={saveDB} language="javascript" />
 
