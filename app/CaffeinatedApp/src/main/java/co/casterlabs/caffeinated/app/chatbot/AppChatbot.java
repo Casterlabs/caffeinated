@@ -7,6 +7,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Shout;
+import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.TriggerType;
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
@@ -106,7 +107,7 @@ public class AppChatbot extends JavascriptObject {
                 KoiEventType.RICH_MESSAGE : shout.getEventType();
 
             if (shoutType != e.getType() ||
-                shout.getText().isBlank()) {
+                shout.getResponse().isBlank()) {
                 continue;
             }
 
@@ -147,23 +148,32 @@ public class AppChatbot extends JavascriptObject {
                 continue;
             }
 
-            String message = shout.getText()
-                .replace("%username%", eventSender.getDisplayname());
+            switch (shout.getResponseAction()) {
+                case EXECUTE: {
+                    ChatbotScriptEngine.execute(e, shout.getResponse());
+                    break;
+                }
 
-            if (!message.contains(eventSender.getDisplayname())) {
-                // Try to always mention the actual user, this is to prevent issues with spam
-                // detection systems.
-                message = String.format("@%s %s", eventSender.getDisplayname(), message);
+                case REPLY_WITH: {
+                    String message = shout.getResponse()
+                        .replace("%username%", eventSender.getDisplayname());
+
+                    if (!message.contains(eventSender.getDisplayname())) {
+                        // Try to always mention the actual user, this is to prevent issues with spam
+                        // detection systems.
+                        message = String.format("@%s %s", eventSender.getDisplayname(), message);
+                    }
+
+                    CaffeinatedApp.getInstance().getKoi().sendChat(
+                        platform,
+                        message,
+                        this.preferences.get().getRealChatter(),
+                        null,
+                        false
+                    );
+                    break;
+                }
             }
-
-            CaffeinatedApp.getInstance().getKoi().sendChat(
-                platform,
-                message,
-                this.preferences.get().getRealChatter(),
-                null,
-                false
-            );
-
             return;
         }
     }
@@ -227,7 +237,7 @@ public class AppChatbot extends JavascriptObject {
                     }
                 }
 
-                if (command.getTriggerType() != Command.TriggerType.ALWAYS) {
+                if (command.getTriggerType() != TriggerType.ALWAYS) {
                     // We don't want to hide messages by accident with ALWAYS, hence the check.
                     hideable = true;
                 }

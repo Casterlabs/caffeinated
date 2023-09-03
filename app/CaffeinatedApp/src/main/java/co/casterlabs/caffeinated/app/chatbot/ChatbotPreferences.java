@@ -73,16 +73,6 @@ public class ChatbotPreferences {
             }
         }
 
-        public static enum TriggerType {
-            COMMAND,
-            CONTAINS,
-            ALWAYS
-        }
-
-        public static enum Action {
-            REPLY_WITH,
-            EXECUTE
-        }
     }
 
     @Data
@@ -91,7 +81,24 @@ public class ChatbotPreferences {
     public static class Shout {
         private @Nullable UserPlatform platform; // NULL = ANY
         private KoiEventType eventType;
-        private String text;
+        private Action responseAction;
+        private String response;
+
+        @JsonDeserializationMethod("text")
+        private void $migrate_response(JsonElement e) {
+            this.responseAction = Action.REPLY_WITH;
+            this.response = e.getAsString();
+        }
     }
 
+    public static enum TriggerType {
+        COMMAND,
+        CONTAINS,
+        ALWAYS
+    }
+
+    public static enum Action {
+        REPLY_WITH,
+        EXECUTE
+    }
 }

@@ -4,6 +4,7 @@
 	import TextArea from '$lib/ui/TextArea.svelte';
 	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
 	import Container from '$lib/ui/Container.svelte';
+	import CodeInput from '$lib/ui/CodeInput.svelte';
 
 	import { t } from '$lib/translate.mjs';
 	import { STREAMING_SERVICE_NAMES } from '$lib/caffeinatedAuth.mjs';
@@ -24,12 +25,18 @@
 		SUBSCRIPTION: 'page.chat_bot.shouts.SUBSCRIPTION'
 	};
 
+	const RESPONSE_ACTIONS = {
+		REPLY_WITH: 'page.chat_bot.commands.response_action.REPLY_WITH',
+		EXECUTE: 'page.chat_bot.commands.response_action.EXECUTE'
+	};
+
 	const console = createConsole('Chat Bot/Shouts');
 	const preferences = st || Caffeinated.chatbot.svelte('preferences');
 
 	$: preferences, $preferences && console.debug('Chat Bot Preferences:', $preferences);
-
 	$: shouts = $preferences?.shouts || [];
+
+	let codeExpandedOn = null;
 
 	function saveDB() {
 		debouncer.debounce(save);
@@ -49,7 +56,7 @@
 			<Container>
 				<LocalizedText
 					key="page.chat_bot.shouts.format"
-					slotMapping={['platform', 'action', 'message']}
+					slotMapping={['platform', 'action', 'response_action', 'response']}
 				>
 					<span class="inline-block h-fit" slot="0">
 						<SlimSelectMenu bind:value={shout.platform} options={PLATFORMS} on:value={saveDB} />
@@ -59,13 +66,57 @@
 						<SlimSelectMenu bind:value={shout.eventType} options={EVENT_TYPES} on:value={saveDB} />
 					</span>
 
-					<span slot="2" class="block mt-1.5">
-						<TextArea
-							placeholder="page.chat_bot.commands.example"
-							rows={2}
-							bind:value={shout.text}
-							on:value={saveDB}
+					<span class="inline-block h-fit" slot="2">
+						<SlimSelectMenu
+							bind:value={shout.responseAction}
+							options={RESPONSE_ACTIONS}
+							on:value={({ detail: value }) => {
+								// Swap the examples to make sense.
+								switch (value) {
+									case 'REPLY_WITH': {
+										if (shout.response == t('page.chat_bot.shouts.example.SCRIPT')) {
+											shout.trigger = 'casterlabs';
+											shout.response = t('page.chat_bot.shouts.example');
+										}
+										break;
+									}
+									case 'EXECUTE': {
+										if (shout.response == t('page.chat_bot.shouts.example')) {
+											shout.trigger = 'test';
+											shout.response = t('page.chat_bot.shouts.example.SCRIPT');
+										}
+										break;
+									}
+								}
+								saveDB();
+							}}
 						/>
+					</span>
+
+					<span slot="3" class="block mt-1.5">
+						{#if shout.responseAction == 'EXECUTE'}
+							<div class="relative h-20" class:h-[70vh]={codeExpandedOn == shout}>
+								<CodeInput bind:value={shout.response} on:value={saveDB} language="javascript" />
+
+								<button
+									class="absolute right-0 bottom-0 p-0.5 rounded-tl bg-base-2 hover:bg-base-7 border-t border-l border-base-8 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-base-12"
+									on:click={() => (codeExpandedOn = codeExpandedOn == shout ? null : shout)}
+								>
+									{#if codeExpandedOn == shout}
+										<icon class="h-5 w-5" data-icon="icon/arrows-pointing-in" />
+									{:else}
+										<icon class="h-5 w-5" data-icon="icon/arrows-pointing-out" />
+									{/if}
+								</button>
+							</div>
+						{:else}
+							<TextArea
+								placeholder="page.chat_bot.shouts.example"
+								rows={2}
+								bind:value={shout.response}
+								on:value={saveDB}
+							/>
+						{/if}
 					</span>
 				</LocalizedText>
 			</Container>

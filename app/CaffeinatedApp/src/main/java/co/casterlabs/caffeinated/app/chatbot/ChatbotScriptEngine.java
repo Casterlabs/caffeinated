@@ -15,6 +15,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.KoiChatterType;
+import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
@@ -45,21 +46,24 @@ public class ChatbotScriptEngine {
     }
 
     @SuppressWarnings("deprecation")
-    public static synchronized void execute(RichMessageEvent event, String scriptToExecute) {
+    public static synchronized void execute(KoiEvent event, String scriptToExecute) {
         try {
             List<String> args = new LinkedList<>();
-            Matcher matcher = QUOTE_PATTERN.matcher(event.getRaw());
-            while (matcher.find()) {
-                String arg = matcher.group(1).trim();
 
-                if (arg.charAt(0) == '"' && arg.charAt(arg.length() - 1) == '"') {
-                    args.add(arg.substring(1, arg.length() - 1));
-                } else {
-                    args.add(arg);
+            if (event instanceof RichMessageEvent) {
+                Matcher matcher = QUOTE_PATTERN.matcher(((RichMessageEvent) event).getRaw());
+                while (matcher.find()) {
+                    String arg = matcher.group(1).trim();
+
+                    if (arg.charAt(0) == '"' && arg.charAt(arg.length() - 1) == '"') {
+                        args.add(arg.substring(1, arg.length() - 1));
+                    } else {
+                        args.add(arg);
+                    }
                 }
-            }
 
-            args.remove(0);
+                args.remove(0);
+            }
 
             String[] script = {
                     "(() => {",
@@ -85,7 +89,7 @@ public class ChatbotScriptEngine {
 
                     // Per-event.
                     String.format("const event = %s;", Rson.DEFAULT.toJson(event)), // Define the event.
-                    String.format("const args = %s;", Rson.DEFAULT.toJson(args)),   // Define a list of arguments.
+                    String.format("const args = %s;", Rson.DEFAULT.toJson(args)),   // Define a list of arguments, only applicable for RichMessages.
                     "",
 
                     scriptToExecute,

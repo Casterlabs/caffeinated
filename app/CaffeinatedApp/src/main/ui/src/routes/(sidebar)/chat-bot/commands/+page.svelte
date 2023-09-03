@@ -4,13 +4,13 @@
 	import TextArea from '$lib/ui/TextArea.svelte';
 	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
 	import Container from '$lib/ui/Container.svelte';
+	import SlimButton from '$lib/ui/SlimButton.svelte';
+	import CodeInput from '$lib/ui/CodeInput.svelte';
 
 	import { t } from '$lib/translate.mjs';
 	import { STREAMING_SERVICE_NAMES } from '$lib/caffeinatedAuth.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
-	import SlimButton from '$lib/ui/SlimButton.svelte';
-	import CodeInput from '$lib/ui/CodeInput.svelte';
 	import { onMount, tick } from 'svelte';
 
 	const debouncer = new Debouncer();
