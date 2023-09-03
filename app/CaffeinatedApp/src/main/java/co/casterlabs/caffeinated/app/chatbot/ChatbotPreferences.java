@@ -12,6 +12,8 @@ import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
+import co.casterlabs.rakurai.json.element.JsonElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -47,14 +49,39 @@ public class ChatbotPreferences {
     @JsonClass(exposeAll = true)
     public static class Command {
         private @Nullable UserPlatform platform; // NULL = ANY
-        private String trigger;
+        private TriggerType triggerType;
+        private String trigger; // Not used on ALWAYS.
+        private Action responseAction; // Must be EXECUTE on ALWAYS
         private String response;
-        private CommandType type;
 
-        public static enum CommandType {
+        @JsonDeserializationMethod("type")
+        private void $migrate_trigger(JsonElement e) {
+            switch (e.getAsString()) {
+                case "SCRIPT":
+                    this.triggerType = TriggerType.COMMAND;
+                    this.responseAction = Action.EXECUTE;
+                    return;
+                case "CONTAINS":
+                    this.triggerType = TriggerType.CONTAINS;
+                    this.responseAction = Action.REPLY_WITH;
+                    return;
+                default:
+                case "COMMAND":
+                    this.triggerType = TriggerType.COMMAND;
+                    this.responseAction = Action.REPLY_WITH;
+                    return;
+            }
+        }
+
+        public static enum TriggerType {
             COMMAND,
             CONTAINS,
-            SCRIPT
+            ALWAYS
+        }
+
+        public static enum Action {
+            REPLY_WITH,
+            EXECUTE
         }
     }
 

@@ -20,10 +20,15 @@
 		...STREAMING_SERVICE_NAMES
 	};
 
-	const TYPES = {
-		COMMAND: 'page.chat_bot.commands.type.COMMAND',
-		CONTAINS: 'page.chat_bot.commands.type.CONTAINS',
-		SCRIPT: 'page.chat_bot.commands.type.SCRIPT'
+	const TRIGGER_TYPES = {
+		COMMAND: 'page.chat_bot.commands.trigger_type.COMMAND',
+		CONTAINS: 'page.chat_bot.commands.trigger_type.CONTAINS',
+		ALWAYS: 'page.chat_bot.commands.trigger_type.ALWAYS'
+	};
+
+	const RESPONSE_ACTIONS = {
+		REPLY_WITH: 'page.chat_bot.commands.response_action.REPLY_WITH',
+		EXECUTE: 'page.chat_bot.commands.response_action.EXECUTE'
 	};
 
 	const console = createConsole('Chat Bot/Commands');
@@ -54,8 +59,8 @@
 		<li class="relative">
 			<Container>
 				<LocalizedText
-					key="page.chat_bot.commands.format.{command.type}"
-					slotMapping={['platform', 'action', 'action_target', 'message']}
+					key="page.chat_bot.commands.format.{command.triggerType}"
+					slotMapping={['platform', 'trigger_type', 'trigger', 'response_action', 'response']}
 				>
 					<span class="inline-block h-fit" slot="0">
 						<SlimSelectMenu bind:value={command.platform} options={PLATFORMS} on:value={saveDB} />
@@ -63,19 +68,17 @@
 
 					<span class="inline-block h-fit" slot="1">
 						<SlimSelectMenu
-							bind:value={command.type}
-							options={TYPES}
-							on:value={({ detail: value }) => {
-								if (value == 'SCRIPT' && command.response == t('page.chat_bot.commands.example')) {
-									command.trigger = 'test';
-									command.response = t('page.chat_bot.commands.example.SCRIPT');
-								}
-								saveDB();
-							}}
+							bind:value={command.triggerType}
+							options={TRIGGER_TYPES}
+							on:value={saveDB}
 						/>
 					</span>
 
-					<div class="w-28 inline-block translate-y-3" slot="2">
+					<span
+						class="inline-block h-7 w-32 align-top"
+						slot="2"
+						class:hidden={command.triggerType == 'ALWAYS'}
+					>
 						<SlimTextArea
 							placeholder=""
 							rows="1"
@@ -83,10 +86,37 @@
 							bind:value={command.trigger}
 							on:value={saveDB}
 						/>
-					</div>
+					</span>
 
-					<span slot="3" class="block mt-1.5">
-						{#if command.type == 'SCRIPT'}
+					<span class="inline-block h-fit" slot="3">
+						<SlimSelectMenu
+							bind:value={command.responseAction}
+							options={RESPONSE_ACTIONS}
+							on:value={({ detail: value }) => {
+								// Swap the examples to make sense.
+								switch (value) {
+									case 'REPLY_WITH': {
+										if (command.response == t('page.chat_bot.commands.example.SCRIPT')) {
+											command.trigger = 'casterlabs';
+											command.response = t('page.chat_bot.commands.example');
+										}
+										break;
+									}
+									case 'EXECUTE': {
+										if (command.response == t('page.chat_bot.commands.example')) {
+											command.trigger = 'test';
+											command.response = t('page.chat_bot.commands.example.SCRIPT');
+										}
+										break;
+									}
+								}
+								saveDB();
+							}}
+						/>
+					</span>
+
+					<span slot="4" class="block mt-1.5">
+						{#if command.responseAction == 'EXECUTE'}
 							<div class="relative h-20" class:h-[70vh]={codeExpandedOn == command}>
 								<CodeInput bind:value={command.response} on:value={saveDB} language="javascript" />
 
@@ -101,10 +131,6 @@
 									{/if}
 								</button>
 							</div>
-
-							<span class="mt-4">
-								<LocalizedText key="sdk_documentation" />
-							</span>
 						{:else}
 							<TextArea
 								placeholder="page.chat_bot.commands.example"
@@ -145,9 +171,10 @@
 			on:click={() => {
 				commands.push({
 					platform: null,
+					triggerType: 'COMMAND',
 					trigger: 'casterlabs',
-					response: t('page.chat_bot.commands.example'),
-					type: 'COMMAND'
+					responseAction: 'REPLY',
+					response: t('page.chat_bot.commands.example')
 				});
 				commands = commands;
 				save();
@@ -182,9 +209,10 @@
 
 							commands.push({
 								platform: null,
+								triggerType: 'COMMAND',
 								trigger: trigger,
-								response: code,
-								type: 'SCRIPT'
+								responseAction: 'EXECUTE',
+								response: code
 							});
 							commands = commands;
 							save();
@@ -199,4 +227,8 @@
 			</li>
 		{/each}
 	</ul>
+
+	<span class="block mt-6">
+		<LocalizedText key="sdk_documentation" />
+	</span>
 </div>

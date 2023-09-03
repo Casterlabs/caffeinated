@@ -94,6 +94,10 @@ public class AppChatbot extends JavascriptObject {
         this.resetTimerTask();
     }
 
+    public boolean isChatBot(User sender) {
+        return sender.getUsername().equalsIgnoreCase("Casterlabs"); // TODO
+    }
+
     // Accessed from Koi.
     public void processEventForShout(KoiEvent e) {
         for (Shout shout : this.preferences.get().getShouts()) {
@@ -165,7 +169,13 @@ public class AppChatbot extends JavascriptObject {
     }
 
     // Accessed from Koi.
+    /**
+     * @return true if the message should get hidden (assuming the user has the
+     *         relevant option enabled)
+     */
     public boolean processEventForCommand(RichMessageEvent richMessage) {
+        boolean hideable = false;
+
         for (Command command : this.preferences.get().getCommands()) {
             // Not filled out, ignore.
             if (command.getTrigger().isBlank() || command.getResponse().isBlank()) {
@@ -175,45 +185,56 @@ public class AppChatbot extends JavascriptObject {
             // Null means any, so we check if the event's platform matches the target.
             UserPlatform platform = richMessage.getSender().getPlatform();
             if ((command.getPlatform() == null) || (command.getPlatform() == platform)) {
-                boolean send = false;
+                boolean actUpon = false;
 
-                switch (command.getType()) {
+                switch (command.getTriggerType()) {
                     case COMMAND:
                         if (richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
-                            send = true;
+                            actUpon = true;
                         }
                         break;
 
                     case CONTAINS:
                         if (richMessage.getRaw().contains(command.getTrigger())) {
-                            send = true;
+                            actUpon = true;
                         }
                         break;
 
-                    case SCRIPT:
-                        if (richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
-                            ChatbotScriptEngine.execute(richMessage, command.getResponse());
-                            return false; // !We don't want to hide the trigger message!
+                    case ALWAYS:
+                        if (!this.isChatBot(richMessage.getSender())) { // Prevent infinite loops.
+                            actUpon = true;
                         }
                         break;
                 }
 
-                if (send) {
-                    String message = command.getResponse();
+                if (!actUpon) continue;
 
-                    CaffeinatedApp.getInstance().getKoi().sendChat(
-                        platform,
-                        message,
-                        this.preferences.get().getRealChatter(),
-                        richMessage.getId(),
-                        false
-                    );
-                    return true;
+                switch (command.getResponseAction()) {
+                    case EXECUTE:
+                        ChatbotScriptEngine.execute(richMessage, command.getResponse());
+                        break;
+
+                    case REPLY_WITH: {
+                        String message = command.getResponse();
+                        CaffeinatedApp.getInstance().getKoi().sendChat(
+                            platform,
+                            message,
+                            this.preferences.get().getRealChatter(),
+                            richMessage.getId(),
+                            false
+                        );
+                        break;
+                    }
+                }
+
+                if (command.getTriggerType() != Command.TriggerType.ALWAYS) {
+                    // We don't want to hide messages by accident with ALWAYS, hence the check.
+                    hideable = true;
                 }
             }
         }
 
-        return false;
+        return hideable;
     }
 
 }
