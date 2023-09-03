@@ -29,7 +29,7 @@ public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
             if (uri.endsWith("/")) {
                 uri += "index.html";
             } else {
-                uri += "/index.html";
+                uri += ".html";
             }
         }
 
