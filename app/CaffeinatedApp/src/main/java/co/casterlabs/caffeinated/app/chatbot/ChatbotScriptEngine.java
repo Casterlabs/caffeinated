@@ -85,6 +85,12 @@ public class ChatbotScriptEngine {
                             + "%s;",
                         CaffeinatedApp.getInstance().getKoi().toJson().toString().substring(1) // Chop off the leading '{'
                     ),
+                    String.format(
+                        "const ChatBot = {"
+                            + "realChatter: %s"
+                            + "};",
+                        new JsonString(CaffeinatedApp.getInstance().getChatbotPreferences().get().getRealChatter().name())
+                    ),
                     "const fetch = {"
                         + "asText(url) {return __internal_handle.fetch_asText(url);},"
                         + "asJson(url) {return JSON.parse(__internal_handle.fetch_asText(url));}"

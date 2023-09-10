@@ -22,6 +22,7 @@ import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
+import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.NonNull;
 
 public class AppChatbot extends JavascriptObject {
@@ -165,12 +166,12 @@ public class AppChatbot extends JavascriptObject {
                         message = String.format("@%s %s", eventSender.getDisplayname(), message);
                     }
 
-                    CaffeinatedApp.getInstance().getKoi().sendChat(
-                        platform,
-                        message,
-                        this.preferences.get().getRealChatter(),
-                        null,
-                        false
+                    ChatbotScriptEngine.execute(
+                        e,
+                        String.format(
+                            "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",
+                            new JsonString(message).toString().replace("`", "\\`")
+                        )
                     );
                     break;
                 }
@@ -228,12 +229,12 @@ public class AppChatbot extends JavascriptObject {
 
                     case REPLY_WITH: {
                         String message = command.getResponse();
-                        CaffeinatedApp.getInstance().getKoi().sendChat(
-                            platform,
-                            message,
-                            this.preferences.get().getRealChatter(),
-                            richMessage.getId(),
-                            false
+                        ChatbotScriptEngine.execute(
+                            richMessage,
+                            String.format(
+                                "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",
+                                new JsonString(message).toString().replace("`", "\\`")
+                            )
                         );
                         break;
                     }
