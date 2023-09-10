@@ -22,7 +22,7 @@ import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
-import co.casterlabs.rakurai.json.element.JsonString;
+import co.casterlabs.rakurai.json.JsonStringUtil;
 import lombok.NonNull;
 
 public class AppChatbot extends JavascriptObject {
@@ -170,7 +170,7 @@ public class AppChatbot extends JavascriptObject {
                         e,
                         String.format(
                             "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",
-                            new JsonString(message).toString().replace("`", "\\`")
+                            JsonStringUtil.jsonEscape(message).toString().replace("`", "\\`")
                         )
                     );
                     break;
@@ -233,7 +233,7 @@ public class AppChatbot extends JavascriptObject {
                             richMessage,
                             String.format(
                                 "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",
-                                new JsonString(message).toString().replace("`", "\\`")
+                                JsonStringUtil.jsonEscape(message).toString().replace("`", "\\`")
                             )
                         );
                         break;
