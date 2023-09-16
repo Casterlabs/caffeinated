@@ -51,6 +51,12 @@ class ComponentResizer extends MouseAdapter {
     private @Getter Dimension minimumSize = new Dimension(500, 500);
     private @Getter @Setter Dimension maximumSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
+    private LightListener onChangeCallback;
+
+    public ComponentResizer(LightListener onChangeCallback) {
+        this.onChangeCallback = onChangeCallback;
+    }
+
     public void setMinimumSize(Dimension minimumSize) {
         int minimumWidth = dragInset + dragInset;
         int minimumHeight = dragInset + dragInset;
@@ -215,6 +221,8 @@ class ComponentResizer extends MouseAdapter {
             height += drag;
         }
 
+        this.onChangeCallback.onPositionChange(x, y);
+        this.onChangeCallback.onSizeChange(width, height);
         source.setBounds(x, y, width, height);
         source.validate();
     }

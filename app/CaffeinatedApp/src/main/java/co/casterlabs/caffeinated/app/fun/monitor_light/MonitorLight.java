@@ -25,8 +25,6 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
 
-import co.casterlabs.commons.platform.OSDistribution;
-import co.casterlabs.commons.platform.Platform;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -35,6 +33,8 @@ public class MonitorLight implements Closeable {
     private static final Cursor DRAG_CURSOR = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
     private static final int BORDER_WIDTH = 15;
     private static final Color BORDER_COLOR = new Color(200, 200, 200);
+
+    private LightListener onChangeCallback;
 
     private final JFrame frame = new JFrame("Casterlabs Caffeinated Light") {
         private static final long serialVersionUID = 913917615526213056L;
@@ -52,8 +52,7 @@ public class MonitorLight implements Closeable {
                 g.fillRect(0, 0, BORDER_WIDTH, height); // EAST
                 g.fillRect(width - BORDER_WIDTH, 0, BORDER_WIDTH, height); // WEST
             }
-        };
-
+        }
     };
 
     private final Canvas canvas = new Canvas() {
@@ -85,7 +84,7 @@ public class MonitorLight implements Closeable {
         @Override
         public void nativeMouseDragged(NativeMouseEvent e) {
             this.nativeMouseMoved(e);
-        };
+        }
     };
 
     private final NativeKeyListener shiftListener = new NativeKeyListener() {
@@ -119,10 +118,12 @@ public class MonitorLight implements Closeable {
     private @Getter @Setter LightStyle style = LightStyle.FULL;
 
     @SneakyThrows
-    public MonitorLight() {
-        if (Platform.osDistribution != OSDistribution.WINDOWS_NT) {
-            throw new RuntimeException("MonitorLight is only supported on windows.");
-        }
+    public MonitorLight(LightListener onChangeCallback) {
+        this.onChangeCallback = onChangeCallback;
+
+//        if (Platform.osDistribution != OSDistribution.WINDOWS_NT) {
+//            throw new RuntimeException("MonitorLight is only supported on windows.");
+//        }
 
         SwingUtilities.invokeAndWait(() -> {
             this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -148,6 +149,7 @@ public class MonitorLight implements Closeable {
                         newOpacity = .25f;
                     }
 
+                    onChangeCallback.onOpacityChange(newOpacity);
                     frame.setOpacity(newOpacity);
                     frame.repaint();
                 }
@@ -177,6 +179,7 @@ public class MonitorLight implements Closeable {
                     int x = currCoords.x - mouseDownCompCoords.x;
                     int y = currCoords.y - mouseDownCompCoords.y;
 
+                    onChangeCallback.onPositionChange(x, y);
                     frame.setLocation(x, y);
                 }
             });
@@ -184,7 +187,7 @@ public class MonitorLight implements Closeable {
 
             this.canvas.setCursor(Cursor.getDefaultCursor());
 
-            ComponentResizer cr = new ComponentResizer();
+            ComponentResizer cr = new ComponentResizer(this.onChangeCallback);
             cr.registerComponent(this.frame);
             cr.setMinimumSize(new Dimension(100, 100));
         });
@@ -201,13 +204,23 @@ public class MonitorLight implements Closeable {
 
     public void setOpacity(float opacity) {
         SwingUtilities.invokeLater(() -> {
+            this.onChangeCallback.onOpacityChange(opacity);
             this.frame.setOpacity(opacity);
+        });
+    }
+
+    @SneakyThrows
+    public void setPosition(int x, int y) {
+        SwingUtilities.invokeAndWait(() -> {
+            this.onChangeCallback.onPositionChange(x, y);
+            this.frame.setLocation(x, y);
         });
     }
 
     @SneakyThrows
     public void setSize(int width, int height) {
         SwingUtilities.invokeAndWait(() -> {
+            this.onChangeCallback.onSizeChange(width, height);
             this.frame.setSize(width, height);
         });
     }
