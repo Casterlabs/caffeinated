@@ -33,16 +33,31 @@ public class SubscribersGoal extends GenericGoal {
 
     @KoiEventHandler
     public void onUserUpdate(@Nullable UserUpdateEvent _ignored) {
-        UserPlatform platform = this.getSelectedPlatform();
+        long subCount = 0;
 
-        if (platform != null) {
-            this.update(Caffeinated.getInstance().getKoi().getUserStates().get(platform).getStreamer().getSubCount());
+        for (UserPlatform platform : this.getSelectedPlatforms()) {
+            UserUpdateEvent state = Caffeinated.getInstance().getKoi().getUserStates().get(platform);
+            if (state == null) continue;
+
+            long stateSubs = state.getStreamer().getSubCount();
+            if (stateSubs != -1) {
+                subCount += stateSubs;
+            }
         }
+
+        this.update(subCount);
     }
 
     @Override
     protected boolean enablePlatformOption() {
         return true;
+    }
+
+    @Override
+    protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
+        return new KoiIntegrationFeatures[] {
+                KoiIntegrationFeatures.SUBSCRIBER_COUNT
+        };
     }
 
 }

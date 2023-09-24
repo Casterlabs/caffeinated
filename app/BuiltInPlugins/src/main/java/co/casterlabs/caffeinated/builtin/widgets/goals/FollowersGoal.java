@@ -33,16 +33,31 @@ public class FollowersGoal extends GenericGoal {
 
     @KoiEventHandler
     public void onUserUpdate(@Nullable UserUpdateEvent _ignored) {
-        UserPlatform platform = this.getSelectedPlatform();
+        long followersCount = 0;
 
-        if (platform != null) {
-            this.update(Caffeinated.getInstance().getKoi().getUserStates().get(platform).getStreamer().getFollowersCount());
+        for (UserPlatform platform : this.getSelectedPlatforms()) {
+            UserUpdateEvent state = Caffeinated.getInstance().getKoi().getUserStates().get(platform);
+            if (state == null) continue;
+
+            long stateFollows = state.getStreamer().getFollowersCount();
+            if (stateFollows != -1) {
+                followersCount += stateFollows;
+            }
         }
+
+        this.update(followersCount);
     }
 
     @Override
     protected boolean enablePlatformOption() {
         return true;
+    }
+
+    @Override
+    protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
+        return new KoiIntegrationFeatures[] {
+                KoiIntegrationFeatures.FOLLOWER_COUNT
+        };
     }
 
 }

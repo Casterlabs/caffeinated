@@ -1,11 +1,8 @@
 package co.casterlabs.caffeinated.builtin.widgets.goals;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -15,10 +12,10 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
-import co.casterlabs.koi.api.listener.KoiEventHandler;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
+import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
@@ -26,26 +23,7 @@ import lombok.NonNull;
 public abstract class GenericGoal extends Widget implements KoiEventListener {
     public static final double DEMO_ASPECT_RATIO = 1 / 10d;
 
-    private static String[] platforms;
-
-    private boolean wasMultiPlatform;
     protected @Getter double count;
-
-    static {
-        List<String> platformsList = new ArrayList<>();
-
-        for (UserPlatform platform : UserPlatform.values()) {
-            if (platform == UserPlatform.CASTERLABS_SYSTEM) {
-                continue;
-            }
-
-            String name = platform.name().toLowerCase();
-
-            platformsList.add(name.substring(0, 1).toUpperCase() + name.substring(1));
-        }
-
-        platforms = platformsList.toArray(new String[0]);
-    }
 
     @Override
     public void onInit() {
@@ -179,10 +157,10 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
             }
         }
 
-        if (this.enablePlatformOption() && this.isMultiPlatform()) {
+        if (this.enablePlatformOption()) {
             layout.addSection(
                 new WidgetSettingsSection("platform", "Platform")
-                    .addItem(WidgetSettingsItem.asDropdown("platform", "Platform", platforms[0], platforms))
+                    .addItem(WidgetSettingsItem.asPlatformDropdown("platforms", "Use from", true, this.requiredPlatformFeatures()))
             );
         }
 
@@ -202,16 +180,6 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
         }
     }
 
-    @KoiEventHandler
-    public void GenericGoal_onUserUpdate(UserUpdateEvent event) {
-        boolean isMultiPlatform = this.isMultiPlatform();
-
-        if (isMultiPlatform != this.wasMultiPlatform) {
-            this.wasMultiPlatform = isMultiPlatform;
-            this.renderSettingsLayout();
-        }
-    }
-
     public void update(double count) {
         this.count = count;
         this.save();
@@ -226,37 +194,19 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
         } catch (IOException ignored) {}
     }
 
-    public @Nullable UserPlatform getSelectedPlatform() {
-        if (Caffeinated.getInstance().getKoi().isSignedOut()) {
-            return null;
-        } else {
-            UserPlatform platform = Caffeinated.getInstance().getKoi().getFirstSignedInPlatform();
-
-            if (this.isMultiPlatform()) {
-                try {
-                    UserPlatform selectedPlatform = UserPlatform.valueOf(this.settings().getString("platform.platform").toUpperCase());
-
-                    // Make sure that platform is signed in.
-                    if (Caffeinated.getInstance().getKoi().getUserStates().containsKey(selectedPlatform)) {
-                        platform = selectedPlatform;
-                    }
-                } catch (Exception e) {
-                    // INVALID VALUE.
-                }
-            }
-
-            return platform;
-        }
+    public List<UserPlatform> getSelectedPlatforms() {
+        return this.settings().get("platform.platforms", new TypeToken<List<UserPlatform>>() {
+        }, Collections.emptyList());
     }
 
     protected abstract boolean enablePlatformOption();
 
-    protected List<WidgetSettingsButton> getButtons() {
-        return Collections.emptyList();
+    protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
+        return new KoiIntegrationFeatures[0];
     }
 
-    protected boolean isMultiPlatform() {
-        return Caffeinated.getInstance().getKoi().getUserStates().size() > 1;
+    protected List<WidgetSettingsButton> getButtons() {
+        return Collections.emptyList();
     }
 
     protected boolean enableValueSetting() {

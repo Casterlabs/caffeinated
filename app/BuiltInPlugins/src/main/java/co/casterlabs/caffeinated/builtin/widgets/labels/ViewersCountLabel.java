@@ -48,14 +48,16 @@ public class ViewersCountLabel extends GenericLabel {
 
     @KoiEventHandler
     public void onUserUpdate(@Nullable UserUpdateEvent _ignored) {
-        UserPlatform platform = this.getSelectedPlatform();
+        long viewerCount = 0;
 
-        if (platform != null) {
-            this.updateText(Caffeinated.getInstance().getKoi().getViewerCounts().getOrDefault(platform, 0));
+        for (UserPlatform platform : this.getSelectedPlatforms()) {
+            viewerCount += Caffeinated.getInstance().getKoi().getViewerCounts().getOrDefault(platform, 0);
         }
+
+        this.updateText(viewerCount);
     }
 
-    private void updateText(int viewersCount) {
+    private void updateText(long viewersCount) {
         String html = String.valueOf(viewersCount);
 
         String prefix = WebUtil.escapeHtml(this.settings().getString("text.prefix")).replace(" ", "&nbsp;");
@@ -89,6 +91,13 @@ public class ViewersCountLabel extends GenericLabel {
     @Override
     protected boolean enablePlatformOption() {
         return true;
+    }
+
+    @Override
+    protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
+        return new KoiIntegrationFeatures[] {
+                KoiIntegrationFeatures.VIEWERS_COUNT
+        };
     }
 
 }
