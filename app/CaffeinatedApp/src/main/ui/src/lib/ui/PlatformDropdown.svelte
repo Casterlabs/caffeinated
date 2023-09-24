@@ -18,7 +18,7 @@
 	let open = false;
 	let highlighted = null;
 
-	$: open, open && (highlighted = value);
+	$: open, open && (highlighted = value[0]);
 
 	function select(id) {
 		if (!allowMultiple) {
