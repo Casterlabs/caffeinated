@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonArray;
@@ -219,6 +220,19 @@ public class WidgetSettingsItem {
         );
     }
 
+    /* Platform */
+
+    public static @NonNull WidgetSettingsItem asPlatformDropdown(String id, String name, boolean allowMultiple, KoiIntegrationFeatures... requiredFeatures) {
+        return new WidgetSettingsItem(
+            id,
+            name,
+            WidgetSettingsItemType.PLATFORM_DROPDOWN,
+            new JsonObject()
+                .put("allowMultiple", allowMultiple)
+                .put("requiredFeatures", Rson.DEFAULT.toJson(requiredFeatures))
+        );
+    }
+
     public static enum WidgetSettingsItemType {
         UNKNOWN,
 
@@ -228,12 +242,13 @@ public class WidgetSettingsItem {
         DROPDOWN,
         TEXT,
         TEXTAREA,
+        CODE,
         PASSWORD,
         CURRENCY,
         FONT,
         RANGE,
         FILE,
-        CODE,
+        PLATFORM_DROPDOWN,
 
     }
 

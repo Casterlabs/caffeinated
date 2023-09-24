@@ -10,6 +10,7 @@
 	import FileInput from './FileInput.svelte';
 	import SlimSearchMenu from './SlimSearchMenu.svelte';
 	import CodeInput from './CodeInput.svelte';
+	import PlatformDropdown from './PlatformDropdown.svelte';
 
 	import { fonts, currencies } from '$lib/misc.mjs';
 
@@ -127,6 +128,15 @@
 			{:else if type == 'file'}
 				{@const { allowed } = widgetSettingsItem.extraData}
 				<FileInput bind:value allowedTypes={allowed} on:value={onInput} />
+			{:else if type == 'platform_dropdown'}
+				{@const { allowMultiple, requiredFeatures } = widgetSettingsItem.extraData}
+				{@const realRequiredFeatures = requiredFeatures?.length > 0 ? requiredFeatures : null}
+				<PlatformDropdown
+					bind:value
+					{allowMultiple}
+					requiredFeatures={realRequiredFeatures}
+					on:value={onInput}
+				/>
 			{:else}
 				... {type}
 			{/if}

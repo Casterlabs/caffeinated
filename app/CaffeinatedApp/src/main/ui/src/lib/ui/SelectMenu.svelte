@@ -26,6 +26,9 @@
 	}
 </script>
 
+<!-- svelte-ignore missing-declaration -->
+<!-- svelte-ignore a11y-role-supports-aria-props -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="w-full" class:opacity-70={disabled} class:pointer-events-none={disabled}>
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label id={ID} class="block text-sm font-medium text-base-12">
