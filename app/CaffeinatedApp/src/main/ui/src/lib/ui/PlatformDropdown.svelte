@@ -5,13 +5,14 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { t } from '$lib/translate.mjs';
+	import { ALL_STREAMING_SERVICES } from '$lib/caffeinatedAuth.mjs';
 
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
 
 	export let allowMultiple = false;
 	export let requiredFeatures = [];
-	export let value = [];
+	export let value = ALL_STREAMING_SERVICES;
 
 	let options = [];
 
@@ -29,14 +30,14 @@
 			// We actually want to REMOVE.
 			value.splice(value.indexOf(id), 1);
 			value = value;
-			open = false;
+			if (!allowMultiple) open = false;
 			dispatch('value', value);
 			return;
 		}
 
 		value.push(id);
 		value = value;
-		open = false;
+		if (!allowMultiple) open = false;
 		dispatch('value', value);
 	}
 
