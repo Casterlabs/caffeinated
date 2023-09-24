@@ -3,13 +3,11 @@ package co.casterlabs.caffeinated.pluginsdk.widgets;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonArray;
-import co.casterlabs.rakurai.json.element.JsonBoolean;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonNull;
-import co.casterlabs.rakurai.json.element.JsonNumber;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
@@ -84,6 +82,28 @@ public class WidgetSettings {
         }
     }
 
+    @SneakyThrows
+    public @Nullable <T> T get(@NonNull String key, @NonNull Class<T> clazz) {
+        JsonElement e = this.get(key);
+
+        if ((e == null) || e.isJsonNull()) {
+            return null;
+        } else {
+            return Rson.DEFAULT.fromJson(e, clazz);
+        }
+    }
+
+    @SneakyThrows
+    public @Nullable <T> T get(@NonNull String key, @NonNull TypeToken<T> type) {
+        JsonElement e = this.get(key);
+
+        if ((e == null) || e.isJsonNull()) {
+            return null;
+        } else {
+            return Rson.DEFAULT.fromJson(e, type);
+        }
+    }
+
     // This needs to copy the settings before accessing
     // as the return types can be mutable.
     public JsonElement get(@NonNull String key) {
@@ -99,7 +119,7 @@ public class WidgetSettings {
     /* Getters (def)    */
     /* ---------------- */
 
-    public @Nullable String getString(@NonNull String key, @NonNull String defaultValue) {
+    public @NonNull String getString(@NonNull String key, @NonNull String defaultValue) {
         JsonElement e = this.unsafe_get(key);
 
         if ((e == null) || e.isJsonNull()) {
@@ -129,7 +149,7 @@ public class WidgetSettings {
         }
     }
 
-    public @Nullable JsonArray getArray(@NonNull String key, @NonNull JsonArray defaultValue) {
+    public @NonNull JsonArray getArray(@NonNull String key, @NonNull JsonArray defaultValue) {
         JsonElement e = this.get(key);
 
         if ((e == null) || e.isJsonNull()) {
@@ -139,7 +159,7 @@ public class WidgetSettings {
         }
     }
 
-    public @Nullable JsonObject getObject(@NonNull String key, @NonNull JsonObject defaultValue) {
+    public @NonNull JsonObject getObject(@NonNull String key, @NonNull JsonObject defaultValue) {
         JsonElement e = this.get(key);
 
         if ((e == null) || e.isJsonNull()) {
@@ -149,9 +169,31 @@ public class WidgetSettings {
         }
     }
 
+    @SneakyThrows
+    public @NonNull <T> T get(@NonNull String key, @NonNull Class<T> clazz, @NonNull T defaultValue) {
+        JsonElement e = this.get(key);
+
+        if ((e == null) || e.isJsonNull()) {
+            return defaultValue;
+        } else {
+            return Rson.DEFAULT.fromJson(e, clazz);
+        }
+    }
+
+    @SneakyThrows
+    public @NonNull <T> T get(@NonNull String key, @NonNull TypeToken<T> type, @NonNull T defaultValue) {
+        JsonElement e = this.get(key);
+
+        if ((e == null) || e.isJsonNull()) {
+            return defaultValue;
+        } else {
+            return Rson.DEFAULT.fromJson(e, type);
+        }
+    }
+
     // This needs to copy the settings before accessing
     // as the return types can be mutable.
-    public JsonElement get(@NonNull String key, @NonNull JsonElement defaultValue) {
+    public @NonNull JsonElement get(@NonNull String key, @NonNull JsonElement defaultValue) {
         JsonElement e = this.get(key);
 
         if ((e == null) || e.isJsonNull()) {
@@ -165,40 +207,13 @@ public class WidgetSettings {
     /* Setters          */
     /* ---------------- */
 
-    public WidgetSettings set(@NonNull String key, @Nullable String value) {
-        if (value == null) {
-            this.setNull(key);
-        } else {
-            this.set(key, new JsonString(value));
-        }
-        return this;
-    }
-
-    public WidgetSettings set(@NonNull String key, @Nullable Number value) {
-        if (value == null) {
-            this.setNull(key);
-        } else {
-            this.set(key, (JsonElement) new JsonNumber(value));
-        }
-        return this;
-    }
-
-    public WidgetSettings set(@NonNull String key, boolean value) {
-        this.set(key, new JsonBoolean(value));
-        return this;
-    }
-
     public WidgetSettings setNull(@NonNull String key) {
         this.set(key, JsonNull.INSTANCE);
         return this;
     }
 
-    public WidgetSettings set(@NonNull String key, @Nullable JsonElement value) {
-        if (value == null) {
-            value = JsonNull.INSTANCE;
-        }
-
-        this.setJson(this.getJson().put(key, value));
+    public WidgetSettings set(@NonNull String key, @Nullable Object value) {
+        this.setJson(this.getJson().put(key, Rson.DEFAULT.toJson(value)));
 
         return this;
     }
