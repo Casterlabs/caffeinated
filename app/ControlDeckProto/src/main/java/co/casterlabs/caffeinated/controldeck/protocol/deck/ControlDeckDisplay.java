@@ -2,7 +2,6 @@ package co.casterlabs.caffeinated.controldeck.protocol.deck;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
@@ -65,8 +64,7 @@ public class ControlDeckDisplay {
     }
 
     void onPacketDisplayTouch(CD_PacketDisplayTouch touchPacket) {
-        Point point = new Point(touchPacket.getX(), touchPacket.getY());
-
+//        Point point = new Point(touchPacket.getX(), touchPacket.getY());
 //        this.panel.dispatchEvent(new MouseEvent(panel, height, height, height, height, height, height, false)); // TODO
     }
 

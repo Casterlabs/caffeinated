@@ -56,6 +56,11 @@ public enum ControlDeckPacketType {
             case INVALID:
                 break;
 
+            case DISPLAY_UPDATE:
+                break;
+
+            case DISPLAY_TOUCH:
+                break;
         }
 
         return null;

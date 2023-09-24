@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
+import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
@@ -139,7 +140,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
 
     @Override
     public void onInit() {
-        this.getPlugins().registerWidget(this, KofiUI.DETAILS, KofiUI.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, KofiUI.DETAILS, KofiUI.class);
         this.onClose(true);
     }
 

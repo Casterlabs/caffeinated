@@ -19,7 +19,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSectio
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.events.ChatEvent;
+import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -100,11 +100,11 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
     }
 
     @KoiEventHandler
-    public void onChat(ChatEvent e) {
+    public void onChat(RichMessageEvent e) {
         try {
             String result = WebUtil.sendHttpRequest(
                 new Request.Builder()
-                    .url("https://www.youtube.com/oembed?format=json&url=" + WebUtil.escapeHtml(e.getMessage()))
+                    .url("https://www.youtube.com/oembed?format=json&url=" + WebUtil.escapeHtml(e.getRaw()))
             );
 
             if (!result.equals("Not Found")) {

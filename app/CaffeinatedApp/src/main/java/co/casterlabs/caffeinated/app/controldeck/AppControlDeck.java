@@ -19,7 +19,6 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class AppControlDeck extends JavascriptObject {
@@ -50,7 +49,7 @@ public class AppControlDeck extends JavascriptObject {
         decks.put(deck.getDeckId(), deck);
     }
 
-    @SneakyThrows
+//    @SneakyThrows
     private void reconnect() {
 //        this.connection.connect(
 //            String.format(

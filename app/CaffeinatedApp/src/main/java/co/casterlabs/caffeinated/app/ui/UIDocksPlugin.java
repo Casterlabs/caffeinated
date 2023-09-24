@@ -70,10 +70,10 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
             }
         };
 
-        this.getPlugins().registerWidgetFactory(this, STREAM_CHAT_DETAILS, factory);
-        this.getPlugins().registerWidgetFactory(this, VIEWERS_DETAILS, factory);
-//        this.getPlugins().registerWidgetFactory(this, CHANNEL_INFO_DETAILS, factory);
-        this.getPlugins().registerWidgetFactory(this, ACTIVITY_FEED_DETAILS, factory);
+        Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, STREAM_CHAT_DETAILS, factory);
+        Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, VIEWERS_DETAILS, factory);
+//        Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, CHANNEL_INFO_DETAILS, factory);
+        Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, ACTIVITY_FEED_DETAILS, factory);
     }
 
     @Override

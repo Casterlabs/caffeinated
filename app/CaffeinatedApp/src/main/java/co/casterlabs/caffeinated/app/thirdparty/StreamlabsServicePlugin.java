@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
+import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
@@ -42,7 +43,7 @@ public class StreamlabsServicePlugin extends CaffeinatedPlugin {
                 }
             });
 
-        this.getPlugins().registerWidget(this, StreamlabsUI.DETAILS, StreamlabsUI.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, StreamlabsUI.DETAILS, StreamlabsUI.class);
     }
 
     @Override
