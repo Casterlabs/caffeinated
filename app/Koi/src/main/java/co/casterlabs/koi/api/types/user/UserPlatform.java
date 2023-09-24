@@ -10,16 +10,17 @@ public enum UserPlatform {
     TROVO("Trovo"),
     YOUTUBE("YouTube"),
     DLIVE("DLive"),
-    THETA("Theta"),
     KICK("Kick"),
     TIKTOK("TikTok"),
 
     // Coming up.
     YOUNOW("YouNow"),
+    LIVESPACE("LiveSpace"),
 
     // Graveyard. R.I.P.
     GLIMESH("Glimesh"),
     BRIME("Brime"),
+    THETA("Theta"),
 
     // Other.
     CASTERLABS_SYSTEM("System"),

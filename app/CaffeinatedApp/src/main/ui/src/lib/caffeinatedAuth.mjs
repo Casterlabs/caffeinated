@@ -8,11 +8,11 @@ export const ALL_STREAMING_SERVICES = [
 	'CAFFEINE',
 	'TWITCH',
 	'TROVO',
-	'GLIMESH',
+	// 'GLIMESH',
 	// 'BRIME',
 	'YOUTUBE',
 	'DLIVE',
-	'THETA',
+	// 'THETA',
 	'KICK',
 	'TIKTOK'
 ];
@@ -30,10 +30,10 @@ export const STREAMING_SERVICES = {
 		name: 'Trovo',
 		color: '#149b53'
 	},
-	GLIMESH: {
-		name: 'Glimesh',
-		color: '#33528b'
-	},
+	// GLIMESH: {
+	// 	name: 'Glimesh',
+	// 	color: '#33528b'
+	// },
 	// BRIME: {
 	// 	name: 'Brime',
 	// 	color: 'linear-gradient(45deg, #8439af 15%, #fc3537 65%)'
@@ -46,10 +46,10 @@ export const STREAMING_SERVICES = {
 		name: 'DLive',
 		color: '#ccc121'
 	},
-	THETA: {
-		name: 'Theta',
-		color: '#161a24'
-	},
+	// THETA: {
+	// 	name: 'Theta',
+	// 	color: '#161a24'
+	// },
 	KICK: {
 		name: 'Kick (BETA)',
 		color: '#53fc18'
@@ -64,11 +64,11 @@ export const STREAMING_SERVICE_NAMES = {
 	CAFFEINE: 'Caffeine',
 	TWITCH: 'Twitch',
 	TROVO: 'Trovo',
-	GLIMESH: 'Glimesh',
+	// GLIMESH: 'Glimesh',
 	// BRIME: 'Brime',
 	YOUTUBE: 'YouTube',
 	DLIVE: 'DLive',
-	THETA: 'Theta',
+	// THETA: 'Theta',
 	KICK: 'Kick',
 	TIKTOK: 'TikTok'
 };
