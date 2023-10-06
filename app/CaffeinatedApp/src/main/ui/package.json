@@ -13,7 +13,7 @@
         "@sveltejs/kit": "^1.0.0",
         "autoprefixer": "^10.4.15",
         "concurrently": "^8.2.1",
-        "postcss": "^8.4.29",
+        "postcss": "^8.4.31",
         "prettier": "^3.0.3",
         "prettier-plugin-svelte": "^3.0.3",
         "rollup-plugin-postcss": "^4.0.2",
