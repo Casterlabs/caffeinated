@@ -125,6 +125,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         try {
             logsDir.mkdirs();
+            logFile.delete();
             logFile.createNewFile();
 
             new FileLogHandler(logFile);
