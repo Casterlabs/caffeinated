@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>FastLoggingFramework</artifactId>
-			<version>1.11.0</version>
+			<version>1.12.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

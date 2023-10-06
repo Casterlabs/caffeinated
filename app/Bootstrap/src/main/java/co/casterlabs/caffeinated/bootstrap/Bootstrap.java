@@ -69,10 +69,10 @@ public class Bootstrap implements Runnable {
     private boolean enableTraceLogging;
 
     @Option(names = {
-            "-dc",
-            "--disable-color"
-    }, description = "Disables colored output.")
-    private boolean disableColor = false;
+            "-ec",
+            "--enable-color"
+    }, description = "Enables colored output.")
+    private boolean enableColor = false;
 
     @Option(names = {
             "--started-by-updater"
@@ -140,7 +140,8 @@ public class Bootstrap implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
-        FastLoggingFramework.setColorEnabled(!this.disableColor);
+        FastLoggingFramework.setColorEnabled(this.enableColor);
+        System.setProperty("fastloggingframework.wrapsystem", "true");
 
         instance = this;
 
