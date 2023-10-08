@@ -48,7 +48,6 @@ public class SpotifyAuthProxy implements HttpProvider {
 
         return HttpResponse.newFixedLengthResponse(StandardHttpStatus.TEMPORARY_REDIRECT)
             .putHeader("Location", url);
-
     }
 
     @HttpEndpoint(uri = "/public/v2/caffeinated/spotify/auth/code")

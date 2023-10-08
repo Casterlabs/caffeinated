@@ -52,7 +52,6 @@ public class StreamlabsAuthProxy implements HttpProvider {
 
         return HttpResponse.newFixedLengthResponse(StandardHttpStatus.TEMPORARY_REDIRECT)
             .putHeader("Location", url);
-
     }
 
     @HttpEndpoint(uri = "/public/v2/caffeinated/streamlabs/auth/code")
