@@ -7,12 +7,13 @@ import co.casterlabs.rakurai.io.http.HttpMethod;
 import co.casterlabs.rakurai.io.http.StandardHttpStatus;
 import co.casterlabs.rakurai.io.http.server.HttpResponse;
 import co.casterlabs.rakurai.io.http.server.HttpSession;
+import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.sora.api.http.HttpProvider;
 import co.casterlabs.sora.api.http.annotations.HttpEndpoint;
 
 public class SpeedTestRoute implements HttpProvider {
-    private static final int LIMIT = 100/*mb*/ * 1000 * 1000;
+    private static final int LIMIT = 200/*mb*/ * 1000 * 1000;
 
     @HttpEndpoint(uri = "/public/v2/caffeinated/speedtest", allowedMethods = {
             HttpMethod.GET,
@@ -34,23 +35,26 @@ public class SpeedTestRoute implements HttpProvider {
                     .newFixedLengthResponse(
                         StandardHttpStatus.OK,
                         new JsonObject()
-                            .put("limit", LIMIT)
-                            .toString(true)
+                            .put(
+                                "data",
+                                new JsonObject()
+                                    .put("limit", LIMIT)
+                                    .put("recommendedDownload", LIMIT / 2) // 100mb
+                                    .put("recommendedUpload", LIMIT / 40) // 5mb
+                            )
+                            .put("errors", JsonArray.EMPTY_ARRAY)
                     )
                     .putHeader("Access-Control-Allow-Origin", "*")
                     .putHeader("Access-Control-Allow-Methods", "*")
                     .putHeader("Access-Control-Allow-Headers", "*");
 
             case PUT: {
-                long start = System.currentTimeMillis();
-
-                long total = 0;
                 {
+                    long total = 0;
                     long read;
-                    while ((read = session.getRequestBodyStream().skip(LIMIT)) != -1) {
+                    while ((read = session.getRequestBodyStream().skip(2048)) != -1) {
                         total += read;
-
-                        if (read > LIMIT) {
+                        if (total > LIMIT) {
                             // Over the limit.
                             return HttpResponse
                                 .newFixedLengthResponse(StandardHttpStatus.BAD_REQUEST)
@@ -61,18 +65,8 @@ public class SpeedTestRoute implements HttpProvider {
                     }
                 }
 
-                long end = System.currentTimeMillis();
-
-                long took = end - start;
-
                 return HttpResponse
-                    .newFixedLengthResponse(
-                        StandardHttpStatus.OK,
-                        new JsonObject()
-                            .put("took_ms", took)
-                            .put("total_read", total)
-                            .toString(true)
-                    )
+                    .newFixedLengthResponse(StandardHttpStatus.OK)
                     .putHeader("Access-Control-Allow-Origin", "*")
                     .putHeader("Access-Control-Allow-Methods", "*")
                     .putHeader("Access-Control-Allow-Headers", "*");
