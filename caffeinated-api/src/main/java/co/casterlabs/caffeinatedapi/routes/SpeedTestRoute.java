@@ -12,7 +12,7 @@ import co.casterlabs.sora.api.http.HttpProvider;
 import co.casterlabs.sora.api.http.annotations.HttpEndpoint;
 
 public class SpeedTestRoute implements HttpProvider {
-    private static final int LIMIT = 10/*mb*/ * 1000 * 1000;
+    private static final int LIMIT = 100/*mb*/ * 1000 * 1000;
 
     @HttpEndpoint(uri = "/public/v2/caffeinated/speedtest", allowedMethods = {
             HttpMethod.GET,
