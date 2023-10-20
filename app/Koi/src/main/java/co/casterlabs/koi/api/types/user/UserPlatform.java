@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum UserPlatform {
-    CAFFEINE("Caffeine"),
     TWITCH("Twitch"),
     TROVO("Trovo"),
     YOUTUBE("YouTube"),
@@ -18,6 +17,7 @@ public enum UserPlatform {
     LIVESPACE("LiveSpace"),
 
     // Graveyard. R.I.P.
+    CAFFEINE("Caffeine"),
     GLIMESH("Glimesh"),
     BRIME("Brime"),
     THETA("Theta"),

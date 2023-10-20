@@ -1,11 +1,10 @@
 export const SPECIAL_SIGNIN = {
-	CAFFEINE: '/$caffeinated-sdk-root$/signin/caffeine',
 	KICK: '/$caffeinated-sdk-root$/signin/kick'
 };
 
 export const ALL_STREAMING_SERVICES = [
 	// '',
-	'CAFFEINE',
+	// 'CAFFEINE',
 	'TWITCH',
 	'TROVO',
 	// 'GLIMESH',
@@ -18,10 +17,10 @@ export const ALL_STREAMING_SERVICES = [
 ];
 
 export const STREAMING_SERVICES = {
-	CAFFEINE: {
-		name: 'Caffeine',
-		color: '#0000ff'
-	},
+	// CAFFEINE: {
+	// 	name: 'Caffeine',
+	// 	color: '#0000ff'
+	// },
 	TWITCH: {
 		name: 'Twitch',
 		color: '#8838ff'
@@ -61,7 +60,7 @@ export const STREAMING_SERVICES = {
 };
 
 export const STREAMING_SERVICE_NAMES = {
-	CAFFEINE: 'Caffeine',
+	// CAFFEINE: 'Caffeine',
 	TWITCH: 'Twitch',
 	TROVO: 'Trovo',
 	// GLIMESH: 'Glimesh',

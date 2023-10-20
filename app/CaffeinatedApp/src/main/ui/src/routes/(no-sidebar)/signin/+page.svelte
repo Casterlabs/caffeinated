@@ -117,7 +117,7 @@
 		<LocalizedText key="page.signin.choose" />
 	</h2>
 
-	<div class="mt-4 w-72 mx-auto flex flex-wrap justify-center">
+	<div class="mt-4 w-64 mx-auto flex flex-wrap justify-center">
 		{#each Object.entries(STREAMING_SERVICES) as [platform, { name, color }]}
 			{@const href = SPECIAL_SIGNIN[platform]
 				? `${SPECIAL_SIGNIN[platform]}?dontGoBack`
