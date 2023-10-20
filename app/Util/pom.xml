@@ -28,8 +28,14 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>co.casterlabs</groupId>
-			<artifactId>Rson</artifactId>
+			<groupId>co.casterlabs.Rakurai</groupId>
+			<artifactId>Json</artifactId>
+			<version>1.17.8</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>co.casterlabs.Rakurai</groupId>
+			<artifactId>Util</artifactId>
 			<version>1.17.8</version>
 			<scope>compile</scope>
 		</dependency>
