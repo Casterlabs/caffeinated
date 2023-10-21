@@ -60,7 +60,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public static final String caffeinatedClientId = "LmHG2ux992BxqQ7w9RJrfhkW";
     public static final String appDataDir;
 
-    public static final String AUTH_URL = "https://casterlabs.co/auth/redirect";
+    public static final String AUTH_URL = "https://auth.casterlabs.co/auth/redirect";
     public static final Map<String, String> OVERRIDE_AUTH_URLS = Map.of(
         "spotify", "https://api.casterlabs.co/v2/caffeinated/spotify/auth/redirect",
         "streamlabs", "https://api.casterlabs.co/v2/caffeinated/streamlabs/auth/redirect"

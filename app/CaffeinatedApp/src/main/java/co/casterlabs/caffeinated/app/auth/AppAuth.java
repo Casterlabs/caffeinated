@@ -348,28 +348,8 @@ public class AppAuth extends JavascriptObject {
      * @implSpec IllegalStateException means MFA prompt.
      */
     @JavascriptFunction
-    public void loginCaffeine(@NonNull String username, @NonNull String password, @Nullable String mfa, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
-        String koiToken = CaffeineHelper.login(username, password, mfa);
-        final String tokenId = "caffeine";
-
-        CaffeinatedApp
-            .getInstance()
-            .getAuthPreferences()
-            .get()
-            .addToken("koi", tokenId, koiToken);
-
-        CaffeinatedApp.getInstance().getAnalytics().track("AUTH__" + tokenId, true);
-        this.startAuthInstance(tokenId);
-
-        if (shouldNavigateBackwards) {
-            // Navigate backwards for the signin screen.
-            CaffeinatedApp.getInstance().getUI().goBack();
-        }
-    }
-
-    @JavascriptFunction
-    public void loginKick(@NonNull String username, @NonNull String password, @Nullable String mfa, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
-        String koiToken = KickHelper.login(username, password, mfa);
+    public void loginKick(@NonNull String email, @NonNull String password, @Nullable String mfa, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
+        String koiToken = KickHelper.login(email, password, mfa);
         final String tokenId = "kick";
 
         CaffeinatedApp
@@ -402,7 +382,14 @@ public class AppAuth extends JavascriptObject {
         try {
             Desktop
                 .getDesktop()
-                .browse(new URI(oauthLink + "?state=" + callback.getStateString()));
+                .browse(
+                    new URI(
+                        oauthLink +
+                            "?platform=" + type.toUpperCase() +
+                            "&clientId=" + CaffeinatedApp.caffeinatedClientId +
+                            "&state=" + callback.getStateString()
+                    )
+                );
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
