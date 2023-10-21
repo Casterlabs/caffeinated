@@ -117,7 +117,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
             this.activePlayback = null;
         }
 
-        final File musicApiDir = new File(CaffeinatedApp.appDataDir, "api/music");
+        final File musicApiDir = new File(CaffeinatedApp.APP_DATA_DIR, "api/music");
         musicApiDir.mkdirs();
 
         // Write some cute files for the end user to mess with :^)
@@ -179,7 +179,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
     }
 
     private void importOldJson() {
-        File oldJson = new File(CaffeinatedApp.appDataDir, "preferences/music.json");
+        File oldJson = new File(CaffeinatedApp.APP_DATA_DIR, "preferences/music.json");
         if (!oldJson.exists()) return;
 
         try {
@@ -196,7 +196,7 @@ public class MusicIntegration extends JavascriptObject implements Music {
         } finally {
             // Keep a backup of the file.
             FastLogger.logStatic(LogLevel.INFO, "Done!");
-            oldJson.renameTo(new File(CaffeinatedApp.appDataDir, "preferences/old/music.json"));
+            oldJson.renameTo(new File(CaffeinatedApp.APP_DATA_DIR, "preferences/old/music.json"));
             oldJson.delete();
         }
     }

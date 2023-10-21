@@ -386,7 +386,7 @@ public class AppAuth extends JavascriptObject {
                     new URI(
                         oauthLink +
                             "?platform=" + type.toUpperCase() +
-                            "&clientId=" + CaffeinatedApp.caffeinatedClientId +
+                            "&clientId=" + CaffeinatedApp.KOI_ID +
                             "&state=" + callback.getStateString()
                     )
                 );

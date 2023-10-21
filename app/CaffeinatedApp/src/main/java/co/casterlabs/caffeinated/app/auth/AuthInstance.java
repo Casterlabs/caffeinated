@@ -79,7 +79,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
             koiUrl,
             koiLogger,
             this,
-            CaffeinatedApp.caffeinatedClientId
+            CaffeinatedApp.KOI_ID
         );
 
         this.reconnect();

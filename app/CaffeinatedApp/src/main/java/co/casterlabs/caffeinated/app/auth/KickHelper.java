@@ -23,7 +23,7 @@ class KickHelper {
             new Request.Builder()
                 .url(
                     "https://api.auth.casterlabs.co/v1/koi/platforms/KICK/do-auth"
-                        + "?clientId=" + CaffeinatedApp.caffeinatedClientId
+                        + "?clientId=" + CaffeinatedApp.KOI_ID
                         + "&state=X"
                 )
         );

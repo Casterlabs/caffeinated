@@ -34,7 +34,7 @@ public class AuthCallback {
         this.stateString = String.format("auth_redirect:%s:caffeinated_%s", new String(Crypto.generateSecureRandomKey()), this.type);
 
         if (isKoi) {
-            this.stateString += ':' + CaffeinatedApp.caffeinatedClientId;
+            this.stateString += ':' + CaffeinatedApp.KOI_ID;
         }
     }
 

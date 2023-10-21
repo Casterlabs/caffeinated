@@ -16,7 +16,7 @@ import xyz.e3ndr.consoleutil.ipc.MemoryMappedIpc;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class InstanceManager {
-    private static File ipcDir = new File(CaffeinatedApp.appDataDir, "/ipc/");
+    private static File ipcDir = new File(CaffeinatedApp.APP_DATA_DIR, "/ipc/");
     private static File lockFile = new File(ipcDir, "instance.lock");
 
     static {

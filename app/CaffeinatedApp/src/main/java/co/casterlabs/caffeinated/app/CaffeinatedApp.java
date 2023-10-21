@@ -57,8 +57,8 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private static final String ANALYTICS_ID = "uC69hShzxhbQ";
 
-    public static final String caffeinatedClientId = "LmHG2ux992BxqQ7w9RJrfhkW";
-    public static final String appDataDir;
+    public static final String KOI_ID = "LmHG2ux992BxqQ7w9RJrfhkW";
+    public static final String APP_DATA_DIR;
 
     public static final String AUTH_URL = "https://auth.casterlabs.co/auth/redirect";
     public static final Map<String, String> OVERRIDE_AUTH_URLS = Map.of(
@@ -115,12 +115,12 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     static {
         AppDirs appDirs = AppDirsFactory.getInstance();
-        appDataDir = appDirs.getUserDataDir("casterlabs-caffeinated", null, null, true);
+        APP_DATA_DIR = appDirs.getUserDataDir("casterlabs-caffeinated", null, null, true);
 
-        new File(appDataDir, "preferences").mkdirs();
-        new File(appDataDir, "preferences/old").mkdir();
+        new File(APP_DATA_DIR, "preferences").mkdirs();
+        new File(APP_DATA_DIR, "preferences/old").mkdir();
 
-        final File logsDir = new File(appDataDir, "logs");
+        final File logsDir = new File(APP_DATA_DIR, "logs");
         final File logFile = new File(logsDir, "app.log");
 
         try {
@@ -157,7 +157,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public void init(boolean traySupported) {
         this.isTraySupported = traySupported;
 
-        this.preferencesConnection = DriverManager.getConnection("jdbc:sqlite:" + new File(CaffeinatedApp.appDataDir, "preferences/database.sqlite").getCanonicalPath());
+        this.preferencesConnection = DriverManager.getConnection("jdbc:sqlite:" + new File(APP_DATA_DIR, "preferences/database.sqlite").getCanonicalPath());
 
         this.chatbot.init();
         this.UI.init();
@@ -275,7 +275,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     @JavascriptGetter("clientId")
     private String caffeinatedClientId() {
-        return caffeinatedClientId;
+        return KOI_ID;
     }
 
     @Override

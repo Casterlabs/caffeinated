@@ -46,7 +46,7 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 public class PluginIntegration extends JavascriptObject {
-    private static final File pluginsDir = new File(CaffeinatedApp.appDataDir, "plugins");
+    private static final File pluginsDir = new File(CaffeinatedApp.APP_DATA_DIR, "plugins");
     private static final String addressesStringList = String.join(",", InterfaceUtil.getLocalIpAddresses());
 
     private PluginsHandler plugins = new PluginsHandler();

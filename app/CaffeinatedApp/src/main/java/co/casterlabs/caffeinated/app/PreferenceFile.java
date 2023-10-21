@@ -40,7 +40,7 @@ public class PreferenceFile<T> {
         this.name = name;
         this.clazz = clazz;
         this.logger = new FastLogger(String.format("PreferenceFile (%s)", this.name));
-        this.file = new File(CaffeinatedApp.appDataDir, String.format("preferences/%s.json", this.name));
+        this.file = new File(CaffeinatedApp.APP_DATA_DIR, String.format("preferences/%s.json", this.name));
 
         this.data = clazz.newInstance();
 

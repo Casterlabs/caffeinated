@@ -16,7 +16,7 @@ public class PluginImporter {
     private static final FastLogger logger = new FastLogger();
 
     public static List<WidgetSettingsDetails> importOldJson() {
-        File oldJson = new File(CaffeinatedApp.appDataDir, "preferences/plugins.json");
+        File oldJson = new File(CaffeinatedApp.APP_DATA_DIR, "preferences/plugins.json");
         if (!oldJson.exists()) return Collections.emptyList();
 
         try {
@@ -32,7 +32,7 @@ public class PluginImporter {
         } finally {
             // Keep a backup of the file.
             logger.info("Done!");
-            oldJson.renameTo(new File(CaffeinatedApp.appDataDir, "preferences/old/plugins.json"));
+            oldJson.renameTo(new File(CaffeinatedApp.APP_DATA_DIR, "preferences/old/plugins.json"));
             oldJson.delete();
         }
     }
