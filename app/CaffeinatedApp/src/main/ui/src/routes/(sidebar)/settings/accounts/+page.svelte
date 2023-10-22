@@ -7,7 +7,12 @@
 	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
 	import { goto } from '$app/navigation';
-	import { STREAMING_SERVICES, SPECIAL_SIGNIN } from '$lib/caffeinatedAuth.mjs';
+	import {
+		STREAMING_SERVICES,
+		SPECIAL_SIGNIN,
+		PORTAL_SIGNIN,
+		openAuthPortal
+	} from '$lib/caffeinatedAuth.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const MUSIC_SERVICES_WITH_ENABLE = ['system', 'pretzel'];
@@ -88,7 +93,12 @@
 										class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 										on:click={() => {
 											if (SPECIAL_SIGNIN[platform]) {
-												goto(SPECIAL_SIGNIN[platform]);
+												goto(`${SPECIAL_SIGNIN[platform]}?platform=${platform.toLowerCase()}`);
+												return;
+											}
+
+											if (PORTAL_SIGNIN.includes(platform)) {
+												openAuthPortal(platform, false);
 												return;
 											}
 

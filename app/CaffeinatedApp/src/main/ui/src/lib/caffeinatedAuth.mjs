@@ -1,6 +1,17 @@
-export const SPECIAL_SIGNIN = {
-	KICK: '/$caffeinated-sdk-root$/signin/kick'
-};
+export const SPECIAL_SIGNIN = {};
+
+export const PORTAL_SIGNIN = ["KICK"];
+
+// See also: appShim.mjs
+export async function openAuthPortal(platform, shouldGoBack) {
+	const portalLink = await Caffeinated.auth.getPortalUrl(platform, JSON.stringify({ shouldGoBack }));
+
+	const frame = document.createElement("iframe");
+	frame.src = portalLink;
+	frame.id = "koi-auth-portal";
+	frame.style = "position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100vw; height: 100vh; z-index: 10000;"
+	document.body.insertBefore(frame, document.body.firstChild);
+}
 
 export const ALL_STREAMING_SERVICES = [
 	// '',

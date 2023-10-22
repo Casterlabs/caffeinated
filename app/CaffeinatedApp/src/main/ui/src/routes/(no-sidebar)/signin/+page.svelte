@@ -2,7 +2,12 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { onDestroy } from 'svelte';
-	import { SPECIAL_SIGNIN, STREAMING_SERVICES } from '$lib/caffeinatedAuth.mjs';
+	import {
+		STREAMING_SERVICES,
+		SPECIAL_SIGNIN,
+		PORTAL_SIGNIN,
+		openAuthPortal
+	} from '$lib/caffeinatedAuth.mjs';
 
 	// DOOT!
 	const ACTIVATE_AT = 5;
@@ -120,7 +125,7 @@
 	<div class="mt-4 w-64 mx-auto flex flex-wrap justify-center">
 		{#each Object.entries(STREAMING_SERVICES) as [platform, { name, color }]}
 			{@const href = SPECIAL_SIGNIN[platform]
-				? `${SPECIAL_SIGNIN[platform]}?dontGoBack`
+				? `${SPECIAL_SIGNIN[platform]}?dontGoBack&platform=${platform.toLowerCase()}`
 				: `/$caffeinated-sdk-root$/signin/oauth?dontGoBack&type=koi&platform=${platform.toLowerCase()}`}
 
 			<a
@@ -128,6 +133,12 @@
 				class="signin-icon w-12 h-12 m-1 border border-base-6 rounded inline-flex items-center justify-center transition"
 				style="--color: {color};"
 				title={name}
+				on:click={(e) => {
+					if (PORTAL_SIGNIN.includes(platform)) {
+						openAuthPortal(platform, false);
+						e.preventDefault();
+					}
+				}}
 			>
 				<icon data-icon="service/{platform.toLowerCase()}" />
 			</a>

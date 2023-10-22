@@ -16,9 +16,9 @@ if (typeof global == 'undefined') {
 	global.st = {
 		subscribe(callback) {
 			callback(null);
-			return () => {};
+			return () => { };
 		},
-		set() {} // No-OP
+		set() { } // No-OP
 	};
 }
 
@@ -29,6 +29,32 @@ function setupCommon() {
 function setupApp() {
 	// "Exposes" goto() to the Java side.
 	Bridge.on('goto', ({ path }) => goto(path));
+
+	window.addEventListener("message", async (e) => {
+		console.debug(e);
+
+		switch (e.origin) {
+			case "https://auth.casterlabs.co": {
+				// See also: caffeinatedAuth.mjs
+				switch (e.data.type) {
+					case 'TOKEN': {
+						const { shouldGoBack } = JSON.parse(e.data.state);
+						await Caffeinated.auth.loginPortal('KICK', e.data.token, shouldGoBack);
+
+						// Fall through and close all portals.
+					}
+
+					case 'CLOSE': {
+						document
+							.querySelectorAll("#koi-auth-portal")
+							.forEach((e) => e.remove());
+						return;
+					}
+				}
+				return;
+			}
+		}
+	});
 
 	Caffeinated.themeManager.svelte('baseColor').subscribe(App.baseColor.set);
 	Caffeinated.themeManager.svelte('primaryColor').subscribe(App.primaryColor.set);

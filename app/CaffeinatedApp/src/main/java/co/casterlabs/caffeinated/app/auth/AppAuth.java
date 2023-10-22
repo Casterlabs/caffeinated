@@ -344,13 +344,21 @@ public class AppAuth extends JavascriptObject {
         }
     }
 
-    /**
-     * @implSpec IllegalStateException means MFA prompt.
-     */
     @JavascriptFunction
-    public void loginKick(@NonNull String email, @NonNull String password, @Nullable String mfa, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
-        String koiToken = KickHelper.login(email, password, mfa);
-        final String tokenId = "kick";
+    public String getPortalUrl(String platform, String state) throws IOException, IllegalStateException, IllegalArgumentException {
+        String response = WebUtil.sendHttpRequest(
+            new Request.Builder()
+                .url(String.format("https://api.auth.casterlabs.co/v1/koi/platforms/%s/do-auth?state=%s&clientId=%s", platform, WebUtil.encodeURIComponent(state), CaffeinatedApp.KOI_ID))
+        );
+
+        JsonObject json = Rson.DEFAULT.fromJson(response, JsonObject.class);
+
+        return json.getObject("data").getString("next");
+    }
+
+    @JavascriptFunction
+    public void loginPortal(String platform, String koiToken, boolean shouldNavigateBackwards) throws IOException, IllegalStateException, IllegalArgumentException {
+        final String tokenId = platform;
 
         CaffeinatedApp
             .getInstance()
