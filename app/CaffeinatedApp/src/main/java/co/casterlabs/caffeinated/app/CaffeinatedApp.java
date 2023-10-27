@@ -21,6 +21,7 @@ import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotScriptEngine;
 import co.casterlabs.caffeinated.app.controldeck.AppControlDeck;
 import co.casterlabs.caffeinated.app.controldeck.ControlDeckPreferences;
+import co.casterlabs.caffeinated.app.fun.multistreaming.Multistreaming;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
@@ -84,16 +85,16 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // @formatter:off
 
     // Integrations
-    private PluginIntegration  pluginIntegration  = new PluginIntegration();
-    private MusicIntegration   music              = new MusicIntegration();
-    private AppControlDeck     controlDeck        = new AppControlDeck();
-    private ThemeManager       themeManager       = new ThemeManager();
-    private AppChatbot         chatbot            = new AppChatbot();
-    private GlobalKoi          koi                = new GlobalKoi();
-    private AppAuth            auth               = new AppAuth();
-    private EmojisObj          emojis             = new EmojisObj();
-    private AppApi             api                = new AppApi();
-    private AppUI              UI                 = new AppUI();
+    private final PluginIntegration  pluginIntegration  = new PluginIntegration();
+    private final MusicIntegration   music              = new MusicIntegration();
+    private final AppControlDeck     controlDeck        = new AppControlDeck();
+    private final ThemeManager       themeManager       = new ThemeManager();
+    private final AppChatbot         chatbot            = new AppChatbot();
+    private final GlobalKoi          koi                = new GlobalKoi();
+    private final AppAuth            auth               = new AppAuth();
+    private final EmojisObj          emojis             = new EmojisObj();
+    private final AppApi             api                = new AppApi();
+    private final AppUI              UI                 = new AppUI();
 
     // Preferences
     private PreferenceFile<ControlDeckPreferences>       controlDeckPreferences = new PreferenceFile<>("controldeck", ControlDeckPreferences.class);
