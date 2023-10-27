@@ -86,6 +86,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     // Integrations
     private final PluginIntegration  pluginIntegration  = new PluginIntegration();
+    private final Multistreaming     multistreaming     = Multistreaming.INSTANCE;
     private final MusicIntegration   music              = new MusicIntegration();
     private final AppControlDeck     controlDeck        = new AppControlDeck();
     private final ThemeManager       themeManager       = new ThemeManager();
