@@ -83,24 +83,27 @@ export function translate(key, opts = {}, simpleResponse = true) {
         result = arr[Math.floor(Math.random() * arr.length)];
     }
 
-    // Replace placeholders
-    (result.match(/{\w+}/g) || []).forEach((match) => {
-        const item = match.slice(1, -1);
+    // Do not process placeholders for `.raw` or `.code` keys.
+    if (!key.endsWith(".raw") && !key.endsWith(".code")) {
+        // Replace placeholders
+        (result.match(/{\w+}/g) || []).forEach((match) => {
+            const item = match.slice(1, -1);
 
-        if (opts[item] != undefined) {
-            result = result.replace(match, opts[item]);
-        } else {
-            console.warn("Could not find missing option for", item, "in", opts, "for", key);
-        }
-    });
+            if (opts[item] != undefined) {
+                result = result.replace(match, opts[item]);
+            } else {
+                console.warn("Could not find missing option for", item, "in", opts, "for", key);
+            }
+        });
 
-    // Replace localized placeholders
-    (result.match(/\[[\w\.]+\]/g) || []).forEach((match) => {
-        const item = match.slice(1, -1);
-        const tItem = translate(item, {}, true);
+        // Replace localized placeholders
+        (result.match(/\[[\w\.]+\]/g) || []).forEach((match) => {
+            const item = match.slice(1, -1);
+            const tItem = translate(item, {}, true);
 
-        result = result.replace(match, tItem);
-    });
+            result = result.replace(match, tItem);
+        });
+    }
 
     if (result == key && simpleResponse) {
         console.warn("Missing translation key:", key);
