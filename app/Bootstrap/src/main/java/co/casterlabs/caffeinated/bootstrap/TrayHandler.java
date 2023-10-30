@@ -116,6 +116,10 @@ public class TrayHandler {
     public static void updateShowCheckbox(boolean newState) {
         if (showCheckbox != null) {
             showCheckbox.setState(newState);
+
+            if (!newState && CaffeinatedApp.getInstance().canDoOneTimeEvent("caffeinated.instance.closed_to_tray")) {
+                notify("Caffeinated has been minimized to the tray. Click the icon to reopen.", MessageType.INFO);
+            }
         }
     }
 
