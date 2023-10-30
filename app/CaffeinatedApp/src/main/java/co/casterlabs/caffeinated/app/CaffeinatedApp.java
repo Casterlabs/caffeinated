@@ -19,9 +19,7 @@ import co.casterlabs.caffeinated.app.auth.AuthPreferences;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotScriptEngine;
-import co.casterlabs.caffeinated.app.controldeck.AppControlDeck;
 import co.casterlabs.caffeinated.app.controldeck.ControlDeckPreferences;
-import co.casterlabs.caffeinated.app.fun.multistreaming.Multistreaming;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
@@ -86,9 +84,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     // Integrations
     private final PluginIntegration  pluginIntegration  = new PluginIntegration();
-    private final Multistreaming     multistreaming     = Multistreaming.INSTANCE;
+//    private final Multistreaming     multistreaming     = Multistreaming.INSTANCE;
     private final MusicIntegration   music              = new MusicIntegration();
-    private final AppControlDeck     controlDeck        = new AppControlDeck();
+//    private final AppControlDeck     controlDeck        = new AppControlDeck();
     private final ThemeManager       themeManager       = new ThemeManager();
     private final AppChatbot         chatbot            = new AppChatbot();
     private final GlobalKoi          koi                = new GlobalKoi();
@@ -98,15 +96,15 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private final AppUI              UI                 = new AppUI();
 
     // Preferences
-    private PreferenceFile<ControlDeckPreferences>       controlDeckPreferences = new PreferenceFile<>("controldeck", ControlDeckPreferences.class);
-    private PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
-    private PreferenceFile<CaffeinatedWindowState>       windowPreferences = new PreferenceFile<>("window", CaffeinatedWindowState.class);
-    private PreferenceFile<AuthPreferences>              authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
+    private final PreferenceFile<ControlDeckPreferences>       controlDeckPreferences = new PreferenceFile<>("controldeck", ControlDeckPreferences.class);
+    private final PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
+    private final PreferenceFile<CaffeinatedWindowState>       windowPreferences = new PreferenceFile<>("window", CaffeinatedWindowState.class);
+    private final PreferenceFile<AuthPreferences>              authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
 
     // @formatter:on
 
     @JavascriptValue(allowSet = false)
-    private PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);
+    private final PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);
 
     // Event stuff
     private Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
@@ -162,10 +160,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.preferencesConnection = DriverManager.getConnection("jdbc:sqlite:" + new File(APP_DATA_DIR, "preferences/database.sqlite").getCanonicalPath());
 
         this.chatbot.init();
+//        this.multistreaming.init();
         this.UI.init();
         this.themeManager.init();
         this.auth.init();
-        this.controlDeck.init();
+//        this.controlDeck.init();
         this.api.init();
         this.pluginIntegration.init();
 //            this.koi.init();
