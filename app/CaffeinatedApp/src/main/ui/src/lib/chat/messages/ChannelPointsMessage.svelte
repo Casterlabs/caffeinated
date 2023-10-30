@@ -8,7 +8,10 @@
 	export let onContextMenuAction;
 </script>
 
-<span style:--platform-color={streamingServices[event.streamer.platform]?.color}>
+<span
+	style:--platform-color={streamingServices[event.streamer.platform]?.color}
+	style:--user-color={event.sender.color}
+>
 	<LocalizedText
 		key="chat.viewer.message.CHANNELPOINTS"
 		opts={{

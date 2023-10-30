@@ -107,7 +107,10 @@
 			{/each}
 		</span>
 
-		<b style:--platform-color={streamingServices[event.streamer.platform]?.color}>
+		<b
+			style:--platform-color={streamingServices[event.streamer.platform]?.color}
+			style:--user-color={event.sender.color}
+		>
 			<icon
 				class="user-platform w-[1em] h-[1em] mr-0.5 translate-y-0.5"
 				data-icon="service/{event.streamer.platform.toLowerCase()}"

@@ -12,6 +12,7 @@
 
 	import createConsole from '$lib/console-helper.mjs';
 	import { fade } from 'svelte/transition';
+	import SelectMenu from '$lib/ui/SelectMenu.svelte';
 
 	const console = createConsole('ChatViewer');
 
@@ -28,7 +29,7 @@
 	let showTimestamps = false;
 	let showProfilePictures = false;
 	let showPlatform = false;
-	let colorByPlatform = false;
+	let colorBy = 'THEME';
 
 	let isAtBottom = true;
 
@@ -139,7 +140,7 @@
 			showTimestamps,
 			showProfilePictures,
 			showPlatform,
-			colorByPlatform
+			colorBy
 		});
 	}
 
@@ -147,7 +148,7 @@
 		showTimestamps = config.showChatTimestamps;
 		showProfilePictures = config.showProfilePictures;
 		showPlatform = config.showPlatform;
-		colorByPlatform = config.colorByPlatform;
+		colorBy = config.colorBy;
 	}
 
 	export function processEvent(event) {
@@ -250,6 +251,19 @@
 
 		<ul class="w-72 divide-y divide-current text-base-6">
 			<li class="py-2">
+				<SelectMenu
+					title="chat.viewer.preferences.color_users_by"
+					description=""
+					options={{
+						THEME: 'chat.viewer.preferences.color_users_by.THEME',
+						USER: 'chat.viewer.preferences.color_users_by.USER',
+						PLATFORM: 'chat.viewer.preferences.color_users_by.PLATFORM'
+					}}
+					bind:value={colorBy}
+					on:value={savePreferences}
+				/>
+			</li>
+			<li class="py-2">
 				<Switch
 					title="chat.viewer.preferences.show_chat_timestamps"
 					description=""
@@ -273,14 +287,6 @@
 					on:value={savePreferences}
 				/>
 			</li>
-			<li class="py-2">
-				<Switch
-					title="chat.viewer.preferences.color_users_by_platform"
-					description=""
-					bind:checked={colorByPlatform}
-					on:value={savePreferences}
-				/>
-			</li>
 		</ul>
 	</Modal>
 {/if}
@@ -289,7 +295,8 @@
 	class="h-full px-2 pt-2 flex flex-col relative"
 	class:show-timestamps={showTimestamps}
 	class:show-platform={showPlatform}
-	class:color-by-platform={colorByPlatform}
+	class:color-by-platform={colorBy == 'PLATFORM'}
+	class:color-by-user={colorBy == 'USER'}
 >
 	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
 		<ul bind:this={chatBox} />
@@ -319,11 +326,6 @@
 		color: var(--primary11);
 	}
 
-	.color-by-platform ul :global(b) {
-		font-weight: 600;
-		color: var(--platform-color, var(--primary11));
-	}
-
 	:global(.message-container) {
 		display: block;
 		white-space: nowrap;
@@ -335,6 +337,17 @@
 		width: calc(100% - var(--timestamp-width, 0));
 		display: inline-block;
 		white-space: normal;
+	}
+
+	/* Colors */
+	.color-by-platform ul :global(b) {
+		font-weight: 600;
+		color: var(--platform-color, var(--primary11));
+	}
+
+	.color-by-user ul :global(b) {
+		font-weight: 600;
+		color: var(--user-color, var(--primary11));
 	}
 
 	/* User Platform */

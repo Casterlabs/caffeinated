@@ -48,7 +48,7 @@ public class UIPreferences {
         private boolean readMessagesAloud = false;
         private String ttsVoice = "Brian";
         private boolean showPlatform = false;
-        private boolean colorByPlatform = true;
+        private String colorBy = "THEME";
         private double ttsOrDingVolume = 1;
 
         // Still used by the popout dock.
@@ -63,7 +63,7 @@ public class UIPreferences {
         private boolean showTimestamps = true;
         private boolean showProfilePictures = false;
         private boolean showPlatform = false;
-        private boolean colorByPlatform = true;
+        private String colorBy = "THEME";
 
     }
 

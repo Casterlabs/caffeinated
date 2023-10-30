@@ -8,7 +8,10 @@
 	export let onContextMenuAction;
 </script>
 
-<span style:--platform-color={streamingServices[event.streamer.platform]?.color}>
+<span
+	style:--platform-color={streamingServices[event.streamer.platform]?.color}
+	style:--user-color={event.gift_recipient?.color || event.subscriber?.color}
+>
 	<LocalizedText
 		key="chat.viewer.message.SUBSCRIPTION.{event.sub_type}"
 		opts={{
