@@ -219,6 +219,10 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
     }
 
+    public boolean canDoOneTimeEvent(@NonNull String id) {
+        return this.appPreferences.get().getOneTimeEvents().add(id);
+    }
+
     @Override
     public void openLink(String url) {
         this.UI.openLink(url);

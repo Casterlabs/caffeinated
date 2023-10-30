@@ -1,10 +1,14 @@
 package co.casterlabs.caffeinated.app;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import co.casterlabs.caffeinated.util.Crypto;
 import co.casterlabs.kaimen.webview.WebviewRenderer;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
+import co.casterlabs.rakurai.json.element.JsonElement;
 import lombok.Data;
 
 @Data
@@ -14,12 +18,11 @@ public class AppPreferences {
 
     private int conductorPort = 8092; // Caffeinated <1.2 was 8091.
     private String conductorKey = new String(Crypto.generateSecureRandomKey());
+    private String developerApiKey = new String(Crypto.generateSecureRandomKey());
 
-    private boolean isNew = true;
+    private Set<String> oneTimeEvents = new HashSet<>();
 
     private boolean useBetaKoiPath = false;
-
-    private String developerApiKey = new String(Crypto.generateSecureRandomKey());
 
     private WebviewRenderer[] rendererPreference = {
             WebviewRenderer.WEBKIT,
@@ -34,6 +37,13 @@ public class AppPreferences {
         }
 
         return this.conductorPort;
+    }
+
+    @JsonDeserializationMethod("isNew")
+    private void $migrate_isNew(JsonElement e) {
+        if (!e.getAsBoolean()) {
+            this.oneTimeEvents.add("caffeinated.instance.first_time_setup");
+        }
     }
 
 }
