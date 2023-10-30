@@ -153,16 +153,13 @@ public class AppUI extends JavascriptObject {
     public void onUILoaded() {
         this.uiFinishedLoad = true;
 
-//        PreferenceFile<AppPreferences> prefs = CaffeinatedApp.getInstance().getAppPreferences();
-
-//        if (prefs.get().isNew()) {
-//            CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
-//
-//            prefs.get().setNew(false);
-//            prefs.save();
-//
+        if (CaffeinatedApp.getInstance().canDoOneTimeEvent("caffeinated.instance.first_time_setup")) {
+            CaffeinatedApp.getInstance().getAnalytics().track("FRESH_INSTALL", true);
 //            this.navigate("/welcome/step1");
-//        } else {
+//            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for first time experience. (ui-loaded)");
+//            return;
+        }
+
         AppAuth auth = CaffeinatedApp.getInstance().getAuth();
 
         if (!auth.isSignedIn()) {
@@ -173,7 +170,6 @@ public class AppUI extends JavascriptObject {
             // Otherwise AppAuth will automagically move us there :D
             FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
         }
-//        }
     }
 
     @JavascriptFunction
