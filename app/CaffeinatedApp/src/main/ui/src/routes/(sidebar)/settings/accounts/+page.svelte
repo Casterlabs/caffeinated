@@ -92,6 +92,9 @@
 									<button
 										class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 										on:click={() => {
+											loading.push(platform);
+											loading = loading;
+
 											if (SPECIAL_SIGNIN[platform]) {
 												goto(`${SPECIAL_SIGNIN[platform]}?platform=${platform.toLowerCase()}`);
 												return;
@@ -107,8 +110,6 @@
 												platform.toLowerCase(),
 												false
 											);
-											loading.push(platform);
-											loading = loading;
 										}}
 									>
 										<LocalizedText key="page.settings.accounts.connect" />
