@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -176,6 +177,14 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.analytics.startHeartbeat();
 
         ChatbotScriptEngine.class.toString(); // Load.
+
+        Calendar calendar = Calendar.getInstance();
+        int calendarMonth = calendar.get(Calendar.MONTH);
+        int calendarDate = calendar.get(Calendar.DATE);
+
+        if (calendarMonth == Calendar.OCTOBER && calendarDate == 31) {
+            this.notify("Boo!", NotificationType.WARNING);
+        }
     }
 
     @Override
