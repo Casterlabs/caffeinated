@@ -1,9 +1,6 @@
 package co.casterlabs.caffeinated.app.auth;
 
-import java.awt.Desktop;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -387,20 +384,15 @@ public class AppAuth extends JavascriptObject {
 
         AuthCallback callback = new AuthCallback(type, isKoi);
 
-        try {
-            Desktop
-                .getDesktop()
-                .browse(
-                    new URI(
-                        oauthLink +
-                            "?platform=" + type.toUpperCase() +
-                            "&clientId=" + CaffeinatedApp.KOI_ID +
-                            "&state=" + callback.getStateString()
-                    )
-                );
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        CaffeinatedApp
+            .getInstance()
+            .getUI()
+            .openLink(
+                oauthLink +
+                    "?platform=" + type.toUpperCase() +
+                    "&clientId=" + CaffeinatedApp.KOI_ID +
+                    "&state=" + callback.getStateString()
+            );
 
         return callback;
     }

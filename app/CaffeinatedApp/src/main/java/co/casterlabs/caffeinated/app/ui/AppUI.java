@@ -19,6 +19,7 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.kaimen.app.App;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
@@ -175,9 +176,39 @@ public class AppUI extends JavascriptObject {
     @JavascriptFunction
     @SneakyThrows
     public void openLink(@NonNull String link) {
-        Desktop
-            .getDesktop()
-            .browse(new URI(link));
+        try {
+            Desktop
+                .getDesktop()
+                .browse(URI.create(link));
+        } catch (UnsupportedOperationException ignored) {
+            // The yucky.
+            switch (Platform.osDistribution) {
+                case MACOS:
+                    Runtime.getRuntime().exec(new String[] {
+                            "open",
+                            link
+                    });
+                    break;
+
+                case WINDOWS_NT:
+                    Runtime.getRuntime().exec(new String[] {
+                            "rundll32",
+                            "url.dll,FileProtocolHandler",
+                            link
+                    });
+                    break;
+
+                case LINUX:
+                    Runtime.getRuntime().exec(new String[] {
+                            "xdg-open",
+                            link
+                    });
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 
     /**
