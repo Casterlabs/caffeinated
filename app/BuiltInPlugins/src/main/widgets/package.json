@@ -12,7 +12,7 @@
         "@sveltejs/adapter-static": "^1.0.0-next.32",
         "@sveltejs/kit": "next",
         "autoprefixer": "^10.4.4",
-        "postcss": "^8.4.12",
+        "postcss": "^8.4.31",
         "prettier": "^2.5.1",
         "prettier-plugin-svelte": "^2.5.0",
         "rollup-plugin-postcss": "^4.0.2",
