@@ -1,7 +1,10 @@
 package co.casterlabs.caffeinated.pluginsdk.localization;
 
+import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @AllArgsConstructor
 public enum Language {
     // @formatter:off
@@ -22,6 +25,14 @@ public enum Language {
     public static enum WritingDirection {
         LEFT_TO_RIGHT,
         RIGHT_TO_LEFT,
+    }
+
+    public JsonObject toJson() {
+        return new JsonObject()
+            .put("code", this.code)
+            .put("direction", this.direction.name())
+            .put("emoji", this.emoji)
+            .put("name", this.name);
     }
 
 }
