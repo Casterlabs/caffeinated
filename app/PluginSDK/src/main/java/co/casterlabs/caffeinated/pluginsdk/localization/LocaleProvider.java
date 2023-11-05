@@ -1,11 +1,6 @@
 package co.casterlabs.caffeinated.pluginsdk.localization;
 
-import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.Nullable;
-
-import lombok.NonNull;
-
-public interface LocaleProvider {
+public interface LocaleProvider extends LocaleProcessorFunction {
 
     /**
      * @implSpec This is a lookup prefix. All {@code key}s will have this prefix
@@ -21,15 +16,5 @@ public interface LocaleProvider {
     public String prefix();
 
     public Language language();
-
-    /**
-     * The following placeholders apply: <br />
-     * - <b>{placeholder}</b>: Plain text placeholder. <br />
-     * - <b>[placeholder]</b>: Pulls another translation key into the string. <br />
-     * - <b>%placeholder%</b>: UI components. <br />
-     * 
-     * @implSpec Return null if you do not understand or have a key.
-     */
-    public @Nullable String process(@NonNull String key);
 
 }
