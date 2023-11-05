@@ -177,6 +177,7 @@
 	"chat.viewer.preferences.tts_voice": "TTS Voice",
 	"chat.viewer.preferences.tts_or_ding_volume": "TTS/Ding volume",
 	"chat.viewer.preferences.show_platform": "Show the user's platform",
+	"chat.viewer.preferences.show_activities": "Show Activities (follows, subs, etc)",
 	"chat.viewer.preferences.color_users_by": "Color users by",
 	"chat.viewer.preferences.color_users_by.THEME": "App Primary Theme",
 	"chat.viewer.preferences.color_users_by.USER": "User Color",

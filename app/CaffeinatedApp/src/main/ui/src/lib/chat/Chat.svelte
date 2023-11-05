@@ -45,6 +45,7 @@
 	let readMessagesAloud = false;
 	let ttsVoice = 'Brian';
 	let showPlatform = false;
+	let showActivities = false;
 	let colorBy = 'THEME';
 	let ttsOrDingVolume;
 
@@ -224,6 +225,7 @@
 		readMessagesAloud = config.readMessagesAloud;
 		ttsVoice = config.ttsVoice;
 		showPlatform = config.showPlatform;
+		showActivities = config.showActivities;
 		colorBy = config.colorBy;
 		ttsOrDingVolume = config.ttsOrDingVolume;
 	}
@@ -305,8 +307,18 @@
 					li.classList.add('my-0.5');
 				}
 
-				if (['VIEWER_JOIN', 'VIEWER_LEAVE'].includes(event.event_type)) {
-					li.classList.add('viewer-joinleave');
+				switch (event.event_type) {
+					case 'VIEWER_JOIN':
+					case 'VIEWER_LEAVE':
+						li.classList.add('viewer-joinleave');
+						break;
+
+					case 'CHANNEL_POINTS':
+					case 'SUBSCRIPTION':
+					case 'FOLLOW':
+					case 'RAID':
+						li.classList.add('activity-event');
+						break;
 				}
 
 				if (event.meta_id) {
@@ -559,6 +571,14 @@
 					on:value={savePreferences}
 				/>
 			</li>
+			<li class="py-2">
+				<Switch
+					title="chat.viewer.preferences.show_activities"
+					description=""
+					bind:checked={showActivities}
+					on:value={savePreferences}
+				/>
+			</li>
 		</ul>
 	</Modal>
 {/if}
@@ -569,6 +589,7 @@
 	class:show-badges={showBadges}
 	class:show-viewers={showViewers}
 	class:show-platform={showPlatform}
+	class:show-activities={showActivities}
 	class:color-by-platform={colorBy == 'PLATFORM'}
 	class:color-by-user={colorBy == 'USER'}
 >
@@ -659,6 +680,15 @@
 	}
 
 	.show-platform :global(.user-platform) {
+		display: inline-block !important;
+	}
+
+	/* Activities */
+	:global(.activity-event) {
+		display: none;
+	}
+
+	.show-activities :global(.activity-event) {
 		display: inline-block !important;
 	}
 

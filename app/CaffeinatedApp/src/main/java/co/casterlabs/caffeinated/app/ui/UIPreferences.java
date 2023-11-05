@@ -48,6 +48,7 @@ public class UIPreferences {
         private boolean readMessagesAloud = false;
         private String ttsVoice = "Brian";
         private boolean showPlatform = false;
+        private boolean showActivities = false;
         private String colorBy = "THEME";
         private double ttsOrDingVolume = 1;
 
