@@ -86,6 +86,8 @@ function setupDock() {
 	widgetApp.on('emojiProvider', App.emojiProvider.set);
 	widgetApp.on('appearance', App.appearance.set);
 	widgetApp.on('language', App.language.set);
+
+	App.setOpenLink(window.openLink);
 }
 
 export default function () {
