@@ -51,4 +51,6 @@
 	});
 </script>
 
-<ActivityFeedViewer bind:this={viewer} {doAction} {userStates} />
+<div class="-mx-6 -my-4 h-screen">
+	<ActivityFeedViewer bind:this={viewer} {doAction} {userStates} />
+</div>
