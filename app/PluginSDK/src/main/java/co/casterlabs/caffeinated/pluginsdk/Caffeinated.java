@@ -1,5 +1,8 @@
 package co.casterlabs.caffeinated.pluginsdk;
 
+import java.util.List;
+import java.util.Map;
+
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
@@ -32,5 +35,20 @@ public interface Caffeinated {
     public String getLocale();
 
     public @Nullable CasterlabsAccount getCasterlabsAccount();
+
+    /**
+     * The following placeholders apply: <br />
+     * - <b>{placeholder}</b>: Plain text placeholder. <br />
+     * - <b>%component%</b>: UI components. <br />
+     * - <b>[external_key]</b>: Pulls another translation key into the string.
+     * <br />
+     * <br />
+     * 
+     * Placeholders are replaced for you automatically EXCEPT for keys that end in
+     * {@code .raw} or {@code .code}.
+     * 
+     * @return a string, even if the specified key could not be found.
+     */
+    public @NonNull String localize(@NonNull String key, @Nullable Map<String, String> knownPlaceholders, @Nullable List<String> knownComponents);
 
 }

@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.time.Instant;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,7 @@ import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotScriptEngine;
 import co.casterlabs.caffeinated.app.controldeck.ControlDeckPreferences;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
+import co.casterlabs.caffeinated.app.locale._LocaleLoader;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
 import co.casterlabs.caffeinated.app.ui.AppUI;
@@ -33,6 +35,7 @@ import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.WebUtil;
+import co.casterlabs.commons.localization.LocaleProvider;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
@@ -41,8 +44,12 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
 import co.casterlabs.rakurai.io.http.MimeTypes;
+import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.TypeToken;
+import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.swetrix.Swetrix;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -74,6 +81,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private @Setter WebviewBridge appBridge;
     private @Setter Webview webview;
     private @Setter String appUrl;
+
+    private @Getter(AccessLevel.NONE) LocaleProvider appLocale;
 
     private @JavascriptValue(allowSet = false) boolean isTraySupported;
 
@@ -171,6 +180,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 //            this.koi.init();
         this.music.init();
 
+        this.reloadLanguage();
+
         this.appPreferences.save();
 
         this.analytics.trackPageView("/", this.UI.getPreferences().getLanguage());
@@ -229,6 +240,12 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     public boolean canDoOneTimeEvent(@NonNull String id) {
         return this.appPreferences.get().getOneTimeEvents().add(id);
+    }
+
+    public void reloadLanguage() {
+        String locale = this.UI.getPreferences().getLanguage();
+
+        this.appLocale = _LocaleLoader.load(locale);
     }
 
     @Override
@@ -327,6 +344,34 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         } catch (Exception ignored) {
             return false;
         }
+    }
+
+    @Override
+    public @NonNull String localize(@NonNull String key, @Nullable Map<String, String> knownPlaceholders, @Nullable List<String> knownComponents) {
+        if (knownPlaceholders == null) knownPlaceholders = Collections.emptyMap();
+        if (knownComponents == null) knownComponents = Collections.emptyList();
+
+        String value = this.appLocale.process(key, null, knownPlaceholders, knownComponents);
+
+        // TODO the providers for plugins.
+
+        if (value == null) {
+            return key;
+        } else {
+            return value;
+        }
+    }
+
+    @SneakyThrows
+    @JavascriptFunction
+    public @NonNull String localize(@NonNull String key, @Nullable JsonObject knownPlaceholders, @Nullable JsonArray knownComponents) {
+        return this.localize(
+            key,
+            Rson.DEFAULT.fromJson(knownPlaceholders, new TypeToken<Map<String, String>>() {
+            }),
+            Rson.DEFAULT.fromJson(knownComponents, new TypeToken<List<String>>() {
+            })
+        );
     }
 
 }
