@@ -40,6 +40,12 @@
 			<version>4.2</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>co.casterlabs.Commons</groupId>
+			<artifactId>Localization</artifactId>
+			<version>2c5d65a</version>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 </project>

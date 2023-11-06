@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.pluginsdk.localization;
+package co.casterlabs.caffeinated.pluginsdk;
 
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @ToString
 @AllArgsConstructor
-public enum Language {
+public enum Languages {
     // @formatter:off
     EN_US    ("en-US",  WritingDirection.LEFT_TO_RIGHT, "🇺🇸", "English, United States of America"),
     ES       ("es",     WritingDirection.LEFT_TO_RIGHT, "🇪🇸", "Español"),
