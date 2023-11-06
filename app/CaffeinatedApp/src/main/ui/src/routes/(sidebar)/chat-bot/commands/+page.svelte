@@ -173,7 +173,7 @@
 					platform: null,
 					triggerType: 'COMMAND',
 					trigger: 'casterlabs',
-					responseAction: 'REPLY',
+					responseAction: 'REPLY_WITH',
 					response: t('page.chat_bot.commands.example')
 				});
 				commands = commands;
