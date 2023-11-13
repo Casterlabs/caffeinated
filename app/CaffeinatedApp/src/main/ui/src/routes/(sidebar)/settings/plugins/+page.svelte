@@ -36,7 +36,9 @@
 							{#if context.file}
 								{context.file}
 							{:else}
-								<LocalizedText key="page.settings.plugins.internal_plugin" />
+								<LocalizedText
+									key="co.casterlabs.caffeinated.app.page.settings.plugins.internal_plugin"
+								/>
 							{/if}
 
 							{#if context.pluginIds.length > 0}
@@ -53,7 +55,9 @@
 										window.Caffeinated.pluginIntegration.unload(context.id);
 									}}
 								>
-									<LocalizedText key="page.settings.plugins.file.unload" />
+									<LocalizedText
+										key="co.casterlabs.caffeinated.app.page.settings.plugins.file.unload"
+									/>
 								</SlimButton>
 							{/if}
 						</div>
@@ -76,7 +80,7 @@
 								window.Caffeinated.pluginIntegration.load(file);
 							}}
 						>
-							<LocalizedText key="page.settings.plugins.file.load" />
+							<LocalizedText key="co.casterlabs.caffeinated.app.page.settings.plugins.file.load" />
 						</SlimButton>
 					</div>
 				</div>
@@ -87,7 +91,7 @@
 
 <div class="mt-6 flex flex-row items-center">
 	<div class="flex-1">
-		<LocalizedText key="sdk_documentation" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.sdk_documentation" />
 	</div>
 
 	<Button
@@ -95,6 +99,6 @@
 			window.Caffeinated.pluginIntegration.openPluginsDir();
 		}}
 	>
-		<LocalizedText key="page.settings.plugins.open_directory" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.page.settings.plugins.open_directory" />
 	</Button>
 </div>

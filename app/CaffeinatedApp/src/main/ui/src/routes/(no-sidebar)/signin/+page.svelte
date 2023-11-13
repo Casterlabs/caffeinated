@@ -116,10 +116,10 @@
 
 <div class="h-full w-fit mx-auto pt-10 relative">
 	<h1 class="font-medium text-2xl text-center">
-		<LocalizedText key="page.signin.welcome" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.welcome" />
 	</h1>
 	<h2 class="text-sm text-base-11 mt-1 text-center">
-		<LocalizedText key="page.signin.choose" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.choose" />
 	</h2>
 
 	<div class="mt-4 w-64 mx-auto flex flex-wrap justify-center">
@@ -147,18 +147,20 @@
 
 	<span class="absolute inset-x-0 bottom-2 text-xs text-base-11">
 		<LocalizedText
-			key="page.signin.disclaimer"
+			key="co.casterlabs.caffeinated.app.page.signin.disclaimer"
 			slotMapping={['terms_of_service', 'privacy_policy', 'here']}
 		>
 			<a slot="0" class="text-nqp" href="https://casterlabs.co/terms-of-service" target="_blank">
-				<LocalizedText key="page.signin.disclaimer.terms_of_service" />
+				<LocalizedText
+					key="co.casterlabs.caffeinated.app.page.signin.disclaimer.terms_of_service"
+				/>
 			</a>
 			<a slot="1" class="text-nqp" href="https://casterlabs.com/privacy-policy" target="_blank">
-				<LocalizedText key="page.signin.disclaimer.privacy_policy" />
+				<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.privacy_policy" />
 			</a>
 
 			<button slot="2" class="text-nqp" on:click={doDoot}>
-				<LocalizedText key="page.signin.disclaimer.here" />
+				<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.here" />
 			</button>
 		</LocalizedText>
 	</span>

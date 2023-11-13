@@ -6,7 +6,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import AspectVar from '$lib/aspect-ratio/AspectVar.svelte';
 
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { onMount, tick } from 'svelte';
@@ -90,7 +90,7 @@
 				on:click={() => goto('/$caffeinated-sdk-root$/widgets')}
 			>
 				<span class="sr-only">
-					<LocalizedText key="sr.navigation.back" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.ui.navigation.back" />
 				</span>
 				<icon class="w-5 h-5" data-icon="icon/arrow-left" />
 			</CircularButton>
@@ -112,25 +112,25 @@
 				</CircularButton>
 			{/each}
 			<CircularButton
-				title={t('sr.page.widgets.copy_link')}
+				title={t('co.casterlabs.caffeinated.app.page.widgets.copy_link')}
 				on:click={() => {
 					window.Caffeinated.pluginIntegration.copyWidgetUrl(widget.id);
 				}}
 			>
 				<span class="sr-only">
-					<LocalizedText key="sr.page.widgets.copy_link" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.copy_link" />
 				</span>
 				<icon class="w-5 h-5" data-icon="icon/document-duplicate" />
 			</CircularButton>
 			<CircularButton
-				title={t('sr.page.widgets.delete')}
+				title={t('co.casterlabs.caffeinated.app.page.widgets.delete')}
 				on:click={() => {
 					window.Caffeinated.pluginIntegration.deleteWidget(widget.id);
 					goto('/$caffeinated-sdk-root$/widgets');
 				}}
 			>
 				<span class="sr-only">
-					<LocalizedText key="sr.page.widgets.delete" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.delete" />
 				</span>
 				<icon class="w-5 h-5 text-error" data-icon="icon/trash" />
 			</CircularButton>
@@ -139,6 +139,7 @@
 		<div class="flex flex-col min-h-full">
 			<div class="-mt-1 pb-5 -mx-6 w-screen flex flex-col items-center justify-center">
 				<span class="text-lg font-semibold relative">
+					<!-- svelte-ignore a11y-no-static-element-interactions -->
 					<div
 						contenteditable
 						class="px-1"
@@ -155,7 +156,7 @@
 
 					<button
 						class="absolute left-full top-1 translate-x-0.5"
-						title={t('sr.page.widget.editor.edit_name')}
+						title={t('co.casterlabs.caffeinated.app.page.widget.editor.edit_name')}
 						on:click={() => {
 							const range = document.createRange();
 							const sel = window.getSelection();
@@ -175,7 +176,7 @@
 						}}
 					>
 						<span class="sr-only">
-							<LocalizedText key="sr.page.widget.editor.edit_name" />
+							<LocalizedText key="co.casterlabs.caffeinated.app.page.widget.editor.edit_name" />
 						</span>
 						<icon class="w-5 h-5" data-icon="icon/pencil-square" />
 					</button>
@@ -221,7 +222,9 @@
 									tick().then(() => (currentSection = '__INTERNAL_TEST'));
 								}}
 							>
-								<LocalizedText key="page.widget.editor.test_events.tab" />
+								<LocalizedText
+									key="co.casterlabs.caffeinated.app.page.widget.editor.test_events.tab"
+								/>
 							</button>
 						{/if}
 					</nav>
@@ -249,7 +252,9 @@
 											on:click={() =>
 												window.Caffeinated.pluginIntegration.fireTestEvent(widget.id, eventType)}
 										>
-											<LocalizedText key="page.widget.editor.test_events.send_test" />
+											<LocalizedText
+												key="co.casterlabs.caffeinated.app.page.widget.editor.test_events.send_test"
+											/>
 										</Button>
 									</div>
 								</div>

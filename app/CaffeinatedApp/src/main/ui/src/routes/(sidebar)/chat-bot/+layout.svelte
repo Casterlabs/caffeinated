@@ -6,17 +6,17 @@
 
 	// prettier-ignore
 	const tabs = [
-		['page.chat_bot.commands', '/$caffeinated-sdk-root$/chat-bot/commands'],
-		['page.chat_bot.shouts',   '/$caffeinated-sdk-root$/chat-bot/shouts'],
-		['page.chat_bot.timers',   '/$caffeinated-sdk-root$/chat-bot/timers'],
-		['page.chat_bot.settings', '/$caffeinated-sdk-root$/chat-bot/settings']
+		['co.casterlabs.caffeinated.app.page.chat_bot.commands', '/$caffeinated-sdk-root$/chat-bot/commands'],
+		['co.casterlabs.caffeinated.app.page.chat_bot.shouts',   '/$caffeinated-sdk-root$/chat-bot/shouts'],
+		['co.casterlabs.caffeinated.app.page.chat_bot.timers',   '/$caffeinated-sdk-root$/chat-bot/timers'],
+		['co.casterlabs.caffeinated.app.page.chat_bot.settings', '/$caffeinated-sdk-root$/chat-bot/settings']
 	];
 
 	// Filter the list of tabs for a match.
 	$: currentPage = tabs.filter(([_, href]) => $page.url.pathname == href)[0][0];
 </script>
 
-<PageTitle title={['page.chat_bot', currentPage]} />
+<PageTitle title={['co.casterlabs.caffeinated.app.page.chat_bot', currentPage]} />
 
 <!-- <h1 class="text-3xl font-bold tracking-tight text-base-12 mb-6">Settings</h1> -->
 

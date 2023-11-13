@@ -30,6 +30,9 @@ function setupApp() {
 	// "Exposes" goto() to the Java side.
 	Bridge.on('goto', ({ path }) => goto(path));
 
+	App.localeProvider.set(Caffeinated.localize);
+	Caffeinated.LOCALES.then(App.locales.set);
+
 	window.addEventListener("message", async (e) => {
 		console.debug(e);
 
@@ -63,7 +66,7 @@ function setupApp() {
 		if (!prefs) return;
 		const { language, icon, emojiProvider, zoom } = prefs;
 
-		App.language.set(language);
+		App.currentLocale.set(language);
 		App.icon.set(icon);
 		App.emojiProvider.set(emojiProvider);
 

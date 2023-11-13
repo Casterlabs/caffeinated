@@ -2,7 +2,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import streamingServices from '$lib/streamingServices.mjs';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 
 	export let event;
 	export let onContextMenuAction;

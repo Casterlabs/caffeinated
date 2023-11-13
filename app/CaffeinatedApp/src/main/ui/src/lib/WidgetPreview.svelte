@@ -16,7 +16,7 @@
 {#if url}
 	<div class="max-w-md mx-auto mt-6 mb-8">
 		<h1 class="font-semibold text-xl">
-			<LocalizedText key="page.widgets.preview" />
+			<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.preview" />
 		</h1>
 
 		<div class="w-full mt-1 select-none border border-base-8 shadow-xl rounded-md">

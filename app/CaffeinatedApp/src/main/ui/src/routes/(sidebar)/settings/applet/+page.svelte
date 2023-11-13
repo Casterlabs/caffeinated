@@ -125,7 +125,9 @@
 								tick().then(() => (currentSection = '__INTERNAL_TEST'));
 							}}
 						>
-							<LocalizedText key="page.widget.editor.test_events.tab" />
+							<LocalizedText
+								key="co.casterlabs.caffeinated.app.page.widget.editor.test_events.tab"
+							/>
 						</button>
 					{/if}
 				</nav>
@@ -153,7 +155,9 @@
 										on:click={() =>
 											window.Caffeinated.pluginIntegration.fireTestEvent(widget.id, eventType)}
 									>
-										<LocalizedText key="page.widget.editor.test_events.send_test" />
+										<LocalizedText
+											key="co.casterlabs.caffeinated.app.page.widget.editor.test_events.send_test"
+										/>
 									</Button>
 								</div>
 							</div>

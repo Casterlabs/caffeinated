@@ -1,6 +1,6 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
 
 	const dispatch = createEventDispatcher();

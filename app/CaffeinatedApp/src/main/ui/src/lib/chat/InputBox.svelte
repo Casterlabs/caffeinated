@@ -4,7 +4,7 @@
 
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
@@ -204,7 +204,7 @@
 			on:click={send}
 			title={isSupportedByPlatform ? undefined : t('unsupported_feature.item', { item: platform })}
 		>
-			<LocalizedText key="chat.viewer.send_message" />
+			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.send_message" />
 		</button>
 	</div>
 </div>

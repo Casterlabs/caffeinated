@@ -247,7 +247,10 @@
 
 {#if settingsModalOpen}
 	<Modal on:close={() => (settingsModalOpen = false)}>
-		<LocalizedText slot="title" key="chat.viewer.preferences.title" />
+		<LocalizedText
+			slot="title"
+			key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.title"
+		/>
 
 		<ul class="w-72 divide-y divide-current text-base-6">
 			<li class="py-2">

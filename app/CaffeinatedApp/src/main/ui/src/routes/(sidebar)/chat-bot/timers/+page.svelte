@@ -3,7 +3,7 @@
 	import TextArea from '$lib/ui/TextArea.svelte';
 	import NumberInput from '$lib/ui/NumberInput.svelte';
 
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const console = createConsole('Chat Bot/Timers');
@@ -22,7 +22,10 @@
 </script>
 
 {#if $preferences}
-	<LocalizedText key="page.chat_bot.timers.format" slotMapping={['seconds']}>
+	<LocalizedText
+		key="co.casterlabs.caffeinated.app.page.chat_bot.timers.format"
+		slotMapping={['seconds']}
+	>
 		<span slot="0" class="inline-block w-16">
 			<NumberInput bind:value={$preferences.timerIntervalSeconds} min={45} on:value={save} />
 		</span>
@@ -33,7 +36,7 @@
 	{#each timers || [] as message, idx}
 		<li class="relative">
 			<TextArea
-				placeholder="page.chat_bot.timers.example"
+				placeholder="co.casterlabs.caffeinated.app.page.chat_bot.timers.example"
 				rows="2"
 				bind:value={message}
 				on:value={save}
@@ -41,7 +44,7 @@
 
 			<button
 				class="absolute inset-y-1 right-1 text-error hover:opacity-80"
-				title={t('sr.page.chat_bot.remove')}
+				title={t('co.casterlabs.caffeinated.app.page.chat_bot.remove')}
 				on:click={() => {
 					timers.splice(idx, 1);
 					save();
@@ -49,7 +52,7 @@
 				}}
 			>
 				<span class="sr-only">
-					<LocalizedText key="sr.page.chat_bot.remove" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.remove" />
 				</span>
 				<icon class="h-5" data-icon="icon/trash" />
 			</button>
@@ -59,16 +62,18 @@
 	<li>
 		<button
 			class="mt-2 w-full relative flex items-center justify-center rounded-lg transition hover:text-base-12 text-base-11 border hover:border-base-8 border-base-7 hover:bg-base-3 bg-base-2 py-1 px-2 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
-			title={t('sr.page.chat_bot.settings.hide_from_chatbots.add')}
+			title={t('co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_from_chatbots.add')}
 			on:click={() => {
-				timers.push(t('page.chat_bot.timers.example'));
+				timers.push(t('co.casterlabs.caffeinated.app.page.chat_bot.timers.example'));
 				save();
 				timers = timers;
 			}}
 		>
 			<div>
 				<span class="sr-only">
-					<LocalizedText key="sr.page.chat_bot.settings.hide_from_chatbots.add" />
+					<LocalizedText
+						key="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_from_chatbots.add"
+					/>
 				</span>
 				<icon data-icon="icon/plus" />
 			</div>

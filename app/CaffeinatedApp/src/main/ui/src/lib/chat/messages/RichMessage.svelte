@@ -7,7 +7,7 @@
 
 	import streamingServices from '$lib/streamingServices.mjs';
 	import { onMount } from 'svelte';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 
 	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
 	const PLATFORMS_WITH_TIMEOUT = ['TWITCH', 'TROVO', 'BRIME'];

@@ -12,10 +12,14 @@
 	<div class="w-full h-full flex justify-center items-center text-center">
 		<div>
 			<h1 class="text-xl font-semibold">
-				<LocalizedText key="dashboard.customize.welcomewagon.welcome" />
+				<LocalizedText
+					key="co.casterlabs.caffeinated.app.page.dashboard.customize.welcomewagon.welcome"
+				/>
 			</h1>
 			<p>
-				<LocalizedText key="dashboard.customize.welcomewagon.getstarted" />
+				<LocalizedText
+					key="co.casterlabs.caffeinated.app.page.dashboard.customize.welcomewagon.getstarted"
+				/>
 			</p>
 		</div>
 	</div>
@@ -29,10 +33,14 @@
 
 	<div class="text-center pt-20 -translate-y-2">
 		<h1 class="font-semibold text-md">
-			<LocalizedText key="dashboard.customize.welcomewagon.next" />
+			<LocalizedText
+				key="co.casterlabs.caffeinated.app.page.dashboard.customize.welcomewagon.next"
+			/>
 		</h1>
 		<h2 class="font-thin text-sm">
-			<LocalizedText key="dashboard.customize.welcomewagon.also" />
+			<LocalizedText
+				key="co.casterlabs.caffeinated.app.page.dashboard.customize.welcomewagon.also"
+			/>
 		</h2>
 	</div>
 {/if}

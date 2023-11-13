@@ -21,8 +21,9 @@
 	import createConsole from '$lib/console-helper.mjs';
 	import { fade } from 'svelte/transition';
 	import { SUPPORTED_TTS_VOICES } from '$lib/app.mjs';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { onDestroy } from 'svelte';
+	import { derived, get } from 'svelte/store';
 
 	const console = createConsole('ChatViewer');
 
@@ -470,7 +471,10 @@
 
 {#if settingsModalOpen}
 	<Modal on:close={() => (settingsModalOpen = false)}>
-		<LocalizedText slot="title" key="chat.viewer.preferences.title" />
+		<LocalizedText
+			slot="title"
+			key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.title"
+		/>
 
 		<ul class="w-72 divide-y divide-current text-base-6">
 			<li class="py-2">
@@ -518,7 +522,9 @@
 					<div class="w-full">
 						<!-- svelte-ignore a11y-label-has-associated-control -->
 						<label class="block text-sm font-medium text-base-12">
-							<LocalizedText key="chat.viewer.preferences.tts_or_ding_volume" />
+							<LocalizedText
+								key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.tts_or_ding_volume"
+							/>
 						</label>
 
 						<RangeInput

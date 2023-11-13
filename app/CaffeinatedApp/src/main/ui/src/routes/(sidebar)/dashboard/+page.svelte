@@ -94,7 +94,7 @@
 	});
 </script>
 
-<PageTitle title="page.dashboard" />
+<PageTitle title="co.casterlabs.caffeinated.app.page.dashboard" />
 
 <div class="fixed inset-0 left-[var(--actual-sidebar-width)]">
 	<CustomResizableGrid

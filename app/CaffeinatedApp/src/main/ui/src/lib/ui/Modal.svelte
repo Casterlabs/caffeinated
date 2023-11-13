@@ -2,7 +2,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { createEventDispatcher } from 'svelte';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
@@ -36,7 +36,7 @@
 					on:click={close}
 				>
 					<span class="sr-only">
-						<LocalizedText key="sr.modal.close" />
+						<LocalizedText key="co.casterlabs.caffeinated.app.ui.modal.close" />
 					</span>
 					<icon data-icon="icon/x-mark" />
 				</button>

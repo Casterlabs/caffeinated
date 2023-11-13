@@ -2,7 +2,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { icon, iconColor } from '$lib/app.mjs';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 
 	const buildInfo = st || Caffeinated.svelte('buildInfo');
 	const preferences = st || Caffeinated.UI.svelte('preferences');
@@ -36,23 +36,17 @@
 		</div>
 	</li>
 	<li class="px-2 py-4 text-base-11">
-		<LocalizedText key="app.love" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.love" />
 		<br />
-		<LocalizedText key="app.copyright" opts={{ year: new Date().getFullYear() }} />
-
-		{#if t('meta.translators') != 'meta.translators'}
-			<br />
-			<br />
-			<LocalizedText
-				key="page.settings.about.translated_by"
-				opts={{ names: t('meta.translators') }}
-			/>
-		{/if}
+		<LocalizedText
+			key="co.casterlabs.caffeinated.app.copyright"
+			opts={{ year: new Date().getFullYear() }}
+		/>
 
 		<br />
 		<br />
 		<label class="checkbox select-none cursor-pointer hover:text-base-10">
-			<LocalizedText key="page.settings.about.enable_unsafe" />
+			<LocalizedText key="co.casterlabs.caffeinated.app.page.settings.about.enable_unsafe" />
 			<input
 				type="checkbox"
 				checked={$preferences?.enableStupidlyUnsafeSettings}
@@ -64,7 +58,9 @@
 		</label>
 		<br />
 		<label class="checkbox select-none cursor-pointer hover:text-base-10">
-			<LocalizedText key="page.settings.about.enable_alternate_themes" />
+			<LocalizedText
+				key="co.casterlabs.caffeinated.app.page.settings.about.enable_alternate_themes"
+			/>
 			<input
 				type="checkbox"
 				checked={$preferences?.enableAlternateThemes}

@@ -4,7 +4,7 @@
 
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { ALL_STREAMING_SERVICES } from '$lib/caffeinatedAuth.mjs';
 
 	const ID = Math.random().toString(36);
@@ -164,7 +164,7 @@
 								title={t(`platform.${platform}`)}
 							>
 								<span class="block truncate" class:font-semibold={isSelected}>
-									<LocalizedText key="platform.{platform}" />
+									<LocalizedText key="co.casterlabs.caffeinated.app.platform.{platform}" />
 								</span>
 
 								{#if isSelected}

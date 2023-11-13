@@ -6,7 +6,7 @@
 	import Container from '$lib/ui/Container.svelte';
 	import CodeInput from '$lib/ui/CodeInput.svelte';
 
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { STREAMING_SERVICE_NAMES } from '$lib/caffeinatedAuth.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
@@ -14,20 +14,20 @@
 	const debouncer = new Debouncer();
 
 	const PLATFORMS = {
-		[null]: 'page.chat_bot.platform.ANY',
+		[null]: 'co.casterlabs.caffeinated.app.page.chat_bot.platform.ANY',
 		...STREAMING_SERVICE_NAMES
 	};
 
 	const EVENT_TYPES = {
-		DONATION: 'page.chat_bot.shouts.DONATION',
-		FOLLOW: 'page.chat_bot.shouts.FOLLOW',
-		RAID: 'page.chat_bot.shouts.RAID',
-		SUBSCRIPTION: 'page.chat_bot.shouts.SUBSCRIPTION'
+		DONATION: 'co.casterlabs.caffeinated.app.page.chat_bot.shouts.DONATION',
+		FOLLOW: 'co.casterlabs.caffeinated.app.page.chat_bot.shouts.FOLLOW',
+		RAID: 'co.casterlabs.caffeinated.app.page.chat_bot.shouts.RAID',
+		SUBSCRIPTION: 'co.casterlabs.caffeinated.app.page.chat_bot.shouts.SUBSCRIPTION'
 	};
 
 	const RESPONSE_ACTIONS = {
-		REPLY_WITH: 'page.chat_bot.commands.response_action.REPLY_WITH',
-		EXECUTE: 'page.chat_bot.commands.response_action.EXECUTE'
+		REPLY_WITH: 'co.casterlabs.caffeinated.app.page.chat_bot.commands.response_action.REPLY_WITH',
+		EXECUTE: 'co.casterlabs.caffeinated.app.page.chat_bot.commands.response_action.EXECUTE'
 	};
 
 	const console = createConsole('Chat Bot/Shouts');
@@ -55,7 +55,7 @@
 		<li class="relative">
 			<Container>
 				<LocalizedText
-					key="page.chat_bot.shouts.format"
+					key="co.casterlabs.caffeinated.app.page.chat_bot.shouts.format"
 					slotMapping={['platform', 'action', 'response_action', 'response']}
 				>
 					<span class="inline-block h-fit" slot="0">
@@ -74,16 +74,26 @@
 								// Swap the examples to make sense.
 								switch (value) {
 									case 'REPLY_WITH': {
-										if (shout.response == t('page.chat_bot.shouts.example.SCRIPT')) {
+										if (
+											shout.response ==
+											t('co.casterlabs.caffeinated.app.page.chat_bot.shouts.example.SCRIPT')
+										) {
 											shout.trigger = 'casterlabs';
-											shout.response = t('page.chat_bot.shouts.example');
+											shout.response = t(
+												'co.casterlabs.caffeinated.app.page.chat_bot.shouts.example'
+											);
 										}
 										break;
 									}
 									case 'EXECUTE': {
-										if (shout.response == t('page.chat_bot.shouts.example')) {
+										if (
+											shout.response ==
+											t('co.casterlabs.caffeinated.app.page.chat_bot.shouts.example')
+										) {
 											shout.trigger = 'test';
-											shout.response = t('page.chat_bot.shouts.example.SCRIPT');
+											shout.response = t(
+												'co.casterlabs.caffeinated.app.page.chat_bot.shouts.example.SCRIPT'
+											);
 										}
 										break;
 									}
@@ -111,7 +121,7 @@
 							</div>
 						{:else}
 							<TextArea
-								placeholder="page.chat_bot.shouts.example"
+								placeholder="co.casterlabs.caffeinated.app.page.chat_bot.shouts.example"
 								rows={2}
 								bind:value={shout.response}
 								on:value={saveDB}
@@ -123,7 +133,7 @@
 
 			<button
 				class="absolute top-2 right-1 text-error hover:opacity-80"
-				title={t('sr.page.chat_bot.remove')}
+				title={t('co.casterlabs.caffeinated.app.page.chat_bot.remove')}
 				on:click={() => {
 					shouts.splice(idx, 1);
 					save();
@@ -131,7 +141,7 @@
 				}}
 			>
 				<span class="sr-only">
-					<LocalizedText key="sr.page.chat_bot.remove" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.remove" />
 				</span>
 				<icon class="h-5" data-icon="icon/trash" />
 			</button>
@@ -141,12 +151,12 @@
 	<li>
 		<button
 			class="mt-2 w-full relative flex items-center justify-center rounded-lg transition hover:text-base-12 text-base-11 border hover:border-base-8 border-base-7 hover:bg-base-3 bg-base-2 py-1 px-2 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
-			title={t('sr.page.chat_bot.commands.add')}
+			title={t('co.casterlabs.caffeinated.app.page.chat_bot.commands.add')}
 			on:click={() => {
 				shouts.push({
 					platform: null,
 					eventType: 'FOLLOW',
-					text: t('page.chat_bot.shouts.example')
+					text: t('co.casterlabs.caffeinated.app.page.chat_bot.shouts.example')
 				});
 				save();
 				shouts = shouts;
@@ -154,7 +164,7 @@
 		>
 			<div>
 				<span class="sr-only">
-					<LocalizedText key="sr.page.chat_bot.commands.add" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.commands.add" />
 				</span>
 				<icon data-icon="icon/plus" />
 			</div>

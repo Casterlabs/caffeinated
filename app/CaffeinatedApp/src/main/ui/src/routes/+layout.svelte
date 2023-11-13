@@ -11,7 +11,7 @@
 	import * as Currencies from '$lib/currencies.mjs';
 
 	import { icon } from '$lib/app.mjs';
-	import { currentLocale } from '$lib/translate.mjs';
+	import { currentLocale } from '$lib/app.mjs';
 
 	onMount(() => {
 		appShim();

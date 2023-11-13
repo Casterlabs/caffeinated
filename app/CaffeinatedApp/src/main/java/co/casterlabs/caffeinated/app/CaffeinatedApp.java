@@ -33,6 +33,7 @@ import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugins;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
+import co.casterlabs.caffeinated.pluginsdk.Languages;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.localization.LocaleProvider;
@@ -161,6 +162,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             .withDebugEnabled(isDev)
             .withAnalyticsDisabled(isDev)
             .build();
+
+        this.reloadLanguage();
     }
 
     @SneakyThrows
@@ -179,8 +182,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.pluginIntegration.init();
 //            this.koi.init();
         this.music.init();
-
-        this.reloadLanguage();
 
         this.appPreferences.save();
 
@@ -347,7 +348,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     }
 
     @Override
-    public @NonNull String localize(@NonNull String key, @Nullable Map<String, String> knownPlaceholders, @Nullable List<String> knownComponents) {
+    public @NonNull String localize(String key, @Nullable Map<String, String> knownPlaceholders, @Nullable List<String> knownComponents) {
+        if (key == null) return "";
+
         if (knownPlaceholders == null) knownPlaceholders = Collections.emptyMap();
         if (knownComponents == null) knownComponents = Collections.emptyList();
 
@@ -364,7 +367,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     @SneakyThrows
     @JavascriptFunction
-    public @NonNull String localize(@NonNull String key, @Nullable JsonObject knownPlaceholders, @Nullable JsonArray knownComponents) {
+    public @NonNull String localize(String key, @Nullable JsonObject knownPlaceholders, @Nullable JsonArray knownComponents) {
+        if (key == null) return "";
+
         return this.localize(
             key,
             Rson.DEFAULT.fromJson(knownPlaceholders, new TypeToken<Map<String, String>>() {
@@ -372,6 +377,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             Rson.DEFAULT.fromJson(knownComponents, new TypeToken<List<String>>() {
             })
         );
+    }
+
+    @JavascriptGetter("LOCALES")
+    public Languages[] getLocales() {
+        return Languages.values();
     }
 
 }

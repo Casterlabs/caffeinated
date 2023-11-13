@@ -5,7 +5,7 @@
 	import Portal from 'svelte-portal';
 
 	import { tick } from 'svelte';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 
 	let contextMenuOpen = false;
 	let contextMenuCoords = [-1000, -1000];

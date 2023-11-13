@@ -2,8 +2,7 @@
 	import SelectMenu from '$lib/ui/SelectMenu.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
 
-	import { supportedLanguages } from '$lib/translate.mjs';
-	import { language } from '$lib/app.mjs';
+	import { currentLocale, locales } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 	import RangeInput from '$lib/ui/RangeInput.svelte';
 	import Button from '$lib/ui/Button.svelte';
@@ -22,16 +21,17 @@
 		handdrawn: 'Hand Drawn'
 	};
 	const EMOJI_PROVIDERS = {
-		system: 'page.settings.appearance.emojis.SYSTEM',
+		system: 'co.casterlabs.caffeinated.app.page.settings.appearance.emojis.SYSTEM',
 		'noto-emoji': 'Noto Emoji',
 		twemoji: 'Twemoji',
 		openmoji: 'OpenMoji',
 		'toss-face': 'Toss Face'
 	};
 	const APPEARANCES = {
-		FOLLOW_SYSTEM: 'page.settings.appearance.appearance.FOLLOW_SYSTEM',
-		LIGHT: 'page.settings.appearance.appearance.LIGHT',
-		DARK: 'page.settings.appearance.appearance.DARK'
+		FOLLOW_SYSTEM:
+			'co.casterlabs.caffeinated.app.page.settings.appearance.appearance.FOLLOW_SYSTEM',
+		LIGHT: 'co.casterlabs.caffeinated.app.page.settings.appearance.appearance.LIGHT',
+		DARK: 'co.casterlabs.caffeinated.app.page.settings.appearance.appearance.DARK'
 	};
 	// prettier-ignore
 	const THEMES = {
@@ -90,7 +90,7 @@
 	{#if $preferences?.enableAlternateThemes}
 		<li class="py-4">
 			<SelectMenu
-				title="page.settings.appearance.theme.base_color"
+				title="co.casterlabs.caffeinated.app.page.settings.appearance.theme.base_color"
 				value={$baseColor}
 				options={THEME_COLORS.reduce(
 					(arr, color) => ({ ...arr, [color.toLowerCase()]: color }),
@@ -103,7 +103,7 @@
 		</li>
 		<li class="py-4">
 			<SelectMenu
-				title="page.settings.appearance.theme.primary_color"
+				title="co.casterlabs.caffeinated.app.page.settings.appearance.theme.primary_color"
 				value={$primaryColor}
 				options={THEME_COLORS.reduce(
 					(arr, color) => ({ ...arr, [color.toLowerCase()]: color }),
@@ -117,7 +117,7 @@
 	{:else}
 		<li class="py-4">
 			<SelectMenu
-				title="page.settings.appearance.theme"
+				title="co.casterlabs.caffeinated.app.page.settings.appearance.theme"
 				value="{$baseColor}/{$primaryColor}"
 				options={THEMES}
 				on:value={({ detail: value }) => {
@@ -129,7 +129,7 @@
 	{/if}
 	<li class="py-4">
 		<SelectMenu
-			title="page.settings.appearance.appearance"
+			title="co.casterlabs.caffeinated.app.page.settings.appearance.appearance"
 			value={$appearance}
 			options={APPEARANCES}
 			on:value={({ detail: value }) => {
@@ -139,7 +139,7 @@
 	</li>
 	<li class="py-4">
 		<SelectMenu
-			title="page.settings.appearance.icon"
+			title="co.casterlabs.caffeinated.app.page.settings.appearance.icon"
 			value={$preferences?.icon}
 			options={ICONS}
 			on:value={({ detail: value }) => setPreferenceItem('icon', value)}
@@ -147,7 +147,7 @@
 	</li>
 	<li class="py-4">
 		<SelectMenu
-			title="page.settings.appearance.emojis"
+			title="co.casterlabs.caffeinated.app.page.settings.appearance.emojis"
 			value={$preferences?.emojiProvider}
 			options={EMOJI_PROVIDERS}
 			on:value={({ detail: value }) => setPreferenceItem('emojiProvider', value)}
@@ -155,9 +155,9 @@
 	</li>
 	<li class="py-4">
 		<SelectMenu
-			title="page.settings.appearance.language"
-			value={$preferences?.language}
-			options={supportedLanguages}
+			title="co.casterlabs.caffeinated.app.page.settings.appearance.language"
+			value={$currentLocale}
+			options={$locales}
 			on:value={({ detail: value }) => {
 				setPreferenceItem('language', value);
 				// language.set(value); // Triggers a UI re-render.
@@ -168,10 +168,12 @@
 		<div class="flex items-center justify-between w-full">
 			<div class="flex flex-col">
 				<p class="text-sm font-medium text-base-12" id="zoominput-label">
-					<LocalizedText key="page.settings.appearance.zoom" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.settings.appearance.zoom" />
 				</p>
 				<p class="text-sm text-base-11" id="zoominput-description">
-					<LocalizedText key="page.settings.appearance.zoom.description" />
+					<LocalizedText
+						key="co.casterlabs.caffeinated.app.page.settings.appearance.zoom.description"
+					/>
 				</p>
 			</div>
 
@@ -183,7 +185,9 @@
 					<Button on:click={() => setPreferenceItem('zoom', 1)}>
 						<icon class="w-4 h-full" data-icon="icon/x-mark" />
 						<span class="sr-only">
-							<LocalizedText key="sr.page.settings.appearance.zoom.reset" />
+							<LocalizedText
+								key="co.casterlabs.caffeinated.app.page.settings.appearance.zoom.reset"
+							/>
 						</span>
 					</Button>
 				</span>
@@ -199,8 +203,8 @@
 	</li>
 	<li class="py-4">
 		<Switch
-			title="page.settings.appearance.close_to_tray"
-			description="page.settings.appearance.close_to_tray.description"
+			title="co.casterlabs.caffeinated.app.page.settings.appearance.close_to_tray"
+			description="co.casterlabs.caffeinated.app.page.settings.appearance.close_to_tray.description"
 			checked={$preferences?.closeToTray}
 			on:value={({ detail: value }) => setPreferenceItem('closeToTray', value)}
 		/>

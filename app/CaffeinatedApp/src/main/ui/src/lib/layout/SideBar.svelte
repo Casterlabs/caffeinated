@@ -8,29 +8,29 @@
 		[
 			{
 				href: '/$caffeinated-sdk-root$/dashboard',
-				name: 'page.dashboard',
+				name: 'co.casterlabs.caffeinated.app.page.dashboard',
 				useStartsWith: false
 			},
 			{
 				href: '/$caffeinated-sdk-root$/chat-bot/commands',
-				name: 'page.chat_bot',
+				name: 'co.casterlabs.caffeinated.app.page.chat_bot',
 				useStartsWith: true
 			}
 		],
 		[
 			{
 				href: '/$caffeinated-sdk-root$/widgets',
-				name: 'page.widgets',
+				name: 'co.casterlabs.caffeinated.app.page.widgets',
 				useStartsWith: true
 			},
 			{
 				href: '/$caffeinated-sdk-root$/docks',
-				name: 'page.docks',
+				name: 'co.casterlabs.caffeinated.app.page.docks',
 				useStartsWith: false
 			},
 			{
 				href: '/$caffeinated-sdk-root$/settings',
-				name: 'page.settings',
+				name: 'co.casterlabs.caffeinated.app.page.settings',
 				useStartsWith: true
 			}
 		]
@@ -77,6 +77,7 @@
 		class="w-[var(--base-sidebar-width)] flex flex-grow flex-col overflow-y-auto bg-base-2 pb-4"
 		style="transform: translateX(calc(-1% * calc(100 - var(--sidebar-width-mul, 100)))"
 	>
+		<!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
 		<nav
 			class="flex flex-1 flex-col divide-y divide-current text-base-6 overflow-y-auto"
 			aria-label="Sidebar"
@@ -89,10 +90,12 @@
 						on:click={() => Bridge.emit('app:restart')}
 					>
 						<h1 class="text-md">
-							<LocalizedText key="sidebar.update_app" />
+							<LocalizedText key="co.casterlabs.caffeinated.app.ui.sidebar.update_app" />
 						</h1>
 						<h2 class="text-xs">
-							<LocalizedText key="sidebar.update_app.description" />
+							<LocalizedText
+								key="co.casterlabs.caffeinated.app.ui.sidebar.update_app.description"
+							/>
 						</h2>
 					</button>
 				</div>

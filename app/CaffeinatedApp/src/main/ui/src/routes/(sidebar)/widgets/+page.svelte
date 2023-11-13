@@ -7,16 +7,16 @@
 	import ContextMenu from '$lib/ui/ContextMenu.svelte';
 
 	import { onMount } from 'svelte';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { STREAMING_SERVICE_NAMES } from '$lib/caffeinatedAuth.mjs';
 	import Button from '$lib/ui/Button.svelte';
 	import { goto } from '$app/navigation';
 
 	const TAGS = {
-		[null]: 'sr.page.widgets.tag.none',
-		red: 'sr.page.widgets.tag.red',
-		green: 'sr.page.widgets.tag.green',
-		blue: 'sr.page.widgets.tag.blue'
+		[null]: 'co.casterlabs.caffeinated.app.page.widgets.tag.none',
+		red: 'co.casterlabs.caffeinated.app.page.widgets.tag.red',
+		green: 'co.casterlabs.caffeinated.app.page.widgets.tag.green',
+		blue: 'co.casterlabs.caffeinated.app.page.widgets.tag.blue'
 	};
 
 	const CATEGORY_ICONS = {
@@ -87,7 +87,9 @@
 					create: () => {
 						Caffeinated.pluginIntegration.createNewWidget(
 							creatable.namespace,
-							`${t(creatable.friendlyName)} ${t('page.widgets.create.new')}`
+							`${t(creatable.friendlyName)} ${t(
+								'co.casterlabs.caffeinated.app.page.widgets.create.new'
+							)}`
 						);
 					}
 				});
@@ -99,23 +101,26 @@
 	});
 </script>
 
-<PageTitle title="page.widgets" />
+<PageTitle title="co.casterlabs.caffeinated.app.page.widgets" />
 
 <div>
-	<LocalizedText key="page.widgets.info" />
+	<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.info" />
 
 	<button
 		class="flex flex-row items-center text-link"
 		on:click={() => (showingTutorialModal = true)}
 	>
 		<icon class="inline-block w-4" data-icon="icon/chevron-right" />
-		<LocalizedText key="show_me_how" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.tutorial.show_me_how" />
 	</button>
 </div>
 
 {#if showingTutorialModal}
 	<Modal on:close={() => (showingTutorialModal = false)}>
-		<LocalizedText slot="title" key="page.widgets.info.show_me_how.modal.title" />
+		<LocalizedText
+			slot="title"
+			key="co.casterlabs.caffeinated.app.page.widgets.info.show_me_how.modal.title"
+		/>
 
 		<img src="/$caffeinated-sdk-root$/tutorials/create_obs_source_widget.gif" alt="" />
 	</Modal>
@@ -142,11 +147,14 @@
 			showCreationWarningFeaturesModalFor = null;
 		}}
 	>
-		<LocalizedText slot="title" key="page.widgets.info.widget_features_not_supported.modal.title" />
+		<LocalizedText
+			slot="title"
+			key="co.casterlabs.caffeinated.app.page.widgets.info.widget_features_not_supported.modal.title"
+		/>
 
 		<p>
 			<LocalizedText
-				key="page.widgets.info.widget_features_not_supported.modal.content"
+				key="co.casterlabs.caffeinated.app.page.widgets.info.widget_features_not_supported.modal.content"
 				opts={{ platform: listOfPlatforms }}
 			/>
 		</p>
@@ -157,7 +165,9 @@
 					showCreationWarningFeaturesModalFor = null;
 				}}
 			>
-				<LocalizedText key="page.widgets.info.widget_features_not_supported.modal.content.cancel" />
+				<LocalizedText
+					key="co.casterlabs.caffeinated.app.page.widgets.info.widget_features_not_supported.modal.content.cancel"
+				/>
 			</Button>
 			<Button
 				on:click={() => {
@@ -166,7 +176,7 @@
 				}}
 			>
 				<LocalizedText
-					key="page.widgets.info.widget_features_not_supported.modal.content.create_anyway"
+					key="co.casterlabs.caffeinated.app.page.widgets.info.widget_features_not_supported.modal.content.create_anyway"
 				/>
 			</Button>
 		</div>
@@ -186,8 +196,8 @@
 					? 'var(--link)'
 					: undefined}
 				title={tagsExpanded[tag]
-					? t('sr.page.widgets.click_to_shrink')
-					: t('sr.page.widgets.click_to_expand')}
+					? t('co.casterlabs.caffeinated.app.page.widgets.click_to_shrink')
+					: t('co.casterlabs.caffeinated.app.page.widgets.click_to_expand')}
 				on:click={() => (tagsExpanded[tag] = !tagsExpanded[tag])}
 			>
 				{#if tagsExpanded[tag]}
@@ -199,7 +209,7 @@
 									{
 										type: 'button',
 										icon: 'icon/pencil-square',
-										text: 'sr.page.widgets.edit_widget',
+										text: 'co.casterlabs.caffeinated.app.page.widgets.edit_widget',
 										onclick() {
 											goto(`/$caffeinated-sdk-root$/widgets/edit?id=${widget.id}`);
 										}
@@ -207,7 +217,7 @@
 									{
 										type: 'select',
 										icon: 'icon/tag',
-										text: 'sr.page.widgets.assign_tag',
+										text: 'co.casterlabs.caffeinated.app.page.widgets.assign_tag',
 										selected: widget.tag,
 										options: TAGS,
 										onselect(tag) {
@@ -219,7 +229,7 @@
 									{
 										type: 'button',
 										icon: 'icon/document-duplicate',
-										text: 'sr.page.widgets.copy_link',
+										text: 'co.casterlabs.caffeinated.app.page.widgets.copy_link',
 										onclick() {
 											window.Caffeinated.pluginIntegration.copyWidgetUrl(widget.id);
 										}
@@ -228,7 +238,7 @@
 									{
 										type: 'button',
 										icon: 'icon/trash',
-										text: 'sr.page.widgets.delete',
+										text: 'co.casterlabs.caffeinated.app.page.widgets.delete',
 										color: 'error',
 										onclick() {
 											window.Caffeinated.pluginIntegration.deleteWidget(widget.id);
@@ -241,19 +251,21 @@
 									icon={widget.details.icon}
 									text={widget.name}
 									href="/$caffeinated-sdk-root$/widgets/edit?id={widget.id}"
-									title={t('sr.page.widgets.edit_widget')}
+									title={t('co.casterlabs.caffeinated.app.page.widgets.edit_widget')}
 								>
 									<div class="text-right flex items-center space-x-1">
 										<button
 											class="text-base-12 hover:text-base-11"
-											title={t('sr.page.widgets.open_context_menu')}
+											title={t('co.casterlabs.caffeinated.app.page.widgets.open_context_menu')}
 											on:click|stopPropagation={(e) => {
 												console.log(e);
 												contextMenuMap[widget.id].doOpen(e.pageX, e.pageY);
 											}}
 										>
 											<span class="sr-only">
-												<LocalizedText key="sr.page.widgets.open_context_menu" />
+												<LocalizedText
+													key="co.casterlabs.caffeinated.app.page.widgets.open_context_menu"
+												/>
 											</span>
 											<icon class="w-5 h-5" data-icon="icon/ellipsis-vertical" />
 										</button>
@@ -263,7 +275,7 @@
 						{/each}
 					</CardList>
 				{:else}
-					<LocalizedText key="sr.page.widgets.click_to_expand" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.click_to_expand" />
 				{/if}
 			</button>
 		{/if}
@@ -273,7 +285,7 @@
 		class="fixed bottom-3 -translate-x-3 flex items-center justify-center shadow-sm rounded-lg border border-base-5 bg-base-1 p-2 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 overflow-hidden hover:overflow-visible"
 		aria-haspopup="true"
 		aria-controls="widget-creation-dropup"
-		title={t('sr.page.widgets.create')}
+		title={t('co.casterlabs.caffeinated.app.page.widgets.create')}
 	>
 		<div class="absolute left-0 bottom-full -translate-x-px" id="widget-creation-dropup">
 			<div
@@ -288,7 +300,9 @@
 						<div class="p-2 flex flex-row items-center text-md space-x-2 text-base-12 w-full">
 							<icon class="flex-0 w-5 h-5" data-icon={CATEGORY_ICONS[category]} />
 							<span class="flex-1 text-left">
-								<LocalizedText key="page.widgets.create.category.{category}" />
+								<LocalizedText
+									key="co.casterlabs.caffeinated.app.page.widgets.create.category.{category}"
+								/>
 							</span>
 							<icon class="flex-0 w-5 h-5" data-icon="icon/chevron-right" />
 						</div>
@@ -337,7 +351,7 @@
 
 		<div class="text-base-12">
 			<span class="sr-only">
-				<LocalizedText key="sr.page.widgets.create" />
+				<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.create" />
 			</span>
 			<icon data-icon="icon/plus" />
 		</div>
