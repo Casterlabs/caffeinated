@@ -44,7 +44,9 @@
 <div class="space-y-6">
 	<div>
 		<h1 class="text-xl font-semibold mb-2">
-			<LocalizedText key="page.settings.accounts.streaming_services" />
+			<LocalizedText
+				key="co.casterlabs.caffeinated.app.page.settings.accounts.streaming_services"
+			/>
 		</h1>
 		<ul class="space-y-2">
 			<!-- Loop over all of the "official" platforms -->
@@ -86,7 +88,9 @@
 											window.Caffeinated.auth.signout(tokenId);
 										}}
 									>
-										<LocalizedText key="page.settings.accounts.disconnect" />
+										<LocalizedText
+											key="co.casterlabs.caffeinated.app.page.settings.accounts.disconnect"
+										/>
 									</button>
 								{:else}
 									<button
@@ -112,7 +116,9 @@
 											);
 										}}
 									>
-										<LocalizedText key="page.settings.accounts.connect" />
+										<LocalizedText
+											key="co.casterlabs.caffeinated.app.page.settings.accounts.connect"
+										/>
 									</button>
 								{/if}
 							</div>
@@ -147,7 +153,9 @@
 											window.Caffeinated.auth.signout(tokenId);
 										}}
 									>
-										<LocalizedText key="page.settings.accounts.disconnect" />
+										<LocalizedText
+											key="co.casterlabs.caffeinated.app.page.settings.accounts.disconnect"
+										/>
 									</button>
 								</div>
 							</div>
@@ -160,7 +168,7 @@
 
 	<div>
 		<h1 class="text-xl font-semibold mb-2">
-			<LocalizedText key="page.settings.accounts.music_services" />
+			<LocalizedText key="co.casterlabs.caffeinated.app.page.settings.accounts.music_services" />
 		</h1>
 
 		{#if $activePlayback}
@@ -198,7 +206,7 @@
 							<div class="flex-0">
 								{#if MUSIC_SERVICES_WITH_ENABLE.includes(provider.serviceId)}
 									<SlimSwitch
-										title="page.settings.accounts.music_services.enable"
+										title="co.casterlabs.caffeinated.app.page.settings.accounts.music_services.enable"
 										checked={provider.settings?.enabled}
 										on:value={({ detail: value }) => {
 											window.Caffeinated.music.updateMusicProviderSettings(provider.serviceId, {
@@ -214,14 +222,18 @@
 												window.Caffeinated.music.signoutMusicProvider(provider.serviceId);
 											}}
 										>
-											<LocalizedText key="page.settings.accounts.disconnect" />
+											<LocalizedText
+												key="co.casterlabs.caffeinated.app.page.settings.accounts.disconnect"
+											/>
 										</button>
 									{:else}
 										<a
 											class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
 											href="/$caffeinated-sdk-root$/signin/oauth?type=music&platform={provider.serviceId}"
 										>
-											<LocalizedText key="page.settings.accounts.connect" />
+											<LocalizedText
+												key="co.casterlabs.caffeinated.app.page.settings.accounts.connect"
+											/>
 										</a>
 									{/if}
 								{/if}

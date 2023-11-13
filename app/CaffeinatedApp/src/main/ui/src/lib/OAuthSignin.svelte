@@ -25,7 +25,9 @@
 		<LoadingSpinner />
 	</div>
 
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<a on:click={cancelAuth} class="text-nqp cursor-pointer">
-		<LocalizedText key="navigation.want_to_go_back" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.ui.navigation.want_to_go_back" />
 	</a>
 </div>

@@ -1,7 +1,6 @@
 <script>
 	import createConsole from '$lib/console-helper.mjs';
-	import { emojiProvider, matchAndReturnEmojiHTML } from '$lib/app.mjs';
-	import { translate } from '$lib/translate.mjs';
+	import { t, emojiProvider, matchAndReturnEmojiHTML } from '$lib/app.mjs';
 	import { tick } from 'svelte';
 
 	const console = createConsole('LocalizedText');
@@ -9,24 +8,16 @@
 	export let opts = {};
 	export let key;
 
+	export let prefix = '';
+
 	export let slotMapping = [];
 	let slotContents = {};
 
 	let contents = [];
 
 	async function render() {
-		const { result, usedFallback } = translate(key, opts, false);
-		let newContents;
-
-		if (usedFallback) {
-			newContents = [
-				`<span style="x-background: red" title="NO TRANSLATION: ${key}">${result}</span>`
-			];
-		} else if (!result) {
-			newContents = [];
-		} else {
-			newContents = result.split(/(%\w+%)/g);
-		}
+		const result = await t(prefix + key, opts, slotMapping);
+		let newContents = result ? result.split(/(%\w+%)/g) : [];
 
 		for (const [index, value] of newContents.entries()) {
 			if (value.startsWith('%')) {

@@ -11,10 +11,10 @@
 
 	// prettier-ignore
 	const tabs = [
-		['page.settings.appearance', '/$caffeinated-sdk-root$/settings'],
-		['page.settings.accounts',   '/$caffeinated-sdk-root$/settings/accounts'],
-		['page.settings.plugins',    '/$caffeinated-sdk-root$/settings/plugins'],
-		['page.settings.about',      '/$caffeinated-sdk-root$/settings/about'],
+		['co.casterlabs.caffeinated.app.page.settings.appearance', '/$caffeinated-sdk-root$/settings'],
+		['co.casterlabs.caffeinated.app.page.settings.accounts',   '/$caffeinated-sdk-root$/settings/accounts'],
+		['co.casterlabs.caffeinated.app.page.settings.plugins',    '/$caffeinated-sdk-root$/settings/plugins'],
+		['co.casterlabs.caffeinated.app.page.settings.about',      '/$caffeinated-sdk-root$/settings/about'],
 		['Developer Stuff',          '/$caffeinated-sdk-root$/settings/developer-stuff']
 	];
 
@@ -37,7 +37,7 @@
 	});
 </script>
 
-<PageTitle title={['page.settings', currentPage]} />
+<PageTitle title={['co.casterlabs.caffeinated.app.page.settings', currentPage]} />
 
 <!-- <h1 class="text-3xl font-bold tracking-tight text-base-12 mb-6">Settings</h1> -->
 

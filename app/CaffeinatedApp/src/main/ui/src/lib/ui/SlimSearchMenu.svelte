@@ -4,7 +4,7 @@
 
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
 	const ID = Math.random().toString(36);

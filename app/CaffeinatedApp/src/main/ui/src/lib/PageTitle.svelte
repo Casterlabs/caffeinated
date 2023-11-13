@@ -1,5 +1,5 @@
 <script>
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { onDestroy } from 'svelte';
 
 	const BASE = 'Casterlabs-Caffeinated';
@@ -8,7 +8,7 @@
 	export let title;
 	let titleString = '';
 
-	function recalculateTitle() {
+	async function recalculateTitle() {
 		titleString = BASE;
 		let parts = title;
 
@@ -18,7 +18,7 @@
 
 		for (const part of parts) {
 			titleString += ' - ';
-			titleString += t(part);
+			titleString += await t(part);
 		}
 	}
 

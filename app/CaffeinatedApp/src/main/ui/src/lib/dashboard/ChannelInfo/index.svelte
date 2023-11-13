@@ -6,7 +6,7 @@
 	import ThumbnailPicker from './ThumbnailPicker.svelte';
 
 	import { onMount } from 'svelte';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const console = createConsole('ChannelInfo');
@@ -203,7 +203,7 @@
 					{#if features.includes('TITLE')}
 						<div>
 							<p class="text-sm font-medium text-base-12 mb-0.5">
-								<LocalizedText key="channel_info.title" />
+								<LocalizedText key="co.casterlabs.caffeinated.app.docks.channel_info.title" />
 							</p>
 							<TextArea
 								rows="1"
@@ -217,7 +217,7 @@
 					{#if features.includes('CATEGORY')}
 						<div>
 							<p class="text-sm font-medium text-base-12 mb-0.5">
-								<LocalizedText key="channel_info.category" />
+								<LocalizedText key="co.casterlabs.caffeinated.app.docks.channel_info.category" />
 							</p>
 							<SlimSearchMenu
 								search={(query) => categorySearch(platform, query)}
@@ -231,7 +231,7 @@
 					{#if features.includes('LANGUAGE')}
 						<div>
 							<p class="text-sm font-medium text-base-12 mb-0.5">
-								<LocalizedText key="channel_info.language" />
+								<LocalizedText key="co.casterlabs.caffeinated.app.docks.channel_info.language" />
 							</p>
 							<SlimSearchMenu
 								search={(query) =>
@@ -248,7 +248,7 @@
 					{#if features.includes('TAGS')}
 						<div>
 							<p class="text-sm font-medium text-base-12 mb-0.5">
-								<LocalizedText key="channel_info.tags" />
+								<LocalizedText key="co.casterlabs.caffeinated.app.docks.channel_info.tags" />
 							</p>
 
 							<div class="-mx-0.5">
@@ -266,13 +266,16 @@
 											}}
 										>
 											<span class="sr-only">
-												<LocalizedText key="channel_info.tags.remove" />
+												<LocalizedText
+													key="co.casterlabs.caffeinated.app.docks.channel_info.tags.remove"
+												/>
 											</span>
 											<icon class="w-3 h-3" data-icon="icon/x-mark" />
 										</button>
 									</span>
 								{/each}
 							</div>
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
 							<div
 								class="mt-1.5 relative"
 								on:keydown={(e) => {
@@ -308,7 +311,9 @@
 									title={t('channel_info.tags.add')}
 								>
 									<span class="sr-only">
-										<LocalizedText key="channel_info.tags.add" />
+										<LocalizedText
+											key="co.casterlabs.caffeinated.app.docks.channel_info.tags.add"
+										/>
 									</span>
 									<icon class="w-4 h-4" data-icon="icon/plus" />
 								</button>
@@ -319,7 +324,9 @@
 					{#if features.includes('CONTENT_RATING')}
 						<div>
 							<p class="text-sm font-medium text-base-12 -mb-2">
-								<LocalizedText key="channel_info.content_rating" />
+								<LocalizedText
+									key="co.casterlabs.caffeinated.app.docks.channel_info.content_rating"
+								/>
 							</p>
 							<SlimSelectMenu
 								options={{
@@ -337,7 +344,7 @@
 					{#if features.includes('THUMBNAIL')}
 						<div>
 							<p class="text-sm font-medium text-base-12 mb-0.5">
-								<LocalizedText key="channel_info.thumbnail" />
+								<LocalizedText key="co.casterlabs.caffeinated.app.docks.channel_info.thumbnail" />
 							</p>
 
 							<ThumbnailPicker values={values[platform]} />
@@ -350,7 +357,7 @@
 					class="mt-6 relative w-full h-[2.375rem] cursor-pointer rounded-md py-1.5 px-2 shadow-sm transition-[background-color] bg-base-1 border border-base-6 hover:bg-base-3 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-center text-sm"
 					on:click={update}
 				>
-					<LocalizedText key="channel_info.update" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.docks.channel_info.update" />
 				</button>
 			{/if}
 		</div>

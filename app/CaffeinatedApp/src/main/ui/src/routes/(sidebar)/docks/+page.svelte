@@ -5,7 +5,7 @@
 	import CardList from '$lib/ui/CardList/index.svelte';
 	import Card from '$lib/ui/CardList/Card.svelte';
 
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { onMount } from 'svelte';
 
 	let docks = [];
@@ -20,23 +20,26 @@
 	});
 </script>
 
-<PageTitle title="page.docks" />
+<PageTitle title="co.casterlabs.caffeinated.app.page.docks" />
 
 <div>
-	<LocalizedText key="page.docks.info" />
+	<LocalizedText key="co.casterlabs.caffeinated.app.page.docks.info" />
 
 	<button
 		class="flex flex-row items-center text-link"
 		on:click={() => (showingTutorialModal = true)}
 	>
 		<icon class="inline-block w-4" data-icon="icon/chevron-right" />
-		<LocalizedText key="show_me_how" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.tutorial.show_me_how" />
 	</button>
 </div>
 
 {#if showingTutorialModal}
 	<Modal on:close={() => (showingTutorialModal = false)}>
-		<LocalizedText slot="title" key="page.docks.info.show_me_how.modal.title" />
+		<LocalizedText
+			slot="title"
+			key="co.casterlabs.caffeinated.app.page.docks.info.show_me_how.modal.title"
+		/>
 
 		<img src="/$caffeinated-sdk-root$/tutorials/create_obs_browser_dock.gif" alt="" />
 	</Modal>
@@ -53,13 +56,13 @@
 				<div class="text-right flex items-center space-x-1">
 					<button
 						class="text-base-12 hover:text-base-11"
-						title={t('sr.page.widgets.copy_link')}
+						title={t('co.casterlabs.caffeinated.app.page.widgets.copy_link')}
 						on:click|stopPropagation={() => {
 							window.Caffeinated.pluginIntegration.copyWidgetUrl(dock.id);
 						}}
 					>
 						<span class="sr-only">
-							<LocalizedText key="sr.page.widgets.copy_link" />
+							<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.copy_link" />
 						</span>
 						<icon class="w-5 h-5" data-icon="icon/document-duplicate" />
 					</button>

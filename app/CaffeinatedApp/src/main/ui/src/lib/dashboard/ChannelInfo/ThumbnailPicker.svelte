@@ -3,7 +3,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import { onDestroy, onMount, tick } from 'svelte';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const console = createConsole('ThumbnailPicker');
@@ -104,7 +104,9 @@
 				title={t('channel_info.thumbnail.select_file')}
 			>
 				<span class="sr-only">
-					<LocalizedText key="channel_info.thumbnail.select_file" />
+					<LocalizedText
+						key="co.casterlabs.caffeinated.app.docks.channel_info.thumbnail.select_file"
+					/>
 				</span>
 				<icon class="w-4 h-4" data-icon="icon/arrow-up-tray" />
 			</button>
@@ -116,7 +118,7 @@
 					title={t('channel_info.thumbnail.clear')}
 				>
 					<span class="sr-only">
-						<LocalizedText key="channel_info.thumbnail.clear" />
+						<LocalizedText key="co.casterlabs.caffeinated.app.docks.channel_info.thumbnail.clear" />
 					</span>
 					<icon class="w-4 h-4" data-icon="icon/x-mark" />
 				</button>

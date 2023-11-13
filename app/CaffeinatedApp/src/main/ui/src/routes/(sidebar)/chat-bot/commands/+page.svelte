@@ -7,7 +7,7 @@
 	import SlimButton from '$lib/ui/SlimButton.svelte';
 	import CodeInput from '$lib/ui/CodeInput.svelte';
 
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { STREAMING_SERVICE_NAMES } from '$lib/caffeinatedAuth.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
@@ -16,19 +16,19 @@
 	const debouncer = new Debouncer();
 
 	const PLATFORMS = {
-		[null]: 'page.chat_bot.platform.ANY',
+		[null]: 'co.casterlabs.caffeinated.app.page.chat_bot.platform.ANY',
 		...STREAMING_SERVICE_NAMES
 	};
 
 	const TRIGGER_TYPES = {
-		COMMAND: 'page.chat_bot.commands.trigger_type.COMMAND',
-		CONTAINS: 'page.chat_bot.commands.trigger_type.CONTAINS',
-		ALWAYS: 'page.chat_bot.commands.trigger_type.ALWAYS'
+		COMMAND: 'co.casterlabs.caffeinated.app.page.chat_bot.commands.trigger_type.COMMAND',
+		CONTAINS: 'co.casterlabs.caffeinated.app.page.chat_bot.commands.trigger_type.CONTAINS',
+		ALWAYS: 'co.casterlabs.caffeinated.app.page.chat_bot.commands.trigger_type.ALWAYS'
 	};
 
 	const RESPONSE_ACTIONS = {
-		REPLY_WITH: 'page.chat_bot.commands.response_action.REPLY_WITH',
-		EXECUTE: 'page.chat_bot.commands.response_action.EXECUTE'
+		REPLY_WITH: 'co.casterlabs.caffeinated.app.page.chat_bot.commands.response_action.REPLY_WITH',
+		EXECUTE: 'co.casterlabs.caffeinated.app.page.chat_bot.commands.response_action.EXECUTE'
 	};
 
 	const console = createConsole('Chat Bot/Commands');
@@ -96,16 +96,26 @@
 								// Swap the examples to make sense.
 								switch (value) {
 									case 'REPLY_WITH': {
-										if (command.response == t('page.chat_bot.commands.example.SCRIPT')) {
+										if (
+											command.response ==
+											t('co.casterlabs.caffeinated.app.page.chat_bot.commands.example.SCRIPT')
+										) {
 											command.trigger = 'casterlabs';
-											command.response = t('page.chat_bot.commands.example');
+											command.response = t(
+												'co.casterlabs.caffeinated.app.page.chat_bot.commands.example'
+											);
 										}
 										break;
 									}
 									case 'EXECUTE': {
-										if (command.response == t('page.chat_bot.commands.example')) {
+										if (
+											command.response ==
+											t('co.casterlabs.caffeinated.app.page.chat_bot.commands.example')
+										) {
 											command.trigger = 'test';
-											command.response = t('page.chat_bot.commands.example.SCRIPT');
+											command.response = t(
+												'co.casterlabs.caffeinated.app.page.chat_bot.commands.example.SCRIPT'
+											);
 										}
 										break;
 									}
@@ -133,7 +143,7 @@
 							</div>
 						{:else}
 							<TextArea
-								placeholder="page.chat_bot.commands.example"
+								placeholder="co.casterlabs.caffeinated.app.page.chat_bot.commands.example"
 								rows={2}
 								bind:value={command.response}
 								on:value={saveDB}
@@ -145,7 +155,7 @@
 
 			<button
 				class="absolute top-2 right-1 text-error hover:opacity-80"
-				title={t('sr.page.chat_bot.remove')}
+				title={t('co.casterlabs.caffeinated.app.page.chat_bot.remove')}
 				on:click={() => {
 					// Yucky code to avoid rerender bugs.
 					let interim = commands;
@@ -157,7 +167,7 @@
 				}}
 			>
 				<span class="sr-only">
-					<LocalizedText key="sr.page.chat_bot.remove" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.remove" />
 				</span>
 				<icon class="h-5" data-icon="icon/trash" />
 			</button>
@@ -167,7 +177,7 @@
 	<li>
 		<button
 			class="mt-2 w-full relative flex items-center justify-center rounded-lg transition hover:text-base-12 text-base-11 border hover:border-base-8 border-base-7 hover:bg-base-3 bg-base-2 py-1 px-2 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
-			title={t('sr.page.chat_bot.commands.add')}
+			title={t('co.casterlabs.caffeinated.app.page.chat_bot.commands.add')}
 			on:click={() => {
 				commands.push({
 					platform: null,
@@ -182,7 +192,7 @@
 		>
 			<div>
 				<span class="sr-only">
-					<LocalizedText key="sr.page.chat_bot.commands.add" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.commands.add" />
 				</span>
 				<icon data-icon="icon/plus" />
 			</div>
@@ -192,7 +202,7 @@
 
 <div class="mt-4">
 	<h1 class="font-bold text-lg">
-		<LocalizedText key="page.chat_bot.commands.examples" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.commands.examples" />
 	</h1>
 
 	<ul class="space-y-4">
@@ -205,7 +215,9 @@
 					<SlimButton
 						on:click={() => {
 							const trigger = example;
-							const code = t(`page.chat_bot.commands.examples.${example}.code`);
+							const code = t(
+								`co.casterlabs.caffeinated.app.page.chat_bot.commands.examples.${example}.code`
+							);
 
 							commands.push({
 								platform: null,
@@ -218,17 +230,21 @@
 							save();
 						}}
 					>
-						<LocalizedText key="page.chat_bot.commands.examples.add" />
+						<LocalizedText
+							key="co.casterlabs.caffeinated.app.page.chat_bot.commands.examples.add"
+						/>
 					</SlimButton>
 				</h2>
 				<p>
-					<LocalizedText key="page.chat_bot.commands.examples.{example}.description" />
+					<LocalizedText
+						key="co.casterlabs.caffeinated.app.page.chat_bot.commands.examples.{example}.description"
+					/>
 				</p>
 			</li>
 		{/each}
 	</ul>
 
 	<span class="block mt-6">
-		<LocalizedText key="sdk_documentation" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.sdk_documentation" />
 	</span>
 </div>

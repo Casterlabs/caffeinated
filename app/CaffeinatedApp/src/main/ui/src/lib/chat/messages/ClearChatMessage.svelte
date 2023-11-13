@@ -2,12 +2,12 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	import streamingServices from '$lib/streamingServices.mjs';
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 
 	export let event;
 	export let onContextMenuAction;
 </script>
 
 <span style:--platform-color={streamingServices[event.streamer.platform]?.color}>
-	<LocalizedText key="chat.viewer.message.CLEARCHAT" />
+	<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.message.CLEARCHAT" />
 </span>

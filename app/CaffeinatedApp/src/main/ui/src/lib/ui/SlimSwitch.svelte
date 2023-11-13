@@ -1,7 +1,7 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
-	import { t } from '$lib/translate.mjs';
+	import { t } from '$lib/app.mjs';
 	import { createEventDispatcher } from 'svelte';
 
 	const ID = Math.random().toString(36);
