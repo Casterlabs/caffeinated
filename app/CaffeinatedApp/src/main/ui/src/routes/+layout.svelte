@@ -1,5 +1,5 @@
 <script>
-	import CSSIntermediate from '$lib/CSSIntermediate.svelte';
+	import CSSIntermediate from '$lib/layout/CSSIntermediate.svelte';
 
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
