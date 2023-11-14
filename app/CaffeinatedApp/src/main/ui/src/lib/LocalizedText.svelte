@@ -1,24 +1,31 @@
 <script>
 	import createConsole from '$lib/console-helper.mjs';
-	import { t, emojiProvider, matchAndReturnEmojiHTML } from '$lib/app.mjs';
+	import { t, matchAndReturnEmojiHTML } from '$lib/app.mjs';
 	import { tick } from 'svelte';
 
 	const console = createConsole('LocalizedText');
 
-	export let opts = {};
+	export let prefix = '';
 	export let key;
 
-	export let prefix = '';
-
+	export let opts = {};
 	export let slotMapping = [];
 	let slotContents = {};
 
+	let contentHash;
 	let contents = [];
 
 	async function render() {
-		const result = await t(prefix + key, opts, slotMapping);
-		let newContents = result ? result.split(/(%\w+%)/g) : [];
+		const hash = JSON.stringify({ prefix, key, opts, slotMapping });
+		if (hash == contentHash) {
+			// Avoid re-render.
+			return;
+		}
 
+		const result = await t(prefix + key, opts, slotMapping);
+		let newContents = result ? result.split(/(%\w+%)/g) : []; // Split on %placeholders%.
+
+		// Process placeholders.
 		for (const [index, value] of newContents.entries()) {
 			if (value.startsWith('%')) {
 				const slotName = value.slice(1, -1);
@@ -28,10 +35,7 @@
 			}
 		}
 
-		if (slotMapping.length > 0) {
-			console.debug('Localized with slots:', key, slotMapping, slotContents, result, newContents);
-		}
-
+		// Look for emojis and replace them.
 		let emojiMatchPromises = [];
 		for (const content of newContents) {
 			if (typeof content == 'string' && typeof window != 'undefined') {
@@ -41,10 +45,16 @@
 			}
 		}
 
-		contents = await Promise.all(emojiMatchPromises);
+		console.debug('Localized with slots:', key, slotMapping, slotContents, result, newContents);
 
+		// Update this instance.
+		contents = await Promise.all(emojiMatchPromises);
+		contentHash = hash;
+
+		// Wait for the DOM to update after we set `contents`.
 		await tick();
 
+		// Mount the slots to the contents.
 		for (const content of contents) {
 			if (typeof content == 'string') continue;
 
@@ -58,11 +68,10 @@
 	$: key, render();
 	$: opts, render();
 	$: slotContents, render();
-	$: $emojiProvider, render();
 </script>
 
 <div style="display: none;" aria-hidden="true">
-	<!-- We need 10 of these -->
+	<!-- TODO Add more as needed. -->
 	<span bind:this={slotContents.item0}><slot name="0" /></span>
 	<span bind:this={slotContents.item1}><slot name="1" /></span>
 	<span bind:this={slotContents.item2}><slot name="2" /></span>
@@ -75,12 +84,12 @@
 	<span bind:this={slotContents.item9}><slot name="9" /></span>
 </div>
 
-<span>
+<span style="display: contents;">
 	{#each contents as c}
 		{#if typeof c == 'string'}
 			{@html c}
 		{:else}
-			<span bind:this={c[1]} />
+			<span bind:this={c[1]} style="display: contents;" />
 		{/if}
 	{/each}
 </span>

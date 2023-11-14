@@ -4,11 +4,10 @@
 
 	const console = createConsole('LocalizedProperty');
 
-	export let opts = {};
+	export let prefix = '';
 	export let key;
+	export let opts = {};
 	export let property = 'title';
-
-	export let prefix = 'co.casterlabs.caffeinated.app.';
 
 	let self;
 
@@ -23,4 +22,4 @@
 	$: opts, render();
 </script>
 
-<span bind:this={self} data-dummy="LocalizedProperty" />
+<span bind:this={self} data-dummy="LocalizedProperty" style="display: none;" />
