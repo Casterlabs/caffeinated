@@ -12,6 +12,8 @@
 	let self;
 
 	async function render() {
+		if (!self) return;
+
 		const hash = JSON.stringify({ key, opts, property });
 		if (hash == contentHash) {
 			// Avoid re-render.
@@ -20,12 +22,14 @@
 
 		const result = await t(key, opts, []);
 		console.debug('Localized:', key, result);
+		contentHash = hash;
 		self.parentElement.setAttribute(property, result);
 	}
 
 	// Rerender on change
 	$: key, render();
 	$: opts, render();
+	$: self, render();
 </script>
 
 <span bind:this={self} data-dummy="LocalizedProperty" style="display: none;" />
