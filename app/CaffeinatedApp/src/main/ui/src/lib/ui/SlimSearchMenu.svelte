@@ -106,12 +106,7 @@
 				<div aria-hidden="true" class="h-0 overflow-hidden">
 					{#each options as name}
 						<span class="block">
-							<!-- svelte-ignore missing-declaration -->
-							{#if localize}
-								<LocalizedText key={name} />
-							{:else}
-								{name}
-							{/if}
+							<LocalizedText key={name} />
 						</span>
 					{/each}
 				</div>
