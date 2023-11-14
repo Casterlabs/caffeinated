@@ -150,7 +150,10 @@
 			title="co.casterlabs.caffeinated.app.page.settings.appearance.emojis"
 			value={$preferences?.emojiProvider}
 			options={EMOJI_PROVIDERS}
-			on:value={({ detail: value }) => setPreferenceItem('emojiProvider', value)}
+			on:value={({ detail: value }) => {
+				setPreferenceItem('emojiProvider', value);
+				location.reload();
+			}}
 		/>
 	</li>
 	<li class="py-4">
@@ -160,7 +163,7 @@
 			options={$locales}
 			on:value={({ detail: value }) => {
 				setPreferenceItem('language', value);
-				// language.set(value); // Triggers a UI re-render.
+				location.reload();
 			}}
 		/>
 	</li>

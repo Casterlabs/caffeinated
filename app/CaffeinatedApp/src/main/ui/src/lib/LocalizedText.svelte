@@ -25,7 +25,7 @@
 		const result = await t(prefix + key, opts, slotMapping);
 		let newContents = result ? result.split(/(%\w+%)/g) : []; // Split on %placeholders%.
 
-		// Process placeholders.
+		// Process slot placeholders.
 		for (const [index, value] of newContents.entries()) {
 			if (value.startsWith('%')) {
 				const slotName = value.slice(1, -1);
