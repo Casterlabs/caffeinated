@@ -11,7 +11,7 @@
 
 	// prettier-ignore
 	const tabs = [
-		['co.casterlabs.caffeinated.app.page.settings.appearance', '/$caffeinated-sdk-root$/settings'],
+		['co.casterlabs.caffeinated.app.page.settings.appearance', '/$caffeinated-sdk-root$/settings/appearance'],
 		['co.casterlabs.caffeinated.app.page.settings.accounts',   '/$caffeinated-sdk-root$/settings/accounts'],
 		['co.casterlabs.caffeinated.app.page.settings.plugins',    '/$caffeinated-sdk-root$/settings/plugins'],
 		['co.casterlabs.caffeinated.app.page.settings.about',      '/$caffeinated-sdk-root$/settings/about'],
@@ -19,8 +19,9 @@
 	];
 
 	// Filter the list of tabs for a match.
-	$: currentPage = (tabs.filter(([_, href]) => $page.url.pathname + $page.url.search == href)[0] ||
-		[])[0];
+	$: currentPage = tabs.filter(
+		([_, href]) => $page.url.pathname + $page.url.search == href
+	)[0]?.[0];
 
 	onMount(() => {
 		Caffeinated.pluginIntegration.widgets

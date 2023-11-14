@@ -12,7 +12,7 @@
 				useStartsWith: false
 			},
 			{
-				href: '/$caffeinated-sdk-root$/chat-bot/commands',
+				href: '/$caffeinated-sdk-root$/chat-bot',
 				name: 'co.casterlabs.caffeinated.app.page.chat_bot',
 				useStartsWith: true
 			}

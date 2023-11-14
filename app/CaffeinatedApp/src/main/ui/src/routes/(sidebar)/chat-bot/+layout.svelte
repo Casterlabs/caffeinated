@@ -13,7 +13,7 @@
 	];
 
 	// Filter the list of tabs for a match.
-	$: currentPage = tabs.filter(([_, href]) => $page.url.pathname == href)[0][0];
+	$: currentPage = tabs.filter(([_, href]) => $page.url.pathname == href)[0]?.[0];
 </script>
 
 <PageTitle title={['co.casterlabs.caffeinated.app.page.chat_bot', currentPage]} />
