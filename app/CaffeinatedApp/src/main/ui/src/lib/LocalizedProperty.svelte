@@ -4,15 +4,21 @@
 
 	const console = createConsole('LocalizedProperty');
 
-	export let prefix = '';
 	export let key;
 	export let opts = {};
-	export let property = 'title';
+	export let property = '';
 
+	let contentHash;
 	let self;
 
 	async function render() {
-		const result = await t(prefix + key, opts, slotMapping);
+		const hash = JSON.stringify({ key, opts, property });
+		if (hash == contentHash) {
+			// Avoid re-render.
+			return;
+		}
+
+		const result = await t(key, opts, []);
 		console.debug('Localized:', key, result);
 		self.parentElement.setAttribute(property, result);
 	}

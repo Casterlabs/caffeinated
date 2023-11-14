@@ -5,7 +5,6 @@
 
 	const console = createConsole('LocalizedText');
 
-	export let prefix = '';
 	export let key;
 
 	export let opts = {};
@@ -16,13 +15,13 @@
 	let contents = [];
 
 	async function render() {
-		const hash = JSON.stringify({ prefix, key, opts, slotMapping });
+		const hash = JSON.stringify({ key, opts, slotMapping });
 		if (hash == contentHash) {
 			// Avoid re-render.
 			return;
 		}
 
-		const result = await t(prefix + key, opts, slotMapping);
+		const result = await t(key, opts, slotMapping);
 		let newContents = result ? result.split(/(%\w+%)/g) : []; // Split on %placeholders%.
 
 		// Process slot placeholders.
