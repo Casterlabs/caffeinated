@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
 
@@ -40,6 +42,7 @@
 
 	let updateAvailable = false;
 
+	export let sidebarVisible = true;
 	let sidebarWidthMul = 100;
 	let sidebarAnimTask = -1;
 	let sidebarAnimDirection = 10;
@@ -47,6 +50,7 @@
 	export function toggleSideBar() {
 		clearInterval(sidebarAnimTask);
 
+		sidebarVisible = !sidebarVisible;
 		sidebarAnimDirection *= -1;
 
 		sidebarAnimTask = setInterval(() => {
