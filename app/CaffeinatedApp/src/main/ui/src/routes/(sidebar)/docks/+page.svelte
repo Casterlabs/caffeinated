@@ -2,7 +2,7 @@
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import Modal from '$lib/ui/Modal.svelte';
-	import PageTitle from '$lib/PageTitle.svelte';
+	import PageTitle from '$lib/layout/PageTitle.svelte';
 	import CardList from '$lib/ui/CardList/index.svelte';
 	import Card from '$lib/ui/CardList/Card.svelte';
 

@@ -20,6 +20,11 @@
 			titleString += ' - ';
 			titleString += await t(part);
 		}
+
+		if (titleString.includes('LOCALE_PRERENDER:')) {
+			titleString = BASE;
+			setTimeout(recalculateTitle, 15);
+		}
 	}
 
 	$: title, recalculateTitle();

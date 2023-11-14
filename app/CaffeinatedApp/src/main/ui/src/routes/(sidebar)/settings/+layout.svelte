@@ -1,6 +1,6 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
-	import PageTitle from '$lib/PageTitle.svelte';
+	import PageTitle from '$lib/layout/PageTitle.svelte';
 
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';

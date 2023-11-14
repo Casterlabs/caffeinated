@@ -1,5 +1,5 @@
 <script>
-	import PageTitle from '$lib/PageTitle.svelte';
+	import PageTitle from '$lib/layout/PageTitle.svelte';
 	import CustomResizableGrid from '$lib/layout/ResizableGrid.svelte';
 	import DashboardPiece from '$lib/layout/dashboard/DashboardPiece.svelte';
 
