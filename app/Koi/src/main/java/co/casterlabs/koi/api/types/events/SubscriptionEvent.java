@@ -21,11 +21,26 @@ public class SubscriptionEvent extends KoiEvent {
     private User giftRecipient;
 
     /**
-     * @deprecated This is ultimately unknowable on some platforms. Be mindful of
-     *             that.
+     * @deprecated This value has been superseded by {@link #monthsPurchased} and
+     *             {@link #monthsStreak}. This will always have a value of 1 until
+     *             it's removal.
      */
     @Deprecated
-    private int months;
+    private int months = 1;
+
+    /**
+     * Note that this is unknowable on some platforms, like TikTok. In that case, it
+     * will always be 1.
+     */
+    @JsonField("months_purchased")
+    private int monthsPurchased;
+
+    /**
+     * Note that this is unknowable on some platforms, like TikTok. In that case, it
+     * will always be 1.
+     */
+    @JsonField("months_streak")
+    private int monthsStreak;
 
     @JsonField("sub_type")
     private SubscriptionType subType;
@@ -38,11 +53,12 @@ public class SubscriptionEvent extends KoiEvent {
         return KoiEventType.SUBSCRIPTION;
     }
 
-    public SubscriptionEvent(SimpleProfile streamer, User subscriber, User giftRecipient, int months, SubscriptionType subType, SubscriptionLevel subLevel) {
+    public SubscriptionEvent(SimpleProfile streamer, User subscriber, User giftRecipient, int monthsPurchased, int monthsStreak, SubscriptionType subType, SubscriptionLevel subLevel) {
         this.streamer = streamer;
         this.subscriber = subscriber;
         this.giftRecipient = giftRecipient;
-        this.months = months;
+        this.monthsPurchased = monthsPurchased;
+        this.monthsStreak = monthsStreak;
         this.subType = subType;
         this.subLevel = subLevel;
     }

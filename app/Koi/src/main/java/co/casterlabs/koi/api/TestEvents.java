@@ -102,7 +102,7 @@ public class TestEvents {
                 break;
 
             case SUBSCRIPTION:
-                result = new SubscriptionEvent(streamer, testUser, null, 0, SubscriptionType.SUB, SubscriptionLevel.UNKNOWN);
+                result = new SubscriptionEvent(streamer, testUser, null, 1, 1, SubscriptionType.SUB, SubscriptionLevel.UNKNOWN);
                 break;
 
             case RICH_MESSAGE:

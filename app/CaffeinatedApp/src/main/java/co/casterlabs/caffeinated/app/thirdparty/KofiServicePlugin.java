@@ -97,7 +97,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
                 CaffeinatedApp.getInstance().getKoi().onEvent(
                     new SubscriptionEvent(
                         KOFI_STREAMER, subscriber, null,
-                        1,
+                        1, 1,
                         json.getBoolean("is_first_subscription_payment") ? SubscriptionType.SUB : SubscriptionType.RESUB,
                         SubscriptionLevel.UNKNOWN
                     )
