@@ -1,7 +1,8 @@
 <script>
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import Modal from '$lib/ui/Modal.svelte';
 	import PageTitle from '$lib/PageTitle.svelte';
-	import LocalizedText from '$lib/LocalizedText.svelte';
 	import CardList from '$lib/ui/CardList/index.svelte';
 	import Card from '$lib/ui/CardList/Card.svelte';
 	import ContextMenu from '$lib/ui/ContextMenu.svelte';
@@ -84,10 +85,10 @@
 				creatableWidgetByCategory[creatable.category].push({
 					name: creatable.friendlyName,
 					requiredFeatures: creatable.requiredFeatures,
-					create: () => {
+					create: async () => {
 						Caffeinated.pluginIntegration.createNewWidget(
 							creatable.namespace,
-							`${t(creatable.friendlyName)} ${t(
+							`${await t(creatable.friendlyName)} ${await t(
 								'co.casterlabs.caffeinated.app.page.widgets.create.new'
 							)}`
 						);
@@ -195,11 +196,14 @@
 					: tag == 'blue'
 					? 'var(--link)'
 					: undefined}
-				title={tagsExpanded[tag]
-					? t('co.casterlabs.caffeinated.app.page.widgets.click_to_shrink')
-					: t('co.casterlabs.caffeinated.app.page.widgets.click_to_expand')}
 				on:click={() => (tagsExpanded[tag] = !tagsExpanded[tag])}
 			>
+				<LocalizedProperty
+					key={tagsExpanded[tag]
+						? 'co.casterlabs.caffeinated.app.page.widgets.click_to_shrink'
+						: 'co.casterlabs.caffeinated.app.page.widgets.click_to_expand'}
+					property="title"
+				/>
 				{#if tagsExpanded[tag]}
 					<CardList>
 						{#each widgets as widget}
@@ -251,17 +255,23 @@
 									icon={widget.details.icon}
 									text={widget.name}
 									href="/$caffeinated-sdk-root$/widgets/edit?id={widget.id}"
-									title={t('co.casterlabs.caffeinated.app.page.widgets.edit_widget')}
 								>
+									<LocalizedProperty
+										key="co.casterlabs.caffeinated.app.page.widgets.edit_widget"
+										property="title"
+									/>
 									<div class="text-right flex items-center space-x-1">
 										<button
 											class="text-base-12 hover:text-base-11"
-											title={t('co.casterlabs.caffeinated.app.page.widgets.open_context_menu')}
 											on:click|stopPropagation={(e) => {
 												console.log(e);
 												contextMenuMap[widget.id].doOpen(e.pageX, e.pageY);
 											}}
 										>
+											<LocalizedProperty
+												key="co.casterlabs.caffeinated.app.page.widgets.open_context_menu"
+												property="title"
+											/>
 											<span class="sr-only">
 												<LocalizedText
 													key="co.casterlabs.caffeinated.app.page.widgets.open_context_menu"
@@ -285,8 +295,8 @@
 		class="fixed bottom-3 -translate-x-3 flex items-center justify-center shadow-sm rounded-lg border border-base-5 bg-base-1 p-2 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 overflow-hidden hover:overflow-visible"
 		aria-haspopup="true"
 		aria-controls="widget-creation-dropup"
-		title={t('co.casterlabs.caffeinated.app.page.widgets.create')}
 	>
+		<LocalizedProperty key="co.casterlabs.caffeinated.app.page.widgets.create" property="title" />
 		<div class="absolute left-0 bottom-full -translate-x-px" id="widget-creation-dropup">
 			<div
 				class="mb-1.5 shadow-sm rounded-lg border border-base-5 bg-base-1 w-36 divide-y divide-current text-base-5"
@@ -318,7 +328,6 @@
 											.filter((f) => !supportedFeatures.includes(f)).length == 0}
 									<button
 										class="block w-full h-10"
-										title={t(widget.name)}
 										on:click={() => {
 											if (isSupported) {
 												widget.create();
@@ -327,6 +336,7 @@
 											}
 										}}
 									>
+										<LocalizedProperty key={widget.name} property="title" />
 										<div
 											class="truncate text-left p-2 text-sm w-full"
 											class:text-base-11={!isSupported}

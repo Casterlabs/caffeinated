@@ -1,5 +1,6 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import FocusListener from '$lib/interaction/FocusListener.svelte';
 
 	import { createEventDispatcher } from 'svelte';
@@ -13,7 +14,6 @@
 	export let options = {};
 	export let disabled = false;
 	export let width = 'fit';
-	export let localize = true;
 
 	let open = false;
 	let highlighted = null;
@@ -33,6 +33,7 @@
 	class:pointer-events-none={disabled}
 >
 	<FocusListener class="relative" on:lostfocus={() => (open = false)}>
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
 			on:keyup={(e) => {
 				if (e.code == 'Enter') {
@@ -72,27 +73,24 @@
 				}
 			}}
 		>
+			<!-- svelte-ignore a11y-role-supports-aria-props -->
 			<button
 				type="button"
 				role="listbox"
 				class="align-middle relative w-{width} h-fit cursor-pointer rounded-md border border-base-7 bg-base-1 py-1 pl-1.5 pr-5 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
-				title={t(options[value])}
 				aria-haspopup="listbox"
 				aria-expanded={open}
 				aria-labelledby={ID}
 				aria-disabled={disabled}
 				on:click={() => (open = !open)}
 			>
+				<LocalizedProperty key={options[value]} property="title" />
 				<!-- Tricks the CSS renderer into giving us the correct width -->
 				<!-- We need to be sure this is hidden from screen readers, though. -->
 				<div aria-hidden="true" class="h-0 overflow-hidden">
 					{#each Object.values(options) as name}
 						<span class="block">
-							{#if localize}
-								<LocalizedText key={name} />
-							{:else}
-								{name}
-							{/if}
+							<LocalizedText key={name} />
 						</span>
 					{/each}
 				</div>
@@ -133,17 +131,10 @@
 								}}
 								on:mouseenter={() => (highlighted = id)}
 							>
-								<button
-									class="w-full text-left py-2 pl-3 pr-9"
-									on:click={() => select(id)}
-									title={localize ? t(name) : name}
-								>
+								<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => select(id)}>
+									<LocalizedProperty key={name} property="title" />
 									<span class="block truncate" class:font-semibold={isSelected}>
-										{#if localize}
-											<LocalizedText key={name} />
-										{:else}
-											{name}
-										{/if}
+										<LocalizedText key={name} />
 									</span>
 
 									{#if isSelected}

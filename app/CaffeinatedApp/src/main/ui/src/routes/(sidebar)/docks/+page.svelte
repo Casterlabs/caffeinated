@@ -1,11 +1,11 @@
 <script>
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import Modal from '$lib/ui/Modal.svelte';
 	import PageTitle from '$lib/PageTitle.svelte';
-	import LocalizedText from '$lib/LocalizedText.svelte';
 	import CardList from '$lib/ui/CardList/index.svelte';
 	import Card from '$lib/ui/CardList/Card.svelte';
 
-	import { t } from '$lib/app.mjs';
 	import { onMount } from 'svelte';
 
 	let docks = [];
@@ -56,11 +56,14 @@
 				<div class="text-right flex items-center space-x-1">
 					<button
 						class="text-base-12 hover:text-base-11"
-						title={t('co.casterlabs.caffeinated.app.page.widgets.copy_link')}
 						on:click|stopPropagation={() => {
 							window.Caffeinated.pluginIntegration.copyWidgetUrl(dock.id);
 						}}
 					>
+						<LocalizedProperty
+							key="co.casterlabs.caffeinated.app.page.widgets.copy_link"
+							property="title"
+						/>
 						<span class="sr-only">
 							<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.copy_link" />
 						</span>

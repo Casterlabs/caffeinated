@@ -115,14 +115,15 @@
 			type="button"
 			role="listbox"
 			class="relative w-full h-[2.375rem] cursor-pointer rounded-md border border-base-7 bg-base-1 py-2 pl-3 pr-10 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
-			title={t(`platform.${value}`)}
 			aria-haspopup="listbox"
 			aria-expanded={open}
 			aria-labelledby={ID}
 			on:click={() => (open = !open)}
 		>
 			<span class="block truncate text-base-12">
-				{value.map((p) => t(`platform.${p}`)).join(', ')}
+				{#await Promise.all(value.map(async (p) => await t(`platform.${p}`))) then mapped}
+					{mapped.join(', ')}
+				{/await}
 				&nbsp;
 			</span>
 			<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
@@ -158,11 +159,11 @@
 							}}
 							on:mouseenter={() => (highlighted = platform)}
 						>
-							<button
-								class="w-full text-left py-2 pl-3 pr-9"
-								on:click={() => select(platform)}
-								title={t(`platform.${platform}`)}
-							>
+							<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => select(platform)}>
+								<LocalizedProperty
+									key="co.casterlabs.caffeinated.app.platform.{platform}"
+									property="title"
+								/>
 								<span class="block truncate" class:font-semibold={isSelected}>
 									<LocalizedText key="co.casterlabs.caffeinated.app.platform.{platform}" />
 								</span>

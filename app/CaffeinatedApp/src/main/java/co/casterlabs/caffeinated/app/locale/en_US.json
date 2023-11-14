@@ -5,7 +5,6 @@
         "love": "Made with ♥ by Casterlabs",
         "copyright": "Copyright © {year} Casterlabs. All rights reserved.",
         "unsupported_feature": "Not supported",
-        "unsupported_feature.item": "Not supported by {item}.",
         "sdk_documentation": "Looking for documentation? Look at the <a class=\"text-link underline\" href=\"https://casterlabs.github.io/caffeinated-sdk/\" target=\"_blank\">Caffeinated SDK Wiki</a>.",
         "platform.TWITCH": "Twitch",
         "platform.TROVO": "Trovo",

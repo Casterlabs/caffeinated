@@ -1,11 +1,11 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import FocusListener from '$lib/interaction/FocusListener.svelte';
 	import LongPressListener from '$lib/interaction/LongPressListener.svelte';
 	import Portal from 'svelte-portal';
 
 	import { tick } from 'svelte';
-	import { t } from '$lib/app.mjs';
 
 	let contextMenuOpen = false;
 	let contextMenuCoords = [-1000, -1000];
@@ -84,6 +84,7 @@
 		doOpen(x, y);
 	}}
 >
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
 		class="contents"
 		on:contextmenu={(e) => {
@@ -168,7 +169,6 @@
 											{@const isSelected = selected == (id == 'null' ? null : id)}
 											<button
 												class="block w-full h-10 relative"
-												title={t(value)}
 												role="option"
 												aria-selected={isSelected}
 												on:click={async () => {
@@ -179,6 +179,7 @@
 													}
 												}}
 											>
+												<LocalizedProperty key={value} property="title" />
 												<div class="truncate text-left p-2 text-sm text-base-12 w-full">
 													<LocalizedText key={value} />
 												</div>

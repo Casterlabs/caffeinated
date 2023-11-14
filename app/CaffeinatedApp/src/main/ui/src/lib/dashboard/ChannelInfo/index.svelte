@@ -1,12 +1,12 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import SlimSearchMenu from '$lib/ui/SlimSearchMenu.svelte';
 	import SlimSelectMenu from '$lib/ui/SlimSelectMenu.svelte';
 	import TextArea from '$lib/ui/TextArea.svelte';
 	import ThumbnailPicker from './ThumbnailPicker.svelte';
 
 	import { onMount } from 'svelte';
-	import { t } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const console = createConsole('ChannelInfo');
@@ -308,8 +308,11 @@
 										textarea.value = '';
 										values = values; // Rerender
 									}}
-									title={t('channel_info.tags.add')}
 								>
+									<LocalizedProperty
+										key="co.casterlabs.caffeinated.app.docks.channel_info.tags.add"
+										property="title"
+									/>
 									<span class="sr-only">
 										<LocalizedText
 											key="co.casterlabs.caffeinated.app.docks.channel_info.tags.add"

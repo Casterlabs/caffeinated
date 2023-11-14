@@ -1,5 +1,6 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import TextArea from '$lib/ui/TextArea.svelte';
 	import NumberInput from '$lib/ui/NumberInput.svelte';
 
@@ -44,13 +45,16 @@
 
 			<button
 				class="absolute inset-y-1 right-1 text-error hover:opacity-80"
-				title={t('co.casterlabs.caffeinated.app.page.chat_bot.remove')}
 				on:click={() => {
 					timers.splice(idx, 1);
 					save();
 					timers = timers;
 				}}
 			>
+				<LocalizedProperty
+					key="co.casterlabs.caffeinated.app.page.chat_bot.remove"
+					property="title"
+				/>
 				<span class="sr-only">
 					<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.remove" />
 				</span>
@@ -62,13 +66,16 @@
 	<li>
 		<button
 			class="mt-2 w-full relative flex items-center justify-center rounded-lg transition hover:text-base-12 text-base-11 border hover:border-base-8 border-base-7 hover:bg-base-3 bg-base-2 py-1 px-2 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
-			title={t('co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_from_chatbots.add')}
-			on:click={() => {
-				timers.push(t('co.casterlabs.caffeinated.app.page.chat_bot.timers.example'));
+			on:click={async () => {
+				timers.push(await t('co.casterlabs.caffeinated.app.page.chat_bot.timers.example'));
 				save();
 				timers = timers;
 			}}
 		>
+			<LocalizedProperty
+				key="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_from_chatbots.add"
+				property="title"
+			/>
 			<div>
 				<span class="sr-only">
 					<LocalizedText

@@ -1,8 +1,9 @@
 <script>
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import SelectMenu from '$lib/ui/SelectMenu.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
 	import TextArea from '$lib/ui/TextArea.svelte';
-	import LocalizedText from '$lib/LocalizedText.svelte';
 
 	// import { hasCasterlabsPlus } from '$lib/app.mjs';
 	import { t } from '$lib/app.mjs';
@@ -86,7 +87,6 @@
 
 							<button
 								class="absolute inset-y-1 right-1 text-error hover:opacity-80"
-								title={t('co.casterlabs.caffeinated.app.page.chat_bot.remove')}
 								on:click={() => {
 									const chatbots = $preferences.chatbots;
 									chatbots.splice(idx, 1);
@@ -94,6 +94,10 @@
 									state++;
 								}}
 							>
+								<LocalizedProperty
+									key="co.casterlabs.caffeinated.app.page.chat_bot.remove"
+									property="title"
+								/>
 								<span class="sr-only">
 									<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.remove" />
 								</span>
@@ -106,7 +110,6 @@
 
 			<button
 				class="mt-2 w-full relative flex items-center justify-center rounded-lg border transition border-base-5 text-base-11 hover:text-base-12 hover:shadow-sm hover:border-base-7 hover:bg-base-2 p-1 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
-				title={t('co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_from_chatbots.add')}
 				on:click={() => {
 					const chatbots = $preferences.chatbots;
 					chatbots.push(''); // Add a new blank entry.
@@ -114,6 +117,10 @@
 					state++;
 				}}
 			>
+				<LocalizedProperty
+					key="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_from_chatbots.add"
+					property="title"
+				/>
 				<div>
 					<span class="sr-only">
 						<LocalizedText

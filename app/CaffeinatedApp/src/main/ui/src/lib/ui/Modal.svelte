@@ -1,8 +1,8 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 
 	import { createEventDispatcher } from 'svelte';
-	import { t } from '$lib/app.mjs';
 	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
@@ -30,11 +30,8 @@
 					<slot name="title" />
 				</h3>
 
-				<button
-					class="absolute top-4 right-3.5 text-base-12"
-					title={t('modal.close')}
-					on:click={close}
-				>
+				<button class="absolute top-4 right-3.5 text-base-12" on:click={close}>
+					<LocalizedProperty key="co.casterlabs.caffeinated.app.ui.modal.close" property="title" />
 					<span class="sr-only">
 						<LocalizedText key="co.casterlabs.caffeinated.app.ui.modal.close" />
 					</span>

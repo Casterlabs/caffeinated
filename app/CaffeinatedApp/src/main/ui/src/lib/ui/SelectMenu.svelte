@@ -1,10 +1,10 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import FocusListener from '$lib/interaction/FocusListener.svelte';
 
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { t } from '$lib/app.mjs';
 
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
@@ -79,13 +79,13 @@
 				type="button"
 				role="listbox"
 				class="relative w-full h-[2.375rem] cursor-pointer rounded-md border border-base-7 bg-base-1 py-2 pl-3 pr-10 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
-				title={t(options[value])}
 				aria-haspopup="listbox"
 				aria-expanded={open}
 				aria-labelledby={ID}
 				aria-disabled={disabled}
 				on:click={() => (open = !open)}
 			>
+				<LocalizedProperty key={options[value]} property="title" />
 				<span class="block truncate text-base-12">
 					<LocalizedText key={options[value]} />&nbsp;
 				</span>
@@ -122,11 +122,8 @@
 								}}
 								on:mouseenter={() => (highlighted = id)}
 							>
-								<button
-									class="w-full text-left py-2 pl-3 pr-9"
-									on:click={() => select(id)}
-									title={t(name)}
-								>
+								<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => select(id)}>
+									<LocalizedProperty key={name} property="title" />
 									<span class="block truncate" class:font-semibold={isSelected}>
 										<LocalizedText key={name} />
 									</span>

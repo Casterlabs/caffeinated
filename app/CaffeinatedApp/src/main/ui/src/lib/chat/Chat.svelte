@@ -479,12 +479,14 @@
 		<ul class="w-72 divide-y divide-current text-base-6">
 			<li class="py-2">
 				<SelectMenu
-					title="chat.viewer.preferences.color_users_by"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by"
 					description=""
 					options={{
-						THEME: 'chat.viewer.preferences.color_users_by.THEME',
-						USER: 'chat.viewer.preferences.color_users_by.USER',
-						PLATFORM: 'chat.viewer.preferences.color_users_by.PLATFORM'
+						THEME:
+							'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.THEME',
+						USER: 'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.USER',
+						PLATFORM:
+							'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.PLATFORM'
 					}}
 					bind:value={colorBy}
 					on:value={savePreferences}
@@ -492,7 +494,7 @@
 			</li>
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.play_ding_on_message"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.play_ding_on_message"
 					description=""
 					bind:checked={playDingOnMessage}
 					on:value={savePreferences}
@@ -500,7 +502,7 @@
 			</li>
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.read_messages_out_loud"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.read_messages_out_loud"
 					description=""
 					bind:checked={readMessagesAloud}
 					on:value={savePreferences}
@@ -509,7 +511,7 @@
 			{#if readMessagesAloud}
 				<li class="py-2">
 					<SelectMenu
-						title="chat.viewer.preferences.tts_voice"
+						title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.tts_voice"
 						description=""
 						options={SUPPORTED_TTS_VOICES.reduce((arr, v) => ({ ...arr, [v]: v }), {})}
 						bind:value={ttsVoice}
@@ -539,7 +541,7 @@
 			{/if}
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_chat_timestamps"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_chat_timestamps"
 					description=""
 					bind:checked={showChatTimestamps}
 					on:value={savePreferences}
@@ -547,7 +549,7 @@
 			</li>
 			<!-- <li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_profile_pictures"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_profile_pictures"
 					description=""
 					bind:checked={showProfilePictures}
 					on:value={savePreferences}
@@ -555,7 +557,7 @@
 			</li> -->
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_badges"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_badges"
 					description=""
 					bind:checked={showBadges}
 					on:value={savePreferences}
@@ -563,7 +565,7 @@
 			</li>
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_viewers"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_viewers"
 					description=""
 					bind:checked={showViewers}
 					on:value={savePreferences}
@@ -571,7 +573,7 @@
 			</li>
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_platform"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_platform"
 					description=""
 					bind:checked={showPlatform}
 					on:value={savePreferences}
@@ -579,7 +581,7 @@
 			</li>
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_activities"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_activities"
 					description=""
 					bind:checked={showActivities}
 					on:value={savePreferences}

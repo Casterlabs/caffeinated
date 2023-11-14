@@ -1,9 +1,10 @@
 <script>
+	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import WidgetPreview from '$lib/WidgetPreview.svelte';
 	import CircularButton from '$lib/ui/CircularButton.svelte';
 	import Button from '$lib/ui/Button.svelte';
 	import FormInput from '$lib/ui/FormInput.svelte';
-	import LocalizedText from '$lib/LocalizedText.svelte';
 	import AspectVar from '$lib/aspect-ratio/AspectVar.svelte';
 
 	import { t } from '$lib/app.mjs';
@@ -85,10 +86,11 @@
 <div class="overflow-x-hidden min-h-full">
 	{#if widget}
 		<div class="fixed left-2.5 top-2.5">
-			<CircularButton
-				title={t('sr.navigation.back')}
-				on:click={() => goto('/$caffeinated-sdk-root$/widgets')}
-			>
+			<CircularButton on:click={() => goto('/$caffeinated-sdk-root$/widgets')}>
+				<LocalizedProperty
+					key="co.casterlabs.caffeinated.app.ui.navigation.back"
+					property="title"
+				/>
 				<span class="sr-only">
 					<LocalizedText key="co.casterlabs.caffeinated.app.ui.navigation.back" />
 				</span>
@@ -112,23 +114,29 @@
 				</CircularButton>
 			{/each}
 			<CircularButton
-				title={t('co.casterlabs.caffeinated.app.page.widgets.copy_link')}
 				on:click={() => {
 					window.Caffeinated.pluginIntegration.copyWidgetUrl(widget.id);
 				}}
 			>
+				<LocalizedProperty
+					key="co.casterlabs.caffeinated.app.page.widgets.copy_link"
+					property="title"
+				/>
 				<span class="sr-only">
 					<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.copy_link" />
 				</span>
 				<icon class="w-5 h-5" data-icon="icon/document-duplicate" />
 			</CircularButton>
 			<CircularButton
-				title={t('co.casterlabs.caffeinated.app.page.widgets.delete')}
 				on:click={() => {
 					window.Caffeinated.pluginIntegration.deleteWidget(widget.id);
 					goto('/$caffeinated-sdk-root$/widgets');
 				}}
 			>
+				<LocalizedProperty
+					key="co.casterlabs.caffeinated.app.page.widgets.delete"
+					property="title"
+				/>
 				<span class="sr-only">
 					<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.delete" />
 				</span>
@@ -156,7 +164,6 @@
 
 					<button
 						class="absolute left-full top-1 translate-x-0.5"
-						title={t('co.casterlabs.caffeinated.app.page.widget.editor.edit_name')}
 						on:click={() => {
 							const range = document.createRange();
 							const sel = window.getSelection();
@@ -175,6 +182,10 @@
 							nameEditorElement.focus();
 						}}
 					>
+						<LocalizedProperty
+							key="co.casterlabs.caffeinated.app.page.widget.editor.edit_name"
+							property="title"
+						/>
 						<span class="sr-only">
 							<LocalizedText key="co.casterlabs.caffeinated.app.page.widget.editor.edit_name" />
 						</span>

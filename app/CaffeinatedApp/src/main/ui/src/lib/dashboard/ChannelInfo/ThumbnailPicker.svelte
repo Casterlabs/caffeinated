@@ -1,6 +1,7 @@
 <script>
-	import Aspect16by9 from '$lib/aspect-ratio/Aspect16by9.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
+	import Aspect16by9 from '$lib/aspect-ratio/Aspect16by9.svelte';
 
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { t } from '$lib/app.mjs';
@@ -101,8 +102,11 @@
 				class="relative w-fit truncate h-8 cursor-pointer rounded-l-md -mr-px py-1.5 px-2 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-center text-sm"
 				class:rounded-md={!values.thumbnail}
 				on:click={() => fileInput.click()}
-				title={t('channel_info.thumbnail.select_file')}
 			>
+				<LocalizedProperty
+					key="co.casterlabs.caffeinated.app.docks.channel_info.thumbnail.select_file"
+					property="title"
+				/>
 				<span class="sr-only">
 					<LocalizedText
 						key="co.casterlabs.caffeinated.app.docks.channel_info.thumbnail.select_file"
@@ -115,8 +119,11 @@
 					type="button"
 					class="-ml-1 relative w-fit h-8 cursor-pointer rounded-r-md py-1.5 px-2 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-center text-sm"
 					on:click={clearInput}
-					title={t('channel_info.thumbnail.clear')}
 				>
+					<LocalizedProperty
+						key="co.casterlabs.caffeinated.app.docks.channel_info.thumbnail.clear"
+						property="title"
+					/>
 					<span class="sr-only">
 						<LocalizedText key="co.casterlabs.caffeinated.app.docks.channel_info.thumbnail.clear" />
 					</span>

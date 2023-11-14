@@ -17,6 +17,9 @@ public class en_US implements Supplier<LocaleProvider> {
                 String[] parts = key.split("\\.");
                 return "([co.casterlabs.caffeinated.app.platform." + parts[parts.length - 2] + "])";
             })
+            .function("unsupported_feature.item", (key, externalLookup, knownPlaceholders, knownComponents) -> {
+                return "Not supported by [co.casterlabs.caffeinated.app.platform." + knownPlaceholders.get("item") + "].";
+            })
 
             // We do these here for simplicity.
             .string("dock.chat.viewer.tts.event_format.RICH_MESSAGE.ASKS", "{name} asks {message}")

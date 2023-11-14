@@ -1,5 +1,6 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import SlimSelectMenu from '$lib/ui/SlimSelectMenu.svelte';
 	import TextArea from '$lib/ui/TextArea.svelte';
 	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
@@ -70,7 +71,7 @@
 						<SlimSelectMenu
 							bind:value={shout.responseAction}
 							options={RESPONSE_ACTIONS}
-							on:value={({ detail: value }) => {
+							on:value={async ({ detail: value }) => {
 								// Swap the examples to make sense.
 								switch (value) {
 									case 'REPLY_WITH': {
@@ -79,7 +80,7 @@
 											t('co.casterlabs.caffeinated.app.page.chat_bot.shouts.example.SCRIPT')
 										) {
 											shout.trigger = 'casterlabs';
-											shout.response = t(
+											shout.response = await t(
 												'co.casterlabs.caffeinated.app.page.chat_bot.shouts.example'
 											);
 										}
@@ -91,7 +92,7 @@
 											t('co.casterlabs.caffeinated.app.page.chat_bot.shouts.example')
 										) {
 											shout.trigger = 'test';
-											shout.response = t(
+											shout.response = await t(
 												'co.casterlabs.caffeinated.app.page.chat_bot.shouts.example.SCRIPT'
 											);
 										}
@@ -133,13 +134,16 @@
 
 			<button
 				class="absolute top-2 right-1 text-error hover:opacity-80"
-				title={t('co.casterlabs.caffeinated.app.page.chat_bot.remove')}
 				on:click={() => {
 					shouts.splice(idx, 1);
 					save();
 					shouts = shouts;
 				}}
 			>
+				<LocalizedProperty
+					key="co.casterlabs.caffeinated.app.page.chat_bot.remove"
+					property="title"
+				/>
 				<span class="sr-only">
 					<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.remove" />
 				</span>
@@ -151,17 +155,20 @@
 	<li>
 		<button
 			class="mt-2 w-full relative flex items-center justify-center rounded-lg transition hover:text-base-12 text-base-11 border hover:border-base-8 border-base-7 hover:bg-base-3 bg-base-2 py-1 px-2 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
-			title={t('co.casterlabs.caffeinated.app.page.chat_bot.commands.add')}
-			on:click={() => {
+			on:click={async () => {
 				shouts.push({
 					platform: null,
 					eventType: 'FOLLOW',
-					text: t('co.casterlabs.caffeinated.app.page.chat_bot.shouts.example')
+					text: await t('co.casterlabs.caffeinated.app.page.chat_bot.shouts.example')
 				});
 				save();
 				shouts = shouts;
 			}}
 		>
+			<LocalizedProperty
+				key="co.casterlabs.caffeinated.app.page.chat_bot.commands.add"
+				property="title"
+			/>
 			<div>
 				<span class="sr-only">
 					<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.commands.add" />

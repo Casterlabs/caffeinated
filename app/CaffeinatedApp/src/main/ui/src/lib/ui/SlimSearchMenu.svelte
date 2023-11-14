@@ -1,11 +1,11 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import FocusListener from '$lib/interaction/FocusListener.svelte';
+	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { t } from '$lib/app.mjs';
-	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
 
 	const ID = Math.random().toString(36);
 	const dispatch = createEventDispatcher();
@@ -13,7 +13,6 @@
 	export let value = '';
 	export let disabled = false;
 	export let width = 'fit';
-	export let localize = true;
 
 	let open = false;
 	let highlighted = null;
@@ -47,6 +46,7 @@
 	class:pointer-events-none={disabled}
 >
 	<FocusListener class="relative mt-1" on:lostfocus={() => (open = false)}>
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
 			on:keyup={(e) => {
 				if (e.code == 'Enter') {
@@ -85,6 +85,7 @@
 				}
 			}}
 		>
+			<!-- svelte-ignore a11y-role-supports-aria-props -->
 			<div
 				class="inline-block relative w-{width} h-fit"
 				role="listbox"
@@ -105,6 +106,7 @@
 				<div aria-hidden="true" class="h-0 overflow-hidden">
 					{#each options as name}
 						<span class="block">
+							<!-- svelte-ignore missing-declaration -->
 							{#if localize}
 								<LocalizedText key={name} />
 							{:else}
@@ -170,17 +172,10 @@
 								}}
 								on:mouseenter={() => (highlighted = name)}
 							>
-								<button
-									class="w-full text-left py-2 pl-3 pr-9"
-									on:click={() => select(name)}
-									title={localize ? t(name) : name}
-								>
+								<button class="w-full text-left py-2 pl-3 pr-9" on:click={() => select(name)}>
+									<LocalizedProperty key={name} property="title" />
 									<span class="block truncate" class:font-semibold={isSelected}>
-										{#if localize}
-											<LocalizedText key={name} />
-										{:else}
-											{name}
-										{/if}
+										<LocalizedText key={name} />
 									</span>
 
 									{#if isSelected}

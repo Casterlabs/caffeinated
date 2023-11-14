@@ -1,9 +1,11 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
 	import FocusListener from '$lib/interaction/FocusListener.svelte';
 
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { writable } from 'svelte/store';
 	import { t } from '$lib/app.mjs';
 
 	const ID = Math.random().toString(36);
@@ -38,12 +40,20 @@
 		platform = id;
 		selectorOpen = false;
 	}
+
+	let placeholderT = writable('');
+	onMount(() =>
+		t('co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.placeholder').then(
+			placeholderT.set
+		)
+	);
 </script>
 
 <div class="flex flex-row h-fit">
 	{#if isMultiAccountMode}
 		<div class="flex-0 -mr-px">
 			<FocusListener class="relative" on:lostfocus={() => (selectorOpen = false)}>
+				<!-- svelte-ignore a11y-no-static-element-interactions -->
 				<div
 					on:keyup={(e) => {
 						if (e.code == 'Enter') {
@@ -83,17 +93,22 @@
 						}
 					}}
 				>
+					<!-- svelte-ignore a11y-role-supports-aria-props -->
 					<button
 						type="button"
 						role="listbox"
 						class="relative w-full h-[2.375rem] cursor-pointer rounded-l-md border border-base-7 bg-base-1 py-2 pl-3 pr-7 text-left shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
-						title={isSupportedByPlatform
-							? `${platform} (${userStates[platform]?.streamer?.displayname})`
-							: t('unsupported_feature.item', { item: platform })}
 						aria-haspopup="listbox"
 						aria-expanded={selectorOpen}
 						on:click={() => (selectorOpen = !selectorOpen)}
 					>
+						<LocalizedProperty
+							key={isSupportedByPlatform
+								? `${platform} (${userStates[platform]?.streamer?.displayname})`
+								: 'co.casterlabs.caffeinated.app.unsupported_feature.item'}
+							opts={{ item: platform }}
+							property="title"
+						/>
 						<span class="block truncate text-base-12">
 							{#key platform}
 								<icon
@@ -142,15 +157,19 @@
 										<button
 											class="w-full py-2 pl-3 pr-9"
 											class:opacity-60={!isSupported}
-											title={isSupported
-												? `${name} (${userStates[name]?.streamer?.displayname})`
-												: t('unsupported_feature')}
 											on:click={() => {
 												if (isSupported) {
 													select(name);
 												}
 											}}
 										>
+											<LocalizedProperty
+												key={isSupported
+													? `${name} (${userStates[name]?.streamer?.displayname})`
+													: 'co.casterlabs.caffeinated.app.unsupported_feature.item'}
+												opts={{ item: name }}
+												property="title"
+											/>
 											<icon
 												class="translate-y-px w-4 h-4"
 												data-icon="service/{name.toLowerCase()}"
@@ -181,7 +200,7 @@
 			class="px-2.5 py-2 resize-none block w-full text-base-12 border transition hover:border-base-8 border-base-7 bg-base-1 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 			class:rounded-l-md={!isMultiAccountMode}
 			class:opacity-60={!isSupportedByPlatform}
-			placeholder={t('chat.viewer.send_message.placeholder')}
+			placeholder={$placeholderT}
 			rows="1"
 			resize={false}
 			bind:value={message}
@@ -191,9 +210,7 @@
 					send(); // Trigger a send on Enter, but just a regular newline on Shift+Enter.
 				}
 			}}
-			title={isSupportedByPlatform ? undefined : t('unsupported_feature.item', { item: platform })}
 		/>
-
 		<slot />
 	</div>
 
@@ -202,8 +219,14 @@
 			type="button"
 			class="relative w-fit h-[2.375rem] cursor-pointer -ml-px rounded-r-md py-1.5 px-2 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-center text-sm"
 			on:click={send}
-			title={isSupportedByPlatform ? undefined : t('unsupported_feature.item', { item: platform })}
 		>
+			<LocalizedProperty
+				key={isSupportedByPlatform
+					? undefined
+					: 'co.casterlabs.caffeinated.app.unsupported_feature.item'}
+				property="title"
+				opts={{ item: platform }}
+			/>
 			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.send_message" />
 		</button>
 	</div>
