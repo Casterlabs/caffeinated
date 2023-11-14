@@ -60,7 +60,7 @@
 		<li class="relative">
 			<Container>
 				<LocalizedText
-					key="page.chat_bot.commands.format.{command.triggerType}"
+					key="co.casterlabs.caffeinated.app.page.chat_bot.commands.format.{command.triggerType}"
 					slotMapping={['platform', 'trigger_type', 'trigger', 'response_action', 'response']}
 				>
 					<span class="inline-block h-fit" slot="0">
@@ -99,7 +99,9 @@
 									case 'REPLY_WITH': {
 										if (
 											command.response ==
-											t('co.casterlabs.caffeinated.app.page.chat_bot.commands.example.SCRIPT')
+											(await t(
+												'co.casterlabs.caffeinated.app.page.chat_bot.commands.example.SCRIPT'
+											))
 										) {
 											command.trigger = 'casterlabs';
 											command.response = await t(
@@ -111,7 +113,7 @@
 									case 'EXECUTE': {
 										if (
 											command.response ==
-											t('co.casterlabs.caffeinated.app.page.chat_bot.commands.example')
+											(await t('co.casterlabs.caffeinated.app.page.chat_bot.commands.example'))
 										) {
 											command.trigger = 'test';
 											command.response = await t(
@@ -187,7 +189,7 @@
 					triggerType: 'COMMAND',
 					trigger: 'casterlabs',
 					responseAction: 'REPLY_WITH',
-					response: await t('page.chat_bot.commands.example')
+					response: await t('co.casterlabs.caffeinated.app.page.chat_bot.commands.example')
 				});
 				commands = commands;
 				save();
