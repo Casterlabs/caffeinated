@@ -316,11 +316,10 @@
 						break;
 
 					case 'RICH_MESSAGE': {
-						if (event.donations.length == 0) {
-							break;
-						} else {
+						if (event.donations.length != 0) {
 							li.classList.add('activity-event');
 						}
+						break;
 					}
 
 					case 'CHANNEL_POINTS':

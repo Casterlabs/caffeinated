@@ -12,6 +12,8 @@
 	key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.SUBSCRIPTION"
 	opts={{
 		months: event.months,
+		months_purchased: event.months_purchased,
+		months_streak: event.months_streak,
 		level: event.sub_level,
 		type: event.sub_type
 	}}

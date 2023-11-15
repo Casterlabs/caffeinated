@@ -77,10 +77,10 @@ public class en_US implements Supplier<LocaleProvider> {
                                 break; // No touch.
                         }
                         if (monthsPurchased > 1) {
-                            format += " for %months_purchased%";
+                            format += " for %months_purchased% months";
                         }
                         if (monthsStreak > 1) {
-                            format += "! They have been subscribed for %months_streak%";
+                            format += "! They have been subscribed for %months_streak% months";
                         }
                         format += "!";
                         return format;
@@ -114,7 +114,7 @@ public class en_US implements Supplier<LocaleProvider> {
                         }
                         format += " subscription";
                         if (monthsStreak > 1) {
-                            format += "! They have been subscribed for %months_streak%";
+                            format += "! They have been subscribed for %months_streak% months";
                         }
                         format += "!";
                         return format;

@@ -2,6 +2,7 @@ package co.casterlabs.koi.api;
 
 import java.time.Instant;
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 
 import co.casterlabs.koi.api.types.events.FollowEvent;
 import co.casterlabs.koi.api.types.events.KoiEvent;
@@ -102,7 +103,7 @@ public class TestEvents {
                 break;
 
             case SUBSCRIPTION:
-                result = new SubscriptionEvent(streamer, testUser, null, 1, 1, SubscriptionType.SUB, SubscriptionLevel.UNKNOWN);
+                result = new SubscriptionEvent(streamer, testUser, null, ThreadLocalRandom.current().nextInt(10), ThreadLocalRandom.current().nextInt(10), SubscriptionType.SUB, SubscriptionLevel.UNKNOWN);
                 break;
 
             case RICH_MESSAGE:

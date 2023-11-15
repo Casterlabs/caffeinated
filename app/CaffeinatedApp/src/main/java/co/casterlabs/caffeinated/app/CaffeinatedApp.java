@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
@@ -44,10 +45,14 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
+import co.casterlabs.koi.api.TestEvents;
+import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.rakurai.io.http.MimeTypes;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonArray;
+import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.swetrix.Swetrix;
 import lombok.AccessLevel;
@@ -378,10 +383,20 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     public @NonNull String localize(String key, @Nullable JsonObject knownPlaceholders, @Nullable JsonArray knownComponents) {
         if (key == null) return "";
 
+        Map<String, String> knownPlaceholders_map = new HashMap<>();
+        if (knownPlaceholders != null) {
+            for (Entry<String, JsonElement> entry : knownPlaceholders.entrySet()) {
+                if (entry.getValue().isJsonString()) {
+                    knownPlaceholders_map.put(entry.getKey(), entry.getValue().getAsString());
+                } else {
+                    knownPlaceholders_map.put(entry.getKey(), entry.getValue().toString());
+                }
+            }
+        }
+
         return this.localize(
             key,
-            Rson.DEFAULT.fromJson(knownPlaceholders, new TypeToken<Map<String, String>>() {
-            }),
+            knownPlaceholders_map,
             Rson.DEFAULT.fromJson(knownComponents, new TypeToken<List<String>>() {
             })
         );
@@ -390,6 +405,16 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @JavascriptGetter("LOCALES")
     public Languages[] getLocales() {
         return Languages.values();
+    }
+
+    @SneakyThrows
+    @JavascriptFunction
+    public void globalTest(KoiEventType type) {
+        KoiEvent e = TestEvents.createTestEvent(
+            this.koi.getUserStates().get(this.koi.getFirstSignedInPlatform()).getStreamer(),
+            type
+        );
+        this.koi.onEvent(e);
     }
 
 }
