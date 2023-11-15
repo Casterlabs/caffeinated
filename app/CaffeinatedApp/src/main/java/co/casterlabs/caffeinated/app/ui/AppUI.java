@@ -103,6 +103,7 @@ public class AppUI extends JavascriptObject {
         this.preferences.setZoom(newPreferences.getZoom());
         this.preferenceFile.save();
 
+        CaffeinatedApp.getInstance().reloadLanguage();
         this.updateEmojiProvider();
 
         JsonObject preferences = this.constructSDKPreferences();
