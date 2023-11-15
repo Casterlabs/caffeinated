@@ -1,12 +1,11 @@
 package co.casterlabs.caffeinated.pluginsdk;
 
-import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @AllArgsConstructor
-@JsonClass(exposeAll = true)
 public enum Locale {
     // @formatter:off
     EN_US    ("en-US",  WritingDirection.LEFT_TO_RIGHT, "🇺🇸", "English, United States of America"),
@@ -26,6 +25,14 @@ public enum Locale {
     public static enum WritingDirection {
         LEFT_TO_RIGHT,
         RIGHT_TO_LEFT,
+    }
+
+    public JsonObject toJson() {
+        return new JsonObject()
+            .put("code", this.code)
+            .put("direction", this.direction.name())
+            .put("emoji", this.emoji)
+            .put("name", this.name);
     }
 
 }

@@ -160,7 +160,7 @@
 		<SelectMenu
 			title="co.casterlabs.caffeinated.app.page.settings.appearance.language"
 			value={$currentLocale}
-			options={$locales}
+			options={Object.fromEntries(Object.entries($locales).map(([k, v]) => [k, v.name]))}
 			on:value={({ detail: value }) => {
 				setPreferenceItem('language', value);
 				location.reload();
