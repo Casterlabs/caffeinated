@@ -12,14 +12,7 @@ public class en_US implements Supplier<LocaleProvider> {
     @Override
     public LocaleProvider get() {
         return new BuildableLocaleProvider.Builder(_Util.loadJson("en_US"))
-            .Rfunction("platform.\\w+.parenthesis", (key, externalLookup, knownPlaceholders, knownComponents) -> {
-                // Basically returns "([platform.TWITCH])".
-                String[] parts = key.split("\\.");
-                return "([co.casterlabs.caffeinated.app.platform." + parts[parts.length - 2] + "])";
-            })
-
             // These keys are used for both tts and display.
-
             .function("docks.chat.viewer.event_format.RAID", (key, externalLookup, knownPlaceholders, knownComponents) -> {
                 double viewerCount = Double.parseDouble(knownPlaceholders.get("viewers"));
 
