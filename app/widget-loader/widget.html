@@ -33,6 +33,11 @@
                 const { conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, openLink } = initParameters;
                 const { contentWindow, contentDocument } = sandboxFrame;
 
+                contentWindow.addEventListener("unload", () => {
+                    console.log("[Widget Loader]", "Detected contentWindow unload, hijacking...");
+                    setTimeout(tryInject, 0); // Wait for the next browser tick.
+                })
+
                 if (!contentWindow.Koi) {
                     // Inject our f a v o r i t e globals.
                     Object.defineProperty(contentWindow, "Koi", {
