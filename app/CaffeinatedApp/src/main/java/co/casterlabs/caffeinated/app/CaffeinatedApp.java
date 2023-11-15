@@ -34,7 +34,7 @@ import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugins;
 import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
-import co.casterlabs.caffeinated.pluginsdk.Languages;
+import co.casterlabs.caffeinated.pluginsdk.Locales;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.localization.LocaleProvider;
@@ -403,8 +403,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     }
 
     @JavascriptGetter("LOCALES")
-    public Languages[] getLocales() {
-        return Languages.values();
+    public Locales[] getLocales() {
+        return Locales.values();
     }
 
     @SneakyThrows

@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @JsonClass(exposeAll = true)
-public enum Languages {
+public enum Locales {
     // @formatter:off
     EN_US    ("en-US",  WritingDirection.LEFT_TO_RIGHT, "🇺🇸", "English, United States of America"),
     ES       ("es-ES",  WritingDirection.LEFT_TO_RIGHT, "🇪🇸", "Español"),
