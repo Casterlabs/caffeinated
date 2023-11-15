@@ -176,7 +176,6 @@
 	"chat.viewer.preferences.tts_voice": "Bunyi Teks menjadi suara",
 	"chat.viewer.preferences.tts_or_ding_volume": "Teks menjadi suara/Ding volume",
 	"chat.viewer.preferences.show_platform": "Tampilkan profil pengguna",
-	"chat.viewer.preferences.color_users_by_platform": "Urutkan warna pengguna berdasarkan platform",
 	"chat.viewer.tts.skip": "Lewati pesan",
 	"chat.viewer.tts.event.RICH_MESSAGE.ASKS": "{name} meminta {message}",
 	"chat.viewer.tts.event.RICH_MESSAGE.SAYS": "{name} berkata {message}",
