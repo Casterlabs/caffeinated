@@ -256,27 +256,23 @@ public abstract class Widget {
     /* ---------------- */
 
     public final synchronized <T extends Widget> T setSettingsLayout(@NonNull WidgetSettingsLayout newSettingsLayout) {
-        $handle.settingsLayout = newSettingsLayout;
-
         JsonObject oldSettings = this.settings().getJson();
         JsonObject newSettings = this.settings().getJson();
 
-        for (WidgetSettingsSection section : $handle.settingsLayout.getSections()) {
+        for (WidgetSettingsSection section : newSettingsLayout.getSections()) {
             for (WidgetSettingsItem item : section.getItems()) {
-                String key = String.format("%s.%s", section.getId(), item.getId());
+                String key = section.getId() + "." + item.getId();
 
-                JsonElement existingValue = oldSettings.get(key);
-
-                if (existingValue == null) {
+                if (!oldSettings.containsKey(key)) {
                     JsonElement defaultValue = item.getDefaultValue();
-
                     newSettings.put(key, defaultValue);
                 } else {
-                    newSettings.put(key, existingValue);
+                    newSettings.put(key, oldSettings.get(key));
                 }
             }
         }
 
+        $handle.settingsLayout = newSettingsLayout;
         $handle.settings = newSettings;
         $handle.onSettingsUpdate();
 
