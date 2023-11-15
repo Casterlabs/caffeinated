@@ -19,10 +19,6 @@ public class en_US implements Supplier<LocaleProvider> {
             })
 
             // These keys are used for both tts and display.
-            .string("docks.chat.viewer.event_format.CHANNEL_POINTS", "%name% just redeemed %reward%!")
-            .string("docks.chat.viewer.event_format.CLEAR_CHAT", "Chat was cleared.")
-            .string("docks.chat.viewer.event_format.VIEWER_JOIN", "%name% joined.")
-            .string("docks.chat.viewer.event_format.VIEWER_LEAVE", "%name% left.")
 
             .function("docks.chat.viewer.event_format.RAID", (key, externalLookup, knownPlaceholders, knownComponents) -> {
                 double viewerCount = Double.parseDouble(knownPlaceholders.get("viewers"));
@@ -30,13 +26,11 @@ public class en_US implements Supplier<LocaleProvider> {
                 if (viewerCount < 2) {
                     // The platform didn't tell us how many viewers are participating OR the value
                     // is too small to reasonably say.
-                    return "%name% just raided the channel!";
+                    return "[docks.chat.viewer.event_format.RAID.no_viewers]";
                 } else {
-                    return "%name% just raided the channel with %viewers% viewers!";
+                    return "[docks.chat.viewer.event_format.RAID.viewers]";
                 }
             })
-
-            .string("docks.chat.viewer.event_format.FOLLOW", "%name% just followed!")
 
             .function("docks.chat.viewer.event_format.SUBSCRIPTION", (key, externalLookup, knownPlaceholders, knownComponents) -> {
                 // This gets ugly REAL quick.
