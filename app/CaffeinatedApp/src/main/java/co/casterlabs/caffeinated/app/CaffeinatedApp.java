@@ -60,7 +60,6 @@ import net.harawata.appdirs.AppDirsFactory;
 import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.loggerimpl.FileLogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
@@ -360,7 +359,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         // TODO the providers for plugins.
 
         if (value == null) {
-            FastLogger.logStatic(LogLevel.WARNING, "Could not find locale key: %s", key);
+//            FastLogger.logStatic(LogLevel.WARNING, "Could not find locale key: %s", key);
             return key;
         }
 
