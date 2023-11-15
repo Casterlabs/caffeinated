@@ -51,127 +51,74 @@ public class en_US implements Supplier<LocaleProvider> {
 
             .function("docks.chat.viewer.event_format.SUBSCRIPTION", (key, externalLookup, knownPlaceholders, knownComponents) -> {
                 // This gets ugly REAL quick.
-                double months = Double.parseDouble(knownPlaceholders.get("months"));
+                double monthsPurchased = Double.parseDouble(knownPlaceholders.get("months_purchased"));
+                double monthsStreak = Double.parseDouble(knownPlaceholders.get("months_streak"));
                 SubscriptionLevel level = SubscriptionLevel.valueOf(knownPlaceholders.get("level"));
                 SubscriptionType type = SubscriptionType.valueOf(knownPlaceholders.get("type"));
 
                 switch (type) {
                     case SUB:
-                        if (months > 1) {
-                            switch (level) {
-                                case TIER_1:
-                                    return "%name% just subscribed at Tier 1 for %months% months!";
-                                case TIER_2:
-                                    return "%name% just subscribed at Tier 2 for %months% months!";
-                                case TIER_3:
-                                    return "%name% just subscribed at Tier 3 for %months% months!";
-                                case TIER_4:
-                                    return "%name% just subscribed at Tier 4 for %months% months!";
-                                case TIER_5:
-                                    return "%name% just subscribed at Tier 5 for %months% months!";
-                                case TWITCH_PRIME:
-                                    return "%name% just subscribed with Twitch Prime for %months% months!";
-                                case UNKNOWN:
-                                    return "%name% just subscribed for %months% months!";
-                            }
-                        } else {
-                            switch (level) {
-                                case TIER_1:
-                                    return "%name% just subscribed at Tier 1!";
-                                case TIER_2:
-                                    return "%name% just subscribed at Tier 2!";
-                                case TIER_3:
-                                    return "%name% just subscribed at Tier 3!";
-                                case TIER_4:
-                                    return "%name% just subscribed at Tier 4!";
-                                case TIER_5:
-                                    return "%name% just subscribed at Tier 5!";
-                                case TWITCH_PRIME:
-                                    return "%name% just subscribed with Twitch Prime!";
-                                case UNKNOWN:
-                                    return "%name% just subscribed!";
-                            }
+                    case RESUB: {
+                        String format = "%name% just subscribed";
+                        switch (level) {
+                            case TIER_1:
+                                format += " at Tier 1";
+                            case TIER_2:
+                                format += " at Tier 2";
+                            case TIER_3:
+                                format += " at Tier 3";
+                            case TIER_4:
+                                format += " at Tier 4";
+                            case TIER_5:
+                                format += " at Tier 5";
+                            case TWITCH_PRIME:
+                                format += " with Twitch Prime";
+                            case UNKNOWN:
+                                break; // No touch.
                         }
-                        return "%name% just subscribed!";
-
-                    case RESUB:
-                        if (months > 1) {
-                            switch (level) {
-                                case TIER_1:
-                                    return "%name% just resubscribed at Tier 1 for %months% months!";
-                                case TIER_2:
-                                    return "%name% just resubscribed at Tier 2 for %months% months!";
-                                case TIER_3:
-                                    return "%name% just resubscribed at Tier 3 for %months% months!";
-                                case TIER_4:
-                                    return "%name% just resubscribed at Tier 4 for %months% months!";
-                                case TIER_5:
-                                    return "%name% just resubscribed at Tier 5 for %months% months!";
-                                case TWITCH_PRIME:
-                                    return "%name% just resubscribed with Twitch Prime for %months% months!";
-                                case UNKNOWN:
-                                    return "%name% just resubscribed for %months% months!";
-                            }
-                        } else {
-                            switch (level) {
-                                case TIER_1:
-                                    return "%name% just resubscribed at Tier 1!";
-                                case TIER_2:
-                                    return "%name% just resubscribed at Tier 2!";
-                                case TIER_3:
-                                    return "%name% just resubscribed at Tier 3!";
-                                case TIER_4:
-                                    return "%name% just resubscribed at Tier 4!";
-                                case TIER_5:
-                                    return "%name% just resubscribed at Tier 5!";
-                                case TWITCH_PRIME:
-                                    return "%name% just resubscribed with Twitch Prime!";
-                                case UNKNOWN:
-                                    return "%name% just resubscribed!";
-                            }
+                        if (monthsPurchased > 1) {
+                            format += " for %months_purchased%";
                         }
-                        return "%name% just resubscribed!";
+                        if (monthsStreak > 1) {
+                            format += "! They have been subscribed for %months_streak%";
+                        }
+                        format += "!";
+                        return format;
+                    }
 
                     case ANONSUBGIFT: // %name% will be "Anonymous".
                     case ANONRESUBGIFT: // %name% will be "Anonymous".
                     case SUBGIFT:
-                    case RESUBGIFT:
-                        if (months > 1) {
-                            switch (level) {
-                                case TIER_1:
-                                    return "%name% just gifted %recipient% a %months% month Tier 1 subscription!";
-                                case TIER_2:
-                                    return "%name% just gifted %recipient% a %months% month Tier 2 subscription!";
-                                case TIER_3:
-                                    return "%name% just gifted %recipient% a %months% month Tier 3 subscription!";
-                                case TIER_4:
-                                    return "%name% just gifted %recipient% a %months% month Tier 4 subscription!";
-                                case TIER_5:
-                                    return "%name% just gifted %recipient% a %months% month Tier 5 subscription!";
-                                case TWITCH_PRIME:
-                                    return "%name% just gifted %recipient% a %months% month Twitch Prime subscription!";
-                                case UNKNOWN:
-                                    return "%name% just gifted %recipient% a %months% month subscription!";
-                            }
+                    case RESUBGIFT: {
+                        String format = "%name% just gifted %recipient%";
+                        if (monthsPurchased > 1) {
+                            format += " a %months_purchased% month";
                         } else {
-                            switch (level) {
-                                case TIER_1:
-                                    return "%name% just gifted %recipient% a Tier 1 subscription!";
-                                case TIER_2:
-                                    return "%name% just gifted %recipient% a Tier 2 subscription!";
-                                case TIER_3:
-                                    return "%name% just gifted %recipient% a Tier 3 subscription!";
-                                case TIER_4:
-                                    return "%name% just gifted %recipient% a Tier 4 subscription!";
-                                case TIER_5:
-                                    return "%name% just gifted %recipient% a Tier 5 subscription!";
-                                case TWITCH_PRIME:
-                                    return "%name% just gifted %recipient% a Twitch Prime subscription!";
-                                case UNKNOWN:
-                                    return "%name% just gifted %recipient% a subscription!";
-                            }
+                            format += " a";
                         }
-                        return "%name% just gifted %recipient% a subscription!";
+                        switch (level) {
+                            case TIER_1:
+                                format += " Tier 1";
+                            case TIER_2:
+                                format += " Tier 2";
+                            case TIER_3:
+                                format += " Tier 3";
+                            case TIER_4:
+                                format += " Tier 4";
+                            case TIER_5:
+                                format += " Tier 5";
+                            case TWITCH_PRIME:
+                                format += " Twitch Prime";
+                            case UNKNOWN:
+                                break; // No touch.
+                        }
+                        format += " subscription";
+                        if (monthsStreak > 1) {
+                            format += "! They have been subscribed for %months_streak%";
+                        }
+                        format += "!";
+                        return format;
+                    }
                 }
 
                 return null;
