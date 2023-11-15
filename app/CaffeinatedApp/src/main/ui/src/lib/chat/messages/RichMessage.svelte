@@ -8,6 +8,7 @@
 	import streamingServices from '$lib/streamingServices.mjs';
 	import { onMount } from 'svelte';
 	import { t } from '$lib/app.mjs';
+	import User from './User.svelte';
 
 	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
 	const PLATFORMS_WITH_TIMEOUT = ['TWITCH', 'TROVO', 'BRIME'];
@@ -49,7 +50,7 @@
 		{
 			type: 'button',
 			icon: 'icon/no-symbol',
-			text: 'chat.viewer.action.ban',
+			text: 'co.casterlabs.caffeinated.app.docks.chat.viewer.action.ban',
 			hidden: !PLATFORMS_WITH_BAN.includes(event.sender.platform),
 			onclick() {
 				onContextMenuAction('ban', event);
@@ -58,7 +59,7 @@
 		{
 			type: 'button',
 			icon: 'icon/clock',
-			text: 'chat.viewer.action.timeout',
+			text: 'co.casterlabs.caffeinated.app.docks.chat.viewer.action.timeout',
 			hidden: !PLATFORMS_WITH_TIMEOUT.includes(event.sender.platform),
 			onclick() {
 				onContextMenuAction('timeout', event);
@@ -67,7 +68,7 @@
 		{
 			type: 'button',
 			icon: 'icon/users',
-			text: 'chat.viewer.action.raid',
+			text: 'co.casterlabs.caffeinated.app.docks.chat.viewer.action.raid',
 			hidden: !PLATFORMS_WITH_RAID.includes(event.sender.platform),
 			onclick() {
 				onContextMenuAction('raid', event);
@@ -76,7 +77,7 @@
 		{
 			type: 'button',
 			icon: 'icon/arrow-up',
-			text: 'chat.viewer.action.upvote',
+			text: 'co.casterlabs.caffeinated.app.docks.chat.viewer.action.upvote',
 			hidden: !supportedFeatures[event.sender.platform]?.includes('MESSAGE_UPVOTE'),
 			onclick() {
 				onContextMenuAction('upvote', event);
@@ -85,7 +86,7 @@
 		{
 			type: 'button',
 			icon: 'icon/trash',
-			text: 'chat.viewer.action.delete_message',
+			text: 'co.casterlabs.caffeinated.app.docks.chat.viewer.action.delete_message',
 			color: 'error',
 			hidden: isDeleted || !supportedFeatures[event.sender.platform]?.includes('MESSAGE_DELETION'),
 			onclick() {
@@ -101,26 +102,13 @@
 		class:hover:opacity-100={isDeleted}
 		bind:this={container}
 	>
-		<span class="richmessage-badges space-x-1" aria-hidden="true">
-			{#each event.sender.badges as badge}
-				<img class="inline-block align-middle h-[1em] -translate-y-0.5" alt="" src={badge} />
-			{/each}
-		</span>
-
-		<b
-			style:--platform-color={streamingServices[event.streamer.platform]?.color}
-			style:--user-color={event.sender.color}
-		>
-			<icon
-				class="user-platform w-[1em] h-[1em] mr-0.5 translate-y-0.5"
-				data-icon="service/{event.streamer.platform.toLowerCase()}"
-			/><a href={event.sender.link} target="_blank">{event.sender.displayname}</a></b
-		><span aria-hidden="true">
-			<span class="select-none"> : </span>
+		<User user={event.sender} /><span aria-hidden="true">
+			<span class="select-none font-light"> : </span>
 			<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
 		</span>
 
 		<span
+			class="richmessage-message"
 			class:upvote-1={upvotes > 0}
 			class:upvote-2={upvotes > 10}
 			class:upvote-3={upvotes > 100}
@@ -147,6 +135,15 @@
 </ContextMenu>
 
 <style>
+	:global(.richmessage-message [data-rich-type='mention']) {
+		font-weight: 600;
+	}
+
+	:global(.richmessage-message [data-rich-type='link']) {
+		text-decoration: underline;
+		color: var(--link);
+	}
+
 	/* Highlight */
 	:global(li.message-container):has(.highlight) {
 		border-radius: 0.375rem; /* rounded-md */

@@ -1,25 +1,44 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import User from './User.svelte';
 
 	import streamingServices from '$lib/streamingServices.mjs';
-	import { t } from '$lib/app.mjs';
 
 	export let event;
 	export let onContextMenuAction;
 </script>
 
-<span
-	style:--platform-color={streamingServices[event.streamer.platform]?.color}
-	style:--user-color={event.gift_recipient?.color || event.subscriber?.color}
+<LocalizedText
+	key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.SUBSCRIPTION"
+	opts={{
+		months: event.months,
+		level: event.sub_level,
+		type: event.sub_type
+	}}
+	slotMapping={['name', 'recipient', 'months', 'months_purchased', 'months_streak']}
 >
-	<LocalizedText
-		key="chat.viewer.message.SUBSCRIPTION.{event.sub_type}"
-		opts={{
-			months: event.months,
-			displayname: event.subscriber?.displayname,
-			gifter: event.subscriber?.displayname,
-			recipient: event.gift_recipient?.displayname,
-			platform: event.streamer.platform.toLowerCase()
-		}}
-	/>
-</span>
+	<User slot="0" user={event.subscriber} />
+	<User slot="1" user={event.gift_recipient} />
+
+	<b
+		slot="2"
+		style:--platform-color={streamingServices[event.streamer.platform]?.color}
+		style:--user-color={event.gift_recipient?.color || event.subscriber?.color}
+	>
+		{event.months}
+	</b>
+	<b
+		slot="3"
+		style:--platform-color={streamingServices[event.streamer.platform]?.color}
+		style:--user-color={event.gift_recipient?.color || event.subscriber?.color}
+	>
+		{event.months_purchased}
+	</b>
+	<b
+		slot="4"
+		style:--platform-color={streamingServices[event.streamer.platform]?.color}
+		style:--user-color={event.gift_recipient?.color || event.subscriber?.color}
+	>
+		{event.months_streak}
+	</b>
+</LocalizedText>

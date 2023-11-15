@@ -3,6 +3,7 @@
 <script>
 	import ChannelPointsMessage from './messages/ChannelPointsMessage.svelte';
 	import SubscriptionMessage from './messages/SubscriptionMessage.svelte';
+	import RichMessage from './messages/RichMessage.svelte';
 	import FollowMessage from './messages/FollowMessage.svelte';
 	import RaidMessage from './messages/RaidMessage.svelte';
 
@@ -51,6 +52,7 @@
 	const EVENT_CLASSES = {
 		CHANNEL_POINTS:   ChannelPointsMessage,
 		SUBSCRIPTION:     SubscriptionMessage,
+		RICH_MESSAGE:     RichMessage,
 		FOLLOW:           FollowMessage,
 		RAID:             RaidMessage,
 	};
@@ -204,6 +206,10 @@
 				const clazz = EVENT_CLASSES[event.event_type];
 				if (!clazz) return; // Avoid triggering the code below.
 
+				if (event.event_type == 'RICH_MESSAGE' && event.donations.length == 0) {
+					return; // Not an activity.
+				}
+
 				const messageTimestamp = document.createElement('span');
 				messageTimestamp.classList = 'message-timestamp';
 				messageTimestamp.innerText = new Date(event.timestamp || Date.now()).toLocaleTimeString();
@@ -223,10 +229,6 @@
 				li.classList = 'message-container';
 				li.appendChild(messageTimestamp);
 				li.appendChild(messageContainer);
-
-				if (['VIEWER_JOIN', 'VIEWER_LEAVE'].includes(event.event_type)) {
-					li.classList.add('viewer-joinleave');
-				}
 
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
@@ -249,18 +251,20 @@
 	<Modal on:close={() => (settingsModalOpen = false)}>
 		<LocalizedText
 			slot="title"
-			key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.title"
+			key="co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title"
 		/>
 
 		<ul class="w-72 divide-y divide-current text-base-6">
 			<li class="py-2">
 				<SelectMenu
-					title="chat.viewer.preferences.color_users_by"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by"
 					description=""
 					options={{
-						THEME: 'chat.viewer.preferences.color_users_by.THEME',
-						USER: 'chat.viewer.preferences.color_users_by.USER',
-						PLATFORM: 'chat.viewer.preferences.color_users_by.PLATFORM'
+						THEME:
+							'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.THEME',
+						USER: 'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.USER',
+						PLATFORM:
+							'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.PLATFORM'
 					}}
 					bind:value={colorBy}
 					on:value={savePreferences}
@@ -268,7 +272,7 @@
 			</li>
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_chat_timestamps"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_chat_timestamps"
 					description=""
 					bind:checked={showTimestamps}
 					on:value={savePreferences}
@@ -276,7 +280,7 @@
 			</li>
 			<!-- <li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_profile_pictures"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_profile_pictures"
 					description=""
 					bind:checked={showProfilePictures}
 					on:value={savePreferences}
@@ -284,7 +288,7 @@
 			</li> -->
 			<li class="py-2">
 				<Switch
-					title="chat.viewer.preferences.show_platform"
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_platform"
 					description=""
 					bind:checked={showPlatform}
 					on:value={savePreferences}

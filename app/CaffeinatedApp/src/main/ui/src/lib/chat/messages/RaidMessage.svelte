@@ -1,23 +1,26 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
+	import User from './User.svelte';
 
 	import streamingServices from '$lib/streamingServices.mjs';
-	import { t } from '$lib/app.mjs';
 
 	export let event;
 	export let onContextMenuAction;
 </script>
 
-<span
-	style:--platform-color={streamingServices[event.streamer.platform]?.color}
-	style:--user-color={event.host.color}
+<LocalizedText
+	key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID"
+	opts={{
+		viewers: event.viewers
+	}}
+	slotMapping={['name', 'viewers']}
 >
-	<LocalizedText
-		key="chat.viewer.message.RAID"
-		opts={{
-			displayname: event.host.displayname,
-			viewers: event.viewers,
-			platform: event.streamer.platform.toLowerCase()
-		}}
-	/>
-</span>
+	<User slot="0" user={event.host} />
+	<b
+		slot="1"
+		style:--platform-color={streamingServices[event.streamer.platform]?.color}
+		style:--user-color={event.host.color}
+	>
+		{event.viewers}
+	</b>
+</LocalizedText>

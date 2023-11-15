@@ -211,6 +211,7 @@
 			readMessagesAloud,
 			ttsVoice,
 			showPlatform,
+			showActivities,
 			colorBy,
 			ttsOrDingVolume
 		});
@@ -313,6 +314,14 @@
 					case 'VIEWER_LEAVE':
 						li.classList.add('viewer-joinleave');
 						break;
+
+					case 'RICH_MESSAGE': {
+						if (event.donations.length == 0) {
+							break;
+						} else {
+							li.classList.add('activity-event');
+						}
+					}
 
 					case 'CHANNEL_POINTS':
 					case 'SUBSCRIPTION':
@@ -693,11 +702,11 @@
 
 	/* Activities */
 	:global(.activity-event) {
-		display: none;
+		display: none !important;
 	}
 
 	.show-activities :global(.activity-event) {
-		display: inline-block !important;
+		display: block !important;
 	}
 
 	/* Timestamps */
