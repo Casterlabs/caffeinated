@@ -88,7 +88,9 @@ function setupDock() {
 
 	widgetApp.on('emojiProvider', App.emojiProvider.set);
 	widgetApp.on('appearance', App.appearance.set);
-	widgetApp.on('language', App.language.set);
+	widgetApp.on('language', App.currentLocale.set);
+	widgetApp.on('language', App.currentLocale.set);
+	widgetApp.on('zoom', (zoom) => document.documentElement.style.fontSize = `${zoom * 100}%`);
 
 	App.setOpenLink(window.openLink);
 }

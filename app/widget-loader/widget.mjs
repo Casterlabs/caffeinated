@@ -44,7 +44,7 @@ export function init({ initHandler, disconnectHandler }) {
     const conn = new Conn(`ws://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/realtime?authorization=${authorization}&mode=${widgetMode}`);
 
     const openLink = (link) => {
-        conn.send("OPEN_LINK", {link});
+        conn.send("OPEN_LINK", { link });
     };
 
     const widgetInstanceEventHandler = new EventHandler();
@@ -54,10 +54,10 @@ export function init({ initHandler, disconnectHandler }) {
         ...widgetInstanceEventHandler,
 
         on(type, handler) {
-            if ( conn.connectionId && ["init", "update"].includes(type.toLowerCase())) {
+            if (conn.connectionId && ["init", "update"].includes(type.toLowerCase())) {
                 setTimeout(handler, 2); // Execute the handler after a couple of browser ticks.
             }
-            widgetInstanceEventHandler.on(type,handler);
+            widgetInstanceEventHandler.on(type, handler);
         },
 
         get connectionId() {
@@ -242,11 +242,12 @@ export function init({ initHandler, disconnectHandler }) {
         musicInstance.broadcast("music", music_data);
     });
 
-    conn.on("app", ({ language, emojiProvider, theme, appearance }) => {
+    conn.on("app", ({ language, emojiProvider, theme, appearance, zoom }) => {
         App.mutate("language", language);
         App.mutate("emojiProvider", emojiProvider);
         App.mutate("theme", theme);
         App.mutate("appearance", appearance);
+        App.mutate("zoom", zoom);
     });
 
     // We completely reset the widget everytime it loses connection.

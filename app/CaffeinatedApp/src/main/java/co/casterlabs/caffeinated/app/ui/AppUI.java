@@ -88,7 +88,8 @@ public class AppUI extends JavascriptObject {
             .put("emojiProvider", this.preferences.getEmojiProvider())
             .put("language", this.preferences.getLanguage())
             .put("appearance", CaffeinatedApp.getInstance().getThemeManager().getEffectiveAppearance().name())
-            .put("theme", JsonArray.of(CaffeinatedApp.getInstance().getThemeManager().getBaseColor(), CaffeinatedApp.getInstance().getThemeManager().getPrimaryColor()));
+            .put("theme", JsonArray.of(CaffeinatedApp.getInstance().getThemeManager().getBaseColor(), CaffeinatedApp.getInstance().getThemeManager().getPrimaryColor()))
+            .put("zoom", this.preferences.getZoom());
     }
 
     @JavascriptFunction

@@ -6,7 +6,8 @@ let store = {
     language: "en",
     emojiProvider: "system",
     theme: ["gray", "gray"],
-    appearance: "DARK"
+    appearance: "DARK",
+    zoom: 1
 };
 
 let appStyleElement;
