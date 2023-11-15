@@ -20,6 +20,10 @@ public class _LocaleLoader {
         LocaleProvider provider;
 
         switch (locale.toUpperCase()) {
+            case "FR_FR":
+                provider = fr_FR.class.newInstance().get();
+                break;
+
             case "EN_US":
                 return FALLBACK;
 
