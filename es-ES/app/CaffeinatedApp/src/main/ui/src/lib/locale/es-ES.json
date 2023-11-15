@@ -163,7 +163,6 @@
 	"chat.viewer.preferences.tts_voice": "Voz de síntesis (TTS)",
 	"chat.viewer.preferences.tts_or_ding_volume": "Volumen de TTS/Ding",
 	"chat.viewer.preferences.show_platform": "Mostrar la plataforma del usuario",
-	"chat.viewer.preferences.color_users_by_platform": "Colorear usuario por plataforma",
 	"chat.viewer.tts.skip": "Omitir mensaje",
 	"chat.viewer.tts.event.RICH_MESSAGE.ASKS": "{name} pregunta {message}",
 	"chat.viewer.tts.event.RICH_MESSAGE.SAYS": "{name} dice {message}",
