@@ -316,7 +316,7 @@ export function init({ initHandler, disconnectHandler }) {
         configurable: true
     });
     Object.defineProperty(window, "App", {
-        value: appInstance,
+        value: App,
         writable: false,
         configurable: true
     });
