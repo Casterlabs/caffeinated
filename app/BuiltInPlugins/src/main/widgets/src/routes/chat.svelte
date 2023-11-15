@@ -93,6 +93,16 @@
 					}
 				});
 
+				if (event.event_type == 'RICH_MESSAGE') {
+					if (event.donations.length == 0) {
+						li.setAttribute('event-type', 'RICH_MESSAGE__REGULAR');
+					} else {
+						li.setAttribute('event-type', 'RICH_MESSAGE__DONATION');
+					}
+				} else {
+					li.setAttribute('event-type', event.event_type);
+				}
+
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
 					// (so, we must keep track of it)
@@ -191,11 +201,41 @@
 		"Match Platform's Theme"}
 	class:username-color-static={$settings['message_style.username_color'] == 'Static Color'}
 	class:show-platform-icon={$settings['message_style.show_platform_icon']}
+	class:show-RICH_MESSAGE__REGULAR={$settings['events.RICH_MESSAGE.REGULAR']}
+	class:show-RICH_MESSAGE__DONATION={$settings['events.RICH_MESSAGE.DONATION']}
+	class:show-CHANNEL_POINTS={$settings['events.CHANNEL_POINTS']}
+	class:show-FOLLOW={$settings['events.FOLLOW']}
+	class:show-SUBSCRIPTION={$settings['events.SUBSCRIPTION']}
+	class:show-RAID={$settings['events.RAID']}
 >
 	<!---->
 </ul>
 
 <style>
+	:not(.show-RICH_MESSAGE__REGULAR) :global(li[event-type='RICH_MESSAGE__REGULAR']) {
+		display: none;
+	}
+
+	:not(.show-RICH_MESSAGE__DONATION) :global(li[event-type='RICH_MESSAGE__DONATION']) {
+		display: none;
+	}
+
+	:not(.show-CHANNEL_POINTS) :global(li[event-type='CHANNEL_POINTS']) {
+		display: none;
+	}
+
+	:not(.show-FOLLOW) :global(li[event-type='FOLLOW']) {
+		display: none;
+	}
+
+	:not(.show-SUBSCRIPTION) :global(li[event-type='SUBSCRIPTION']) {
+		display: none;
+	}
+
+	:not(.show-RAID) :global(li[event-type='RAID']) {
+		display: none;
+	}
+
 	:not(.show-platform-icon) :global(.user-platform-icon) {
 		display: none;
 	}

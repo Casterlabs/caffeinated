@@ -88,11 +88,15 @@ public class ChatWidget extends Widget {
                     .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
                     .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right"))
             )
-//            .addSection(
-//                new WidgetSettingsSection("moderation", "Moderation")
-//                    .addItem(WidgetSettingsItem.asCheckbox("hide_bots", "Hide Bots", true))
-//                    .addItem(WidgetSettingsItem.asCheckbox("hide_naughty_language", "Hide Naughty Language", true))
-//            );
+            .addSection(
+                new WidgetSettingsSection("events", "Events")
+                    .addItem(WidgetSettingsItem.asCheckbox("RICH_MESSAGE.REGULAR", "Show Chat Messages", true))
+                    .addItem(WidgetSettingsItem.asCheckbox("CHANNEL_POINTS", "Show Channel Points Redemptions", true))
+                    .addItem(WidgetSettingsItem.asCheckbox("RICH_MESSAGE.DONATION", "Show Donations Events and Messages", true))
+                    .addItem(WidgetSettingsItem.asCheckbox("FOLLOW", "Show Follow Events", true))
+                    .addItem(WidgetSettingsItem.asCheckbox("SUBSCRIPTION", "Show Subscription Events", true))
+                    .addItem(WidgetSettingsItem.asCheckbox("RAID", "Show Raid Events", true))
+            )
             .addButton(
                 new WidgetSettingsButton(
                     "clear-chat",
