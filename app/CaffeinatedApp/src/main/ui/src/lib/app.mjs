@@ -3,7 +3,7 @@ import { get, writable } from 'svelte/store';
 // Locale
 
 export const currentLocale = writable(null); // "en-US", etc
-export const locales = writable([]);
+export const locales = writable({});
 export const localeProvider = writable(async (k, kp, kc) => `LOCALE_PRERENDER:${k}`);
 
 // {placeholder}: some text passed to the translator and is replaced
