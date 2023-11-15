@@ -1,3 +1,0 @@
-files:
-  - source: app/CaffeinatedApp/src/main/java/co/casterlabs/caffeinated/app/locale/en-US.json
-    translation: '%original_path%/%locale%.json'
