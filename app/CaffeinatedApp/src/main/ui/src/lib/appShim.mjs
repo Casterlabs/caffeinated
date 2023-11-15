@@ -95,7 +95,7 @@ function setupDock() {
 	App.setOpenLink(window.openLink);
 }
 
-export default function () {
+export function init() {
 	if (typeof global != 'undefined') {
 		// We're in SSR, abort.
 		console.debug("Not shimming app (we're in SSR).");
@@ -111,5 +111,17 @@ export default function () {
 	} else {
 		console.debug('Shimming with Widget-SDK.');
 		setupDock();
+	}
+}
+
+export function awaitPageLoad() {
+	if (typeof global != 'undefined') {
+		return Promise.resolve(); // We're in SSR.
+	}
+
+	if (typeof window.Widget == 'object') {
+		return new Promise((resolve) => Widget.on("init", resolve));
+	} else {
+		return Promise.resolve();
 	}
 }

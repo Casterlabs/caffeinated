@@ -6,14 +6,14 @@
 	import { onMount } from 'svelte';
 	import hookIcons from '$lib/icons.mjs';
 	import hookAnchors from '$lib/intercept-anchors.mjs';
-	import appShim from '$lib/appShim.mjs';
+	import * as appShim from '$lib/appShim.mjs';
 	import * as App from '$lib/app.mjs';
 	import * as Currencies from '$lib/currencies.mjs';
 
 	import { icon } from '$lib/app.mjs';
 
 	onMount(() => {
-		appShim();
+		appShim.init();
 
 		hookIcons('/$caffeinated-sdk-root$');
 		hookAnchors(App.openLink);
@@ -41,6 +41,8 @@
 	{/if}
 </svelte:head>
 
-<CSSIntermediate>
-	<slot />
-</CSSIntermediate>
+{#await appShim.awaitPageLoad() then}
+	<CSSIntermediate>
+		<slot />
+	</CSSIntermediate>
+{/await}
