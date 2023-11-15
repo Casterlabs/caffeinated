@@ -13,6 +13,7 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.io.http.server.websocket.Websocket;
 import co.casterlabs.rakurai.io.http.server.websocket.WebsocketListener;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -135,14 +136,43 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
                     // Ignored.
                     return;
 
+                case "LOCALIZE": {
+                    JsonObject data = message.getObject("data");
+                    String nonce = data.getString("nonce");
+
+                    try {
+                        String key = data.getString("key");
+                        JsonObject knownPlaceholders = data.getObject("knownPlaceholders");
+                        JsonArray knownComponents = data.getArray("knownComponents");
+
+                        String value = CaffeinatedApp.getInstance().localize(key, knownPlaceholders, knownComponents);
+
+                        this.sendMessage(
+                            "LOCALIZE",
+                            new JsonObject()
+                                .put("nonce", nonce)
+                                .put("value", value)
+                        );
+                    } catch (Throwable t) {
+                        this.sendMessage(
+                            "LOCALIZE",
+                            new JsonObject()
+                                .put("nonce", nonce)
+                                .put("value", "INTERNAL_ERROR")
+                        );
+                        throw t;
+                    }
+                    return;
+                }
+
                 case "PONG": {
                     this.connInstance.resetTimeout();
                     return;
                 }
 
             }
-        } catch (Exception e) {
-            FastLogger.logException(e);
+        } catch (Throwable t) {
+            FastLogger.logException(t);
         }
     }
 

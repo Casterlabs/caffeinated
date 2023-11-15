@@ -202,14 +202,36 @@ export function init({ initHandler, disconnectHandler }) {
         }
     };
 
+    // The `App` global.
+    let appLocalizationTasks = {};
+    const appInstance = {
+        ...App,
+
+        localize(key, knownPlaceholders = {}, knownComponents = []) {
+            return new Promise((resolve) => {
+                const nonce = Math.random(28).toString();
+
+                appLocalizationTasks[nonce] = resolve;
+
+                conn.send("LOCALIZE", {
+                    nonce: nonce,
+                    key: key,
+                    knownPlaceholders: knownPlaceholders,
+                    knownComponents: knownComponents
+                });
+            });
+        },
+    };
+
     deepFreeze(widgetInstance);
     deepFreeze(koiInstance);
     deepFreeze(musicInstance);
+    deepFreeze(appInstance);
 
     // Listen for events on the conn, fire them off, yeah you get the idea.
     conn.on("init", ({ basePath }) => {
         // initHandler returns false if it should be handled by the implementer manually.
-        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, basePath, openLink })) {
+        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App: appInstance, basePath, openLink })) {
             App.init();
             widgetInstance.broadcast("init");
             widgetInstance.broadcast("update");
@@ -249,6 +271,11 @@ export function init({ initHandler, disconnectHandler }) {
         App.mutate("appearance", appearance);
         App.mutate("zoom", zoom);
     });
+
+    conn.on("localize", ({ nonce, value }) => {
+        appLocalizationTasks[nonce](value);
+    });
+
 
     // We completely reset the widget everytime it loses connection.
     conn.on("close", () => {
@@ -294,7 +321,7 @@ export function init({ initHandler, disconnectHandler }) {
         configurable: true
     });
     Object.defineProperty(window, "App", {
-        value: App,
+        value: appInstance,
         writable: false,
         configurable: true
     });

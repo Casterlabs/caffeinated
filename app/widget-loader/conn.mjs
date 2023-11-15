@@ -48,7 +48,7 @@ export default class Conn {
                 this.broadcast("close");
             };
 
-            this.ws.onmessage = async(raw) => {
+            this.ws.onmessage = async (raw) => {
                 const payload = JSON.parse(raw.data);
 
                 switch (payload.type) {
@@ -106,6 +106,12 @@ export default class Conn {
                     case "APP":
                         {
                             this.broadcast("app", payload.data);
+                            return;
+                        }
+
+                    case "LOCALIZE":
+                        {
+                            this.broadcast("localize", payload.data);
                             return;
                         }
                 }
