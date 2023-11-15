@@ -30,6 +30,11 @@ function recomputeStyle() {
     }
 }
 
+let localeProvider = async (k, kp, kc) => "LOCALE_PRERENDER:" + k;
+export function setLocaleProvider(fn) {
+    localeProvider = fn;
+}
+
 function init(doc = document) {
     if (appStyleElement) return;
 
@@ -71,5 +76,9 @@ export default {
         if (["emojiProvider"].includes(key) && appStyleElement) {
             recomputeStyle();
         }
+    },
+
+    async localize(key, knownPlaceholders = {}, knownComponents = []) {
+        return await localeProvider(key, knownPlaceholders, knownComponents);
     }
 };

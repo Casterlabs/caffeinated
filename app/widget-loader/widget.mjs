@@ -1,6 +1,7 @@
 import Currencies from "./currencies.mjs";
 import Conn from "./conn.mjs";
 import App from "./app.mjs";
+import { setLocaleProvider } from "./app.mjs";
 import EventHandler from "./eventHandler.mjs";
 
 const queryParams = (() => {
@@ -204,34 +205,29 @@ export function init({ initHandler, disconnectHandler }) {
 
     // The `App` global.
     let appLocalizationTasks = {};
-    const appInstance = {
-        ...App,
+    setLocaleProvider((key, knownPlaceholders = {}, knownComponents = []) => {
+        return new Promise((resolve) => {
+            const nonce = Math.random(28).toString();
 
-        localize(key, knownPlaceholders = {}, knownComponents = []) {
-            return new Promise((resolve) => {
-                const nonce = Math.random(28).toString();
+            appLocalizationTasks[nonce] = resolve;
 
-                appLocalizationTasks[nonce] = resolve;
-
-                conn.send("LOCALIZE", {
-                    nonce: nonce,
-                    key: key,
-                    knownPlaceholders: knownPlaceholders,
-                    knownComponents: knownComponents
-                });
+            conn.send("LOCALIZE", {
+                nonce: nonce,
+                key: key,
+                knownPlaceholders: knownPlaceholders,
+                knownComponents: knownComponents
             });
-        },
-    };
+        });
+    });
 
     deepFreeze(widgetInstance);
     deepFreeze(koiInstance);
     deepFreeze(musicInstance);
-    deepFreeze(appInstance);
 
     // Listen for events on the conn, fire them off, yeah you get the idea.
     conn.on("init", ({ basePath }) => {
         // initHandler returns false if it should be handled by the implementer manually.
-        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App: appInstance, basePath, openLink })) {
+        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, basePath, openLink })) {
             App.init();
             widgetInstance.broadcast("init");
             widgetInstance.broadcast("update");
@@ -275,7 +271,6 @@ export function init({ initHandler, disconnectHandler }) {
     conn.on("localize", ({ nonce, value }) => {
         appLocalizationTasks[nonce](value);
     });
-
 
     // We completely reset the widget everytime it loses connection.
     conn.on("close", () => {
