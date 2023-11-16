@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.localserver.handlers.RouteMiscApi;
 import co.casterlabs.caffeinated.localserver.handlers.RouteLocalServer;
+import co.casterlabs.caffeinated.localserver.handlers.RouteMiscApi;
 import co.casterlabs.caffeinated.localserver.handlers.RoutePluginApi;
 import co.casterlabs.caffeinated.localserver.handlers.RouteWidgetApi;
 import co.casterlabs.caffeinated.localserver.websocket.RealtimeConnection;
@@ -49,6 +49,7 @@ public class LocalServer implements Closeable, HttpProvider {
         this.port = port;
         this.framework = new SoraLauncher()
             .setPort(this.port)
+            .setBindAddress("0.0.0.0") // TODO investigate using ::
             .buildWithoutPluginLoader();
 
         this.framework

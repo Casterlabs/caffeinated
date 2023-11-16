@@ -6,6 +6,7 @@ import java.net.SocketException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
@@ -14,20 +15,27 @@ public class InterfaceUtil {
 
     public static Set<String> getLocalIpAddresses() {
         Set<String> result = new HashSet<>();
+        Consumer<String> add = (ip) -> {
+            if (ip.contains(":")) {
+                result.add('[' + ip + ']');
+            } else {
+                result.add(ip);
+            }
+        };
 
-        result.add("0:0:0:0:0:0:0:1");
-        result.add("127.0.0.1");
+        add.accept("0:0:0:0:0:0:0:1");
+        add.accept("127.0.0.1");
 
         if (System.getenv().containsKey("COMPUTERNAME")) {
-            result.add(System.getenv("COMPUTERNAME"));
+            add.accept(System.getenv("COMPUTERNAME"));
         } else if (System.getenv().containsKey("HOSTNAME")) {
-            result.add(System.getenv("HOSTNAME"));
+            add.accept(System.getenv("HOSTNAME"));
         }
 
         try {
             for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
                 for (InetAddress addr : Collections.list(iface.getInetAddresses())) {
-                    result.add(addr.getHostAddress());
+                    add.accept(addr.getHostAddress());
                 }
             }
         } catch (SocketException e) {
