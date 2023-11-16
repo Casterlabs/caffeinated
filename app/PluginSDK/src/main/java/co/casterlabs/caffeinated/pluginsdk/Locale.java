@@ -8,7 +8,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public enum Locale {
     // @formatter:off
-    EN_US    ("en-US",  WritingDirection.LEFT_TO_RIGHT, "🇺🇸", "English, United States of America"),
+    EN_US    ("en-US",  WritingDirection.LEFT_TO_RIGHT, "🇺🇸", "English (United States)"),
 //    ES       ("es-ES",  WritingDirection.LEFT_TO_RIGHT, "🇪🇸", "Español"),
 //    ES_491   ("es-419", WritingDirection.LEFT_TO_RIGHT, "🌎", "Español Latino"),
     FR_FR    ("fr-FR",  WritingDirection.LEFT_TO_RIGHT, "🇫🇷", "Français"),
