@@ -179,7 +179,7 @@
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.EMOTES": "%name% sent some emotes.",
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.ATTACHMENT": "%name% sent an attachment.",
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.REPLY": "%name% said, in response to {otherName}, {message}.",
-        "docks.chat.viewer.event_format.RICH_MESSAGE.replying_to": "Replying to %name% %message%",
+        "docks.chat.viewer.event_format.RICH_MESSAGE.replying_to": "Replying to %other% %message%",
         "docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown": "Replying to another message.",
         "docks.chat.viewer.action.ban": "Ban",
         "docks.chat.viewer.action.timeout": "Timeout",

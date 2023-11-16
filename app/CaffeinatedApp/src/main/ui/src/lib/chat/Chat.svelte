@@ -232,7 +232,7 @@
 		ttsOrDingVolume = config.ttsOrDingVolume;
 	}
 
-	export function processEvent(event) {
+	export async function processEvent(event) {
 		console.log('Processing event:', event);
 
 		switch (event.event_type) {
@@ -417,18 +417,24 @@
 
 				if (format) {
 					ttsQueue.push(
-						t(`chat.viewer.tts.event.RICH_MESSAGE.${format}`, {
-							name: event.sender.displayname,
-							message: text
-						})
+						await t(
+							`co.casterlabs.caffeinated.app.docks.chat.viewer.tts.event_format.RICH_MESSAGE.${format}`,
+							{
+								name: event.sender.displayname,
+								message: text
+							}
+						)
 					);
 				}
 
 				if (event.attachments.length > 0) {
 					ttsQueue.push(
-						t('chat.viewer.tts.event.RICH_MESSAGE.SENT_AN_ATTACHMENT', {
-							name: event.sender.displayname
-						})
+						await t(
+							'co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.tts.RICH_MESSAGE.ATTACHMENT',
+							{
+								name: event.sender.displayname
+							}
+						)
 					);
 				}
 
@@ -440,29 +446,37 @@
 
 			switch (event.event_type) {
 				case 'CHANNEL_POINTS':
-					message = t('chat.viewer.tts.event.CHANNELPOINTS', {
-						name: event.sender.displayname,
-						reward: event.reward.title
-					});
+					message = await t(
+						'co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS',
+						{
+							name: event.sender.displayname,
+							reward: event.reward.title
+						}
+					);
 					break;
 
 				case 'SUBSCRIPTION':
-					message = t(`chat.viewer.tts.event.SUBSCRIPTION.${event.sub_type}`, {
-						months: event.months,
-						name: event.subscriber?.displayname,
-						gifter: event.subscriber?.displayname,
-						recipient: event.gift_recipient?.displayname
-					});
+					message = await t(
+						'co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.SUBSCRIPTION',
+						{
+							months_purchased: event.months_purchased,
+							months_streak: event.months_streak,
+							level: event.sub_level,
+							type: event.sub_type,
+							name: event.subscriber?.displayname,
+							recipient: event.gift_recipient?.displayname
+						}
+					);
 					break;
 
 				case 'FOLLOW':
-					message = t('chat.viewer.tts.event.FOLLOW', {
+					message = await t('co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW', {
 						name: event.follower.displayname
 					});
 					break;
 
 				case 'RAID':
-					message = t('chat.viewer.tts.event.RAID', {
+					message = await t('co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID', {
 						name: event.host.displayname,
 						viewers: event.viewers
 					});
