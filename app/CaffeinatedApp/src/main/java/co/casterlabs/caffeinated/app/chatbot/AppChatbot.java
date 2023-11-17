@@ -9,8 +9,6 @@ import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Action;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Shout;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.TriggerType;
-import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
-import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
@@ -38,63 +36,57 @@ public class AppChatbot extends JavascriptObject {
         KoiEventType.RAID, KoiEventType.SUBSCRIPTION
     );
 
-    private AsyncTask timerTask;
+    private Thread timerThread = new Thread(this::doTimerLoop);
     private int timerIndex;
 
     @JavascriptSetter("preferences")
     public void setPreferences(@NonNull ChatbotPreferences prefs) {
         this.preferences.set(prefs);
-        this.resetTimerTask();
+        this.timerThread.interrupt();
     }
 
-    private void resetTimerTask() {
-        if (this.timerTask != null)
-            this.timerTask.cancel();
+    private void doTimerLoop() {
+        while (true) {
+            int timerIntervalSeconds = this.preferences.get().getTimerIntervalSeconds();
+            List<String> timerTexts = this.preferences.get().getTimers();
 
-        int timerIntervalSeconds = this.preferences.get().getTimerIntervalSeconds();
+            try {
+                if (timerTexts.isEmpty() || timerIntervalSeconds < 1) {
+                    Thread.sleep(Long.MAX_VALUE);  // Sleep forever (or until interrupted).
+                } else {
+                    long millisToWait = timerIntervalSeconds * 1000;
 
-        if ((timerIntervalSeconds > 0) && !this.preferences.get().getTimers().isEmpty()) {
-            this.timerTask = AsyncTask.create(() -> {
-                while (true) {
-                    try {
-                        Thread.sleep(timerIntervalSeconds * 1000);
-                    } catch (InterruptedException e) {
-                        return;
-                    }
-
-                    List<String> timerTexts = this.preferences.get().getTimers();
-
-                    // Increments the timer index, and check to make sure we're not overshooting.
-                    this.timerIndex++;
-                    if (timerIndex >= timerTexts.size()) {
-                        this.timerIndex = 0;
-                    }
-
-                    String text = timerTexts.get(this.timerIndex);
-
-                    if (!text.isEmpty()) {
-                        Koi koi = CaffeinatedApp.getInstance().getKoi();
-
-                        for (UserPlatform platform : koi.getSignedInPlatforms()) {
-                            koi.sendChat(
-                                platform,
-                                text,
-                                this.preferences.get().getRealChatter(),
-                                null,
-                                false
-                            );
-                        }
-                    }
+                    Thread.sleep(millisToWait);
                 }
-            });
-        } else {
-            this.timerTask = null;
+            } catch (InterruptedException e) {
+                Thread.interrupted(); // Clear.
+                continue;
+            }
+
+            // Increments the timer index, and check to make sure we're not overshooting.
+            this.timerIndex++;
+            if (timerIndex >= timerTexts.size()) {
+                this.timerIndex = 0;
+            }
+
+            String text = timerTexts.get(this.timerIndex);
+            if (text.isEmpty()) continue;
+
+            for (UserPlatform platform : CaffeinatedApp.getInstance().getKoi().getSignedInPlatforms()) {
+                CaffeinatedApp.getInstance().getKoi().sendChat(
+                    platform,
+                    text,
+                    this.preferences.get().getRealChatter(),
+                    null,
+                    false
+                );
+            }
         }
     }
 
     public void init() {
         this.preferences = CaffeinatedApp.getInstance().getChatbotPreferences();
-        this.resetTimerTask();
+        this.timerThread.start();
     }
 
     public boolean isChatBot(User sender) {
