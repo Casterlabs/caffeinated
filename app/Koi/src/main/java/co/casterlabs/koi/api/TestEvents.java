@@ -99,7 +99,7 @@ public class TestEvents {
                 break;
 
             case RAID:
-                result = new RaidEvent(testUser, 0);
+                result = new RaidEvent(testUser, ThreadLocalRandom.current().nextInt(10));
                 break;
 
             case SUBSCRIPTION:
