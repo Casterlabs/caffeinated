@@ -14,11 +14,34 @@ declare const event: KoiEvent;
 // ------------------------------------------------
 
 declare const Sound: {
-	/* Plays the specified audio url using the provided volume (must be 0-1) */
+	/** Plays the specified audio url using the provided volume (must be 0-1) */
 	playAudio(audioUrl: string, volume: number): void;
 
-	/* Plays the specified text as a TTS message using the provided volume (must be 0-1) */
+	/** Plays the specified text as a TTS message using the provided volume (must be 0-1) */
 	playTTS(audioUrl: string, defaultVoice: string, volume: number): void;
+};
+
+// ------------------------------------------------
+// Input
+// ------------------------------------------------
+
+/**
+ * @deprecated Note that using any functions in this may result in a game's anticheat banning you for suspected hacks. You have been warned.
+ */
+declare const Input: {
+	/** Presses the specified key. e.g "VK_A"
+	 *  @see https://docs.oracle.com/javase/8/docs/api/java/awt/event/KeyEvent.html#:~:text=Fields-,Modifier%20and%20Type,-Field%20and%20Description
+	 */
+	keyPress(keycode: string): void;
+
+	/* Moves the mouse by the specified amount of pixels in any direction. */
+	mouseMove(pixels: number, degrees: number, smooth: boolean): void;
+
+	/* Simulates the scroll wheel. Use a negative value for up and a positive value for down. */
+	mouseScroll(direction: number): void;
+
+	/* Simulates a click. Use 1 for left click, 2 for right, 3 for scroll wheel, 4 for forward, and 5 for backward. */
+	mouseClick(button: number): void;
 };
 
 // ------------------------------------------------
@@ -27,16 +50,16 @@ declare const Sound: {
 
 /** The K:V store, you can use this to store information like points or stats. */
 declare const store: {
-	/* Puts a value in the store. */
+	/** Puts a value in the store. */
 	put(key: string, value: any): void;
 
-	/* Returns a value */
+	/** Returns a value */
 	get(key: string): any;
 
-	/* Returns a value, using the default if it's not present */
+	/** Returns a value, using the default if it's not present */
 	getOrDefault(key: string, defaultValue: any): any;
 
-	/* Returns whether or not the store contains a key */
+	/** Returns whether or not the store contains a key */
 	containsKey(key: string): boolean;
 };
 
