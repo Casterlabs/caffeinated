@@ -5,33 +5,60 @@
 	import NumberInput from '$lib/ui/NumberInput.svelte';
 
 	import { t } from '$lib/app.mjs';
+	import { onMount } from 'svelte';
 	import createConsole from '$lib/console-helper.mjs';
 
 	const console = createConsole('Chat Bot/Timers');
-	const preferences = st || Caffeinated.chatbot.svelte('preferences');
 
-	$: preferences, $preferences && console.debug('Chat Bot Preferences:', $preferences);
+	const nextMessageAt = st || Caffeinated.chatbot.svelte('nextMessageAt');
+	let nextMessageIn_seconds = '';
 
-	$: timers = $preferences?.timers || [];
+	let timers = [];
+	let timerInterval_seconds = 0;
 
 	async function save() {
 		Caffeinated.chatbot.preferences = {
 			...(await Caffeinated.chatbot.preferences),
-			timers: timers
+			timers: timers,
+			timerIntervalSeconds: timerInterval_seconds
 		};
 	}
+
+	onMount(() => {
+		Caffeinated.chatbot.preferences.then((prefs) => {
+			console.debug('Chat Bot Preferences:', prefs);
+			timers = prefs.timers;
+			timerInterval_seconds = prefs.timerIntervalSeconds;
+		});
+
+		let task = setInterval(() => {
+			const next = $nextMessageAt;
+			if (next > 0) {
+				nextMessageIn_seconds = ((next - Date.now()) / 1000).toFixed(0);
+			} else {
+				nextMessageIn_seconds = null;
+			}
+		}, 1000);
+		return () => clearInterval(task);
+	});
 </script>
 
-{#if $preferences}
-	<LocalizedText
-		key="co.casterlabs.caffeinated.app.page.chat_bot.timers.format"
-		slotMapping={['seconds']}
-	>
-		<span slot="0" class="inline-block w-16">
-			<NumberInput bind:value={$preferences.timerIntervalSeconds} min={45} on:value={save} />
-		</span>
-	</LocalizedText>
-{/if}
+<LocalizedText
+	key="co.casterlabs.caffeinated.app.page.chat_bot.timers.format"
+	slotMapping={['seconds']}
+>
+	<span slot="0" class="inline-block w-20">
+		<NumberInput
+			bind:value={timerInterval_seconds}
+			on:value={() => {
+				if (timerInterval_seconds < 45) {
+					timerInterval_seconds = 45; // Min.
+				}
+				save();
+			}}
+		/>
+	</span>
+</LocalizedText>
 
 <ul class="mt-4 space-y-2">
 	{#each timers || [] as message, idx}
@@ -87,3 +114,17 @@
 		</button>
 	</li>
 </ul>
+
+<br />
+{#if nextMessageIn_seconds}
+	{#if nextMessageIn_seconds > 0}
+		<LocalizedText
+			key="co.casterlabs.caffeinated.app.page.chat_bot.timers.next.seconds"
+			opts={{ seconds: nextMessageIn_seconds }}
+		/>
+	{:else}
+		<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.timers.next.now" />
+	{/if}
+{:else}
+	<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.timers.next.never" />
+{/if}

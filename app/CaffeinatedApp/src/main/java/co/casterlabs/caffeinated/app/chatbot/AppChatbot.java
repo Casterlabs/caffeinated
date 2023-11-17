@@ -22,6 +22,8 @@ import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.JsonStringUtil;
 import lombok.NonNull;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class AppChatbot extends JavascriptObject {
     public static final char SYMBOL = '!';
@@ -39,6 +41,9 @@ public class AppChatbot extends JavascriptObject {
     private Thread timerThread = new Thread(this::doTimerLoop);
     private int timerIndex;
 
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private long nextMessageAt = -1;
+
     @JavascriptSetter("preferences")
     public void setPreferences(@NonNull ChatbotPreferences prefs) {
         this.preferences.set(prefs);
@@ -52,16 +57,20 @@ public class AppChatbot extends JavascriptObject {
 
             try {
                 if (timerTexts.isEmpty() || timerIntervalSeconds < 1) {
+                    this.nextMessageAt = -1;
                     Thread.sleep(Long.MAX_VALUE);  // Sleep forever (or until interrupted).
                 } else {
                     long millisToWait = timerIntervalSeconds * 1000;
 
+                    this.nextMessageAt = System.currentTimeMillis() + millisToWait;
                     Thread.sleep(millisToWait);
                 }
             } catch (InterruptedException e) {
                 Thread.interrupted(); // Clear.
                 continue;
             }
+
+            FastLogger.logStatic(LogLevel.DEBUG, "Doing chat bot tick!");
 
             // Increments the timer index, and check to make sure we're not overshooting.
             this.timerIndex++;
