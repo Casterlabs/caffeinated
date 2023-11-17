@@ -25,7 +25,7 @@
 	};
 
 	const componentChoices = {
-		[null]: 'dashboard.customize.options.none',
+		[null]: 'co.casterlabs.caffeinated.app.page.dashboard.customize.options.none',
 		// welcomewagon: 'WelcomeWagon',
 		'co.casterlabs.dock.channel_info.dock': 'Channel Info' // Temporary.
 	};
