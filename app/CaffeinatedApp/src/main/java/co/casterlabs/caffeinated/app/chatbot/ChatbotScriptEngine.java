@@ -1,6 +1,9 @@
 package co.casterlabs.caffeinated.app.chatbot;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,7 +18,9 @@ import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.pluginsdk.TTS;
+import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.caffeinated.util.WebUtil;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
@@ -150,9 +155,36 @@ public class ChatbotScriptEngine {
             return CaffeinatedApp.getInstance().getPlugins().callServiceMethod(pluginId, serviceId, methodName, args);
         }
 
-        public void playAudio(@NonNull String audioUrl, Number volume) {
+        public void playAudio(@NonNull String audioUrl, Number volume) throws IOException {
             if (volume == null) volume = 1;
-            CaffeinatedApp.getInstance().getUI().playAudio(audioUrl, volume.floatValue());
+
+            byte[] audioBytes;
+            String audioMime;
+
+            if (audioUrl.startsWith("data:")) {
+                FastLogger.logStatic(LogLevel.DEBUG, "Playing audio: ??? (data uri)");
+                CaffeinatedApp.getInstance().getUI().playAudio(
+                    audioUrl,
+                    volume.floatValue()
+                );
+                return;
+            } else if (audioUrl.startsWith("http://") || audioUrl.startsWith("https://")) {
+                Pair<byte[], String> pair = WebUtil.sendHttpRequestBytesWithMime(new Request.Builder().url(audioUrl));
+                audioBytes = pair.a();
+                audioMime = pair.b();
+            } else if (audioUrl.startsWith("file://")) {
+                File file = new File(WebUtil.decodeURIComponent(audioUrl.substring("file://".length())));
+                audioBytes = Files.readAllBytes(file.toPath());
+                audioMime = MimeTypes.getMimeForFile(file);
+            } else {
+                throw new UnsupportedOperationException("Unsupported protocol: " + audioUrl);
+            }
+
+            FastLogger.logStatic(LogLevel.DEBUG, "Playing audio: %s", audioMime);
+            CaffeinatedApp.getInstance().getUI().playAudio(
+                "data:" + audioMime + ";base64," + Base64.getEncoder().encodeToString(audioBytes),
+                volume.floatValue()
+            );
         }
 
         public void playTTS(@NonNull String text, String defaultVoice, Number volume) throws IOException {
