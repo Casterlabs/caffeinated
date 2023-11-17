@@ -19,9 +19,9 @@ public class en_US implements Supplier<LocaleProvider> {
                 if (viewerCount < 2) {
                     // The platform didn't tell us how many viewers are participating OR the value
                     // is too small to reasonably say.
-                    return "[docks.chat.viewer.event_format.RAID.no_viewers]";
+                    return "[co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.no_viewers]";
                 } else {
-                    return "[docks.chat.viewer.event_format.RAID.viewers]";
+                    return "[co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers]";
                 }
             })
 
