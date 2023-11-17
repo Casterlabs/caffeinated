@@ -1,5 +1,11 @@
 package co.casterlabs.caffeinated.app.chatbot;
 
+import java.awt.AWTException;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,6 +43,7 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 public class ChatbotScriptEngine {
     private static final Pattern QUOTE_PATTERN = Pattern.compile("([^\\\"]\\S*|\\\".+?\\\") *");
     private static ScriptEngine engine;
+    private static Robot robot;
 
     static {
         System.setProperty("nashorn.args", "--language=es6");
@@ -49,6 +56,12 @@ public class ChatbotScriptEngine {
             engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
             engine.eval("load('classpath:nashornPolyfill.js')");
         } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            robot = new Robot();
+        } catch (AWTException e) {
             e.printStackTrace();
         }
     }
@@ -107,6 +120,13 @@ public class ChatbotScriptEngine {
                         + "playAudio(audioUrl, volume) {return __internal_handle.playAudio(audioUrl, volume);},"
                         + "playTTS(text, defaultVoice, volume) {return __internal_handle.playTTS(text, defaultVoice, volume);}"
                         + "};",
+                    "const Input = {"
+                        + "keyPress(keycode) {return __internal_handle.keyPress(keycode);},"
+                        + "mouseMove(pixels, degrees, smooth) {return __internal_handle.mouseMove(pixels, degrees, smooth);},"
+                        + "mouseScroll(direction) {return __internal_handle.mouseScroll(direction);},"
+                        + "mouseClick(button) {return __internal_handle.mouseClick(button);}"
+                        + "};",
+                    "function sleep(milliseconds) {return __internal_handle.sleep(milliseconds);}",
                     "",
 
                     // Per-event.
@@ -191,6 +211,92 @@ public class ChatbotScriptEngine {
             if (defaultVoice == null) defaultVoice = "Brian";
             if (volume == null) volume = 1;
             playAudio(TTS.getSpeechAsUrl(defaultVoice, text), volume.floatValue());
+        }
+
+        @SneakyThrows
+        public void keyPress(@NonNull String keyCode) {
+            int scanCode = KeyEvent.class.getField(keyCode).getInt(null);
+
+            robot.keyPress(scanCode);
+            Thread.sleep(100); // We need delay to trigger successfully.
+            robot.keyRelease(scanCode);
+        }
+
+        @SneakyThrows
+        public void mouseMove(Number pixels, Number degrees, boolean smooth) {
+            if (pixels.intValue() < 1) {
+                throw new IllegalArgumentException("You must move the mouse by a positive amount of pixels. Did you mean to change degrees?");
+            }
+
+            int relativeX = 0;
+            int relativeY = 0;
+
+            switch (degrees.intValue() % 360) {
+                case 0:
+                    relativeY = -1;
+                    break;
+                case 90:
+                    relativeX = 1;
+                    break;
+                case 180:
+                    relativeY = 1;
+                    break;
+                case 270:
+                    relativeX = -1;
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("The only supported directions are 0, 90, 180, and 270.");
+            }
+
+            if (smooth) {
+                for (int _i = 0; _i < pixels.intValue(); _i++) {
+                    Point currentPos = MouseInfo.getPointerInfo().getLocation();
+                    robot.mouseMove(
+                        currentPos.x + relativeX,
+                        currentPos.y + relativeY
+                    );
+                    Thread.sleep(2); // Add some delay to "smoothly" move.
+                }
+            } else {
+                Point currentPos = MouseInfo.getPointerInfo().getLocation();
+                robot.mouseMove(
+                    currentPos.x + (relativeX * pixels.intValue()),
+                    currentPos.y + (relativeY * pixels.intValue())
+                );
+            }
+        }
+
+        @SneakyThrows
+        public void mouseScroll(Number direction) {
+            robot.mouseWheel(direction.intValue());
+        }
+
+        @SneakyThrows
+        public void mouseClick(Number button) {
+            int downMask;
+
+            // Java flips the scroll and right click values. So we have to unflip them.
+            switch (button.intValue()) {
+                case 2:
+                    downMask = InputEvent.BUTTON3_DOWN_MASK; // Right Click.
+                    break;
+                case 3:
+                    downMask = InputEvent.BUTTON2_DOWN_MASK; // Scroll Click.
+                    break;
+                default:
+                    downMask = InputEvent.getMaskForButton(button.intValue());
+                    break;
+            }
+
+            robot.mousePress(downMask);
+            Thread.sleep(50); // We need delay to trigger successfully.
+            robot.mouseRelease(downMask);
+        }
+
+        @SneakyThrows
+        public void sleep(Number milliseconds) {
+            Thread.sleep(milliseconds.longValue());
         }
 
     }

@@ -192,50 +192,55 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             return; // Don't further process.
         }
 
-        // Process shout events.
-        CaffeinatedApp.getInstance().getChatbot().processEventForShout(e);
+        try {
+            // Process shout events.
+            CaffeinatedApp.getInstance().getChatbot().processEventForShout(e);
 
-        if (e.getType() == KoiEventType.RICH_MESSAGE) {
-            ChatbotPreferences prefs = CaffeinatedApp.getInstance().getChatbotPreferences().get();
-            RichMessageEvent richMessage = (RichMessageEvent) e;
+            if (e.getType() == KoiEventType.RICH_MESSAGE) {
+                ChatbotPreferences prefs = CaffeinatedApp.getInstance().getChatbotPreferences().get();
+                RichMessageEvent richMessage = (RichMessageEvent) e;
 
-            boolean commandResultedInAction = CaffeinatedApp.getInstance().getChatbot().processEventForCommand(richMessage);
+                boolean commandResultedInAction = CaffeinatedApp.getInstance().getChatbot().processEventForCommand(richMessage);
 
-            if (prefs.isHideCommandsFromChat()) {
-                // Hide !commands and "commands".
-                if (commandResultedInAction) {
-                    return;
+                if (prefs.isHideCommandsFromChat()) {
+                    // Hide !commands and "commands".
+                    if (commandResultedInAction) {
+                        return;
+                    }
+
+                    // Hide all command response messages.
+                    {
+                        List<Command> commands = prefs.getCommands();
+
+                        for (ChatbotPreferences.Command command : commands) {
+                            if (command.getResponse().equals(richMessage.getRaw())) {
+                                return;
+                            }
+                        }
+                    }
                 }
 
-                // Hide all command response messages.
+                // We want to hide all messages from listed chatbots.
                 {
-                    List<Command> commands = prefs.getCommands();
+                    List<String> chatbots = prefs.getChatbots();
 
-                    for (ChatbotPreferences.Command command : commands) {
-                        if (command.getResponse().equals(richMessage.getRaw())) {
+                    for (String chatbot : chatbots) {
+                        if (chatbot.equalsIgnoreCase(richMessage.getSender().getDisplayname())) {
                             return;
                         }
                     }
                 }
-            }
 
-            // We want to hide all messages from listed chatbots.
-            {
-                List<String> chatbots = prefs.getChatbots();
-
-                for (String chatbot : chatbots) {
-                    if (chatbot.equalsIgnoreCase(richMessage.getSender().getDisplayname())) {
+                if (prefs.isHideTimersFromChat()) {
+                    // Hide all timer messages.
+                    if (prefs.getTimers().contains(richMessage.getRaw())) {
                         return;
                     }
                 }
             }
-
-            if (prefs.isHideTimersFromChat()) {
-                // Hide all timer messages.
-                if (prefs.getTimers().contains(richMessage.getRaw())) {
-                    return;
-                }
-            }
+        } catch (Throwable t) {
+            // Chat bot error.
+            FastLogger.logStatic(LogLevel.SEVERE, t);
         }
 
         // Add it to the local event history.
