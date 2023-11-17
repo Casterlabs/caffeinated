@@ -12,6 +12,8 @@
 	import createConsole from '$lib/console-helper.mjs';
 	import Debouncer from '$lib/debouncer.mjs';
 
+	import EDITOR_TYPES from '$lib/chatBotTypes.d.ts?raw';
+
 	const debouncer = new Debouncer();
 
 	const PLATFORMS = {
@@ -107,7 +109,12 @@
 					<span slot="3" class="block mt-1.5">
 						{#if shout.responseAction == 'EXECUTE'}
 							<div class="relative h-20" class:h-[70vh]={codeExpandedOn == shout}>
-								<CodeInput bind:value={shout.response} on:value={saveDB} language="javascript" />
+								<CodeInput
+									bind:value={shout.response}
+									on:value={saveDB}
+									language="javascript"
+									typescriptTypings={EDITOR_TYPES}
+								/>
 
 								<button
 									class="absolute right-0 bottom-0 p-0.5 rounded-tl bg-base-2 hover:bg-base-7 border-t border-l border-base-8 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-base-12"
