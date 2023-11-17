@@ -9,6 +9,9 @@ declare const rawArgs: string;
 // Take note that during Shouts, this will be a SubscriptionEvent, FollowEvent, etc. */
 declare const event: KoiEvent;
 
+// Waits the specified amount of time.
+declare function sleep(milliseconds: number): void;
+
 // ------------------------------------------------
 // Sound
 // ------------------------------------------------
