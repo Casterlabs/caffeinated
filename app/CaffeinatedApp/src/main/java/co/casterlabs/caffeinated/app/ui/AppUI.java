@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
@@ -228,7 +229,7 @@ public class AppUI extends JavascriptObject {
 
                 // Build the toastify options.
                 new JsonObject()
-                    .put("text", message)
+                    .put("text", CaffeinatedApp.getInstance().localize(message, Collections.emptyMap(), Collections.emptyList()))
                     .put("duration", TOAST_DURATION)
                     .put("close", true)
                     .put(

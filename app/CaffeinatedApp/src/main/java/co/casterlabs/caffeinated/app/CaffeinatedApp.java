@@ -288,7 +288,10 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @JavascriptFunction
     public void notify(@NonNull String message, @NonNull NotificationType type) {
         try {
-            this.nativeSystem.notify(message, type);
+            this.nativeSystem.notify(
+                this.localize(message, Collections.emptyMap(), Collections.emptyList()),
+                type
+            );
         } catch (IllegalStateException ignored) {
             this.UI.showToast(message, NotificationType.NONE);
         }
