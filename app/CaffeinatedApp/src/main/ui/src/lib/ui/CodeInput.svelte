@@ -7,9 +7,26 @@
 	export let value = '';
 	export let language = '';
 
+	export let typescriptTypings = null;
+
 	let container;
 
 	onMount(() => {
+		if (typescriptTypings != null) {
+			const compilerOptions = monaco.languages.typescript.javascriptDefaults.getCompilerOptions();
+			monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+				...compilerOptions,
+				target: monaco.languages.typescript.ScriptTarget.ES5,
+				allowNonTsExtensions: true,
+				lib: ['es5']
+			});
+
+			monaco.languages.typescript.javascriptDefaults.addExtraLib(
+				typescriptTypings,
+				'file:///lib.d.ts'
+			);
+		}
+
 		const editor = monaco.editor.create(container, {
 			value,
 			language,
