@@ -259,8 +259,4 @@
 			</li>
 		{/each}
 	</ul>
-
-	<span class="block mt-6">
-		<LocalizedText key="co.casterlabs.caffeinated.app.sdk_documentation" />
-	</span>
 </div>
