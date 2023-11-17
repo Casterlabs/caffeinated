@@ -7,7 +7,7 @@
 </script>
 
 <LocalizedText
-	key="co.casterlabs.caffeinated.app.docks.chat.viewer.message.VIEWER_JOIN"
+	key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN"
 	slotMapping={['name']}
 >
 	<User slot="0" user={event.viewer} />
