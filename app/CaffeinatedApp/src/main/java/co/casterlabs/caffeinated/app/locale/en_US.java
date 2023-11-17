@@ -39,16 +39,22 @@ public class en_US implements Supplier<LocaleProvider> {
                         switch (level) {
                             case TIER_1:
                                 format += " at Tier 1";
+                                break;
                             case TIER_2:
                                 format += " at Tier 2";
+                                break;
                             case TIER_3:
                                 format += " at Tier 3";
+                                break;
                             case TIER_4:
                                 format += " at Tier 4";
+                                break;
                             case TIER_5:
                                 format += " at Tier 5";
+                                break;
                             case TWITCH_PRIME:
                                 format += " with Twitch Prime";
+                                break;
                             case UNKNOWN:
                                 break; // No touch.
                         }
@@ -75,16 +81,22 @@ public class en_US implements Supplier<LocaleProvider> {
                         switch (level) {
                             case TIER_1:
                                 format += " Tier 1";
+                                break;
                             case TIER_2:
                                 format += " Tier 2";
+                                break;
                             case TIER_3:
                                 format += " Tier 3";
+                                break;
                             case TIER_4:
                                 format += " Tier 4";
+                                break;
                             case TIER_5:
                                 format += " Tier 5";
+                                break;
                             case TWITCH_PRIME:
                                 format += " Twitch Prime";
+                                break;
                             case UNKNOWN:
                                 break; // No touch.
                         }
