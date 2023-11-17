@@ -484,7 +484,7 @@ public class MimeTypes {
         if (idx == -1) {
             return "application/octet-stream";
         } else {
-            return getMimeForType(fileName.substring(idx));
+            return getMimeForType(fileName.substring(idx + 1));
         }
     }
 
