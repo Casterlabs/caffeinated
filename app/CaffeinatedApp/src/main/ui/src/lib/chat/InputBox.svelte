@@ -14,9 +14,17 @@
 	export let userStates = {};
 	export let supportedFeatures = {};
 	export let replyTarget = null;
+	export let preferences = {};
 
-	let platform = 'KICK';
+	let platform = 'TWITCH';
 	let message = '';
+
+	$: preferences,
+		(() => {
+			if (preferences?.platform) {
+				platform = preferences.platform;
+			}
+		})();
 
 	$: isSupportedByPlatform = supportedFeatures[platform]?.includes('CHAT_SEND_MESSAGE');
 	$: isMultiAccountMode = Object.keys(userStates || {}).length > 1;
@@ -39,6 +47,8 @@
 	function select(id) {
 		platform = id;
 		selectorOpen = false;
+		preferences.platform = id;
+		dispatch('save', preferences);
 	}
 
 	let placeholderT = writable('');

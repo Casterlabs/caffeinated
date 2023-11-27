@@ -23,7 +23,6 @@
 	import { SUPPORTED_TTS_VOICES } from '$lib/app.mjs';
 	import { t } from '$lib/app.mjs';
 	import { onDestroy } from 'svelte';
-	import { derived, get } from 'svelte/store';
 
 	const console = createConsole('ChatViewer');
 
@@ -49,6 +48,7 @@
 	let showActivities = false;
 	let colorBy = 'THEME';
 	let ttsOrDingVolume;
+	let inputBoxPreferences = {};
 
 	let isAtBottom = true;
 
@@ -213,7 +213,8 @@
 			showPlatform,
 			showActivities,
 			colorBy,
-			ttsOrDingVolume
+			ttsOrDingVolume,
+			inputBoxPreferences
 		});
 	}
 
@@ -230,6 +231,7 @@
 		showActivities = config.showActivities;
 		colorBy = config.colorBy;
 		ttsOrDingVolume = config.ttsOrDingVolume;
+		inputBoxPreferences = config.inputBoxPreferences;
 	}
 
 	export async function processEvent(event) {
@@ -652,12 +654,17 @@
 		<InputBox
 			{userStates}
 			{supportedFeatures}
+			preferences={inputBoxPreferences}
 			on:send={({ detail }) => {
 				doAction('chat', {
 					message: detail.message,
 					platform: detail.platform,
 					replyTarget: detail.replyTarget?.id || null
 				});
+			}}
+			on:save={({ detail }) => {
+				inputBoxPreferences = detail;
+				savePreferences();
 			}}
 		>
 			<button

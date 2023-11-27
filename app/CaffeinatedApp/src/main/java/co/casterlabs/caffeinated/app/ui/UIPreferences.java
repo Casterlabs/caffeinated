@@ -4,6 +4,7 @@ import co.casterlabs.caffeinated.util.MiscUtil;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Data;
 
 @Data
@@ -51,6 +52,7 @@ public class UIPreferences {
         private boolean showActivities = false;
         private String colorBy = "THEME";
         private double ttsOrDingVolume = 1;
+        private JsonObject inputBoxPreferences = new JsonObject();
 
         // Still used by the popout dock.
         private @Deprecated boolean showModActions = true;
