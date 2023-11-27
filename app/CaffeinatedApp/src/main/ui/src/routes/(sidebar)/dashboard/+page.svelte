@@ -20,14 +20,14 @@
 		welcomewagon: component_WelcomeWagon,
 		'co.casterlabs.dock.stream_chat.dock': component_Chat,
 		'co.casterlabs.dock.viewers.dock': component_Viewers,
-		'co.casterlabs.dock.channel_info.dock': component_ChannelInfo,
+		// 'co.casterlabs.dock.channel_info.dock': component_ChannelInfo,
 		'co.casterlabs.dock.activity_feed.dock': component_ActivityFeed
 	};
 
 	const componentChoices = {
-		[null]: 'co.casterlabs.caffeinated.app.page.dashboard.customize.options.none',
+		[null]: 'co.casterlabs.caffeinated.app.page.dashboard.customize.options.none'
 		// welcomewagon: 'WelcomeWagon',
-		'co.casterlabs.dock.channel_info.dock': 'Channel Info' // Temporary.
+		// 'co.casterlabs.dock.channel_info.dock': 'Channel Info' // Temporary.
 	};
 
 	let layoutElement;
