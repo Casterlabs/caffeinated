@@ -122,7 +122,7 @@
 			on:click={() => (open = !open)}
 		>
 			<span class="block truncate text-base-12">
-				{#await Promise.all(value.map(async (p) => await t(`platform.${p}`))) then mapped}
+				{#await Promise.all(value.map(async (p) => await t(`co.casterlabs.caffeinated.app.platform.${p}`))) then mapped}
 					{mapped.join(', ')}
 				{/await}
 				&nbsp;
