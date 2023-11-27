@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -210,6 +211,17 @@ public class KoiConnection implements Closeable {
                     // We don't care about these or we already have them.
                     case "CLIENT_SCOPES":
                         return;
+
+                    case "RECONNECT_SOON": {
+                        FastLogger.logStatic(LogLevel.DEBUG, "Received the signal to reconnect, waiting a random amount of time and disconnecting.");
+                        new Thread(() -> {
+                            try {
+                                Thread.sleep(ThreadLocalRandom.current().nextLong(1000, 15000));
+                            } catch (InterruptedException e) {}
+                            this.close();
+                        }).start();
+                        return;
+                    }
 
                     default:
                         FastLogger.logStatic(LogLevel.DEBUG, "Unknown message type: %s\n%s", packet.getString("type"), packet);
