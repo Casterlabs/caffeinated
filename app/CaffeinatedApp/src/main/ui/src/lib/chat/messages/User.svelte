@@ -2,6 +2,18 @@
 	import streamingServices from '$lib/streamingServices.mjs';
 
 	export let user;
+
+	function escapeHtml(str) {
+		var doc = new DOMParser().parseFromString(str, 'text/html');
+		return doc.body.textContent || '';
+	}
+
+	$: displayString =
+		user && user.displayname.toLowerCase() == user.username.toLowerCase()
+			? escapeHtml(user.displayname)
+			: `${escapeHtml(user.displayname)} <span style="opacity: 60%; font-size: 75%;">(${escapeHtml(
+					user.username
+			  )})</span>`;
 </script>
 
 {#if user}
@@ -19,6 +31,6 @@
 			class="user-platform w-[1em] h-[1em] mr-0.5 translate-y-0.5"
 			data-icon="service/{user.platform.toLowerCase()}"
 			style:color={streamingServices[user.platform]?.color}
-		/><a href={user.link} target="_blank">{user.displayname}</a></b
+		/><a href={user.link} target="_blank">{@html displayString}</a></b
 	>
 {/if}
