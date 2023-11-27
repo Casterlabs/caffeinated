@@ -11,7 +11,7 @@
 	const console = createConsole('Settings/Appearance');
 
 	const MIN_ZOOM = 0.45;
-	const MAX_ZOOM = 1.5;
+	const MAX_ZOOM = 2.75;
 
 	const ICONS = {
 		casterlabs: 'Casterlabs',
