@@ -11,6 +11,7 @@
 	import { onMount } from 'svelte';
 	import changeFont from '$lib/changeFont.mjs';
 
+	const MAX_EVENTS_DISPLAY = 5;
 	const ANIMATION_TIME = 250;
 
 	// prettier-ignore
@@ -25,6 +26,7 @@
 	/** @type {HTMLElement} */
 	let chatBox;
 	let chatElements = {};
+	let chatHistory = [];
 
 	const settings = writable({});
 
@@ -85,7 +87,7 @@
 						settings
 					}
 				});
-				const message = new clazz({
+				const comp = new clazz({
 					target: li.querySelector('#slot'),
 					props: {
 						event,
@@ -106,10 +108,17 @@
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
 					// (so, we must keep track of it)
-					chatElements[event.meta_id] = message;
+					chatElements[event.meta_id] = comp;
 				}
 
+				chatHistory.push({ element: li, component: comp, event: event });
 				chatBox.appendChild(li);
+
+				while (chatHistory.length > MAX_EVENTS_DISPLAY) {
+					const { element, event } = chatHistory.shift();
+					element.remove();
+					delete chatElements[event.meta_id];
+				}
 
 				// No need to animate :)
 				if (event.x_is_catchup) return;

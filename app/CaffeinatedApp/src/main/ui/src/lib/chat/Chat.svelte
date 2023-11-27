@@ -24,6 +24,8 @@
 	import { t } from '$lib/app.mjs';
 	import { onDestroy } from 'svelte';
 
+	const MAX_EVENTS_DISPLAY = 500;
+
 	const console = createConsole('ChatViewer');
 
 	export let doAction = (action, data) => {};
@@ -33,6 +35,7 @@
 	/** @type {HTMLElement} */
 	let chatBox;
 	let chatElements = {};
+	let chatHistory = [];
 
 	// Preferences
 	let settingsModalOpen = false;
@@ -293,7 +296,7 @@
 
 				const messageContainer = document.createElement('span');
 				messageContainer.classList = 'message-content';
-				const message = new clazz({
+				const comp = new clazz({
 					target: messageContainer,
 					props: {
 						event,
@@ -335,10 +338,18 @@
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
 					// (so, we must keep track of it)
-					chatElements[event.meta_id] = message;
+					chatElements[event.meta_id] = comp;
 				}
 
+				chatHistory.push({ element: li, component: comp, event: event });
 				chatBox.appendChild(li);
+
+				while (chatHistory.length > MAX_EVENTS_DISPLAY) {
+					const { element, event } = chatHistory.shift();
+					element.remove();
+					delete chatElements[event.meta_id];
+				}
+
 				break;
 			}
 		}
