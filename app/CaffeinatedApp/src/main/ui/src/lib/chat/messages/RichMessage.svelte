@@ -31,9 +31,6 @@
 		{}
 	);
 
-	// Either if `is_highlighted` or `donations` > 0.
-	$: highlighted = event?.is_highlighted || event?.donations.length > 0 || false;
-
 	function updateUpvotes() {
 		if (!container) return;
 
@@ -97,25 +94,45 @@
 >
 	<div
 		class="transition inline-block"
-		class:highlight={highlighted}
 		class:opacity-60={isDeleted}
 		class:hover:opacity-100={isDeleted}
 		bind:this={container}
 	>
-		<User user={event.sender} /><span aria-hidden="true">
-			<span class="select-none font-light"> : </span>
-			<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
-		</span>
+		{#if event.attributes.includes('RP_ACTION')}
+			<i>
+				<User user={event.sender} /><span aria-hidden="true">
+					<span class="select-none font-light"> : </span>
+					<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
+				</span>
 
-		<span
-			class="richmessage-message"
-			class:upvote-1={upvotes > 0}
-			class:upvote-2={upvotes > 10}
-			class:upvote-3={upvotes > 100}
-			class:upvote-4={upvotes > 1000}
-		>
-			{@html event.html}
-		</span>
+				<b
+					class="richmessage-message"
+					style:--platform-color={streamingServices[event.sender.platform]?.color}
+					style:--user-color={event.sender.color}
+					class:upvote-1={upvotes > 0}
+					class:upvote-2={upvotes > 10}
+					class:upvote-3={upvotes > 100}
+					class:upvote-4={upvotes > 1000}
+				>
+					{@html event.html}
+				</b>
+			</i>
+		{:else}
+			<User user={event.sender} /><span aria-hidden="true">
+				<span class="select-none font-light"> : </span>
+				<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
+			</span>
+
+			<span
+				class="richmessage-message"
+				class:upvote-1={upvotes > 0}
+				class:upvote-2={upvotes > 10}
+				class:upvote-3={upvotes > 100}
+				class:upvote-4={upvotes > 1000}
+			>
+				{@html event.html}
+			</span>
+		{/if}
 
 		{#if reactions.length > 0}
 			<div class="w-full text-xs -mt-1 pt-1.5">
@@ -142,14 +159,6 @@
 	:global(.richmessage-message [data-rich-type='link']) {
 		text-decoration: underline;
 		color: var(--link);
-	}
-
-	/* Highlight */
-	:global(li.message-container):has(.highlight) {
-		border-radius: 0.375rem; /* rounded-md */
-		padding: 0.5rem; /* p-2 */
-		background-color: var(--primary5); /* bg-primary-5 */
-		text-shadow: 1px 1px 5px var(--primary3); /* Try to make the text more readable */
 	}
 
 	/* Upvotes */

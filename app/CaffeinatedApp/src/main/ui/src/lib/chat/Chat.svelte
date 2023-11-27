@@ -310,8 +310,12 @@
 				li.appendChild(messageTimestamp);
 				li.appendChild(messageContainer);
 
-				if (event.is_highlighted || event.donations?.length > 0) {
-					li.classList.add('my-0.5');
+				if (
+					event.attributes?.includes('HIGHLIGHTED') ||
+					event.donations?.length > 0 ||
+					['SUBSCRIPTION', 'RAID'].includes(event.event_type)
+				) {
+					li.classList.add('highlighted');
 				}
 
 				switch (event.event_type) {
@@ -738,6 +742,15 @@
 
 	.show-activities :global(.activity-event) {
 		display: block !important;
+	}
+
+	/* Highlight */
+	:global(li.highlighted) {
+		border-radius: 0.375rem; /* rounded-md */
+		padding: 0.5rem; /* p-2 */
+		margin: 0.125rem 0; /* my-0.5 */
+		background-color: var(--primary5); /* bg-primary-5 */
+		text-shadow: 1px 1px 5px var(--primary3); /* Try to make the text more readable */
 	}
 
 	/* Timestamps */
