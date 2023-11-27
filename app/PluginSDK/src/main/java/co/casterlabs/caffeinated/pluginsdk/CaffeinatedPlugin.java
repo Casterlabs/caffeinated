@@ -97,6 +97,16 @@ public abstract class CaffeinatedPlugin implements Closeable {
     /* ---------------- */
 
     /**
+     * This handler allows you to override events before the App deals with them.
+     * 
+     * @implSpec Return true if you wish for the event to be cancelled.
+     * @implSpec Return false if the event is fine and should continue (default).
+     */
+    public boolean shouldCancel(@NonNull KoiEvent event) {
+        return false;
+    }
+
+    /**
      * @apiNote Calling {@link #addKoiListener(KoiEventListener)} multiple times
      *          with the same listener won't register it multiple times. The
      *          internal implementation is a {@link HashSet}.

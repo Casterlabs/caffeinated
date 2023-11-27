@@ -193,6 +193,17 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             return; // Don't further process.
         }
 
+        for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPluginIntegration().getLoadedPlugins()) {
+            try {
+                if (plugin.shouldCancel(e)) {
+                    return;
+                }
+            } catch (Throwable t) {
+                // Plugin error.
+                FastLogger.logStatic(LogLevel.SEVERE, t);
+            }
+        }
+
         try {
             // Process shout events.
             CaffeinatedApp.getInstance().getChatbot().processEventForShout(e);
@@ -300,15 +311,17 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         }
 
         // Emit the event to Caffeinated.
-        JsonElement asJson = Rson.DEFAULT.toJson(e);
+        AsyncTask.create(() -> {
+            JsonElement asJson = Rson.DEFAULT.toJson(e);
 
-        CaffeinatedApp.getInstance().getAppBridge().emit("koi:event:" + e.getType().name().toLowerCase(), asJson);
-        CaffeinatedApp.getInstance().getAppBridge().emit("koi:event", asJson);
+            CaffeinatedApp.getInstance().getAppBridge().emit("koi:event:" + e.getType().name().toLowerCase(), asJson);
+            CaffeinatedApp.getInstance().getAppBridge().emit("koi:event", asJson);
 
-        // These are used internally.
-        for (KoiLifeCycleHandler listener : this.koiEventListeners) {
-            KoiEventUtil.reflectInvoke(listener, e);
-        }
+            // These are used internally.
+            for (KoiLifeCycleHandler listener : this.koiEventListeners) {
+                KoiEventUtil.reflectInvoke(listener, e);
+            }
+        });
 
         // Notify the plugins
         AsyncTask.create(() -> {
