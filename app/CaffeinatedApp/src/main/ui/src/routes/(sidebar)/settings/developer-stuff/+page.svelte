@@ -8,6 +8,7 @@
 		PORTAL_SIGNIN,
 		openAuthPortal
 	} from '$lib/caffeinatedAuth.mjs';
+	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
 
 	let manualAuthPlatform = 0;
 </script>
@@ -35,16 +36,11 @@
 <br />
 <br />
 
-<a
-	class="text-link"
-	href="/$caffeinated-sdk-root$/settings/applet?id=co.casterlabs.thirdparty.streamlabs.settings.settings_applet"
->
-	Streamlabs Integration
-</a>
-
-<a
-	class="text-link"
-	href="/$caffeinated-sdk-root$/settings/applet?id=co.casterlabs.thirdparty.kofi.settings.settings_applet"
->
-	Ko-fi Integration
-</a>
+<SlimTextArea
+	rows="1"
+	resize={false}
+	placeholder="Navigate to path"
+	on:value={({ detail }) => {
+		goto('/$caffeinated-sdk-root$' + detail);
+	}}
+/>
