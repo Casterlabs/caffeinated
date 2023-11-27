@@ -139,7 +139,7 @@ public class RichMessageEvent extends MessageMeta {
             }
         }
 
-        result.setHighlighted(this.isHighlighted());
+//        result.setHighlighted(this.isHighlighted());
         result.setUpvotes(this.getUpvotes());
         result.setVisible(this.isVisible());
 
