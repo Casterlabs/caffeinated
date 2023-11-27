@@ -48,6 +48,8 @@ public abstract class MessageMeta extends KoiEvent {
     public static enum MessageAttribute {
         HIGHLIGHTED,
         RP_ACTION,
+        FIRST_TIME_CHATTER,
+        ANNOUNCEMENT,
     }
 
 }
