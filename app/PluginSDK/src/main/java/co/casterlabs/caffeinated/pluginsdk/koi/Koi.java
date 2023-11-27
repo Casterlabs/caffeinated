@@ -40,6 +40,8 @@ public interface Koi {
 
     public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId, boolean isUserGesture);
 
+    public void broadcastEvent(@NonNull KoiEvent event);
+
     /**
      * @deprecated This is used internally.
      */

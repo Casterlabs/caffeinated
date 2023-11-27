@@ -159,7 +159,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
             // TODO get rid of this by broadcasting roomstates across all platforms on
             // connect. (KOI)
             this.roomstate = new RoomstateEvent(e.getStreamer());
-            CaffeinatedApp.getInstance().getKoi().onEvent(this.roomstate);
+            CaffeinatedApp.getInstance().getKoi().broadcastEvent(this.roomstate);
         }
 
         if (isAuthConfirmation) {

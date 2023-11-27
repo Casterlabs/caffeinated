@@ -421,7 +421,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             this.koi.getUserStates().get(this.koi.getFirstSignedInPlatform()).getStreamer(),
             type
         );
-        this.koi.onEvent(e);
+        this.koi.broadcastEvent(e);
     }
 
 }

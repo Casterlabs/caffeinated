@@ -81,8 +81,8 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
                     json.getString("message_id"), null
                 );
 
-                CaffeinatedApp.getInstance().getKoi().onEvent(rich);
-                CaffeinatedApp.getInstance().getKoi().onEvent(rich.toLegacyEvent());
+                CaffeinatedApp.getInstance().getKoi().broadcastEvent(rich);
+                CaffeinatedApp.getInstance().getKoi().broadcastEvent(rich.toLegacyEvent());
                 break;
             }
 
@@ -94,7 +94,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
                     0, 0
                 );
 
-                CaffeinatedApp.getInstance().getKoi().onEvent(
+                CaffeinatedApp.getInstance().getKoi().broadcastEvent(
                     new SubscriptionEvent(
                         KOFI_STREAMER, subscriber, null,
                         1, 1,

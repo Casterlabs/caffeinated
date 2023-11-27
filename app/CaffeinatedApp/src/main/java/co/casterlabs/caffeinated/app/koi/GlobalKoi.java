@@ -165,8 +165,9 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         });
     }
 
+    @Override
     @KoiEventHandler
-    public void onEvent(KoiEvent e) {
+    public void broadcastEvent(@NonNull KoiEvent e) {
         if (e.getType() == KoiEventType.CATCHUP) {
             CatchupEvent catchUp = (CatchupEvent) e;
 
@@ -184,7 +185,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                         if (catchUp.isFresh()) {
                             this.eventHistory.add(cEvent);
                         } else {
-                            this.onEvent(cEvent);
+                            this.broadcastEvent(cEvent);
                         }
                     }
                 }
