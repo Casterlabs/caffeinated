@@ -1,6 +1,5 @@
 package co.casterlabs.caffeinated.app.ui;
 
-import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -89,54 +88,46 @@ class GoogleFontsProvider implements Provider {
 }
 
 class SystemFontsProvider implements Provider {
-    private static final String powershellCmd = ""
-        + "[void] [System.Reflection.Assembly]::LoadWithPartialName('System.Drawing'); "
-        + "ConvertTo-Json (New-Object System.Drawing.Text.InstalledFontCollection).Families";
+//    private static final String powershellCmd = ""
+//        + "[void] [System.Reflection.Assembly]::LoadWithPartialName('System.Drawing'); "
+//        + "ConvertTo-Json (New-Object System.Drawing.Text.InstalledFontCollection).Families";
 
     private static final String macCmd = "system_profiler SPFontsDataType | grep 'Full Name:'";
 
     @Override
     public List<String> listFonts() {
-        switch (Platform.osDistribution) {
-            case MACOS: {
-                return this.listMacFonts();
-            }
-
-            case WINDOWS_NT: {
-
-                try {
-                    FastLogger.logStatic("Loading Windows System fonts.");
-                    return this.listWindowsFonts();
-                } catch (Exception e) {
-                    FastLogger.logException(e);
-                    // Fall through and use Java's listing.
-                    break;
+        try {
+            switch (Platform.osDistribution) {
+                case MACOS: {
+                    FastLogger.logStatic("Loading macOS System fonts.");
+                    return this.listMacFonts();
                 }
+
+//                case WINDOWS_NT: {
+//                    FastLogger.logStatic("Loading Windows System fonts.");
+//                    return this.listWindowsFonts();
+//                }
+
+                default:
+                    break;
             }
-
-            default:
-                break;
-
+        } catch (Exception e) {
+            FastLogger.logException(e);
+            // Fall through and use Java's listing.
         }
-
-        List<String> fonts = new LinkedList<>();
 
         try {
             FastLogger.logStatic("Loading System fonts.");
 
-            GraphicsEnvironment ge = GraphicsEnvironment
-                .getLocalGraphicsEnvironment();
-
-            Font[] allFonts = ge.getAllFonts();
-
-            for (Font font : allFonts) {
-                fonts.add(font.getFontName().trim());
-            }
+            return Arrays.asList(
+                GraphicsEnvironment
+                    .getLocalGraphicsEnvironment()
+                    .getAvailableFontFamilyNames()
+            );
         } catch (Exception e) {
             FastLogger.logException(e);
+            return Collections.emptyList();
         }
-
-        return fonts;
     }
 
     @SneakyThrows
@@ -165,33 +156,33 @@ class SystemFontsProvider implements Provider {
         return fonts;
     }
 
-    @SneakyThrows
-    private List<String> listWindowsFonts() {
-        List<String> fonts = new LinkedList<>();
-
-        String json = IOUtil.readInputStreamString(
-            Runtime
-                .getRuntime()
-                .exec(new String[] {
-                        "powershell",
-                        "-command",
-                        powershellCmd
-                })
-                .getInputStream(),
-            StandardCharsets.UTF_8
-        );
-
-        JsonArray array = Rson.DEFAULT.fromJson(json, JsonArray.class);
-        for (JsonElement e : array) {
-            String name = e
-                .getAsObject()
-                .getString("Name")
-                .trim();
-
-            fonts.add(name);
-        }
-
-        return fonts;
-    }
+//    @SneakyThrows
+//    private List<String> listWindowsFonts() {
+//        List<String> fonts = new LinkedList<>();
+//
+//        String json = IOUtil.readInputStreamString(
+//            Runtime
+//                .getRuntime()
+//                .exec(new String[] {
+//                        "powershell",
+//                        "-command",
+//                        powershellCmd
+//                })
+//                .getInputStream(),
+//            StandardCharsets.UTF_8
+//        );
+//
+//        JsonArray array = Rson.DEFAULT.fromJson(json, JsonArray.class);
+//        for (JsonElement e : array) {
+//            String name = e
+//                .getAsObject()
+//                .getString("Name")
+//                .trim();
+//
+//            fonts.add(name);
+//        }
+//
+//        return fonts;
+//    }
 
 }
