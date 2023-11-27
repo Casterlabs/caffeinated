@@ -62,12 +62,15 @@ public interface Koi {
      * @deprecated This is used internally.
      * 
      * @implNote   The difference between this and {@link #toJson()} is that this
-     *             version give the full event history.
+     *             version give a fuller event history.
      */
     @Deprecated
     default JsonObject toJsonExtended() {
+        int previous = Math.min(250, this.getEventHistory().size());
+        List<KoiEvent> history = this.getEventHistory().subList(this.getEventHistory().size() - previous, this.getEventHistory().size());
+
         return new JsonObject()
-            .put("history", Rson.DEFAULT.toJson(this.getEventHistory()))
+            .put("history", Rson.DEFAULT.toJson(history))
             .put("viewers", Rson.DEFAULT.toJson(this.getViewers()))
             .put("viewerCounts", Rson.DEFAULT.toJson(this.getViewerCounts()))
             .put("userStates", Rson.DEFAULT.toJson(this.getUserStates()))
