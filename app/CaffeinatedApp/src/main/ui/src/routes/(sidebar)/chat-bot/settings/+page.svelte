@@ -8,6 +8,7 @@
 	// import { hasCasterlabsPlus } from '$lib/app.mjs';
 	import { t } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
+	import CodeInput from '$lib/ui/CodeInput.svelte';
 
 	const console = createConsole('Chat Bot/Settings');
 	const preferences = st || Caffeinated.chatbot.svelte('preferences');
@@ -132,4 +133,14 @@
 			</button>
 		</div>
 	</li>
+	<!-- <li class="py-4">
+		<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.settings.store_editor" />
+		<div class="h-72 rounded overflow-hidden">
+			<CodeInput
+				language="json"
+				value={JSON.stringify($preferences?.store || {}, null, 2)}
+				on:value={({ detail: value }) => setPreferenceItem('store', JSON.parse(value))}
+			/>
+		</div>
+	</li> -->
 </ul>
