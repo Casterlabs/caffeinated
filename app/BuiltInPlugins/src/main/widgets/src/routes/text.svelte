@@ -31,6 +31,7 @@
 	style:color={textColor}
 	style:font-size="{fontSize}px"
 	style:text-align={textAlign}
+	style="display: block;"
 >
 	{@html html}
 </span>
