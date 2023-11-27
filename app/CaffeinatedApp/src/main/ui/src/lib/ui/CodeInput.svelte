@@ -18,7 +18,7 @@
 				...compilerOptions,
 				target: monaco.languages.typescript.ScriptTarget.ES5,
 				allowNonTsExtensions: true,
-				lib: ['es5']
+				lib: ['es7', 'es2022']
 			});
 
 			monaco.languages.typescript.javascriptDefaults.addExtraLib(

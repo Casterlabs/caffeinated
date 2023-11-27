@@ -53,8 +53,9 @@ public class ChatbotScriptEngine {
         engine.put("__internal_handle", new ScriptHandle());
 
         try {
+            engine.eval("load('classpath:nashorn_polyfill.js')");
+            engine.eval("load('classpath:nashorn_constants.js')");
             engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
-            engine.eval("load('classpath:nashornPolyfill.js')");
         } catch (ScriptException e) {
             e.printStackTrace();
         }
