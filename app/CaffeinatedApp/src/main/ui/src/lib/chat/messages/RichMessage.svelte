@@ -98,6 +98,53 @@
 		class:hover:opacity-100={isDeleted}
 		bind:this={container}
 	>
+		{#if event.reply_target_data || event.reply_target}
+			<a
+				href="#"
+				class="block text-sm opacity-80 mt-0.5"
+				on:click={() => {
+					const ANIMATE_TIME = 750;
+					event.reply_target_data.element.scrollIntoView();
+
+					event.reply_target_data.element.style.transition = `background-color ${ANIMATE_TIME}ms`;
+					event.reply_target_data.element.style.backgroundColor = 'var(--primary8)';
+
+					setTimeout(() => {
+						event.reply_target_data.element.style.backgroundColor = '';
+
+						setTimeout(() => {
+							event.reply_target_data.element.style.transition = '';
+						}, ANIMATE_TIME);
+					}, ANIMATE_TIME);
+				}}
+			>
+				<icon class="inline-block h-4 w-4 translate-y-1" data-icon="icon/chat-bubble-left" />
+				{#if event.reply_target_data}
+					<LocalizedText
+						key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to"
+						slotMapping={['other', 'message']}
+					>
+						<span slot="0">
+							<User user={event.reply_target_data.event.sender} /><span aria-hidden="true">
+								<span class="select-none font-light"> : </span>
+								<span class="opacity-0 absolute"> &gt;&nbsp; <!-- Sexy Text Selection --></span>
+							</span>
+						</span>
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-missing-attribute -->
+						<!-- svelte-ignore a11y-no-static-element-interactions -->
+						<!-- svelte-ignore a11y-invalid-attribute -->
+						<span slot="1">
+							{@html event.reply_target_data.event.html}
+						</span>
+					</LocalizedText>
+				{:else if event.reply_target}
+					<LocalizedText
+						key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown"
+					/>
+				{/if}
+			</a>
+		{/if}
 		{#if event.attributes.includes('RP_ACTION')}
 			<i>
 				<User user={event.sender} /><span aria-hidden="true">

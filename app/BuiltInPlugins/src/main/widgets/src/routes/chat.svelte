@@ -39,7 +39,7 @@
 				if (chatElement) {
 					chatElement.upvotes = event.upvotes;
 					if (!event.is_visible) {
-						chatMessage.remove();
+						chatElement.element.remove();
 						delete chatElements[event.meta_id];
 					}
 				}
@@ -50,7 +50,7 @@
 				console.debug('Event:', event);
 				if (event.user_upid) {
 					// Clear by user.
-					for (const [key, chatMessage] of Object.entries(chatElements)) {
+					for (const [key, { component: chatMessage }] of Object.entries(chatElements)) {
 						const koiEvent = chatMessage.koiEvent;
 
 						if (koiEvent.sender && koiEvent.sender.UPID == event.user_upid) {
@@ -64,7 +64,7 @@
 				// Clear all.
 				const now = Date.now();
 
-				for (const [key, chatMessage] of Object.entries(chatElements)) {
+				for (const [key, { component: chatMessage }] of Object.entries(chatElements)) {
 					if (chatMessage.timestamp < now) {
 						chatMessage.remove();
 						delete chatElements[key];
@@ -78,6 +78,7 @@
 				if (!clazz) return;
 
 				console.debug('Event:', event);
+				event.reply_target_data = chatElements[event.reply_target || ''] || null;
 
 				const li = document.createElement('li');
 				const card = new CardContainer({
@@ -108,7 +109,7 @@
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
 					// (so, we must keep track of it)
-					chatElements[event.meta_id] = comp;
+					chatElements[event.meta_id] = { element: li, component: comp, event: event };
 				}
 
 				chatHistory.push({ element: li, component: comp, event: event });

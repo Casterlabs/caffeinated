@@ -54,6 +54,10 @@
 		class:upvote-3={upvotes > 100}
 		class:upvote-4={upvotes > 1000}
 	>
+		{#if event.reply_target_data}
+			<!-- Add an @ to the user. TODO use the lang system. -->
+			<b>@{event.reply_target_data.event.sender.username}</b>
+		{/if}
 		{@html event.html}
 	</span>
 </span>

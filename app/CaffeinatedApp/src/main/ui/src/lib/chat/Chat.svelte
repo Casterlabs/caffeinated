@@ -245,8 +245,8 @@
 				const chatElement = chatElements[event.meta_id];
 
 				if (chatElement) {
-					chatElement.upvotes = event.upvotes;
-					chatElement.isDeleted = !event.is_visible;
+					chatElement.component.upvotes = event.upvotes;
+					chatElement.component.isDeleted = !event.is_visible;
 				}
 				return; // Avoid triggering the code below.
 			}
@@ -255,8 +255,8 @@
 				const chatElement = chatElements[event.meta_id];
 
 				if (chatElement) {
-					chatElement.reactions.push(event.reaction);
-					chatElement.reactions = chatElement.reactions; // Re-render.
+					chatElement.component.reactions.push(event.reaction);
+					chatElement.component.reactions = chatElement.reactions; // Re-render.
 				}
 				return; // Avoid triggering the code below.
 			}
@@ -264,7 +264,7 @@
 			case 'CLEARCHAT': {
 				if (event.user_upid) {
 					// Clear by user.
-					for (const chatMessage of Object.values(chatElements)) {
+					for (const { component: chatMessage } of Object.values(chatElements)) {
 						const koiEvent = chatMessage.koiEvent;
 
 						if (koiEvent.sender && koiEvent.sender.UPID == event.user_upid) {
@@ -276,7 +276,7 @@
 					// Clear all.
 					const now = Date.now();
 
-					for (const chatMessage of Object.values(chatElements)) {
+					for (const { component: chatMessage } of Object.values(chatElements)) {
 						if (chatMessage.timestamp < now) {
 							chatMessage.isDeleted = true;
 						}
@@ -289,6 +289,8 @@
 			default: {
 				const clazz = EVENT_CLASSES[event.event_type];
 				if (!clazz) return; // Avoid triggering the code below.
+
+				event.reply_target_data = chatElements[event.reply_target || ''] || null;
 
 				const messageTimestamp = document.createElement('span');
 				messageTimestamp.classList = 'message-timestamp';
@@ -342,7 +344,7 @@
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
 					// (so, we must keep track of it)
-					chatElements[event.meta_id] = comp;
+					chatElements[event.meta_id] = { element: li, component: comp, event: event };
 				}
 
 				chatHistory.push({ element: li, component: comp, event: event });
@@ -715,6 +717,10 @@
 		white-space: normal;
 	}
 
+	ul :global(li) {
+		border-radius: 0.375rem; /* rounded-md */
+	}
+
 	/* Colors */
 	.color-by-platform ul :global(b) {
 		font-weight: 600;
@@ -746,7 +752,6 @@
 
 	/* Highlight */
 	:global(li.highlighted) {
-		border-radius: 0.375rem; /* rounded-md */
 		padding: 0.5rem; /* p-2 */
 		margin: 0.125rem 0; /* my-0.5 */
 		background-color: var(--primary5); /* bg-primary-5 */
