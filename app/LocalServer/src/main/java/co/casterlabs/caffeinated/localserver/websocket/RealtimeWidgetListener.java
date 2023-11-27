@@ -214,7 +214,6 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
         }
     }
 
-    @SneakyThrows
     private void sendMessage(String type, JsonObject payload) {
         String json = new JsonObject()
             .put("type", type.toUpperCase())
@@ -223,9 +222,11 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
 //        FastLogger.logStatic(LogLevel.TRACE, json);
 
-        this.websocket.send(
-            json
-        );
+        try {
+            this.websocket.send(
+                json
+            );
+        } catch (Throwable ignored) {}
     }
 
     private class ConnectionWrapper extends RealtimeConnection {
