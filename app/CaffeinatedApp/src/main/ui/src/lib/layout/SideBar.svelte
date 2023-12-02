@@ -5,6 +5,7 @@
 
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import anime from 'animejs';
 
 	const sections = [
 		[
@@ -39,28 +40,20 @@
 	];
 
 	let applets = [];
-
 	let updateAvailable = false;
-
 	export let sidebarVisible = true;
-	let sidebarWidthMul = 100;
-	let sidebarAnimTask = -1;
-	let sidebarAnimDirection = 10;
 
 	export function toggleSideBar() {
-		clearInterval(sidebarAnimTask);
-
 		sidebarVisible = !sidebarVisible;
-		sidebarAnimDirection *= -1;
 
-		sidebarAnimTask = setInterval(() => {
-			sidebarWidthMul += sidebarAnimDirection;
-			document.body.style.setProperty('--sidebar-width-mul', sidebarWidthMul);
-
-			if (sidebarWidthMul == 0 || sidebarWidthMul == 100) {
-				clearInterval(sidebarAnimTask);
+		anime({
+			easing: 'easeOutQuad',
+			duration: 200,
+			direction: sidebarVisible ? 'normal' : 'reverse',
+			update: (anim) => {
+				document.body.style.setProperty('--sidebar-width-mul', anim.progress);
 			}
-		}, 16);
+		});
 	}
 
 	onMount(() => {
@@ -70,9 +63,12 @@
 			applets = widgets.filter((w) => w.details.type == 'APPLET');
 		});
 
-		setInterval(async () => {
-			updateAvailable = await Caffeinated.hasUpdate();
-		}, 2 /*min*/ * 60 * 1000);
+		setInterval(
+			async () => {
+				updateAvailable = await Caffeinated.hasUpdate();
+			},
+			2 /*min*/ * 60 * 1000
+		);
 	});
 </script>
 

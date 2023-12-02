@@ -26,6 +26,7 @@
     "type": "module",
     "dependencies": {
         "@radix-ui/colors": "^0.1.8",
+        "animejs": "^3.2.2",
         "svelte-portal": "^2.2.0"
     }
 }
