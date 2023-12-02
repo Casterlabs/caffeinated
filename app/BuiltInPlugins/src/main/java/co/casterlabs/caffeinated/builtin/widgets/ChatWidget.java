@@ -40,7 +40,6 @@ public class ChatWidget extends Widget {
         {
             WidgetSettingsSection messageStyle = new WidgetSettingsSection("message_style", "Message Style")
                 .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE))
-                .addItem(WidgetSettingsItem.asDropdown("message_direction", "Messages Direction", "Bottom-up", "Bottom-up", "Top-down"))
                 .addItem(WidgetSettingsItem.asDropdown("badges", "Badges", "Before Username", "Hidden", "Before Username", "After Username"))
                 .addItem(WidgetSettingsItem.asCheckbox("show_platform_icon", "Show User's Platform", false))
                 .addItem(
@@ -61,18 +60,32 @@ public class ChatWidget extends Widget {
                 messageStyle.addItem(WidgetSettingsItem.asNumber("disappear_after", "Disappear After (Seconds)", 30, 1, 10, 360));
             }
 
-            messageStyle.addItem(WidgetSettingsItem.asDropdown("messages_animation", "Message Animation", "None", "None", "Slide-in"));
-            if ("Slide-in".equals(this.settings().getString("message_style.messages_animation"))) {
-                messageStyle.addItem(
-                    WidgetSettingsItem.asDropdown(
-                        "slide_direction", "Slide direction",
-                        "From the left",
-                        "From the left", "From the right"
-                    )
-                );
+            messageStyle.addItem(
+                WidgetSettingsItem.asDropdown(
+                    "message_style", "Message Style", "Text (Bottom-up)",
+                    "Text (Top-down)", "Text (Bottom-up)", "Text (Sideways)"
+                )
+            );
+
+            if ("Text (Bottom-up)".equals(this.settings().getString("message_style.message_style")) ||
+                "Text (Top-down)".equals(this.settings().getString("message_style.message_style"))) {
+                messageStyle.addItem(WidgetSettingsItem.asDropdown("messages_animation", "Message Animation", "None", "None", "Slide-in"));
+
+                if ("Slide-in".equals(this.settings().getString("message_style.messages_animation"))) {
+                    messageStyle.addItem(
+                        WidgetSettingsItem.asDropdown(
+                            "slide_direction", "Slide direction",
+                            "From the left",
+                            "From the left", "From the right"
+                        )
+                    );
+                }
             }
 
-//            messageStyle.addItem(WidgetSettingsItem.asDropdown("message_style", "Message Style", "Text", "Text", "Card"));
+            if ("Text (Sideways)".equals(this.settings().getString("message_style.message_style"))) {
+                messageStyle.addItem(WidgetSettingsItem.asDropdown("messages_animation", "Message Animation", "None", "None", "Slide-in"));
+            }
+
 //            if ("Card".equals(this.settings().getString("message_style.message_style"))) {
 //                messageStyle.addItem(WidgetSettingsItem.asColor("message_style.message_style.card_color", "Card Color", "#6e6466"));
 //            }

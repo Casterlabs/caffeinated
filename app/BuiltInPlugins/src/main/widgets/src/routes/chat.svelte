@@ -121,48 +121,92 @@
 					delete chatElements[event.meta_id];
 				}
 
-				// No need to animate :)
-				if (event.x_is_catchup) return;
-				if ($settings['message_style.messages_animation'] == 'None') return;
+				if (event.x_is_catchup) return; // No need to animate :)
 
 				const FRAME_RATE = 60; // fps, keep it even.
 				const FRAME_INTERVAL = 1000 / FRAME_RATE;
 				const TOTAL_FRAME_COUNT = ANIMATION_TIME / FRAME_INTERVAL;
 
-				const direction = $settings['message_style.slide_direction'];
+				switch ($settings['message_style.message_style']) {
+					case 'Text (Top-down)':
+					case 'Text (Bottom-up)': {
+						if ($settings['message_style.messages_animation'] == 'None') return; // No need to animate :)
 
-				switch (direction) {
-					case 'From the left': {
-						card.offsetX = '-100%';
+						const direction = $settings['message_style.slide_direction'];
+
+						switch (direction) {
+							case 'From the left': {
+								card.offsetX = '-100%';
+								break;
+							}
+
+							case 'From the right': {
+								card.offsetX = '100%';
+								break;
+							}
+						}
+
+						let currentFrame = 0;
+						let animTaskId = setInterval(() => {
+							currentFrame++;
+							if (currentFrame >= TOTAL_FRAME_COUNT) {
+								clearInterval(animTaskId);
+							}
+
+							const progress = currentFrame / TOTAL_FRAME_COUNT;
+							switch (direction) {
+								case 'From the left': {
+									card.offsetX = `-${(1 - progress) * 100}%`;
+									break;
+								}
+
+								case 'From the right': {
+									card.offsetX = `${(1 - progress) * 100}%`;
+									break;
+								}
+							}
+						}, FRAME_INTERVAL);
 						break;
 					}
 
-					case 'From the right': {
-						card.offsetX = '100%';
+					case 'Text (Sideways)': {
+						const direction = $settings['text_style.text_align'];
+
+						switch (direction) {
+							case 'Left': {
+								card.offsetX = '-100%';
+								break;
+							}
+
+							case 'Right': {
+								card.offsetX = '100%';
+								break;
+							}
+						}
+
+						let currentFrame = 0;
+						let animTaskId = setInterval(() => {
+							currentFrame++;
+							if (currentFrame >= TOTAL_FRAME_COUNT) {
+								clearInterval(animTaskId);
+							}
+
+							const progress = currentFrame / TOTAL_FRAME_COUNT;
+							switch (direction) {
+								case 'Left': {
+									card.offsetX = `-${(1 - progress) * 100}%`;
+									break;
+								}
+
+								case 'Right': {
+									card.offsetX = `${(1 - progress) * 100}%`;
+									break;
+								}
+							}
+						}, FRAME_INTERVAL);
 						break;
 					}
 				}
-
-				let currentFrame = 0;
-				let animTaskId = setInterval(() => {
-					currentFrame++;
-					if (currentFrame >= TOTAL_FRAME_COUNT) {
-						clearInterval(animTaskId);
-					}
-
-					const progress = currentFrame / TOTAL_FRAME_COUNT;
-					switch (direction) {
-						case 'From the left': {
-							card.offsetX = `-${(1 - progress) * 100}%`;
-							break;
-						}
-
-						case 'From the right': {
-							card.offsetX = `${(1 - progress) * 100}%`;
-							break;
-						}
-					}
-				}, FRAME_INTERVAL);
 
 				return;
 			}
@@ -197,15 +241,25 @@
 <ul
 	bind:this={chatBox}
 	id="chatbox"
+	class="absolute flex px-1"
 	style:--animation-time={ANIMATION_TIME}
 	style:color={$settings['text_style.text_color']}
 	style:font-size="{$settings['text_style.font_size']}px"
 	style:font-weight={$settings['text_style.font_weight']}
 	style:padding="{$settings['message_style.margin']}px"
-	class="absolute inset-x-0 flex flex-col px-1"
-	class:top-0={$settings['message_style.message_direction'] == 'Top-down'}
-	class:flex-col-reverse={$settings['message_style.message_direction'] == 'Top-down'}
-	class:bottom-0={$settings['message_style.message_direction'] == 'Bottom-up'}
+	class:top-0={$settings['message_style.message_style'] == 'Text (Top-down)'}
+	class:flex-col-reverse={$settings['message_style.message_style'] == 'Text (Top-down)'}
+	class:flex-col={$settings['message_style.message_style'] == 'Text (Bottom-up)'}
+	class:bottom-0={$settings['message_style.message_style'] == 'Text (Bottom-up)'}
+	class:flex-row={$settings['message_style.message_style'] == 'Text (Sideways)' &&
+		$settings['text_style.text_align'] == 'Right'}
+	class:flex-row-reverse={$settings['message_style.message_style'] == 'Text (Sideways)' &&
+		$settings['text_style.text_align'] == 'Left'}
+	class:w-max={$settings['message_style.message_style'] == 'Text (Sideways)'}
+	class:space-x-4={$settings['message_style.message_style'] == 'Text (Sideways)'}
+	class:right-0={$settings['message_style.message_style'] == 'Text (Sideways)' &&
+		$settings['text_style.text_align'] == 'Right'}
+	class:inset-x-0={$settings['message_style.message_style'] != 'Text (Sideways)'}
 	class:text-right={$settings['text_style.text_align'] == 'Right'}
 	style:--static-username-color={$settings['message_style.username_color.static'] || '#f04f88'}
 	class:username-color-platform={$settings['message_style.username_color'] ==
