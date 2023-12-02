@@ -4,7 +4,7 @@
 	import Debouncer from '$lib/debouncer.mjs';
 
 	const dispatch = createEventDispatcher();
-	const debouncer = new Debouncer();
+	const debouncer = new Debouncer(100 /* ~10hz */);
 
 	export let value = 0;
 	export let min = Number.MIN_SAFE_INTEGER;

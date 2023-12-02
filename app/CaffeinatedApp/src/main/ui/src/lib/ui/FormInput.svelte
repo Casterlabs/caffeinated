@@ -107,18 +107,17 @@
 					on:value={onInput}
 					search={(query) => {
 						query = query.toLowerCase();
-						let result = [];
 
+						let result = [];
 						for (const font of $fonts) {
 							if (font.toLowerCase().includes(query)) {
 								result.push(font);
 							}
 
-							if (result.length == 6) {
-								break; // Max of 6 results.
+							if (result.length == 20) {
+								break; // Cap the results.
 							}
 						}
-
 						return result;
 					}}
 				/>
