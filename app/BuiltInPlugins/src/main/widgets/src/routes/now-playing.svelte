@@ -18,6 +18,7 @@
 
 	let textOnly_font;
 	let textOnly_fontSize;
+	let textOnly_fontWeight;
 	let textOnly_textColor;
 	let textOnly_textAlign;
 
@@ -42,6 +43,7 @@
 
 		textOnly_font = Widget.getSetting('style.font');
 		textOnly_fontSize = Widget.getSetting('style.font_size');
+		textOnly_fontWeight = Widget.getSetting('style.font_weight');
 		textOnly_textColor = Widget.getSetting('style.text_color');
 		textOnly_textAlign = Widget.getSetting('style.text_align');
 
@@ -103,6 +105,7 @@
 	{:else if cardStyle == 'Text Only'}
 		<p
 			style:font-size="{textOnly_fontSize}px"
+			style:font-weight={textOnly_fontWeight}
 			style:text-align={textOnly_textAlign}
 			style:color={textOnly_textColor}
 		>

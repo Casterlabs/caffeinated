@@ -200,6 +200,7 @@
 	style:--animation-time={ANIMATION_TIME}
 	style:color={$settings['text_style.text_color']}
 	style:font-size="{$settings['text_style.font_size']}px"
+	style:font-weight={$settings['text_style.font_weight']}
 	style:padding="{$settings['message_style.margin']}px"
 	class="absolute inset-x-0 flex flex-col px-1"
 	class:top-0={$settings['message_style.message_direction'] == 'Top-down'}

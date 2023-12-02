@@ -64,7 +64,8 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
                 .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE))
                 .addItem(WidgetSettingsItem.asDropdown("style", "Style", "Progress Bar (With Text)", "Progress Bar", "Text Only"))
                 .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
-                .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128))
+                .addItem(WidgetSettingsItem.asRange("font_size", "Font Size", 16, 1, 0, 128))
+                .addItem(WidgetSettingsItem.asRange("font_weight", "Font Weight (boldness)", 400, 100, 100, 1000))
                 .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"));
 
             if (currentStyle.equals("Text Only")) {

@@ -6,6 +6,7 @@
 	let highlightColor;
 	let textColor;
 	let fontSize;
+	let fontWeight;
 	let textAlign;
 
 	onMount(() => {
@@ -14,6 +15,7 @@
 			highlightColor = Widget.getSetting('text_style.highlight_color');
 			textColor = Widget.getSetting('text_style.text_color');
 			fontSize = Widget.getSetting('text_style.font_size');
+			fontWeight = Widget.getSetting('text_style.font_weight');
 			textAlign = Widget.getSetting('text_style.text_align');
 		});
 
@@ -30,6 +32,7 @@
 	style:--highlight-color={highlightColor}
 	style:color={textColor}
 	style:font-size="{fontSize}px"
+	style:font-weight={fontWeight}
 	style:text-align={textAlign}
 	style="display: block;"
 >

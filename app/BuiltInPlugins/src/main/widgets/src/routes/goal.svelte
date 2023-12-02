@@ -14,6 +14,7 @@
 	let barColor;
 	let textColor;
 	let fontSize;
+	let fontWeight;
 	let textAlign;
 	let margin;
 
@@ -80,6 +81,7 @@
 			barColor = Widget.getSetting('goal.bar_color');
 			textColor = Widget.getSetting('style.text_color');
 			fontSize = Widget.getSetting('style.font_size');
+			fontWeight = Widget.getSetting('text_style.font_weight');
 			textAlign = Widget.getSetting('style.text_align') || 'left';
 			margin = Widget.getSetting('style.margin');
 
@@ -95,7 +97,12 @@
 	});
 </script>
 
-<div style:color={textColor} style:font-size="{fontSize}px" style:padding="{margin}px">
+<div
+	style:color={textColor}
+	style:font-size="{fontSize}px"
+	style:padding="{margin}px"
+	style:font-weight={fontWeight}
+>
 	{#if currentCount != -1}
 		{#if style == 'Text Only'}
 			<p style:text-align={textAlign}>

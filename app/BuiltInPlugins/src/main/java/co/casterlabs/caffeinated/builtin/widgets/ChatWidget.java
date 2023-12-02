@@ -84,7 +84,8 @@ public class ChatWidget extends Widget {
             .addSection(
                 new WidgetSettingsSection("text_style", "Text Style")
                     .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
-                    .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128))
+                    .addItem(WidgetSettingsItem.asRange("font_size", "Font Size", 16, 1, 0, 128))
+                    .addItem(WidgetSettingsItem.asRange("font_weight", "Font Weight (boldness)", 400, 100, 100, 1000))
                     .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
                     .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right"))
             )
