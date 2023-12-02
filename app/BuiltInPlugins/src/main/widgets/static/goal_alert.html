@@ -34,13 +34,18 @@
 			}
 
 			.container {
+				position: relative;
 				margin: auto;
 				width: 100vmin;
-				height: 100vmin;
+				height: fit-content;
 			}
 
 			#alert-text {
+				position: absolute;
 				text-align: center;
+				width: 100%;
+				top: var(--text-voffset);
+				transform: translateX(var(--text-hoffset));
 			}
 
 			.emote {
@@ -124,6 +129,8 @@
 				document.body.style =
 					`--highlight-color: ${Widget.getSetting('alert.highlight_color')};` +
 					`--text-color: ${Widget.getSetting('alert.text_color')};` +
+					`--text-voffset: ${Widget.getSetting('alert.vertical_offset') * 100}%;` +
+					`--text-hoffset: ${Widget.getSetting('alert.horizontal_offset') * 100}%;` +
 					`font-size: ${Widget.getSetting('alert.font_size')}px;` +
 					`font-weight: ${Widget.getSetting('style.font_weight')};` +
 					`text-align: ${Widget.getSetting('alert.text_align').toLowerCase()};`;
