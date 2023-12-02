@@ -10,9 +10,9 @@
 	import { t } from '$lib/app.mjs';
 	import User from './User.svelte';
 
-	const PLATFORMS_WITH_BAN = ['TWITCH', 'TROVO', 'BRIME'];
-	const PLATFORMS_WITH_TIMEOUT = ['TWITCH', 'TROVO', 'BRIME'];
-	const PLATFORMS_WITH_RAID = ['CAFFEINE', 'TWITCH', 'TROVO'];
+	const PLATFORMS_WITH_BAN = []; // TODO
+	const PLATFORMS_WITH_TIMEOUT = []; // TODO
+	const PLATFORMS_WITH_RAID = []; // TODO
 
 	export let event;
 	export let onContextMenuAction;
