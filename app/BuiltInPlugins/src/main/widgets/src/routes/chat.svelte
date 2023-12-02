@@ -11,7 +11,7 @@
 	import { onMount } from 'svelte';
 	import changeFont from '$lib/changeFont.mjs';
 
-	const MAX_EVENTS_DISPLAY = 500;
+	const MAX_EVENTS_DISPLAY = 100;
 	const ANIMATION_TIME = 250;
 
 	// prettier-ignore

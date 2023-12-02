@@ -24,7 +24,7 @@
 	import { t } from '$lib/app.mjs';
 	import { onDestroy } from 'svelte';
 
-	const MAX_EVENTS_DISPLAY = 500;
+	const MAX_EVENTS_DISPLAY = 100;
 
 	const console = createConsole('ChatViewer');
 
@@ -350,7 +350,7 @@
 				chatHistory.push({ element: li, component: comp, event: event });
 				chatBox.appendChild(li);
 
-				while (chatHistory.length > MAX_EVENTS_DISPLAY) {
+				if (chatHistory.length > MAX_EVENTS_DISPLAY) {
 					const { element, event } = chatHistory.shift();
 					element.remove();
 					delete chatElements[event.meta_id];
