@@ -6,16 +6,16 @@
 	function escapeHtml(unsafe) {
 		return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 	}
-
-	$: displayString =
-		user && user.displayname.toLowerCase() == user.username.toLowerCase()
-			? escapeHtml(user.displayname)
-			: `${escapeHtml(user.displayname)} <span style="opacity: 60%; font-size: 75%;">(${escapeHtml(
-					user.username
-			  )})</span>`;
 </script>
 
 {#if user}
+	{@const displayString =
+		user.displayname.toLowerCase() == user.username.toLowerCase()
+			? escapeHtml(user.displayname)
+			: `${escapeHtml(user.displayname)} <span style="opacity: 60%; font-size: 75%;">(${escapeHtml(
+					user.username
+			  )})</span>`}
+
 	<span class="richmessage-badges space-x-1" aria-hidden="true">
 		{#each user.badges as badge}
 			<img class="inline-block align-middle h-[1em] -translate-y-0.5" alt="" src={badge} />
