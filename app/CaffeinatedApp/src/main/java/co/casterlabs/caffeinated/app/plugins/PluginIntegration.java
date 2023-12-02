@@ -134,6 +134,10 @@ public class PluginIntegration extends JavascriptObject {
                         e.printStackTrace();
                     }
                 }
+
+                // Okay, we've produced a LOT of garbage after doing all of that.
+                // Let's see if we can bring our apparent usage down :^)
+                System.gc();
             }
         }
 
@@ -178,6 +182,7 @@ public class PluginIntegration extends JavascriptObject {
                 this.plugins.loadPluginsFromFile(file)
             );
 
+            System.gc();
             FastLogger.logStatic(LogLevel.INFO, "Loaded %s", file.getName());
         } catch (Exception e) {
             FastLogger.logStatic(LogLevel.SEVERE, "Unable to load %s as a plugin, make sure that it's *actually* a plugin!", file.getName());

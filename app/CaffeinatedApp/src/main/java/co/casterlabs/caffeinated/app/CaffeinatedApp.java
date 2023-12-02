@@ -92,7 +92,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     private @JavascriptValue(allowSet = false) boolean isTraySupported;
 
-    private Swetrix analytics;
+    private @Getter(AccessLevel.NONE) Swetrix analytics;
 
     private Connection preferencesConnection;
 
@@ -190,8 +190,12 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         this.appPreferences.save();
 
-        this.analytics.trackPageView("/", this.UI.getPreferences().getLanguage());
-        this.analytics.startHeartbeat();
+        try {
+            this.analytics.trackPageView("/", this.UI.getPreferences().getLanguage());
+            this.analytics.startHeartbeat();
+        } catch (Exception e) {
+            FastLogger.logStatic(e);
+        }
 
         ChatbotScriptEngine.class.toString(); // Load.
 
@@ -202,6 +206,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         if (calendarMonth == Calendar.OCTOBER && calendarDate == 31) {
             this.notify("Boo!", NotificationType.WARNING);
         }
+
+        System.gc();
     }
 
     @Override
@@ -422,6 +428,14 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             type
         );
         this.koi.broadcastEvent(e);
+    }
+
+    public void track(String event, boolean unique) {
+        try {
+            this.analytics.track(event, unique);
+        } catch (Exception e) {
+            FastLogger.logStatic(e);
+        }
     }
 
 }
