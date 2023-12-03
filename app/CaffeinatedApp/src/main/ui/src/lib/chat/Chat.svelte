@@ -24,7 +24,7 @@
 	import { t } from '$lib/app.mjs';
 	import { onDestroy } from 'svelte';
 
-	const MAX_EVENTS_DISPLAY = 100;
+	const MAX_EVENTS_DISPLAY = 400;
 
 	const console = createConsole('ChatViewer');
 

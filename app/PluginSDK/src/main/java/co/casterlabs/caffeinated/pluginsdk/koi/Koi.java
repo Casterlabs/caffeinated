@@ -47,7 +47,7 @@ public interface Koi {
      */
     @Deprecated
     default JsonObject toJson() {
-        int previous = Math.min(20, this.getEventHistory().size());
+        int previous = Math.min(35, this.getEventHistory().size());
         List<KoiEvent> history = this.getEventHistory().subList(this.getEventHistory().size() - previous, this.getEventHistory().size());
 
         return new JsonObject()
@@ -68,7 +68,7 @@ public interface Koi {
      */
     @Deprecated
     default JsonObject toJsonExtended() {
-        int previous = Math.min(100, this.getEventHistory().size());
+        int previous = Math.min(200, this.getEventHistory().size());
         List<KoiEvent> history = this.getEventHistory().subList(this.getEventHistory().size() - previous, this.getEventHistory().size());
 
         return new JsonObject()
