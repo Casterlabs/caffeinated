@@ -112,7 +112,8 @@
 											window.Caffeinated.auth.requestOAuthSignin(
 												'koi',
 												platform.toLowerCase(),
-												false
+												false,
+												null
 											);
 										}}
 									>

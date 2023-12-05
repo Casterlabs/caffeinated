@@ -110,7 +110,7 @@ public class StreamlabsServicePlugin extends CaffeinatedPlugin {
             });
 
             instance.on("signin", () -> {
-                CaffeinatedApp.getInstance().getAuth().requestOAuthSignin("thirdparty", "streamlabs", false);
+                CaffeinatedApp.getInstance().getAuth().requestOAuthSignin("thirdparty", "streamlabs", false, null);
             });
 
             instance.on("signout", () -> {

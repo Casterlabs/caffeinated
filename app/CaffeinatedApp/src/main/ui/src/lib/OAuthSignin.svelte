@@ -10,7 +10,7 @@
 	onMount(() => {
 		const dontGoBack =
 			location.search.includes('?dontGoBack') || location.search.includes('&dontGoBack');
-		Caffeinated.auth.requestOAuthSignin(type, platform, !dontGoBack);
+		Caffeinated.auth.requestOAuthSignin(type, platform, !dontGoBack, null);
 	});
 
 	function cancelAuth() {

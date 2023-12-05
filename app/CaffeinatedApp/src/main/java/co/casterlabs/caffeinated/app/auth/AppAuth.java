@@ -276,9 +276,10 @@ public class AppAuth extends JavascriptObject {
 
     @SuppressWarnings("deprecation")
     @JavascriptFunction
-    public void requestOAuthSignin(@NonNull String type, @NonNull String platform, boolean shouldNavigateBackwards) {
+    public void requestOAuthSignin(@NonNull String type, @NonNull String platform, boolean shouldNavigateBackwards, @Nullable String tokenId) {
         try {
             final boolean isKoi = type.equalsIgnoreCase("koi");
+            final String $tokenId_ptr = tokenId == null ? platform : tokenId;
 
             this.logger.info("Signin requested. (%s)", platform);
 
@@ -299,18 +300,18 @@ public class AppAuth extends JavascriptObject {
                         .getInstance()
                         .getAuthPreferences()
                         .get()
-                        .addToken(type, platform, token);
+                        .addToken(type, $tokenId_ptr, token);
 
                     CaffeinatedApp.getInstance().emitAppEvent(
                         "auth:completion",
                         new JsonObject()
                             .put("type", type)
                             .put("platform", platform)
-                            .put("tokenId", platform)
+                            .put("tokenId", $tokenId_ptr)
                     );
 
                     if (isKoi) {
-                        this.startAuthInstance(platform);
+                        this.startAuthInstance($tokenId_ptr);
                     }
 
                     if (shouldNavigateBackwards) {
