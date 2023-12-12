@@ -257,7 +257,8 @@ public class AppUI extends JavascriptObject {
     public void playAudio(@NonNull String audioUrl, float volume) {
         if (!this.uiVisible) {
             CaffeinatedApp.getInstance().notify(
-                "The app cannot play sounds without the window being open and visible on screen.",
+                "co.casterlabs.caffeinated.app.cannot_play_sounds_without_ui",
+                Collections.emptyMap(),
                 NotificationType.WARNING
             );
             return;

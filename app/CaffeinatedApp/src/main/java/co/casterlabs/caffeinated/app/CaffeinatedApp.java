@@ -204,7 +204,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         int calendarDate = calendar.get(Calendar.DATE);
 
         if (calendarMonth == Calendar.OCTOBER && calendarDate == 31) {
-            this.notify("Boo!", NotificationType.WARNING);
+            this.notify("Boo!", Collections.emptyMap(), NotificationType.WARNING);
         }
 
         System.gc();
@@ -292,14 +292,13 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
      */
     @SuppressWarnings("deprecation")
     @JavascriptFunction
-    public void notify(@NonNull String message, @NonNull NotificationType type) {
+    public void notify(@NonNull String message, Map<String, String> placeholders, @NonNull NotificationType type) {
+        String localized = this.localize(message, placeholders, Collections.emptyList());
+
         try {
-            this.nativeSystem.notify(
-                this.localize(message, Collections.emptyMap(), Collections.emptyList()),
-                type
-            );
+            this.nativeSystem.notify(localized, type);
         } catch (IllegalStateException ignored) {
-            this.UI.showToast(message, NotificationType.NONE);
+            this.UI.showToast(localized, NotificationType.NONE);
         }
     }
 

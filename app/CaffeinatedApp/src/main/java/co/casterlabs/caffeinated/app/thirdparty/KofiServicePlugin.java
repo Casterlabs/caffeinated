@@ -108,6 +108,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
             case "Shop Order": {
                 CaffeinatedApp.getInstance().notify(
                     String.format("%s just made an order on your Ko-fi shop!", json.getString("from_name")),
+                    Collections.emptyMap(),
                     NotificationType.INFO
                 );
                 break;

@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
@@ -234,12 +235,11 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     public void onError(String errorCode) {
         switch (errorCode) {
             case "USER_AUTH_INVALID": {
-                if (this.userData != null) {
-                    CaffeinatedApp.getInstance().notify(
-                        String.format("You have been logged out from %s, you may need to sign back in.", this.userData.getPlatform()),
-                        NotificationType.WARNING
-                    );
-                }
+                CaffeinatedApp.getInstance().notify(
+                    "co.casterlabs.caffeinated.app.auth.logged_out",
+                    Map.of("platform", this.tokenId),
+                    NotificationType.WARNING
+                );
                 this.invalidate();
                 return;
             }

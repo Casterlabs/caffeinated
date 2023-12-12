@@ -12,12 +12,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collections;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.kaimen.app.App;
@@ -118,7 +120,7 @@ public class TrayHandler {
             showCheckbox.setState(newState);
 
             if (!newState && CaffeinatedApp.getInstance().canDoOneTimeEvent("caffeinated.instance.closed_to_tray")) {
-                notify("Caffeinated has been minimized to the tray. Click the icon to reopen.", MessageType.INFO);
+                CaffeinatedApp.getInstance().notify("co.casterlabs.caffeinated.app.minimized_to_tray", Collections.emptyMap(), NotificationType.INFO);
             }
         }
     }

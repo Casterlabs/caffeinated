@@ -1,6 +1,7 @@
 package co.casterlabs.caffeinated.app.auth;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,10 +173,18 @@ public class AppAuth extends JavascriptObject {
 
         if (this.isKoiAlive != isAlive) {
             if (isAlive) {
-                CaffeinatedApp.getInstance().notify("Reconnected to Casterlabs successfully.", NotificationType.INFO);
+                CaffeinatedApp.getInstance().notify(
+                    "co.casterlabs.caffeinated.app.auth.reconnected",
+                    Collections.emptyMap(),
+                    NotificationType.INFO
+                );
             } else {
                 // Show an error to the user.
-                CaffeinatedApp.getInstance().notify("Lost connection to Casterlabs, reconnecting.", NotificationType.ERROR);
+                CaffeinatedApp.getInstance().notify(
+                    "co.casterlabs.caffeinated.app.auth.lost_connection",
+                    Collections.emptyMap(),
+                    NotificationType.ERROR
+                );
             }
         }
 
