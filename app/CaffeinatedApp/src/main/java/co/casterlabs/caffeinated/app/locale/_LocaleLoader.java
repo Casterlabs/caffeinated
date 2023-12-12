@@ -19,9 +19,13 @@ public class _LocaleLoader {
     public static LocaleProvider load(String locale) {
         LocaleProvider provider;
 
-        switch (locale.toUpperCase()) {
+        switch (locale.toUpperCase().replace('-', '_')) {
             case "FR_FR":
                 provider = fr_FR.class.newInstance().get();
+                break;
+
+            case "DA_DK":
+                provider = da_DK.class.newInstance().get();
                 break;
 
             case "EN_US":
