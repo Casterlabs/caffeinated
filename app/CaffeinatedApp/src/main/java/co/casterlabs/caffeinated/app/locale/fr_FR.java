@@ -25,7 +25,6 @@ public class fr_FR implements Supplier<LocaleProvider> {
                 }
             })
 
-            // TODO
             .function("docks.chat.viewer.event_format.SUBSCRIPTION", (key, externalLookup, knownPlaceholders, knownComponents) -> {
                 // This gets ugly REAL quick.
                 double monthsPurchased = Double.parseDouble(knownPlaceholders.get("months_purchased"));
