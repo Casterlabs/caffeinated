@@ -20,16 +20,21 @@ public class _LocaleLoader {
         LocaleProvider provider;
 
         switch (locale.toUpperCase().replace('-', '_')) {
-            case "FR_FR":
-                provider = fr_FR.class.newInstance().get();
-                break;
-
             case "DA_DK":
                 provider = da_DK.class.newInstance().get();
                 break;
 
             case "EN_US":
                 return FALLBACK;
+
+
+            case "FR_FR":
+                provider = fr_FR.class.newInstance().get();
+                break;
+
+            case "ID_ID":
+                provider = id_ID.class.newInstance().get();
+                break;
 
             default:
                 FastLogger.logStatic(LogLevel.WARNING, "Unable to find locale provider for: %s", locale);
