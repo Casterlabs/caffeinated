@@ -14,6 +14,7 @@ public enum Locale {
     FR_FR    ("fr-FR",  WritingDirection.LEFT_TO_RIGHT, "🇫🇷", "Français"),
     DA_DK    ("da-DK",  WritingDirection.LEFT_TO_RIGHT, "🇩🇰", "Dansk"),
     ID_ID    ("id-ID",  WritingDirection.LEFT_TO_RIGHT, "🇮🇩", "Bahasa Indonesia"),
+    RU_RU    ("ru-RU",  WritingDirection.LEFT_TO_RIGHT, "🇷🇺", "Русский"),
 
     // @formatter:on
     ;
