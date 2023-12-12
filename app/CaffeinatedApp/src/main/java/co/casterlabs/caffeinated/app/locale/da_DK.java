@@ -10,20 +10,7 @@ public class da_DK implements Supplier<LocaleProvider> {
     @Override
     public LocaleProvider get() {
         return new BuildableLocaleProvider.Builder(_Util.loadJson("da_DK"))
-            // These keys are used for both tts and display.
-            .function("docks.chat.viewer.event_format.RAID", (key, externalLookup, knownPlaceholders, knownComponents) -> {
-                double viewerCount = Double.parseDouble(knownPlaceholders.get("viewers"));
-
-                if (viewerCount < 2) {
-                    // The platform didn't tell us how many viewers are participating OR the value
-                    // is too small to reasonably say.
-                    return "[docks.chat.viewer.event_format.RAID.no_viewers]";
-                } else {
-                    return "[docks.chat.viewer.event_format.RAID.viewers]";
-                }
-            })
-
-            // TODO
+        // TODO
 //            .function("docks.chat.viewer.event_format.SUBSCRIPTION", (key, externalLookup, knownPlaceholders, knownComponents) -> {
 //                // This gets ugly REAL quick.
 //                double monthsPurchased = Double.parseDouble(knownPlaceholders.get("months_purchased"));
