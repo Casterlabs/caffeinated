@@ -27,6 +27,13 @@ public class _LocaleLoader {
             case "EN_US":
                 return FALLBACK;
 
+            case "ES_419":
+                provider = es_419.class.newInstance().get();
+                break;
+
+            case "ES_ES":
+                provider = es_ES.class.newInstance().get();
+                break;
 
             case "FR_FR":
                 provider = fr_FR.class.newInstance().get();

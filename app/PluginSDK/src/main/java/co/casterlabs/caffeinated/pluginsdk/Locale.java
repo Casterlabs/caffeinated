@@ -9,8 +9,8 @@ import lombok.ToString;
 public enum Locale {
     // @formatter:off
     EN_US    ("en-US",  WritingDirection.LEFT_TO_RIGHT, "🇺🇸", "English (United States)"),
-//    ES       ("es-ES",  WritingDirection.LEFT_TO_RIGHT, "🇪🇸", "Español"),
-//    ES_491   ("es-419", WritingDirection.LEFT_TO_RIGHT, "🌎", "Español Latino"),
+    ES       ("es-ES",  WritingDirection.LEFT_TO_RIGHT, "🇪🇸", "Español"),
+    ES_491   ("es-419", WritingDirection.LEFT_TO_RIGHT, "🌎", "Español Latino"),
     FR_FR    ("fr-FR",  WritingDirection.LEFT_TO_RIGHT, "🇫🇷", "Français"),
     DA_DK    ("da-DK",  WritingDirection.LEFT_TO_RIGHT, "🇩🇰", "Dansk"),
     ID_ID    ("id-ID",  WritingDirection.LEFT_TO_RIGHT, "🇮🇩", "Bahasa Indonesia"),
