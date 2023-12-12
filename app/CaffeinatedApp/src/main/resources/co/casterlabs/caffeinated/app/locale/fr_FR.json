@@ -1,6 +1,6 @@
 {
-    "prefix": "",
-    "useRegexMode": "",
+    "prefix": "co.casterlabs.caffeinated.app",
+    "useRegexMode": false,
     "keys": {
         "love": "Fabriqué avec ♥️ par Casterlabs",
         "copyright": "Droits d'auteur ©️ {year} Casterlabs. Tous droits réservés.",
