@@ -3,9 +3,11 @@ package co.casterlabs.caffeinated.builtin;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.builtin.locale.BuiltInLocale;
 import co.casterlabs.caffeinated.builtin.widgets.CamWidget;
 import co.casterlabs.caffeinated.builtin.widgets.ChatWidget;
 import co.casterlabs.caffeinated.builtin.widgets.EmojiRainWidget;
@@ -31,6 +33,7 @@ import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
+import co.casterlabs.commons.localization.LocaleProvider;
 import co.casterlabs.rakurai.io.IOUtil;
 import lombok.NonNull;
 
@@ -101,6 +104,11 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
     @Override
     public @NonNull String getId() {
         return "co.casterlabs.defaultwidgets";
+    }
+
+    @Override
+    public @Nullable Map<String, LocaleProvider> getLang() {
+        return BuiltInLocale.providers;
     }
 
     @Override

@@ -1,0 +1,7 @@
+{
+    "prefix": "co.casterlabs.defaultwidgets",
+    "useRegexMode": false,
+    "keys": {
+        "widget.chat": "Chat Widget"
+    }
+}
