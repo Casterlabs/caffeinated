@@ -17,6 +17,7 @@ public class ChatWidget extends Widget {
         .withIcon("chat-bubble-left")
         .withCategory(WidgetDetailsCategory.INTERACTION)
         .withFriendlyName("chat")
+        .withLocaleBase("co.casterlabs.defaultwidgets.widget")
         .withShowDemo(true, 3 / 4d)
         .withRequiredFeatures(KoiIntegrationFeatures.CHAT);
 

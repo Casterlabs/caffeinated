@@ -50,7 +50,7 @@ public class WidgetSettingsItem {
 
     /* Checkbox */
 
-    public static WidgetSettingsItem asCheckbox(@NonNull String id, @NonNull String name, boolean defaultValue) {
+    public static WidgetSettingsItem asCheckbox(@NonNull String id, @Nullable String name, boolean defaultValue) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -62,7 +62,7 @@ public class WidgetSettingsItem {
 
     /* Color */
 
-    public static @NonNull WidgetSettingsItem asColor(@NonNull String id, @NonNull String name, @NonNull String defaultValue) {
+    public static @NonNull WidgetSettingsItem asColor(@NonNull String id, @Nullable String name, @NonNull String defaultValue) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -74,7 +74,7 @@ public class WidgetSettingsItem {
 
     /* Number */
 
-    public static WidgetSettingsItem asNumber(@NonNull String id, @NonNull String name, @NonNull Number defaultValue, @NonNull Number step, @NonNull Number min, @NonNull Number max) {
+    public static WidgetSettingsItem asNumber(@NonNull String id, @Nullable String name, @NonNull Number defaultValue, @NonNull Number step, @NonNull Number min, @NonNull Number max) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -92,7 +92,7 @@ public class WidgetSettingsItem {
     /**
      * You may also prefer {@link #asDropdown(String, String, String, Map)}.
      */
-    public static WidgetSettingsItem asDropdown(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String... options) {
+    public static WidgetSettingsItem asDropdown(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String... options) {
         Map<String, String> map = new HashMap<>();
         for (String option : options) {
             map.put(option, option);
@@ -100,7 +100,7 @@ public class WidgetSettingsItem {
         return asDropdown(id, name, defaultValue, map);
     }
 
-    public static WidgetSettingsItem asDropdown(@NonNull String id, @NonNull String name, @NonNull String defaultKey, @NonNull Map<String, String> options) {
+    public static WidgetSettingsItem asDropdown(@NonNull String id, @Nullable String name, @NonNull String defaultKey, @NonNull Map<String, String> options) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -113,7 +113,7 @@ public class WidgetSettingsItem {
 
     /* Text */
 
-    public static WidgetSettingsItem asText(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String placeholder) {
+    public static WidgetSettingsItem asText(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String placeholder) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -126,11 +126,11 @@ public class WidgetSettingsItem {
 
     /* Text Area */
 
-    public static WidgetSettingsItem asTextArea(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String placeholder) {
+    public static WidgetSettingsItem asTextArea(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String placeholder) {
         return asTextArea(id, name, defaultValue, placeholder, 4);
     }
 
-    public static WidgetSettingsItem asTextArea(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String placeholder, int rows) {
+    public static WidgetSettingsItem asTextArea(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String placeholder, int rows) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -144,7 +144,7 @@ public class WidgetSettingsItem {
 
     /* Code */
 
-    public static WidgetSettingsItem asCode(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String language) {
+    public static WidgetSettingsItem asCode(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String language) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -157,7 +157,7 @@ public class WidgetSettingsItem {
 
     /* Password */
 
-    public static WidgetSettingsItem asPassword(@NonNull String id, @NonNull String name, @NonNull String defaultValue, @NonNull String placeholder) {
+    public static WidgetSettingsItem asPassword(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String placeholder) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -170,7 +170,7 @@ public class WidgetSettingsItem {
 
     /* Currency */
 
-    public static WidgetSettingsItem asCurrency(@NonNull String id, @NonNull String name, @NonNull String defaultValue, boolean allowDefault) {
+    public static WidgetSettingsItem asCurrency(@NonNull String id, @Nullable String name, @NonNull String defaultValue, boolean allowDefault) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -183,7 +183,7 @@ public class WidgetSettingsItem {
 
     /* Font */
 
-    public static @NonNull WidgetSettingsItem asFont(String id, String name, String defaultValue) {
+    public static @NonNull WidgetSettingsItem asFont(@NonNull String id, @Nullable String name, @NonNull String defaultValue) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -195,7 +195,7 @@ public class WidgetSettingsItem {
 
     /* Range */
 
-    public static WidgetSettingsItem asRange(@NonNull String id, @NonNull String name, @NonNull Number defaultValue, @NonNull Number step, @NonNull Number min, @NonNull Number max) {
+    public static WidgetSettingsItem asRange(@NonNull String id, @Nullable String name, @NonNull Number defaultValue, @NonNull Number step, @NonNull Number min, @NonNull Number max) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -210,7 +210,7 @@ public class WidgetSettingsItem {
 
     /* File */
 
-    public static @NonNull WidgetSettingsItem asFile(String id, String name, String... allowed) {
+    public static @NonNull WidgetSettingsItem asFile(@NonNull String id, @Nullable String name, @NonNull String... allowed) {
         return new WidgetSettingsItem(
             id,
             name,
@@ -222,7 +222,7 @@ public class WidgetSettingsItem {
 
     /* Platform */
 
-    public static @NonNull WidgetSettingsItem asPlatformDropdown(String id, String name, boolean allowMultiple, KoiIntegrationFeatures... requiredFeatures) {
+    public static @NonNull WidgetSettingsItem asPlatformDropdown(@NonNull String id, @Nullable String name, boolean allowMultiple, @NonNull KoiIntegrationFeatures... requiredFeatures) {
         return new WidgetSettingsItem(
             id,
             name,

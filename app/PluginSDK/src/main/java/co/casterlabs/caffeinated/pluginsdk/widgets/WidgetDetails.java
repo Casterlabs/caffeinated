@@ -21,6 +21,7 @@ public class WidgetDetails {
 
     private @With String icon; // https://heroicons.com
     private @With String friendlyName;
+    private @With String localeBase;
     private @With WidgetDetailsCategory category;
 
     private @With WidgetType type;
@@ -42,6 +43,7 @@ public class WidgetDetails {
         this.namespace = null;
         this.icon = "grid";
         this.friendlyName = null;
+        this.localeBase = null;
         this.category = WidgetDetailsCategory.OTHER;
         this.type = WidgetType.WIDGET;
         this.showDemo = false;
