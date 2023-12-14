@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
@@ -48,6 +49,7 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.rakurai.io.http.MimeTypes;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
@@ -422,10 +424,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @SneakyThrows
     @JavascriptFunction
     public void globalTest(KoiEventType type) {
-        KoiEvent e = TestEvents.createTestEvent(
-            this.koi.getUserStates().get(this.koi.getFirstSignedInPlatform()).getStreamer(),
-            type
-        );
+        // Pick a random account that we're signed-in to.
+        UserUpdateEvent[] userStates = CaffeinatedApp.getInstance().getKoi().getUserStates().values().toArray(new UserUpdateEvent[0]);
+        UserUpdateEvent randomAccount = userStates[ThreadLocalRandom.current().nextInt(userStates.length)];
+
+        KoiEvent e = TestEvents.createTestEvent(type, randomAccount.getStreamer().getPlatform());
         this.koi.broadcastEvent(e);
     }
 

@@ -274,7 +274,7 @@ public class PluginIntegration extends JavascriptObject {
         UserUpdateEvent[] userStates = CaffeinatedApp.getInstance().getKoi().getUserStates().values().toArray(new UserUpdateEvent[0]);
         UserUpdateEvent randomAccount = userStates[ThreadLocalRandom.current().nextInt(userStates.length)];
 
-        KoiEvent event = TestEvents.createTestEvent(randomAccount.getStreamer().clone(), type);
+        KoiEvent event = TestEvents.createTestEvent(type, randomAccount.getStreamer().getPlatform());
         handle.widget.fireKoiEventListeners(event);
     }
 
