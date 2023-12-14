@@ -31,6 +31,7 @@ import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.CaffeinatedWindowState;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
+import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugins;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.Locale;
@@ -211,7 +212,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     @Override
     public String getLocale() {
-        return this.UI.getPreferences().getLanguage();
+        return this.UI.getPreferences().getLanguage().toUpperCase();
     }
 
     public boolean canCloseUI() {
@@ -352,7 +353,20 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         String value = this.appLocale.process(key, null, knownPlaceholders, knownComponents);
 
-        // TODO the providers for plugins.
+        if (value == null) {
+            // See if any of the plugins can localize the string.
+            for (CaffeinatedPlugin plugin : this.pluginIntegration.getLoadedPlugins()) {
+                @Nullable
+                Map<String, LocaleProvider> fullLang = plugin.getLang();
+                if (fullLang == null) continue;
+
+                LocaleProvider lang = fullLang.get(this.getLocale().replace('-', '_').toUpperCase());
+                if (lang == null) continue;
+
+                value = lang.process(key, null, knownPlaceholders, knownComponents);
+                if (value != null) break; // We found one!
+            }
+        }
 
         if (value == null) {
 //            FastLogger.logStatic(LogLevel.WARNING, "Could not find locale key: %s", key);

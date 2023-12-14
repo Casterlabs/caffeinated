@@ -26,6 +26,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.commons.async.Promise;
 import co.casterlabs.commons.functional.tuples.Pair;
+import co.casterlabs.commons.localization.LocaleProvider;
 import co.casterlabs.kaimen.util.reflection.Reflective;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
@@ -147,7 +148,7 @@ public abstract class CaffeinatedPlugin implements Closeable {
 
     public abstract @NonNull String getId();
 
-    public @Nullable JsonObject getLang() {
+    public @Nullable Map<String, LocaleProvider> getLang() {
         return null;
     }
 

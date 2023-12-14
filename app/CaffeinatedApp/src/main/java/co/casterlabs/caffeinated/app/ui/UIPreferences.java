@@ -1,5 +1,6 @@
 package co.casterlabs.caffeinated.app.ui;
 
+import co.casterlabs.caffeinated.pluginsdk.Locale;
 import co.casterlabs.caffeinated.util.MiscUtil;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
@@ -15,7 +16,7 @@ public class UIPreferences {
     private String emojiProvider = Platform.osDistribution == OSDistribution.MACOS ? "system" : "twemoji"; // Use system emojis by default on macOS, Twemoji elsewhere.
     private String icon = "casterlabs";
     private String theme = "co.casterlabs.dark"; // Unused.
-    private String language = "EN_US";
+    private String language = Locale.EN_US.getCode();
     private boolean closeToTray = true;
     private ChatViewerPreferences chatViewerPreferences = new ChatViewerPreferences();
     private ActivityViewerPreferences activityViewerPreferences = new ActivityViewerPreferences();
