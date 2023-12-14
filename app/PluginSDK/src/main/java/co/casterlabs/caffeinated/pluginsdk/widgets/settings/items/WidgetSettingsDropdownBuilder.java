@@ -44,6 +44,14 @@ public class WidgetSettingsDropdownBuilder {
         return this.withOptions(Collections.unmodifiableMap(clone));
     }
 
+    public WidgetSettingsDropdownBuilder withOptionsList(@NonNull String... names) {
+        Map<String, String> clone = new HashMap<>(this.options);
+        for (String name : names) {
+            clone.put(name, name);
+        }
+        return this.withOptions(Collections.unmodifiableMap(clone));
+    }
+
     @SuppressWarnings("deprecation")
     public WidgetSettingsItem build() {
         assert this.id != null : "id cannot be null";
