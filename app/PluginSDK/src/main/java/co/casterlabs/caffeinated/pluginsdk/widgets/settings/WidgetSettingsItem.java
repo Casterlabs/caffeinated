@@ -5,13 +5,24 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCheckboxBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCodeBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsColorBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCurrencyBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsDropdownBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFileBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFontBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsNumberBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsPasswordBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsPlatformDropdownBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsTextAreaBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsTextBuilder;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
-import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -19,7 +30,9 @@ import lombok.SneakyThrows;
 
 @Getter
 @NonNull
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(onConstructor = @__({
+        @Deprecated
+}))
 @JsonClass(exposeAll = true)
 public class WidgetSettingsItem {
     private String id;
@@ -36,62 +49,55 @@ public class WidgetSettingsItem {
         return this.getExtraData().get("defaultValue");
     }
 
-    /* Html */
+    /* ---- Deprecated ---- */
 
-//    public static WidgetSettingsItem asHtml(@NonNull String html) {
-//        return new WidgetSettingsItem(
-//            "",
-//            "",
-//            WidgetSettingsItemType.HTML,
-//            new JsonObject()
-//                .put("html", html)
-//        );
-//    }
-
-    /* Checkbox */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsCheckboxBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asCheckbox(@NonNull String id, @Nullable String name, boolean defaultValue) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.CHECKBOX,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-        );
+        return new WidgetSettingsCheckboxBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .build();
     }
 
     /* Color */
 
+    /**
+     * @deprecated Use {@link WidgetSettingsColorBuilder}.
+     */
+    @Deprecated
     public static @NonNull WidgetSettingsItem asColor(@NonNull String id, @Nullable String name, @NonNull String defaultValue) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.COLOR,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-        );
+        return new WidgetSettingsColorBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .build();
     }
 
-    /* Number */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsNumberBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asNumber(@NonNull String id, @Nullable String name, @NonNull Number defaultValue, @NonNull Number step, @NonNull Number min, @NonNull Number max) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.NUMBER,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-                .put("step", step)
-                .put("min", min)
-                .put("max", max)
-        );
+        return new WidgetSettingsNumberBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .withStep(step)
+            .withMin(min)
+            .withMax(max)
+            .build();
     }
 
     /* Dropdown */
 
     /**
-     * You may also prefer {@link #asDropdown(String, String, String, Map)}.
+     * @deprecated Use {@link WidgetSettingsDropdownBuilder}.
      */
+    @Deprecated
     public static WidgetSettingsItem asDropdown(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String... options) {
         Map<String, String> map = new HashMap<>();
         for (String option : options) {
@@ -100,156 +106,145 @@ public class WidgetSettingsItem {
         return asDropdown(id, name, defaultValue, map);
     }
 
+    /**
+     * @deprecated Use {@link WidgetSettingsDropdownBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asDropdown(@NonNull String id, @Nullable String name, @NonNull String defaultKey, @NonNull Map<String, String> options) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.DROPDOWN,
-            new JsonObject()
-                .put("defaultValue", defaultKey)
-                .put("options", Rson.DEFAULT.toJson(options))
-        );
+        return new WidgetSettingsDropdownBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultKey)
+            .withOptions(options)
+            .build();
     }
 
-    /* Text */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsTextBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asText(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String placeholder) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.TEXT,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-                .put("placeholder", placeholder)
-        );
+        return new WidgetSettingsTextBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .withPlaceholder(placeholder)
+            .build();
     }
 
     /* Text Area */
 
+    /**
+     * @deprecated Use {@link WidgetSettingsTextAreaBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asTextArea(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String placeholder) {
         return asTextArea(id, name, defaultValue, placeholder, 4);
     }
 
+    /**
+     * @deprecated Use {@link WidgetSettingsTextAreaBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asTextArea(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String placeholder, int rows) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.TEXTAREA,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-                .put("placeholder", placeholder)
-                .put("rows", rows)
-        );
+        return new WidgetSettingsTextAreaBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .withPlaceholder(placeholder)
+            .withRows(rows)
+            .build();
     }
 
-    /* Code */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsCodeBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asCode(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String language) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.CODE,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-                .put("language", language)
-        );
+        return new WidgetSettingsCodeBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .withLanguage(language)
+            .build();
     }
 
-    /* Password */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsPasswordBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asPassword(@NonNull String id, @Nullable String name, @NonNull String defaultValue, @NonNull String placeholder) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.PASSWORD,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-                .put("placeholder", placeholder)
-        );
+        return new WidgetSettingsPasswordBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .withPlaceholder(placeholder)
+            .build();
     }
 
-    /* Currency */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsCurrencyBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asCurrency(@NonNull String id, @Nullable String name, @NonNull String defaultValue, boolean allowDefault) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.CURRENCY,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-                .put("allowDefault", allowDefault)
-        );
+        return new WidgetSettingsCurrencyBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .withAddDefaultOption(allowDefault)
+            .build();
     }
 
-    /* Font */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsFontBuilder}.
+     */
+    @Deprecated
     public static @NonNull WidgetSettingsItem asFont(@NonNull String id, @Nullable String name, @NonNull String defaultValue) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.FONT,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-        );
+        return new WidgetSettingsFontBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .build();
     }
 
-    /* Range */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsRangeBuilder}.
+     */
+    @Deprecated
     public static WidgetSettingsItem asRange(@NonNull String id, @Nullable String name, @NonNull Number defaultValue, @NonNull Number step, @NonNull Number min, @NonNull Number max) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.RANGE,
-            new JsonObject()
-                .put("defaultValue", defaultValue)
-                .put("step", step)
-                .put("min", min)
-                .put("max", max)
-        );
+        return new WidgetSettingsRangeBuilder()
+            .withId(id)
+            .withName(name)
+            .withDefaultValue(defaultValue)
+            .withStep(step)
+            .withMin(min)
+            .withMax(max)
+            .build();
     }
 
-    /* File */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsFileBuilder}.
+     */
+    @Deprecated
     public static @NonNull WidgetSettingsItem asFile(@NonNull String id, @Nullable String name, @NonNull String... allowed) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.FILE,
-            new JsonObject()
-                .put("allowed", JsonArray.of((Object[]) allowed))
-        );
+        return new WidgetSettingsFileBuilder()
+            .withId(id)
+            .withName(name)
+            .withAllowedTypes(allowed)
+            .build();
     }
 
-    /* Platform */
-
+    /**
+     * @deprecated Use {@link WidgetSettingsPlatformDropdownBuilder}.
+     */
+    @Deprecated
     public static @NonNull WidgetSettingsItem asPlatformDropdown(@NonNull String id, @Nullable String name, boolean allowMultiple, @NonNull KoiIntegrationFeatures... requiredFeatures) {
-        return new WidgetSettingsItem(
-            id,
-            name,
-            WidgetSettingsItemType.PLATFORM_DROPDOWN,
-            new JsonObject()
-                .put("allowMultiple", allowMultiple)
-                .put("requiredFeatures", Rson.DEFAULT.toJson(requiredFeatures))
-        );
-    }
-
-    public static enum WidgetSettingsItemType {
-        UNKNOWN,
-
-        CHECKBOX,
-        COLOR,
-        NUMBER,
-        DROPDOWN,
-        TEXT,
-        TEXTAREA,
-        CODE,
-        PASSWORD,
-        CURRENCY,
-        FONT,
-        RANGE,
-        FILE,
-        PLATFORM_DROPDOWN,
-
+        return new WidgetSettingsPlatformDropdownBuilder()
+            .withId(id)
+            .withName(name)
+            .withAllowMultiple(allowMultiple)
+            .withRequiredFeatures(requiredFeatures)
+            .build();
     }
 
 }
