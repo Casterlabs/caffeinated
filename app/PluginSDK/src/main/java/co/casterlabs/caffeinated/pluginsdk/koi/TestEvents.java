@@ -1,4 +1,4 @@
-package co.casterlabs.koi.api;
+package co.casterlabs.caffeinated.pluginsdk.koi;
 
 import java.time.Instant;
 import java.util.Collections;
