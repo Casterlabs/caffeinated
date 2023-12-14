@@ -3,33 +3,25 @@ package co.casterlabs.caffeinated.app.auth;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
-import co.casterlabs.caffeinated.app.PreferenceFile;
-import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.stream.KoiStreamLanguage;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class AppAuth extends JavascriptObject {
     private FastLogger logger = new FastLogger();
@@ -53,113 +45,6 @@ public class AppAuth extends JavascriptObject {
     @Getter
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private boolean isAuthorized = false;
-
-    @Getter
-    @JavascriptValue(allowSet = false, watchForMutate = true)
-    private CasterlabsAccount casterlabsAccount;
-
-    private AsyncTask clRefreshTask;
-
-    @JavascriptFunction
-    public byte[] sendAuthorizedApiRequestBytes(String endpoint, @Nullable JsonObject body) throws IOException {
-        Request.Builder request = new Request.Builder();
-
-        request.url("https://api.casterlabs.co" + endpoint);
-
-        if (body != null) {
-            request
-                .post(
-                    RequestBody.create(body.toString().getBytes())
-                )
-                .header("Content-Type", "application/json");
-        }
-
-        String token = CaffeinatedApp.getInstance().getAuthPreferences().get().getToken("casterlabs", "casterlabs");
-        if (token != null) {
-            request.header("Authorization", "Bearer " + token);
-        }
-
-        return WebUtil.sendHttpRequestBytes(request);
-    }
-
-    @JavascriptFunction
-    public JsonObject sendAuthorizedApiRequest(String endpoint, @Nullable JsonObject body) throws IOException, CasterlabsApiException {
-        JsonObject response = Rson.DEFAULT.fromJson(
-            new String(this.sendAuthorizedApiRequestBytes(endpoint, body)),
-            JsonObject.class
-        );
-
-        if (response.containsKey("__note")) {
-            FastLogger.logStatic(LogLevel.INFO, "Api note (%s): %s", endpoint, response.getString("__note"));
-        }
-
-        if (response.get("data").isJsonNull()) {
-            List<String> errors = Rson.DEFAULT.fromJson(response.get("errors"), new TypeToken<List<String>>() {
-            });
-
-            if (errors.contains("UNAUTHORIZED")) {
-                this.logoutCasterlabs();
-            }
-
-            throw new CasterlabsApiException(errors);
-        } else {
-            return response.getObject("data");
-        }
-    }
-
-    @JavascriptFunction
-    public void logoutCasterlabs() {
-        if (this.clRefreshTask != null) {
-            this.clRefreshTask.cancel();
-            this.clRefreshTask = null;
-        }
-
-        this.casterlabsAccount = null;
-
-        PreferenceFile<AuthPreferences> prefs = CaffeinatedApp.getInstance().getAuthPreferences();
-
-        prefs.get().removeToken("casterlabs", "casterlabs");
-        prefs.save();
-    }
-
-    @JavascriptFunction
-    public void loginCasterlabs(final String token) {
-        if (this.casterlabsAccount == null) {
-            PreferenceFile<AuthPreferences> prefs = CaffeinatedApp.getInstance().getAuthPreferences();
-
-            prefs.get().addToken("casterlabs", "casterlabs", token);
-            prefs.save();
-
-            this.clRefreshTask = AsyncTask.create(() -> {
-                while (true) {
-                    try {
-                        JsonObject response = this.sendAuthorizedApiRequest("/v3/account", null);
-
-                        this.casterlabsAccount = Rson.DEFAULT.fromJson(response, CasterlabsAccount.class);
-
-                        // TODO
-                        try {
-                            TimeUnit.SECONDS.sleep(60);
-                        } catch (InterruptedException ignored) {}
-
-                        continue;
-                    } catch (CasterlabsApiException e) {
-                        if (e.getErrors().contains("UNAUTHORIZED")) {
-                            AsyncTask.create(this::logoutCasterlabs);
-                        }
-                        // Fall through
-                    } catch (IOException e) {
-                        // Fall through
-                    }
-
-                    // An error occurred, try again quickly.
-                    try {
-                        TimeUnit.SECONDS.sleep(3);
-                    } catch (InterruptedException ignored) {}
-                }
-            });
-        }
-    }
 
     synchronized void checkStatus() {
         boolean isAlive = false;
@@ -198,11 +83,6 @@ public class AppAuth extends JavascriptObject {
     public void init() {
         for (String tokenId : CaffeinatedApp.getInstance().getAuthPreferences().get().getAllTokenIdsByType("koi")) {
             this.startAuthInstance(tokenId);
-        }
-
-        String casterlabsToken = CaffeinatedApp.getInstance().getAuthPreferences().get().getToken("casterlabs", "casterlabs");
-        if (casterlabsToken != null) {
-            this.loginCasterlabs(casterlabsToken);
         }
     }
 

@@ -23,7 +23,6 @@ import co.casterlabs.caffeinated.app.auth.AuthPreferences;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotScriptEngine;
-import co.casterlabs.caffeinated.app.controldeck.ControlDeckPreferences;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.locale._LocaleLoader;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
@@ -33,7 +32,6 @@ import co.casterlabs.caffeinated.app.ui.CaffeinatedWindowState;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugins;
-import co.casterlabs.caffeinated.pluginsdk.CasterlabsAccount;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.Locale;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
@@ -114,7 +112,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private final AppUI              UI                 = new AppUI();
 
     // Preferences
-    private final PreferenceFile<ControlDeckPreferences>       controlDeckPreferences = new PreferenceFile<>("controldeck", ControlDeckPreferences.class);
     private final PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
     private final PreferenceFile<CaffeinatedWindowState>       windowPreferences = new PreferenceFile<>("window", CaffeinatedWindowState.class);
     private final PreferenceFile<AuthPreferences>              authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
@@ -323,22 +320,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @JavascriptGetter("clientId")
     private String caffeinatedClientId() {
         return KOI_ID;
-    }
-
-    @Override
-    public @Nullable CasterlabsAccount getCasterlabsAccount() {
-        return this.auth.getCasterlabsAccount();
-    }
-
-    @JavascriptGetter("hasCasterlabsPlus")
-    public boolean hasCasterlabsPlus() {
-        CasterlabsAccount account = this.auth.getCasterlabsAccount();
-
-        if (account == null) {
-            return false;
-        }
-
-        return account.hasCasterlabsPlus();
     }
 
     @JavascriptFunction

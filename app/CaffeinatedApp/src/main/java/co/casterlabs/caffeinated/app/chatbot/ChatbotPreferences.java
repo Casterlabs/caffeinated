@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -33,16 +32,6 @@ public class ChatbotPreferences {
     private KoiChatterType chatter = KoiChatterType.SYSTEM;
 
     private Map<String, Object> store = new HashMap<>();
-
-    public KoiChatterType getRealChatter() {
-        boolean hasCasterlabsPlus = CaffeinatedApp.getInstance().hasCasterlabsPlus();
-
-        if (hasCasterlabsPlus) {
-            return this.chatter;
-        } else {
-            return KoiChatterType.SYSTEM;
-        }
-    }
 
     @Data
     @EqualsAndHashCode

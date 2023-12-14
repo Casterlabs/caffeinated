@@ -108,7 +108,7 @@ public class ChatbotScriptEngine {
                         "const ChatBot = {"
                             + "realChatter: %s"
                             + "};",
-                        new JsonString(CaffeinatedApp.getInstance().getChatbotPreferences().get().getRealChatter().name())
+                        new JsonString(CaffeinatedApp.getInstance().getChatbotPreferences().get().getChatter().name())
                     ),
                     "const fetch = {"
                         + "asText(url) {return __internal_handle.fetch_asText(url);},"

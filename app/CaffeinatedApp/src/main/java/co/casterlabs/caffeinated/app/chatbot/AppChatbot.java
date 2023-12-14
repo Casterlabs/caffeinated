@@ -85,7 +85,7 @@ public class AppChatbot extends JavascriptObject {
                 CaffeinatedApp.getInstance().getKoi().sendChat(
                     platform,
                     text,
-                    this.preferences.get().getRealChatter(),
+                    this.preferences.get().getChatter(),
                     null,
                     false
                 );

@@ -34,8 +34,6 @@ public interface Caffeinated {
 
     public String getLocale();
 
-    public @Nullable CasterlabsAccount getCasterlabsAccount();
-
     /**
      * The following placeholders apply: <br />
      * - <b>{placeholder}</b>: Plain text placeholder. <br />

@@ -171,13 +171,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
                 .getToken("koiPuppet", this.tokenId);
 
             if (puppetToken != null) {
-                boolean hasCasterlabsPlus = CaffeinatedApp.getInstance().hasCasterlabsPlus();
-
-                if (hasCasterlabsPlus) {
-                    this.koi.loginPuppet(puppetToken);
-                } else {
-                    this.logger.warn("User does not have Casterlabs plus, not logging in puppet.");
-                }
+                this.koi.loginPuppet(puppetToken);
             }
         }
 
