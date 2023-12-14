@@ -8,6 +8,10 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCheckboxBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsColorBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsDropdownBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsNumberBuilder;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import lombok.NonNull;
 
@@ -40,56 +44,107 @@ public class ChatWidget extends Widget {
 
         {
             WidgetSettingsSection messageStyle = new WidgetSettingsSection("message_style", "Message Style")
-                .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE))
-                .addItem(WidgetSettingsItem.asDropdown("badges", "Badges", "Before Username", "Hidden", "Before Username", "After Username"))
-                .addItem(WidgetSettingsItem.asCheckbox("show_platform_icon", "Show User's Platform", false))
                 .addItem(
-                    WidgetSettingsItem.asDropdown(
-                        "username_color", "Username color",
-                        "User's Preference",
-                        "User's Preference", "Static Color", "Match Platform's Theme"
-                    )
+                    new WidgetSettingsNumberBuilder()
+                        .withId("margin")
+                        .withName("Margin (px)")
+                        .withDefaultValue(0)
+                        .withMin(0)
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsDropdownBuilder()
+                        .withId("badges")
+                        .withName("User Badges")
+                        .withDefaultValue("Before Username")
+                        .withOptionsList("Hidden", "Before Username", "After Username")
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsCheckboxBuilder()
+                        .withId("show_platform_icon")
+                        .withName("Show User Platform Icon")
+                        .withDefaultValue(false)
+                        .build()
                 );
-//                .addItem(WidgetSettingsItem.asCheckbox("show_avatars", "Show user avatars", false));
 
+            messageStyle.addItem(
+                new WidgetSettingsDropdownBuilder()
+                    .withId("username_color")
+                    .withName("Display Name Color")
+                    .withDefaultValue("User's Preference")
+                    .withOptionsList("User's Preference", "Static Color", "Match Platform's Theme")
+                    .build()
+            );
             if ("Static Color".equals(this.settings().getString("message_style.username_color"))) {
-                messageStyle.addItem(WidgetSettingsItem.asColor("username_color.static", "Static Username Color", "#f04f88"));
+                messageStyle.addItem(
+                    new WidgetSettingsColorBuilder()
+                        .withId("username_color.static")
+                        .withName("Static Username Color")
+                        .withDefaultValue("#f04f88")
+                        .build()
+                );
             }
 
-            messageStyle.addItem(WidgetSettingsItem.asCheckbox("disappearing", "Make messages disappear", false));
+            messageStyle
+                .addItem(
+                    new WidgetSettingsCheckboxBuilder()
+                        .withId("disappearing")
+                        .withName("Make Messages Disappear?")
+                        .withDefaultValue(false)
+                        .build()
+                );
             if (this.settings().getBoolean("message_style.disappearing", false)) {
-                messageStyle.addItem(WidgetSettingsItem.asNumber("disappear_after", "Disappear After (Seconds)", 30, 1, 10, 360));
+                messageStyle.addItem(
+                    new WidgetSettingsNumberBuilder()
+                        .withId("disappear_after")
+                        .withName("Disappear After (seconds)")
+                        .withDefaultValue(30)
+                        .withMin(10)
+                        .withMin(360)
+                        .build()
+                );
             }
 
             messageStyle.addItem(
-                WidgetSettingsItem.asDropdown(
-                    "message_style", "Message Style", "Text (Bottom-up)",
-                    "Text (Top-down)", "Text (Bottom-up)", "Text (Sideways)"
-                )
+                new WidgetSettingsDropdownBuilder()
+                    .withId("message_style")
+                    .withName("Message Style")
+                    .withDefaultValue("Text (Bottom-up)")
+                    .withOptionsList("Text (Top-down)", "Text (Bottom-up)", "Text (Sideways)")
+                    .build()
             );
-
             if ("Text (Bottom-up)".equals(this.settings().getString("message_style.message_style")) ||
                 "Text (Top-down)".equals(this.settings().getString("message_style.message_style"))) {
-                messageStyle.addItem(WidgetSettingsItem.asDropdown("messages_animation", "Message Animation", "None", "None", "Slide-in"));
+                messageStyle.addItem(
+                    new WidgetSettingsDropdownBuilder()
+                        .withId("messages_animation")
+                        .withName("Message Animation")
+                        .withDefaultValue("None")
+                        .withOptionsList("None", "Slide-in")
+                        .build()
+                );
 
                 if ("Slide-in".equals(this.settings().getString("message_style.messages_animation"))) {
                     messageStyle.addItem(
-                        WidgetSettingsItem.asDropdown(
-                            "slide_direction", "Slide direction",
-                            "From the left",
-                            "From the left", "From the right"
-                        )
+                        new WidgetSettingsDropdownBuilder()
+                            .withId("slide_direction")
+                            .withName("Slide-in Direction")
+                            .withDefaultValue("From the left")
+                            .withOptionsList("From the left", "From the right")
+                            .build()
                     );
                 }
+            } else if ("Text (Sideways)".equals(this.settings().getString("message_style.message_style"))) {
+                messageStyle.addItem(
+                    new WidgetSettingsDropdownBuilder()
+                        .withId("messages_animation")
+                        .withName("Message Animation")
+                        .withDefaultValue("None")
+                        .withOptionsList("None", "Slide-in")
+                        .build()
+                );
             }
-
-            if ("Text (Sideways)".equals(this.settings().getString("message_style.message_style"))) {
-                messageStyle.addItem(WidgetSettingsItem.asDropdown("messages_animation", "Message Animation", "None", "None", "Slide-in"));
-            }
-
-//            if ("Card".equals(this.settings().getString("message_style.message_style"))) {
-//                messageStyle.addItem(WidgetSettingsItem.asColor("message_style.message_style.card_color", "Card Color", "#6e6466"));
-//            }
 
             layout.addSection(messageStyle);
         }
