@@ -2,6 +2,10 @@
     "prefix": "co.casterlabs.defaultwidgets",
     "useRegexMode": false,
     "keys": {
-        "widget.chat": "Chat Widget"
+        "widget.chat": "Chat Widget",
+        "widget.chat.settings.message_style": "Message Style",
+        "widget.chat.settings.message_style.margin": "Margin (px)",
+        "widget.chat.settings.message_style.badges": "Badges",
+        "widget.chat.settings.message_style.show_platform_icon": "Show the Chatter's Platform"
     }
 }
