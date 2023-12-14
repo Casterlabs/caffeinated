@@ -1,6 +1,6 @@
 export const SPECIAL_SIGNIN = {};
 
-export const PORTAL_SIGNIN = ["KICK"];
+export const PORTAL_SIGNIN = ["KICK", "NOICE", "LIVESPACE"];
 
 // See also: appShim.mjs
 export async function openAuthPortal(platform, shouldGoBack) {
@@ -14,24 +14,19 @@ export async function openAuthPortal(platform, shouldGoBack) {
 }
 
 export const ALL_STREAMING_SERVICES = [
-	// '',
-	// 'CAFFEINE',
 	'TWITCH',
 	'TROVO',
-	// 'GLIMESH',
-	// 'BRIME',
 	'YOUTUBE',
 	'DLIVE',
-	// 'THETA',
 	'KICK',
-	'TIKTOK'
+	'TIKTOK',
+	// 'NOICE',
+	// 'LIVESPACE',
+	// 'X',
+	// 'FACEBOOK_GAMING'
 ];
 
 export const STREAMING_SERVICES = {
-	// CAFFEINE: {
-	// 	name: 'Caffeine',
-	// 	color: '#0000ff'
-	// },
 	TWITCH: {
 		name: 'Twitch',
 		color: '#8838ff'
@@ -40,14 +35,6 @@ export const STREAMING_SERVICES = {
 		name: 'Trovo',
 		color: '#149b53'
 	},
-	// GLIMESH: {
-	// 	name: 'Glimesh',
-	// 	color: '#33528b'
-	// },
-	// BRIME: {
-	// 	name: 'Brime',
-	// 	color: 'linear-gradient(45deg, #8439af 15%, #fc3537 65%)'
-	// },
 	YOUTUBE: {
 		name: 'YouTube',
 		color: '#ff0000'
@@ -56,10 +43,6 @@ export const STREAMING_SERVICES = {
 		name: 'DLive',
 		color: '#ccc121'
 	},
-	// THETA: {
-	// 	name: 'Theta',
-	// 	color: '#161a24'
-	// },
 	KICK: {
 		name: 'Kick (BETA)',
 		color: '#53fc18'
@@ -67,18 +50,34 @@ export const STREAMING_SERVICES = {
 	TIKTOK: {
 		name: 'TikTok (BETA)',
 		color: '#e5004e'
-	}
+	},
+	// NOICE: {
+	// 	name: 'Noice',
+	// 	color: 'linear-gradient(45deg, #5231f9 6%, #6c2cfc 32%, #bb12fc 68%, #cf0bf9 77%, #ef00f5 94%)'
+	// },
+	// LIVESPACE: {
+	// 	name: 'LiveSpace',
+	// 	color: '#ff0070'
+	// },
+	// X: {
+	// 	name: '𝕏',
+	// 	color: '#000000'
+	// },
+	// FACEBOOK_GAMING: {
+	// 	name: 'Facebook Gaming',
+	// 	color: '#0866FF'
+	// },
 };
 
 export const STREAMING_SERVICE_NAMES = {
-	// CAFFEINE: 'Caffeine',
 	TWITCH: 'Twitch',
 	TROVO: 'Trovo',
-	// GLIMESH: 'Glimesh',
-	// BRIME: 'Brime',
 	YOUTUBE: 'YouTube',
 	DLIVE: 'DLive',
-	// THETA: 'Theta',
 	KICK: 'Kick',
-	TIKTOK: 'TikTok'
+	TIKTOK: 'TikTok',
+	// NOICE: 'Noice',
+	// LIVESPACE: 'LiveSpace',
+	// X: '𝕏',
+	// FACEBOOK_GAMING: 'Facebook Gaming'
 };

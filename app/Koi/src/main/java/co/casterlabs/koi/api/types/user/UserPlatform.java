@@ -13,14 +13,17 @@ public enum UserPlatform {
     TIKTOK("TikTok"),
 
     // Coming up.
-    YOUNOW("YouNow"),
+    NOICE("Noice"),
     LIVESPACE("LiveSpace"),
+    X("𝕏"),
+    FACEBOOK_GAMING("Facebook Gaming"),
 
     // Graveyard. R.I.P.
     CAFFEINE("Caffeine"),
     GLIMESH("Glimesh"),
     BRIME("Brime"),
     THETA("Theta"),
+    YOUNOW("YouNow"),
 
     // Other.
     CASTERLABS_SYSTEM("System"),
