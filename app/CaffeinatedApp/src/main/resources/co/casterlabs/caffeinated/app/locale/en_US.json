@@ -165,6 +165,7 @@
         "docks.chat.viewer.send_message": "Send",
         "docks.chat.viewer.all_platforms": "All",
         "docks.chat.viewer.send_message.placeholder": "Send a message",
+        "docks.chat.viewer.user_history.title": "Showing message history for: %user%",
         "docks.chat.viewer.preferences.title": "Chat Preferences",
         "docks.chat.viewer.preferences.show_chat_timestamps": "Show timestamps",
         "docks.chat.viewer.preferences.show_profile_pictures": "Show avatars",

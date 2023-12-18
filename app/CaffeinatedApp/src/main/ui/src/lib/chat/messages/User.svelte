@@ -30,6 +30,6 @@
 			class="user-platform w-[1em] h-[1em] mr-0.5 translate-y-0.5"
 			data-icon="service/{user.platform.toLowerCase()}"
 			style:color={streamingServices[user.platform]?.color}
-		/><a href={user.link} target="_blank">{@html displayString}</a></b
+		/><a href="#" data-user-modal-for={user.UPID}>{@html displayString}</a></b
 	>
 {/if}

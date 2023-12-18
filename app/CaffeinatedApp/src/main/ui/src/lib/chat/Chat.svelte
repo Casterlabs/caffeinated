@@ -10,6 +10,7 @@
 	import ClearChatMessage from './messages/ClearChatMessage.svelte';
 	import FollowMessage from './messages/FollowMessage.svelte';
 	import RaidMessage from './messages/RaidMessage.svelte';
+	import User from './messages/User.svelte';
 
 	import InputBox from './InputBox.svelte';
 	import Modal from '$lib/ui/Modal.svelte';
@@ -20,10 +21,9 @@
 
 	import createConsole from '$lib/console-helper.mjs';
 	import { fade } from 'svelte/transition';
-	import { SUPPORTED_TTS_VOICES } from '$lib/app.mjs';
+	import { SUPPORTED_TTS_VOICES, openLink } from '$lib/app.mjs';
 	import { t } from '$lib/app.mjs';
-	import { onDestroy } from 'svelte';
-	import { text } from '@sveltejs/kit';
+	import { onDestroy, tick } from 'svelte';
 
 	const MAX_EVENTS_DISPLAY = 400;
 
@@ -60,6 +60,8 @@
 	/** @type {HTMLAudioElement} */
 	let ttsAudio = null;
 	let ttsQueue = [];
+
+	let showUserModalFor = null;
 
 	function checkTTSQueue() {
 		if (ttsAudio) return;
@@ -241,6 +243,63 @@
 		inputBoxPreferences = config.inputBoxPreferences;
 	}
 
+	function mountEvent(event, listElement) {
+		const clazz = EVENT_CLASSES[event.event_type];
+		if (!clazz) return { element: null, comp: null }; // Avoid triggering the code below.
+
+		const messageTimestamp = document.createElement('span');
+		messageTimestamp.classList = 'message-timestamp';
+		messageTimestamp.innerText = new Date(event.timestamp || Date.now()).toLocaleTimeString();
+
+		const messageContainer = document.createElement('span');
+		messageContainer.classList = 'message-content';
+		const comp = new clazz({
+			target: messageContainer,
+			props: {
+				event,
+				onContextMenuAction,
+				supportedFeatures
+			}
+		});
+
+		const li = document.createElement('li');
+		li.classList = 'message-container';
+		li.appendChild(messageTimestamp);
+		li.appendChild(messageContainer);
+
+		if (
+			event.attributes?.includes('HIGHLIGHTED') ||
+			event.donations?.length > 0 ||
+			['SUBSCRIPTION', 'RAID'].includes(event.event_type)
+		) {
+			li.classList.add('highlighted');
+		}
+
+		switch (event.event_type) {
+			case 'VIEWER_JOIN':
+			case 'VIEWER_LEAVE':
+				li.classList.add('viewer-joinleave');
+				break;
+
+			case 'RICH_MESSAGE': {
+				if (event.donations.length != 0) {
+					li.classList.add('activity-event');
+				}
+				break;
+			}
+
+			case 'CHANNEL_POINTS':
+			case 'SUBSCRIPTION':
+			case 'FOLLOW':
+			case 'RAID':
+				li.classList.add('activity-event');
+				break;
+		}
+
+		listElement.appendChild(li);
+		return { element: li, comp };
+	}
+
 	export async function processEvent(event) {
 		console.log('Processing event:', event);
 
@@ -291,73 +350,29 @@
 			}
 
 			default: {
-				const clazz = EVENT_CLASSES[event.event_type];
-				if (!clazz) return; // Avoid triggering the code below.
-
 				event.reply_target_data = chatElements[event.reply_target || ''] || null;
 
-				const messageTimestamp = document.createElement('span');
-				messageTimestamp.classList = 'message-timestamp';
-				messageTimestamp.innerText = new Date(event.timestamp || Date.now()).toLocaleTimeString();
-
-				const messageContainer = document.createElement('span');
-				messageContainer.classList = 'message-content';
-				const comp = new clazz({
-					target: messageContainer,
-					props: {
-						event,
-						onContextMenuAction,
-						supportedFeatures
-					}
-				});
-
-				const li = document.createElement('li');
-				li.classList = 'message-container';
-				li.appendChild(messageTimestamp);
-				li.appendChild(messageContainer);
-
-				if (
-					event.attributes?.includes('HIGHLIGHTED') ||
-					event.donations?.length > 0 ||
-					['SUBSCRIPTION', 'RAID'].includes(event.event_type)
-				) {
-					li.classList.add('highlighted');
-				}
-
-				switch (event.event_type) {
-					case 'VIEWER_JOIN':
-					case 'VIEWER_LEAVE':
-						li.classList.add('viewer-joinleave');
-						break;
-
-					case 'RICH_MESSAGE': {
-						if (event.donations.length != 0) {
-							li.classList.add('activity-event');
-						}
-						break;
-					}
-
-					case 'CHANNEL_POINTS':
-					case 'SUBSCRIPTION':
-					case 'FOLLOW':
-					case 'RAID':
-						li.classList.add('activity-event');
-						break;
-				}
+				const { element, comp } = mountEvent(event, chatBox);
+				if (!element || !comp) return; // Avoid triggering the code below.
 
 				if (event.meta_id) {
 					// This event is editable in some way, shape, or form.
 					// (so, we must keep track of it)
-					chatElements[event.meta_id] = { element: li, component: comp, event: event };
+					chatElements[event.meta_id] = { element: element, component: comp, event: event };
 				}
 
-				chatHistory.push({ element: li, component: comp, event: event });
-				chatBox.appendChild(li);
+				chatHistory.push({ element: element, component: comp, event: event });
 
 				if (chatHistory.length > MAX_EVENTS_DISPLAY) {
 					const { element, event } = chatHistory.shift();
 					element.remove();
 					delete chatElements[event.meta_id];
+				}
+
+				const user =
+					event.sender || event.follower || event.subscriber || event.host || event.viewer;
+				if (user.UPID == showUserModalFor) {
+					mountEvent(event, document.querySelector('#user-modal-list-element'));
 				}
 
 				break;
@@ -664,8 +679,71 @@
 	class:color-by-platform={colorBy == 'PLATFORM'}
 	class:color-by-user={colorBy == 'USER'}
 >
+	{#if showUserModalFor}
+		<Modal on:close={() => (showUserModalFor = null)}>
+			{@const events = chatHistory
+				.filter(({ event }) => {
+					const user =
+						event.sender || event.follower || event.subscriber || event.host || event.viewer;
+					return user?.UPID == showUserModalFor;
+				})
+				.map(({ event }) => event)}
+			{@const userProfile = events.map(
+				(event) => event.sender || event.follower || event.subscriber || event.host || event.viewer
+			)[0]}
+
+			<div class="text-base-12 w-screen max-w-md">
+				<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<h1
+					class="text-lg mb-2 -mt-4"
+					on:click={(e) => {
+						if (e.target?.getAttribute('data-user-modal-for')) {
+							openLink(userProfile.link);
+						}
+					}}
+				>
+					<LocalizedText
+						key="co.casterlabs.caffeinated.app.docks.chat.viewer.user_history.title"
+						slotMapping={['user']}
+					>
+						<User slot="0" user={userProfile} />
+					</LocalizedText>
+				</h1>
+
+				<ul
+					class="overflow-y-auto h-96"
+					style="font-size: {textSize * 100}%;"
+					id="user-modal-list-element"
+				></ul>
+				{(() => {
+					tick().then(() => {
+						for (const event of events) {
+							mountEvent(event, document.querySelector('#user-modal-list-element'));
+						}
+						document.querySelector('#user-modal-list-element').scrollTop = document.querySelector(
+							'#user-modal-list-element'
+						).scrollHeight;
+					});
+					return '';
+				})()}
+			</div>
+		</Modal>
+	{/if}
+
 	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
-		<ul style="font-size: {textSize * 100}%;" bind:this={chatBox} />
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+		<ul
+			style="font-size: {textSize * 100}%;"
+			bind:this={chatBox}
+			on:click={(e) => {
+				if (e.target?.getAttribute('data-user-modal-for')) {
+					e.preventDefault();
+					showUserModalFor = e.target?.getAttribute('data-user-modal-for');
+				}
+			}}
+		/>
 	</div>
 
 	{#if ttsAudio}
