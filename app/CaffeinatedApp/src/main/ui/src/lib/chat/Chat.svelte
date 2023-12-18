@@ -669,6 +669,66 @@
 	</Modal>
 {/if}
 
+{#if showUserModalFor}
+	<Modal on:close={() => (showUserModalFor = null)}>
+		{@const events = chatHistory
+			.filter(({ event }) => {
+				const user =
+					event.sender || event.follower || event.subscriber || event.host || event.viewer;
+				return user?.UPID == showUserModalFor;
+			})
+			.map(({ event }) => event)}
+		{@const userProfile = events.map(
+			(event) => event.sender || event.follower || event.subscriber || event.host || event.viewer
+		)[0]}
+
+		<div
+			class="text-base-12 w-screen max-w-md"
+			class:show-timestamps={true}
+			class:show-badges={true}
+			class:show-viewers={true}
+			class:show-platform={true}
+			class:color-by-platform={colorBy == 'PLATFORM'}
+			class:color-by-user={colorBy == 'USER'}
+		>
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<h1
+				class="text-lg mb-2 -mt-4"
+				on:click={(e) => {
+					if (e.target?.getAttribute('data-user-modal-for')) {
+						openLink(userProfile.link);
+					}
+				}}
+			>
+				<LocalizedText
+					key="co.casterlabs.caffeinated.app.docks.chat.viewer.user_history.title"
+					slotMapping={['user']}
+				>
+					<User slot="0" user={userProfile} />
+				</LocalizedText>
+			</h1>
+
+			<ul
+				class="overflow-y-auto h-96"
+				style="font-size: {textSize * 100}%;"
+				id="user-modal-list-element"
+			></ul>
+			{(() => {
+				tick().then(() => {
+					for (const event of events) {
+						mountEvent(event, document.querySelector('#user-modal-list-element'));
+					}
+					document.querySelector('#user-modal-list-element').scrollTop = document.querySelector(
+						'#user-modal-list-element'
+					).scrollHeight;
+				});
+				return '';
+			})()}
+		</div>
+	</Modal>
+{/if}
+
 <div
 	class="h-full px-2 pt-2 flex flex-col relative"
 	class:show-timestamps={showChatTimestamps}
@@ -679,58 +739,6 @@
 	class:color-by-platform={colorBy == 'PLATFORM'}
 	class:color-by-user={colorBy == 'USER'}
 >
-	{#if showUserModalFor}
-		<Modal on:close={() => (showUserModalFor = null)}>
-			{@const events = chatHistory
-				.filter(({ event }) => {
-					const user =
-						event.sender || event.follower || event.subscriber || event.host || event.viewer;
-					return user?.UPID == showUserModalFor;
-				})
-				.map(({ event }) => event)}
-			{@const userProfile = events.map(
-				(event) => event.sender || event.follower || event.subscriber || event.host || event.viewer
-			)[0]}
-
-			<div class="text-base-12 w-screen max-w-md">
-				<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<h1
-					class="text-lg mb-2 -mt-4"
-					on:click={(e) => {
-						if (e.target?.getAttribute('data-user-modal-for')) {
-							openLink(userProfile.link);
-						}
-					}}
-				>
-					<LocalizedText
-						key="co.casterlabs.caffeinated.app.docks.chat.viewer.user_history.title"
-						slotMapping={['user']}
-					>
-						<User slot="0" user={userProfile} />
-					</LocalizedText>
-				</h1>
-
-				<ul
-					class="overflow-y-auto h-96"
-					style="font-size: {textSize * 100}%;"
-					id="user-modal-list-element"
-				></ul>
-				{(() => {
-					tick().then(() => {
-						for (const event of events) {
-							mountEvent(event, document.querySelector('#user-modal-list-element'));
-						}
-						document.querySelector('#user-modal-list-element').scrollTop = document.querySelector(
-							'#user-modal-list-element'
-						).scrollHeight;
-					});
-					return '';
-				})()}
-			</div>
-		</Modal>
-	{/if}
-
 	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
