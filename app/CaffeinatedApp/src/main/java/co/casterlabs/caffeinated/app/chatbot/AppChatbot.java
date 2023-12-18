@@ -17,6 +17,7 @@ import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.RaidEvent;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
+import co.casterlabs.koi.api.types.events.StreamStatusEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -81,9 +82,10 @@ public class AppChatbot extends JavascriptObject {
             String text = timerTexts.get(this.timerIndex);
             if (text.isEmpty()) continue;
 
-            for (UserPlatform platform : CaffeinatedApp.getInstance().getKoi().getSignedInPlatforms()) {
+            for (StreamStatusEvent streamStatus : CaffeinatedApp.getInstance().getKoi().getStreamStates().values()) {
+                if (!streamStatus.isLive()) return;
                 CaffeinatedApp.getInstance().getKoi().sendChat(
-                    platform,
+                    streamStatus.getStreamer().getPlatform(),
                     text,
                     this.preferences.get().getChatter(),
                     null,
