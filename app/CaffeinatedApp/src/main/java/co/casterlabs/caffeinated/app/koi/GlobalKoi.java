@@ -14,8 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.app.auth.AuthInstance;
-import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
-import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -209,46 +207,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             CaffeinatedApp.getInstance().getChatbot().processEventForShout(e);
 
             if (e.getType() == KoiEventType.RICH_MESSAGE) {
-                ChatbotPreferences prefs = CaffeinatedApp.getInstance().getChatbotPreferences().get();
                 RichMessageEvent richMessage = (RichMessageEvent) e;
-
-                boolean commandResultedInAction = CaffeinatedApp.getInstance().getChatbot().processEventForCommand(richMessage);
-
-                if (prefs.isHideCommandsFromChat()) {
-                    // Hide !commands and "commands".
-                    if (commandResultedInAction) {
-                        return;
-                    }
-
-                    // Hide all command response messages.
-                    {
-                        List<Command> commands = prefs.getCommands();
-
-                        for (ChatbotPreferences.Command command : commands) {
-                            if (command.getResponse().equals(richMessage.getRaw())) {
-                                return;
-                            }
-                        }
-                    }
-                }
-
-                // We want to hide all messages from listed chatbots.
-                {
-                    List<String> chatbots = prefs.getChatbots();
-
-                    for (String chatbot : chatbots) {
-                        if (chatbot.equalsIgnoreCase(richMessage.getSender().getDisplayname())) {
-                            return;
-                        }
-                    }
-                }
-
-                if (prefs.isHideTimersFromChat()) {
-                    // Hide all timer messages.
-                    if (prefs.getTimers().contains(richMessage.getRaw())) {
-                        return;
-                    }
-                }
+                CaffeinatedApp.getInstance().getChatbot().processEventForCommand(richMessage);
             }
         } catch (Throwable t) {
             // Chat bot error.
@@ -310,6 +270,13 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                 break;
         }
 
+        FastLogger.logStatic(
+            LogLevel.DEBUG,
+            "Processed %s event for %s.",
+            e.getType().name().toLowerCase().replace('_', ' '),
+            e.getStreamer().getUPID()
+        );
+
         // Emit the event to Caffeinated.
         AsyncTask.create(() -> {
             JsonElement asJson = Rson.DEFAULT.toJson(e);
@@ -323,6 +290,10 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             }
         });
 
+        if (CaffeinatedApp.getInstance().getChatbot().shouldHideFromWidgets(e)) {
+            return;
+        }
+
         // Notify the plugins
         AsyncTask.create(() -> {
             for (CaffeinatedPlugin pl : CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPlugins()) {
@@ -330,7 +301,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             }
         });
 
-        // Send update to the local api.
+        // Notify the local api.
         AsyncTask.create(() -> {
             try {
                 // Send the events to the widget instances.
@@ -341,13 +312,6 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                 ex.printStackTrace();
             }
         });
-
-        FastLogger.logStatic(
-            LogLevel.DEBUG,
-            "Processed %s event for %s.",
-            e.getType().name().toLowerCase().replace('_', ' '),
-            e.getStreamer().getUPID()
-        );
     }
 
     @JavascriptFunction

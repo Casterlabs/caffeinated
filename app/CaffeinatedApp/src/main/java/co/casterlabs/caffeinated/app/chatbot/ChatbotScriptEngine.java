@@ -154,6 +154,11 @@ public class ChatbotScriptEngine {
         public void koi_sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
             UserPlatform enumP = platform == null ? null : UserPlatform.valueOf(platform);
             CaffeinatedApp.getInstance().getKoi().sendChat(enumP, message, KoiChatterType.valueOf(chatter), replyTarget, false);
+            CaffeinatedApp.getInstance().getChatbot().getRecentReplies().add(message);
+
+            while (CaffeinatedApp.getInstance().getChatbot().getRecentReplies().size() > 50) {
+                CaffeinatedApp.getInstance().getChatbot().getRecentReplies().removeFirst();
+            }
         }
 
         public void koi_upvoteChat(@NonNull String platform, @NonNull String messageId) {

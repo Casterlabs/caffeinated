@@ -26,8 +26,7 @@ public class ChatbotPreferences {
     private int timerIntervalSeconds = 300;
 
     private List<String> chatbots = new ArrayList<>();
-    private boolean hideCommandsFromChat = false;
-    private boolean hideTimersFromChat = false;
+    private boolean hideFromChat = false;
 
     private KoiChatterType chatter = KoiChatterType.SYSTEM;
 

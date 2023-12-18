@@ -1,6 +1,8 @@
 package co.casterlabs.caffeinated.app.chatbot;
 
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
@@ -8,7 +10,6 @@ import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Action;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Shout;
-import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.TriggerType;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
@@ -22,6 +23,7 @@ import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.JsonStringUtil;
+import lombok.Getter;
 import lombok.NonNull;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
@@ -44,6 +46,8 @@ public class AppChatbot extends JavascriptObject {
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private long nextMessageAt = -1;
+
+    private @Getter Deque<String> recentReplies = new LinkedList<>();
 
     @JavascriptSetter("preferences")
     public void setPreferences(@NonNull ChatbotPreferences prefs) {
@@ -102,6 +106,63 @@ public class AppChatbot extends JavascriptObject {
 
     public boolean isChatBot(User sender) {
         return sender.getUsername().equalsIgnoreCase("Casterlabs"); // TODO
+    }
+
+    public boolean shouldHideFromWidgets(KoiEvent e) {
+        switch (e.getType()) {
+            case RICH_MESSAGE: {
+                RichMessageEvent richMessage = (RichMessageEvent) e;
+                for (String chatbotToHide : this.preferences.get().getChatbots()) {
+                    if (richMessage.getSender().getUsername().equalsIgnoreCase(chatbotToHide) ||
+                        richMessage.getSender().getDisplayname().equalsIgnoreCase(chatbotToHide)) {
+                        return true;
+                    }
+                }
+
+                // Check the replies for this specific message.
+                if (this.preferences.get().isHideFromChat()) {
+                    if (this.recentReplies.remove(richMessage.getRaw())) {
+                        return true;
+                    }
+                }
+
+                // Check for !commands or "contains".
+                if (this.preferences.get().isHideFromChat()) {
+                    for (Command command : this.preferences.get().getCommands()) {
+                        // Not filled out, ignore.
+                        if (command.getTrigger().isBlank() || command.getResponse().isBlank()) {
+                            continue;
+                        }
+
+                        // Null means any, so we check if the event's platform matches the target.
+                        UserPlatform platform = richMessage.getSender().getPlatform();
+                        if ((command.getPlatform() != null) && (command.getPlatform() != platform)) {
+                            continue;
+                        }
+
+                        switch (command.getTriggerType()) {
+                            case COMMAND:
+                                if (richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
+                                    return true;
+                                }
+
+                            case CONTAINS:
+                                if (richMessage.getRaw().contains(command.getTrigger())) {
+                                    return true;
+                                }
+
+                            case ALWAYS:
+                                continue;
+                        }
+                    }
+                }
+            }
+
+            default:
+                break;
+        }
+
+        return false;
     }
 
     // Accessed from Koi.
@@ -188,9 +249,7 @@ public class AppChatbot extends JavascriptObject {
      * @return true if the message should get hidden (assuming the user has the
      *         relevant option enabled)
      */
-    public boolean processEventForCommand(RichMessageEvent richMessage) {
-        boolean hideable = false;
-
+    public void processEventForCommand(RichMessageEvent richMessage) {
         for (Command command : this.preferences.get().getCommands()) {
             // Not filled out, ignore.
             if (command.getTrigger().isBlank() || command.getResponse().isBlank()) {
@@ -199,58 +258,49 @@ public class AppChatbot extends JavascriptObject {
 
             // Null means any, so we check if the event's platform matches the target.
             UserPlatform platform = richMessage.getSender().getPlatform();
-            if ((command.getPlatform() == null) || (command.getPlatform() == platform)) {
-                boolean actUpon = false;
+            if ((command.getPlatform() != null) && (command.getPlatform() != platform)) {
+                continue;
+            }
 
-                switch (command.getTriggerType()) {
-                    case COMMAND:
-                        if (richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
-                            actUpon = true;
-                        }
-                        break;
-
-                    case CONTAINS:
-                        if (richMessage.getRaw().contains(command.getTrigger())) {
-                            actUpon = true;
-                        }
-                        break;
-
-                    case ALWAYS:
-                        if (!this.isChatBot(richMessage.getSender()) && command.getResponseAction() == Action.EXECUTE) {
-                            // Prevent infinite loops / dumb behavior.
-                            actUpon = true;
-                        }
-                        break;
-                }
-
-                if (!actUpon) continue;
-
-                switch (command.getResponseAction()) {
-                    case EXECUTE:
-                        ChatbotScriptEngine.execute(richMessage, command.getResponse());
-                        break;
-
-                    case REPLY_WITH: {
-                        String message = command.getResponse();
-                        ChatbotScriptEngine.execute(
-                            richMessage,
-                            String.format(
-                                "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",
-                                JsonStringUtil.jsonEscape(message).toString().replace("`", "\\`")
-                            )
-                        );
-                        break;
+            switch (command.getTriggerType()) {
+                case COMMAND:
+                    if (!richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
+                        continue;
                     }
-                }
+                    break;
 
-                if (command.getTriggerType() != TriggerType.ALWAYS) {
-                    // We don't want to hide messages by accident with ALWAYS, hence the check.
-                    hideable = true;
+                case CONTAINS:
+                    if (!richMessage.getRaw().contains(command.getTrigger())) {
+                        continue;
+                    }
+                    break;
+
+                case ALWAYS:
+                    if (this.isChatBot(richMessage.getSender()) || command.getResponseAction() != Action.EXECUTE) {
+                        // Prevent infinite loops / dumb behavior.
+                        continue;
+                    }
+                    break;
+            }
+
+            switch (command.getResponseAction()) {
+                case EXECUTE:
+                    ChatbotScriptEngine.execute(richMessage, command.getResponse());
+                    break;
+
+                case REPLY_WITH: {
+                    String message = command.getResponse();
+                    ChatbotScriptEngine.execute(
+                        richMessage,
+                        String.format(
+                            "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",
+                            JsonStringUtil.jsonEscape(message).toString().replace("`", "\\`")
+                        )
+                    );
+                    break;
                 }
             }
         }
-
-        return hideable;
     }
 
 }

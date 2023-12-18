@@ -1,14 +1,11 @@
 <script>
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import LocalizedProperty from '$lib/LocalizedProperty.svelte';
-	import SelectMenu from '$lib/ui/SelectMenu.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
 	import TextArea from '$lib/ui/TextArea.svelte';
 
-	// import { hasCasterlabsPlus } from '$lib/app.mjs';
 	import { t } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
-	import CodeInput from '$lib/ui/CodeInput.svelte';
 
 	const console = createConsole('Chat Bot/Settings');
 	const preferences = st || Caffeinated.chatbot.svelte('preferences');
@@ -26,31 +23,11 @@
 
 <ul class="divide-y divide-current text-base-6">
 	<li class="py-4">
-		<SelectMenu
-			title="co.casterlabs.caffeinated.app.page.chat_bot.settings.sender"
-			value={/*$hasCasterlabsPlus ? $preferences?.chatter : */ 'SYSTEM'}
-			options={{
-				SYSTEM: 'co.casterlabs.caffeinated.app.page.chat_bot.settings.sender.SYSTEM',
-				CLIENT: 'co.casterlabs.caffeinated.app.page.chat_bot.settings.sender.CLIENT'
-			}}
-			disabled={/*!$hasCasterlabsPlus*/ true}
-			on:value={({ detail: value }) => setPreferenceItem('chatter', value)}
-		/>
-	</li>
-	<li class="py-4">
 		<Switch
-			title="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_commands_from_chat"
-			description="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_commands_from_chat.description"
-			checked={$preferences?.hideCommandsFromChat}
-			on:value={({ detail: value }) => setPreferenceItem('hideCommandsFromChat', value)}
-		/>
-	</li>
-	<li class="py-4">
-		<Switch
-			title="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_timers_from_chat"
-			description="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_timers_from_chat.description"
-			checked={$preferences?.hideTimersFromChat}
-			on:value={({ detail: value }) => setPreferenceItem('hideTimersFromChat', value)}
+			title="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_from_chat"
+			description="co.casterlabs.caffeinated.app.page.chat_bot.settings.hide_from_chat.description"
+			checked={$preferences?.hideFromChat}
+			on:value={({ detail: value }) => setPreferenceItem('hideFromChat', value)}
 		/>
 	</li>
 	<li class="py-4">

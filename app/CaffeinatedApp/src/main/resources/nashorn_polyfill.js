@@ -1,5 +1,7 @@
 // https://polyfill.io/v3/polyfill.js?features=es5%2Ces6%2Ces7%2Ces2022%2Ces2021%2Ces2020%2Ces2019%2Ces2018%2Ces2017%2Ces2016%2Ces2015
 
+const Reflect = {};
+
 /* Polyfill service v3.111.0
  * For detailed credits and licence information see https://github.com/JakeChampion/polyfill-service.
  * 
