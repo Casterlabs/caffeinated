@@ -53,6 +53,7 @@ public class UIPreferences {
         private boolean showActivities = false;
         private String colorBy = "THEME";
         private double ttsOrDingVolume = 1;
+        private double textSize = 1;
         private JsonObject inputBoxPreferences = new JsonObject();
 
         // Still used by the popout dock.

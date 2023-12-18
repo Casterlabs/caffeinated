@@ -23,6 +23,7 @@
 	import { SUPPORTED_TTS_VOICES } from '$lib/app.mjs';
 	import { t } from '$lib/app.mjs';
 	import { onDestroy } from 'svelte';
+	import { text } from '@sveltejs/kit';
 
 	const MAX_EVENTS_DISPLAY = 400;
 
@@ -51,6 +52,7 @@
 	let showActivities = false;
 	let colorBy = 'THEME';
 	let ttsOrDingVolume;
+	let textSize = 1;
 	let inputBoxPreferences = {};
 
 	let isAtBottom = true;
@@ -217,6 +219,7 @@
 			showActivities,
 			colorBy,
 			ttsOrDingVolume,
+			textSize,
 			inputBoxPreferences
 		});
 	}
@@ -234,6 +237,7 @@
 		showActivities = config.showActivities;
 		colorBy = config.colorBy;
 		ttsOrDingVolume = config.ttsOrDingVolume;
+		textSize = config.textSize;
 		inputBoxPreferences = config.inputBoxPreferences;
 	}
 
@@ -581,6 +585,24 @@
 				</li>
 			{/if}
 			<li class="py-2">
+				<div class="w-full">
+					<!-- svelte-ignore a11y-label-has-associated-control -->
+					<label class="block text-sm font-medium text-base-12">
+						<LocalizedText
+							key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.text_size"
+						/>
+					</label>
+
+					<RangeInput
+						min={0.1}
+						max={2}
+						step={0.01}
+						bind:value={textSize}
+						on:value={savePreferences}
+					/>
+				</div>
+			</li>
+			<li class="py-2">
 				<Switch
 					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_chat_timestamps"
 					description=""
@@ -643,7 +665,7 @@
 	class:color-by-user={colorBy == 'USER'}
 >
 	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
-		<ul bind:this={chatBox} />
+		<ul style="font-size: {textSize * 100}%;" bind:this={chatBox} />
 	</div>
 
 	{#if ttsAudio}
