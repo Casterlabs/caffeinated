@@ -98,6 +98,22 @@
 		class:hover:opacity-100={isDeleted}
 		bind:this={container}
 	>
+		{#if event.attributes.includes('FIRST_TIME_CHATTER')}
+			<span class="block text-sm opacity-80 mt-0.5">
+				<icon class="inline-block h-4 w-4 translate-y-1" data-icon="icon/cake" />
+				<LocalizedText
+					key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter"
+				/>
+			</span>
+		{/if}
+		{#if event.attributes.includes('ANNOUNCEMENT')}
+			<span class="block text-sm opacity-80 mt-0.5">
+				<icon class="inline-block h-4 w-4 translate-y-1" data-icon="icon/megaphone" />
+				<LocalizedText
+					key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement"
+				/>
+			</span>
+		{/if}
 		{#if event.reply_target_data || event.reply_target}
 			<a
 				href="#"

@@ -191,6 +191,8 @@
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.REPLY": "%name% said, in response to {otherName}, {message}.",
         "docks.chat.viewer.event_format.RICH_MESSAGE.replying_to": "Replying to %other% %message%",
         "docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown": "Replying to another message.",
+        "docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter": "First time chatter",
+        "docks.chat.viewer.event_format.RICH_MESSAGE.announcement": "Announcement",
         "docks.chat.viewer.action.ban": "Ban",
         "docks.chat.viewer.action.timeout": "Timeout",
         "docks.chat.viewer.action.delete_message": "Delete Message",
