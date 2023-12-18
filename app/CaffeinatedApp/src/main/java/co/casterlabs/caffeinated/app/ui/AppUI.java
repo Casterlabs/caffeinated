@@ -179,6 +179,8 @@ public class AppUI extends JavascriptObject {
     @JavascriptFunction
     @SneakyThrows
     public void openLink(@NonNull String link) {
+        if (link.startsWith("#")) return; // Not a real link.
+
         try {
             Desktop
                 .getDesktop()
