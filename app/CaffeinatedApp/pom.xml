@@ -103,12 +103,6 @@
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs</groupId>
-			<artifactId>ControlDeckProto</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>co.casterlabs</groupId>
 			<artifactId>Koi</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>compile</scope>
