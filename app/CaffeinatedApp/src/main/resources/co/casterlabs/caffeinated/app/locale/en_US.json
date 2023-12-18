@@ -112,6 +112,7 @@
         "page.chat_bot.shouts.example.SCRIPT": "Koi.sendChat(event.streamer.platform, \"Hello world!\", \"SYSTEM\", event.id);",
         "page.chat_bot.timers": "Timers",
         "page.chat_bot.timers.format": "Every %seconds% seconds, send one of the following:",
+        "page.chat_bot.timers.format.disclaimer": "(The message will only be sent to the platforms you are currently live on.)",
         "page.chat_bot.timers.example": "I love Casterlabs!",
         "page.chat_bot.timers.next.seconds": "Next message in: {seconds} seconds.",
         "page.chat_bot.timers.next.now": "Next message: now.",

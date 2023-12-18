@@ -59,6 +59,7 @@
 		/>
 	</span>
 </LocalizedText>
+<br />
 
 <ul class="mt-4 space-y-2">
 	{#each timers || [] as message, idx}
@@ -114,6 +115,10 @@
 		</button>
 	</li>
 </ul>
+<span class="text-xs">
+	<LocalizedText key="co.casterlabs.caffeinated.app.page.chat_bot.timers.format.disclaimer" />
+</span>
+<br />
 
 <br />
 {#if nextMessageIn_seconds}
