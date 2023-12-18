@@ -151,8 +151,9 @@ public class ChatbotScriptEngine {
 
     public static class ScriptHandle {
 
-        public void koi_sendChat(@NonNull String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
-            CaffeinatedApp.getInstance().getKoi().sendChat(UserPlatform.valueOf(platform), message, KoiChatterType.valueOf(chatter), replyTarget, false);
+        public void koi_sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
+            UserPlatform enumP = platform == null ? null : UserPlatform.valueOf(platform);
+            CaffeinatedApp.getInstance().getKoi().sendChat(enumP, message, KoiChatterType.valueOf(chatter), replyTarget, false);
         }
 
         public void koi_upvoteChat(@NonNull String platform, @NonNull String messageId) {
