@@ -164,6 +164,7 @@
         "docks.activity_feed.preferences.title": "Feed Preferences",
         "docks.chat.viewer": "Chat",
         "docks.chat.viewer.send_message": "Send",
+        "docks.chat.viewer.all_platforms": "All",
         "docks.chat.viewer.send_message.placeholder": "Send a message",
         "docks.chat.viewer.preferences.title": "Chat Preferences",
         "docks.chat.viewer.preferences.show_chat_timestamps": "Show timestamps",

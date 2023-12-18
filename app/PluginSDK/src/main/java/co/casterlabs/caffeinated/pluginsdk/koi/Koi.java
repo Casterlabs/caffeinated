@@ -34,7 +34,10 @@ public interface Koi {
 
     public Map<UserPlatform, List<KoiIntegrationFeatures>> getFeatures();
 
-    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture);
+    /**
+     * A NULL platform will broadcast to all connected accounts.
+     */
+    public void sendChat(@Nullable UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture);
 
     public void upvoteChat(@NonNull UserPlatform platform, @NonNull String messageId);
 

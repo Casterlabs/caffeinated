@@ -352,9 +352,16 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
     @JavascriptFunction
     @Override
-    public void sendChat(@NonNull UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
+    public void sendChat(@Nullable UserPlatform platform, @NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
         if (message.startsWith("/koi test")) {
             // NOOP
+            return;
+        }
+
+        if (platform == null) {
+            for (UserPlatform p : this.userStates.keySet()) {
+                this.sendChat(p, message, chatter, replyTarget, isUserGesture);
+            }
             return;
         }
 

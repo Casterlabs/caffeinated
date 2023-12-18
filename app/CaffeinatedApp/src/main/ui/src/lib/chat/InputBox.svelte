@@ -119,22 +119,32 @@
 						aria-expanded={selectorOpen}
 						on:click={() => (selectorOpen = !selectorOpen)}
 					>
-						<LocalizedProperty
-							key={isSupportedByPlatform
-								? `${platform} (${userStates[platform]?.streamer?.displayname})`
-								: 'co.casterlabs.caffeinated.app.unsupported_feature.item'}
-							opts={{ item: platform }}
-							property="title"
-						/>
-						<span class="block truncate text-base-12">
-							{#key platform}
-								<icon
-									class="w-4 h-5"
-									class:opacity-60={!isSupportedByPlatform}
-									data-icon="service/{platform.toLowerCase()}"
+						{#key platform}
+							{#if platform == null}
+								<LocalizedProperty
+									key="co.casterlabs.caffeinated.app.docks.chat.viewer.all_platforms"
+									property="title"
 								/>
-							{/key}
-						</span>
+								<LocalizedText
+									key="co.casterlabs.caffeinated.app.docks.chat.viewer.all_platforms"
+								/>
+							{:else}
+								<LocalizedProperty
+									key={isSupportedByPlatform
+										? `${platform} (${userStates[platform]?.streamer?.displayname})`
+										: 'co.casterlabs.caffeinated.app.unsupported_feature.item'}
+									opts={{ item: platform }}
+									property="title"
+								/>
+								<span class="block truncate text-base-12">
+									<icon
+										class="w-4 h-5"
+										class:opacity-60={!isSupportedByPlatform}
+										data-icon="service/{platform.toLowerCase()}"
+									/>
+								</span>
+							{/if}
+						{/key}
 						<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
 							<icon class="h-5 w-5 text-base-10" data-icon="icon/chevron-up-down" />
 						</span>
@@ -151,10 +161,11 @@
 								aria-activedescendant="{ID}_{platform}"
 								transition:fade|local={{ duration: 75 }}
 							>
-								{#each Object.keys(userStates) as name}
+								{#each [null, ...Object.keys(userStates)] as name}
 									{@const isSelected = platform == name}
 									{@const isHighlighted = selectorHighlighted == name}
-									{@const isSupported = supportedFeatures[name]?.includes('CHAT_SEND_MESSAGE')}
+									{@const isSupported =
+										!name || supportedFeatures[name]?.includes('CHAT_SEND_MESSAGE')}
 
 									<li
 										id="{ID}_{name}"
@@ -180,17 +191,27 @@
 												}
 											}}
 										>
-											<LocalizedProperty
-												key={isSupported
-													? `${name} (${userStates[name]?.streamer?.displayname})`
-													: 'co.casterlabs.caffeinated.app.unsupported_feature.item'}
-												opts={{ item: name }}
-												property="title"
-											/>
-											<icon
-												class="translate-y-px w-4 h-4"
-												data-icon="service/{name.toLowerCase()}"
-											/>
+											{#if name == null}
+												<LocalizedProperty
+													key="co.casterlabs.caffeinated.app.docks.chat.viewer.all_platforms"
+													property="title"
+												/>
+												<LocalizedText
+													key="co.casterlabs.caffeinated.app.docks.chat.viewer.all_platforms"
+												/>
+											{:else}
+												<LocalizedProperty
+													key={isSupported
+														? `${name} (${userStates[name]?.streamer?.displayname})`
+														: 'co.casterlabs.caffeinated.app.unsupported_feature.item'}
+													opts={{ item: name }}
+													property="title"
+												/>
+												<icon
+													class="translate-y-px w-4 h-4"
+													data-icon="service/{name.toLowerCase()}"
+												/>
+											{/if}
 
 											{#if isSelected}
 												<span
@@ -216,7 +237,7 @@
 		<textarea
 			class="px-2.5 py-2 resize-none block w-full text-base-12 border transition hover:border-base-8 border-base-7 bg-base-1 shadow-sm focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7 text-sm"
 			class:rounded-l-md={!isMultiAccountMode}
-			class:opacity-60={!isSupportedByPlatform}
+			class:opacity-60={!isSupportedByPlatform && platform}
 			placeholder={$placeholderT}
 			rows="1"
 			resize={false}
