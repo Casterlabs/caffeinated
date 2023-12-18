@@ -16,6 +16,9 @@
 	export let replyTarget = null;
 	export let preferences = {};
 
+	let messageHistory = [];
+	let historyIndex = -1;
+	let messageEdited = false;
 	let platform = 'TWITCH';
 	let message = '';
 
@@ -35,8 +38,12 @@
 			platform = Object.keys(userStates)[0];
 		}
 
-		dispatch('send', { message, platform, replyTarget });
+		const data = { message, platform, replyTarget };
+		dispatch('send', data);
+		messageHistory.push(data);
 		message = '';
+		historyIndex = -1;
+		messageEdited = false;
 	}
 
 	let selectorOpen = false;
@@ -214,11 +221,60 @@
 			rows="1"
 			resize={false}
 			bind:value={message}
-			on:keypress={(e) => {
-				if (e.key == 'Enter' && !e.shiftKey) {
-					e.preventDefault();
-					send(); // Trigger a send on Enter, but just a regular newline on Shift+Enter.
+			on:keyup={(e) => {
+				if (message.length == 0) {
+					messageEdited = false; // Clear the state when the box gets cleared.
 				}
+			}}
+			on:keydown={(e) => {
+				switch (e.key) {
+					case 'Enter': {
+						if (e.shiftKey) return;
+						e.preventDefault();
+						send(); // Trigger a send on Enter, but just a regular newline on Shift+Enter.
+						return;
+					}
+
+					case 'ArrowUp': {
+						if (messageEdited) return; // Do not replace.
+						if (messageHistory.length == 0) return; // No messages to pull.
+
+						if (historyIndex == -1) {
+							historyIndex = messageHistory.length - 1;
+						} else {
+							historyIndex--;
+							if (historyIndex < 0) {
+								historyIndex = 0; // Lower bounds.
+							}
+						}
+
+						message = messageHistory[historyIndex].message;
+						platform = messageHistory[historyIndex].platform;
+						replyTarget = messageHistory[historyIndex].replyTarget;
+						return; // Do not mark as edited.
+					}
+
+					case 'ArrowDown': {
+						if (messageEdited) return; // Do not replace.
+						if (messageHistory.length == 0) return; // No messages to pull.
+
+						if (historyIndex == -1) {
+							historyIndex = messageHistory.length - 1;
+						} else {
+							historyIndex++;
+							if (historyIndex == messageHistory.length) {
+								historyIndex = messageHistory.length - 1; // Upper bounds.
+							}
+						}
+
+						message = messageHistory[historyIndex].message;
+						platform = messageHistory[historyIndex].platform;
+						replyTarget = messageHistory[historyIndex].replyTarget;
+						return; // Do not mark as edited.
+					}
+				}
+
+				messageEdited = true;
 			}}
 		/>
 		<slot />
