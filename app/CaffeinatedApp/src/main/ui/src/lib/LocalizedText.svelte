@@ -83,12 +83,8 @@
 	<span bind:this={slotContents.item9}><slot name="9" /></span>
 </div>
 
-<span style="display: contents;">
-	{#each contents as c}
-		{#if typeof c == 'string'}
-			{@html c}
-		{:else}
-			<span bind:this={c[1]} style="display: contents;" />
-		{/if}
-	{/each}
-</span>
+<!-- This looks gross, but it's necessary to remove spaces -->
+<span style="display: contents;"
+	>{#each contents as c}{#if typeof c == 'string'}{@html c}
+		{:else}<span bind:this={c[1]} style="display: contents;" />{/if}{/each}</span
+>
