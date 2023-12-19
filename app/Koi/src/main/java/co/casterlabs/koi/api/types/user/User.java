@@ -1,12 +1,16 @@
 package co.casterlabs.koi.api.types.user;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
+import co.casterlabs.rakurai.json.validation.JsonValidate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 @ToString
@@ -22,6 +26,8 @@ public class User extends SimpleProfile {
     private String username;
 
     private String displayname;
+
+    private Pronouns pronouns = Pronouns.UNKNOWN;
 
     private String bio;
 
@@ -56,6 +62,17 @@ public class User extends SimpleProfile {
         this.imageLink = imageLink;
         this.followersCount = followersCount;
         this.subCount = subCount;
+    }
+
+    @JsonValidate
+    private void $lookupPronouns() {
+        try {
+            Class<?> pronounQuery = Class.forName("co.casterlabs.caffeinated.app.PronounsQuery");
+            Method get = pronounQuery.getMethod("get", User.class);
+            this.pronouns = (Pronouns) get.invoke(null, this);
+        } catch (Throwable t) {
+            FastLogger.logStatic(LogLevel.DEBUG, "An error occurred whilst fetching pronouns for %s:\n%s", this.UPID, t);
+        }
     }
 
     public static enum UserRoles {

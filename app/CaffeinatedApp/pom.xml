@@ -160,6 +160,12 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>co.casterlabs.Yen</groupId>
+			<artifactId>MemoryBackedCache</artifactId>
+			<version>32c360b</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.41.2.2</version>
