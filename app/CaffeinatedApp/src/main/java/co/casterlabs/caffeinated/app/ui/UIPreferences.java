@@ -54,6 +54,7 @@ public class UIPreferences {
         private String colorBy = "THEME";
         private double ttsOrDingVolume = 1;
         private double textSize = 1;
+        private boolean showPronouns = false;
         private JsonObject inputBoxPreferences = new JsonObject();
 
         // Still used by the popout dock.

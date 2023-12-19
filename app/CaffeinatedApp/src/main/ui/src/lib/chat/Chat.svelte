@@ -50,6 +50,7 @@
 	let ttsVoice = 'Brian';
 	let showPlatform = false;
 	let showActivities = false;
+	let showPronouns = false;
 	let colorBy = 'THEME';
 	let ttsOrDingVolume;
 	let textSize = 1;
@@ -222,6 +223,7 @@
 			colorBy,
 			ttsOrDingVolume,
 			textSize,
+			showPronouns,
 			inputBoxPreferences
 		});
 	}
@@ -240,6 +242,7 @@
 		colorBy = config.colorBy;
 		ttsOrDingVolume = config.ttsOrDingVolume;
 		textSize = config.textSize;
+		showPronouns = config.showPronouns;
 		inputBoxPreferences = config.inputBoxPreferences;
 	}
 
@@ -665,6 +668,14 @@
 					on:value={savePreferences}
 				/>
 			</li>
+			<li class="py-2">
+				<Switch
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_pronouns"
+					description=""
+					bind:checked={showPronouns}
+					on:value={savePreferences}
+				/>
+			</li>
 		</ul>
 	</Modal>
 {/if}
@@ -736,6 +747,7 @@
 	class:show-viewers={showViewers}
 	class:show-platform={showPlatform}
 	class:show-activities={showActivities}
+	class:show-pronouns={showPronouns}
 	class:color-by-platform={colorBy == 'PLATFORM'}
 	class:color-by-user={colorBy == 'USER'}
 >
@@ -906,5 +918,14 @@
 
 	.show-viewers :global(.viewer-joinleave) {
 		display: block !important;
+	}
+
+	/* Pronouns */
+	:global(.pronouns) {
+		display: none;
+	}
+
+	.show-pronouns :global(.pronouns) {
+		display: unset !important;
 	}
 </style>

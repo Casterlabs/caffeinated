@@ -1,4 +1,5 @@
 <script>
+	import LocalizedText from '$lib/LocalizedText.svelte';
 	import streamingServices from '$lib/streamingServices.mjs';
 
 	export let user;
@@ -30,6 +31,9 @@
 			class="user-platform w-[1em] h-[1em] mr-0.5 translate-y-0.5"
 			data-icon="service/{user.platform.toLowerCase()}"
 			style:color={streamingServices[user.platform]?.color}
-		/><a href="#" data-user-modal-for={user.UPID}>{@html displayString}</a></b
+		/><a href="#" data-user-modal-for={user.UPID}>{@html displayString}</a><span
+			class="ml-1 pronouns text-base-11 bg-base-6 border border-base-7 rounded-lg py-px px-1 text-xs"
+			><LocalizedText key="co.casterlabs.caffeinated.app.pronouns.{user.pronouns}" /></span
+		></b
 	>
 {/if}
