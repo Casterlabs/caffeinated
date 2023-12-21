@@ -43,7 +43,8 @@ public abstract class GenericLabel extends Widget implements KoiEventListener {
                 .addItem(WidgetSettingsItem.asRange("font_size", "Font Size", 16, 1, 0, 128))
                 .addItem(WidgetSettingsItem.asRange("font_weight", "Font Weight (boldness)", 400, 100, 100, 1000))
                 .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"))
-                .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"));
+                .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
+                .addItem(WidgetSettingsItem.asRange("text_shadow", "Text Shadow", -1, 1, -1, 20));
 
             if (this.hasHighlight()) {
                 textStyle.addItem(WidgetSettingsItem.asColor("highlight_color", "Highlight Color", "#5bf599"));

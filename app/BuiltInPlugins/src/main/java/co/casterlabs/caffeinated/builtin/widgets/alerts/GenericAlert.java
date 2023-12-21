@@ -50,6 +50,7 @@ public abstract class GenericAlert extends Widget {
                     .addItem(WidgetSettingsItem.asColor("highlight_color", "Highlight Color", "#5bf599"))
                     .addItem(WidgetSettingsItem.asRange("vertical_offset", "Text Vertical Offset", 1, .05, 0, 1))
                     .addItem(WidgetSettingsItem.asRange("horizontal_offset", "Text Horizontal Offset", 0, .05, -1, 1))
+                    .addItem(WidgetSettingsItem.asRange("shadow", "Shadow", -1, 1, -1, 20))
             );
 
         {

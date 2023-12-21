@@ -20,7 +20,7 @@ public class ChatWidget extends Widget {
         .withNamespace("co.casterlabs.chat_widget")
         .withIcon("chat-bubble-left")
         .withCategory(WidgetDetailsCategory.INTERACTION)
-        .withFriendlyName("chat")
+        .withFriendlyName("Chat")
         .withLocaleBase("co.casterlabs.defaultwidgets.widget")
         .withShowDemo(true, 3 / 4d)
         .withRequiredFeatures(KoiIntegrationFeatures.CHAT);
@@ -157,6 +157,7 @@ public class ChatWidget extends Widget {
                     .addItem(WidgetSettingsItem.asRange("font_weight", "Font Weight (boldness)", 400, 100, 100, 1000))
                     .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
                     .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right"))
+                    .addItem(WidgetSettingsItem.asRange("text_shadow", "Text Shadow", -1, 1, -1, 20))
             )
             .addSection(
                 new WidgetSettingsSection("events", "Events")

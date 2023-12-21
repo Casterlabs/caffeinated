@@ -127,13 +127,17 @@
 
 				document.body.style =
 					`--highlight-color: ${Widget.getSetting('style.highlight_color')};` +
-					`--text-color: ${Widget.getSetting('style.text_color')};` +
-					`--text-voffset: ${Widget.getSetting('style.vertical_offset') * 100}%;` +
-					`--text-hoffset: ${Widget.getSetting('style.horizontal_offset') * 100}%;` +
-					`--text-color: ${Widget.getSetting('style.text_color')};` +
-					`font-size: ${Widget.getSetting('style.font_size')}px;` +
-					`font-weight: ${Widget.getSetting('style.font_weight')};` +
-					`text-align: ${Widget.getSetting('style.text_align').toLowerCase()};`;
+						`--text-color: ${Widget.getSetting('style.text_color')};` +
+						`--text-voffset: ${Widget.getSetting('style.vertical_offset') * 100}%;` +
+						`--text-hoffset: ${Widget.getSetting('style.horizontal_offset') * 100}%;` +
+						`--text-color: ${Widget.getSetting('style.text_color')};` +
+						`font-size: ${Widget.getSetting('style.font_size')}px;` +
+						`font-weight: ${Widget.getSetting('style.font_weight')};` +
+						//
+						Widget.getSetting('style.shadow') ==
+					-1
+						? ''
+						: `filter: drop-shadow(0px 0px ${Widget.getSetting('style.shadow')}px black);`;
 			});
 
 			Widget.on('alert', (data) => {

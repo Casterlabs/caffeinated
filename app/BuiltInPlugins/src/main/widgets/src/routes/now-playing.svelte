@@ -21,6 +21,7 @@
 	let textOnly_fontWeight;
 	let textOnly_textColor;
 	let textOnly_textAlign;
+	let textOnly_shadow;
 
 	async function update() {
 		console.log(Music.activePlayback);
@@ -46,6 +47,7 @@
 		textOnly_fontWeight = Widget.getSetting('style.font_weight');
 		textOnly_textColor = Widget.getSetting('style.text_color');
 		textOnly_textAlign = Widget.getSetting('style.text_align');
+		textOnly_shadow = Widget.getSetting('style.text_shadow');
 
 		if (cardStyle == 'Text Only') {
 			changeFont(textOnly_font);
@@ -108,6 +110,7 @@
 			style:font-weight={textOnly_fontWeight}
 			style:text-align={textOnly_textAlign}
 			style:color={textOnly_textColor}
+			style:filter={textOnly_shadow == -1 ? '' : `drop-shadow(0px 0px ${textOnly_shadow}px black)`}
 		>
 			{title} &bull; {artist}
 		</p>

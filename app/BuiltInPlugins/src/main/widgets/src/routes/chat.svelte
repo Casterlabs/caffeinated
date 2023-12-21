@@ -272,6 +272,9 @@
 	class:show-FOLLOW={$settings['events.FOLLOW']}
 	class:show-SUBSCRIPTION={$settings['events.SUBSCRIPTION']}
 	class:show-RAID={$settings['events.RAID']}
+	style:filter={$settings['text_style.text_shadow'] == -1
+		? ''
+		: `drop-shadow(0px 0px ${$settings['text_style.text_shadow']}px black)`}
 >
 	<!---->
 </ul>
