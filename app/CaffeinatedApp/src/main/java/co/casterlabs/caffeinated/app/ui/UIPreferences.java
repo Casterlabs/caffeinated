@@ -23,6 +23,7 @@ public class UIPreferences {
     private boolean enableStupidlyUnsafeSettings = false;
     private boolean enableAlternateThemes = false;
     private double zoom = 1.0;
+    private String uiFont = "";
 
     private DashboardConfig mainDashboard = new DashboardConfig();
     private DashboardConfig dockDashboard = new DashboardConfig();

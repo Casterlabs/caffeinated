@@ -1,5 +1,6 @@
 <script>
 	import SelectMenu from '$lib/ui/SelectMenu.svelte';
+	import SlimSearchMenu from '$lib/ui/SlimSearchMenu.svelte';
 
 	import { goto } from '$app/navigation';
 	import {
@@ -9,8 +10,19 @@
 		openAuthPortal
 	} from '$lib/caffeinatedAuth.mjs';
 	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
+	import TextArea from '$lib/ui/TextArea.svelte';
 
+	const uiPreferences = st || Caffeinated.UI.svelte('preferences');
 	let manualAuthPlatform = 0;
+
+	$: uiPreferences, $uiPreferences && console.debug('UI Preferences:', $uiPreferences);
+
+	async function setUIPreferenceItem(name, value) {
+		Caffeinated.UI.updateAppearance({
+			...(await Caffeinated.UI.preferences),
+			[name]: value
+		});
+	}
 </script>
 
 <SelectMenu
@@ -43,4 +55,14 @@
 	on:value={({ detail }) => {
 		goto('/$caffeinated-sdk-root$' + detail);
 	}}
+/>
+
+<br />
+<br />
+
+Override UI Font: <TextArea
+	rows="1"
+	resize={false}
+	value={$uiPreferences?.uiFont}
+	on:value={({ detail: value }) => setUIPreferenceItem('uiFont', value)}
 />

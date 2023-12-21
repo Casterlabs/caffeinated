@@ -102,6 +102,7 @@ public class AppUI extends JavascriptObject {
         this.preferences.setEnableStupidlyUnsafeSettings(newPreferences.isEnableStupidlyUnsafeSettings());
         this.preferences.setEnableAlternateThemes(newPreferences.isEnableAlternateThemes());
         this.preferences.setZoom(newPreferences.getZoom());
+        this.preferences.setUiFont(newPreferences.getUiFont());
         this.preferenceFile.save();
 
         CaffeinatedApp.getInstance().reloadLanguage();

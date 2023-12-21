@@ -64,13 +64,14 @@ function setupApp() {
 	Caffeinated.themeManager.svelte('effectiveAppearance').subscribe(App.appearance.set);
 	Caffeinated.UI.svelte('preferences').subscribe((prefs) => {
 		if (!prefs) return;
-		const { language, icon, emojiProvider, zoom } = prefs;
+		const { language, icon, emojiProvider, zoom, uiFont } = prefs;
 
 		App.currentLocale.set(language);
 		App.icon.set(icon);
 		App.emojiProvider.set(emojiProvider);
 
 		document.documentElement.style.fontSize = `${zoom * 100}%`;
+		document.documentElement.style.fontFamily = uiFont;
 	});
 
 	Caffeinated.UI.fonts.then(fonts.set);
