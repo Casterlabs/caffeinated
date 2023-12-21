@@ -741,7 +741,7 @@
 {/if}
 
 <div
-	class="h-full px-2 pt-2 flex flex-col relative"
+	class="h-full px-2 pt-2 flex flex-col relative overflow-hidden"
 	class:show-timestamps={showChatTimestamps}
 	class:show-badges={showBadges}
 	class:show-viewers={showViewers}
