@@ -424,6 +424,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         UserUpdateEvent randomAccount = userStates[ThreadLocalRandom.current().nextInt(userStates.length)];
 
         KoiEvent e = TestEvents.createTestEvent(type, randomAccount.getStreamer().getPlatform());
+        if (e == null) return;
         this.koi.broadcastEvent(e);
     }
 
