@@ -205,7 +205,7 @@ export function init({ initHandler, disconnectHandler }) {
 
     // The `App` global.
     let appLocalizationTasks = {};
-    setLocaleProvider((key, knownPlaceholders = {}, knownComponents = []) => {
+    setLocaleProvider((key = '', knownPlaceholders = {}, knownComponents = []) => {
         return new Promise((resolve) => {
             const nonce = Math.random(28).toString();
 
@@ -213,9 +213,9 @@ export function init({ initHandler, disconnectHandler }) {
 
             conn.send("LOCALIZE", {
                 nonce: nonce,
-                key: key,
-                knownPlaceholders: knownPlaceholders,
-                knownComponents: knownComponents
+                key: key || '',
+                knownPlaceholders: knownPlaceholders || {},
+                knownComponents: knownComponents || []
             });
         });
     });

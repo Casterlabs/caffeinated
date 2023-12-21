@@ -169,6 +169,16 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                     JsonObject data = message.getObject("data");
                     String nonce = data.getString("nonce");
 
+                    if (!data.containsKey("key")) {
+                        this.sendMessage(
+                            "LOCALIZE",
+                            new JsonObject()
+                                .put("nonce", nonce)
+                                .put("value", "")
+                        );
+                        return;
+                    }
+
                     try {
                         String key = data.getString("key");
                         JsonObject knownPlaceholders = data.getObject("knownPlaceholders");
