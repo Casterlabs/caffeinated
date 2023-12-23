@@ -50,7 +50,7 @@
 </script>
 
 <svelte:head>
-	<script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.js"></script>
+	<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.js"></script>
 </svelte:head>
 
 <!-- svelte-ignore a11y-media-has-caption -->
