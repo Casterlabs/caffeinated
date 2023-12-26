@@ -755,7 +755,7 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<ul
-			style="font-size: {textSize * 100}%;"
+			style="font-size: {(textSize || 1) * 100}%;"
 			bind:this={chatBox}
 			on:click={(e) => {
 				if (e.target?.getAttribute('data-user-modal-for')) {
