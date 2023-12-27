@@ -1,12 +1,18 @@
 export default function hook(handler) {
 	document.onclick = (e) => {
-		const target = e.target || e.srcElement;
+		let target = e.target || e.srcElement;
 
-		if (target.tagName == 'A' && target.getAttribute('target') == '_blank') {
-			const href = target.getAttribute('href');
+		while (true) {
+			if (!target) return;
+			if (target.tagName == "A") break;
 
-			e.preventDefault();
-			handler(href);
+			target = target.parentElement;
 		}
+
+		if (target.getAttribute('target') != '_blank') return;
+
+		const href = target.getAttribute('href');
+		e.preventDefault();
+		handler(href);
 	};
 }
