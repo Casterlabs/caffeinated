@@ -50,6 +50,7 @@
 
 				peer.on('open', (id) => {
 					Widget.emit('caller-id', id);
+					Widget.emit('aspect-ratio', videoElement.clientHeight / videoElement.clientWidth);
 				});
 			})
 			.catch(location.reload);

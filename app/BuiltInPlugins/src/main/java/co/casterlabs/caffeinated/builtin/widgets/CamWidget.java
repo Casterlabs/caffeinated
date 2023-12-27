@@ -34,6 +34,7 @@ public class CamWidget extends Widget implements KinokoV1Listener {
     private String channelId;
 
     private String callerId;
+    private double aspectRatio;
 
     @Override
     public void onInit() {
@@ -98,7 +99,12 @@ public class CamWidget extends Widget implements KinokoV1Listener {
 
             instance.on("caller-id", (e) -> {
                 this.callerId = e.getAsString();
-                this.sendCallerId();
+                this.sendInfo();
+            });
+
+            instance.on("aspect-ratio", (e) -> {
+                this.aspectRatio = e.getAsNumber().doubleValue();
+                this.sendInfo();
             });
 
             if (count > 1) {
@@ -138,7 +144,8 @@ public class CamWidget extends Widget implements KinokoV1Listener {
                 );
 
                 this.sendKoiAuth();
-                this.sendCallerId();
+                this.sendInfo();
+                return;
             }
 
             case "CHAT": {
@@ -146,28 +153,37 @@ public class CamWidget extends Widget implements KinokoV1Listener {
                 String text = message.getString("message");
                 String replyTarget = message.getString("replyTarget");
                 Caffeinated.getInstance().getKoi().sendChat(platform, text, KoiChatterType.CLIENT, replyTarget, true);
+                return;
             }
 
             case "UPVOTE": {
                 UserPlatform platform = UserPlatform.valueOf(message.getString("platform"));
                 String messageId = message.getString("messageId");
                 Caffeinated.getInstance().getKoi().upvoteChat(platform, messageId);
+                return;
             }
 
             case "DELETE": {
                 UserPlatform platform = UserPlatform.valueOf(message.getString("platform"));
                 String messageId = message.getString("messageId");
                 Caffeinated.getInstance().getKoi().deleteChat(platform, messageId, true);
+                return;
             }
 
         }
     }
 
-    public void sendCallerId() {
+    public void sendInfo() {
         this.kinoko.send(
             new JsonObject()
                 .put("type", "CALLER_ID")
                 .put("id", this.callerId)
+                .toString()
+        );
+        this.kinoko.send(
+            new JsonObject()
+                .put("type", "ASPECT_RATIO")
+                .put("aspectRatio", this.aspectRatio)
                 .toString()
         );
     }
