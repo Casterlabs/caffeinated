@@ -30,12 +30,19 @@
 
 					call.on('close', () => {
 						console.log('Closed', call);
+						videoElement.srcObject = null;
 						currentCall = null;
 					});
 
-					currentCall.on('stream', (mediaStream) => {
+					call.on('stream', (mediaStream) => {
 						console.debug('Video: ' + mediaStream);
 						videoElement.srcObject = mediaStream;
+
+						for (const videoTrack of mediaStream.getVideoTracks()) {
+							videoTrack.onmute = () => {
+								videoElement.style.opacity = 0;
+							};
+						}
 					});
 
 					call.answer();
