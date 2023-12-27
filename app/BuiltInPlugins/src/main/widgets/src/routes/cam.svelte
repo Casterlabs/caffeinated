@@ -42,6 +42,9 @@
 							videoTrack.onmute = () => {
 								videoElement.style.opacity = 0;
 							};
+							videoTrack.onunmute = () => {
+								videoElement.style.opacity = 1;
+							};
 						}
 					});
 
