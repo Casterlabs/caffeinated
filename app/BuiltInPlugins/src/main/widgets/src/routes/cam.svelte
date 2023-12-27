@@ -54,4 +54,4 @@
 </svelte:head>
 
 <!-- svelte-ignore a11y-media-has-caption -->
-<video class="w-full h-full" style:hidden={!currentCall} bind:this={videoElement} />
+<video class="w-full h-full object-cover" style:hidden={!currentCall} bind:this={videoElement} />
