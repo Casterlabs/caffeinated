@@ -26,6 +26,7 @@ public enum KoiEventType {
     PLATFORM_MESSAGE     (PlatformMessageEvent.class), 
     RICH_MESSAGE         (RichMessageEvent.class),
     LIKE                 (LikeEvent.class),
+    CONNECTION_STATE     (ConnectionStateEvent.class),
     
     @Deprecated
     DONATION             (DonationEvent.class),

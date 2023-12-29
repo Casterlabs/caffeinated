@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
+import co.casterlabs.koi.api.types.events.ConnectionStateEvent.ConnectionState;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -33,6 +34,8 @@ public interface Koi {
     public Map<UserPlatform, RoomstateEvent> getRoomStates();
 
     public Map<UserPlatform, List<KoiIntegrationFeatures>> getFeatures();
+
+    public Map<UserPlatform, Map<String, ConnectionState>> getConnectionStates();
 
     /**
      * A NULL platform will broadcast to all connected accounts.

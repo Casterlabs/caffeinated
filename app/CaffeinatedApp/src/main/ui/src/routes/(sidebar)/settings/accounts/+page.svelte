@@ -23,6 +23,7 @@
 	const activePlayback = st || Caffeinated.music.svelte('activePlayback');
 	const musicProviders = st || Caffeinated.music.svelte('providers');
 	const authInstances = st || Caffeinated.auth.svelte('authInstances');
+	const connectionStates = st || Caffeinated.koi.svelte('connectionStates');
 
 	let loading = [];
 
@@ -39,6 +40,7 @@
 	$: activePlayback, $activePlayback && console.debug('Active Playback:', $activePlayback);
 	$: musicProviders, $musicProviders && console.debug('Music Providers:', $musicProviders);
 	$: authInstances, $authInstances && console.debug('Auth Instances:', $authInstances);
+	$: connectionStates, $connectionStates && console.debug('Connection states:', $connectionStates);
 </script>
 
 <div class="space-y-6">
@@ -73,6 +75,14 @@
 									>
 										{userData.displayname}
 									</a>
+
+									<span
+										title={Object.entries($connectionStates[userData.platform])
+											.map(([k, v]) => `${k}: ${v}`)
+											.join('\n')}
+									>
+										<icon class="translate-x-1 w-3.5 h-3.5" data-icon="icon/information-circle" />
+									</span>
 								{/if}
 							</p>
 

@@ -28,6 +28,8 @@ import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.events.CatchupEvent;
+import co.casterlabs.koi.api.types.events.ConnectionStateEvent;
+import co.casterlabs.koi.api.types.events.ConnectionStateEvent.ConnectionState;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
@@ -88,6 +90,9 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, List<KoiIntegrationFeatures>> features = new ConcurrentHashMap<>();
+
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private Map<UserPlatform, Map<String, ConnectionState>> connectionStates = new ConcurrentHashMap<>();
 
     /**
      * @deprecated Should <b>only</b> be called from AppAuth.
@@ -266,6 +271,14 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
                 break;
             }
 
+            case CONNECTION_STATE: {
+                this.connectionStates.put(
+                    e.getStreamer().getPlatform(),
+                    ((ConnectionStateEvent) e).getStates()
+                );
+                break;
+            }
+
             default:
                 break;
         }
@@ -391,6 +404,11 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
     @Override
     public Map<UserPlatform, List<KoiIntegrationFeatures>> getFeatures() {
         return Collections.unmodifiableMap(this.features);
+    }
+
+    @Override
+    public Map<UserPlatform, Map<String, ConnectionState>> getConnectionStates() {
+        return Collections.unmodifiableMap(this.connectionStates);
     }
 
 }
