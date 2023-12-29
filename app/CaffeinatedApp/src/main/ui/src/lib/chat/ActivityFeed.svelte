@@ -10,6 +10,7 @@
 	import Modal from '$lib/ui/Modal.svelte';
 	import LocalizedText from '$lib/LocalizedText.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
+	import RangeInput from '$lib/ui/RangeInput.svelte';
 
 	import createConsole from '$lib/console-helper.mjs';
 	import { fade } from 'svelte/transition';
@@ -30,7 +31,9 @@
 	let showTimestamps = false;
 	let showProfilePictures = false;
 	let showPlatform = false;
+	let showPronouns = false;
 	let showZebraStripes = false;
+	let textSize = 1;
 	let colorBy = 'THEME';
 
 	let isAtBottom = true;
@@ -143,6 +146,7 @@
 			showTimestamps,
 			showProfilePictures,
 			showPlatform,
+			showPronouns,
 			showZebraStripes,
 			colorBy
 		});
@@ -273,6 +277,24 @@
 				/>
 			</li>
 			<li class="py-2">
+				<div class="w-full">
+					<!-- svelte-ignore a11y-label-has-associated-control -->
+					<label class="block text-sm font-medium text-base-12">
+						<LocalizedText
+							key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.text_size"
+						/>
+					</label>
+
+					<RangeInput
+						min={0.1}
+						max={2}
+						step={0.01}
+						bind:value={textSize}
+						on:value={savePreferences}
+					/>
+				</div>
+			</li>
+			<li class="py-2">
 				<Switch
 					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_chat_timestamps"
 					description=""
@@ -298,6 +320,14 @@
 			</li>
 			<li class="py-2">
 				<Switch
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_pronouns"
+					description=""
+					bind:checked={showPronouns}
+					on:value={savePreferences}
+				/>
+			</li>
+			<li class="py-2">
+				<Switch
 					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_zebra_stripes"
 					description=""
 					bind:checked={showZebraStripes}
@@ -312,12 +342,13 @@
 	class="h-full px-2 pt-2 flex flex-col relative"
 	class:show-timestamps={showTimestamps}
 	class:show-platform={showPlatform}
+	class:show-pronouns={showPronouns}
 	class:show-zebra-stripes={showZebraStripes}
 	class:color-by-platform={colorBy == 'PLATFORM'}
 	class:color-by-user={colorBy == 'USER'}
 >
 	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
-		<ul bind:this={chatBox} />
+		<ul style="font-size: {(textSize || 1) * 100}%;" bind:this={chatBox} />
 	</div>
 
 	{#if !isAtBottom}
@@ -396,6 +427,15 @@
 		display: inline-block;
 		width: var(--timestamp-width, 0);
 		padding-right: 5px;
+	}
+
+	/* Pronouns */
+	:global(.pronouns) {
+		display: none;
+	}
+
+	.show-pronouns :global(.pronouns) {
+		display: unset !important;
 	}
 
 	/* Zebra Stripes */

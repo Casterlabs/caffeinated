@@ -72,6 +72,8 @@ public class UIPreferences {
         private boolean showProfilePictures = false;
         private boolean showPlatform = false;
         private String colorBy = "THEME";
+        private double textSize = 1;
+        private boolean showPronouns = false;
         private boolean showZebraStripes = false;
 
     }
