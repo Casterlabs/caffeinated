@@ -68,6 +68,8 @@
 								{platformName}
 
 								{#if userData}
+									{@const connectionState = ($connectionStates || {})[userData.platform] || {}}
+
 									<a
 										href="/$caffeinated-sdk-root${userData.link}"
 										target="_blank"
@@ -76,13 +78,15 @@
 										{userData.displayname}
 									</a>
 
-									<span
-										title={Object.entries($connectionStates[userData.platform])
-											.map(([k, v]) => `${k}: ${v}`)
-											.join('\n')}
-									>
-										<icon class="translate-x-1 w-3.5 h-3.5" data-icon="icon/information-circle" />
-									</span>
+									{#if Object.entries(connectionState).length > 0}
+										<span
+											title={Object.entries(connectionState)
+												.map(([k, v]) => `${k}: ${v}`)
+												.join('\n')}
+										>
+											<icon class="translate-x-1 w-3.5 h-3.5" data-icon="icon/information-circle" />
+										</span>
+									{/if}
 								{/if}
 							</p>
 
