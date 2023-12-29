@@ -51,6 +51,7 @@
 	let showPlatform = false;
 	let showActivities = false;
 	let showPronouns = false;
+	let showZebraStripes = false;
 	let colorBy = 'THEME';
 	let ttsOrDingVolume;
 	let textSize = 1;
@@ -224,6 +225,7 @@
 			ttsOrDingVolume,
 			textSize,
 			showPronouns,
+			showZebraStripes,
 			inputBoxPreferences
 		});
 	}
@@ -243,6 +245,7 @@
 		ttsOrDingVolume = config.ttsOrDingVolume;
 		textSize = config.textSize;
 		showPronouns = config.showPronouns;
+		showZebraStripes = config.showZebraStripes;
 		inputBoxPreferences = config.inputBoxPreferences;
 	}
 
@@ -676,6 +679,14 @@
 					on:value={savePreferences}
 				/>
 			</li>
+			<li class="py-2">
+				<Switch
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_zebra_stripes"
+					description=""
+					bind:checked={showZebraStripes}
+					on:value={savePreferences}
+				/>
+			</li>
 		</ul>
 	</Modal>
 {/if}
@@ -748,6 +759,7 @@
 	class:show-platform={showPlatform}
 	class:show-activities={showActivities}
 	class:show-pronouns={showPronouns}
+	class:show-zebra-stripes={showZebraStripes}
 	class:color-by-platform={colorBy == 'PLATFORM'}
 	class:color-by-user={colorBy == 'USER'}
 >
@@ -879,7 +891,6 @@
 	}
 
 	/* Timestamps */
-
 	:global(.message-timestamp) {
 		display: none;
 		user-select: none !important;
@@ -901,7 +912,6 @@
 	}
 
 	/* Badges */
-
 	:global(.richmessage-badges) {
 		display: none;
 	}
@@ -911,7 +921,6 @@
 	}
 
 	/* Viewer Join/Leave Messages */
-
 	:global(.viewer-joinleave) {
 		display: none !important;
 	}
@@ -927,5 +936,10 @@
 
 	.show-pronouns :global(.pronouns) {
 		display: unset !important;
+	}
+
+	/* Zebra Stripes */
+	.show-zebra-stripes ul > :global(li):nth-child(odd) {
+		background-color: var(--base4);
 	}
 </style>

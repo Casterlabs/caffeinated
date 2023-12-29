@@ -30,6 +30,7 @@
 	let showTimestamps = false;
 	let showProfilePictures = false;
 	let showPlatform = false;
+	let showZebraStripes = false;
 	let colorBy = 'THEME';
 
 	let isAtBottom = true;
@@ -142,6 +143,7 @@
 			showTimestamps,
 			showProfilePictures,
 			showPlatform,
+			showZebraStripes,
 			colorBy
 		});
 	}
@@ -294,6 +296,14 @@
 					on:value={savePreferences}
 				/>
 			</li>
+			<li class="py-2">
+				<Switch
+					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_zebra_stripes"
+					description=""
+					bind:checked={showZebraStripes}
+					on:value={savePreferences}
+				/>
+			</li>
 		</ul>
 	</Modal>
 {/if}
@@ -302,6 +312,7 @@
 	class="h-full px-2 pt-2 flex flex-col relative"
 	class:show-timestamps={showTimestamps}
 	class:show-platform={showPlatform}
+	class:show-zebra-stripes={showZebraStripes}
 	class:color-by-platform={colorBy == 'PLATFORM'}
 	class:color-by-user={colorBy == 'USER'}
 >
@@ -367,7 +378,6 @@
 	}
 
 	/* Timestamps */
-
 	:global(.message-timestamp) {
 		display: none;
 		user-select: none !important;
@@ -386,5 +396,10 @@
 		display: inline-block;
 		width: var(--timestamp-width, 0);
 		padding-right: 5px;
+	}
+
+	/* Zebra Stripes */
+	.show-zebra-stripes ul > :global(li):nth-child(odd) {
+		background-color: var(--base4);
 	}
 </style>
