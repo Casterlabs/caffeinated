@@ -103,6 +103,7 @@ public class AppUI extends JavascriptObject {
         this.preferences.setEnableAlternateThemes(newPreferences.isEnableAlternateThemes());
         this.preferences.setZoom(newPreferences.getZoom());
         this.preferences.setUiFont(newPreferences.getUiFont());
+        this.preferences.setSidebarClosed(newPreferences.isSidebarClosed());
         this.preferenceFile.save();
 
         CaffeinatedApp.getInstance().reloadLanguage();

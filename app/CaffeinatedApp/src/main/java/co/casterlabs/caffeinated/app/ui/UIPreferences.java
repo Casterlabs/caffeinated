@@ -24,6 +24,7 @@ public class UIPreferences {
     private boolean enableAlternateThemes = false;
     private double zoom = 1.0;
     private String uiFont = "";
+    private boolean sidebarClosed = false;
 
     private DashboardConfig mainDashboard = new DashboardConfig();
     private DashboardConfig dockDashboard = new DashboardConfig();

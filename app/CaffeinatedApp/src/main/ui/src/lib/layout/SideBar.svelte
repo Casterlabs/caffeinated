@@ -45,6 +45,7 @@
 
 	export function toggleSideBar() {
 		sidebarVisible = !sidebarVisible;
+		setPreferenceItem('sidebarClosed', !sidebarVisible);
 
 		anime({
 			easing: 'easeOutQuad',
@@ -56,11 +57,25 @@
 		});
 	}
 
+	async function setPreferenceItem(name, value) {
+		Caffeinated.UI.updateAppearance({
+			...(await Caffeinated.UI.preferences),
+			[name]: value
+		});
+	}
+
 	onMount(() => {
 		window.toggleSideBar = toggleSideBar;
 
 		Caffeinated.pluginIntegration.widgets.then((widgets) => {
 			applets = widgets.filter((w) => w.details.type == 'APPLET');
+		});
+
+		Caffeinated.UI.preferences.then((prefs) => {
+			if (prefs.sidebarClosed) {
+				document.body.style.setProperty('--sidebar-width-mul', 0);
+				sidebarVisible = false;
+			}
 		});
 
 		setInterval(
