@@ -59,10 +59,6 @@ public class UIPreferences {
         private boolean showZebraStripes = false;
         private JsonObject inputBoxPreferences = new JsonObject();
 
-        // Still used by the popout dock.
-        private @Deprecated boolean showModActions = true;
-        private @Deprecated boolean showViewersList = true;
-
     }
 
     @Data
