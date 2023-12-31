@@ -37,7 +37,8 @@
 	const THEMES = {
 		'mauve/crimson': 'Casterlabs',
 		'bronze/gold':   'Bronze',
-		'gray/gray':     'Noir'
+		'gray/gray':     'Noir',
+		'red/teal':      'Cyberpunk',
 	};
 
 	const THEME_COLORS = [
