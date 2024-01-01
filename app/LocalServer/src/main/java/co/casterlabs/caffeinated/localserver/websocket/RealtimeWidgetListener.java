@@ -112,7 +112,10 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                     FastLogger.logStatic(data);
 
                     String koiType = data.getString("type");
-                    UserPlatform platform = UserPlatform.valueOf(data.getString("platform"));
+                    UserPlatform platform = null;
+                    if (data.get("platform").isJsonString()) {
+                        platform = UserPlatform.valueOf(data.getString("platform"));
+                    }
 
                     switch (koiType) {
                         case "UPVOTE": {
