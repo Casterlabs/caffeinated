@@ -12,6 +12,15 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCheckboxBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsColorBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsDropdownBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFileBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFontBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsNumberBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsPlatformDropdownBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsTextBuilder;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -54,6 +63,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
     /**
      * Override as neeeded.
      */
+    @SuppressWarnings("deprecation")
     protected WidgetSettingsLayout generateSettingsLayout() {
         WidgetSettingsLayout layout = new WidgetSettingsLayout();
 
@@ -61,17 +71,79 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
         {
             WidgetSettingsSection barStyle = new WidgetSettingsSection("style", "Style")
-                .addItem(WidgetSettingsItem.asNumber("margin", "Margin (px)", 0, 1, 0, Integer.MAX_VALUE))
-                .addItem(WidgetSettingsItem.asDropdown("style", "Style", "Progress Bar (With Text)", "Progress Bar", "Text Only"))
-                .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
-                .addItem(WidgetSettingsItem.asRange("font_size", "Font Size", 16, 1, 0, 128))
-                .addItem(WidgetSettingsItem.asRange("font_weight", "Font Weight (boldness)", 400, 100, 100, 1000))
-                .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"));
+                .addItem(
+                    new WidgetSettingsNumberBuilder()
+                        .withId("margin")
+                        .withName("Margin (px)")
+                        .withDefaultValue(0)
+                        .withStep(1)
+                        .withMin(0)
+                        .withMax(Integer.MAX_VALUE)
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsDropdownBuilder()
+                        .withId("style")
+                        .withName("Style")
+                        .withDefaultValue("Progress Bar (With Text)")
+                        .withOptionsList("Progress Bar (With Text)", "Progress Bar", "Text Only")
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsFontBuilder()
+                        .withId("font")
+                        .withName("Font")
+                        .withDefaultValue("Poppins")
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsRangeBuilder()
+                        .withId("font_size")
+                        .withName("Font Size")
+                        .withDefaultValue(16)
+                        .withStep(1)
+                        .withMin(0)
+                        .withMax(128)
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsRangeBuilder()
+                        .withId("font_weight")
+                        .withName("Font Weight (Boldness)")
+                        .withDefaultValue(400)
+                        .withStep(100)
+                        .withMin(100)
+                        .withMax(1000)
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsColorBuilder()
+                        .withId("text_color")
+                        .withName("Text Color")
+                        .withDefaultValue("#ffffff")
+                        .build()
+                );
 
             if (currentStyle.equals("Text Only")) {
                 barStyle
-                    .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"))
-                    .addItem(WidgetSettingsItem.asRange("text_shadow", "Text Shadow", -1, 1, -1, 20));
+                    .addItem(
+                        new WidgetSettingsDropdownBuilder()
+                            .withId("text_align")
+                            .withName("Text Align")
+                            .withDefaultValue("Left")
+                            .withOptionsList("Left", "Right", "Center")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("text-shadow")
+                            .withName("Text Shadow")
+                            .withDefaultValue(-1)
+                            .withStep(1)
+                            .withMin(-1)
+                            .withMax(20)
+                            .build()
+                    );
             }
 
             layout.addSection(barStyle);
@@ -79,23 +151,77 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
         {
             WidgetSettingsSection barGoal = new WidgetSettingsSection("goal", "Goal")
-                .addItem(WidgetSettingsItem.asText("title", "Title", "", ""))
-                .addItem(WidgetSettingsItem.asNumber("target", "Target", 10, 1, 0, Integer.MAX_VALUE));
+                .addItem(
+                    new WidgetSettingsTextBuilder()
+                        .withId("title")
+                        .withName("Title")
+                        .withDefaultValue("")
+                        .withPlaceholder("")
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsNumberBuilder()
+                        .withId("target")
+                        .withName("Target")
+                        .withDefaultValue(10)
+                        .withStep(1)
+                        .withMin(0)
+                        .withMax(Integer.MAX_VALUE)
+                        .build()
+                );
 
             if (currentStyle.equals("Progress Bar")) {
                 barGoal
-                    .addItem(WidgetSettingsItem.asCheckbox("rounded_edges", "Rounded Edges", false))
-                    .addItem(WidgetSettingsItem.asCheckbox("add_numbers", "Show Numbers", true))
-                    .addItem(WidgetSettingsItem.asColor("bar_color", "Bar Color", "#31f8ff"));
+                    .addItem(
+                        new WidgetSettingsCheckboxBuilder()
+                            .withId("rounded_edges")
+                            .withName("Rounded Edges")
+                            .withDefaultValue(false)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsCheckboxBuilder()
+                            .withId("add_numbers")
+                            .withName("Show Numbers")
+                            .withDefaultValue(true)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsColorBuilder()
+                            .withId("bar_color")
+                            .withName("Bar Color")
+                            .withDefaultValue("#31f8ff")
+                            .build()
+                    );
 
                 boolean isRounded = this.settings().has("goal.rounded_edges") ? this.settings().getBoolean("goal.rounded_edges") : false;
                 if (isRounded) {
-                    barGoal.addItem(WidgetSettingsItem.asNumber("roundness", "Roundess (px)", 20, 1, 0, 30));
+                    barGoal
+                        .addItem(
+                            new WidgetSettingsNumberBuilder()
+                                .withId("roundness")
+                                .withName("Roundess (px)")
+                                .withDefaultValue(20)
+                                .withStep(1)
+                                .withMin(0)
+                                .withMax(30)
+                                .build()
+                        );
                 }
             }
 
             if (this.enableValueSetting()) {
-                barGoal.addItem(WidgetSettingsItem.asNumber("value", "Value", 1, 1, 0, Integer.MAX_VALUE));
+                barGoal
+                    .addItem(
+                        new WidgetSettingsNumberBuilder()
+                            .withId("value")
+                            .withName("Value")
+                            .withDefaultValue(1)
+                            .withStep(1)
+                            .withMin(0)
+                            .withMax(Integer.MAX_VALUE)
+                            .build()
+                    );;
             }
 
             layout.addSection(barGoal);
@@ -103,7 +229,13 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
         {
             WidgetSettingsSection alert = new WidgetSettingsSection("alert", "Alert")
-                .addItem(WidgetSettingsItem.asCheckbox("enabled", "Enabled", false));
+                .addItem(
+                    new WidgetSettingsCheckboxBuilder()
+                        .withId("enabled")
+                        .withName("Enabled")
+                        .withDefaultValue(false)
+                        .build()
+                );
 
             if (this.settings().getBoolean("alert.enabled", false)) {
                 layout.addButton(
@@ -123,26 +255,138 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
                 alert
                     .addItem(WidgetSettingsItem.asNumber("duration", "Duration (Seconds)", 15, 1, 0, 60))
-                    .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
-                    .addItem(WidgetSettingsItem.asNumber("font_size", "Font Size (px)", 16, 1, 0, 128))
-                    .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"))
-                    .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
-                    .addItem(WidgetSettingsItem.asColor("highlight_color", "Highlight Color", "#5bf599"))
+                    .addItem(
+                        new WidgetSettingsNumberBuilder()
+                            .withId("duration")
+                            .withName("Duration (Seconds)")
+                            .withDefaultValue(15)
+                            .withStep(1)
+                            .withMin(0)
+                            .withMax(60)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsFontBuilder()
+                            .withId("font")
+                            .withName("Font")
+                            .withDefaultValue("Poppins")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("font_size")
+                            .withName("Font Size")
+                            .withDefaultValue(16)
+                            .withStep(1)
+                            .withMin(0)
+                            .withMax(128)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("font_weight")
+                            .withName("Font Weight (Boldness)")
+                            .withDefaultValue(400)
+                            .withStep(100)
+                            .withMin(100)
+                            .withMax(1000)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsDropdownBuilder()
+                            .withId("text_align")
+                            .withName("Text Align")
+                            .withDefaultValue("Left")
+                            .withOptionsList("Left", "Right", "Center")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsColorBuilder()
+                            .withId("text_color")
+                            .withName("Text Color")
+                            .withDefaultValue("#ffffff")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsColorBuilder()
+                            .withId("highlight_color")
+                            .withName("Highlight Color")
+                            .withDefaultValue("#5bf599")
+                            .build()
+                    )
                     .addItem(WidgetSettingsItem.asText("text", "Text", "We did it!", ""))
-                    .addItem(WidgetSettingsItem.asRange("vertical_offset", "Text Vertical Offset", 1, .05, 0, 1))
-                    .addItem(WidgetSettingsItem.asRange("horizontal_offset", "Text Horizontal Offset", 0, .05, -1, 1))
-                    .addItem(WidgetSettingsItem.asRange("shadow", "Shadow", -1, 1, -1, 20));
+                    .addItem(
+                        new WidgetSettingsTextBuilder()
+                            .withId("text")
+                            .withName("Text")
+                            .withDefaultValue("We did it!")
+                            .withPlaceholder("")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("vertical_offset")
+                            .withName("Text Vertical Offset")
+                            .withDefaultValue(1)
+                            .withStep(.05)
+                            .withMin(0)
+                            .withMax(1)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("horizontal_offset")
+                            .withName("Text Horizontal Offset")
+                            .withDefaultValue(0)
+                            .withStep(.05)
+                            .withMin(-1)
+                            .withMax(1)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("shadow")
+                            .withName("Shadow")
+                            .withDefaultValue(-1)
+                            .withStep(1)
+                            .withMin(-1)
+                            .withMax(20)
+                            .build()
+                    );
 
                 layout.addSection(alert);
 
                 {
                     WidgetSettingsSection audioSection = new WidgetSettingsSection("alert.audio", "Alert Audio")
-                        .addItem(WidgetSettingsItem.asCheckbox("enabled", "Play Audio", true));
+                        .addItem(WidgetSettingsItem.asCheckbox("enabled", "Play Audio", true))
+                        .addItem(
+                            new WidgetSettingsCheckboxBuilder()
+                                .withId("enabled")
+                                .withName("Play Audio")
+                                .withDefaultValue(true)
+                                .build()
+                        );
 
                     if (this.settings().getBoolean("audio.enabled", true)) {
                         audioSection
-                            .addItem(WidgetSettingsItem.asFile("file", "Audio File", "audio"))
-                            .addItem(WidgetSettingsItem.asRange("volume", "Volume", .5, .01, 0, 1));
+                            .addItem(
+                                new WidgetSettingsFileBuilder()
+                                    .withId("file")
+                                    .withName("Audio File")
+                                    .withAllowedTypes("audio")
+                                    .build()
+
+                            )
+                            .addItem(
+                                new WidgetSettingsRangeBuilder()
+                                    .withId("volume")
+                                    .withName("Volume")
+                                    .withDefaultValue(.5)
+                                    .withStep(.01)
+                                    .withMin(0)
+                                    .withMax(1)
+                                    .build()
+                            );
                     }
 
                     layout.addSection(audioSection);
@@ -150,10 +394,23 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
                 {
                     WidgetSettingsSection imageSection = new WidgetSettingsSection("alert.image", "Alert Image")
-                        .addItem(WidgetSettingsItem.asCheckbox("enabled", "Show Image", true));
+                        .addItem(
+                            new WidgetSettingsCheckboxBuilder()
+                                .withId("enabled")
+                                .withName("Show Image")
+                                .withDefaultValue(true)
+                                .build()
+                        );
 
                     if (this.settings().getBoolean("image.enabled", true)) {
-                        imageSection.addItem(WidgetSettingsItem.asFile("file", "Image File", "image", "video"));
+                        imageSection
+                            .addItem(
+                                new WidgetSettingsFileBuilder()
+                                    .withId("file")
+                                    .withName("Image File")
+                                    .withAllowedTypes("image", "video")
+                                    .build()
+                            );
                     }
 
                     layout.addSection(imageSection);
@@ -166,7 +423,15 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
         if (this.enablePlatformOption()) {
             layout.addSection(
                 new WidgetSettingsSection("platform", "Platform")
-                    .addItem(WidgetSettingsItem.asPlatformDropdown("platforms", "Use from", true, this.requiredPlatformFeatures()))
+                    .addItem(
+                        new WidgetSettingsPlatformDropdownBuilder()
+                            .withId("platforms")
+                            .withName("Use from")
+                            .withAllowMultiple(true)
+                            .withRequiredFeatures(this.requiredPlatformFeatures())
+                            .build()
+                    )
+
             );
         }
 
