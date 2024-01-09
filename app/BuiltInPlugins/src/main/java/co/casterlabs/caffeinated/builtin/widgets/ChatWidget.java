@@ -101,7 +101,7 @@ public class ChatWidget extends Widget {
                         .withName("Disappear After (seconds)")
                         .withDefaultValue(30)
                         .withMin(10)
-                        .withMin(360)
+                        .withMax(360)
                         .build()
                 );
             }
