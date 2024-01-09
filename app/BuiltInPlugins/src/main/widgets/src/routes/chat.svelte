@@ -247,6 +247,7 @@
 	style:font-size="{$settings['text_style.font_size']}px"
 	style:font-weight={$settings['text_style.font_weight']}
 	style:padding="{$settings['message_style.margin']}px"
+	style:letter-spacing="{$settings['text_style.letter_spacing']}px"
 	class:top-0={$settings['message_style.message_style'] == 'Text (Top-down)'}
 	class:flex-col-reverse={$settings['message_style.message_style'] == 'Text (Top-down)'}
 	class:flex-col={$settings['message_style.message_style'] == 'Text (Bottom-up)'}
