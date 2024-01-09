@@ -5,13 +5,14 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
-import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCheckboxBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsColorBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsDropdownBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFontBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsNumberBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import lombok.NonNull;
 
@@ -39,6 +40,7 @@ public class ChatWidget extends Widget {
         this.setSettingsLayout(this.generateSettingsLayout()); // Preserve
     }
 
+    @SuppressWarnings("deprecation")
     protected WidgetSettingsLayout generateSettingsLayout() {
         WidgetSettingsLayout layout = new WidgetSettingsLayout();
 
@@ -152,21 +154,103 @@ public class ChatWidget extends Widget {
         layout
             .addSection(
                 new WidgetSettingsSection("text_style", "Text Style")
-                    .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
-                    .addItem(WidgetSettingsItem.asRange("font_size", "Font Size", 16, 1, 0, 128))
-                    .addItem(WidgetSettingsItem.asRange("font_weight", "Font Weight (boldness)", 400, 100, 100, 1000))
-                    .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
-                    .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right"))
-                    .addItem(WidgetSettingsItem.asRange("text_shadow", "Text Shadow", -1, 1, -1, 20))
+                    .addItem(
+                        new WidgetSettingsFontBuilder()
+                            .withId("font")
+                            .withName("Font")
+                            .withDefaultValue("Poppins")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("font_size")
+                            .withName("Font Size")
+                            .withDefaultValue(16)
+                            .withStep(1)
+                            .withMin(0)
+                            .withMax(128)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("font_weight")
+                            .withName("Font Weight (boldness)")
+                            .withDefaultValue(400)
+                            .withStep(100)
+                            .withMin(100)
+                            .withMax(1000)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsColorBuilder()
+                            .withId("text_color")
+                            .withName("Text_Color")
+                            .withDefaultValue("#ffffff")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsDropdownBuilder()
+                            .withId("text_align")
+                            .withName("Text Align")
+                            .withDefaultValue("Left")
+                            .withOptionsList("Left", "Right")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("text_shadow")
+                            .withName("Text Shadow")
+                            .withDefaultValue(-1)
+                            .withStep(-1)
+                            .withMin(-1)
+                            .withMax(20)
+                            .build()
+                    )
             )
             .addSection(
                 new WidgetSettingsSection("events", "Events")
-                    .addItem(WidgetSettingsItem.asCheckbox("RICH_MESSAGE.REGULAR", "Show Chat Messages", true))
-                    .addItem(WidgetSettingsItem.asCheckbox("CHANNEL_POINTS", "Show Channel Points Redemptions", true))
-                    .addItem(WidgetSettingsItem.asCheckbox("RICH_MESSAGE.DONATION", "Show Donations Events and Messages", true))
-                    .addItem(WidgetSettingsItem.asCheckbox("FOLLOW", "Show Follow Events", true))
-                    .addItem(WidgetSettingsItem.asCheckbox("SUBSCRIPTION", "Show Subscription Events", true))
-                    .addItem(WidgetSettingsItem.asCheckbox("RAID", "Show Raid Events", true))
+                    .addItem(
+                        new WidgetSettingsCheckboxBuilder()
+                            .withId("RICH_MESSAGE.REGULAR")
+                            .withName("Show Chat Messages")
+                            .withDefaultValue(true)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsCheckboxBuilder()
+                            .withId("CHANNEL_POINTS")
+                            .withName("Show Channel Points Redemptions")
+                            .withDefaultValue(true)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsCheckboxBuilder()
+                            .withId("RICH_MESSAGE.DONATION")
+                            .withName("Show Donations Events and Messages")
+                            .withDefaultValue(true)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsCheckboxBuilder()
+                            .withId("FOLLOW")
+                            .withName("Show Follow Events")
+                            .withDefaultValue(true)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsCheckboxBuilder()
+                            .withId("SUBSCRIPTION")
+                            .withName("Show Subscription Events")
+                            .withDefaultValue(true)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsCheckboxBuilder()
+                            .withId("RAID")
+                            .withName("Show Raid Events")
+                            .withDefaultValue(true)
+                            .build()
+                    )
             )
             .addButton(
                 new WidgetSettingsButton(
