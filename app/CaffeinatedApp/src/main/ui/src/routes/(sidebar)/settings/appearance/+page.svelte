@@ -39,6 +39,7 @@
 		'bronze/gold':   'Bronze',
 		'gray/gray':     'Noir',
 		'red/teal':      'Cyberpunk',
+		'pink/pink':     'Cute <3',
 	};
 
 	const THEME_COLORS = [
