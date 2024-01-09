@@ -14,6 +14,14 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCheckboxBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsColorBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsDropdownBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFileBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFontBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsNumberBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsTextBuilder;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.types.events.ChatEvent;
 import co.casterlabs.rakurai.json.Rson;
@@ -37,43 +45,171 @@ public abstract class GenericAlert extends Widget {
     /**
      * Override as neeeded.
      */
+    @SuppressWarnings({
+            "deprecation"
+    })
     protected WidgetSettingsLayout generateSettingsLayout() {
+        @SuppressWarnings("deprecation")
         WidgetSettingsLayout layout = new WidgetSettingsLayout()
             .addSection(
                 new WidgetSettingsSection("style", "Style")
-                    .addItem(WidgetSettingsItem.asNumber("duration", "Duration (Seconds)", 15, 1, 0, 60))
-                    .addItem(WidgetSettingsItem.asFont("font", "Font", "Poppins"))
-                    .addItem(WidgetSettingsItem.asRange("font_size", "Font Size", 16, 1, 0, 128))
-                    .addItem(WidgetSettingsItem.asRange("font_weight", "Font Weight (boldness)", 400, 100, 100, 1000))
-                    .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"))
-                    .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ffffff"))
-                    .addItem(WidgetSettingsItem.asColor("highlight_color", "Highlight Color", "#5bf599"))
-                    .addItem(WidgetSettingsItem.asRange("vertical_offset", "Text Vertical Offset", 1, .05, 0, 1))
-                    .addItem(WidgetSettingsItem.asRange("horizontal_offset", "Text Horizontal Offset", 0, .05, -1, 1))
-                    .addItem(WidgetSettingsItem.asRange("shadow", "Shadow", -1, 1, -1, 20))
+                    .addItem(
+                        new WidgetSettingsNumberBuilder()
+                            .withId("duration")
+                            .withName("Duration (Seconds)")
+                            .withDefaultValue(15)
+                            .withStep(1)
+                            .withMin(0)
+                            .withMax(60)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsFontBuilder()
+                            .withId("font")
+                            .withName("Font")
+                            .withDefaultValue("Poppins")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("font_size")
+                            .withName("Font Size")
+                            .withDefaultValue(16)
+                            .withStep(1)
+                            .withMin(0)
+                            .withMax(128)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("font_weight")
+                            .withName("Font Weight (Boldness)")
+                            .withDefaultValue(400)
+                            .withStep(100)
+                            .withMin(100)
+                            .withMax(1000)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsDropdownBuilder()
+                            .withId("text_align")
+                            .withName("Text Align")
+                            .withDefaultValue("Left")
+                            .withOptionsList("Left", "Right", "Center")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsColorBuilder()
+                            .withId("text_color")
+                            .withName("Text Color")
+                            .withDefaultValue("#ffffff")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsColorBuilder()
+                            .withId("highlight_color")
+                            .withName("Highlight Color")
+                            .withDefaultValue("#5bf599")
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("vertical_offset")
+                            .withName("Text Vertical Offset")
+                            .withDefaultValue(1)
+                            .withStep(.05)
+                            .withMin(0)
+                            .withMax(1)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("horizontal_offset")
+                            .withName("Text Horizontal Offset")
+                            .withDefaultValue(0)
+                            .withStep(.05)
+                            .withMin(-1)
+                            .withMax(1)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("shadow")
+                            .withName("Shadow")
+                            .withDefaultValue(-1)
+                            .withStep(1)
+                            .withMin(-1)
+                            .withMax(20)
+                            .build()
+                    )
             );
 
         {
             WidgetSettingsSection textSection = new WidgetSettingsSection("text", "Text")
-                .addItem(WidgetSettingsItem.asText("prefix", "Prefix", this.defaultPrefix(), ""));
+                .addItem(
+                    new WidgetSettingsTextBuilder()
+                        .withId("prefix")
+                        .withName("Prefix")
+                        .withDefaultValue(this.defaultPrefix())
+                        .withPlaceholder("")
+                        .build()
+                );
 
             if (this.hasInfix()) {
-                textSection.addItem(WidgetSettingsItem.asText("infix", "Infix", this.defaultInfix(), ""));
+                textSection
+                    .addItem(
+                        new WidgetSettingsTextBuilder()
+                            .withId("infix")
+                            .withName("Infix")
+                            .withDefaultValue(this.defaultInfix())
+                            .withPlaceholder("")
+                            .build()
+                    );
             }
 
-            textSection.addItem(WidgetSettingsItem.asText("suffix", "Suffix", this.defaultSuffix(), ""));
+            textSection
+                .addItem(
+                    new WidgetSettingsTextBuilder()
+                        .withId("suffix")
+                        .withName("Suffix")
+                        .withDefaultValue(this.defaultSuffix())
+                        .withPlaceholder("")
+                        .build()
+                );
 
             layout.addSection(textSection);
         }
 
         if (this.hasTTS()) {
             WidgetSettingsSection ttsSection = new WidgetSettingsSection("tts", "Text To Speech")
-                .addItem(WidgetSettingsItem.asCheckbox("enabled", "Enabled", true));
+                .addItem(
+                    new WidgetSettingsCheckboxBuilder()
+                        .withId("enabled")
+                        .withName("Enabled")
+                        .withDefaultValue(true)
+                        .build()
+                );
 
             if (this.settings().getBoolean("tts.enabled", true)) {
                 ttsSection
-                    .addItem(WidgetSettingsItem.asRange("volume", "Volume", .5, .01, 0, 1))
-                    .addItem(WidgetSettingsItem.asDropdown("voice", "Default Voice", "Brian", TTS.getVoicesAsArray()));
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("volume")
+                            .withName("Volume")
+                            .withDefaultValue(.5)
+                            .withStep(.01)
+                            .withMin(0)
+                            .withMax(1)
+                            .build()
+                    )
+                    .addItem(
+                        new WidgetSettingsDropdownBuilder()
+                            .withId("voice")
+                            .withName("Default Voice")
+                            .withDefaultValue("Brian")
+                            .withOptionsList(TTS.getVoicesAsArray())
+                            .build()
+                    );
 
                 layout.addButton(
                     new WidgetSettingsButton("skip-tts")
@@ -93,12 +229,34 @@ public abstract class GenericAlert extends Widget {
 
         {
             WidgetSettingsSection audioSection = new WidgetSettingsSection("audio", "Alert Audio")
-                .addItem(WidgetSettingsItem.asCheckbox("enabled", "Play Audio", true));
+                .addItem(
+                    new WidgetSettingsCheckboxBuilder()
+                        .withId("enabled")
+                        .withName("Play Audio")
+                        .withDefaultValue(true)
+                        .build()
+                );
 
             if (this.settings().getBoolean("audio.enabled", true)) {
                 audioSection
-                    .addItem(WidgetSettingsItem.asFile("file", "Audio File", "audio"))
-                    .addItem(WidgetSettingsItem.asRange("volume", "Volume", .5, .01, 0, 1));
+                    .addItem(
+                        new WidgetSettingsFileBuilder()
+                            .withId("file")
+                            .withName("Audio File")
+                            .withAllowedTypes("audio")
+                            .build()
+
+                    )
+                    .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("volume")
+                            .withName("Volume")
+                            .withDefaultValue(.5)
+                            .withStep(.01)
+                            .withMin(0)
+                            .withMax(1)
+                            .build()
+                    );
             }
 
             layout.addSection(audioSection);
@@ -106,10 +264,23 @@ public abstract class GenericAlert extends Widget {
 
         if (!this.hasCustomImageImplementation()) {
             WidgetSettingsSection imageSection = new WidgetSettingsSection("image", "Alert Image")
-                .addItem(WidgetSettingsItem.asCheckbox("enabled", "Show Image", true));
+                .addItem(
+                    new WidgetSettingsCheckboxBuilder()
+                        .withId("enabled")
+                        .withName("Show Image")
+                        .withDefaultValue(true)
+                        .build()
+                );
 
             if (this.settings().getBoolean("image.enabled", true)) {
-                imageSection.addItem(WidgetSettingsItem.asFile("file", "Image File", "image", "video"));
+                imageSection.addItem(WidgetSettingsItem.asFile("file", "Image File", "image", "video"))
+                    .addItem(
+                        new WidgetSettingsFileBuilder()
+                            .withId("file")
+                            .withName("Image File")
+                            .withAllowedTypes("image", "video")
+                            .build()
+                    );
             }
 
             layout.addSection(imageSection);
