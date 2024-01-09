@@ -174,7 +174,7 @@ public class ChatWidget extends Widget {
                     .addItem(
                         new WidgetSettingsRangeBuilder()
                             .withId("font_weight")
-                            .withName("Font Weight (boldness)")
+                            .withName("Font Weight (Boldness)")
                             .withDefaultValue(400)
                             .withStep(100)
                             .withMin(100)
