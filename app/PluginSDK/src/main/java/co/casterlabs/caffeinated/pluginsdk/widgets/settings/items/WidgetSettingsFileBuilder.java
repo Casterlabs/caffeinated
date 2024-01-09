@@ -39,4 +39,7 @@ public class WidgetSettingsFileBuilder {
         );
     }
 
+    public WidgetSettingsFileBuilder withAllowedTypes(String... allowed) {
+        return new WidgetSettingsFileBuilder(this.id, this.name, allowed);
+    }
 }
