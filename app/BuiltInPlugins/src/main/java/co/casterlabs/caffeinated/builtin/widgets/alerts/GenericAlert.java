@@ -91,6 +91,16 @@ public abstract class GenericAlert extends Widget {
                             .build()
                     )
                     .addItem(
+                        new WidgetSettingsRangeBuilder()
+                            .withId("letter_spacing")
+                            .withName("Letter Spacing")
+                            .withDefaultValue(0)
+                            .withStep(1)
+                            .withMin(-5)
+                            .withMax(5)
+                            .build()
+                    )
+                    .addItem(
                         new WidgetSettingsDropdownBuilder()
                             .withId("text_align")
                             .withName("Text Align")
