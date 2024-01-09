@@ -196,7 +196,7 @@
         "docks.chat.viewer.tts.skip": "Skip message",
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.ASKS": "%name% asks {message}",
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.SAYS": "%name% said {message}",
-        "docks.chat.viewer.tts.event_format.RICH_MESSAGE.LINK": "%name% sent a link.",
+        "docks.chat.viewer.tts.event_format.RICH_MESSAGE.SENT_A_LINK": "%name% sent a link.",
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.EMOTES": "%name% sent some emotes.",
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.ATTACHMENT": "%name% sent an attachment.",
         "docks.chat.viewer.tts.event_format.RICH_MESSAGE.REPLY": "%name% said, in response to {otherName}, {message}.",
