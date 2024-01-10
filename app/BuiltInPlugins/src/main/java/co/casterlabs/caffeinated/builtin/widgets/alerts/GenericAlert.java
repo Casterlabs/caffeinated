@@ -11,7 +11,6 @@ import co.casterlabs.caffeinated.pluginsdk.TTS;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
-import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCheckboxBuilder;
@@ -283,7 +282,7 @@ public abstract class GenericAlert extends Widget {
                 );
 
             if (this.settings().getBoolean("image.enabled", true)) {
-                imageSection.addItem(WidgetSettingsItem.asFile("file", "Image File", "image", "video"))
+                imageSection
                     .addItem(
                         new WidgetSettingsFileBuilder()
                             .withId("file")
