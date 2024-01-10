@@ -368,7 +368,6 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
 
                 {
                     WidgetSettingsSection audioSection = new WidgetSettingsSection("alert.audio", "Alert Audio")
-                        .addItem(WidgetSettingsItem.asCheckbox("enabled", "Play Audio", true))
                         .addItem(
                             new WidgetSettingsCheckboxBuilder()
                                 .withId("enabled")
