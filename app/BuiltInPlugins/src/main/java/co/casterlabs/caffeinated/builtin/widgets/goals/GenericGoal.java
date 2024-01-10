@@ -9,7 +9,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
-import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCheckboxBuilder;
@@ -264,7 +263,6 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
                 );
 
                 alert
-                    .addItem(WidgetSettingsItem.asNumber("duration", "Duration (Seconds)", 15, 1, 0, 60))
                     .addItem(
                         new WidgetSettingsNumberBuilder()
                             .withId("duration")
@@ -324,7 +322,6 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
                             .withDefaultValue("#5bf599")
                             .build()
                     )
-                    .addItem(WidgetSettingsItem.asText("text", "Text", "We did it!", ""))
                     .addItem(
                         new WidgetSettingsTextBuilder()
                             .withId("text")
