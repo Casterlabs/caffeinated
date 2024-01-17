@@ -6,7 +6,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>Bootstrap</module>
+		<module>App</module>
 		<module>Util</module>
 		<module>PluginSDK</module>
 		<module>Koi</module>
