@@ -5,7 +5,7 @@
 
 	let chatViewer;
 
-	const userStates = st || Caffeinated.koi.svelte('userStates');
+	const userStates = st || Caffeinated.koi.__stores.svelte('userStates');
 
 	function doAction(action, data) {
 		switch (action) {

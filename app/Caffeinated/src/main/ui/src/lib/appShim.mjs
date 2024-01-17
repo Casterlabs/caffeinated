@@ -59,10 +59,10 @@ function setupApp() {
 		}
 	});
 
-	Caffeinated.themeManager.svelte('baseColor').subscribe(App.baseColor.set);
-	Caffeinated.themeManager.svelte('primaryColor').subscribe(App.primaryColor.set);
-	Caffeinated.themeManager.svelte('effectiveAppearance').subscribe(App.appearance.set);
-	Caffeinated.UI.svelte('preferences').subscribe((prefs) => {
+	Caffeinated.themeManager.__stores.svelte('baseColor').subscribe(App.baseColor.set);
+	Caffeinated.themeManager.__stores.svelte('primaryColor').subscribe(App.primaryColor.set);
+	Caffeinated.themeManager.__stores.svelte('effectiveAppearance').subscribe(App.appearance.set);
+	Caffeinated.UI.__stores.svelte('preferences').subscribe((prefs) => {
 		if (!prefs) return;
 		const { language, icon, emojiProvider, zoom, uiFont } = prefs;
 

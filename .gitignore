@@ -21,3 +21,6 @@ dist/
 .metadata/
 
 # Misc
+app/Caffeinated/webview.dll
+app/Caffeinated/libwebview.so
+app/Caffeinated/libwebview.dylib

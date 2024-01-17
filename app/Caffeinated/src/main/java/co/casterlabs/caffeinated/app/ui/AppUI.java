@@ -21,16 +21,15 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.platform.Platform;
-import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonNumber;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rakurai.json.element.JsonString;
+import dev.webview.webview_java.bridge.JavascriptFunction;
+import dev.webview.webview_java.bridge.JavascriptGetter;
+import dev.webview.webview_java.bridge.JavascriptObject;
+import dev.webview.webview_java.bridge.JavascriptSetter;
+import dev.webview.webview_java.bridge.JavascriptValue;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -242,13 +241,13 @@ public class AppUI extends JavascriptObject {
                     )
             );
 
-            CaffeinatedApp.getInstance().getAppBridge().eval(line);
+            CaffeinatedApp.getInstance().getWebview().eval(line);
         }
     }
 
     public void goBack() {
         if (this.uiFinishedLoad) {
-            CaffeinatedApp.getInstance().getAppBridge().eval("history.back()");
+            CaffeinatedApp.getInstance().getWebview().eval("history.back()");
         }
     }
 
@@ -268,7 +267,7 @@ public class AppUI extends JavascriptObject {
             return;
         }
 
-        CaffeinatedApp.getInstance().getAppBridge().eval(
+        CaffeinatedApp.getInstance().getWebview().eval(
             "(() => {"
                 + "const audio = new Audio(" + new JsonString(audioUrl) + ");"
                 + "audio.volume = " + new JsonNumber(volume) + ";"
@@ -288,7 +287,7 @@ public class AppUI extends JavascriptObject {
             resource = AppUI.class.getClassLoader().getResource(path);
         }
 
-        App.setIcon(resource);
+//        App.setIcon(resource);
     }
 
 }

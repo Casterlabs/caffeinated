@@ -167,10 +167,10 @@ public class InstanceManager {
                         FastLogger.logStatic("IPC (HOST): %s", line);
 
                         if (line.equals("SUMMON")) {
-                            if (!Bootstrap.getWebview().isOpen()) {
-                                Bootstrap.getWebview().open(CaffeinatedApp.getInstance().getAppUrl());
-                            }
-                            Bootstrap.getWebview().focus();
+//                            if (!Bootstrap.getWebview().isOpen()) {
+//                                Bootstrap.getWebview().open(CaffeinatedApp.getInstance().getAppUrl());
+//                            }
+//                            Bootstrap.getWebview().focus();
                         } else if (line.equals("SHUTDOWN")) {
                             Bootstrap.shutdown();
                         }

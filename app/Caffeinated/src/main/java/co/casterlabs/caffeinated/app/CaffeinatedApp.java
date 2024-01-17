@@ -28,7 +28,6 @@ import co.casterlabs.caffeinated.app.locale._LocaleLoader;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
 import co.casterlabs.caffeinated.app.ui.AppUI;
-import co.casterlabs.caffeinated.app.ui.CaffeinatedWindowState;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
@@ -39,13 +38,6 @@ import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.localization.LocaleProvider;
-import co.casterlabs.kaimen.webview.Webview;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
-import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
@@ -56,6 +48,13 @@ import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.swetrix.Swetrix;
+import dev.webview.webview_java.Webview;
+import dev.webview.webview_java.bridge.JavascriptFunction;
+import dev.webview.webview_java.bridge.JavascriptGetter;
+import dev.webview.webview_java.bridge.JavascriptObject;
+import dev.webview.webview_java.bridge.JavascriptSetter;
+import dev.webview.webview_java.bridge.JavascriptValue;
+import dev.webview.webview_java.bridge.WebviewBridge;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -100,27 +99,27 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     // @formatter:off
 
     // Integrations
-    private final PluginIntegration  pluginIntegration  = new PluginIntegration();
-//    private final Multistreaming     multistreaming     = Multistreaming.INSTANCE;
-    private final MusicIntegration   music              = new MusicIntegration();
-//    private final AppControlDeck     controlDeck        = new AppControlDeck();
-    private final ThemeManager       themeManager       = new ThemeManager();
-    private final AppChatbot         chatbot            = new AppChatbot();
-    private final GlobalKoi          koi                = new GlobalKoi();
-    private final AppAuth            auth               = new AppAuth();
-    private final EmojisObj          emojis             = new EmojisObj();
-    private final AppApi             api                = new AppApi();
-    private final AppUI              UI                 = new AppUI();
+    public final PluginIntegration  pluginIntegration  = new PluginIntegration();
+//    public final Multistreaming     multistreaming     = Multistreaming.INSTANCE;
+    public final MusicIntegration   music              = new MusicIntegration();
+//    public final AppControlDeck     controlDeck        = new AppControlDeck();
+    public final ThemeManager       themeManager       = new ThemeManager();
+    public final AppChatbot         chatbot            = new AppChatbot();
+    public final GlobalKoi          koi                = new GlobalKoi();
+    public final AppAuth            auth               = new AppAuth();
+    public final EmojisObj          emojis             = new EmojisObj();
+    public final AppApi             api                = new AppApi();
+    public final AppUI              UI                 = new AppUI();
 
     // Preferences
-    private final PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
-    private final PreferenceFile<CaffeinatedWindowState>       windowPreferences = new PreferenceFile<>("window", CaffeinatedWindowState.class);
-    private final PreferenceFile<AuthPreferences>              authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
+    public final PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
+//    public final PreferenceFile<CaffeinatedWindowState>       windowPreferences = new PreferenceFile<>("window", CaffeinatedWindowState.class);
+    public final PreferenceFile<AuthPreferences>              authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
 
     // @formatter:on
 
     @JavascriptValue(allowSet = false)
-    private final PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);
+    public final PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);
 
     // Event stuff
     private Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
@@ -207,7 +206,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             this.notify("Boo!", Collections.emptyMap(), NotificationType.WARNING);
         }
 
-        System.gc();
+//        System.gc();
     }
 
     @Override

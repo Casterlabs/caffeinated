@@ -20,10 +20,10 @@
 
 	const console = createConsole('Settings/Accounts');
 
-	const activePlayback = st || Caffeinated.music.svelte('activePlayback');
-	const musicProviders = st || Caffeinated.music.svelte('providers');
-	const authInstances = st || Caffeinated.auth.svelte('authInstances');
-	const connectionStates = st || Caffeinated.koi.svelte('connectionStates');
+	const activePlayback = st || Caffeinated.music.__stores.svelte('activePlayback');
+	const musicProviders = st || Caffeinated.music.__stores.svelte('providers');
+	const authInstances = st || Caffeinated.auth.__stores.svelte('authInstances');
+	const connectionStates = st || Caffeinated.koi.__stores.svelte('connectionStates');
 
 	let loading = [];
 

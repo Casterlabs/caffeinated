@@ -1,12 +1,10 @@
 package co.casterlabs.caffeinated.app.ui;
 
 import co.casterlabs.caffeinated.app.PreferenceFile;
-import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.app.App.Appearance;
-import co.casterlabs.kaimen.app.AppEvent;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
+import co.casterlabs.caffeinated.app.ui.ThemePreferences.Appearance;
+import dev.webview.webview_java.bridge.JavascriptFunction;
+import dev.webview.webview_java.bridge.JavascriptObject;
+import dev.webview.webview_java.bridge.JavascriptValue;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -36,17 +34,17 @@ public class ThemeManager extends JavascriptObject {
         this.primaryColor = this.preferenceFile.get().getPrimaryColor();
         this.appearance = this.preferenceFile.get().getAppearance();
 
-        App.on(AppEvent.APPEARANCE_CHANGE, this::calculateEffectiveTheme);
+//        App.on(AppEvent.APPEARANCE_CHANGE, this::calculateEffectiveTheme);
         this.calculateEffectiveTheme();
     }
 
     private void calculateEffectiveTheme() {
         if (this.appearance == Appearance.FOLLOW_SYSTEM) {
-            App.setAppearance(Appearance.FOLLOW_SYSTEM);
-            Appearance appearance = App.getAppearance();
+//            App.setAppearance(Appearance.FOLLOW_SYSTEM);
+//            Appearance appearance = App.getAppearance();
             this.effectiveAppearance = appearance;
         } else {
-            App.setAppearance(this.appearance);
+//            App.setAppearance(this.appearance);
             this.effectiveAppearance = this.appearance;
         }
     }

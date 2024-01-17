@@ -26,10 +26,6 @@ import co.casterlabs.caffeinated.util.collections.IdentityCollection;
 import co.casterlabs.caffeinated.util.network.InterfaceUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.emoji.generator.WebUtil;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
@@ -38,6 +34,10 @@ import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.yen.Cache;
 import co.casterlabs.yen.CacheIterator;
 import co.casterlabs.yen.impl.SQLBackedCache;
+import dev.webview.webview_java.bridge.JavascriptFunction;
+import dev.webview.webview_java.bridge.JavascriptGetter;
+import dev.webview.webview_java.bridge.JavascriptObject;
+import dev.webview.webview_java.bridge.JavascriptValue;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -49,7 +49,7 @@ public class PluginIntegration extends JavascriptObject {
     private static final File pluginsDir = new File(CaffeinatedApp.APP_DATA_DIR, "plugins");
     private static final String addressesStringList = String.join(",", InterfaceUtil.getLocalIpAddresses());
 
-    private PluginsHandler plugins = new PluginsHandler();
+    public final PluginsHandler plugins = new PluginsHandler();
     private List<PluginContext> contexts = new ArrayList<>();
     private Cache<WidgetSettingsDetails> preferenceData;
 

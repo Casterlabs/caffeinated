@@ -18,16 +18,11 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
-import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.app.App.PowerManagementHint;
-import co.casterlabs.kaimen.app.AppBootstrap;
-import co.casterlabs.kaimen.app.AppEntry;
-import co.casterlabs.kaimen.app.ui.UIServer;
-import co.casterlabs.kaimen.webview.Webview;
-import co.casterlabs.kaimen.webview.WebviewFactory;
-import co.casterlabs.kaimen.webview.WebviewLifeCycleListener;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import dev.webview.webview_java.Webview;
+import dev.webview.webview_java.bridge.WebviewBridge;
+import dev.webview.webview_java.uiserver.UIServer;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -101,14 +96,6 @@ public class Bootstrap implements Runnable {
 
     // FOR TESTING.
     public static void main(String[] args) throws Exception {
-        AppBootstrap.main(args);
-    }
-
-    @AppEntry
-    public static void main() throws Exception {
-        App.setName("Casterlabs Caffeinated");
-        App.setPowermanagementHint(PowerManagementHint.POWER_SAVER);
-
         System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 
         NativeBootstrap nb = null;
@@ -131,10 +118,9 @@ public class Bootstrap implements Runnable {
         }
 
         assert nb != null : "Unsupported platform: " + Platform.osDistribution;
-
         nb.init();
 
-        new CommandLine(new Bootstrap()).execute(App.getArgs()); // Calls #run()
+        new CommandLine(new Bootstrap()).execute(args); // Calls #run()
     }
 
     @SneakyThrows
@@ -245,113 +231,119 @@ public class Bootstrap implements Runnable {
         }
 
         uiServer = new UIServer();
-        uiServer.setIgnorePassword(true); // TODO Fix CEF and serve the files locally.
-                                          // Also TODO use WebKit directly so that we can serve files locally.
-                                          // Also TODO ban Adam.
         uiServer.setHandler(new AppSchemeHandler());
         uiServer.start();
 
         String appUrl = (isDev ? this.devAddress : uiServer.getLocalAddress()) + "/$caffeinated-sdk-root$";
 
         // Setup the webview.
-        WebviewFactory factory = WebviewFactory.getFactory(app.getAppPreferences().get().getRendererPreference());
-
         logger.info("Initializing UI (this may take some time)");
-        webview = factory.get();
+        webview = new Webview(true);
+
+        WebviewBridge bridge = new WebviewBridge(webview);
+        bridge.defineObject("Caffeinated", app);
+
+        app.setAppBridge(bridge);
+        app.setWebview(webview);
+        app.setAppUrl(appUrl);
+
+//        webview.getBridge().setOnEvent((t, d) -> onBridgeEvent(t, d));
 
         // Register the lifecycle listener.
-        WebviewLifeCycleListener uiLifeCycleListener = new WebviewLifeCycleListener() {
-            private boolean traySupported = false;
+//        WebviewLifeCycleListener uiLifeCycleListener = new WebviewLifeCycleListener() {
+//            private boolean traySupported = false;
+//
+//            @Override
+//            public void onBrowserPreLoad() {
+//                logger.debug("onPreLoad");
+//
+//                app.setAppBridge(webview.getBridge());
+//                app.setWebview(webview);
+//                app.setAppUrl(appUrl);
+//
+//                AsyncTask.create(() -> {
+//                    webview.getBridge().defineObject("Caffeinated", app);
+//
+//                    this.traySupported = TrayHandler.tryCreateTray(webview);
+//
+//                    app.init(this.traySupported);
+//                });
+//            }
+//
+//            @Override
+//            public void onMinimize() {
+//                logger.debug("onMinimize");
+//            }
+//
+//            @Override
+//            public void onBrowserOpen() {
+//                logger.debug("onWindowOpen");
+//
+//                try {
+//                    ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", true);
+//                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
+//
+//                if (this.traySupported) {
+//                    TrayHandler.updateShowCheckbox(true);
+//                }
+//            }
+//
+//            @Override
+//            public void onBrowserClose() {
+//                logger.debug("onBrowserClose");
+//
+//                try {
+//                    ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", false);
+//                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
+//
+//                if (this.traySupported) {
+//                    TrayHandler.updateShowCheckbox(false);
+//                }
+//            }
+//
+//            @Override
+//            public void onOpenRequested() {
+//                logger.debug("onOpenRequested");
+//                webview.open(appUrl);
+//            }
+//
+//            @Override
+//            public void onCloseRequested() {
+//                logger.debug("onCloseRequested");
+//
+//                if (app.canCloseUI()) {
+//                    AsyncTask.create(() -> {
+//                        if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray() && this.traySupported) {
+//                            webview.close();
+//                        } else {
+//                            shutdown();
+//                        }
+//                    });
+//                } else {
+//                    webview.focus();
+//                }
+//            }
+//
+//        };
 
-            @Override
-            public void onBrowserPreLoad() {
-                logger.debug("onPreLoad");
-
-                webview.getBridge().setOnEvent((t, d) -> onBridgeEvent(t, d));
-
-                app.setAppBridge(webview.getBridge());
-                app.setWebview(webview);
-                app.setAppUrl(appUrl);
-
-                AsyncTask.create(() -> {
-                    webview.getBridge().defineObject("Caffeinated", app);
-
-                    this.traySupported = TrayHandler.tryCreateTray(webview);
-
-                    app.init(this.traySupported);
-                });
-            }
-
-            @Override
-            public void onMinimize() {
-                logger.debug("onMinimize");
-            }
-
-            @Override
-            public void onBrowserOpen() {
-                logger.debug("onWindowOpen");
-
-                try {
-                    ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", true);
-                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
-
-                if (this.traySupported) {
-                    TrayHandler.updateShowCheckbox(true);
-                }
-            }
-
-            @Override
-            public void onBrowserClose() {
-                logger.debug("onBrowserClose");
-
-                try {
-                    ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", false);
-                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
-
-                if (this.traySupported) {
-                    TrayHandler.updateShowCheckbox(false);
-                }
-            }
-
-            @Override
-            public void onOpenRequested() {
-                logger.debug("onOpenRequested");
-                webview.open(appUrl);
-            }
-
-            @Override
-            public void onCloseRequested() {
-                logger.debug("onCloseRequested");
-
-                if (app.canCloseUI()) {
-                    AsyncTask.create(() -> {
-                        if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray() && this.traySupported) {
-                            webview.close();
-                        } else {
-                            shutdown();
-                        }
-                    });
-                } else {
-                    webview.focus();
-                }
-            }
-
-        };
-
-        logger.info("Starting the UI");
-        webview.initialize(
-            uiLifeCycleListener,
-            app.getWindowPreferences().get(),
-            false,
-            false
-        );
+        logger.info("Starting the App");
+        AsyncTask.create(() -> app.init(false));
+//        webview.initialize(
+//            uiLifeCycleListener,
+//            app.getWindowPreferences().get(),
+//            false,
+//            false
+//        );
 
         logger.info("appAddress = %s", appUrl);
-        webview.open(appUrl);
+        webview.loadURL(appUrl);
 
         // If all of that succeeds, we write a file to let the updater know that
         // everything's okay.
         writeAppFile(".build_ok", null);
+
+        webview.run(); // Main thread!!!
+        webview.close();
     }
 
     private void onBridgeEvent(String type, JsonObject data) {
@@ -402,7 +394,7 @@ public class Bootstrap implements Runnable {
 
                 // UI
                 TrayHandler.destroy();
-                webview.destroy();
+                webview.close();
 
                 try {
                     uiServer.close();
@@ -432,7 +424,7 @@ public class Bootstrap implements Runnable {
                     System.exit(0);
                 }
             } else {
-                webview.focus();
+//                webview.focus();
             }
         });
     }

@@ -10,7 +10,7 @@
 
 	const console = createConsole('Chat Bot/Timers');
 
-	const nextMessageAt = st || Caffeinated.chatbot.svelte('nextMessageAt');
+	const nextMessageAt = st || Caffeinated.chatbot.__stores.svelte('nextMessageAt');
 	let nextMessageIn_seconds = '';
 
 	let timers = [];

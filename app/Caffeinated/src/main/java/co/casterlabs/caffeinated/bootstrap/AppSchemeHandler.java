@@ -6,9 +6,9 @@ import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.util.MimeTypes;
-import co.casterlabs.rakurai.io.http.StandardHttpStatus;
-import co.casterlabs.rakurai.io.http.server.HttpResponse;
-import co.casterlabs.rakurai.io.http.server.HttpSession;
+import co.casterlabs.rhs.protocol.StandardHttpStatus;
+import co.casterlabs.rhs.server.HttpResponse;
+import co.casterlabs.rhs.session.HttpSession;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;

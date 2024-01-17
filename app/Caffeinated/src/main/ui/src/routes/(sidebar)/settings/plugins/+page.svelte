@@ -9,8 +9,8 @@
 
 	const console = createConsole('Settings/Plugins');
 
-	const preferences = st || Caffeinated.UI.svelte('preferences');
-	const contexts = st || Caffeinated.pluginIntegration.svelte('contexts');
+	const preferences = st || Caffeinated.UI.__stores.svelte('preferences');
+	const contexts = st || Caffeinated.pluginIntegration.__stores.svelte('contexts');
 
 	$: contexts, $contexts && console.debug('Plugins Contexts:', $contexts);
 

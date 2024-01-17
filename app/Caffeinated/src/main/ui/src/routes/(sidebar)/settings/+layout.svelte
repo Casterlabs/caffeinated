@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
-	const preferences = st || Caffeinated.UI.svelte('preferences');
+	const preferences = st || Caffeinated.UI.__stores.svelte('preferences');
 
 	let loadedWidgets = false;
 

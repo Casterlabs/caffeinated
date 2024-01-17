@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import co.casterlabs.caffeinated.util.Crypto;
-import co.casterlabs.kaimen.webview.WebviewRenderer;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -23,11 +22,6 @@ public class AppPreferences {
     private Set<String> oneTimeEvents = new HashSet<>();
 
     private boolean useBetaKoiPath = false;
-
-    private WebviewRenderer[] rendererPreference = {
-            WebviewRenderer.WEBKIT,
-            WebviewRenderer.CHROMIUM_EMBEDDED_FRAMEWORK
-    };
 
     public int getConductorPort() {
         if (CaffeinatedApp.getInstance().isDev()) {

@@ -8,7 +8,7 @@
 	import createConsole from '$lib/console-helper.mjs';
 
 	const console = createConsole('Chat Bot/Settings');
-	const preferences = st || Caffeinated.chatbot.svelte('preferences');
+	const preferences = st || Caffeinated.chatbot.__stores.svelte('preferences');
 
 	$: preferences, $preferences && console.debug('Chat Bot Preferences:', $preferences);
 	let state = 0;

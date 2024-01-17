@@ -22,8 +22,6 @@
 	</distributionManagement>
 
 	<properties>
-		<kaimen.version>3cb3816</kaimen.version>
-
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -72,79 +70,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>App</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Util</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-
-			<!-- NEVER DO THIS. -->
-
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>AllWebviewImpls</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Windows-x86_64</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Windows-x86</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Windows-aarch64</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>MacOS-x86_64</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>MacOS-aarch64</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Linux-x86_64</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Linux-x86</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>co.casterlabs.kaimen</groupId>
-				<artifactId>Linux-aarch64</artifactId>
-				<version>${kaimen.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<!-- Code related packages -->

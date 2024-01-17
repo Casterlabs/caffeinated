@@ -79,6 +79,7 @@
 		<dependency>
 			<groupId>co.casterlabs.kaimen</groupId>
 			<artifactId>Util</artifactId>
+			<version>3cb3816</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

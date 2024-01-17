@@ -6,8 +6,8 @@ import co.casterlabs.caffeinated.pluginsdk.Emojis;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.emoji.data.EmojiIndex;
 import co.casterlabs.emoji.generator.EmojiIndexGenerator;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
+import dev.webview.webview_java.bridge.JavascriptFunction;
+import dev.webview.webview_java.bridge.JavascriptObject;
 import lombok.Setter;
 
 public class EmojisObj extends JavascriptObject implements Emojis {

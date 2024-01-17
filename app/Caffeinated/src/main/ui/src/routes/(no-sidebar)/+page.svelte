@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { icon, iconColor } from '$lib/app.mjs';
 
-	const useBetaKoiPath = st || Caffeinated.svelte('useBetaKoiPath');
+	const useBetaKoiPath = st || Caffeinated.__stores.svelte('useBetaKoiPath');
 
 	function disableBetaKoi() {
 		Caffeinated.useBetaKoiPath = false;
