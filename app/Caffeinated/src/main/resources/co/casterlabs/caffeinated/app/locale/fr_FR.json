@@ -188,6 +188,7 @@
         "docks.chat.viewer.preferences.show_activities": "Afficher les activités (suivantes, subs, etc)",
         "docks.chat.viewer.preferences.text_size": "Taille du texte",
         "docks.chat.viewer.preferences.show_pronouns": "Afficher les pronounces de l'utilisateur",
+        "docks.chat.viewer.preferences.show_zebra_stripes": "Utiliser les arrière-plans de messages alternatifs",
         "docks.chat.viewer.preferences.color_users_by": "Couleur des utilisateurs par",
         "docks.chat.viewer.preferences.color_users_by.THEME": "Thème Principal de l'App",
         "docks.chat.viewer.preferences.color_users_by.USER": "Couleur de l'utilisateur",
