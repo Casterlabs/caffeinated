@@ -1,15 +1,8 @@
 package co.casterlabs.caffeinated.util.network;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class InterfaceUtil {
 
@@ -26,21 +19,21 @@ public class InterfaceUtil {
         add.accept("0:0:0:0:0:0:0:1");
         add.accept("127.0.0.1");
 
-        if (System.getenv().containsKey("COMPUTERNAME")) {
-            add.accept(System.getenv("COMPUTERNAME"));
-        } else if (System.getenv().containsKey("HOSTNAME")) {
-            add.accept(System.getenv("HOSTNAME"));
-        }
+//        if (System.getenv().containsKey("COMPUTERNAME")) {
+//            add.accept(System.getenv("COMPUTERNAME"));
+//        } else if (System.getenv().containsKey("HOSTNAME")) {
+//            add.accept(System.getenv("HOSTNAME"));
+//        }
 
-        try {
-            for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
-                for (InetAddress addr : Collections.list(iface.getInetAddresses())) {
-                    add.accept(addr.getHostAddress());
-                }
-            }
-        } catch (SocketException e) {
-            FastLogger.logStatic(LogLevel.DEBUG, "Could not enumerate network interfaces:\n%s", e);
-        }
+//        try {
+//            for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+//                for (InetAddress addr : Collections.list(iface.getInetAddresses())) {
+//                    add.accept(addr.getHostAddress());
+//                }
+//            }
+//        } catch (SocketException e) {
+//            FastLogger.logStatic(LogLevel.DEBUG, "Could not enumerate network interfaces:\n%s", e);
+//        }
 
         return result;
     }
