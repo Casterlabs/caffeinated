@@ -188,6 +188,7 @@
         "docks.chat.viewer.preferences.show_activities": "Показывать активности (подписки, подписчиков и т. д.)",
         "docks.chat.viewer.preferences.text_size": "Размер текста",
         "docks.chat.viewer.preferences.show_pronouns": "Показывать местоимения пользователя",
+        "docks.chat.viewer.preferences.show_zebra_stripes": "Использовать альтернативные фоны сообщения",
         "docks.chat.viewer.preferences.color_users_by": "Цвет пользователей",
         "docks.chat.viewer.preferences.color_users_by.THEME": "Основная тема приложения",
         "docks.chat.viewer.preferences.color_users_by.USER": "Цвет пользователя",
