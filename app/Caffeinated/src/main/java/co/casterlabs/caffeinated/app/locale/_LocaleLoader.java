@@ -47,6 +47,10 @@ public class _LocaleLoader {
                 provider = ru_RU.class.newInstance().get();
                 break;
 
+            case "TR_TR":
+                provider = tr_TR.class.newInstance().get();
+                break;
+
             default:
                 FastLogger.logStatic(LogLevel.WARNING, "Unable to find locale provider for: %s", locale);
                 return FALLBACK;
