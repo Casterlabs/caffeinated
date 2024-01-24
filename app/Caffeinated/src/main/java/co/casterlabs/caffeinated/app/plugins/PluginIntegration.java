@@ -161,7 +161,7 @@ public class PluginIntegration extends JavascriptObject {
             .filter((file) -> {
                 // Remove the files that belong to already loaded contexts.
                 for (PluginContext ctx : this.contexts) {
-                    if (ctx.getFile() != null) {
+                    if (ctx.getFile() != null && ctx.getFile().equals(file)) {
                         return false;
                     }
                 }
