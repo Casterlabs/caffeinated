@@ -181,15 +181,7 @@
 					// Text
 					{
 						if (chatEvent) {
-							let text = escapeHtml(chatEvent.message);
-
-							for (const [name, image] of Object.entries(chatEvent.emotes)) {
-								text = text
-									.split(name)
-									.join(`<img class="emote" title="${name}" src="${image}" />`);
-							}
-
-							alertTextText.innerHTML = text;
+							alertTextText.innerHTML = chatEvent.html;
 						}
 
 						alertTextTitle.innerHTML = title;

@@ -22,7 +22,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettings
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsTextBuilder;
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.koi.api.types.events.ChatEvent;
+import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -48,7 +48,6 @@ public abstract class GenericAlert extends Widget {
             "deprecation"
     })
     protected WidgetSettingsLayout generateSettingsLayout() {
-        @SuppressWarnings("deprecation")
         WidgetSettingsLayout layout = new WidgetSettingsLayout()
             .addSection(
                 new WidgetSettingsSection("style", "Style")
@@ -307,11 +306,11 @@ public abstract class GenericAlert extends Widget {
         return "/alert.html";
     }
 
-    public void queueAlert(@NonNull String titleHtml, @Nullable ChatEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
+    public void queueAlert(@NonNull String titleHtml, @Nullable RichMessageEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
         this.queueAlert(titleHtml, null, chatEvent, customImage, ttsText);
     }
 
-    public void queueAlert(@NonNull String titleHtml, @Nullable String titleHtml2, @Nullable ChatEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
+    public void queueAlert(@NonNull String titleHtml, @Nullable String titleHtml2, @Nullable RichMessageEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
         String ttsAudio = null;
 
         // Generate the base64 audio data for TTS if enabled.

@@ -10,9 +10,11 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSectio
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.events.DonationEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.events.RichMessageEvent;
+import co.casterlabs.koi.api.types.events.rich.ChatFragment;
 import co.casterlabs.koi.api.types.events.rich.Donation;
+import co.casterlabs.koi.api.types.events.rich.LinkFragment;
 
 public class DonationAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
@@ -30,22 +32,27 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
     }
 
     @KoiEventHandler
-    public void onDonation(DonationEvent e) {
+    public void onDonation(RichMessageEvent e) {
+        if (e.getDonations().isEmpty()) return;
+
         Donation donation = e.getDonations().get(0);
 
         // Generate the title html.
         String title = String.format("<span class='highlight'>%s</span>", e.getSender().getDisplayname());
 
         // Generate the ttsText
-        String ttsText = e.getMessage();
+        String ttsText = e.getRaw();
 
-        for (String link : e.getLinks()) {
-            ttsText = ttsText.replace(link, "(link)");
+        for (ChatFragment link : e.getFragments()) {
+            if (link instanceof LinkFragment) {
+                ttsText = ttsText.replace(((LinkFragment) link).getUrl(), "(link)");
+            }
         }
 
-        this.queueAlert(title, e, donation.getImage(), e.getMessage());
+        this.queueAlert(title, e, donation.getImage(), ttsText);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected WidgetSettingsLayout generateSettingsLayout() {
         WidgetSettingsLayout layout = super.generateSettingsLayout();
@@ -55,7 +62,7 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
                 .addItem(WidgetSettingsItem.asCheckbox("enabled", "Show Image", true));
 
             if (this.settings().getBoolean("image.enabled", true)) {
-                imageSection.addItem(WidgetSettingsItem.asDropdown("source", "Source", "Donation Image", "Custom Image"));
+                imageSection.addItem(WidgetSettingsItem.asDropdown("source", "Source", "Donation Image", "Donation Image", "Custom Image"));
 
                 if (this.settings().getString("image.source", "").equals("Custom Image")) {
                     imageSection.addItem(WidgetSettingsItem.asFile("file", "Image File", "image", "video"));
