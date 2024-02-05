@@ -5,12 +5,11 @@
 	let maxEmojis = 1000;
 	let size = 15;
 	let speed = 1;
+	let container;
 
 	const minOpacity = 0.8;
 	let avgTickTime = 0;
 	let emojis = [];
-	let canvas;
-	let ctx;
 
 	const targetDelta = 1000 / 60; // 60hz
 	let start = performance.now();
@@ -19,15 +18,21 @@
 		if (emojis.length < maxEmojis) {
 			const scale = Math.random() * (1 - minOpacity) + minOpacity;
 
-			if (content.startsWith('http')) {
+			if (content.startsWith('http') || content.startsWith('data:')) {
 				const image = new Image();
 				image.src = content;
 				content = image;
+			} else {
+				const span = document.createElement('span');
+				span.innerText = content;
+				content = span;
 			}
 
+			content.style.position = 'absolute';
+
 			const emoji = {
-				x: Math.random() * canvas.width,
-				y: Math.random() * canvas.height,
+				x: Math.random() * container.offsetWidth,
+				y: Math.random() * container.offsetHeight,
 				ys: Math.random() + 2,
 				scale: scale,
 				opacity: 0.01,
@@ -35,6 +40,8 @@
 				dying: false,
 				time: performance.now()
 			};
+
+			container.append(content);
 
 			emojis.push(emoji);
 		}
@@ -46,50 +53,39 @@
 
 		start += delta;
 
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.fillStyle = 'white';
+		for (const emoji of emojis) {
+			emoji.y += emoji.ys * deltaRate * speed;
 
-		if (emojis.length > 0) {
-			emojis.forEach((emoji) => {
-				ctx.save();
+			const relativeSize = size * emoji.scale;
 
-				emoji.y += emoji.ys * deltaRate * speed;
+			if (emoji.time + timeout < start) {
+				emoji.dying = true;
+			}
 
-				const relativeSize = size * emoji.scale;
+			emoji.content.style.opacity = emoji.opacity;
+			emoji.content.style.width = relativeSize + 'px';
+			emoji.content.style.top = emoji.y + 'px';
+			emoji.content.style.left = emoji.x + 'px';
 
-				if (emoji.time + timeout < start) {
-					emoji.dying = true;
-				}
+			if (emoji.dying) {
+				if (emoji.opacity > 0.005) {
+					emoji.opacity -= 0.01;
 
-				ctx.globalAlpha = emoji.opacity;
-
-				if (emoji.content instanceof Image) {
-					ctx.drawImage(emoji.content, emoji.x, emoji.y, relativeSize, relativeSize);
-				} else {
-					ctx.fillText(emoji.content, emoji.x, emoji.y);
-				}
-
-				if (emoji.dying) {
-					if (emoji.opacity > 0.005) {
-						emoji.opacity -= 0.01;
-
-						if (emoji.opacity < 0) {
-							emoji.opacity = 0;
-						}
-					} else {
-						emojis.splice(emojis.indexOf(emoji), 1);
+					if (emoji.opacity < 0) {
+						emoji.opacity = 0;
 					}
-				} else if (emoji.opacity < 1) {
-					emoji.opacity += 0.01;
+				} else {
+					emoji.content.remove();
+					emojis.splice(emojis.indexOf(emoji), 1);
 				}
+			} else if (emoji.opacity < 1) {
+				emoji.opacity += 0.01;
+			}
 
-				if (emoji.y > canvas.height + relativeSize) {
-					emoji.x = Math.random() * canvas.width;
-					emoji.y = -relativeSize;
-				}
-
-				ctx.restore();
-			});
+			if (emoji.y > container.offsetHeight + relativeSize) {
+				emoji.x = Math.random() * container.offsetWidth;
+				emoji.y = -relativeSize;
+			}
 		}
 
 		const time = performance.now() - start;
@@ -105,7 +101,7 @@
 			size = Widget.getSetting('rain_settings.size');
 			speed = Widget.getSetting('rain_settings.speed') / 25;
 
-			ctx.font = size + 'px Sans-Serif';
+			container.style.font = size + 'px';
 		});
 
 		Koi.on('RICH_MESSAGE', (event) => {
@@ -129,6 +125,10 @@
 			}
 		});
 
+		window.test = () => {
+			create('https://static-cdn.jtvnw.net/emoticons/v2/305954156/default/dark/3.0');
+		};
+
 		// setInterval(() => {
 		// 	console.debug(
 		// 		avgTickTime.toFixed(2) +
@@ -140,14 +140,9 @@
 		// 	);
 		// }, 10000);
 
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-
-		ctx = canvas.getContext('2d');
 		Widget.broadcast('update');
-
 		requestAnimationFrame(draw);
 	});
 </script>
 
-<canvas bind:this={canvas} class="w-full h-full" />
+<div bind:this={container} class="relative w-full h-full" />
