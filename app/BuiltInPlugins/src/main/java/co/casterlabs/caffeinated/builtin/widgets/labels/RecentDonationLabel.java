@@ -18,8 +18,8 @@ import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
-import co.casterlabs.koi.api.types.events.DonationEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.rich.Donation;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.Rson;
@@ -106,7 +106,9 @@ public class RecentDonationLabel extends GenericLabel {
     }
 
     @KoiEventHandler
-    public void onDonation(@Nullable DonationEvent e) {
+    public void onDonation(@Nullable RichMessageEvent e) {
+        if (e.getDonations().isEmpty()) return;
+
         AsyncTask.create(() -> {
             double total = 0;
             String currency = "USD";
