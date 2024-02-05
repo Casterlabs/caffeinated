@@ -21,6 +21,15 @@
 	</span>
 </LocalizedText>
 
+{#if event.prompt}
+	{event.prompt}:
+	{#if event.message}
+		{event.message}
+	{:else}
+		<i class="opacity-90">No message provided</i>
+	{/if}
+{/if}
+
 <style>
 	.channel-points-reward-image {
 		display: inline-block;
