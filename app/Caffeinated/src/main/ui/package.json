@@ -9,8 +9,8 @@
         "format": "prettier --plugin-search-dir . --write ."
     },
     "devDependencies": {
-        "@sveltejs/adapter-static": "^2.0.3",
-        "@sveltejs/kit": "^1.26.0",
+        "@sveltejs/adapter-static": "^3.0.1",
+        "@sveltejs/kit": "^2.5.0",
         "autoprefixer": "^10.4.15",
         "concurrently": "^8.2.1",
         "postcss": "^8.4.31",
