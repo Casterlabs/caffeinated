@@ -49,7 +49,7 @@
 
 		Caffeinated.koi.features.then((featuresMap) => {
 			for (const [platform, features] of Object.entries(featuresMap)) {
-				if (requiredFeatures.length == 0) {
+				if (!requiredFeatures || requiredFeatures.length == 0) {
 					options.push(platform);
 				} else {
 					let meetsRequirements = true;

@@ -95,6 +95,11 @@
 						settings
 					}
 				});
+				li.setAttribute('event-platform', event.streamer.platform);
+
+				if (!Widget.getSetting('platform.platforms').includes(event.streamer.platform)) {
+					li.style.display = 'none';
+				}
 
 				if (event.event_type == 'RICH_MESSAGE') {
 					if (event.donations.length == 0) {
@@ -222,6 +227,15 @@
 		Widget.on('update', () => {
 			settings.set(Widget.widgetData.settings);
 			changeFont(Widget.getSetting('text_style.font'));
+
+			const platforms = Widget.getSetting('platform.platforms');
+			for (const li of document.querySelectorAll('#chatbox>li')) {
+				if (platforms.includes(li.getAttribute('event-platform'))) {
+					li.style.display = 'unset';
+				} else {
+					li.style.display = 'none';
+				}
+			}
 		});
 
 		Widget.on('init', () => {
