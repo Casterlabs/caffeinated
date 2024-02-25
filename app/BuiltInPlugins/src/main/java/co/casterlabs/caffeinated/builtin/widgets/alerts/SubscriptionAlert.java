@@ -26,6 +26,8 @@ public class SubscriptionAlert extends GenericAlert implements KoiEventListener 
 
     @KoiEventHandler
     public void onSubscriber(SubscriptionEvent e) {
+        if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
+
         User sub = null;
 
         if (e.getGiftRecipient() != null) {
@@ -58,6 +60,13 @@ public class SubscriptionAlert extends GenericAlert implements KoiEventListener 
     @Override
     protected boolean hasTTS() {
         return false;
+    }
+
+    @Override
+    protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
+        return new KoiIntegrationFeatures[] {
+                KoiIntegrationFeatures.SUBSCRIPTION_ALERT
+        };
     }
 
 }

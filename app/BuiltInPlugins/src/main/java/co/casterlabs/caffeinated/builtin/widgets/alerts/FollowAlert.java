@@ -25,6 +25,8 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
 
     @KoiEventHandler
     public void onFollow(FollowEvent e) {
+        if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
+
         // Generate the title html.
         String title = String.format("<span class='highlight'>%s</span>", e.getFollower().getDisplayname());
 
@@ -49,6 +51,13 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
     @Override
     protected boolean hasTTS() {
         return false;
+    }
+
+    @Override
+    protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
+        return new KoiIntegrationFeatures[] {
+                KoiIntegrationFeatures.FOLLOWER_ALERT
+        };
     }
 
 }

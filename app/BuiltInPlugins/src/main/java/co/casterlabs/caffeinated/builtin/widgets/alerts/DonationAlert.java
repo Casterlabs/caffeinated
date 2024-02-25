@@ -33,6 +33,7 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
 
     @KoiEventHandler
     public void onDonation(RichMessageEvent e) {
+        if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
         if (e.getDonations().isEmpty()) return;
 
         Donation donation = e.getDonations().get(0);
@@ -107,6 +108,13 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
     @Override
     protected boolean hasTTS() {
         return true;
+    }
+
+    @Override
+    protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
+        return new KoiIntegrationFeatures[] {
+                KoiIntegrationFeatures.DONATION_ALERT
+        };
     }
 
 }
