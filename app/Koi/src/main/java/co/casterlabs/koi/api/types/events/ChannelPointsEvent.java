@@ -42,7 +42,11 @@ public class ChannelPointsEvent extends KoiEvent {
         private String id;
 
         @JsonField("cooldown_expires_at")
-        private Instant cooldownExpiresAt;
+        private String cooldownExpiresAt;
+
+        public Instant getCooldownExpiresAt() {
+            return Instant.parse(this.cooldownExpiresAt);
+        }
 
         private String title;
 

@@ -265,7 +265,9 @@ public abstract class Widget {
 
                 if (!oldSettings.containsKey(key)) {
                     JsonElement defaultValue = item.getDefaultValue();
-                    newSettings.put(key, defaultValue);
+                    if (defaultValue != null) {
+                        newSettings.put(key, defaultValue);
+                    }
                 } else {
                     newSettings.put(key, oldSettings.get(key));
                 }

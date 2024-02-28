@@ -3,6 +3,7 @@ package co.casterlabs.caffeinated.builtin.widgets.alerts;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -19,11 +20,15 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettings
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFileBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFontBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsNumberBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsPlatformDropdownBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsTextBuilder;
 import co.casterlabs.caffeinated.util.WebUtil;
-import co.casterlabs.koi.api.types.events.ChatEvent;
+import co.casterlabs.koi.api.KoiIntegrationFeatures;
+import co.casterlabs.koi.api.types.events.RichMessageEvent;
+import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
 
@@ -48,7 +53,6 @@ public abstract class GenericAlert extends Widget {
             "deprecation"
     })
     protected WidgetSettingsLayout generateSettingsLayout() {
-        @SuppressWarnings("deprecation")
         WidgetSettingsLayout layout = new WidgetSettingsLayout()
             .addSection(
                 new WidgetSettingsSection("style", "Style")
@@ -295,6 +299,19 @@ public abstract class GenericAlert extends Widget {
             layout.addSection(imageSection);
         }
 
+        layout.addSection(
+            new WidgetSettingsSection("platform", "Platform")
+                .addItem(
+                    new WidgetSettingsPlatformDropdownBuilder()
+                        .withId("platforms")
+                        .withName("Use from")
+                        .withAllowMultiple(true)
+                        .withRequiredFeatures(this.requiredPlatformFeatures())
+                        .build()
+                )
+
+        );
+
         for (WidgetSettingsButton button : this.getButtons()) {
             layout.addButton(button);
         }
@@ -307,11 +324,11 @@ public abstract class GenericAlert extends Widget {
         return "/alert.html";
     }
 
-    public void queueAlert(@NonNull String titleHtml, @Nullable ChatEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
+    public void queueAlert(@NonNull String titleHtml, @Nullable RichMessageEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
         this.queueAlert(titleHtml, null, chatEvent, customImage, ttsText);
     }
 
-    public void queueAlert(@NonNull String titleHtml, @Nullable String titleHtml2, @Nullable ChatEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
+    public void queueAlert(@NonNull String titleHtml, @Nullable String titleHtml2, @Nullable RichMessageEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
         String ttsAudio = null;
 
         // Generate the base64 audio data for TTS if enabled.
@@ -381,6 +398,17 @@ public abstract class GenericAlert extends Widget {
 
     protected boolean hasInfix() {
         return false;
+    }
+
+    protected abstract KoiIntegrationFeatures[] requiredPlatformFeatures();
+
+    public List<UserPlatform> getSelectedPlatforms() {
+        List<UserPlatform> list = new LinkedList<>();
+        list.addAll(this.settings().get("platform.platforms", new TypeToken<List<UserPlatform>>() {
+        }, Collections.emptyList()));
+        list.add(UserPlatform.CASTERLABS_SYSTEM);
+        list.add(UserPlatform.CUSTOM_INTEGRATION);
+        return list;
     }
 
 }

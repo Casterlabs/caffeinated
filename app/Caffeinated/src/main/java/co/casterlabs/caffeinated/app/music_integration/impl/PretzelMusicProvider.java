@@ -11,6 +11,7 @@ import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -18,8 +19,7 @@ import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings> {
-    private static final String PRETZEL_ALBUM_ART = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mOU3rzkPwAE1gJzt/4W2gAAAABJRU5ErkJggg==";
-    private static final String PRETZEL_ENDPOINT = "https://api.pretzel.tv/playing/twitch/%s";
+    private static final String PRETZEL_ENDPOINT = "https://api.pretzel.tv/playing/twitch/%s/json";
     private static final long POLL_RATE = TimeUnit.SECONDS.toMillis(20);
 
     private FastLogger logger = new FastLogger();
@@ -83,24 +83,13 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
             try {
                 String response = WebUtil.sendHttpRequest(new Request.Builder().url(String.format(PRETZEL_ENDPOINT, this.channelId)));
 
+                JsonObject json = Rson.DEFAULT.fromJson(response, JsonObject.class);
                 // Janky check for ratelimit.
-                if (response.startsWith("Now Playing: ")) {
-                    // "Now Playing: Arcade by Stesso -> https://prtzl.io/PDHXD5z6enygxyFmE"
-//                    this.logger.debug(response);
-
-                    // "Arcade by Stesso -> https://prtzl.io/PDHXD5z6enygxyFmE"
-                    String nowPlaying = response.substring("Now Playing: ".length());
-
-                    // Separate out the link
-                    String[] nowPlayingArr = nowPlaying.split(" -> https://");
-                    String songLink = "https://" + nowPlayingArr[1];
-
-                    // "Arcade by Stesso"
-                    // Split out the title and artist(s)
-                    String[] songNameArr = nowPlayingArr[0].split(" by ");
-
-                    String title = songNameArr[0];
-                    List<String> artists = Arrays.asList(songNameArr[1]);
+                if (json.containsKey("track")) {
+                    String songLink = json.getString("url");
+                    String title = json.getObject("track").getString("title");
+                    String artworkUrl = json.getObject("track").getString("artworkUrl");
+                    List<String> artists = Arrays.asList(json.getObject("track").getString("artist"));
 
                     // *thanos meme*
                     // All that, for a music track?
@@ -108,7 +97,7 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
                         title,
                         artists,
                         null,
-                        PRETZEL_ALBUM_ART,
+                        artworkUrl,
                         songLink
                     );
 

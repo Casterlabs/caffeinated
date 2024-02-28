@@ -25,6 +25,8 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
 
     @KoiEventHandler
     public void onRaid(RaidEvent e) {
+        if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
+
         // Generate the title html.
         String title = String.format("<span class='highlight'>%s</span>", e.getHost().getDisplayname());
         String title2 = String.format("<span class='highlight'>%s</span>", e.getViewers());
@@ -60,6 +62,13 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
     @Override
     protected boolean hasInfix() {
         return true;
+    }
+
+    @Override
+    protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
+        return new KoiIntegrationFeatures[] {
+                KoiIntegrationFeatures.RAID_ALERT
+        };
     }
 
 }

@@ -145,7 +145,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
                     )
                     .addItem(
                         new WidgetSettingsRangeBuilder()
-                            .withId("text-shadow")
+                            .withId("text_shadow")
                             .withName("Text Shadow")
                             .withDefaultValue(-1)
                             .withStep(1)
@@ -179,7 +179,7 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
                         .build()
                 );
 
-            if (currentStyle.equals("Progress Bar")) {
+            if (currentStyle.contains("Progress Bar")) {
                 barGoal
                     .addItem(
                         new WidgetSettingsCheckboxBuilder()

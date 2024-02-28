@@ -17,6 +17,8 @@ import co.casterlabs.caffeinated.builtin.widgets.alerts.FollowAlert;
 import co.casterlabs.caffeinated.builtin.widgets.alerts.RaidAlert;
 import co.casterlabs.caffeinated.builtin.widgets.alerts.SubscriptionAlert;
 import co.casterlabs.caffeinated.builtin.widgets.goals.CustomGoal;
+import co.casterlabs.caffeinated.builtin.widgets.goals.DailyFollowersGoal;
+import co.casterlabs.caffeinated.builtin.widgets.goals.DailySubscribersGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.DonationGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.FollowersGoal;
 import co.casterlabs.caffeinated.builtin.widgets.goals.SubscribersGoal;
@@ -80,6 +82,8 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
         Caffeinated.getInstance().getPlugins().registerWidget(this, SubscribersGoal.DETAILS, SubscribersGoal.class);
         Caffeinated.getInstance().getPlugins().registerWidget(this, CustomGoal.DETAILS, CustomGoal.class);
         Caffeinated.getInstance().getPlugins().registerWidget(this, DonationGoal.DETAILS, DonationGoal.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, DailyFollowersGoal.DETAILS, DailyFollowersGoal.class);
+        Caffeinated.getInstance().getPlugins().registerWidget(this, DailySubscribersGoal.DETAILS, DailySubscribersGoal.class);
 
         // Alerts
         Caffeinated.getInstance().getPlugins().registerWidget(this, DonationAlert.DETAILS, DonationAlert.class);

@@ -12,6 +12,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettings
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsDropdownBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsFontBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsNumberBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsPlatformDropdownBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import lombok.NonNull;
@@ -261,6 +262,18 @@ public class ChatWidget extends Widget {
                             .withDefaultValue(true)
                             .build()
                     )
+            )
+            .addSection(
+                new WidgetSettingsSection("platform", "Platform")
+                    .addItem(
+                        new WidgetSettingsPlatformDropdownBuilder()
+                            .withId("platforms")
+                            .withName("Use from")
+                            .withAllowMultiple(true)
+                            .withRequiredFeatures(new KoiIntegrationFeatures[0])
+                            .build()
+                    )
+
             )
             .addButton(
                 new WidgetSettingsButton(

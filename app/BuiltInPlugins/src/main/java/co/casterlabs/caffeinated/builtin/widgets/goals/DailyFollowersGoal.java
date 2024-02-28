@@ -3,23 +3,21 @@ package co.casterlabs.caffeinated.builtin.widgets.goals;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.types.events.FollowEvent;
-import co.casterlabs.koi.api.types.events.UserUpdateEvent;
-import co.casterlabs.koi.api.types.user.UserPlatform;
+import co.casterlabs.koi.api.types.events.StreamStatusEvent;
 
-public class FollowersGoal extends GenericGoal {
+public class DailyFollowersGoal extends GenericGoal {
     public static final WidgetDetails DETAILS = new WidgetDetails()
-        .withNamespace("co.casterlabs.followers_goal")
+        .withNamespace("co.casterlabs.daily_followers_goal")
         .withIcon("users")
         .withCategory(WidgetDetailsCategory.GOALS)
-        .withFriendlyName("Followers Goal")
+        .withFriendlyName("Daily Followers Goal")
         .withShowDemo(true, DEMO_ASPECT_RATIO)
-        .withRequiredFeatures(KoiIntegrationFeatures.FOLLOWER_COUNT, KoiIntegrationFeatures.FOLLOWER_ALERT);
+        .withRequiredFeatures(KoiIntegrationFeatures.FOLLOWER_ALERT, KoiIntegrationFeatures.STREAM_STATUS);
 
     private Map<String, Integer> offsets = new HashMap<>();
 
@@ -40,36 +38,26 @@ public class FollowersGoal extends GenericGoal {
         if (this.offsets.containsKey(e.getStreamer().getUPID())) {
             int newOffset = this.offsets.get(e.getStreamer().getUPID()) + 1;
             this.offsets.put(e.getStreamer().getUPID(), newOffset);
-        } else {
-            this.offsets.put(e.getStreamer().getUPID(), 1);
         }
         this.recalculate();
     }
 
     @KoiEventHandler
-    public void onUserUpdate(UserUpdateEvent e) {
-        this.offsets.remove(e.getStreamer().getUPID()); // Clear the offset value. We just got a fresh count!
+    public void onStreamStatus(StreamStatusEvent e) {
+        if (e.isLive()) {
+            this.offsets.putIfAbsent(e.getStreamer().getUPID(), 0);
+        } else {
+            this.offsets.remove(e.getStreamer().getUPID()); // Clear the offset value. No longer live.
+        }
         this.recalculate();
     }
 
     private void recalculate() {
-        long followersCount = 0;
-
-        for (UserPlatform platform : this.getSelectedPlatforms()) {
-            UserUpdateEvent state = Caffeinated.getInstance().getKoi().getUserStates().get(platform);
-            if (state == null) continue;
-
-            long stateFollows = state.getStreamer().getFollowersCount();
-            if (stateFollows != -1) {
-                followersCount += stateFollows;
-
-                if (this.offsets.containsKey(state.getStreamer().getUPID())) {
-                    followersCount += this.offsets.get(state.getStreamer().getUPID());
-                }
-            }
+        long count = 0;
+        for (Integer c : this.offsets.values()) {
+            count += c;
         }
-
-        this.update(followersCount);
+        this.update(count);
     }
 
     @Override
@@ -80,8 +68,8 @@ public class FollowersGoal extends GenericGoal {
     @Override
     protected KoiIntegrationFeatures[] requiredPlatformFeatures() {
         return new KoiIntegrationFeatures[] {
-                KoiIntegrationFeatures.FOLLOWER_COUNT,
-                KoiIntegrationFeatures.FOLLOWER_ALERT
+                KoiIntegrationFeatures.FOLLOWER_ALERT,
+                KoiIntegrationFeatures.STREAM_STATUS
         };
     }
 
