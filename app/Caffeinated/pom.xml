@@ -146,19 +146,19 @@
 		<dependency>
 			<groupId>com.github.webview.webview_java</groupId>
 			<artifactId>core</artifactId>
-			<version>d11a624</version>
+			<version>3814b34</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.webview.webview_java</groupId>
 			<artifactId>bridge</artifactId>
-			<version>d11a624</version>
+			<version>3814b34</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.webview.webview_java</groupId>
 			<artifactId>ui-server</artifactId>
-			<version>d11a624</version>
+			<version>3814b34</version>
 			<scope>compile</scope>
 		</dependency>
 
