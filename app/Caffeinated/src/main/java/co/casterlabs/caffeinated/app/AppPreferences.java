@@ -22,7 +22,7 @@ public class AppPreferences {
 
     private Set<String> oneTimeEvents = new HashSet<>();
 
-    private boolean useBetaKoiPath = false;
+    private String koiUrl = "wss://api.casterlabs.co/v2/koi";
 
     private WebviewRenderer[] rendererPreference = {
             WebviewRenderer.WEBKIT,

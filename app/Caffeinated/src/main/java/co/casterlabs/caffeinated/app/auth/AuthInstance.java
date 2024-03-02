@@ -65,8 +65,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
             .get()
             .getToken("koi", this.tokenId);
 
-        String koiUrl = CaffeinatedApp.getInstance().isUseBetaKoiPath() ? //
-            "wss://api.casterlabs.co/beta/v2/koi" : "wss://api.casterlabs.co/v2/koi";
+        String koiUrl = CaffeinatedApp.getInstance().getKoiUrl();
 
         FastLogger koiLogger = new FastLogger("AuthInstance Koi (" + tokenId + ")");
 

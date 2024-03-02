@@ -302,14 +302,14 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
     }
 
-    @JavascriptGetter("useBetaKoiPath")
-    public boolean isUseBetaKoiPath() {
-        return this.appPreferences.get().isUseBetaKoiPath();
+    @JavascriptGetter("koiUrl")
+    public String getKoiUrl() {
+        return this.appPreferences.get().getKoiUrl();
     }
 
-    @JavascriptSetter("useBetaKoiPath")
-    public void setUseBetaKoiPath(boolean val) {
-        this.appPreferences.get().setUseBetaKoiPath(val);
+    @JavascriptSetter("koiUrl")
+    public void setUseBetaKoiPath(String val) {
+        this.appPreferences.get().setKoiUrl(val);
         this.appPreferences.save();
     }
 

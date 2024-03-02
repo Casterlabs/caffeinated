@@ -4,10 +4,10 @@
 	import { onMount } from 'svelte';
 	import { icon, iconColor } from '$lib/app.mjs';
 
-	const useBetaKoiPath = st || Caffeinated.svelte('useBetaKoiPath');
+	const koiUrl = st || Caffeinated.svelte('koiUrl');
 
-	function disableBetaKoi() {
-		Caffeinated.useBetaKoiPath = false;
+	function resetKoi() {
+		Caffeinated.koiUrl = 'wss://api.casterlabs.co/v2/koi';
 		Bridge.emit('app:restart');
 	}
 
@@ -27,12 +27,12 @@
 		<LoadingSpinner />
 	</div>
 
-	{#if $useBetaKoiPath}
+	{#if $koiUrl != 'wss://api.casterlabs.co/v2/koi'}
 		<br />
 		<!-- svelte-ignore a11y-missing-attribute -->
 		<small>
-			Having connection issues? Try <a class="text-link cursor-pointer" on:click={disableBetaKoi}>
-				disabling the Koi beta.
+			Having connection issues? Try <a class="text-link cursor-pointer" on:click={resetKoi}>
+				switching back to normal Koi.
 			</a>
 		</small>
 	{/if}
