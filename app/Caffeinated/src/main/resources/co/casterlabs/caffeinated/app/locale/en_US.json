@@ -227,6 +227,12 @@
         "docks.channel_info.thumbnail": "Thumbnail",
         "docks.channel_info.thumbnail.select_file": "Select a file",
         "docks.channel_info.thumbnail.clear": "Clear",
-        "docks.channel_info.update": "Update"
+        "docks.channel_info.update": "Update",
+        "status.OPERATIONAL": "We are operational.",
+        "status.MAJOR_OUTAGE": "There is a major outage",
+        "status.MINOR_OUTAGE": "There is a minor outage",
+        "status.PARTIAL_OUTAGE": "There is a partial outage",
+        "status.DEGRADED_PERFORMANCE": "We are currently experiencing degraded performance",
+        "status.MAINTENANCE": "We are currently performing maintenance"
     }
 }

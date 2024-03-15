@@ -10,7 +10,19 @@
 	import * as App from '$lib/app.mjs';
 	import * as Currencies from '$lib/currencies.mjs';
 
-	import { icon } from '$lib/app.mjs';
+	import { icon, statusStates } from '$lib/app.mjs';
+	import LocalizedText from '$lib/LocalizedText.svelte';
+
+	export const STATUS_COLORS = {
+		OPERATIONAL: ['green', 'white'],
+		MAJOR_OUTAGE: ['red', 'white'],
+		MINOR_OUTAGE: ['orange', 'white'],
+		PARTIAL_OUTAGE: ['orange', 'white'],
+		DEGRADED_PERFORMANCE: ['yellow', 'black'],
+		MAINTENANCE: ['green', 'white']
+	};
+
+	let hideStatusBanner = false;
 
 	onMount(() => {
 		appShim.init();
@@ -44,5 +56,29 @@
 {#await appShim.awaitPageLoad() then}
 	<CSSIntermediate>
 		<slot />
+		{#if $statusStates.length > 0 && !hideStatusBanner}
+			{@const state = $statusStates[0]}
+
+			<div
+				class="absolute top-0 inset-x-0 py-1 m-1 rounded-md drop-shadow-lg"
+				style:background={STATUS_COLORS[state.status][0]}
+				style:color={STATUS_COLORS[state.status][1]}
+			>
+				<a
+					class="block text-center underline"
+					href={state.activeIncidents[0].link || 'https://status.casterlabs.co'}
+					target="_blank"
+				>
+					<LocalizedText key="co.casterlabs.caffeinated.app.status.{state.status}"></LocalizedText>
+				</a>
+
+				<button
+					class="absolute inset-y-0 right-1 flex items-center justify-center"
+					on:click={() => (hideStatusBanner = true)}
+				>
+					<icon data-icon="icon/x-mark" />
+				</button>
+			</div>
+		{/if}
 	</CSSIntermediate>
 {/await}

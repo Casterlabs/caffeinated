@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +40,7 @@ import co.casterlabs.caffeinated.pluginsdk.Locale;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.WebUtil;
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.localization.LocaleProvider;
 import co.casterlabs.kaimen.webview.Webview;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
@@ -66,6 +69,7 @@ import net.harawata.appdirs.AppDirsFactory;
 import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.loggerimpl.FileLogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
@@ -122,6 +126,9 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     @JavascriptValue(allowSet = false)
     private final PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);
 
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private JsonArray statusStates = JsonArray.EMPTY_ARRAY;
+
     // Event stuff
     private Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
 
@@ -169,6 +176,33 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             .build();
 
         this.reloadLanguage();
+
+        AsyncTask.create(() -> {
+            while (true) {
+                try {
+                    JsonObject response = Rson.DEFAULT.fromJson(
+                        WebUtil.sendHttpRequest(
+                            new Request.Builder()
+                                .url("https://api.status.casterlabs.co")
+                        ), JsonObject.class
+                    );
+
+                    JsonArray statusStates = new JsonArray();
+                    for (String only : Arrays.asList("Caffeinated")) {
+                        if (!response.getObject("data").getObject("stateData").containsKey(only)) continue;
+                        JsonObject state = response.getObject("data").getObject("stateData").getObject(only);
+                        if (state.getString("status").equals("OPERATIONAL")) continue;
+                        statusStates.add(state);
+                    }
+                    this.statusStates = statusStates;
+                } catch (IOException e) {
+                    FastLogger.logStatic(LogLevel.WARNING, "Error whilst polling status API. Retrying later.\n%s", e);
+                }
+                try {
+                    TimeUnit.MINUTES.sleep(2);
+                } catch (InterruptedException ignored) {}
+            }
+        });
     }
 
     @SneakyThrows

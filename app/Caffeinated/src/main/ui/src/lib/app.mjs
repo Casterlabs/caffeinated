@@ -79,3 +79,6 @@ export let openLink = async (url) => url;
 export function setOpenLink(fn) {
 	openLink = fn;
 }
+
+
+export const statusStates = writable([]);

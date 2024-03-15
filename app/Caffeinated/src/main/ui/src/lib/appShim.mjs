@@ -59,6 +59,7 @@ function setupApp() {
 		}
 	});
 
+	Caffeinated.svelte('statusStates').subscribe(App.statusStates.set);
 	Caffeinated.themeManager.svelte('baseColor').subscribe(App.baseColor.set);
 	Caffeinated.themeManager.svelte('primaryColor').subscribe(App.primaryColor.set);
 	Caffeinated.themeManager.svelte('effectiveAppearance').subscribe(App.appearance.set);
@@ -94,6 +95,26 @@ function setupDock() {
 
 	App.localeProvider.set(widgetApp.localize);
 	App.setOpenLink(window.openLink);
+
+
+	async function pollStatusApi() {
+		try {
+			const response = await fetch('https://api.status.casterlabs.co') //
+				.then((response) => response.json());
+
+			const stateData = [];
+			for (const only of ['Caffeinated']) {
+				const state = response.data.stateData[only];
+				if (!state || state.status == "OPERATIONAL") continue;
+				stateData.push(state);
+			}
+			App.statusStates.set(stateData);
+		} catch (e) {
+			console.warn('Error whilst polling status API. Retrying later.', e);
+		}
+		setTimeout(pollStatusApi, 120 * 1000);
+	}
+	pollStatusApi();
 }
 
 export function init() {
