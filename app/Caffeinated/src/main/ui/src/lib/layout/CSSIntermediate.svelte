@@ -67,8 +67,22 @@
 
 	import { baseColor, primaryColor, appearance } from '$lib/app.mjs';
 	import createConsole from '$lib/console-helper.mjs';
+	import { onMount } from 'svelte';
 
+	let oldTimey = true;
 	const console = createConsole('CSSIntermediate');
+
+	let audio;
+	let showClickPermission = true;
+
+	onMount(() => {
+		if (oldTimey) {
+			audio = new Audio('/doots/the-entertainer.webm');
+			audio.volume = 0.1;
+			audio.loop = true;
+			return () => audio.pause();
+		}
+	});
 
 	$: useLightTheme = $appearance == 'LIGHT';
 	$: appearance, $appearance && console.info('Switching to (effective) theme:', $appearance);
@@ -90,6 +104,43 @@
 	<slot />
 
 	<div id="context-menu" />
+
+	{#if oldTimey}
+		<img
+			class="absolute inset-0 w-screen h-screen pointer-events-none"
+			alt=""
+			src="/doots/scratches.gif"
+			style="mix-blend-mode: lighten;"
+		/>
+		<button
+			class="absolute top-[50%] left-2 drop-shadow-md"
+			on:click={() => {
+				audio.pause();
+				oldTimey = false;
+			}}
+		>
+			<icon class="w-10 h-10" data-icon="icon/arrow-left-on-rectangle" />
+		</button>
+		<style>
+			html {
+				filter: sepia(1);
+			}
+		</style>
+	{/if}
+
+	{#if audio && showClickPermission}
+		<div class="absolute inset-0 bg-black flex items-center justify-center">
+			<button
+				class="bg-base-2 border border-base-4 rounded-md text-xl px-2 py-1"
+				on:click={() => {
+					showClickPermission = false;
+					audio.play();
+				}}
+			>
+				Click here
+			</button>
+		</div>
+	{/if}
 </div>
 
 <style>
