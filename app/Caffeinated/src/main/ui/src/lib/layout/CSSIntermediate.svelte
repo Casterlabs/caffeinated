@@ -69,7 +69,7 @@
 	import createConsole from '$lib/console-helper.mjs';
 	import { onMount } from 'svelte';
 
-	let oldTimey = true;
+	let oldTimey = false;
 	const console = createConsole('CSSIntermediate');
 
 	let audio;
