@@ -62,7 +62,7 @@ public class CamWidget extends Widget implements KinokoV1Listener {
                         .withIconTitle("Copy Camera Link")
                         .withOnClick(() -> {
                             Caffeinated.getInstance().copyText(
-                                String.format("https://casterlabs.co/tools/cam?id=%s", this.settings().getString("cam.id")),
+                                String.format("https://studio.casterlabs.co/tools/cam?id=%s", this.settings().getString("cam.id")),
                                 null
                             );
                         })
