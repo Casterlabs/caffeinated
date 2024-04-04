@@ -108,15 +108,18 @@
                 initParameters = params;
                 const { address, port, pluginId, widgetId, authorization, widgetMode, basePath } = params;
 
-                // Map the url elsewhere if we're in dev mode.
                 console.debug("Origin:", location.origin, "Plugin ID:", pluginId)
-
+                
                 if (["http://localhost:3000", "http://localhost:3002"].includes(location.origin)) {
+                    // Map the url elsewhere if we're in dev mode.
                     if (["co.casterlabs.uidocks", "co.casterlabs.thirdparty.streamlabs", "co.casterlabs.thirdparty.kofi"].includes(pluginId)) {
                         sandboxFrame.src = `http://localhost:3000/$caffeinated-sdk-root$${basePath}`;
                     } else {
                         sandboxFrame.src = `http://localhost:3002/$caffeinated-sdk-root$${basePath}`;
                     }
+                } else if (basePath.startsWith("http://") || basePath.startsWith("https://")) {
+                    // Allow direct embedding
+                    sandboxFrame.src = basePath;
                 } else {
                     sandboxFrame.src = `http://${address}:${port}/api/plugin/${pluginId}/${authorization}/html${basePath}`;
                 }
