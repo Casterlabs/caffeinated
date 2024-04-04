@@ -116,6 +116,27 @@
 				</div>
 			{/if}
 
+			{#if applets.length > 0}
+				<div class="space-y-1 px-2 py-4" role="listitem">
+					{#each applets as applet}
+						{@const href = `/$caffeinated-sdk-root$/applet?id=${applet.id}`}
+						{@const isSelected = $page.url.pathname == href}
+
+						<a
+							{href}
+							class="group flex items-center px-3 py-2 text-sm leading-6 border-current transition font-medium rounded-md"
+							aria-current={isSelected ? 'page' : undefined}
+							class:hover:bg-base-4={!isSelected}
+							class:bg-base-5={isSelected}
+						>
+							<span class="text-base-12">
+								<LocalizedText key={applet.details.friendlyName} />
+							</span>
+						</a>
+					{/each}
+				</div>
+			{/if}
+
 			{#each sections as section}
 				<div class="space-y-1 px-2 py-4" role="listitem">
 					{#each section as item}
@@ -137,27 +158,6 @@
 					{/each}
 				</div>
 			{/each}
-
-			{#if applets.length > 0}
-				<div class="space-y-1 px-2 py-4" role="listitem">
-					{#each applets as applet}
-						{@const href = `/$caffeinated-sdk-root$/applet?id=${applet.id}`}
-						{@const isSelected = $page.url.pathname == href}
-
-						<a
-							{href}
-							class="group flex items-center px-3 py-2 text-sm leading-6 border-current transition font-medium rounded-md"
-							aria-current={isSelected ? 'page' : undefined}
-							class:hover:bg-base-4={!isSelected}
-							class:bg-base-5={isSelected}
-						>
-							<span class="text-base-12">
-								<LocalizedText key={applet.details.friendlyName} />
-							</span>
-						</a>
-					{/each}
-				</div>
-			{/if}
 		</nav>
 	</div>
 </div>
