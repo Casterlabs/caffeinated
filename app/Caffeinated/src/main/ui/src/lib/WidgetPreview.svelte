@@ -14,15 +14,19 @@
 </script>
 
 {#if url}
-	<div class="max-w-md mx-auto mt-6 mb-8">
-		<h1 class="font-semibold text-xl">
-			<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.preview" />
-		</h1>
+	{#if mode == 'DOCK'}
+		<iframe class="w-full h-full" aria-hidden={ariaHidden} title="" src={url} />
+	{:else}
+		<div class="max-w-md mx-auto mt-6 mb-8">
+			<h1 class="font-semibold text-xl">
+				<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.preview" />
+			</h1>
 
-		<div class="w-full mt-1 select-none border border-base-8 shadow-xl rounded-md">
-			<AspectVar aspectRatio={widget.details.demoAspectRatio}>
-				<iframe class="w-full h-full" aria-hidden={ariaHidden} title="" src={url} />
-			</AspectVar>
+			<div class="w-full mt-1 select-none border border-base-8 shadow-xl rounded-md">
+				<AspectVar aspectRatio={widget.details.demoAspectRatio}>
+					<iframe class="w-full h-full" aria-hidden={ariaHidden} title="" src={url} />
+				</AspectVar>
+			</div>
 		</div>
-	</div>
+	{/if}
 {/if}
