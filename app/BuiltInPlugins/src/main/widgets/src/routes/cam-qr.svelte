@@ -17,7 +17,7 @@
 		});
 
 		function setCode() {
-			qrcode.makeCode(`https://casterlabs.co/tools/cam?id=${Widget.getSetting('cam.id')}`);
+			qrcode.makeCode(`https://studio.casterlabs.co/tools/cam?id=${Widget.getSetting('cam.id')}`);
 		}
 
 		setCode();
