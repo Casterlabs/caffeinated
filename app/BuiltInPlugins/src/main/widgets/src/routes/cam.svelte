@@ -14,7 +14,7 @@
 					host: 'oci-igmsmi.casterlabs.co',
 					port: 443,
 					secure: true,
-					path: '',
+					path: '/',
 					config: {
 						iceServers: apiInfo.ice_servers,
 						sdpSemantics: 'unified-plan'

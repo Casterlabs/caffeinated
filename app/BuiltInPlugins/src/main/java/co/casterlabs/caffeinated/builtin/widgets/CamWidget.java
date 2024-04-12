@@ -90,12 +90,12 @@ public class CamWidget extends Widget implements KinokoV1Listener {
         if (instance.getInstanceMode() == WidgetInstanceMode.WIDGET) {
             // Count up how many widgets we have, if we have too many then we want to
             // display an error.
-            int count = 0;
-            for (WidgetInstance w : this.getWidgetInstances()) {
-                if (w.getInstanceMode() == WidgetInstanceMode.WIDGET) {
-                    count++;
-                }
-            }
+//            int count = 0;
+//            for (WidgetInstance w : this.getWidgetInstances()) {
+//                if (w.getInstanceMode() == WidgetInstanceMode.WIDGET) {
+//                    count++;
+//                }
+//            }
 
             instance.on("caller-id", (e) -> {
                 this.callerId = e.getAsString();
@@ -107,9 +107,9 @@ public class CamWidget extends Widget implements KinokoV1Listener {
                 this.sendInfo();
             });
 
-            if (count > 1) {
-                this.broadcastToAll("too-many-instances");
-            }
+//            if (count > 1) {
+//                this.broadcastToAll("too-many-instances");
+//            }
         } else {
             instance.emit("id", this.channelId);
         }
