@@ -11,6 +11,10 @@
 			.then((response) => response.json())
 			.then((apiInfo) => {
 				peer = new Peer({
+					host: 'oci-igmsmi.casterlabs.co',
+					port: 443,
+					secure: true,
+					path: '',
 					config: {
 						iceServers: apiInfo.ice_servers,
 						sdpSemantics: 'unified-plan'
