@@ -7,60 +7,62 @@
 	let currentCall;
 
 	onMount(() => {
-		fetch('https://cdn.casterlabs.co/api.json')
-			.then((response) => response.json())
-			.then((apiInfo) => {
-				peer = new Peer({
-					host: 'oci-igmsmi.casterlabs.co',
-					port: 443,
-					secure: true,
-					path: '/',
-					config: {
-						iceServers: apiInfo.ice_servers,
-						sdpSemantics: 'unified-plan'
-					}
-				});
-
-				videoElement.addEventListener('loadedmetadata', () => {
-					videoElement.style.opacity = 1;
-					videoElement.play();
-				});
-
-				peer.on('call', (call) => {
-					if (currentCall) currentCall.close();
-
-					currentCall = call;
-					console.log('Call', call);
-
-					call.on('close', () => {
-						console.log('Closed', call);
-						videoElement.srcObject = null;
-						currentCall = null;
-					});
-
-					call.on('stream', (mediaStream) => {
-						console.debug('Video: ' + mediaStream);
-						videoElement.srcObject = mediaStream;
-
-						for (const videoTrack of mediaStream.getVideoTracks()) {
-							videoTrack.onmute = () => {
-								videoElement.style.opacity = 0;
-							};
-							videoTrack.onunmute = () => {
-								videoElement.style.opacity = 1;
-							};
+		Widget.on('init', () => {
+			fetch('https://cdn.casterlabs.co/api.json')
+				.then((response) => response.json())
+				.then((apiInfo) => {
+					peer = new Peer({
+						host: 'oci-igmsmi.casterlabs.co',
+						port: 443,
+						secure: true,
+						path: '/',
+						config: {
+							iceServers: apiInfo.ice_servers,
+							sdpSemantics: 'unified-plan'
 						}
 					});
 
-					call.answer();
-				});
+					videoElement.addEventListener('loadedmetadata', () => {
+						videoElement.style.opacity = 1;
+						videoElement.play();
+					});
 
-				peer.on('open', (id) => {
-					Widget.emit('caller-id', id);
-					Widget.emit('aspect-ratio', videoElement.clientHeight / videoElement.clientWidth);
-				});
-			})
-			.catch(location.reload);
+					peer.on('call', (call) => {
+						if (currentCall) currentCall.close();
+
+						currentCall = call;
+						console.log('Call', call);
+
+						call.on('close', () => {
+							console.log('Closed', call);
+							videoElement.srcObject = null;
+							currentCall = null;
+						});
+
+						call.on('stream', (mediaStream) => {
+							console.debug('Video: ' + mediaStream);
+							videoElement.srcObject = mediaStream;
+
+							for (const videoTrack of mediaStream.getVideoTracks()) {
+								videoTrack.onmute = () => {
+									videoElement.style.opacity = 0;
+								};
+								videoTrack.onunmute = () => {
+									videoElement.style.opacity = 1;
+								};
+							}
+						});
+
+						call.answer();
+					});
+
+					peer.on('open', (id) => {
+						Widget.emit('caller-id', id);
+						Widget.emit('aspect-ratio', videoElement.clientHeight / videoElement.clientWidth);
+					});
+				})
+				.catch(location.reload);
+		});
 	});
 </script>
 
