@@ -95,11 +95,19 @@
             }
 
             function hook() {
-                const { contentWindow, contentDocument } = sandboxFrame;
+                const { contentWindow } = sandboxFrame;
 
                 contentWindow.addEventListener("unload", () => {
                     console.log("[Widget Loader]", "Detected contentWindow unload, hijacking...");
                     setTimeout(tryInject, 0); // Wait for the next browser tick.
+                });
+                
+                contentWindow.addEventListener("load", () => {
+                    const { contentDocument } = sandboxFrame;
+                    const customCSSStyle = contentDocument.createElement("style");
+                    customCSSStyle.innerText = customCSS;
+                    customCSSStyle.setAttribute("data-type", "broadcastsw-customcss");
+                    contentDocument.head.appendChild(customCSSStyle);
                 });
             }
             hook();
@@ -125,14 +133,6 @@
                 }
 
                 console.debug("frameSrc:" + sandboxFrame.src);
-
-                
-                contentWindow.addEventListener("load", () => {
-                    const { contentDocument } = sandboxFrame;
-                    const customCSSStyle = contentDocument.createElement("style");
-                    customCSSStyle.innerText = customCSS;
-                    contentDocument.head.appendChild(customCSSStyle);
-                });
 
                 return false;
             }
