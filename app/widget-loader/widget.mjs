@@ -18,6 +18,7 @@ const { pluginId, widgetId, authorization } = queryParams;
 const port = queryParams.port || "8092";
 const address = queryParams.validAddress || "localhost";
 const widgetMode = (queryParams.mode || "WIDGET").toUpperCase();
+const customCSS = (queryParams.customCSS || "");
 
 export function deepFreeze(object) {
     const propNames = Object.getOwnPropertyNames(object);
@@ -227,7 +228,7 @@ export function init({ initHandler, disconnectHandler }) {
     // Listen for events on the conn, fire them off, yeah you get the idea.
     conn.on("init", ({ basePath }) => {
         // initHandler returns false if it should be handled by the implementer manually.
-        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, basePath, openLink })) {
+        if (!initHandler || initHandler({ conn, koiInstance, widgetInstance, musicInstance, Currencies, koi_statics, address, port, pluginId, widgetId, authorization, widgetMode, App, basePath, openLink, customCSS })) {
             App.init();
             widgetInstance.broadcast("init");
             widgetInstance.broadcast("update");

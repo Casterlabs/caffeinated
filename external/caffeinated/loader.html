@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Just A Caffeinated Widget</title>
-        <style>
+        <style data-from="casterlabs">
             iframe {
                 position: absolute;
                 top: 0;
@@ -22,6 +22,8 @@
     <footer>
         <script type="module">
             import Conn from "./conn.mjs";
+
+            const customCSS = document.querySelector("style:not([data-from=casterlabs])")?.innerText || ''
 
             const queryParams = (() => {
                 let vars = {};
@@ -49,7 +51,7 @@
                 conn.on("init", () => {
                     console.debug("[widgets.casterlabs.co loader] Successfully connected to realtime, loading iframe.");
                     const sandboxFrame = document.createElement("iframe");
-                    sandboxFrame.src = `http://${address}:${port}/api/plugin/widget/loader/widget.html${location.search}&validAddress=${encodeURIComponent(address)}`;
+                    sandboxFrame.src = `http://${address}:${port}/api/plugin/widget/loader/widget.html${location.search}&validAddress=${encodeURIComponent(address)}&customCSS=${encodeURIComponent(customCSS)}`;
 
                     document.body.appendChild(sandboxFrame);
                 });

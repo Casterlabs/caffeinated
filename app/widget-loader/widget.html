@@ -106,7 +106,7 @@
 
             function initHandler(params) {
                 initParameters = params;
-                const { address, port, pluginId, widgetId, authorization, widgetMode, basePath } = params;
+                const { address, port, pluginId, widgetId, authorization, widgetMode, basePath, customCSS } = params;
 
                 console.debug("Origin:", location.origin, "Plugin ID:", pluginId)
                 
@@ -125,6 +125,14 @@
                 }
 
                 console.debug("frameSrc:" + sandboxFrame.src);
+
+                
+                contentWindow.addEventListener("load", () => {
+                    const { contentDocument } = sandboxFrame;
+                    const customCSSStyle = contentDocument.createElement("style");
+                    customCSSStyle.innerText = customCSS;
+                    contentDocument.head.appendChild(customCSSStyle);
+                });
 
                 return false;
             }
