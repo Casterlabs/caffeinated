@@ -31,25 +31,12 @@ public class Evaluater {
         System.setProperty("nashorn.args", "--language=es6");
         engine = new NashornScriptEngineFactory().getScriptEngine();
 
+        engine.put("fetch", new FetchScriptHandle());
+        engine.put("Plugins", new PluginsScriptHandle());
+        engine.put("Currencies", new CurrenciesScriptHandle());
+
         try {
-            engine.put("__internal_handle", new ScriptHandle());
             engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
-            engine.eval(
-                "const fetch = {"
-                    + "asText(url) {return __internal_handle.fetch_asText(url);},"
-                    + "asJson(url) {return JSON.parse(__internal_handle.fetch_asText(url));}"
-                    + "};"
-            );
-            engine.eval(
-                "const Plugins = {"
-                    + "callServiceMethod(pluginId, serviceId, methodName, args) {return __internal_handle.callServiceMethod(pluginId, serviceId, methodName, args);}"
-                    + "};"
-            );
-            engine.eval(
-                "const Currencies = {"
-                    + "formatCurrency(amount, currency) {return __internal_handle.currencies_formatCurrency(amount, currency);}"
-                    + "};"
-            );
             engine.eval(
                 "let event = null;"
             );
@@ -91,22 +78,28 @@ public class Evaluater {
         }
     }
 
-    public static class ScriptHandle {
+    public static class FetchScriptHandle {
 
         @SneakyThrows
-        public String fetch_asText(@NonNull String url) {
+        public String asText(@NonNull String url) {
             return WebUtil.sendHttpRequest(
                 new Request.Builder()
                     .addHeader("User-Agent", "Casterlabs/Bot")
                     .url(url)
             );
         }
+    }
+
+    public static class PluginsScriptHandle {
 
         public Object callServiceMethod(@NonNull String pluginId, @NonNull String serviceId, @NonNull String methodName, @Nullable Object[] args) {
             return Caffeinated.getInstance().getPlugins().callServiceMethod(pluginId, serviceId, methodName, args);
         }
+    }
 
-        public String currencies_formatCurrency(Number amount, @NonNull String currency) throws InterruptedException, Throwable {
+    public static class CurrenciesScriptHandle {
+
+        public String formatCurrency(Number amount, @NonNull String currency) throws InterruptedException, Throwable {
             return Currencies.formatCurrency(amount.doubleValue(), currency).await();
         }
 

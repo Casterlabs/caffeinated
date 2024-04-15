@@ -50,12 +50,17 @@ public class ChatbotScriptEngine {
         engine = new NashornScriptEngineFactory().getScriptEngine();
 
         engine.put("store", CaffeinatedApp.getInstance().getChatbotPreferences().get().getStore());
-        engine.put("__internal_handle", new ScriptHandle());
+        engine.put("Koi", new KoiScriptHandle());
+        engine.put("fetch", new FetchScriptHandle());
+        engine.put("Plugins", new PluginsScriptHandle());
+        engine.put("Sound", new SoundScriptHandle());
+        engine.put("Input", new InputScriptHandle());
 
         try {
-            engine.eval("load('classpath:nashorn_polyfill.js')");
-            engine.eval("load('classpath:nashorn_constants.js')");
+            engine.eval("function sleep(milliseconds) {return __internal_handle.sleep(milliseconds);}");
             engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
+            engine.eval("load('classpath:nashorn_constants.js')");
+            engine.eval("load('classpath:nashorn_polyfill.js')");
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -93,44 +98,13 @@ public class ChatbotScriptEngine {
 
             String[] script = {
                     "(() => {",
-
-                    // "Globals"
                     String.format("const Music = %s;", CaffeinatedApp.getInstance().getMusic().toJson()),
-                    String.format(
-                        "const Koi = {"
-                            + "sendChat(platform, message, chatter, replyTarget) {return __internal_handle.koi_sendChat(platform, message, chatter, replyTarget);},"
-                            + "upvoteChat(platform, messageId) {return __internal_handle.koi_upvoteChat(platform, messageId);},"
-                            + "deleteChat(platform, messageId) {return __internal_handle.koi_deleteChat(platform, messageId);},"
-                            + "%s;",
-                        CaffeinatedApp.getInstance().getKoi().toJson().toString().substring(1) // Chop off the leading '{'
-                    ),
                     String.format(
                         "const ChatBot = {"
                             + "realChatter: %s"
                             + "};",
                         new JsonString(CaffeinatedApp.getInstance().getChatbotPreferences().get().getChatter().name())
                     ),
-                    "const fetch = {"
-                        + "asText(url) {return __internal_handle.fetch_asText(url);},"
-                        + "asJson(url) {return JSON.parse(__internal_handle.fetch_asText(url));}"
-                        + "};",
-                    "const Plugins = {"
-                        + "callServiceMethod(pluginId, serviceId, methodName, args) {return __internal_handle.callServiceMethod(pluginId, serviceId, methodName, args);}"
-                        + "};",
-                    "const Sound = {"
-                        + "playAudio(audioUrl, volume) {return __internal_handle.playAudio(audioUrl, volume);},"
-                        + "playTTS(text, defaultVoice, volume) {return __internal_handle.playTTS(text, defaultVoice, volume);}"
-                        + "};",
-                    "const Input = {"
-                        + "keyPress(keycode) {return __internal_handle.keyPress(keycode);},"
-                        + "mouseMove(pixels, degrees, smooth) {return __internal_handle.mouseMove(pixels, degrees, smooth);},"
-                        + "mouseScroll(direction) {return __internal_handle.mouseScroll(direction);},"
-                        + "mouseClick(button) {return __internal_handle.mouseClick(button);}"
-                        + "};",
-                    "function sleep(milliseconds) {return __internal_handle.sleep(milliseconds);}",
-                    "",
-
-                    // Per-event.
                     String.format("const event = %s;", Rson.DEFAULT.toJson(event)), // Define the event.
                     String.format("const args = %s;", Rson.DEFAULT.toJson(args)),   // Define a list of arguments, only applicable for RichMessages.
                     String.format("const rawArgs = %s;", new JsonString(rawArgs)),  // ^
@@ -149,9 +123,9 @@ public class ChatbotScriptEngine {
         }
     }
 
-    public static class ScriptHandle {
+    public static class KoiScriptHandle {
 
-        public void koi_sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
+        public void sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
             UserPlatform enumP = platform == null ? null : UserPlatform.valueOf(platform);
             CaffeinatedApp.getInstance().getKoi().sendChat(enumP, message, KoiChatterType.valueOf(chatter), replyTarget, false);
             CaffeinatedApp.getInstance().getChatbot().getRecentReplies().add(message);
@@ -161,26 +135,36 @@ public class ChatbotScriptEngine {
             }
         }
 
-        public void koi_upvoteChat(@NonNull String platform, @NonNull String messageId) {
+        public void upvoteChat(@NonNull String platform, @NonNull String messageId) {
             CaffeinatedApp.getInstance().getKoi().upvoteChat(UserPlatform.valueOf(platform), messageId);
         }
 
-        public void koi_deleteChat(@NonNull String platform, @NonNull String messageId) {
+        public void deleteChat(@NonNull String platform, @NonNull String messageId) {
             CaffeinatedApp.getInstance().getKoi().deleteChat(UserPlatform.valueOf(platform), messageId, false);
         }
 
+    }
+
+    public static class FetchScriptHandle {
+
         @SneakyThrows
-        public String fetch_asText(@NonNull String url) {
+        public String asText(@NonNull String url) {
             return WebUtil.sendHttpRequest(
                 new Request.Builder()
                     .addHeader("User-Agent", "Casterlabs/Bot")
                     .url(url)
             );
         }
+    }
+
+    public static class PluginsScriptHandle {
 
         public Object callServiceMethod(@NonNull String pluginId, @NonNull String serviceId, @NonNull String methodName, @Nullable Object[] args) {
             return CaffeinatedApp.getInstance().getPlugins().callServiceMethod(pluginId, serviceId, methodName, args);
         }
+    }
+
+    public static class SoundScriptHandle {
 
         public void playAudio(@NonNull String audioUrl, Number volume) throws IOException {
             if (volume == null) volume = 1;
@@ -219,6 +203,9 @@ public class ChatbotScriptEngine {
             if (volume == null) volume = 1;
             playAudio(TTS.getSpeechAsUrl(defaultVoice, text), volume.floatValue());
         }
+    }
+
+    public static class InputScriptHandle {
 
         @SneakyThrows
         public void keyPress(@NonNull String keyCode) {
@@ -300,6 +287,10 @@ public class ChatbotScriptEngine {
             Thread.sleep(50); // We need delay to trigger successfully.
             robot.mouseRelease(downMask);
         }
+
+    }
+
+    public static class InternalScriptHandle {
 
         @SneakyThrows
         public void sleep(Number milliseconds) {
