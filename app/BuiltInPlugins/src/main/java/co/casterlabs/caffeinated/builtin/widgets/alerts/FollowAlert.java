@@ -27,20 +27,12 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
     public void onFollow(FollowEvent e) {
         if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
 
-        // Generate the title html.
-        String title = String.format("<span class='highlight'>%s</span>", e.getFollower().getDisplayname());
-
-        this.queueAlert(title, null, null, null);
+        this.queueAlert(e, null, null);
     }
 
     @Override
-    protected String defaultPrefix() {
-        return "";
-    }
-
-    @Override
-    protected String defaultSuffix() {
-        return "just followed!";
+    protected String defaultFormat() {
+        return "${escapeHtml(event.follower.displayname)} just followed!";
     }
 
     @Override

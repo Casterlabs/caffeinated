@@ -27,26 +27,12 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
     public void onRaid(RaidEvent e) {
         if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
 
-        // Generate the title html.
-        String title = String.format("<span class='highlight'>%s</span>", e.getHost().getDisplayname());
-        String title2 = String.format("<span class='highlight'>%s</span>", e.getViewers());
-
-        this.queueAlert(title, title2, null, null, null);
+        this.queueAlert(e, null, null);
     }
 
     @Override
-    protected String defaultPrefix() {
-        return "";
-    }
-
-    @Override
-    protected String defaultInfix() {
-        return "is raiding with";
-    }
-
-    @Override
-    protected String defaultSuffix() {
-        return "viewers!";
+    protected String defaultFormat() {
+        return "${escapeHtml(event.host.displayname)} is raiding with ${event.viewers} viewers!";
     }
 
     @Override
@@ -57,11 +43,6 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
     @Override
     protected boolean hasTTS() {
         return false;
-    }
-
-    @Override
-    protected boolean hasInfix() {
-        return true;
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.builtin.Evaluater;
 import co.casterlabs.caffeinated.pluginsdk.TTS;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
@@ -22,9 +23,9 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettings
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsNumberBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsPlatformDropdownBuilder;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
-import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsTextBuilder;
-import co.casterlabs.caffeinated.util.WebUtil;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsTextAreaBuilder;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
+import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
@@ -160,32 +161,10 @@ public abstract class GenericAlert extends Widget {
         {
             WidgetSettingsSection textSection = new WidgetSettingsSection("text", "Text")
                 .addItem(
-                    new WidgetSettingsTextBuilder()
-                        .withId("prefix")
-                        .withName("Prefix")
-                        .withDefaultValue(this.defaultPrefix())
-                        .withPlaceholder("")
-                        .build()
-                );
-
-            if (this.hasInfix()) {
-                textSection
-                    .addItem(
-                        new WidgetSettingsTextBuilder()
-                            .withId("infix")
-                            .withName("Infix")
-                            .withDefaultValue(this.defaultInfix())
-                            .withPlaceholder("")
-                            .build()
-                    );
-            }
-
-            textSection
-                .addItem(
-                    new WidgetSettingsTextBuilder()
-                        .withId("suffix")
-                        .withName("Suffix")
-                        .withDefaultValue(this.defaultSuffix())
+                    new WidgetSettingsTextAreaBuilder()
+                        .withId("format")
+                        .withName("Format")
+                        .withDefaultValue(this.defaultFormat())
                         .withPlaceholder("")
                         .build()
                 );
@@ -324,11 +303,7 @@ public abstract class GenericAlert extends Widget {
         return "/alert.html";
     }
 
-    public void queueAlert(@NonNull String titleHtml, @Nullable RichMessageEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
-        this.queueAlert(titleHtml, null, chatEvent, customImage, ttsText);
-    }
-
-    public void queueAlert(@NonNull String titleHtml, @Nullable String titleHtml2, @Nullable RichMessageEvent chatEvent, @Nullable String customImage, @Nullable String ttsText) {
+    public void queueAlert(@NonNull KoiEvent event, @Nullable String customImage, @Nullable String ttsText) {
         String ttsAudio = null;
 
         // Generate the base64 audio data for TTS if enabled.
@@ -343,29 +318,18 @@ public abstract class GenericAlert extends Widget {
             }
         }
 
-        // Append the prefix and suffix to the title.
-        String prefix = WebUtil.escapeHtml(this.settings().getString("text.prefix")).replace(" ", "&nbsp;");
-        String suffix = WebUtil.escapeHtml(this.settings().getString("text.suffix")).replace(" ", "&nbsp;");
-
-        if (!prefix.isEmpty()) {
-            titleHtml = prefix + ' ' + titleHtml;
-        }
-
-        if (this.hasInfix()) {
-            String infix = WebUtil.escapeHtml(this.settings().getString("text.infix")).replace(" ", "&nbsp;");
-            titleHtml += infix + ' ' + titleHtml2;
-        }
-
-        if (!suffix.isEmpty()) {
-            titleHtml = titleHtml + ' ' + suffix;
-        }
+        String title = Evaluater.replace(
+            this.settings().getString("text.format"),
+            "<span class='highlight'>", "</span>",
+            event
+        );
 
         // Send it on it's way.
         this.broadcastToAll(
             "alert",
             new JsonObject()
-                .put("title", titleHtml)
-                .put("chatEvent", Rson.DEFAULT.toJson(chatEvent))
+                .put("title", title)
+                .put("chatEvent", Rson.DEFAULT.toJson(event instanceof RichMessageEvent ? event : null))
                 .put("image", this.getImage(customImage))
                 .put("audio", this.getAudio())
                 .put("ttsAudio", ttsAudio)
@@ -384,21 +348,11 @@ public abstract class GenericAlert extends Widget {
         return this.settings().getString("audio.file");
     }
 
-    protected abstract String defaultPrefix();
-
-    protected String defaultInfix() {
-        return null;
-    }
-
-    protected abstract String defaultSuffix();
+    protected abstract String defaultFormat();
 
     protected abstract boolean hasCustomImageImplementation();
 
     protected abstract boolean hasTTS();
-
-    protected boolean hasInfix() {
-        return false;
-    }
 
     protected abstract KoiIntegrationFeatures[] requiredPlatformFeatures();
 

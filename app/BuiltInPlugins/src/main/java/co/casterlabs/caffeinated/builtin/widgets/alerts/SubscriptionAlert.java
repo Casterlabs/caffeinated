@@ -7,7 +7,6 @@ import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
-import co.casterlabs.koi.api.types.user.User;
 
 public class SubscriptionAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
@@ -28,28 +27,18 @@ public class SubscriptionAlert extends GenericAlert implements KoiEventListener 
     public void onSubscriber(SubscriptionEvent e) {
         if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
 
-        User sub = null;
-
-        if (e.getGiftRecipient() != null) {
-            sub = e.getGiftRecipient();
-        } else {
-            sub = e.getSubscriber();
-        }
-
-        // Generate the title html.
-        String title = String.format("<span class='highlight'>%s</span>", sub.getDisplayname());
-
-        this.queueAlert(title, null, null, null);
+        this.queueAlert(e, null, null);
     }
 
     @Override
-    protected String defaultPrefix() {
-        return "";
-    }
-
-    @Override
-    protected String defaultSuffix() {
-        return "just subscribed!";
+    protected String defaultFormat() {
+        // TODO
+//        if (e.getGiftRecipient() != null) {
+//            sub = e.getGiftRecipient();
+//        } else {
+//            sub = e.getSubscriber();
+//        }
+        return "${(event.gift_recipient || event.subscriber).displayname} just subscribed!";
     }
 
     @Override

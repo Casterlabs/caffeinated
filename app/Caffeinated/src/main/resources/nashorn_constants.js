@@ -25,3 +25,12 @@ const KoiPlatform = {
 	CUSTOM_INTEGRATION: 'CUSTOM_INTEGRATION',
 };
 Object.freeze(KoiPlatform);
+
+function escapeHtml(unsafe) {
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+ }

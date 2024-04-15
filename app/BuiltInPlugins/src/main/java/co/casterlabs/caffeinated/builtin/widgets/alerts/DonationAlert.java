@@ -38,9 +38,6 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
 
         Donation donation = e.getDonations().get(0);
 
-        // Generate the title html.
-        String title = String.format("<span class='highlight'>%s</span>", e.getSender().getDisplayname());
-
         // Generate the ttsText
         String ttsText = e.getRaw();
 
@@ -50,7 +47,7 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
             }
         }
 
-        this.queueAlert(title, e, donation.getImage(), ttsText);
+        this.queueAlert(e, donation.getImage(), ttsText);
     }
 
     @SuppressWarnings("deprecation")
@@ -91,13 +88,8 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
     }
 
     @Override
-    protected String defaultPrefix() {
-        return "";
-    }
-
-    @Override
-    protected String defaultSuffix() {
-        return "just donated!";
+    protected String defaultFormat() {
+        return "${escapeHtml(event.sender.displayname)} just donated ${Currencies.formatCurrency(event.donations.reduce((acc, d) => acc + d.amount, 0), event.donations[0].currency)}!";
     }
 
     @Override
