@@ -156,6 +156,7 @@
 					const { title, chatEvent, image, audio, ttsAudio } = alertQueue.shift();
 					const duration = Widget.getSetting('style.duration') * 1000 - ANIMATION_DURATION * 2; // Seconds -> Milliseconds, minus the fade-in and fade-out times.
 					executingAlert = true;
+					let videoPromise = Promise.resolve(null);
 
 					// Image
 					{
@@ -167,6 +168,10 @@
 								alertVideo.src = image;
 								alertVideo.play();
 								alertVideo.classList = '';
+								videoPromise = new Promise((resolve) => {
+									alertVideo.addEventListener("ended", resolve);
+									alertVideo.addEventListener("error", resolve);
+								})
 								// alertVideo.addEventListener("loadeddata", () => {
 								//     const duration = alertVideo.duration * 1000;
 								//     displayTime += (duration - DISPLAY_TIME);
@@ -198,9 +203,9 @@
 						// If audio == null then try to play TTS.
 						// Otherwise, play the audio and then try to play TTS.
 						if (audio) {
-							playAudio(audio, false).then(tryPlayTTS);
+							videoPromise.then(() => playAudio(audio, false)).then(tryPlayTTS);
 						} else {
-							tryPlayTTS();
+							videoPromise.then(() => tryPlayTTS());
 						}
 					}
 
