@@ -5,11 +5,11 @@ import java.nio.charset.StandardCharsets;
 
 import co.casterlabs.caffeinatedapi.Config;
 import co.casterlabs.caffeinatedapi.HttpUtil;
-import co.casterlabs.rakurai.io.http.HttpStatus;
-import co.casterlabs.rakurai.io.http.StandardHttpStatus;
-import co.casterlabs.rakurai.io.http.server.HttpResponse;
-import co.casterlabs.rakurai.io.http.server.HttpSession;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.rhs.protocol.HttpStatus;
+import co.casterlabs.rhs.protocol.StandardHttpStatus;
+import co.casterlabs.rhs.server.HttpResponse;
+import co.casterlabs.rhs.session.HttpSession;
 import co.casterlabs.sora.api.http.HttpProvider;
 import co.casterlabs.sora.api.http.annotations.HttpEndpoint;
 import lombok.AllArgsConstructor;
