@@ -51,6 +51,7 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
 import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.events.PlatformMessageEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.rakurai.io.http.MimeTypes;
 import co.casterlabs.rakurai.json.Rson;
@@ -333,6 +334,21 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             this.nativeSystem.notify(localized, type);
         } catch (IllegalStateException ignored) {
             this.UI.showToast(localized, NotificationType.NONE);
+        }
+
+        switch (type) {
+            case ERROR:
+                this.koi.broadcastEvent(new PlatformMessageEvent("🚨 " + localized));
+                break;
+
+            case WARNING:
+                this.koi.broadcastEvent(new PlatformMessageEvent("⚠️ " + localized));
+                break;
+
+            case INFO:
+            case NONE:
+                this.koi.broadcastEvent(new PlatformMessageEvent("ℹ️ " + localized));
+                break;
         }
     }
 
