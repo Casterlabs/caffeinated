@@ -8,6 +8,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Base64;
 import java.util.LinkedList;
@@ -149,11 +150,19 @@ public class ChatbotScriptEngine {
 
         @SneakyThrows
         public String asText(@NonNull String url) {
-            return WebUtil.sendHttpRequest(
-                new Request.Builder()
-                    .addHeader("User-Agent", "Casterlabs/Bot")
-                    .url(url)
-            );
+            if (url.startsWith("http://") || url.startsWith("https://")) {
+                return WebUtil.sendHttpRequest(
+                    new Request.Builder()
+                        .addHeader("User-Agent", "Casterlabs/Bot")
+                        .url(url)
+                );
+            } else if (url.startsWith("file://")) {
+                File file = new File(WebUtil.decodeURIComponent(url.substring("file://".length())));
+                byte[] contents = Files.readAllBytes(file.toPath());
+                return new String(contents, StandardCharsets.UTF_8);
+            } else {
+                throw new UnsupportedOperationException("Unsupported protocol: " + url);
+            }
         }
     }
 
@@ -180,7 +189,11 @@ public class ChatbotScriptEngine {
                 );
                 return;
             } else if (audioUrl.startsWith("http://") || audioUrl.startsWith("https://")) {
-                Pair<byte[], String> pair = WebUtil.sendHttpRequestBytesWithMime(new Request.Builder().url(audioUrl));
+                Pair<byte[], String> pair = WebUtil.sendHttpRequestBytesWithMime(
+                    new Request.Builder()
+                        .addHeader("User-Agent", "Casterlabs/Bot")
+                        .url(audioUrl)
+                );
                 audioBytes = pair.a();
                 audioMime = pair.b();
             } else if (audioUrl.startsWith("file://")) {
