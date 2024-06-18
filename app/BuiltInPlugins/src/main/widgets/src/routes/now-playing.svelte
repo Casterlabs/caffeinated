@@ -9,19 +9,8 @@
 	let artist;
 	let albumArtUrl;
 
-	let cardStyle;
+	const settings = writable({});
 	let cardColor;
-	let textColor;
-	let backgroundStyle;
-	let imageStyle;
-	let margin;
-
-	let textOnly_font;
-	let textOnly_fontSize;
-	let textOnly_fontWeight;
-	let textOnly_textColor;
-	let textOnly_textAlign;
-	let textOnly_shadow;
 
 	async function update() {
 		console.log(Music.activePlayback);
@@ -35,19 +24,6 @@
 		title = Music.activePlayback.currentTrack.title;
 		artist = Music.activePlayback.currentTrack.artists.join(', ');
 		albumArtUrl = Music.activePlayback.currentTrack.albumArtUrl;
-
-		cardStyle = Widget.getSetting('style.card_style');
-		textColor = Widget.getSetting('style.text_color');
-		backgroundStyle = Widget.getSetting('style.background_style');
-		imageStyle = Widget.getSetting('style.image_style');
-		margin = Widget.getSetting('style.margin');
-
-		textOnly_font = Widget.getSetting('style.font');
-		textOnly_fontSize = Widget.getSetting('style.font_size');
-		textOnly_fontWeight = Widget.getSetting('style.font_weight');
-		textOnly_textColor = Widget.getSetting('style.text_color');
-		textOnly_textAlign = Widget.getSetting('style.text_align');
-		textOnly_shadow = Widget.getSetting('style.text_shadow');
 
 		if (cardStyle == 'Text Only') {
 			changeFont(textOnly_font);
@@ -67,22 +43,25 @@
 	onMount(() => {
 		update();
 		Widget.on('init', update);
-		Widget.on('update', update);
 		Music.on('music', update);
+		Widget.on('update', () => {
+			settings.set(Widget.widgetData.settings);
+			update();
+		});
 	});
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
 {#if title}
-	{#if cardStyle == 'Horizontal Card'}
+	{#if $settings['style.card_style'] == 'Horizontal Card'}
 		<div class="drop-shadow-lg">
 			<AspectVar aspectRatio={298 / 930}>
 				<div
 					class="w-full h-full overflow-hidden rounded-lg relative shadow-lg"
 					style:background-color={cardColor}
-					style:margin="{margin}px"
+					style:margin="{$settings['style.margin']}px"
 				>
-					{#if backgroundStyle == 'Blur'}
+					{#if $settings['style.background_style'] == 'Blur'}
 						<img
 							class="absolute inset-0 w-full h-full object-cover blur-sm brightness-50"
 							src={albumArtUrl}
@@ -90,35 +69,37 @@
 					{/if}
 
 					<div class="absolute inset-4 flex flex-row space-x-6">
-						{#if imageStyle == 'Left'}
+						{#if $settings['style.image_style'] == 'Left'}
 							<img class="rounded-md drop-shadow-lg" src={albumArtUrl} />
 						{/if}
 						<div class="flex-1 text-white">
 							<h1 class="text-[5vw] drop-shadow-2xl">{title}</h1>
 							<h2 class="text-[3vw] drop-shadow-2xl">{artist}</h2>
 						</div>
-						{#if imageStyle == 'Right'}
+						{#if $settings['style.image_style'] == 'Right'}
 							<img class="rounded-md drop-shadow-lg" src={albumArtUrl} />
 						{/if}
 					</div>
 				</div>
 			</AspectVar>
 		</div>
-	{:else if cardStyle == 'Text Only'}
+	{:else if $settings['style.card_style'] == 'Text Only'}
 		<p
-			style:font-size="{textOnly_fontSize}px"
-			style:font-weight={textOnly_fontWeight}
-			style:text-align={textOnly_textAlign}
-			style:color={textOnly_textColor}
-			style:filter={textOnly_shadow == -1 ? '' : `drop-shadow(0px 0px ${textOnly_shadow}px black)`}
+			style:font-size="{$settings['style.font_size']}px"
+			style:font-weight={$settings['style.font_weight']}
+			style:text-align={$settings['style.text_align']}
+			style:color={$settings['style.text_color']}
+			style:filter={$settings['style.text_shadow'] == -1
+				? ''
+				: `drop-shadow(0px 0px ${$settings['style.text_shadow']}px black)`}
 		>
 			{title} &bull; {artist}
 		</p>
-	{:else if cardStyle == 'Image Only'}
+	{:else if $settings['style.card_style'] == 'Image Only'}
 		<img
 			class="absolute inset-0 w-full h-full object-contain"
 			src={albumArtUrl}
-			style:padding="{margin}px;"
+			style:padding="{$settings['style.margin']}px;"
 		/>
 	{/if}
 {/if}
