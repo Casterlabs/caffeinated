@@ -27,6 +27,11 @@ public abstract class GenericLabel extends Widget implements KoiEventListener {
         this.addKoiListener(this);
     }
 
+    @Override
+    protected void onSettingsUpdate() {
+        this.renderSettingsLayout();
+    }
+
     private void renderSettingsLayout() {
         WidgetSettingsLayout layout = this.generateSettingsLayout();
 

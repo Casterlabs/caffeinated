@@ -168,7 +168,7 @@ public abstract class GenericAlert extends Widget {
                     .withMax(1)
                     .build()
             );
-            if (this.settings().getNumber("text_style.outline_width", 0).doubleValue() > 0) {
+            if (this.settings().getNumber("style.outline_width", 0).doubleValue() > 0) {
                 textStyle.addItem(
                     new WidgetSettingsColorBuilder()
                         .withId("outline_color")
