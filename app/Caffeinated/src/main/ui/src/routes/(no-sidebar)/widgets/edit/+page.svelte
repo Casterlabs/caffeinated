@@ -218,62 +218,11 @@
 								<LocalizedText key={section.name} />
 							</button>
 						{/each}
-
-						{#if hasTestEvents}
-							{@const isSelected = currentSection == '__INTERNAL_TEST'}
-							<button
-								class="border-current whitespace-nowrap pb-4 px-1 font-medium text-sm"
-								aria-current={isSelected ? 'page' : undefined}
-								class:border-b-2={isSelected}
-								class:text-primary-11={isSelected}
-								on:click={() => {
-									currentSection = null;
-
-									// Svelte bug :(
-									tick().then(() => (currentSection = '__INTERNAL_TEST'));
-								}}
-							>
-								<LocalizedText
-									key="co.casterlabs.caffeinated.app.page.widget.editor.test_events.tab"
-								/>
-							</button>
-						{/if}
 					</nav>
 				{/if}
 			</div>
 
 			<ul class="flex-1 block w-full max-w-sm mx-auto mt-2 divide-y divide-current text-base-6">
-				{#if currentSection == '__INTERNAL_TEST'}
-					{#each widget.details.testEvents as eventType}
-						<li class="py-4">
-							<span class="text-base-12">
-								<div class="flex items-center justify-between w-full">
-									<div class="flex flex-col">
-										<p class="text-sm font-medium text-base-12">
-											<!-- Try to convert the enum to a friendlier name. -->
-											{(eventType.substring(0, 1) + eventType.substring(1).toLowerCase()).replace(
-												'_',
-												' '
-											)}
-										</p>
-									</div>
-
-									<div class="text-right w-40">
-										<Button
-											on:click={() =>
-												window.Caffeinated.pluginIntegration.fireTestEvent(widget.id, eventType)}
-										>
-											<LocalizedText
-												key="co.casterlabs.caffeinated.app.page.widget.editor.test_events.send_test"
-											/>
-										</Button>
-									</div>
-								</div>
-							</span>
-						</li>
-					{/each}
-				{/if}
-
 				{#key settingsLayout}
 					{#each widget.settingsLayout?.sections || [] as section}
 						{#if currentSection == section.id}
@@ -292,6 +241,28 @@
 
 		{#if widget.details.showDemo}
 			<WidgetPreview {widget} mode="DEMO" ariaHidden={true} />
+		{/if}
+
+		{#if hasTestEvents}
+			<div class="max-w-md mx-auto mt-6 mb-8">
+				<h1 class="font-semibold text-xl">
+					<LocalizedText
+						key="co.casterlabs.caffeinated.app.page.widget.editor.test_events.send_test"
+					/>
+				</h1>
+
+				<div class="w-full mt-1 pt-1 select-none">
+					{#each widget.details.testEvents as eventType}
+						<Button
+							on:click={() =>
+								window.Caffeinated.pluginIntegration.fireTestEvent(widget.id, eventType)}
+						>
+							<!-- Try to convert the enum to a friendlier name. -->
+							{(eventType.substring(0, 1) + eventType.substring(1).toLowerCase()).replace('_', ' ')}
+						</Button>
+					{/each}
+				</div>
+			</div>
 		{/if}
 	{/if}
 </div>
