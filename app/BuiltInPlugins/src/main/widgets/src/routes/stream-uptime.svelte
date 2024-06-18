@@ -1,4 +1,5 @@
 <script>
+	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import changeFont from '$lib/changeFont.mjs';
 

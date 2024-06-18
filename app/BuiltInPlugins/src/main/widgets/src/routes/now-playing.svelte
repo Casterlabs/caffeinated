@@ -1,6 +1,7 @@
 <script>
 	import AspectVar from '$lib/aspect-ratio/AspectVar.svelte';
 
+	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import changeFont from '$lib/changeFont.mjs';
 	import getAverageColor from '$lib/getAverageColor.mjs';
