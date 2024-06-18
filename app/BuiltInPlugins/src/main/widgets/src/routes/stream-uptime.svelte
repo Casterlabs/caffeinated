@@ -2,12 +2,9 @@
 	import { onMount } from 'svelte';
 	import changeFont from '$lib/changeFont.mjs';
 
+	const settings = writable({});
+
 	let html = '';
-	let highlightColor;
-	let textColor;
-	let fontSize;
-	let fontWeight;
-	let textAlign;
 
 	function updateText() {
 		requestAnimationFrame(updateText);
@@ -47,12 +44,8 @@
 		updateText();
 
 		Widget.on('update', () => {
+			settings.set(Widget.widgetData.settings);
 			changeFont(Widget.getSetting('text_style.font'));
-			highlightColor = Widget.getSetting('text_style.highlight_color');
-			textColor = Widget.getSetting('text_style.text_color');
-			fontSize = Widget.getSetting('text_style.font_size');
-			fontWeight = Widget.getSetting('text_style.font_weight');
-			textAlign = Widget.getSetting('text_style.text_align');
 		});
 
 		Widget.on('init', () => Widget.broadcast('update'));
@@ -60,11 +53,18 @@
 </script>
 
 <span
-	style:--highlight-color={highlightColor}
-	style:color={textColor}
-	style:font-size="{fontSize}px"
-	style:font-weight={fontWeight}
-	style:text-align={textAlign}
+	style:--highlight-color={$settings['text_style.highlight_color']}
+	style:color={$settings['text_style.text_color']}
+	style:font-size="{$settings['text_style.font_size']}px"
+	style:font-weight={$settings['text_style.font_weight']}
+	style:text-align={$settings['text_style.text_align']}
+	style:-webkit-text-stroke="{$settings['text_style.outline_width'] * 0.1}em {$settings[
+		'text_style.outline_color'
+	]}"
+	style:filter={$settings['text_style.text_shadow'] == -1
+		? ''
+		: `drop-shadow(0px 0px ${$settings['text_style.text_shadow']}px black)`}
+	style:display="block"
 >
 	{@html html}
 </span>

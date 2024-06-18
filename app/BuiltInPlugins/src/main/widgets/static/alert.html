@@ -134,6 +134,9 @@
 					`font-weight: ${Widget.getSetting('style.font_weight')};` +
 					`letter-spacing: ${Widget.getSetting('style.letter_spacing')}px;` +
 					`text-align: ${Widget.getSetting('style.text_align').toLowerCase()};` +
+					`-webkit-text-stroke: ${
+						Widget.getSetting('text_style.outline_width') * 0.1
+					}em ${Widget.getSetting('text_style.outline_color')};` +
 					//
 					(Widget.getSetting('style.shadow') == -1
 						? ''
@@ -169,9 +172,9 @@
 								alertVideo.play();
 								alertVideo.classList = '';
 								videoPromise = new Promise((resolve) => {
-									alertVideo.addEventListener("ended", resolve);
-									alertVideo.addEventListener("error", resolve);
-								})
+									alertVideo.addEventListener('ended', resolve);
+									alertVideo.addEventListener('error', resolve);
+								});
 								// alertVideo.addEventListener("loadeddata", () => {
 								//     const duration = alertVideo.duration * 1000;
 								//     displayTime += (duration - DISPLAY_TIME);

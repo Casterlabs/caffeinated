@@ -7,6 +7,8 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsColorBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
 import lombok.NonNull;
 
 public class NowPlayingWidget extends Widget {
@@ -48,6 +50,26 @@ public class NowPlayingWidget extends Widget {
                     .addItem(WidgetSettingsItem.asColor("text_color", "Text Color", "#ff0000"))
                     .addItem(WidgetSettingsItem.asDropdown("text_align", "Text Align", "Left", "Left", "Right", "Center"))
                     .addItem(WidgetSettingsItem.asRange("text_shadow", "Text Shadow", -1, 1, -1, 20));
+
+                section.addItem(
+                    new WidgetSettingsRangeBuilder()
+                        .withId("outline_width")
+                        .withName("Outline Size")
+                        .withDefaultValue(0)
+                        .withStep(.01)
+                        .withMin(0)
+                        .withMax(1)
+                        .build()
+                );
+                if (this.settings().getNumber("style.outline_width", 0).doubleValue() > 0) {
+                    section.addItem(
+                        new WidgetSettingsColorBuilder()
+                            .withId("outline_color")
+                            .withName("Outline Color")
+                            .withDefaultValue("#000000")
+                            .build()
+                    );
+                }
                 break;
             }
 

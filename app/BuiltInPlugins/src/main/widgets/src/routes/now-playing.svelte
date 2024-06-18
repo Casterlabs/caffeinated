@@ -89,6 +89,9 @@
 			style:font-weight={$settings['style.font_weight']}
 			style:text-align={$settings['style.text_align']}
 			style:color={$settings['style.text_color']}
+			style:-webkit-text-stroke="{$settings['style.outline_width'] * 0.1}em {$settings[
+				'style.outline_color'
+			]}"
 			style:filter={$settings['style.text_shadow'] == -1
 				? ''
 				: `drop-shadow(0px 0px ${$settings['style.text_shadow']}px black)`}

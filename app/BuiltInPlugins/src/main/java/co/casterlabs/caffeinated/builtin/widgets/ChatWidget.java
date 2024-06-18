@@ -152,72 +152,95 @@ public class ChatWidget extends Widget {
             layout.addSection(messageStyle);
         }
 
+        {
+            WidgetSettingsSection textStyle = new WidgetSettingsSection("text_style", "Text Style")
+                .addItem(
+                    new WidgetSettingsFontBuilder()
+                        .withId("font")
+                        .withName("Font")
+                        .withDefaultValue("Poppins")
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsRangeBuilder()
+                        .withId("font_size")
+                        .withName("Font Size")
+                        .withDefaultValue(16)
+                        .withStep(1)
+                        .withMin(0)
+                        .withMax(128)
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsRangeBuilder()
+                        .withId("font_weight")
+                        .withName("Font Weight (Boldness)")
+                        .withDefaultValue(400)
+                        .withStep(100)
+                        .withMin(100)
+                        .withMax(1000)
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsColorBuilder()
+                        .withId("text_color")
+                        .withName("Text Color")
+                        .withDefaultValue("#ffffff")
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsDropdownBuilder()
+                        .withId("text_align")
+                        .withName("Text Align")
+                        .withDefaultValue("Left")
+                        .withOptionsList("Left", "Right")
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsRangeBuilder()
+                        .withId("text_shadow")
+                        .withName("Text Shadow")
+                        .withDefaultValue(0)
+                        .withStep(1)
+                        .withMin(-1)
+                        .withMax(20)
+                        .build()
+                )
+                .addItem(
+                    new WidgetSettingsRangeBuilder()
+                        .withId("letter_spacing")
+                        .withName("Letter Spacing")
+                        .withDefaultValue(1)
+                        .withStep(1)
+                        .withMin(-5)
+                        .withMax(5)
+                        .build()
+                );
+
+            textStyle.addItem(
+                new WidgetSettingsRangeBuilder()
+                    .withId("outline_width")
+                    .withName("Outline Size")
+                    .withDefaultValue(0)
+                    .withStep(.01)
+                    .withMin(0)
+                    .withMax(1)
+                    .build()
+            );
+            if (this.settings().getNumber("text_style.outline_width", 0).doubleValue() > 0) {
+                textStyle.addItem(
+                    new WidgetSettingsColorBuilder()
+                        .withId("outline_color")
+                        .withName("Outline Color")
+                        .withDefaultValue("#000000")
+                        .build()
+                );
+            }
+
+            layout.addSection(textStyle);
+        }
+
         layout
-            .addSection(
-                new WidgetSettingsSection("text_style", "Text Style")
-                    .addItem(
-                        new WidgetSettingsFontBuilder()
-                            .withId("font")
-                            .withName("Font")
-                            .withDefaultValue("Poppins")
-                            .build()
-                    )
-                    .addItem(
-                        new WidgetSettingsRangeBuilder()
-                            .withId("font_size")
-                            .withName("Font Size")
-                            .withDefaultValue(16)
-                            .withStep(1)
-                            .withMin(0)
-                            .withMax(128)
-                            .build()
-                    )
-                    .addItem(
-                        new WidgetSettingsRangeBuilder()
-                            .withId("font_weight")
-                            .withName("Font Weight (Boldness)")
-                            .withDefaultValue(400)
-                            .withStep(100)
-                            .withMin(100)
-                            .withMax(1000)
-                            .build()
-                    )
-                    .addItem(
-                        new WidgetSettingsColorBuilder()
-                            .withId("text_color")
-                            .withName("Text Color")
-                            .withDefaultValue("#ffffff")
-                            .build()
-                    )
-                    .addItem(
-                        new WidgetSettingsDropdownBuilder()
-                            .withId("text_align")
-                            .withName("Text Align")
-                            .withDefaultValue("Left")
-                            .withOptionsList("Left", "Right")
-                            .build()
-                    )
-                    .addItem(
-                        new WidgetSettingsRangeBuilder()
-                            .withId("text_shadow")
-                            .withName("Text Shadow")
-                            .withDefaultValue(-1)
-                            .withStep(-1)
-                            .withMin(-1)
-                            .withMax(20)
-                            .build()
-                    )
-                    .addItem(
-                        new WidgetSettingsRangeBuilder()
-                            .withId("letter_spacing")
-                            .withName("Letter Spacing")
-                            .withDefaultValue(1)
-                            .withStep(1)
-                            .withMin(-5)
-                            .withMax(5)
-                            .build()
-                    )
-            )
             .addSection(
                 new WidgetSettingsSection("events", "Events")
                     .addItem(

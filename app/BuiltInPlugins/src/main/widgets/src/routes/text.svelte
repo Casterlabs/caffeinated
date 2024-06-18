@@ -28,6 +28,9 @@
 	style:font-size="{$settings['text_style.font_size']}px"
 	style:font-weight={$settings['text_style.font_weight']}
 	style:text-align={$settings['text_style.text_align']}
+	style:-webkit-text-stroke="{$settings['text_style.outline_width'] * 0.1}em {$settings[
+		'text_style.outline_color'
+	]}"
 	style:filter={$settings['text_style.text_shadow'] == -1
 		? ''
 		: `drop-shadow(0px 0px ${$settings['text_style.text_shadow']}px black)`}

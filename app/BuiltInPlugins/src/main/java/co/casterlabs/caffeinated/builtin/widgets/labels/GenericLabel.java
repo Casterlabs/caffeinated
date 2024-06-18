@@ -9,6 +9,8 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsColorBuilder;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsRangeBuilder;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -48,6 +50,26 @@ public abstract class GenericLabel extends Widget implements KoiEventListener {
 
             if (this.hasHighlight()) {
                 textStyle.addItem(WidgetSettingsItem.asColor("highlight_color", "Highlight Color", "#5bf599"));
+            }
+
+            textStyle.addItem(
+                new WidgetSettingsRangeBuilder()
+                    .withId("outline_width")
+                    .withName("Outline Size")
+                    .withDefaultValue(0)
+                    .withStep(.01)
+                    .withMin(0)
+                    .withMax(1)
+                    .build()
+            );
+            if (this.settings().getNumber("text_style.outline_width", 0).doubleValue() > 0) {
+                textStyle.addItem(
+                    new WidgetSettingsColorBuilder()
+                        .withId("outline_color")
+                        .withName("Outline Color")
+                        .withDefaultValue("#000000")
+                        .build()
+                );
             }
 
             layout.addSection(textStyle);

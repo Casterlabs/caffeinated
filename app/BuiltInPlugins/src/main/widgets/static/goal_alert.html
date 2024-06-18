@@ -127,18 +127,21 @@
 				}
 
 				document.body.style =
-					`--highlight-color: ${Widget.getSetting('style.highlight_color')};` +
-					`--text-color: ${Widget.getSetting('style.text_color')};` +
-					`--text-voffset: ${Widget.getSetting('style.vertical_offset') * 100}%;` +
-					`--text-hoffset: ${Widget.getSetting('style.horizontal_offset') * 100}%;` +
-					`font-size: ${Widget.getSetting('style.font_size')}px;` +
-					// `font-weight: ${Widget.getSetting('style.font_weight')};` +
-					// `letter-spacing: ${Widget.getSetting('style.letter_spacing')}px;` +
-					`text-align: ${Widget.getSetting('style.text_align').toLowerCase()};` +
+					`--highlight-color: ${Widget.getSetting('alert.highlight_color')};` +
+					`--text-color: ${Widget.getSetting('alert.text_color')};` +
+					`--text-voffset: ${Widget.getSetting('alert.vertical_offset') * 100}%;` +
+					`--text-hoffset: ${Widget.getSetting('alert.horizontal_offset') * 100}%;` +
+					`font-size: ${Widget.getSetting('alert.font_size')}px;` +
+					// `font-weight: ${Widget.getSetting('alert.font_weight')};` +
+					// `letter-spacing: ${Widget.getSetting('alert.letter_spacing')}px;` +
+					`text-align: ${Widget.getSetting('alert.text_align').toLowerCase()};` +
+					`-webkit-text-stroke: ${
+						Widget.getSetting('alert.outline_width') * 0.1
+					}em ${Widget.getSetting('alert.outline_color')};` +
 					//
-					(Widget.getSetting('style.shadow') == -1
+					(Widget.getSetting('alert.shadow') == -1
 						? ''
-						: `filter: drop-shadow(0px 0px ${Widget.getSetting('style.shadow')}px black);`);
+						: `filter: drop-shadow(0px 0px ${Widget.getSetting('alert.shadow')}px black);`);
 			});
 
 			Widget.on('count', ({ count }) => {

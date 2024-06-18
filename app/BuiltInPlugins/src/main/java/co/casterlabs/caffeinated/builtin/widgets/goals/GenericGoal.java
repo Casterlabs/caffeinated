@@ -155,6 +155,26 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
                     );
             }
 
+            barStyle.addItem(
+                new WidgetSettingsRangeBuilder()
+                    .withId("outline_width")
+                    .withName("Outline Size")
+                    .withDefaultValue(0)
+                    .withStep(.01)
+                    .withMin(0)
+                    .withMax(1)
+                    .build()
+            );
+            if (this.settings().getNumber("style.outline_width", 0).doubleValue() > 0) {
+                barStyle.addItem(
+                    new WidgetSettingsColorBuilder()
+                        .withId("outline_color")
+                        .withName("Outline Color")
+                        .withDefaultValue("#000000")
+                        .build()
+                );
+            }
+
             layout.addSection(barStyle);
         }
 
@@ -360,6 +380,26 @@ public abstract class GenericGoal extends Widget implements KoiEventListener {
                             .withMax(20)
                             .build()
                     );
+
+                alert.addItem(
+                    new WidgetSettingsRangeBuilder()
+                        .withId("outline_width")
+                        .withName("Outline Size")
+                        .withDefaultValue(0)
+                        .withStep(.01)
+                        .withMin(0)
+                        .withMax(1)
+                        .build()
+                );
+                if (this.settings().getNumber("alert.outline_width", 0).doubleValue() > 0) {
+                    alert.addItem(
+                        new WidgetSettingsColorBuilder()
+                            .withId("outline_color")
+                            .withName("Outline Color")
+                            .withDefaultValue("#000000")
+                            .build()
+                    );
+                }
 
                 layout.addSection(alert);
 

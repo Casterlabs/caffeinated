@@ -18,6 +18,7 @@
 	let textAlign;
 	let margin;
 	let shadow;
+	let outline;
 
 	let currentCount = -1;
 
@@ -86,6 +87,10 @@
 			textAlign = Widget.getSetting('style.text_align') || 'left';
 			margin = Widget.getSetting('style.margin');
 
+			outline = `${Widget.getSetting('style.outline_width') * 0.1}em ${Widget.getSetting(
+				'style.outline_color'
+			)};`;
+
 			if (style == 'Text Only') {
 				shadow = Widget.getSetting('style.text_shadow');
 			} else {
@@ -109,6 +114,7 @@
 	style:font-size="{fontSize}px"
 	style:padding="{margin}px"
 	style:font-weight={fontWeight}
+	style:-webkit-text-stroke={outline}
 	style:filter={shadow == -1 ? '' : `drop-shadow(0px 0px ${shadow}px black)`}
 >
 	{#if currentCount != -1}

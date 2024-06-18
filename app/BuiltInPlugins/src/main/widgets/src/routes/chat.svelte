@@ -287,6 +287,9 @@
 	class:show-FOLLOW={$settings['events.FOLLOW']}
 	class:show-SUBSCRIPTION={$settings['events.SUBSCRIPTION']}
 	class:show-RAID={$settings['events.RAID']}
+	style:-webkit-text-stroke="{$settings['text_style.outline_width'] * 0.1}em {$settings[
+		'text_style.outline_color'
+	]}"
 	style:filter={$settings['text_style.text_shadow'] == -1
 		? ''
 		: `drop-shadow(0px 0px ${$settings['text_style.text_shadow']}px black)`}
