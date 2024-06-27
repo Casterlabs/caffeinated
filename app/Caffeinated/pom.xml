@@ -229,17 +229,19 @@
 			<groupId>org.graalvm.sdk</groupId>
 			<artifactId>graal-sdk</artifactId>
 			<version>22.2.0</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js</artifactId>
 			<version>22.2.0</version>
-			<scope>runtime</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js-scriptengine</artifactId>
 			<version>22.2.0</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- Utility packages -->
