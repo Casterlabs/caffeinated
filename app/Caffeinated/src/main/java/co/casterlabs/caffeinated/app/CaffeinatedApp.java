@@ -220,11 +220,14 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         } catch (Throwable t) {
             FastLogger.logException(t);
         }
-        try {
-            this.scriptingEngines = new ScriptingEnginesImpl();
-        } catch (Throwable t) {
-            FastLogger.logException(t);
-        }
+
+        AsyncTask.create(() -> {
+            try {
+                this.scriptingEngines = new ScriptingEnginesImpl();
+            } catch (Throwable t) {
+                FastLogger.logException(t);
+            }
+        });
 
         try {
             this.UI.init();
