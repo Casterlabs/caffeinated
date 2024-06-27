@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.chatbot;
+package co.casterlabs.caffeinated.app.scripting;
 
 import java.awt.AWTException;
 import java.awt.MouseInfo;
@@ -28,6 +28,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.pluginsdk.TTS;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
+import co.casterlabs.caffeinated.pluginsdk.scripting.ScriptingEngine;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.functional.tuples.Pair;
@@ -44,30 +45,39 @@ import xyz.e3ndr.fastloggingframework.LogUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class ChatbotScriptEngine {
+public class JavascriptEngineImpl implements ScriptingEngine {
     private static final Pattern QUOTE_PATTERN = Pattern.compile("([^\\\"]\\S*|\\\".+?\\\") *");
-    private static ScriptEngine engine;
     private static Robot robot;
 
+    private ScriptEngine engine;
+
     static {
-        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
-        System.setProperty("polyglot.js.nashorn-compat", "true");
-        engine = new ScriptEngineManager().getEngineByName("Graal.js");
-
-        engine.put("store", CaffeinatedApp.getInstance().getChatbotPreferences().get().getStore());
-        engine.put("Koi", new KoiScriptHandle());
-        engine.put("fetch", new FetchScriptHandle());
-        engine.put("Plugins", new PluginsScriptHandle());
-        engine.put("Sound", new SoundScriptHandle());
-        engine.put("Input", new InputScriptHandle());
-
         try {
-            engine.eval("function sleep(milliseconds) {return __internal_handle.sleep(milliseconds);}");
-            engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
-            engine.eval(String.format("const KoiPlatform = %s;", Rson.DEFAULT.toJson(Arrays.asList(UserPlatform.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
-            engine.eval(String.format("const KoiChatter = %s;", Rson.DEFAULT.toJson(Arrays.asList(KoiChatterType.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
-            engine.eval(String.format("const PlaybackState = %s;", Rson.DEFAULT.toJson(Arrays.asList(MusicPlaybackState.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
-            engine.eval(
+            robot = new Robot();
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public JavascriptEngineImpl() {
+        try {
+            System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+            System.setProperty("polyglot.js.nashorn-compat", "true");
+            this.engine = new ScriptEngineManager().getEngineByName("Graal.js");
+
+            this.engine.put("store", CaffeinatedApp.getInstance().getChatbotPreferences().get().getStore());
+            this.engine.put("Koi", new KoiScriptHandle());
+            this.engine.put("fetch", new FetchScriptHandle());
+            this.engine.put("Plugins", new PluginsScriptHandle());
+            this.engine.put("Sound", new SoundScriptHandle());
+            this.engine.put("Input", new InputScriptHandle());
+
+            this.engine.eval("function sleep(milliseconds) {return __internal_handle.sleep(milliseconds);}");
+            this.engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
+            this.engine.eval(String.format("const KoiPlatform = %s;", Rson.DEFAULT.toJson(Arrays.asList(UserPlatform.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
+            this.engine.eval(String.format("const KoiChatter = %s;", Rson.DEFAULT.toJson(Arrays.asList(KoiChatterType.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
+            this.engine.eval(String.format("const PlaybackState = %s;", Rson.DEFAULT.toJson(Arrays.asList(MusicPlaybackState.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
+            this.engine.eval(
                 "function escapeHtml(unsafe) {\r\n"
                     + "    return unsafe\r\n"
                     + "        .replace(/&/g, \"&amp;\")\r\n"
@@ -80,16 +90,11 @@ public class ChatbotScriptEngine {
         } catch (ScriptException e) {
             e.printStackTrace();
         }
-
-        try {
-            robot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
     }
 
+    @Override
     @SuppressWarnings("deprecation")
-    public static synchronized void execute(KoiEvent event, String scriptToExecute) {
+    public synchronized Object execute(@Nullable KoiEvent event, @NonNull String scriptToExecute) {
         try {
             List<String> args = new LinkedList<>();
             String rawArgs = "";
@@ -130,12 +135,14 @@ public class ChatbotScriptEngine {
                     "})();"
             };
 
-            engine.eval(String.join("\n", script), engine.getContext());
+            Object result = this.engine.eval(String.join("\n", script), this.engine.getContext());
             CaffeinatedApp.getInstance().getChatbotPreferences().save(); // Save any changes to store.
+            return result;
         } catch (ScriptException e) {
             String message = LogUtil.parseFormat("An error occurred whilst executing script command:\n%s", e);
             FastLogger.logStatic(LogLevel.WARNING, message);
             CaffeinatedApp.getInstance().getUI().showToast(message, NotificationType.WARNING);
+            return null;
         }
     }
 

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.music.Music;
+import co.casterlabs.caffeinated.pluginsdk.scripting.ScriptingEngines;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
@@ -48,5 +49,7 @@ public interface Caffeinated {
      * @return a string, even if the specified key could not be found.
      */
     public @NonNull String localize(@NonNull String key, @Nullable Map<String, String> knownPlaceholders, @Nullable List<String> knownComponents);
+
+    public ScriptingEngines getScriptingEngines();
 
 }

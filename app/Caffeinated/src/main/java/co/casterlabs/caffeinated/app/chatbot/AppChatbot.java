@@ -216,7 +216,7 @@ public class AppChatbot extends JavascriptObject {
 
             switch (shout.getResponseAction()) {
                 case EXECUTE: {
-                    ChatbotScriptEngine.execute(e, shout.getResponse());
+                    CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(e, shout.getResponse());
                     break;
                 }
 
@@ -230,7 +230,7 @@ public class AppChatbot extends JavascriptObject {
                         message = String.format("@%s %s", eventSender.getDisplayname(), message);
                     }
 
-                    ChatbotScriptEngine.execute(
+                    CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(
                         e,
                         String.format(
                             "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",
@@ -285,12 +285,12 @@ public class AppChatbot extends JavascriptObject {
 
             switch (command.getResponseAction()) {
                 case EXECUTE:
-                    ChatbotScriptEngine.execute(richMessage, command.getResponse());
+                    CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(richMessage, command.getResponse());
                     break;
 
                 case REPLY_WITH: {
                     String message = command.getResponse();
-                    ChatbotScriptEngine.execute(
+                    CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(
                         richMessage,
                         String.format(
                             "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",

@@ -24,11 +24,12 @@ import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.auth.AuthPreferences;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
-import co.casterlabs.caffeinated.app.chatbot.ChatbotScriptEngine;
 import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.locale._LocaleLoader;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
+import co.casterlabs.caffeinated.app.scripting.JavascriptEngineImpl;
+import co.casterlabs.caffeinated.app.scripting.ScriptingEnginesImpl;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.CaffeinatedWindowState;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
@@ -38,6 +39,7 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugins;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.Locale;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
+import co.casterlabs.caffeinated.pluginsdk.scripting.ScriptingEngines;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
@@ -101,6 +103,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private @Getter(AccessLevel.NONE) Swetrix analytics;
 
     private Connection preferencesConnection;
+
+    private @Getter ScriptingEngines scriptingEngines;
 
     // @formatter:off
 
@@ -223,6 +227,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 //            this.koi.init();
         this.music.init();
 
+        this.scriptingEngines = new ScriptingEnginesImpl();
+
         this.appPreferences.save();
 
         try {
@@ -232,7 +238,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             FastLogger.logStatic(e);
         }
 
-        ChatbotScriptEngine.class.toString(); // Load.
+        JavascriptEngineImpl.class.toString(); // Load.
 
         Calendar calendar = Calendar.getInstance();
         int calendarMonth = calendar.get(Calendar.MONTH);
