@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
+import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.TTS;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
 import co.casterlabs.caffeinated.pluginsdk.scripting.ScriptingEngine;
@@ -71,6 +72,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
             this.engine.put("Plugins", new PluginsScriptHandle());
             this.engine.put("Sound", new SoundScriptHandle());
             this.engine.put("Input", new InputScriptHandle());
+            this.engine.put("Currencies", new CurrenciesScriptHandle());
 
             this.engine.eval("function sleep(milliseconds) {return __internal_handle.sleep(milliseconds);}");
             this.engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
@@ -111,7 +113,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
                     }
                 }
 
-                if (args.get(0).startsWith("!")) {
+                if (!args.isEmpty() && args.get(0).startsWith("!")) {
                     String cmd = args.remove(0);
                     rawArgs = ((RichMessageEvent) event).getRaw().substring(cmd.length()).trim();
                 }
@@ -334,6 +336,14 @@ public class JavascriptEngineImpl implements ScriptingEngine {
         @SneakyThrows
         public void sleep(Number milliseconds) {
             Thread.sleep(milliseconds.longValue());
+        }
+
+    }
+
+    public static class CurrenciesScriptHandle {
+
+        public String formatCurrency(Number amount, @NonNull String currency) throws InterruptedException, Throwable {
+            return Currencies.formatCurrency(amount.doubleValue(), currency).await();
         }
 
     }
