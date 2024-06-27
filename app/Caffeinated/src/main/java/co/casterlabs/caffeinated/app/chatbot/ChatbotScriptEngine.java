@@ -10,11 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -25,6 +27,7 @@ import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.pluginsdk.TTS;
+import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.functional.tuples.Pair;
@@ -60,6 +63,9 @@ public class ChatbotScriptEngine {
         try {
             engine.eval("function sleep(milliseconds) {return __internal_handle.sleep(milliseconds);}");
             engine.eval(String.format("const PLATFORMS = %s;", Rson.DEFAULT.toJson(UserPlatform.values())));
+            engine.eval(String.format("const KoiPlatform = %s;", Rson.DEFAULT.toJson(Arrays.asList(UserPlatform.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
+            engine.eval(String.format("const KoiChatter = %s;", Rson.DEFAULT.toJson(Arrays.asList(KoiChatterType.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
+            engine.eval(String.format("const PlaybackState = %s;", Rson.DEFAULT.toJson(Arrays.asList(MusicPlaybackState.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
             engine.eval("load('classpath:nashorn_constants.js')");
             engine.eval("load('classpath:nashorn_polyfill.js')");
         } catch (ScriptException e) {
@@ -125,6 +131,10 @@ public class ChatbotScriptEngine {
     }
 
     public static class KoiScriptHandle {
+
+        public void sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter) {
+            this.sendChat(platform, message, chatter, null);
+        }
 
         public void sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
             UserPlatform enumP = platform == null ? null : UserPlatform.valueOf(platform);
