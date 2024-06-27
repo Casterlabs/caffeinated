@@ -21,7 +21,7 @@ declare const Sound: {
 	playAudio(audioUrl: string, volume: number): void;
 
 	/** Plays the specified text as a TTS message using the provided volume (must be 0-1) */
-	playTTS(audioUrl: string, defaultVoice: string, volume: number): void;
+	playTTS(text: string, defaultVoice: string, volume: number): void;
 };
 
 // ------------------------------------------------
@@ -90,7 +90,7 @@ declare const Plugins: {
 
 declare const Music: {
 	/** Null if there is no song playing. */
-	activePlayback?: ActivePlayback;
+	activePlayback: ActivePlayback | null;
 
 	/** Not really useful, feel free to poke around though. */
 	providers: any[];
@@ -99,15 +99,15 @@ declare const Music: {
 declare interface ActivePlayback {
 	serviceId: string;
 	serviceName: string;
-	accountName?: string;
-	accountLink?: string;
+	accountName: string | null;
+	accountLink: string | null;
 	playbackState: PlaybackState;
 	currentTrack: MusicTrack;
 }
 
 declare interface MusicTrack {
 	title: string;
-	album?: string;
+	album: string | null;
 	/**
 	 * Can also be base64 data. Be wary.
 	 */
@@ -134,7 +134,7 @@ declare const Koi: {
 		platform: KoiPlatform, // Must be a signed in platform for this to succeed.
 		message: string,
 		chatter: KoiChatter,
-		replyTarget?: string // The event ID, if you want to do a direct reply.
+		replyTarget: string | null // The event ID, if you want to do a direct reply.
 	): void;
 
 	upvoteChat( // Not supported by all platforms.
