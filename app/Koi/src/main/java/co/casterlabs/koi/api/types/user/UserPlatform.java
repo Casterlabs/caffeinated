@@ -13,10 +13,8 @@ public enum UserPlatform {
     TIKTOK("TikTok"),
 
     // Coming up.
-    NOICE("Noice"),
-    LIVESPACE("LiveSpace"),
     X("𝕏"),
-    FACEBOOK_GAMING("Facebook Gaming"),
+    RUMBLE("Rumble"),
 
     // Graveyard. R.I.P.
     CAFFEINE("Caffeine"),
@@ -24,6 +22,7 @@ public enum UserPlatform {
     BRIME("Brime"),
     THETA("Theta"),
     YOUNOW("YouNow"),
+    LIVESPACE("LiveSpace"),
 
     // Other.
     CASTERLABS_SYSTEM("System"),
