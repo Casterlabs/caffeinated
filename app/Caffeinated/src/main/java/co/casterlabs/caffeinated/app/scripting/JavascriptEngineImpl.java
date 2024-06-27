@@ -90,7 +90,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
                     + " }"
             );
         } catch (ScriptException e) {
-            e.printStackTrace();
+            FastLogger.logException(e);
         }
     }
 

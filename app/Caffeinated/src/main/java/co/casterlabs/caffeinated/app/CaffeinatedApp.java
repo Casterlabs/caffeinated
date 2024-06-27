@@ -28,7 +28,6 @@ import co.casterlabs.caffeinated.app.koi.GlobalKoi;
 import co.casterlabs.caffeinated.app.locale._LocaleLoader;
 import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
-import co.casterlabs.caffeinated.app.scripting.JavascriptEngineImpl;
 import co.casterlabs.caffeinated.app.scripting.ScriptingEnginesImpl;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.CaffeinatedWindowState;
@@ -216,18 +215,47 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         this.preferencesConnection = DriverManager.getConnection("jdbc:sqlite:" + new File(APP_DATA_DIR, "preferences/database.sqlite").getCanonicalPath());
 
-        this.chatbot.init();
-//        this.multistreaming.init();
-        this.UI.init();
-        this.themeManager.init();
-        this.auth.init();
-//        this.controlDeck.init();
-        this.api.init();
-        this.pluginIntegration.init();
-//            this.koi.init();
-        this.music.init();
+        try {
+            this.chatbot.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            this.scriptingEngines = new ScriptingEnginesImpl();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
 
-        this.scriptingEngines = new ScriptingEnginesImpl();
+        try {
+            this.UI.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            this.themeManager.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            this.auth.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            this.api.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            this.pluginIntegration.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            this.music.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
 
         this.appPreferences.save();
 
@@ -237,8 +265,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         } catch (Exception e) {
             FastLogger.logStatic(e);
         }
-
-        JavascriptEngineImpl.class.toString(); // Load.
 
         Calendar calendar = Calendar.getInstance();
         int calendarMonth = calendar.get(Calendar.MONTH);
