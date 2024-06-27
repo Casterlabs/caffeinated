@@ -75,6 +75,14 @@ declare const fetch: {
 };
 
 // ------------------------------------------------
+// Currencies
+// ------------------------------------------------
+
+declare const Currencies: {
+	formatCurrency(amount: number, currencyCode: string): string;
+};
+
+// ------------------------------------------------
 // Plugins
 // ------------------------------------------------
 
