@@ -72,8 +72,6 @@ declare const store: {
 
 declare const fetch: {
 	asText(url: string): string;
-
-	asJson(url: string): object;
 };
 
 // ------------------------------------------------
