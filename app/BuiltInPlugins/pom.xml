@@ -82,18 +82,10 @@
 	</repositories>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>co.casterlabs</groupId>
 			<artifactId>PluginSDK</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openjdk.nashorn</groupId>
-			<artifactId>nashorn-core</artifactId>
-			<version>15.4</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

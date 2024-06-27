@@ -19,10 +19,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.jetbrains.annotations.Nullable;
-import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
@@ -50,8 +50,9 @@ public class ChatbotScriptEngine {
     private static Robot robot;
 
     static {
-        System.setProperty("nashorn.args", "--language=es6");
-        engine = new NashornScriptEngineFactory().getScriptEngine();
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+        System.setProperty("polyglot.js.nashorn-compat", "true");
+        engine = new ScriptEngineManager().getEngineByName("Graal.js");
 
         engine.put("store", CaffeinatedApp.getInstance().getChatbotPreferences().get().getStore());
         engine.put("Koi", new KoiScriptHandle());
@@ -66,8 +67,16 @@ public class ChatbotScriptEngine {
             engine.eval(String.format("const KoiPlatform = %s;", Rson.DEFAULT.toJson(Arrays.asList(UserPlatform.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
             engine.eval(String.format("const KoiChatter = %s;", Rson.DEFAULT.toJson(Arrays.asList(KoiChatterType.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
             engine.eval(String.format("const PlaybackState = %s;", Rson.DEFAULT.toJson(Arrays.asList(MusicPlaybackState.values()).stream().collect(Collectors.toMap((p) -> p.name(), (p) -> p.name())))));
-            engine.eval("load('classpath:nashorn_constants.js')");
-            engine.eval("load('classpath:nashorn_polyfill.js')");
+            engine.eval(
+                "function escapeHtml(unsafe) {\r\n"
+                    + "    return unsafe\r\n"
+                    + "        .replace(/&/g, \"&amp;\")\r\n"
+                    + "        .replace(/</g, \"&lt;\")\r\n"
+                    + "        .replace(/>/g, \"&gt;\")\r\n"
+                    + "        .replace(/\"/g, \"&quot;\")\r\n"
+                    + "        .replace(/'/g, \"&#039;\");\r\n"
+                    + " }"
+            );
         } catch (ScriptException e) {
             e.printStackTrace();
         }

@@ -4,10 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.jetbrains.annotations.Nullable;
-import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
@@ -28,8 +28,7 @@ public class Evaluater {
     private static ScriptEngine engine;
 
     static {
-        System.setProperty("nashorn.args", "--language=es6");
-        engine = new NashornScriptEngineFactory().getScriptEngine();
+        engine = new ScriptEngineManager().getEngineByName("Graal.js");
 
         engine.put("fetch", new FetchScriptHandle());
         engine.put("Plugins", new PluginsScriptHandle());
@@ -40,8 +39,16 @@ public class Evaluater {
             engine.eval(
                 "let event = null;"
             );
-            engine.eval("load('classpath:nashorn_constants.js')");
-            engine.eval("load('classpath:nashorn_polyfill.js')");
+            engine.eval(
+                "function escapeHtml(unsafe) {\r\n"
+                    + "    return unsafe\r\n"
+                    + "        .replace(/&/g, \"&amp;\")\r\n"
+                    + "        .replace(/</g, \"&lt;\")\r\n"
+                    + "        .replace(/>/g, \"&gt;\")\r\n"
+                    + "        .replace(/\"/g, \"&quot;\")\r\n"
+                    + "        .replace(/'/g, \"&#039;\");\r\n"
+                    + " }"
+            );
         } catch (ScriptException e) {
             e.printStackTrace();
         }
