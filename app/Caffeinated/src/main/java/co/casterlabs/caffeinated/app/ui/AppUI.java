@@ -270,9 +270,15 @@ public class AppUI extends JavascriptObject {
 
         CaffeinatedApp.getInstance().getAppBridge().eval(
             "(() => {"
-                + "const audio = new Audio(" + new JsonString(audioUrl) + ");"
-                + "audio.volume = " + new JsonNumber(volume) + ";"
-                + "audio.play();"
+                + "let previousAudioPromise = window.currentAudioPromise;"
+                + "window.currentAudioPromise = new Promise(async (resolve) => {"
+                + "  if (previousAudioPromise) await previousAudioPromise;"
+                + "  const audio = new Audio(" + new JsonString(audioUrl) + ");"
+                + "  audio.addEventListener('ended', resolve);"
+                + "  audio.addEventListener('error', resolve);"
+                + "  audio.volume = " + new JsonNumber(volume) + ";"
+                + "  audio.play();"
+                + "});"
                 + "})();"
         );
     }
