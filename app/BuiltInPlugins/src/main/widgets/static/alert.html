@@ -160,6 +160,7 @@
 					const duration = Widget.getSetting('style.duration') * 1000 - ANIMATION_DURATION * 2; // Seconds -> Milliseconds, minus the fade-in and fade-out times.
 					executingAlert = true;
 					let videoPromise = Promise.resolve(null);
+					let finalChainPromise;
 
 					// Image
 					{
@@ -195,6 +196,8 @@
 						alertTextTitle.innerHTML = title;
 					}
 
+					finalChainPromise = videoPromise;
+
 					// Alert audio.
 					{
 						function tryPlayTTS() {
@@ -206,9 +209,9 @@
 						// If audio == null then try to play TTS.
 						// Otherwise, play the audio and then try to play TTS.
 						if (audio) {
-							videoPromise.then(() => playAudio(audio, false)).then(tryPlayTTS);
+							finalChainPromise = videoPromise.then(() => playAudio(audio, false)).then(tryPlayTTS);
 						} else {
-							videoPromise.then(() => tryPlayTTS());
+							finalChainPromise = videoPromise.then(() => tryPlayTTS());
 						}
 					}
 
@@ -228,6 +231,7 @@
 						duration: ANIMATION_DURATION
 					}).finished;
 
+					await finalChainPromise;
 					executingAlert = false;
 
 					if (alertQueue.length > 0) {
