@@ -19,10 +19,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.jetbrains.annotations.Nullable;
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
@@ -62,9 +62,8 @@ public class JavascriptEngineImpl implements ScriptingEngine {
 
     public JavascriptEngineImpl() {
         try {
-            System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
-            System.setProperty("polyglot.js.nashorn-compat", "true");
-            this.engine = new ScriptEngineManager().getEngineByName("Graal.js");
+            System.setProperty("nashorn.args", "--language=es6");
+            this.engine = new NashornScriptEngineFactory().getScriptEngine();
 
             this.engine.put("store", CaffeinatedApp.getInstance().getChatbotPreferences().get().getStore());
             this.engine.put("Koi", new KoiScriptHandle());
@@ -91,7 +90,12 @@ public class JavascriptEngineImpl implements ScriptingEngine {
             );
         } catch (ScriptException e) {
             FastLogger.logException(e);
+            return;
         }
+
+        try {
+            this.engine.eval("load('classpath:nashorn_polyfill.js')");
+        } catch (Throwable ignored) {}
     }
 
     @Override
