@@ -27,13 +27,13 @@
 
 <SelectMenu
 	title="Manually authenticate platform"
-	options={ALL_STREAMING_SERVICES}
+	options={['Select a platform', ...ALL_STREAMING_SERVICES]}
 	bind:value={manualAuthPlatform}
 	on:value={({ detail: index }) => {
 		if (index == 0) return;
 		manualAuthPlatform = 0;
 
-		const platform = ALL_STREAMING_SERVICES[index];
+		const platform = ALL_STREAMING_SERVICES[index - 1];
 		if (SPECIAL_SIGNIN[platform]) {
 			goto(`${SPECIAL_SIGNIN[platform]}?platform=${platform.toLowerCase()}`);
 		} else if (PORTAL_SIGNIN.includes(platform)) {
