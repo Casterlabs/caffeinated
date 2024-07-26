@@ -42,6 +42,17 @@ public class ChatbotPreferences {
         private Action responseAction; // Must be EXECUTE on ALWAYS
         private String response;
 
+        @JsonDeserializationMethod("platform")
+        private void $deserialize_platform(JsonElement e) {
+            // Thanks JavaScript.
+            if (e.isJsonString()) {
+                String str = e.getAsString();
+                if (!str.equalsIgnoreCase("null")) {
+                    this.platform = UserPlatform.valueOf(str);
+                }
+            } // Otherwise, null
+        }
+
         @JsonDeserializationMethod("type")
         private void $migrate_trigger(JsonElement e) {
             switch (e.getAsString()) {
@@ -71,6 +82,17 @@ public class ChatbotPreferences {
         private KoiEventType eventType;
         private Action responseAction;
         private String response;
+
+        @JsonDeserializationMethod("platform")
+        private void $deserialize_platform(JsonElement e) {
+            // Thanks JavaScript.
+            if (e.isJsonString()) {
+                String str = e.getAsString();
+                if (!str.equalsIgnoreCase("null")) {
+                    this.platform = UserPlatform.valueOf(str);
+                }
+            } // Otherwise, null
+        }
 
         @JsonDeserializationMethod("text")
         private void $migrate_response(JsonElement e) {
