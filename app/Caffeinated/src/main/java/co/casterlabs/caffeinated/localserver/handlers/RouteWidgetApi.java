@@ -14,12 +14,12 @@ import co.casterlabs.caffeinated.localserver.websocket.RealtimeWidgetListener;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
+import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
-import co.casterlabs.rakurai.io.IOUtil;
-import co.casterlabs.rakurai.io.http.MimeTypes;
-import co.casterlabs.rakurai.io.http.StandardHttpStatus;
-import co.casterlabs.rakurai.io.http.server.HttpResponse;
-import co.casterlabs.rakurai.io.http.server.websocket.WebsocketListener;
+import co.casterlabs.commons.io.streams.StreamUtil;
+import co.casterlabs.rhs.protocol.StandardHttpStatus;
+import co.casterlabs.rhs.server.HttpResponse;
+import co.casterlabs.rhs.session.WebsocketListener;
 import co.casterlabs.sora.api.http.HttpProvider;
 import co.casterlabs.sora.api.http.SoraHttpSession;
 import co.casterlabs.sora.api.http.annotations.HttpEndpoint;
@@ -61,7 +61,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
 
             InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("co/casterlabs/caffeinated/app/ui/html/loader" + resource);
 
-            String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
+            String content = StreamUtil.toString(in, StandardCharsets.UTF_8);
             String mime = MimeTypes.getMimeForFile(new File(resource));
 
             return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)

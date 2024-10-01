@@ -3,8 +3,8 @@ package co.casterlabs.caffeinated.pluginsdk.koi;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.emoji.generator.WebUtil;
-import co.casterlabs.koi.api.types.events.KoiEvent;
-import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.KoiEvent;
+import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;

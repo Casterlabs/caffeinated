@@ -16,9 +16,9 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
-import co.casterlabs.koi.api.types.events.DonationEvent;
 import co.casterlabs.koi.api.types.events.FollowEvent;
 import co.casterlabs.koi.api.types.events.RaidEvent;
+import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonBoolean;
@@ -128,7 +128,7 @@ public class StreamlabsServicePlugin extends CaffeinatedPlugin {
 
         @KoiEventHandler
         public void onFollow(FollowEvent e) {
-            this.triggerAlert("follow", e.getFollower().getDisplayname(), "");
+            this.triggerAlert("follow", e.follower.displayname, "");
         }
 
         @KoiEventHandler
@@ -137,13 +137,14 @@ public class StreamlabsServicePlugin extends CaffeinatedPlugin {
         }
 
         @KoiEventHandler
-        public void onDonation(DonationEvent e) {
-            this.triggerAlert("donation", e.getSender().getDisplayname(), "");
+        public void onDonation(RichMessageEvent e) {
+            if (e.donations.isEmpty()) return;
+            this.triggerAlert("donation", e.sender.displayname, "");
         }
 
         @KoiEventHandler
         public void onRaid(RaidEvent e) {
-            this.triggerAlert("host", e.getHost().getDisplayname(), "");
+            this.triggerAlert("host", e.host.displayname, "");
         }
 
     }

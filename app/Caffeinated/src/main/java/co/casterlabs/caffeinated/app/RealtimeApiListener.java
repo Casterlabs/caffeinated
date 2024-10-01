@@ -2,7 +2,7 @@ package co.casterlabs.caffeinated.app;
 
 import java.io.IOException;
 
-import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
 

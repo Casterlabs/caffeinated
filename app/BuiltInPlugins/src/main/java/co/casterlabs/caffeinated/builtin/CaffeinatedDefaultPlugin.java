@@ -35,8 +35,8 @@ import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
+import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.commons.localization.LocaleProvider;
-import co.casterlabs.rakurai.io.IOUtil;
 import lombok.NonNull;
 
 public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
@@ -138,7 +138,7 @@ public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
         try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {
             return new Pair<>(
-                IOUtil.readInputStreamString(in, StandardCharsets.UTF_8),
+                StreamUtil.toString(in, StandardCharsets.UTF_8),
                 mimeType
             );
         } catch (Throwable e) {

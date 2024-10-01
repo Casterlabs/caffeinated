@@ -245,9 +245,6 @@ public class Bootstrap implements Runnable {
         }
 
         uiServer = new UIServer();
-        uiServer.setIgnorePassword(true); // TODO Fix CEF and serve the files locally.
-                                          // Also TODO use WebKit directly so that we can serve files locally.
-                                          // Also TODO ban Adam.
         uiServer.setHandler(new AppSchemeHandler());
         uiServer.start();
 

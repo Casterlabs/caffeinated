@@ -5,8 +5,8 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCa
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
+import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.FollowEvent;
-import co.casterlabs.koi.api.types.events.KoiEventType;
 
 public class FollowAlert extends GenericAlert implements KoiEventListener {
     public static final WidgetDetails DETAILS = new WidgetDetails()
@@ -25,7 +25,7 @@ public class FollowAlert extends GenericAlert implements KoiEventListener {
 
     @KoiEventHandler
     public void onFollow(FollowEvent e) {
-        if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
+        if (!this.getSelectedPlatforms().contains(e.streamer.platform)) return;
 
         this.queueAlert(e, null, null);
     }

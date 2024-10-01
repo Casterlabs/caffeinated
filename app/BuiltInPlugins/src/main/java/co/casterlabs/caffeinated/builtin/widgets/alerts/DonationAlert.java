@@ -10,13 +10,14 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSectio
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
-import co.casterlabs.koi.api.types.events.rich.ChatFragment;
 import co.casterlabs.koi.api.types.events.rich.Donation;
-import co.casterlabs.koi.api.types.events.rich.LinkFragment;
+import co.casterlabs.koi.api.types.events.rich.fragments.ChatFragment;
+import co.casterlabs.koi.api.types.events.rich.fragments.LinkFragment;
 
 public class DonationAlert extends GenericAlert implements KoiEventListener {
+    @SuppressWarnings("deprecation")
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.donation_alert")
         .withIcon("currency-dollar")
@@ -33,21 +34,21 @@ public class DonationAlert extends GenericAlert implements KoiEventListener {
 
     @KoiEventHandler
     public void onDonation(RichMessageEvent e) {
-        if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
-        if (e.getDonations().isEmpty()) return;
+        if (!this.getSelectedPlatforms().contains(e.streamer.platform)) return;
+        if (e.donations.isEmpty()) return;
 
-        Donation donation = e.getDonations().get(0);
+        Donation donation = e.donations.get(0);
 
         // Generate the ttsText
-        String ttsText = e.getRaw();
+        String ttsText = e.raw;
 
-        for (ChatFragment link : e.getFragments()) {
+        for (ChatFragment link : e.fragments) {
             if (link instanceof LinkFragment) {
-                ttsText = ttsText.replace(((LinkFragment) link).getUrl(), "(link)");
+                ttsText = ttsText.replace(((LinkFragment) link).url, "(link)");
             }
         }
 
-        this.queueAlert(e, donation.getImage(), ttsText);
+        this.queueAlert(e, donation.image, ttsText);
     }
 
     @SuppressWarnings("deprecation")

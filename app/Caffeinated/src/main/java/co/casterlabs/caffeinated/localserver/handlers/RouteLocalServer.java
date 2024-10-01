@@ -1,8 +1,8 @@
 package co.casterlabs.caffeinated.localserver.handlers;
 
 import co.casterlabs.caffeinated.localserver.RouteHelper;
-import co.casterlabs.rakurai.io.http.StandardHttpStatus;
-import co.casterlabs.rakurai.io.http.server.HttpResponse;
+import co.casterlabs.rhs.protocol.StandardHttpStatus;
+import co.casterlabs.rhs.server.HttpResponse;
 import co.casterlabs.sora.api.http.HttpProvider;
 import co.casterlabs.sora.api.http.SoraHttpSession;
 import co.casterlabs.sora.api.http.annotations.HttpEndpoint;

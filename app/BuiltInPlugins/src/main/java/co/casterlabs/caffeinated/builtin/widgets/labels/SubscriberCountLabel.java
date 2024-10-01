@@ -48,7 +48,7 @@ public class SubscriberCountLabel extends GenericLabel {
             UserUpdateEvent state = Caffeinated.getInstance().getKoi().getUserStates().get(platform);
             if (state == null) continue;
 
-            long stateSubs = state.getStreamer().getSubCount();
+            long stateSubs = state.streamer.subscriberCount;
             if (stateSubs != -1) {
                 subCount += stateSubs;
             }

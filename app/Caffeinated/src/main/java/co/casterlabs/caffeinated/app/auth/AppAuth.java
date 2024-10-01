@@ -14,7 +14,7 @@ import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
-import co.casterlabs.koi.api.stream.KoiStreamLanguage;
+import co.casterlabs.koi.api.types.stream.KoiStreamLanguage;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -97,7 +97,7 @@ public class AppAuth extends JavascriptObject {
     public int countPlatform(UserPlatform platform) {
         int count = 0;
         for (AuthInstance inst : this.authInstances.values()) {
-            if ((inst.getUserData() != null) && (inst.getUserData().getPlatform() == platform)) {
+            if ((inst.getUserData() != null) && (inst.getUserData().platform == platform)) {
                 count++;
             }
         }
@@ -134,7 +134,7 @@ public class AppAuth extends JavascriptObject {
         this.authInstances.forEach((__, v) -> {
             if (v.getUserData() != null) {
                 platforms.put(
-                    v.getUserData().getPlatform().name(),
+                    v.getUserData().platform.name(),
                     new JsonObject()
                         .put("userData", Rson.DEFAULT.toJson(v.getUserData()))
                 );
@@ -290,7 +290,7 @@ public class AppAuth extends JavascriptObject {
     public @Nullable AuthInstance getAuthInstance(UserPlatform platform) {
         for (AuthInstance inst : this.authInstances.values()) {
             if ((inst.getUserData() != null) &&
-                (inst.getUserData().getPlatform() == platform)) {
+                (inst.getUserData().platform == platform)) {
                 return inst;
             }
         }

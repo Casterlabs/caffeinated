@@ -48,7 +48,7 @@ public class FollowerCountLabel extends GenericLabel {
             UserUpdateEvent state = Caffeinated.getInstance().getKoi().getUserStates().get(platform);
             if (state == null) continue;
 
-            long stateFollows = state.getStreamer().getFollowersCount();
+            long stateFollows = state.streamer.followersCount;
             if (stateFollows != -1) {
                 followersCount += stateFollows;
             }

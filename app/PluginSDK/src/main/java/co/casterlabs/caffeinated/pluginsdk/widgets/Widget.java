@@ -14,11 +14,11 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
-import co.casterlabs.commons.async.Promise;
+import co.casterlabs.commons.async.promise.Promise;
 import co.casterlabs.kaimen.util.reflection.Reflective;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
-import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonField;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
@@ -178,8 +178,6 @@ public abstract class Widget {
                     FastLogger.logException(t);
                 }
             }
-
-            return null;
         });
     }
 

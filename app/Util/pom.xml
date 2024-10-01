@@ -10,6 +10,10 @@
 	</parent>
 
 	<repositories>
+        <repository>
+            <id>casterlabs-maven</id>
+            <url>https://repo.casterlabs.co/maven</url>
+        </repository>
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
@@ -36,21 +40,15 @@
 		<dependency>
 			<groupId>co.casterlabs.EmojiApi</groupId>
 			<artifactId>Index</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>co.casterlabs.Rakurai</groupId>
-			<artifactId>Json</artifactId>
-			<version>1.17.8</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>co.casterlabs.Rakurai</groupId>
-			<artifactId>Util</artifactId>
-			<version>1.17.8</version>
-			<scope>compile</scope>
-		</dependency>
+        <dependency>
+            <groupId>co.casterlabs</groupId>
+            <artifactId>rson</artifactId>
+            <version>1.18.0</version>
+            <scope>compile</scope>
+        </dependency>
 		<dependency>
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>FastLoggingFramework</artifactId>
@@ -72,7 +70,7 @@
 		<dependency>
 			<groupId>co.casterlabs.Commons</groupId>
 			<artifactId>IO</artifactId>
-			<version>1.6.0</version>
+			<version>1.8.0-1</version>
 			<scope>compile</scope>
 		</dependency>
 
