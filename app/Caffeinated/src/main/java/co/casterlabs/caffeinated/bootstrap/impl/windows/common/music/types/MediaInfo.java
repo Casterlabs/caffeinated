@@ -17,7 +17,7 @@ public class MediaInfo {
     @JsonField("AlbumArtist")
     private String albumArtist;
 
-    @JsonField("AlbumTitle ")
+    @JsonField("AlbumTitle")
     private String albumTitle;
 
     @JsonField("AlbumTrackCount")
