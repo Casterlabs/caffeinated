@@ -1,6 +1,7 @@
 package co.casterlabs.caffeinated.app.auth;
 
 import java.io.Closeable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -158,7 +159,15 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         if (this.roomstate == null) {
             // TODO get rid of this by broadcasting roomstates across all platforms on
             // connect. (KOI)
-            this.roomstate = RoomstateEvent.builder().streamer(e.streamer).build();
+            this.roomstate = RoomstateEvent.builder()
+                .isEmoteOnly(false)
+                .isFollowersOnly(false)
+                .isR9KMode(false)
+                .isSlowMode(false)
+                .isSubsOnly(false)
+                .timestamp(Instant.now())
+                .streamer(e.streamer)
+                .build();
             CaffeinatedApp.getInstance().getKoi().broadcastEvent(this.roomstate);
         }
 
