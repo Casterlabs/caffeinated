@@ -3,6 +3,7 @@ package co.casterlabs.caffeinated.bootstrap.impl.windows.common.music;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,6 @@ import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.Play
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.types.MediaInfo;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.types.PlaybackStatus;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
-import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -32,17 +32,22 @@ public class WindowsSystemPlaybackMusicProvider extends SystemPlaybackMusicProvi
     @Override
     public void init() {
         if (!WMCJCW_LOCATION.exists()) {
-//            JOptionPane.showMessageDialog(null, "Unable to find WMC-JsonConsoleWrapper.\nThe system music service will not work.", "Casterlabs-Caffeinated", JOptionPane.ERROR_MESSAGE, null);
+//            JOptionPane.showMessageDialog(null, "Unable to find " + WMCJCW_LOCATION.getAbsolutePath() + ".\nThe system music service will not work.", "Casterlabs-Caffeinated", JOptionPane.ERROR_MESSAGE, null);
             return;
         }
 
-        AsyncTask.create(this::startListener);
+        Thread th = new Thread(this::startListener);
+        th.setDaemon(true);
+        th.setName("WindowsSystemPlaybackMusicProvider");
+        th.start();
     }
 
     @SneakyThrows
     private void startListener() {
         Process p = new ProcessBuilder()
             .command(WMCJCW_LOCATION.getAbsolutePath()/*, "no_thumbnail"*/)
+            .redirectOutput(Redirect.PIPE)
+            .redirectInput(Redirect.PIPE)
             .start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
