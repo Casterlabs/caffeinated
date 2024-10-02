@@ -21,7 +21,7 @@
 	</distributionManagement>
 
 	<properties>
-		<kaimen.version>43546a1</kaimen.version>
+		<kaimen.version>4689d69</kaimen.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

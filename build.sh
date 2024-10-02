@@ -14,7 +14,7 @@ fi
 rm -rf dist/*
 mkdir -p -p dist
 
-KAIMEN_VERSION="99e3999"
+KAIMEN_VERSION="4689d69"
 VM_OPTIONS="-vm Xms1M -vm XX:+UseCompressedOops -vm XX:+UseSerialGC -vm XX:MaxHeapFreeRatio=1 -vm XX:MinHeapFreeRatio=1"
 
 if [[ $@ != *"nopackage"* ]]; then
