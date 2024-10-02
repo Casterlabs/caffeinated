@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
-import co.casterlabs.koi.api.types.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEvent;
 
 public class Evaluater {
     private static final Pattern PATTERN = Pattern.compile("\\$\\{(.+?)\\}");

@@ -17,7 +17,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
-import co.casterlabs.commons.io.streams.StreamUtil;
+import co.casterlabs.rakurai.io.IOUtil;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -120,7 +120,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
 
         try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {
             return new Pair<>(
-                StreamUtil.toString(in, StandardCharsets.UTF_8),
+                IOUtil.readInputStreamString(in, StandardCharsets.UTF_8),
                 mimeType
             );
         } catch (Exception e) {

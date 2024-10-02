@@ -17,6 +17,7 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 
+import co.casterlabs.rakurai.io.IOUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class ArchiveExtractor {
@@ -131,7 +132,7 @@ public class ArchiveExtractor {
 
         // Extract the file.
         try (FileOutputStream out = new FileOutputStream(newFile)) {
-            byte[] buffer = new byte[2048];
+            byte[] buffer = new byte[IOUtil.DEFAULT_BUFFER_SIZE];
             int read = 0;
 
             while ((read = in.read(buffer)) != -1) {

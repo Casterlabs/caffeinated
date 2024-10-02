@@ -8,8 +8,7 @@ import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
 import co.casterlabs.caffeinated.util.Crypto;
 import co.casterlabs.commons.async.AsyncTask;
-import co.casterlabs.commons.async.promise.Promise;
-import co.casterlabs.commons.async.promise.PromiseResolver;
+import co.casterlabs.commons.async.Promise;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -41,9 +40,9 @@ public class AuthCallback {
 
     public Promise<String> connect() {
         if (this.authPromise == null) {
-            this.authPromise = new Promise<>((PromiseResolver<String> resolver) -> {
-                this.authPromiseResolve = resolver::resolve;
-                this.authPromiseReject = resolver::reject;
+            this.authPromise = new Promise<>((resolve, reject) -> {
+                this.authPromiseResolve = resolve;
+                this.authPromiseReject = reject;
 
                 this.timeoutWatcher = AsyncTask.create(() -> {
                     try {

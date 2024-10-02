@@ -35,19 +35,19 @@ public class DailySubscribersGoal extends GenericGoal {
 
     @KoiEventHandler
     public void onSubscribe(SubscriptionEvent e) {
-        if (this.offsets.containsKey(e.streamer.UPID)) {
-            int newOffset = this.offsets.get(e.streamer.UPID) + 1;
-            this.offsets.put(e.streamer.UPID, newOffset);
+        if (this.offsets.containsKey(e.getStreamer().getUPID())) {
+            int newOffset = this.offsets.get(e.getStreamer().getUPID()) + 1;
+            this.offsets.put(e.getStreamer().getUPID(), newOffset);
         }
         this.recalculate();
     }
 
     @KoiEventHandler
     public void onStreamStatus(StreamStatusEvent e) {
-        if (e.live) {
-            this.offsets.putIfAbsent(e.streamer.UPID, 0);
+        if (e.isLive()) {
+            this.offsets.putIfAbsent(e.getStreamer().getUPID(), 0);
         } else {
-            this.offsets.remove(e.streamer.UPID); // Clear the offset value. No longer live.
+            this.offsets.remove(e.getStreamer().getUPID()); // Clear the offset value. No longer live.
         }
         this.recalculate();
     }

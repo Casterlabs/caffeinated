@@ -104,7 +104,7 @@ public class CaffeinatedYoutubePlugin implements KoiEventListener {
         try {
             String result = WebUtil.sendHttpRequest(
                 new Request.Builder()
-                    .url("https://www.youtube.com/oembed?format=json&url=" + WebUtil.escapeHtml(e.raw))
+                    .url("https://www.youtube.com/oembed?format=json&url=" + WebUtil.escapeHtml(e.getRaw()))
             );
 
             if (!result.equals("Not Found")) {

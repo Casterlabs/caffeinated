@@ -1,7 +1,7 @@
 package co.casterlabs.caffeinated.pluginsdk.widgets;
 
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
-import co.casterlabs.koi.api.types.KoiEventType;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonField;
 import lombok.AccessLevel;

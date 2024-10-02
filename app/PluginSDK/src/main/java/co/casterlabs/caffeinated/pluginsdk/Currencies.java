@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
-import co.casterlabs.commons.async.promise.Promise;
+import co.casterlabs.commons.async.Promise;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.annotating.JsonClass;

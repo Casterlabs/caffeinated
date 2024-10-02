@@ -2,7 +2,7 @@ package co.casterlabs.caffeinated.pluginsdk.scripting;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.koi.api.types.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEvent;
 import lombok.NonNull;
 
 public interface ScriptingEngine {

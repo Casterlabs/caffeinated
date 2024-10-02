@@ -105,15 +105,15 @@ public class TopDonationLabel extends GenericLabel {
 
     @KoiEventHandler
     public void onDonation(@Nullable RichMessageEvent e) {
-        if (e.donations.isEmpty()) return;
+        if (e.getDonations().isEmpty()) return;
 
         AsyncTask.create(() -> {
             double total = 0;
             String currency = "USD";
 
-            for (Donation d : e.donations) {
+            for (Donation d : e.getDonations()) {
                 try {
-                    Double convertedAmount = Currencies.convertCurrency(d.amount * d.count, d.currency, Currencies.baseCurrency).await();
+                    Double convertedAmount = Currencies.convertCurrency(d.getAmount() * d.getCount(), d.getCurrency(), Currencies.baseCurrency).await();
 
                     total += convertedAmount;
                 } catch (Throwable t) {
@@ -121,11 +121,11 @@ public class TopDonationLabel extends GenericLabel {
                 }
 
                 // Is always homogenous.
-                currency = d.currency;
+                currency = d.getCurrency();
             }
 
             if (total >= this.topAmount) {
-                this.topDonator = e.sender;
+                this.topDonator = e.getSender();
                 this.topAmount = total;
                 this.topCurrency = currency;
 
@@ -169,7 +169,7 @@ public class TopDonationLabel extends GenericLabel {
             }
 
             if (showName) {
-                html = this.topDonator.displayname + " ";
+                html = this.topDonator.getDisplayname() + " ";
             }
 
             if (formattedTotal != null) {

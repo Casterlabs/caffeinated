@@ -34,7 +34,7 @@ import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.KoiChatterType;
-import co.casterlabs.koi.api.types.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
@@ -106,7 +106,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
             String rawArgs = "";
 
             if (event instanceof RichMessageEvent) {
-                Matcher matcher = QUOTE_PATTERN.matcher(((RichMessageEvent) event).raw);
+                Matcher matcher = QUOTE_PATTERN.matcher(((RichMessageEvent) event).getRaw());
                 while (matcher.find()) {
                     String arg = matcher.group(1).trim();
 
@@ -119,7 +119,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
 
                 if (!args.isEmpty() && args.get(0).startsWith("!")) {
                     String cmd = args.remove(0);
-                    rawArgs = ((RichMessageEvent) event).raw.substring(cmd.length()).trim();
+                    rawArgs = ((RichMessageEvent) event).getRaw().substring(cmd.length()).trim();
                 }
             }
 

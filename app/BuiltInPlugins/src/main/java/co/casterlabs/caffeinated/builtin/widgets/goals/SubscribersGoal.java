@@ -37,18 +37,18 @@ public class SubscribersGoal extends GenericGoal {
 
     @KoiEventHandler
     public void onSubscribe(SubscriptionEvent e) {
-        if (this.offsets.containsKey(e.streamer.UPID)) {
-            int newOffset = this.offsets.get(e.streamer.UPID) + 1;
-            this.offsets.put(e.streamer.UPID, newOffset);
+        if (this.offsets.containsKey(e.getStreamer().getUPID())) {
+            int newOffset = this.offsets.get(e.getStreamer().getUPID()) + 1;
+            this.offsets.put(e.getStreamer().getUPID(), newOffset);
         } else {
-            this.offsets.put(e.streamer.UPID, 1);
+            this.offsets.put(e.getStreamer().getUPID(), 1);
         }
         this.recalculate();
     }
 
     @KoiEventHandler
     public void onUserUpdate(UserUpdateEvent e) {
-        this.offsets.remove(e.streamer.UPID); // Clear the offset value. We just got a fresh count!
+        this.offsets.remove(e.getStreamer().getUPID()); // Clear the offset value. We just got a fresh count!
         this.recalculate();
     }
 
@@ -59,12 +59,12 @@ public class SubscribersGoal extends GenericGoal {
             UserUpdateEvent state = Caffeinated.getInstance().getKoi().getUserStates().get(platform);
             if (state == null) continue;
 
-            long stateSubs = state.streamer.subscriberCount;
+            long stateSubs = state.getStreamer().getSubCount();
             if (stateSubs != -1) {
                 subCount += stateSubs;
 
-                if (this.offsets.containsKey(state.streamer.UPID)) {
-                    subCount += this.offsets.get(state.streamer.UPID);
+                if (this.offsets.containsKey(state.getStreamer().getUPID())) {
+                    subCount += this.offsets.get(state.getStreamer().getUPID());
                 }
             }
         }

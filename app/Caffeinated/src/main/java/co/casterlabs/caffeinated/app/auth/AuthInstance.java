@@ -20,7 +20,7 @@ import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
-import co.casterlabs.koi.api.types.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
@@ -153,27 +153,26 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     public void onUserUpdate(UserUpdateEvent e) {
         boolean isAuthConfirmation = this.userData == null;
 
-        this.userData = e.streamer;
+        this.userData = e.getStreamer();
 
         if (this.roomstate == null) {
             // TODO get rid of this by broadcasting roomstates across all platforms on
             // connect. (KOI)
-            this.roomstate = RoomstateEvent.builder().streamer(e.streamer).build();
+            this.roomstate = new RoomstateEvent(e.getStreamer());
             CaffeinatedApp.getInstance().getKoi().broadcastEvent(this.roomstate);
         }
 
-        // TODO
-//        if (isAuthConfirmation) {
-//            String puppetToken = CaffeinatedApp
-//                .getInstance()
-//                .getAuthPreferences()
-//                .get()
-//                .getToken("koiPuppet", this.tokenId);
-//
-//            if (puppetToken != null) {
-//                this.koi.loginPuppet(puppetToken);
-//            }
-//        }
+        if (isAuthConfirmation) {
+            String puppetToken = CaffeinatedApp
+                .getInstance()
+                .getAuthPreferences()
+                .get()
+                .getToken("koiPuppet", this.tokenId);
+
+            if (puppetToken != null) {
+                this.koi.loginPuppet(puppetToken);
+            }
+        }
 
         CaffeinatedApp.getInstance().getAuth().checkStatus();
         CaffeinatedApp.getInstance().getAuth().updateBridgeData();
@@ -187,7 +186,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 
     @KoiEventHandler
     public void onViewerList(ViewerListEvent e) {
-        this.viewers = e.viewers;
+        this.viewers = e.getViewers();
         CaffeinatedApp.getInstance().getAuth().updateBridgeData();
     }
 

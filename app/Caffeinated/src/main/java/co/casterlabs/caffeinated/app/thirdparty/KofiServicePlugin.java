@@ -1,7 +1,6 @@
 package co.casterlabs.caffeinated.app.thirdparty;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
@@ -25,10 +25,10 @@ import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent.SubscriptionLevel;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent.SubscriptionType;
+import co.casterlabs.koi.api.types.events.rich.ChatFragment;
 import co.casterlabs.koi.api.types.events.rich.Donation;
 import co.casterlabs.koi.api.types.events.rich.Donation.DonationType;
-import co.casterlabs.koi.api.types.events.rich.fragments.ChatFragment;
-import co.casterlabs.koi.api.types.events.rich.fragments.TextFragment;
+import co.casterlabs.koi.api.types.events.rich.TextFragment;
 import co.casterlabs.koi.api.types.user.SimpleProfile;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
@@ -39,12 +39,7 @@ import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1Listener {
-    private static final SimpleProfile KOFI_STREAMER = SimpleProfile.builder()
-        .id("kofi")
-        .channelId("kofi")
-        .UPID("kofi" + ';' + UserPlatform.CUSTOM_INTEGRATION)
-        .platform(UserPlatform.CUSTOM_INTEGRATION)
-        .build();
+    private static final SimpleProfile KOFI_STREAMER = new SimpleProfile("kofi", "kofi", UserPlatform.CUSTOM_INTEGRATION);
 
     private KinokoV1Connection connection = new KinokoV1Connection(this);
 
@@ -64,63 +59,60 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
 
         this.getLogger().debug("Ko-fi event: %s", json);
 
-        User user = User.builder()
-            .id(json.getString("from_name"))
-            .channelId(json.getString("from_name"))
-            .UPID(json.getString("from_name") + ';' + UserPlatform.CUSTOM_INTEGRATION)
-            .username(json.getString("from_name"))
-            .displayname(json.getString("from_name"))
-            .platform(UserPlatform.CUSTOM_INTEGRATION)
-            .badges(Collections.emptyList())
-            .roles(Collections.emptyList())
-            .color("#00aff1")
-            .bio("")
-            .link(json.getString("url"))
-            .imageLink(getRandomAvatar())
-            .build();
-
         switch (json.getString("type")) {
             case "Donation": {
-                ChatFragment message = TextFragment.of(json.getString("message"));
-                Donation donation = Donation.of(
-                    DonationType.OTHER, "Donation",
-                    json.getString("currency"), Double.parseDouble(json.getString("amount")), 1,
-                    user.imageLink
+                User sender = new User(
+                    json.getString("from_name"), json.getString("from_name"), UserPlatform.CUSTOM_INTEGRATION,
+                    Collections.emptyList(), Collections.emptyList(),
+                    "#00aff1", json.getString("from_name"), json.getString("from_name"), "", json.getString("url"), getRandomAvatar(),
+                    0, 0
                 );
 
-                RichMessageEvent rich = RichMessageEvent.of(
-                    KOFI_STREAMER, Instant.now(), user,
-                    Arrays.asList(message), Arrays.asList(donation), Collections.emptyList(),
-                    json.getString("message_id"), json.getString("message_id"), null
+                ChatFragment message = new TextFragment(json.getString("message"));
+                Donation donation = new Donation(
+                    DonationType.OTHER, "Donation",
+                    json.getString("currency"), Double.parseDouble(json.getString("amount")), 1,
+                    sender.getImageLink()
+                );
+
+                RichMessageEvent rich = new RichMessageEvent(
+                    KOFI_STREAMER, sender, Arrays.asList(message),
+                    Arrays.asList(donation), Collections.emptyList(),
+                    json.getString("message_id"), null
                 );
 
                 CaffeinatedApp.getInstance().getKoi().broadcastEvent(rich);
+                CaffeinatedApp.getInstance().getKoi().broadcastEvent(rich.toLegacyEvent());
                 break;
             }
 
             case "Subscription": {
+                User subscriber = new User(
+                    json.getString("from_name"), json.getString("from_name"), UserPlatform.CUSTOM_INTEGRATION,
+                    Collections.emptyList(), Collections.emptyList(),
+                    "#00aff1", json.getString("from_name"), json.getString("from_name"), "", json.getString("url"), getRandomAvatar(),
+                    0, 0
+                );
+
                 CaffeinatedApp.getInstance().getKoi().broadcastEvent(
-                    SubscriptionEvent.builder()
-                        .streamer(KOFI_STREAMER)
-                        .subscriber(user)
-                        .giftRecipients(null)
-                        .monthsPurchased(1)
-                        .monthsStreak(1)
-                        .subType(json.getBoolean("is_first_subscription_payment") ? SubscriptionType.SUB : SubscriptionType.RESUB)
-                        .subLevel(SubscriptionLevel.UNKNOWN)
-                        .build()
+                    new SubscriptionEvent(
+                        KOFI_STREAMER, subscriber, null,
+                        1, 1,
+                        json.getBoolean("is_first_subscription_payment") ? SubscriptionType.SUB : SubscriptionType.RESUB,
+                        SubscriptionLevel.UNKNOWN
+                    )
                 );
                 break;
             }
 
-//            case "Shop Order": {
-//                CaffeinatedApp.getInstance().notify(
-//                    String.format("%s just made an order on your Ko-fi shop!", json.getString("from_name")),
-//                    Collections.emptyMap(),
-//                    NotificationType.INFO
-//                );
-//                break;
-//            }
+            case "Shop Order": {
+                CaffeinatedApp.getInstance().notify(
+                    String.format("%s just made an order on your Ko-fi shop!", json.getString("from_name")),
+                    Collections.emptyMap(),
+                    NotificationType.INFO
+                );
+                break;
+            }
         }
     }
 

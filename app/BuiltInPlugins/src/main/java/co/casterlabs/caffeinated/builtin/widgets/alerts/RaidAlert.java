@@ -5,7 +5,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCa
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.KoiEventType;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.RaidEvent;
 
 public class RaidAlert extends GenericAlert implements KoiEventListener {
@@ -25,7 +25,7 @@ public class RaidAlert extends GenericAlert implements KoiEventListener {
 
     @KoiEventHandler
     public void onRaid(RaidEvent e) {
-        if (!this.getSelectedPlatforms().contains(e.streamer.platform)) return;
+        if (!this.getSelectedPlatforms().contains(e.getStreamer().getPlatform())) return;
 
         this.queueAlert(e, null, null);
     }

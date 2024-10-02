@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileLock;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.commons.async.AsyncTask;
-import co.casterlabs.commons.async.promise.Promise;
-import co.casterlabs.commons.async.promise.PromiseFunctionalInterface.PromiseRunnableWithHandle;
-import co.casterlabs.commons.async.promise.PromiseResolver;
+import co.casterlabs.commons.async.Promise;
 import xyz.e3ndr.consoleutil.ipc.IpcChannel;
 import xyz.e3ndr.consoleutil.ipc.MemoryMappedIpc;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -76,11 +76,11 @@ public class InstanceManager {
     }
 
     private static boolean childIpcComms(String command) {
-        Promise<Void> commsPromise = new Promise<>(new PromiseRunnableWithHandle<>() {
+        Promise<Void> commsPromise = new Promise<>(new BiConsumer<Consumer<Void>, Consumer<Throwable>>() {
             private volatile boolean completed = false;
 
             @Override
-            public void run(PromiseResolver<Void> resolver) throws Throwable {
+            public void accept(Consumer<Void> resolve, Consumer<Throwable> reject) {
                 AsyncTask ipcTask = AsyncTask.create(() -> {
                     try {
                         IpcChannel ipc = MemoryMappedIpc.startHostIpc(ipcDir, "launch");
@@ -93,14 +93,14 @@ public class InstanceManager {
                             FastLogger.logStatic("IPC (CHILD): %s", line);
 
                             if (line.equals("OK")) {
-                                resolver.resolve(null);
+                                resolve.accept(null);
                                 break;
                             }
                         }
 
                         ipc.close();
                     } catch (Exception e) {
-                        resolver.reject(new IOException("IPC communications failed.", e));
+                        reject.accept(new IOException("IPC communications failed.", e));
                     } finally {
                         this.completed = true;
                     }
@@ -114,7 +114,7 @@ public class InstanceManager {
 
                     if (!this.completed) {
                         ipcTask.cancel();
-                        resolver.reject(new IllegalStateException("IPC communication took more than 5 seconds."));
+                        reject.accept(new IllegalStateException("IPC communication took more than 5 seconds."));
                     }
                 });
             }
@@ -145,10 +145,10 @@ public class InstanceManager {
         }
 
         try {
-            new Promise<>((PromiseResolver<Void> resolver) -> {
+            new Promise<>((resolve, reject) -> {
                 try {
                     IpcChannel ipc = MemoryMappedIpc.startChildIpc(ipcDir, "launch");
-                    resolver.resolve(null);
+                    resolve.accept(null);
 
                     Runtime.getRuntime().addShutdownHook(new Thread() {
                         @Override
@@ -178,7 +178,7 @@ public class InstanceManager {
                         ipc.write("OK");
                     }
                 } catch (Exception e) {
-                    resolver.reject(e);
+                    reject.accept(e);
                 }
             })
                 .await();

@@ -13,9 +13,9 @@ import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Shout;
 import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
-import co.casterlabs.koi.api.types.KoiEvent;
-import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.FollowEvent;
+import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.RaidEvent;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -37,10 +37,8 @@ public class AppChatbot extends JavascriptObject {
     @SuppressWarnings("deprecation")
     @JavascriptValue(allowSet = false)
     private List<KoiEventType> supportedShoutEvents = Arrays.asList(
-        KoiEventType.DONATION,
-        KoiEventType.FOLLOW,
-        KoiEventType.RAID,
-        KoiEventType.SUBSCRIPTION
+        KoiEventType.DONATION, KoiEventType.FOLLOW,
+        KoiEventType.RAID, KoiEventType.SUBSCRIPTION
     );
 
     private Thread timerThread = new Thread(this::doTimerLoop);
@@ -89,9 +87,9 @@ public class AppChatbot extends JavascriptObject {
             if (text.isEmpty()) continue;
 
             for (StreamStatusEvent streamStatus : CaffeinatedApp.getInstance().getKoi().getStreamStates().values()) {
-                if (!streamStatus.live) return;
+                if (!streamStatus.isLive()) return;
                 CaffeinatedApp.getInstance().getKoi().sendChat(
-                    streamStatus.streamer.platform,
+                    streamStatus.getStreamer().getPlatform(),
                     text,
                     this.preferences.get().getChatter(),
                     null,
@@ -107,23 +105,23 @@ public class AppChatbot extends JavascriptObject {
     }
 
     public boolean isChatBot(User sender) {
-        return sender.username.equalsIgnoreCase("Casterlabs"); // TODO
+        return sender.getUsername().equalsIgnoreCase("Casterlabs"); // TODO
     }
 
     public boolean shouldHideFromWidgets(KoiEvent e) {
-        switch (e.type()) {
+        switch (e.getType()) {
             case RICH_MESSAGE: {
                 RichMessageEvent richMessage = (RichMessageEvent) e;
                 for (String chatbotToHide : this.preferences.get().getChatbots()) {
-                    if (richMessage.sender.username.equalsIgnoreCase(chatbotToHide) ||
-                        richMessage.sender.displayname.equalsIgnoreCase(chatbotToHide)) {
+                    if (richMessage.getSender().getUsername().equalsIgnoreCase(chatbotToHide) ||
+                        richMessage.getSender().getDisplayname().equalsIgnoreCase(chatbotToHide)) {
                         return true;
                     }
                 }
 
                 // Check the replies for this specific message.
                 if (this.preferences.get().isHideFromChat()) {
-                    if (this.recentReplies.remove(richMessage.raw)) {
+                    if (this.recentReplies.remove(richMessage.getRaw())) {
                         return true;
                     }
                 }
@@ -137,19 +135,19 @@ public class AppChatbot extends JavascriptObject {
                         }
 
                         // Null means any, so we check if the event's platform matches the target.
-                        UserPlatform platform = richMessage.sender.platform;
+                        UserPlatform platform = richMessage.getSender().getPlatform();
                         if ((command.getPlatform() != null) && (command.getPlatform() != platform)) {
                             continue;
                         }
 
                         switch (command.getTriggerType()) {
                             case COMMAND:
-                                if (richMessage.raw.trim().startsWith(SYMBOL + command.getTrigger())) {
+                                if (richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
                                     return true;
                                 }
 
                             case CONTAINS:
-                                if (richMessage.raw.contains(command.getTrigger())) {
+                                if (richMessage.getRaw().contains(command.getTrigger())) {
                                     return true;
                                 }
 
@@ -174,36 +172,36 @@ public class AppChatbot extends JavascriptObject {
             KoiEventType shoutType = shout.getEventType() == KoiEventType.DONATION ? //
                 KoiEventType.RICH_MESSAGE : shout.getEventType();
 
-            if (shoutType != e.type() ||
+            if (shoutType != e.getType() ||
                 shout.getResponse().isBlank()) {
                 continue;
             }
 
             User eventSender = null;
 
-            switch (e.type()) {
+            switch (e.getType()) {
                 case RICH_MESSAGE: {
                     RichMessageEvent richMessage = (RichMessageEvent) e;
 
                     // Not a donation, skip.
-                    if (richMessage.donations.isEmpty()) {
+                    if (richMessage.getDonations().isEmpty()) {
                         continue;
                     }
 
-                    eventSender = richMessage.sender;
+                    eventSender = richMessage.getSender();
                     break;
                 }
 
                 case FOLLOW:
-                    eventSender = ((FollowEvent) e).follower;
+                    eventSender = ((FollowEvent) e).getFollower();
                     break;
 
                 case RAID:
-                    eventSender = ((RaidEvent) e).host;
+                    eventSender = ((RaidEvent) e).getHost();
                     break;
 
                 case SUBSCRIPTION:
-                    eventSender = ((SubscriptionEvent) e).subscriber;
+                    eventSender = ((SubscriptionEvent) e).getSubscriber();
                     break;
 
                 default:
@@ -211,7 +209,7 @@ public class AppChatbot extends JavascriptObject {
             }
 
             // Null means any, so we check if the event's platform matches the target.
-            UserPlatform platform = eventSender.platform;
+            UserPlatform platform = eventSender.getPlatform();
             if ((shout.getPlatform() != null) && (shout.getPlatform() != platform)) {
                 continue;
             }
@@ -224,12 +222,12 @@ public class AppChatbot extends JavascriptObject {
 
                 case REPLY_WITH: {
                     String message = shout.getResponse()
-                        .replace("%username%", eventSender.displayname);
+                        .replace("%username%", eventSender.getDisplayname());
 
-                    if (!message.contains(eventSender.displayname)) {
+                    if (!message.contains(eventSender.getDisplayname())) {
                         // Try to always mention the actual user, this is to prevent issues with spam
                         // detection systems.
-                        message = String.format("@%s %s", eventSender.displayname, message);
+                        message = String.format("@%s %s", eventSender.getDisplayname(), message);
                     }
 
                     CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(
@@ -259,26 +257,26 @@ public class AppChatbot extends JavascriptObject {
             }
 
             // Null means any, so we check if the event's platform matches the target.
-            UserPlatform platform = richMessage.sender.platform;
+            UserPlatform platform = richMessage.getSender().getPlatform();
             if ((command.getPlatform() != null) && (command.getPlatform() != platform)) {
                 continue;
             }
 
             switch (command.getTriggerType()) {
                 case COMMAND:
-                    if (!richMessage.raw.trim().startsWith(SYMBOL + command.getTrigger())) {
+                    if (!richMessage.getRaw().trim().startsWith(SYMBOL + command.getTrigger())) {
                         continue;
                     }
                     break;
 
                 case CONTAINS:
-                    if (!richMessage.raw.contains(command.getTrigger())) {
+                    if (!richMessage.getRaw().contains(command.getTrigger())) {
                         continue;
                     }
                     break;
 
                 case ALWAYS:
-                    if (this.isChatBot(richMessage.sender) || command.getResponseAction() != Action.EXECUTE) {
+                    if (this.isChatBot(richMessage.getSender()) || command.getResponseAction() != Action.EXECUTE) {
                         // Prevent infinite loops / dumb behavior.
                         continue;
                     }

@@ -92,14 +92,14 @@ public class DonationTotalLabel extends GenericLabel {
 
     @KoiEventHandler
     public void onDonation(@Nullable RichMessageEvent e) {
-        if (e.donations.isEmpty()) return;
+        if (e.getDonations().isEmpty()) return;
 
         AsyncTask.create(() -> {
             double total = 0;
 
-            for (Donation d : e.donations) {
+            for (Donation d : e.getDonations()) {
                 try {
-                    Double convertedAmount = Currencies.convertCurrency(d.amount * d.count, d.currency, Currencies.baseCurrency).await();
+                    Double convertedAmount = Currencies.convertCurrency(d.getAmount() * d.getCount(), d.getCurrency(), Currencies.baseCurrency).await();
 
                     total += convertedAmount;
                 } catch (Throwable t) {

@@ -13,10 +13,6 @@
 
 	<repositories>
 		<repository>
-			<id>casterlabs-maven</id>
-			<url>https://repo.casterlabs.co/maven</url>
-		</repository>
-		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
 		</repository>
@@ -32,20 +28,8 @@
 		</dependency>
 		<dependency>
 			<groupId>co.casterlabs</groupId>
-			<artifactId>koi-sdk</artifactId>
-			<version>3d130ba</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>co.casterlabs.EmojiApi</groupId>
-			<artifactId>Index</artifactId>
-			<version>3.6.0</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.unbescape</groupId>
-			<artifactId>unbescape</artifactId>
-			<version>1.1.6.RELEASE</version>
+			<artifactId>Koi</artifactId>
+			<version>${project.parent.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -59,13 +43,7 @@
 		<dependency>
 			<groupId>co.casterlabs.Commons</groupId>
 			<artifactId>Localization</artifactId>
-			<version>1.8.0-1</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.java-websocket</groupId>
-			<artifactId>Java-WebSocket</artifactId>
-			<version>1.5.3</version>
+			<version>2c5d65a</version>
 			<scope>compile</scope>
 		</dependency>
 

@@ -9,6 +9,7 @@
 		<module>Caffeinated</module>
 		<module>Util</module>
 		<module>PluginSDK</module>
+		<module>Koi</module>
 		<module>BuiltInPlugins</module>
 	</modules>
 
@@ -21,7 +22,7 @@
 	</distributionManagement>
 
 	<properties>
-		<kaimen.version>43546a1</kaimen.version>
+		<kaimen.version>3cb3816</kaimen.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

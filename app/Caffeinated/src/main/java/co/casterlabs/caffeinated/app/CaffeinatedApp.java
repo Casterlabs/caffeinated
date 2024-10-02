@@ -40,7 +40,6 @@ import co.casterlabs.caffeinated.pluginsdk.Locale;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
 import co.casterlabs.caffeinated.pluginsdk.scripting.ScriptingEngines;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
-import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.localization.LocaleProvider;
@@ -51,11 +50,11 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
 import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
-import co.casterlabs.koi.api.types.KoiEvent;
-import co.casterlabs.koi.api.types.KoiEventType;
+import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.PlatformMessageEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
-import co.casterlabs.koi.api.types.events.rich.fragments.TextFragment;
+import co.casterlabs.rakurai.io.http.MimeTypes;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonArray;
@@ -275,7 +274,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         int calendarDate = calendar.get(Calendar.DATE);
 
         if (calendarMonth == Calendar.OCTOBER && calendarDate == 31) {
-            this.notify("Boo! 👻", Collections.emptyMap(), NotificationType.WARNING);
+            this.notify("Boo!", Collections.emptyMap(), NotificationType.WARNING);
         }
 
         System.gc();
@@ -374,31 +373,16 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         switch (type) {
             case ERROR:
-                this.koi.broadcastEvent(
-                    PlatformMessageEvent.of(
-                        GlobalKoi.SYSTEM_SENDER.cloneSimpleProfile(), Instant.now(), GlobalKoi.SYSTEM_SENDER,
-                        Arrays.asList(TextFragment.of("🚨 " + localized)), Collections.emptyList(), null
-                    )
-                );
+                this.koi.broadcastEvent(new PlatformMessageEvent("🚨 " + localized));
                 break;
 
             case WARNING:
-                this.koi.broadcastEvent(
-                    PlatformMessageEvent.of(
-                        GlobalKoi.SYSTEM_SENDER.cloneSimpleProfile(), Instant.now(), GlobalKoi.SYSTEM_SENDER,
-                        Arrays.asList(TextFragment.of("⚠️ " + localized)), Collections.emptyList(), null
-                    )
-                );
+                this.koi.broadcastEvent(new PlatformMessageEvent("⚠️ " + localized));
                 break;
 
             case INFO:
             case NONE:
-                this.koi.broadcastEvent(
-                    PlatformMessageEvent.of(
-                        GlobalKoi.SYSTEM_SENDER.cloneSimpleProfile(), Instant.now(), GlobalKoi.SYSTEM_SENDER,
-                        Arrays.asList(TextFragment.of("ℹ️ " + localized)), Collections.emptyList(), null
-                    )
-                );
+                this.koi.broadcastEvent(new PlatformMessageEvent("ℹ️ " + localized));
                 break;
         }
     }
@@ -524,7 +508,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         UserUpdateEvent[] userStates = CaffeinatedApp.getInstance().getKoi().getUserStates().values().toArray(new UserUpdateEvent[0]);
         UserUpdateEvent randomAccount = userStates[ThreadLocalRandom.current().nextInt(userStates.length)];
 
-        KoiEvent e = TestEvents.createTestEvent(type, randomAccount.streamer.platform);
+        KoiEvent e = TestEvents.createTestEvent(type, randomAccount.getStreamer().getPlatform());
         if (e == null) return;
         this.koi.broadcastEvent(e);
     }

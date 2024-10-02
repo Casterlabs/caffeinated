@@ -14,8 +14,8 @@ import co.casterlabs.caffeinated.util.Crypto;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventListener;
-import co.casterlabs.koi.api.types.KoiEvent;
-import co.casterlabs.koi.api.types.KoiEventType;
+import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonObject;
@@ -43,7 +43,7 @@ public class CamWidget extends Widget implements KinokoV1Listener {
         this.addKoiListener(new KoiEventListener() {
             @KoiEventHandler
             public void onEvent(KoiEvent e) {
-                if (e.type() != KoiEventType.CATCHUP) {
+                if (e.getType() != KoiEventType.CATCHUP) {
                     kinoko.send(
                         new JsonObject()
                             .put("type", "KOI_EVENT")

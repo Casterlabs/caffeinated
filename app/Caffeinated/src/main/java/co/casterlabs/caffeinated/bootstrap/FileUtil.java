@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import co.casterlabs.commons.io.streams.StreamUtil;
+import co.casterlabs.rakurai.io.IOUtil;
 
 public class FileUtil {
     private static boolean isDev;
@@ -21,7 +21,7 @@ public class FileUtil {
             in = FileUtil.class.getClassLoader().getResourceAsStream(path);
         }
 
-        return StreamUtil.toString(in, StandardCharsets.UTF_8);
+        return IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
     }
 
     public static String loadResourceFromBuildProject(String path, String project) throws IOException {
@@ -33,7 +33,7 @@ public class FileUtil {
             in = FileUtil.class.getClassLoader().getResourceAsStream(path);
         }
 
-        return StreamUtil.toString(in, StandardCharsets.UTF_8);
+        return IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
     }
 
     public static byte[] loadResourceBytes(String path) throws IOException {
@@ -45,7 +45,7 @@ public class FileUtil {
             in = FileUtil.class.getClassLoader().getResourceAsStream(path);
         }
 
-        return StreamUtil.toBytes(in);
+        return IOUtil.readInputStreamBytes(in);
     }
 
     public static URL loadResourceAsUrl(String path) throws IOException {
