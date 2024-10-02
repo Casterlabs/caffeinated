@@ -13,7 +13,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
-import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.Rson;
@@ -77,10 +77,10 @@ public class RecentSubscriberLabel extends GenericLabel {
 
     @KoiEventHandler
     public void onSubscription(@Nullable SubscriptionEvent event) {
-        if (event.getGiftRecipient() != null) {
-            this.recentSubscriber = event.getGiftRecipient();
+        if (event.giftRecipients != null) {
+            this.recentSubscriber = event.giftRecipients.get(0);
         } else {
-            this.recentSubscriber = event.getSubscriber();
+            this.recentSubscriber = event.subscriber;
         }
 
         this.save();
@@ -91,7 +91,7 @@ public class RecentSubscriberLabel extends GenericLabel {
         if (this.recentSubscriber == null) {
             this.currHtml = "";
         } else {
-            String html = this.recentSubscriber.getDisplayname();
+            String html = this.recentSubscriber.displayname;
 
             String prefix = WebUtil.escapeHtml(this.settings().getString("text.prefix")).replace(" ", "&nbsp;");
             String suffix = WebUtil.escapeHtml(this.settings().getString("text.suffix")).replace(" ", "&nbsp;");

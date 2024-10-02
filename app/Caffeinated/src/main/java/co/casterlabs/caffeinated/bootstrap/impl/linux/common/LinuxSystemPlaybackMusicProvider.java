@@ -2,7 +2,7 @@ package co.casterlabs.caffeinated.bootstrap.impl.linux.common;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
@@ -16,10 +16,10 @@ import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvide
 import co.casterlabs.caffeinated.bootstrap.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
+import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.functional.tuples.Pair;
-import co.casterlabs.rakurai.io.IOUtil;
-import co.casterlabs.rakurai.io.http.MimeTypes;
+import co.casterlabs.commons.io.streams.StreamUtil;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
@@ -83,8 +83,7 @@ public class LinuxSystemPlaybackMusicProvider extends SystemPlaybackMusicProvide
     @SneakyThrows
     private static byte[] urlToBytes(String url) {
         InputStream in = new URL(url).openStream();
-
-        return IOUtil.readInputStreamBytes(in);
+        return StreamUtil.toBytes(in);
     }
 
     private static @Nullable Map<String, String> getPlayerMetaData() {
@@ -115,7 +114,7 @@ public class LinuxSystemPlaybackMusicProvider extends SystemPlaybackMusicProvide
             .command("bash", "-c", command)
             .start();
 
-        return IOUtil.readInputStreamString(p.getInputStream(), StandardCharsets.UTF_8);
+        return StreamUtil.toString(p.getInputStream(), Charset.defaultCharset());
     }
 
     @SneakyThrows

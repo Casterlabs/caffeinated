@@ -27,11 +27,10 @@ import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
-import co.casterlabs.koi.api.types.events.CatchupEvent;
+import co.casterlabs.koi.api.types.KoiEvent;
+import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.ConnectionStateEvent;
 import co.casterlabs.koi.api.types.events.ConnectionStateEvent.ConnectionState;
-import co.casterlabs.koi.api.types.events.KoiEvent;
-import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -39,6 +38,7 @@ import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.events.ViewerCountEvent;
 import co.casterlabs.koi.api.types.events.ViewerListEvent;
 import co.casterlabs.koi.api.types.user.User;
+import co.casterlabs.koi.api.types.user.User.UserBuilder;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -49,6 +49,25 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @SuppressWarnings("deprecation")
 public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHandler {
+    public static final User SYSTEM_SENDER;
+    static {
+        UserBuilder<?, ?> builder = User.builder()
+            .platform(UserPlatform.CASTERLABS_SYSTEM)
+            .channelId("system")
+            .id("system")
+            .UPID("system")
+            .displayname("Casterlabs")
+            .username("Casterlabs")
+            .color("#ea4c4c")
+            .link("https://casterlabs.co")
+            .imageLink("https://cdn.casterlabs.co/branding/casterlabs/icon.png")
+            .followersCount(-1L)
+            .subscriberCount(-1L);
+
+        User.populateMissingInfo(builder);
+        SYSTEM_SENDER = builder.build();
+    }
+
     private static final List<KoiEventType> KEPT_EVENTS = Arrays.asList(
         KoiEventType.FOLLOW,
         KoiEventType.SUBSCRIPTION,
@@ -104,7 +123,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
         for (AuthInstance inst : CaffeinatedApp.getInstance().getAuth().getAuthInstances().values()) {
             if (inst.getUserData() != null) {
-                validPlatforms.add(inst.getUserData().getPlatform());
+                validPlatforms.add(inst.getUserData().platform);
             }
         }
 
@@ -123,7 +142,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
     private void updateBridgeData() {
         for (AuthInstance auth : CaffeinatedApp.getInstance().getAuth().getAuthInstances().values()) {
             if (auth.getUserData() != null) {
-                this.features.put(auth.getUserData().getPlatform(), Collections.unmodifiableList(auth.getFeatures()));
+                this.features.put(auth.getUserData().platform, Collections.unmodifiableList(auth.getFeatures()));
             }
         }
 
@@ -171,28 +190,28 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
     @Override
     @KoiEventHandler
     public void broadcastEvent(@NonNull KoiEvent e) {
-        if (e.getType() == KoiEventType.CATCHUP) {
-            CatchupEvent catchUp = (CatchupEvent) e;
-
-            // Loop through the catchup events,
-            // Convert them to an event,
-            // Check to make sure that conversion succeeded,
-            // Ensure that we're not spamming the user,
-            // Broadcast that event.
-            // (We need to do these in order)
-            for (JsonElement element : catchUp.getEvents()) {
-                KoiEvent cEvent = KoiEventType.get(element.getAsObject());
-
-                if ((cEvent != null) && !this.eventHistory.contains(e)) {
-                    if (KEPT_EVENTS.contains(cEvent.getType())) {
-                        if (catchUp.isFresh()) {
-                            this.eventHistory.add(cEvent);
-                        } else {
-                            this.broadcastEvent(cEvent);
-                        }
-                    }
-                }
-            }
+        if (e.type() == KoiEventType.CATCHUP) {
+//            CatchupEvent catchUp = (CatchupEvent) e;
+//
+//            // Loop through the catchup events,
+//            // Convert them to an event,
+//            // Check to make sure that conversion succeeded,
+//            // Ensure that we're not spamming the user,
+//            // Broadcast that event.
+//            // (We need to do these in order)
+//            for (JsonElement element : catchUp.events) {
+//                KoiEvent cEvent = KoiEventType.get(element.getAsObject());
+//
+//                if ((cEvent != null) && !this.eventHistory.contains(e)) {
+//                    if (KEPT_EVENTS.contains(cEvent.type())) {
+//                        if (catchUp.isFresh()) {
+//                            this.eventHistory.add(cEvent);
+//                        } else {
+//                            this.broadcastEvent(cEvent);
+//                        }
+//                    }
+//                }
+//            }
             return; // Don't further process.
         }
 
@@ -211,7 +230,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             // Process shout events.
             CaffeinatedApp.getInstance().getChatbot().processEventForShout(e);
 
-            if (e.getType() == KoiEventType.RICH_MESSAGE) {
+            if (e.type() == KoiEventType.RICH_MESSAGE) {
                 RichMessageEvent richMessage = (RichMessageEvent) e;
                 CaffeinatedApp.getInstance().getChatbot().processEventForCommand(richMessage);
             }
@@ -221,15 +240,15 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         }
 
         // Add it to the local event history.
-        if (KEPT_EVENTS.contains(e.getType())) {
+        if (KEPT_EVENTS.contains(e.type())) {
             this.eventHistory.add(e);
         }
 
-        switch (e.getType()) {
+        switch (e.type()) {
             case VIEWER_COUNT: {
                 this.viewerCounts.put(
-                    e.getStreamer().getPlatform(),
-                    ((ViewerCountEvent) e).getCount()
+                    e.streamer.platform,
+                    ((ViewerCountEvent) e).count
                 );
                 this.updateBridgeData();
                 break;
@@ -237,8 +256,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
             case VIEWER_LIST: {
                 this.viewers.put(
-                    e.getStreamer().getPlatform(),
-                    Collections.unmodifiableList(((ViewerListEvent) e).getViewers())
+                    e.streamer.platform,
+                    Collections.unmodifiableList(((ViewerListEvent) e).viewers)
                 );
                 this.updateBridgeData();
                 break;
@@ -246,7 +265,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
             case USER_UPDATE: {
                 this.userStates.put(
-                    e.getStreamer().getPlatform(),
+                    e.streamer.platform,
                     (UserUpdateEvent) e
                 );
                 this.updateBridgeData();
@@ -255,7 +274,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
             case STREAM_STATUS: {
                 this.streamStates.put(
-                    e.getStreamer().getPlatform(),
+                    e.streamer.platform,
                     (StreamStatusEvent) e
                 );
                 this.updateBridgeData();
@@ -264,7 +283,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
             case ROOMSTATE: {
                 this.roomStates.put(
-                    e.getStreamer().getPlatform(),
+                    e.streamer.platform,
                     (RoomstateEvent) e
                 );
                 this.updateBridgeData();
@@ -273,8 +292,8 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
 
             case CONNECTION_STATE: {
                 this.connectionStates.put(
-                    e.getStreamer().getPlatform(),
-                    ((ConnectionStateEvent) e).getStates()
+                    e.streamer.platform,
+                    ((ConnectionStateEvent) e).states
                 );
                 break;
             }
@@ -286,15 +305,15 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         FastLogger.logStatic(
             LogLevel.DEBUG,
             "Processed %s event for %s.",
-            e.getType().name().toLowerCase().replace('_', ' '),
-            e.getStreamer().getUPID()
+            e.type().name().toLowerCase().replace('_', ' '),
+            e.streamer.UPID
         );
 
         // Emit the event to Caffeinated.
         AsyncTask.create(() -> {
             JsonElement asJson = Rson.DEFAULT.toJson(e);
 
-            CaffeinatedApp.getInstance().getAppBridge().emit("koi:event:" + e.getType().name().toLowerCase(), asJson);
+            CaffeinatedApp.getInstance().getAppBridge().emit("koi:event:" + e.type().name().toLowerCase(), asJson);
             CaffeinatedApp.getInstance().getAppBridge().emit("koi:event", asJson);
 
             // These are used internally.

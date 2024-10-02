@@ -13,8 +13,8 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
+import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.FollowEvent;
-import co.casterlabs.koi.api.types.events.KoiEventType;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -77,7 +77,7 @@ public class RecentFollowerLabel extends GenericLabel {
 
     @KoiEventHandler
     public void onFollow(@Nullable FollowEvent event) {
-        this.recentFollower = event.getFollower();
+        this.recentFollower = event.follower;
 
         this.save();
         this.updateText();
@@ -87,7 +87,7 @@ public class RecentFollowerLabel extends GenericLabel {
         if (this.recentFollower == null) {
             this.currHtml = "";
         } else {
-            String html = this.recentFollower.getDisplayname();
+            String html = this.recentFollower.displayname;
 
             String prefix = WebUtil.escapeHtml(this.settings().getString("text.prefix")).replace(" ", "&nbsp;");
             String suffix = WebUtil.escapeHtml(this.settings().getString("text.suffix")).replace(" ", "&nbsp;");

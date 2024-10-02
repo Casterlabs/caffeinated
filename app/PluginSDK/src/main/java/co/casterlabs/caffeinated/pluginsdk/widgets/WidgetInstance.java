@@ -11,7 +11,7 @@ import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.commons.functional.tuples.Pair;
-import co.casterlabs.koi.api.types.events.KoiEvent;
+import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonNull;

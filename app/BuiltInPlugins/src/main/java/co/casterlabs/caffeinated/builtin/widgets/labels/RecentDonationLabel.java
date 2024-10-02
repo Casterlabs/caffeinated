@@ -18,7 +18,7 @@ import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
-import co.casterlabs.koi.api.types.events.KoiEventType;
+import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.rich.Donation;
 import co.casterlabs.koi.api.types.user.User;
@@ -30,6 +30,7 @@ import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class RecentDonationLabel extends GenericLabel {
+    @SuppressWarnings("deprecation")
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.recent_donation_label")
         .withIcon("currency-dollar")
@@ -107,15 +108,15 @@ public class RecentDonationLabel extends GenericLabel {
 
     @KoiEventHandler
     public void onDonation(@Nullable RichMessageEvent e) {
-        if (e.getDonations().isEmpty()) return;
+        if (e.donations.isEmpty()) return;
 
         AsyncTask.create(() -> {
             double total = 0;
             String currency = "USD";
 
-            for (Donation d : e.getDonations()) {
+            for (Donation d : e.donations) {
                 try {
-                    Double convertedAmount = Currencies.convertCurrency(d.getAmount() * d.getCount(), d.getCurrency(), Currencies.baseCurrency).await();
+                    Double convertedAmount = Currencies.convertCurrency(d.amount * d.count, d.currency, Currencies.baseCurrency).await();
 
                     total += convertedAmount;
                 } catch (Throwable t) {
@@ -123,10 +124,10 @@ public class RecentDonationLabel extends GenericLabel {
                 }
 
                 // Is always homogenous.
-                currency = d.getCurrency();
+                currency = d.currency;
             }
 
-            this.recentDonator = e.getSender();
+            this.recentDonator = e.sender;
             this.recentAmount = total;
             this.recentCurrency = currency;
 
@@ -169,7 +170,7 @@ public class RecentDonationLabel extends GenericLabel {
             }
 
             if (showName) {
-                html = this.recentDonator.getDisplayname() + " ";
+                html = this.recentDonator.displayname + " ";
             }
 
             if (formattedTotal != null) {

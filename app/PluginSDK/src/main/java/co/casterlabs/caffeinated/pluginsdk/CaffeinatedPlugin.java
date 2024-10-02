@@ -24,14 +24,14 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetSettings;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
-import co.casterlabs.commons.async.Promise;
+import co.casterlabs.commons.async.promise.Promise;
 import co.casterlabs.commons.functional.tuples.Pair;
+import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.commons.localization.LocaleProvider;
 import co.casterlabs.kaimen.util.reflection.Reflective;
 import co.casterlabs.koi.api.listener.KoiEventListener;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
-import co.casterlabs.koi.api.types.events.KoiEvent;
-import co.casterlabs.rakurai.io.IOUtil;
+import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -282,7 +282,7 @@ public abstract class CaffeinatedPlugin implements Closeable {
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
         InputStream in = this.classLoader.getResourceAsStream(resource);
 
-        String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
+        String content = StreamUtil.toString(in, StandardCharsets.UTF_8);
         String mime = Caffeinated.getInstance().getMimeForPath(resource);
 
         return new Pair<>(content, mime);
@@ -298,7 +298,6 @@ public abstract class CaffeinatedPlugin implements Closeable {
      *             See {@link Promise#await()} or
      *             {@link Promise#then(java.util.function.Consumer)}
      */
-    @SuppressWarnings("deprecation")
     @Deprecated
     public Promise<Void> fireKoiEventListeners(@NonNull KoiEvent event) {
         return new Promise<Void>(() -> {
@@ -319,8 +318,6 @@ public abstract class CaffeinatedPlugin implements Closeable {
                     this.logger.exception(t);
                 }
             }
-
-            return null;
         });
     }
 

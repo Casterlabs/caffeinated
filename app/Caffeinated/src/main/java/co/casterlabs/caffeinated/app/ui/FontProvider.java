@@ -1,7 +1,7 @@
 package co.casterlabs.caffeinated.app.ui;
 
 import java.awt.GraphicsEnvironment;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,8 +11,8 @@ import java.util.Set;
 
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.commons.platform.Platform;
-import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -134,7 +134,7 @@ class SystemFontsProvider implements Provider {
     private List<String> listMacFonts() {
         List<String> fonts = new LinkedList<>();
 
-        String[] list = IOUtil.readInputStreamString(
+        String[] list = StreamUtil.toString(
             Runtime
                 .getRuntime()
                 .exec(new String[] {
@@ -143,7 +143,7 @@ class SystemFontsProvider implements Provider {
                         macCmd
                 })
                 .getInputStream(),
-            StandardCharsets.UTF_8
+            Charset.defaultCharset()
         )
             .split("\n");
 

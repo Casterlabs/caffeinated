@@ -87,14 +87,14 @@ public class DonationGoal extends GenericGoal {
 
     @KoiEventHandler
     public void onDonation(@Nullable RichMessageEvent e) {
-        if (e.getDonations().isEmpty()) return;
+        if (e.donations.isEmpty()) return;
 
         AsyncTask.create(() -> {
             double total = 0;
 
-            for (Donation d : e.getDonations()) {
+            for (Donation d : e.donations) {
                 try {
-                    Double convertedAmount = Currencies.convertCurrency(d.getAmount() * d.getCount(), d.getCurrency(), Currencies.baseCurrency).await();
+                    Double convertedAmount = Currencies.convertCurrency(d.amount * d.count, d.currency, Currencies.baseCurrency).await();
 
                     total += convertedAmount;
                 } catch (Throwable t) {
