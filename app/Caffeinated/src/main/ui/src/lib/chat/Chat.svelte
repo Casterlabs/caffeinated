@@ -34,6 +34,8 @@
 	export let supportedFeatures = {};
 
 	/** @type {HTMLElement} */
+	let scrollContainer = null;
+	/** @type {HTMLElement} */
 	let chatBox;
 	let chatElements = {};
 	let chatHistory = [];
@@ -99,15 +101,17 @@
 
 	function checkNearBottom() {
 		const elem = chatBox.parentElement;
-		const scrollPercent = (elem.scrollTop + elem.clientHeight) / elem.scrollHeight;
-		isAtBottom = scrollPercent >= 0.9;
+		isAtBottom = elem.scrollTop == 0; // Note that the scroll direction is inverted via CSS+JS.
 	}
 
 	function jumpToBottom(behavior = 'smooth') {
 		const elem = chatBox.parentElement;
 
 		setTimeout(() => {
-			elem.scrollTo({ top: elem.scrollHeight + 200, behavior });
+			elem.scrollTo({
+				top: 0, // Note that the scroll direction is inverted via CSS+JS.
+				behavior
+			});
 		}, 50);
 	}
 
@@ -763,11 +767,21 @@
 	class:color-by-platform={colorBy == 'PLATFORM'}
 	class:color-by-user={colorBy == 'USER'}
 >
-	<div class="flex-1 overflow-x-hidden overflow-y-auto" on:scroll={checkNearBottom}>
+	<div
+		class="flex-1 overflow-x-hidden overflow-y-auto"
+		on:scroll={checkNearBottom}
+		bind:this={scrollContainer}
+		style="transform: scaleY(-1);"
+		on:scroll|preventDefault
+		on:wheel|preventDefault={(e) => {
+			scrollContainer.scrollTop -= e.deltaY / 2;
+		}}
+	>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<ul
-			style="font-size: {(textSize || 1) * 100}%;"
+			class="h-fit"
+			style="transform: scaleY(-1); font-size: {(textSize || 1) * 100}%;"
 			bind:this={chatBox}
 			on:click={(e) => {
 				if (e.target?.getAttribute('data-user-modal-for')) {
@@ -791,11 +805,12 @@
 
 	{#if !isAtBottom}
 		<button
-			class="absolute bottom-14 right-3 cursor-pointer rounded-full p-1 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
+			class="absolute bottom-14 left-2 right-2 opacity-95 cursor-pointer flex items-center justify-center rounded-md p-1 transition-[background-color] bg-base-3 border border-base-6 hover:bg-base-5 hover:border-base-8 focus:border-primary-7 focus:outline-none focus:ring-1 focus:ring-primary-7"
 			transition:fade
 			on:click={() => jumpToBottom()}
 		>
-			<icon data-icon="icon/arrow-small-down" />
+			<icon class="inline-block pr-1" data-icon="icon/pause" />
+			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.scrolling_paused" />
 		</button>
 	{/if}
 
