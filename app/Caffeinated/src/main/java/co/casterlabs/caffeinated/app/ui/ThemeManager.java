@@ -1,16 +1,15 @@
 package co.casterlabs.caffeinated.app.ui;
 
 import co.casterlabs.caffeinated.app.PreferenceFile;
-import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.app.App.Appearance;
-import co.casterlabs.kaimen.app.AppEvent;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
+import co.casterlabs.caffeinated.app.ui.ThemePreferences.Appearance;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class ThemeManager extends JavascriptObject {
+@JavascriptObject
+public class ThemeManager {
     private PreferenceFile<ThemePreferences> preferenceFile = new PreferenceFile<>("theme", ThemePreferences.class);
 
     // These all include some defaults so that the app can load and not look
@@ -29,26 +28,27 @@ public class ThemeManager extends JavascriptObject {
 
     // Calculated.
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private @Getter Appearance effectiveAppearance;
+    private @Getter Appearance effectiveAppearance = Appearance.DARK;
 
     public void init() {
         this.baseColor = this.preferenceFile.get().getBaseColor();
         this.primaryColor = this.preferenceFile.get().getPrimaryColor();
         this.appearance = this.preferenceFile.get().getAppearance();
 
-        App.on(AppEvent.APPEARANCE_CHANGE, this::calculateEffectiveTheme);
+//        App.on(AppEvent.APPEARANCE_CHANGE, this::calculateEffectiveTheme);
         this.calculateEffectiveTheme();
     }
 
     private void calculateEffectiveTheme() {
-        if (this.appearance == Appearance.FOLLOW_SYSTEM) {
-            App.setAppearance(Appearance.FOLLOW_SYSTEM);
-            Appearance appearance = App.getAppearance();
-            this.effectiveAppearance = appearance;
-        } else {
-            App.setAppearance(this.appearance);
-            this.effectiveAppearance = this.appearance;
-        }
+        // TODO fix
+//        if (this.appearance == Appearance.FOLLOW_SYSTEM) {
+//            App.setAppearance(Appearance.FOLLOW_SYSTEM);
+//            Appearance appearance = App.getAppearance();
+//            this.effectiveAppearance = appearance;
+//        } else {
+//            App.setAppearance(this.appearance);
+//            this.effectiveAppearance = this.appearance;
+//        }
     }
 
     @JavascriptFunction

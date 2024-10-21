@@ -6,11 +6,12 @@ import co.casterlabs.caffeinated.pluginsdk.Emojis;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.emoji.data.EmojiIndex;
 import co.casterlabs.emoji.generator.EmojiIndexGenerator;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
+import co.casterlabs.saucer.bridge.JavascriptObject;
 import lombok.Setter;
 
-public class EmojisObj extends JavascriptObject implements Emojis {
+@JavascriptObject
+public class EmojisObj implements Emojis {
     private static EmojiIndex emojiIndex;
     private static @Setter String emojiProvider = "system"; // Gets set by AppUI.
 

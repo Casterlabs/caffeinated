@@ -41,16 +41,16 @@
 				console.debug('Widget data:', widget);
 			});
 
-		const eventListener = Bridge.on(`widgets:${id}`, (w) => {
-			widget = w;
-
-			if (!deepEqual(widget.settingsLayout, settingsLayout)) {
-				settingsLayout = widget.settingsLayout; // Re-render the UI.
+		const eventListener = window.saucer.messages.onMessage(([type, data]) => {
+			if (type == `widgets:${id}`) {
+				widget = data;
+				if (!deepEqual(widget.settingsLayout, settingsLayout)) {
+					settingsLayout = widget.settingsLayout; // Re-render the UI.
+				}
 			}
 		});
-
 		return () => {
-			Bridge.off(`widgets:${id}`, eventListener);
+			window.saucer.messages.off(eventListener);
 		};
 	});
 

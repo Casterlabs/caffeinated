@@ -30,7 +30,6 @@ import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
 import co.casterlabs.caffeinated.app.plugins.PluginIntegration;
 import co.casterlabs.caffeinated.app.scripting.ScriptingEnginesImpl;
 import co.casterlabs.caffeinated.app.ui.AppUI;
-import co.casterlabs.caffeinated.app.ui.CaffeinatedWindowState;
 import co.casterlabs.caffeinated.app.ui.ThemeManager;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
@@ -44,13 +43,6 @@ import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.localization.LocaleProvider;
-import co.casterlabs.kaimen.webview.Webview;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
-import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.RoomId;
@@ -63,6 +55,12 @@ import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.saucer.Saucer;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
+import co.casterlabs.saucer.bridge.JavascriptGetter;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptSetter;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 import co.casterlabs.swetrix.Swetrix;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -78,7 +76,8 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @SuppressWarnings("deprecation")
 @Getter
-public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
+@JavascriptObject
+public class CaffeinatedApp implements Caffeinated {
     private static final String ANALYTICS_ID = "uC69hShzxhbQ";
 
     public static final String KOI_ID = "LmHG2ux992BxqQ7w9RJrfhkW";
@@ -95,18 +94,13 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private final @JavascriptValue(allowSet = false) BuildInfo buildInfo;
     private final @JavascriptValue(allowSet = false) boolean isDev;
 
-    private @Setter WebviewBridge appBridge;
-    private @Setter Webview webview;
-    private @Setter String appUrl;
-
-    private @Getter(AccessLevel.NONE) LocaleProvider appLocale;
-
+    private @Setter Saucer saucer;
     private @JavascriptValue(allowSet = false) boolean isTraySupported;
 
+    private @Getter(AccessLevel.NONE) LocaleProvider appLocale;
     private @Getter(AccessLevel.NONE) Swetrix analytics;
 
     private Connection preferencesConnection;
-
     private @Getter ScriptingEngines scriptingEngines;
 
     // @formatter:off
@@ -126,13 +120,13 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
     // Preferences
     private final PreferenceFile<ChatbotPreferences>           chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
-    private final PreferenceFile<CaffeinatedWindowState>       windowPreferences = new PreferenceFile<>("window", CaffeinatedWindowState.class);
+//    private final PreferenceFile<CaffeinatedWindowState>       windowPreferences = new PreferenceFile<>("window", CaffeinatedWindowState.class);
     private final PreferenceFile<AuthPreferences>              authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
 
     // @formatter:on
 
     @JavascriptValue(allowSet = false)
-    private final PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);
+    public final PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private JsonArray statusStates = JsonArray.EMPTY_ARRAY;
@@ -176,8 +170,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
 
         Currencies.getCurrencies(); // Load the class.
 
-        this.UI.updateIcon();
-
         this.analytics = Swetrix.builder(ANALYTICS_ID)
             .withDebugEnabled(isDev)
             .withAnalyticsDisabled(isDev)
@@ -218,6 +210,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         this.isTraySupported = traySupported;
 
         this.preferencesConnection = DriverManager.getConnection("jdbc:sqlite:" + new File(APP_DATA_DIR, "preferences/database.sqlite").getCanonicalPath());
+
+        this.UI.updateIcon();
 
         try {
             this.chatbot.init();

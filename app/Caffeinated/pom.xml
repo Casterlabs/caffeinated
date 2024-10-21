@@ -11,6 +11,10 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<properties>
+		<saucer4j.version>385153e</saucer4j.version>
+	</properties>
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -162,38 +166,30 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Kaimen -->
+		<!-- Saucer -->
 		<dependency>
-			<groupId>co.casterlabs.kaimen</groupId>
-			<artifactId>AllWebviewImpls</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>co.casterlabs.kaimen</groupId>
-			<artifactId>Windows-x86_64</artifactId>
-			<scope>provided</scope>
+		    <groupId>com.github.saucer.saucer4j</groupId>
+		    <artifactId>api</artifactId>
+		    <version>${saucer4j.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>co.casterlabs.kaimen</groupId>
-			<artifactId>Windows-x86</artifactId>
-			<scope>provided</scope>
+		    <groupId>com.github.saucer.saucer4j</groupId>
+		    <artifactId>webview2</artifactId>
+		    <version>${saucer4j.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>co.casterlabs.kaimen</groupId>
-			<artifactId>Windows-aarch64</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>co.casterlabs.kaimen</groupId>
-			<artifactId>MacOS-x86_64</artifactId>
-			<scope>provided</scope>
+		    <groupId>com.github.saucer.saucer4j</groupId>
+		    <artifactId>webkitgtk</artifactId>
+		    <version>${saucer4j.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>co.casterlabs.kaimen</groupId>
-			<artifactId>MacOS-aarch64</artifactId>
-			<scope>provided</scope>
+		    <groupId>com.github.saucer.saucer4j</groupId>
+		    <artifactId>webkit</artifactId>
+		    <version>${saucer4j.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- JNA -->

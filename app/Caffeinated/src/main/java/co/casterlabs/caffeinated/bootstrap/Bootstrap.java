@@ -18,16 +18,13 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
-import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.app.App.PowerManagementHint;
-import co.casterlabs.kaimen.app.AppBootstrap;
-import co.casterlabs.kaimen.app.AppEntry;
-import co.casterlabs.kaimen.app.ui.UIServer;
-import co.casterlabs.kaimen.webview.Webview;
-import co.casterlabs.kaimen.webview.WebviewFactory;
-import co.casterlabs.kaimen.webview.WebviewLifeCycleListener;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.saucer.Saucer;
+import co.casterlabs.saucer.SaucerWebview.SaucerWebviewListener;
+import co.casterlabs.saucer.SaucerWindow.SaucerWindowListener;
+import co.casterlabs.saucer.utils.SaucerApp;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -90,51 +87,47 @@ public class Bootstrap implements Runnable {
 
     private static FastLogger logger = new FastLogger();
 
+    private static @Getter Bootstrap instance;
+    private static LocalServer localServer;
+
     private static @Getter BuildInfo buildInfo;
-    private static @Getter boolean useAppLoopback;
+    private static @Getter Saucer saucer;
     private static @Getter boolean isDev;
 
-    private static @Getter Bootstrap instance;
-    private static @Getter Webview webview;
-    private static LocalServer localServer;
-    private static UIServer uiServer;
-
-    // FOR TESTING.
     public static void main(String[] args) throws Exception {
-        AppBootstrap.main(args);
-    }
+        Bootstrap.class.getClassLoader().setDefaultAssertionStatus(true);
+        SaucerApp.initialize("co.casterlabs.caffeinated", () -> {
+            System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 
-    @AppEntry
-    public static void main() throws Exception {
-        App.setName("Casterlabs Caffeinated");
-        App.setPowermanagementHint(PowerManagementHint.POWER_SAVER);
+            NativeBootstrap nb = null;
+            switch (Platform.osDistribution) {
+                case LINUX:
+                    nb = new LinuxBootstrap();
+                    break;
 
-        System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
+                case MACOS:
+                    nb = new MacOSBootstrap();
+                    break;
 
-        NativeBootstrap nb = null;
+                case WINDOWS_NT:
+                    nb = new WindowsBootstrap();
+                    break;
 
-        switch (Platform.osDistribution) {
-            case LINUX:
-                nb = new LinuxBootstrap();
-                break;
+                default:
+                    break;
+            }
 
-            case MACOS:
-                nb = new MacOSBootstrap();
-                break;
+            assert nb != null : "Unsupported platform: " + Platform.osDistribution;
 
-            case WINDOWS_NT:
-                nb = new WindowsBootstrap();
-                break;
+            try {
+                nb.init();
+            } catch (Exception e) {
+                e.printStackTrace();
+                SaucerApp.quit();
+            }
 
-            default:
-                break;
-        }
-
-        assert nb != null : "Unsupported platform: " + Platform.osDistribution;
-
-        nb.init();
-
-        new CommandLine(new Bootstrap()).execute(App.getArgs()); // Calls #run()
+            new CommandLine(new Bootstrap()).execute(args); // Calls #run()
+        });
     }
 
     @SneakyThrows
@@ -142,8 +135,6 @@ public class Bootstrap implements Runnable {
     public void run() {
         FastLoggingFramework.setColorEnabled(this.enableColor);
         System.setProperty("fastloggingframework.wrapsystem", "true");
-
-        instance = this;
 
         File expectUpdaterFile = getAppFile("expect-updater");
         if (expectUpdaterFile.exists()) {
@@ -198,7 +189,14 @@ public class Bootstrap implements Runnable {
         // Update the log level.
         logger.setCurrentLevel(FastLoggingFramework.getDefaultLevel());
 
-        this.startApp();
+        AsyncTask.create(() -> {
+            try {
+                this.startApp();
+            } catch (Exception e) {
+                e.printStackTrace();
+                shutdown();
+            }
+        });
     }
 
     private static void writeAppFile(@NonNull String filename, byte[] bytes) throws IOException {
@@ -237,118 +235,98 @@ public class Bootstrap implements Runnable {
         // Init and start the local server.
         try {
             localServer = new LocalServer(app.getAppPreferences().get().getConductorPort());
-
             localServer.start();
         } catch (Exception e) {
             FastLogger.logStatic(LogLevel.SEVERE, "Unable to start LocalServer (conductor):");
             FastLogger.logException(e);
         }
 
-        uiServer = new UIServer();
-        uiServer.setHandler(new AppSchemeHandler());
-        uiServer.start();
-
-        String appUrl = (isDev ? this.devAddress : uiServer.getLocalAddress()) + "/$caffeinated-sdk-root$";
+        String appUrl = (isDev ? this.devAddress : "app://authority") + "/$caffeinated-sdk-root$";
 
         // Setup the webview.
-        WebviewFactory factory = WebviewFactory.getFactory(app.getAppPreferences().get().getRendererPreference());
-
         logger.info("Initializing UI (this may take some time)");
-        webview = factory.get();
 
-        // Register the lifecycle listener.
-        WebviewLifeCycleListener uiLifeCycleListener = new WebviewLifeCycleListener() {
-            private boolean traySupported = false;
+        boolean traySupported = TrayHandler.tryCreateTray();
 
+        SaucerApp.dispatch(() -> {
+            Saucer.registerCustomScheme("app");
+            saucer = Saucer.create();
+            saucer.window().setTitle("Casterlabs-Caffeinated");
+            saucer.bridge().defineObject("Caffeinated", app);
+            if (isDev) {
+                saucer.webview().setDevtoolsVisible(true);
+            }
+
+            saucer.webview().setSchemeHandler(new AppSchemeHandler());
+            saucer.webview().setUrl(appUrl);
+            logger.info("appAddress = %s", appUrl);
+
+            saucer.window().show();
+        });
+
+        try {
+            ReflectionLib.setValue(CaffeinatedApp.getInstance(), "saucer", saucer);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
+
+//        try {
+//            ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", true);
+//        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
+//
+//        if (this.traySupported) {
+//            TrayHandler.updateShowCheckbox(true);
+//        }
+
+        saucer.messages().onMessage((arr) -> {
+            String type = arr.getString(0);
+
+            if (arr.size() > 1) {
+                JsonObject data = arr.getObject(1);
+                onBridgeEvent(type, data);
+            } else {
+                onBridgeEvent(type, JsonObject.EMPTY_OBJECT);
+            }
+        }, JsonArray.class);
+
+        saucer.webview().setListener(new SaucerWebviewListener() {
             @Override
-            public void onBrowserPreLoad() {
-                logger.debug("onPreLoad");
+            public void onTitle(String newTitle) {
+                saucer.window().setTitle(newTitle);
+            }
+        });
 
-                webview.getBridge().setOnEvent((t, d) -> onBridgeEvent(t, d));
-
-                app.setAppBridge(webview.getBridge());
-                app.setWebview(webview);
-                app.setAppUrl(appUrl);
-
-                AsyncTask.create(() -> {
-                    webview.getBridge().defineObject("Caffeinated", app);
-
-                    this.traySupported = TrayHandler.tryCreateTray(webview);
-
-                    app.init(this.traySupported);
-                });
+        saucer.window().setListener(new SaucerWindowListener() {
+            @Override
+            public void onClosed() {
+                shutdown();
             }
 
             @Override
-            public void onMinimize() {
-                logger.debug("onMinimize");
-            }
-
-            @Override
-            public void onBrowserOpen() {
-                logger.debug("onWindowOpen");
-
-                try {
-                    ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", true);
-                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
-
-                if (this.traySupported) {
-                    TrayHandler.updateShowCheckbox(true);
-                }
-            }
-
-            @Override
-            public void onBrowserClose() {
-                logger.debug("onBrowserClose");
-
-                try {
-                    ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", false);
-                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
-
-                if (this.traySupported) {
-                    TrayHandler.updateShowCheckbox(false);
-                }
-            }
-
-            @Override
-            public void onOpenRequested() {
-                logger.debug("onOpenRequested");
-                webview.open(appUrl);
-            }
-
-            @Override
-            public void onCloseRequested() {
-                logger.debug("onCloseRequested");
-
+            public boolean shouldAvoidClosing() {
                 if (app.canCloseUI()) {
-                    AsyncTask.create(() -> {
-                        if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray() && this.traySupported) {
-                            webview.close();
-                        } else {
-                            shutdown();
-                        }
-                    });
+                    if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray() && traySupported) {
+                        saucer.webview().setDevtoolsVisible(false);
+                        saucer.window().hide();
+                        saucer.webview().setUrl(appUrl + "/blank");
+                        return true;
+                    } else {
+                        shutdown();
+                        return false;
+                    }
                 } else {
-                    webview.focus();
+                    saucer.window().focus();
+                    saucer.webview().setDevtoolsVisible(false);
+                    return true;
                 }
             }
+        });
 
-        };
-
-        logger.info("Starting the UI");
-        webview.initialize(
-            uiLifeCycleListener,
-            app.getWindowPreferences().get(),
-            false,
-            false
-        );
-
-        logger.info("appAddress = %s", appUrl);
-        webview.open(appUrl);
+        logger.info("Starting app...");
+        app.init(traySupported);
 
         // If all of that succeeds, we write a file to let the updater know that
         // everything's okay.
         writeAppFile(".build_ok", null);
+        logger.info("Everything is running and everything is happy :D");
     }
 
     private void onBridgeEvent(String type, JsonObject data) {
@@ -386,52 +364,45 @@ public class Bootstrap implements Runnable {
     }
 
     private static void shutdown(boolean force, boolean relaunch, boolean isReset) {
-        AsyncTask.create(() -> {
-            if (CaffeinatedApp.getInstance().canCloseUI() || force) {
-                logger.info("Shutting down.");
+        if (CaffeinatedApp.getInstance().canCloseUI() || force) {
+            logger.info("Shutting down.");
 
-                // Local Server
-                try {
-                    localServer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                // UI
-                TrayHandler.destroy();
-                webview.destroy();
-
-                try {
-                    uiServer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                // App
-                CaffeinatedApp.getInstance().shutdown();
-                InstanceManager.cleanShutdown();
-
-                // Exit.
-                if (isReset) {
-                    try {
-                        Files.walk(new File(CaffeinatedApp.APP_DATA_DIR).toPath())
-                            .sorted(Comparator.reverseOrder())
-                            .map(Path::toFile)
-                            .forEach(File::delete);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (relaunch) {
-                    relaunch();
-                } else {
-                    System.exit(0);
-                }
-            } else {
-                webview.focus();
+            // Local Server
+            try {
+                localServer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+
+            // UI
+            TrayHandler.destroy();
+            saucer.close();
+            SaucerApp.quit();
+
+            // App
+            CaffeinatedApp.getInstance().shutdown();
+            InstanceManager.cleanShutdown();
+
+            // Exit.
+            if (isReset) {
+                try {
+                    Files.walk(new File(CaffeinatedApp.APP_DATA_DIR).toPath())
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (relaunch) {
+                relaunch();
+            } else {
+                System.exit(0);
+            }
+        } else {
+            saucer.window().focus();
+        }
     }
 
     @SneakyThrows

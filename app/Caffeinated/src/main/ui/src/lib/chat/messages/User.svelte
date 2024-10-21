@@ -33,7 +33,9 @@
 			style:color={streamingServices[user.platform]?.color}
 		/><a href="#" data-user-modal-for={user.UPID}>{@html displayString}</a><span
 			class="ml-1 pronouns text-base-11 bg-base-6 border border-base-7 rounded-lg py-px px-1 text-xs"
-			><LocalizedText key="co.casterlabs.caffeinated.app.pronouns.{user.pronouns}" /></span
+			><LocalizedText
+				key="co.casterlabs.caffeinated.app.pronouns.{user.pronouns || 'UNKNOWN'}"
+			/></span
 		></b
 	>
 {/if}

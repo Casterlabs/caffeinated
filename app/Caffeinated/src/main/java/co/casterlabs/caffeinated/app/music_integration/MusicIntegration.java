@@ -20,12 +20,12 @@ import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.commons.async.AsyncTask;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 import co.casterlabs.yen.Cache;
 import co.casterlabs.yen.impl.SQLBackedCache;
 import lombok.Getter;
@@ -35,7 +35,8 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
-public class MusicIntegration extends JavascriptObject implements Music {
+@JavascriptObject
+public class MusicIntegration implements Music {
     private static InternalMusicProvider<?> systemPlaybackMusicProvider = null;
 
     @JavascriptValue(allowSet = false, watchForMutate = true)

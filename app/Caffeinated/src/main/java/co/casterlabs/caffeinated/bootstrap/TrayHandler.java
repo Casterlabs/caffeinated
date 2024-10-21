@@ -1,6 +1,5 @@
 package co.casterlabs.caffeinated.bootstrap;
 
-import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -10,11 +9,8 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Collections;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -22,9 +18,7 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
-import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.app.AppEvent;
-import co.casterlabs.kaimen.webview.Webview;
+import co.casterlabs.saucer.utils.SaucerApp;
 import lombok.NonNull;
 
 public class TrayHandler {
@@ -34,7 +28,7 @@ public class TrayHandler {
     private static Image lastImage;
     private static TrayIcon icon;
 
-    public static boolean tryCreateTray(Webview webview) {
+    public static boolean tryCreateTray() {
         if (tray == null) {
             // Check the SystemTray support
             if ((Platform.osDistribution == OSDistribution.MACOS) || !SystemTray.isSupported()) {
@@ -44,7 +38,7 @@ public class TrayHandler {
             }
 
             // Need to do this somewhere, here is good.
-            App.getMainThread().execute(() -> {
+            SaucerApp.dispatch(() -> {
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 } catch (Exception ignored) {}
@@ -57,7 +51,8 @@ public class TrayHandler {
             showCheckbox = new CheckboxMenuItem("Show");
             MenuItem itemExit = new MenuItem("Exit");
 
-            showCheckbox.setState(webview.isOpen());
+            // TODO
+//            showCheckbox.setState(Bootstrap.getSaucer().window().);
 
             // Add components to popup menu
             popup.add(showCheckbox);
@@ -65,11 +60,12 @@ public class TrayHandler {
             popup.add(itemExit);
 
             showCheckbox.addItemListener((ItemEvent e) -> {
-                if (webview.isOpen()) {
-                    webview.close();
-                } else {
-                    webview.open(CaffeinatedApp.getInstance().getAppUrl());
-                }
+                // TODO
+//                if (webview.isOpen()) {
+//                    webview.close();
+//                } else {
+//                    webview.open(CaffeinatedApp.getInstance().getAppUrl());
+//                }
             });
 
             itemExit.addActionListener((ActionEvent e) -> {
@@ -77,37 +73,37 @@ public class TrayHandler {
             });
 
             // Setup the tray icon.
-            icon = new TrayIcon(new ImageIcon(App.getIconURL(), "Casterlabs Logo").getImage());
-            App.on(AppEvent.ICON_CHANGE, TrayHandler::changeTrayIcon);
-
-            icon.setImageAutoSize(true);
-            icon.setPopupMenu(popup);
-
-            icon.addMouseListener(new MouseListener() {
-
-                @Override
-                public void mouseClicked(MouseEvent e) {}
-
-                @Override
-                public void mousePressed(MouseEvent e) {}
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    if (!e.isPopupTrigger()) {
-                        webview.open(CaffeinatedApp.getInstance().getAppUrl());
-                    }
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {}
-
-                @Override
-                public void mouseExited(MouseEvent e) {}
-            });
-
-            try {
-                tray.add(icon);
-            } catch (AWTException e) {}
+//            icon = new TrayIcon(new ImageIcon(App.getIconURL(), "Casterlabs Logo").getImage());
+//            App.on(AppEvent.ICON_CHANGE, TrayHandler::changeTrayIcon);
+//
+//            icon.setImageAutoSize(true);
+//            icon.setPopupMenu(popup);
+//
+//            icon.addMouseListener(new MouseListener() {
+//
+//                @Override
+//                public void mouseClicked(MouseEvent e) {}
+//
+//                @Override
+//                public void mousePressed(MouseEvent e) {}
+//
+//                @Override
+//                public void mouseReleased(MouseEvent e) {
+//                    if (!e.isPopupTrigger()) {
+//                        webview.open(CaffeinatedApp.getInstance().getAppUrl());
+//                    }
+//                }
+//
+//                @Override
+//                public void mouseEntered(MouseEvent e) {}
+//
+//                @Override
+//                public void mouseExited(MouseEvent e) {}
+//            });
+//
+//            try {
+//                tray.add(icon);
+//            } catch (AWTException e) {}
 
             return true;
         } else {
@@ -130,10 +126,9 @@ public class TrayHandler {
             lastImage.flush();
         }
 
-        Image image = new ImageIcon(App.getIconURL()).getImage();
-        lastImage = image;
-
-        icon.setImage(image);
+//        Image image = new ImageIcon(App.getIconURL()).getImage();
+//        lastImage = image;
+//        icon.setImage(image);
     }
 
     public static void notify(@NonNull String message, @NonNull MessageType type) {

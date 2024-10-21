@@ -1,8 +1,9 @@
 package co.casterlabs.caffeinated.app.api;
 
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptObject;
 
-public class AppApi extends JavascriptObject {
+@JavascriptObject
+public class AppApi {
     public final MusicApi musicApi = new MusicApi();
 
     public void init() {

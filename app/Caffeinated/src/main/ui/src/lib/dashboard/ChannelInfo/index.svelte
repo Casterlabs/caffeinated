@@ -125,9 +125,9 @@
 	onMount(() => {
 		Caffeinated.auth.getLanguages().then((v) => (languages = v));
 
-		Caffeinated.koi.svelte('streamStates').subscribe((v) => (streamStates = v));
+		window.svelte('Caffeinated.koi', 'streamStates').subscribe((v) => (streamStates = v));
 
-		Caffeinated.koi.svelte('features').subscribe((features) => {
+		window.svelte('Caffeinated.koi', 'features').subscribe((features) => {
 			// Look for loggged-out platforms.
 			for (const [platform, state] of Object.entries(streamStates)) {
 				if (features[platform]) {

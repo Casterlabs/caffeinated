@@ -73,10 +73,10 @@
 		'Bronze'
 	];
 
-	const baseColor = st || Caffeinated.themeManager.svelte('baseColor');
-	const primaryColor = st || Caffeinated.themeManager.svelte('primaryColor');
-	const appearance = st || Caffeinated.themeManager.svelte('appearance');
-	const preferences = st || Caffeinated.UI.svelte('preferences');
+	const baseColor = st || window.svelte('Caffeinated.themeManager', 'baseColor');
+	const primaryColor = st || window.svelte('Caffeinated.themeManager', 'primaryColor');
+	const appearance = st || window.svelte('Caffeinated.themeManager', 'appearance');
+	const preferences = st || window.svelte('Caffeinated.UI', 'preferences');
 
 	$: preferences, $preferences && console.debug('UI Preferences:', $preferences);
 

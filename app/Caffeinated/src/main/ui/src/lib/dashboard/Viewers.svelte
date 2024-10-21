@@ -5,14 +5,6 @@
 	let listElement;
 
 	onMount(() => {
-		const eventListener = Bridge.on('koi:event', (event) => {
-			if (event.event_type == 'VIEWER_LIST') {
-				listElement.onViewersList(event);
-			} else if (event.event_type == 'VIEWER_COUNT') {
-				listElement.onViewersCount(event);
-			}
-		});
-
 		Caffeinated.koi.viewers.then((all) => {
 			for (const [platform, viewers] of Object.entries(all)) {
 				listElement.onViewersList({
@@ -35,8 +27,17 @@
 			}
 		});
 
+		const eventListener = window.saucer.messages.onMessage(([type, data]) => {
+			if (type == 'koi:event') {
+				if (data.event_type == 'VIEWER_LIST') {
+					listElement.onViewersList(event);
+				} else if (data.event_type == 'VIEWER_COUNT') {
+					listElement.onViewersCount(event);
+				}
+			}
+		});
 		return () => {
-			Bridge.off('koi:event', eventListener);
+			window.saucer.messages.off(eventListener);
 		};
 	});
 </script>

@@ -10,9 +10,6 @@ import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Action;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Shout;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.FollowEvent;
@@ -23,12 +20,16 @@ import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.JsonStringUtil;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptSetter;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 import lombok.Getter;
 import lombok.NonNull;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class AppChatbot extends JavascriptObject {
+@JavascriptObject
+public class AppChatbot {
     public static final char SYMBOL = '!';
 
     @JavascriptValue(allowSet = false, watchForMutate = false)

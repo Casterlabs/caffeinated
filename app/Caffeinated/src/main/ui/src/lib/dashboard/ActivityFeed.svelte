@@ -5,7 +5,7 @@
 
 	let viewer;
 
-	const userStates = st || Caffeinated.koi.svelte('userStates');
+	const userStates = st || window.svelte('Caffeinated.koi', 'userStates');
 
 	function doAction(action, data) {
 		switch (action) {
@@ -48,9 +48,13 @@
 		Caffeinated.UI.activityPreferences.then(viewer.loadConfig);
 
 		// Unsubscribe when this page exits.
-		const eventListener = Bridge.on('koi:event', viewer.processEvent);
+		const eventListener = window.saucer.messages.onMessage(([type, data]) => {
+			if (type == 'koi:event') {
+				viewer.processEvent(data);
+			}
+		});
 		return () => {
-			Bridge.off('koi:event', eventListener);
+			window.saucer.messages.off(eventListener);
 		};
 	});
 </script>

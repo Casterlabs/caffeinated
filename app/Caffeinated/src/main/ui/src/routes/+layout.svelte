@@ -56,7 +56,7 @@
 {#await appShim.awaitPageLoad() then}
 	<CSSIntermediate>
 		<slot />
-		{#if $statusStates.length > 0 && !hideStatusBanner}
+		{#if $statusStates?.length > 0 && !hideStatusBanner}
 			{@const state = $statusStates[0]}
 
 			<div

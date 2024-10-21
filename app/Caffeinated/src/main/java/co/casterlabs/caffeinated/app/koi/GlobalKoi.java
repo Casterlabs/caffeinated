@@ -19,9 +19,6 @@ import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.commons.async.AsyncTask;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
@@ -42,12 +39,16 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 import lombok.NonNull;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @SuppressWarnings("deprecation")
-public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHandler {
+@JavascriptObject
+public class GlobalKoi implements Koi, KoiLifeCycleHandler {
     private static final List<KoiEventType> KEPT_EVENTS = Arrays.asList(
         KoiEventType.FOLLOW,
         KoiEventType.SUBSCRIPTION,
@@ -293,8 +294,14 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
         AsyncTask.create(() -> {
             JsonElement asJson = Rson.DEFAULT.toJson(e);
 
-            CaffeinatedApp.getInstance().getAppBridge().emit("koi:event:" + e.type().name().toLowerCase(), asJson);
-            CaffeinatedApp.getInstance().getAppBridge().emit("koi:event", asJson);
+            CaffeinatedApp.getInstance().getSaucer().messages().emit(new Object[] {
+                    "koi:event:" + e.type().name().toLowerCase(),
+                    asJson
+            });
+            CaffeinatedApp.getInstance().getSaucer().messages().emit(new Object[] {
+                    "koi:event",
+                    asJson
+            });
 
             // These are used internally.
             for (KoiLifeCycleHandler listener : this.koiEventListeners) {

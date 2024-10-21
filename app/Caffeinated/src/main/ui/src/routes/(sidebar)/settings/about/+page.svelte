@@ -4,8 +4,8 @@
 	import { icon, iconColor } from '$lib/app.mjs';
 	import { t } from '$lib/app.mjs';
 
-	const buildInfo = st || Caffeinated.svelte('buildInfo');
-	const preferences = st || Caffeinated.UI.svelte('preferences');
+	const buildInfo = st || window.svelte('Caffeinated', 'buildInfo');
+	const preferences = st || window.svelte('Caffeinated.UI', 'preferences');
 
 	async function setPreferenceItem(name, value) {
 		Caffeinated.UI.updateAppearance({

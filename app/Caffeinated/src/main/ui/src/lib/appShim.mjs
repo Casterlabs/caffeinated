@@ -3,6 +3,7 @@
 import { goto } from '$app/navigation';
 import { fonts, currencies } from '$lib/misc.mjs';
 import { getCurrencies } from '$lib/currencies.mjs';
+import { writable } from 'svelte/store';
 import createConsole from '$lib/console-helper.mjs';
 import * as App from '$lib/app.mjs';
 
@@ -28,7 +29,40 @@ function setupCommon() {
 
 function setupApp() {
 	// "Exposes" goto() to the Java side.
-	Bridge.on('goto', ({ path }) => goto(path));
+	window.saucer.messages.onMessage(([type, data]) => {
+		if (type == "goto") {
+			goto(data.path);
+		}
+	});
+
+	const writableCache = {};
+	window.svelte = (object, field) => {
+		if (writableCache[object] && writableCache[object][field]) {
+			return writableCache[object][field];
+		}
+
+		let root = window;
+		try {
+			const store = writable(null);
+
+			for (const part of object.split(".")) {
+				root = root[part];
+			}
+
+			root.onMutate(field, store.set);
+			root[field].then(store.set);
+
+			if (!writableCache[object]) {
+				writableCache[object] = {};
+			}
+			writableCache[object][field] = store;
+
+			return store;
+		} catch (e) {
+			console.debug(e, root, object, field);
+			throw "Probably could not find a root, you supplied: " + object;
+		}
+	}
 
 	App.localeProvider.set(Caffeinated.localize);
 	Caffeinated.LOCALES.then(App.locales.set);
@@ -59,11 +93,11 @@ function setupApp() {
 		}
 	});
 
-	Caffeinated.svelte('statusStates').subscribe(App.statusStates.set);
-	Caffeinated.themeManager.svelte('baseColor').subscribe(App.baseColor.set);
-	Caffeinated.themeManager.svelte('primaryColor').subscribe(App.primaryColor.set);
-	Caffeinated.themeManager.svelte('effectiveAppearance').subscribe(App.appearance.set);
-	Caffeinated.UI.svelte('preferences').subscribe((prefs) => {
+	svelte("Caffeinated", 'statusStates').subscribe(App.statusStates.set);
+	svelte("Caffeinated.themeManager", 'baseColor').subscribe(App.baseColor.set);
+	svelte("Caffeinated.themeManager", 'primaryColor').subscribe(App.primaryColor.set);
+	svelte("Caffeinated.themeManager", 'effectiveAppearance').subscribe(App.appearance.set);
+	svelte("Caffeinated.UI", 'preferences').subscribe((prefs) => {
 		if (!prefs) return;
 		const { language, icon, emojiProvider, zoom, uiFont } = prefs;
 

@@ -74,9 +74,11 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- TEMPORARY -->
 		<dependency>
 			<groupId>co.casterlabs.kaimen</groupId>
 			<artifactId>Util</artifactId>
+			<version>4689d69</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

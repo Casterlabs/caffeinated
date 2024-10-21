@@ -26,15 +26,15 @@ import co.casterlabs.caffeinated.util.collections.IdentityCollection;
 import co.casterlabs.caffeinated.util.network.InterfaceUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.emoji.generator.WebUtil;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
+import co.casterlabs.saucer.bridge.JavascriptGetter;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 import co.casterlabs.yen.Cache;
 import co.casterlabs.yen.CacheIterator;
 import co.casterlabs.yen.impl.SQLBackedCache;
@@ -45,7 +45,8 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
-public class PluginIntegration extends JavascriptObject {
+@JavascriptObject
+public class PluginIntegration {
     private static final File pluginsDir = new File(CaffeinatedApp.APP_DATA_DIR, "plugins");
     private static final String addressesStringList = String.join(",", InterfaceUtil.getLocalIpAddresses());
 

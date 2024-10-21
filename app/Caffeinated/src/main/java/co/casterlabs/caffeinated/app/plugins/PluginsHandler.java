@@ -23,15 +23,16 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.caffeinated.util.collections.IdentityCollection;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.functional.tuples.Triple;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.saucer.bridge.JavascriptObject;
 import co.casterlabs.yen.CacheIterator;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
-public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugins {
+@JavascriptObject
+public class PluginsHandler implements CaffeinatedPlugins {
     private static final FastLogger logger = new FastLogger();
 
     private Map<String, Triple<CaffeinatedPlugin, Function<WidgetDetails, Widget>, WidgetDetails>> widgetFactories = new HashMap<>();
@@ -107,7 +108,10 @@ public class PluginsHandler extends JavascriptObject implements CaffeinatedPlugi
             @SuppressWarnings("deprecation")
             @Override
             public void onSettingsUpdate() {
-                CaffeinatedApp.getInstance().getAppBridge().emit("widgets:" + this.id, this.widget.toJson());
+                CaffeinatedApp.getInstance().getSaucer().messages().emit(new Object[] {
+                        "widgets:" + this.id,
+                        this.widget.toJson()
+                });
                 CaffeinatedApp.getInstance().getPluginIntegration().save(this);
             }
         };

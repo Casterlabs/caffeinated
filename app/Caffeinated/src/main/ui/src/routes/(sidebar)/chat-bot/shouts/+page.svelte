@@ -34,7 +34,7 @@
 	};
 
 	const console = createConsole('Chat Bot/Shouts');
-	const preferences = st || Caffeinated.chatbot.svelte('preferences');
+	const preferences = st || window.svelte('Caffeinated.chatbot', 'preferences');
 
 	$: preferences, $preferences && console.debug('Chat Bot Preferences:', $preferences);
 	$: shouts = $preferences?.shouts || [];

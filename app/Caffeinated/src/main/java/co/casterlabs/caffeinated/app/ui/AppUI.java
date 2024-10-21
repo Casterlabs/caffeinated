@@ -1,9 +1,7 @@
 package co.casterlabs.caffeinated.app.ui;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -20,24 +18,27 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.commons.async.AsyncTask;
-import co.casterlabs.commons.platform.Platform;
-import co.casterlabs.kaimen.app.App;
-import co.casterlabs.kaimen.webview.bridge.JavascriptFunction;
-import co.casterlabs.kaimen.webview.bridge.JavascriptGetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptObject;
-import co.casterlabs.kaimen.webview.bridge.JavascriptSetter;
-import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
+import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonNumber;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rakurai.json.element.JsonString;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
+import co.casterlabs.saucer.bridge.JavascriptGetter;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptSetter;
+import co.casterlabs.saucer.bridge.JavascriptValue;
+import co.casterlabs.saucer.utils.SaucerDesktop;
+import co.casterlabs.saucer.utils.SaucerIcon;
+import co.casterlabs.saucer.utils.SaucerStash;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class AppUI extends JavascriptObject {
+@JavascriptObject
+public class AppUI {
     private static final long TOAST_DURATION = 2250; // 2.25s
 
     private PreferenceFile<UIPreferences> preferenceFile = new PreferenceFile<>("ui", UIPreferences.class);
@@ -48,7 +49,7 @@ public class AppUI extends JavascriptObject {
 
     private @Getter boolean uiFinishedLoad = false;
 
-    private @Getter boolean uiVisible = false;
+    private @Getter boolean uiVisible = true;
 
     @Getter
     @JavascriptValue(allowSet = false)
@@ -183,39 +184,7 @@ public class AppUI extends JavascriptObject {
     public void openLink(@NonNull String link) {
         if (link.startsWith("#")) return; // Not a real link.
 
-        try {
-            Desktop
-                .getDesktop()
-                .browse(URI.create(link));
-        } catch (UnsupportedOperationException ignored) {
-            // The yucky.
-            switch (Platform.osDistribution) {
-                case MACOS:
-                    Runtime.getRuntime().exec(new String[] {
-                            "open",
-                            link
-                    });
-                    break;
-
-                case WINDOWS_NT:
-                    Runtime.getRuntime().exec(new String[] {
-                            "rundll32",
-                            "url.dll,FileProtocolHandler",
-                            link
-                    });
-                    break;
-
-                case LINUX:
-                    Runtime.getRuntime().exec(new String[] {
-                            "xdg-open",
-                            link
-                    });
-                    break;
-
-                default:
-                    break;
-            }
-        }
+        SaucerDesktop.open(link);
     }
 
     /**
@@ -242,19 +211,22 @@ public class AppUI extends JavascriptObject {
                     )
             );
 
-            CaffeinatedApp.getInstance().getAppBridge().eval(line);
+            CaffeinatedApp.getInstance().getSaucer().bridge().executeJavaScript(line);
         }
     }
 
     public void goBack() {
         if (this.uiFinishedLoad) {
-            CaffeinatedApp.getInstance().getAppBridge().eval("history.back()");
+            CaffeinatedApp.getInstance().getSaucer().webview().back();
         }
     }
 
     public void navigate(String path) {
         if (this.uiFinishedLoad) {
-            CaffeinatedApp.getInstance().getAppBridge().emit("goto", JsonObject.singleton("path", "/$caffeinated-sdk-root$" + path));
+            CaffeinatedApp.getInstance().getSaucer().messages().emit(new Object[] {
+                    "goto",
+                    JsonObject.singleton("path", "/$caffeinated-sdk-root$" + path)
+            });
         }
     }
 
@@ -268,7 +240,7 @@ public class AppUI extends JavascriptObject {
             return;
         }
 
-        CaffeinatedApp.getInstance().getAppBridge().eval(
+        CaffeinatedApp.getInstance().getSaucer().bridge().executeJavaScript(
             "(() => {"
                 + "let previousAudioPromise = window.currentAudioPromise;"
                 + "window.currentAudioPromise = new Promise(async (resolve) => {"
@@ -294,7 +266,10 @@ public class AppUI extends JavascriptObject {
             resource = AppUI.class.getClassLoader().getResource(path);
         }
 
-        App.setIcon(resource);
+        SaucerStash stash = SaucerStash.of(StreamUtil.toBytes(resource.openStream()));
+        SaucerIcon icon = SaucerIcon.of(stash);
+
+        CaffeinatedApp.getInstance().getSaucer().window().setIcon(icon);
     }
 
 }

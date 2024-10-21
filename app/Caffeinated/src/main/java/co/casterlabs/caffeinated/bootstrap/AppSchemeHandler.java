@@ -1,24 +1,23 @@
 package co.casterlabs.caffeinated.bootstrap;
 
 import java.io.IOException;
-import java.util.function.Function;
-
-import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.util.MimeTypes;
-import co.casterlabs.rhs.protocol.StandardHttpStatus;
-import co.casterlabs.rhs.server.HttpResponse;
-import co.casterlabs.rhs.session.HttpSession;
+import co.casterlabs.saucer.scheme.SaucerSchemeHandler;
+import co.casterlabs.saucer.scheme.SaucerSchemeRequest;
+import co.casterlabs.saucer.scheme.SaucerSchemeResponse;
+import co.casterlabs.saucer.scheme.SaucerSchemeResponse.SaucerRequestError;
+import co.casterlabs.saucer.utils.SaucerStash;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
+public class AppSchemeHandler implements SaucerSchemeHandler {
 
     @SneakyThrows
     @Override
-    public @Nullable HttpResponse apply(@Nullable HttpSession request) {
-        String uri = request.getUri();
+    public SaucerSchemeResponse handle(SaucerSchemeRequest request) throws Throwable {
+        String uri = request.uri().toString();
 
         if (uri.startsWith("/$caffeinated-sdk-root$")) {
             uri = uri.substring("/$caffeinated-sdk-root$".length());
@@ -46,15 +45,13 @@ public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
                 mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
             }
 
-            FastLogger.logStatic(LogLevel.DEBUG, "200 %s -> app%s (%s)", request.getUri(), uri, mimeType);
+            FastLogger.logStatic(LogLevel.DEBUG, "200 %s -> app%s (%s)", request.uri(), uri, mimeType);
 
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
-                .setMimeType(mimeType);
+            return SaucerSchemeResponse.success(SaucerStash.of(content), mimeType);
         } catch (IOException e) {
-            FastLogger.logStatic(LogLevel.SEVERE, "404 %s -> app%s", request.getUri(), uri);
+            FastLogger.logStatic(LogLevel.SEVERE, "404 %s -> app%s", request.uri(), uri);
 
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.NOT_FOUND, "")
-                .setMimeType("application/octet-stream");
+            return SaucerSchemeResponse.error(SaucerRequestError.NOT_FOUND);
         }
     }
 

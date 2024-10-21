@@ -4,11 +4,11 @@
 	import { onMount } from 'svelte';
 	import { icon, iconColor } from '$lib/app.mjs';
 
-	const koiUrl = st || Caffeinated.svelte('koiUrl');
+	const koiUrl = st || window.svelte('Caffeinated', 'koiUrl');
 
 	function resetKoi() {
 		Caffeinated.koiUrl = 'wss://api.casterlabs.co/v2/koi';
-		Bridge.emit('app:restart');
+		window.saucer.messages.emit(['app:restart']);
 	}
 
 	onMount(() => setTimeout(Caffeinated.UI.onUILoaded, 1500));

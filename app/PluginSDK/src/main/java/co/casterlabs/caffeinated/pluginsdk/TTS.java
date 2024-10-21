@@ -64,7 +64,7 @@ public class TTS {
             return false;
         } else {
             for (String v : voices) {
-                if (v.equalsIgnoreCase(voice)) {
+                if (v.toLowerCase().contains(voice.toLowerCase())) {
                     return true;
                 }
             }

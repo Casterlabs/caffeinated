@@ -12,7 +12,7 @@
 	import SlimTextArea from '$lib/ui/SlimTextArea.svelte';
 	import TextArea from '$lib/ui/TextArea.svelte';
 
-	const uiPreferences = st || Caffeinated.UI.svelte('preferences');
+	const uiPreferences = st || window.svelte('Caffeinated.UI', 'preferences');
 	let manualAuthPlatform = 0;
 
 	$: uiPreferences, $uiPreferences && console.debug('UI Preferences:', $uiPreferences);
