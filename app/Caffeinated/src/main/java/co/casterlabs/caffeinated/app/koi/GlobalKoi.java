@@ -38,7 +38,6 @@ import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.events.ViewerCountEvent;
 import co.casterlabs.koi.api.types.events.ViewerListEvent;
 import co.casterlabs.koi.api.types.user.User;
-import co.casterlabs.koi.api.types.user.User.UserBuilder;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -49,25 +48,6 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @SuppressWarnings("deprecation")
 public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHandler {
-    public static final User SYSTEM_SENDER;
-    static {
-        UserBuilder<?, ?> builder = User.builder()
-            .platform(UserPlatform.CASTERLABS_SYSTEM)
-            .channelId("system")
-            .id("system")
-            .UPID("system")
-            .displayname("Casterlabs")
-            .username("Casterlabs")
-            .color("#ea4c4c")
-            .link("https://casterlabs.co")
-            .imageLink("https://cdn.casterlabs.co/branding/casterlabs/icon.png")
-            .followersCount(-1L)
-            .subscriberCount(-1L);
-
-        User.populateMissingInfo(builder);
-        SYSTEM_SENDER = builder.build();
-    }
-
     private static final List<KoiEventType> KEPT_EVENTS = Arrays.asList(
         KoiEventType.FOLLOW,
         KoiEventType.SUBSCRIPTION,

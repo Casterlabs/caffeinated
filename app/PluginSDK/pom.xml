@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>co.casterlabs</groupId>
 			<artifactId>koi-sdk</artifactId>
-			<version>3d130ba</version>
+			<version>567227c</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

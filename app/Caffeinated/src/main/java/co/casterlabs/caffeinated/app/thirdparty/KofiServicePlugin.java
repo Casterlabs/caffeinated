@@ -2,8 +2,6 @@ package co.casterlabs.caffeinated.app.thirdparty;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +19,8 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.emoji.generator.WebUtil;
+import co.casterlabs.koi.api.types.MessageId;
+import co.casterlabs.koi.api.types.RoomId;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent.SubscriptionLevel;
@@ -38,11 +38,10 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
+@SuppressWarnings("deprecation")
 public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1Listener {
     private static final SimpleProfile KOFI_STREAMER = SimpleProfile.builder()
-        .id("kofi")
-        .channelId("kofi")
-        .UPID("kofi" + ';' + UserPlatform.CUSTOM_INTEGRATION)
+        .bothIds("kofi")
         .platform(UserPlatform.CUSTOM_INTEGRATION)
         .build();
 
@@ -64,17 +63,15 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
 
         this.getLogger().debug("Ko-fi event: %s", json);
 
-        User user = User.builder()
-            .id(json.getString("from_name"))
-            .channelId(json.getString("from_name"))
-            .UPID(json.getString("from_name") + ';' + UserPlatform.CUSTOM_INTEGRATION)
+        User user = User.builder(
+            SimpleProfile.builder()
+                .bothIds(json.getString("from_name"))
+                .platform(UserPlatform.CUSTOM_INTEGRATION)
+                .build()
+        )
             .username(json.getString("from_name"))
             .displayname(json.getString("from_name"))
-            .platform(UserPlatform.CUSTOM_INTEGRATION)
-            .badges(Collections.emptyList())
-            .roles(Collections.emptyList())
             .color("#00aff1")
-            .bio("")
             .link(json.getString("url"))
             .imageLink(getRandomAvatar())
             .build();
@@ -88,11 +85,13 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
                     user.imageLink
                 );
 
-                RichMessageEvent rich = RichMessageEvent.of(
-                    KOFI_STREAMER, Instant.now(), user,
-                    Arrays.asList(message), Arrays.asList(donation), Collections.emptyList(),
-                    json.getString("message_id"), json.getString("message_id"), null
-                );
+                RichMessageEvent rich = RichMessageEvent.builder(
+                    MessageId.random(KOFI_STREAMER, user.toSimpleProfile()),
+                    RoomId.of(KOFI_STREAMER, json.getString("url"))
+                )
+                    .appendDonation(donation)
+                    .appendFragment(message)
+                    .build();
 
                 CaffeinatedApp.getInstance().getKoi().broadcastEvent(rich);
                 break;
@@ -101,11 +100,9 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
             case "Subscription": {
                 CaffeinatedApp.getInstance().getKoi().broadcastEvent(
                     SubscriptionEvent.builder()
+                        .timestamp(Instant.now())
                         .streamer(KOFI_STREAMER)
                         .subscriber(user)
-                        .giftRecipients(null)
-                        .monthsPurchased(1)
-                        .monthsStreak(1)
                         .subType(json.getBoolean("is_first_subscription_payment") ? SubscriptionType.SUB : SubscriptionType.RESUB)
                         .subLevel(SubscriptionLevel.UNKNOWN)
                         .build()

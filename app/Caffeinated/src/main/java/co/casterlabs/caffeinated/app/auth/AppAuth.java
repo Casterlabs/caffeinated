@@ -159,8 +159,8 @@ public class AppAuth extends JavascriptObject {
     }
 
     @JavascriptFunction
-    public Map<KoiStreamLanguage, String> getLanguages() {
-        return KoiStreamLanguage.LANG;
+    public Map<String, String> getLanguages() {
+        return KoiStreamLanguage.NAMES;
     }
 
     @SuppressWarnings("deprecation")

@@ -53,9 +53,11 @@ import co.casterlabs.kaimen.webview.bridge.JavascriptValue;
 import co.casterlabs.kaimen.webview.bridge.WebviewBridge;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
+import co.casterlabs.koi.api.types.RoomId;
 import co.casterlabs.koi.api.types.events.PlatformMessageEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.events.rich.fragments.TextFragment;
+import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonArray;
@@ -74,6 +76,7 @@ import xyz.e3ndr.fastloggingframework.loggerimpl.FileLogHandler;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
+@SuppressWarnings("deprecation")
 @Getter
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private static final String ANALYTICS_ID = "uC69hShzxhbQ";
@@ -346,7 +349,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         return this.pluginIntegration.getPlugins();
     }
 
-    @SuppressWarnings("deprecation")
     @JavascriptFunction
     @Override
     public void copyText(@NonNull String text, @Nullable String toastText) {
@@ -361,7 +363,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
      * Sends a system notification, if that fails then it'll fallback on a UI-based
      * notification instead.
      */
-    @SuppressWarnings("deprecation")
     @JavascriptFunction
     public void notify(@NonNull String message, Map<String, String> placeholders, @NonNull NotificationType type) {
         String localized = this.localize(message, placeholders, Collections.emptyList());
@@ -376,7 +377,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             case ERROR:
                 this.koi.broadcastEvent(
                     PlatformMessageEvent.of(
-                        GlobalKoi.SYSTEM_SENDER.cloneSimpleProfile(), Instant.now(), GlobalKoi.SYSTEM_SENDER,
+                        UserPlatform.CASTERLABS_SYSTEM.systemProfile, Instant.now(), RoomId.of(UserPlatform.CASTERLABS_SYSTEM.systemProfile, ""), UserPlatform.CASTERLABS_SYSTEM.systemUser,
                         Arrays.asList(TextFragment.of("🚨 " + localized)), Collections.emptyList(), null
                     )
                 );
@@ -385,7 +386,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             case WARNING:
                 this.koi.broadcastEvent(
                     PlatformMessageEvent.of(
-                        GlobalKoi.SYSTEM_SENDER.cloneSimpleProfile(), Instant.now(), GlobalKoi.SYSTEM_SENDER,
+                        UserPlatform.CASTERLABS_SYSTEM.systemProfile, Instant.now(), RoomId.of(UserPlatform.CASTERLABS_SYSTEM.systemProfile, ""), UserPlatform.CASTERLABS_SYSTEM.systemUser,
                         Arrays.asList(TextFragment.of("⚠️ " + localized)), Collections.emptyList(), null
                     )
                 );
@@ -395,7 +396,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
             case NONE:
                 this.koi.broadcastEvent(
                     PlatformMessageEvent.of(
-                        GlobalKoi.SYSTEM_SENDER.cloneSimpleProfile(), Instant.now(), GlobalKoi.SYSTEM_SENDER,
+                        UserPlatform.CASTERLABS_SYSTEM.systemProfile, Instant.now(), RoomId.of(UserPlatform.CASTERLABS_SYSTEM.systemProfile, ""), UserPlatform.CASTERLABS_SYSTEM.systemUser,
                         Arrays.asList(TextFragment.of("ℹ️ " + localized)), Collections.emptyList(), null
                     )
                 );

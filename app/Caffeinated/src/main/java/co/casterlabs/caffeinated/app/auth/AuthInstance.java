@@ -149,7 +149,6 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 //        }
 //    }
 
-    @SuppressWarnings("deprecation")
     @KoiEventHandler
     public void onUserUpdate(UserUpdateEvent e) {
         boolean isAuthConfirmation = this.userData == null;
@@ -160,13 +159,8 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
             // TODO get rid of this by broadcasting roomstates across all platforms on
             // connect. (KOI)
             this.roomstate = RoomstateEvent.builder()
-                .isEmoteOnly(false)
-                .isFollowersOnly(false)
-                .isR9KMode(false)
-                .isSlowMode(false)
-                .isSubsOnly(false)
+                .streamer(e.streamer.toSimpleProfile())
                 .timestamp(Instant.now())
-                .streamer(e.streamer)
                 .build();
             CaffeinatedApp.getInstance().getKoi().broadcastEvent(this.roomstate);
         }
