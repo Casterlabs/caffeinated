@@ -17,39 +17,39 @@ public class AppSchemeHandler implements SaucerSchemeHandler {
     @SneakyThrows
     @Override
     public SaucerSchemeResponse handle(SaucerSchemeRequest request) throws Throwable {
-        String uri = request.uri().toString();
+        String path = request.uri().getPath();
 
-        if (uri.startsWith("/$caffeinated-sdk-root$")) {
-            uri = uri.substring("/$caffeinated-sdk-root$".length());
+        if (path.startsWith("/$caffeinated-sdk-root$")) {
+            path = path.substring("/$caffeinated-sdk-root$".length());
         }
 
-        if (uri.isEmpty()) {
-            uri = "/index.html";
+        if (path.isEmpty()) {
+            path = "/index.html";
         } else {
             // Append `index.html` to the end when required.
-            if (!uri.contains(".")) {
-                if (uri.endsWith("/")) {
-                    uri += "index.html";
+            if (!path.contains(".")) {
+                if (path.endsWith("/")) {
+                    path += "index.html";
                 } else {
-                    uri += ".html";
+                    path += ".html";
                 }
             }
         }
 
         try {
-            byte[] content = FileUtil.loadResourceBytes("co/casterlabs/caffeinated/app/ui/html" + uri);
+            byte[] content = FileUtil.loadResourceBytes("co/casterlabs/caffeinated/app/ui/html" + path);
             String mimeType = "application/octet-stream";
 
-            String[] split = uri.split("\\.");
+            String[] split = path.split("\\.");
             if (split.length > 1) {
                 mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
             }
 
-            FastLogger.logStatic(LogLevel.DEBUG, "200 %s -> app%s (%s)", request.uri(), uri, mimeType);
+            FastLogger.logStatic(LogLevel.DEBUG, "200 %s -> app%s (%s)", request.uri(), path, mimeType);
 
             return SaucerSchemeResponse.success(SaucerStash.of(content), mimeType);
         } catch (IOException e) {
-            FastLogger.logStatic(LogLevel.SEVERE, "404 %s -> app%s", request.uri(), uri);
+            FastLogger.logStatic(LogLevel.SEVERE, "404 %s -> app%s", request.uri(), path);
 
             return SaucerSchemeResponse.error(SaucerRequestError.NOT_FOUND);
         }
