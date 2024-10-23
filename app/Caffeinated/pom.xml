@@ -14,7 +14,7 @@
 	<properties>
 		<saucer4j.version>7090d29</saucer4j.version>
 	</properties>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -168,27 +168,27 @@
 
 		<!-- Saucer -->
 		<dependency>
-		    <groupId>com.github.saucer.saucer4j</groupId>
-		    <artifactId>api</artifactId>
-		    <version>${saucer4j.version}</version>
+			<groupId>com.github.saucer.saucer4j</groupId>
+			<artifactId>api</artifactId>
+			<version>${saucer4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.saucer.saucer4j</groupId>
-		    <artifactId>webview2</artifactId>
-		    <version>${saucer4j.version}</version>
+			<groupId>com.github.saucer.saucer4j</groupId>
+			<artifactId>webview2</artifactId>
+			<version>${saucer4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.saucer.saucer4j</groupId>
-		    <artifactId>webkitgtk</artifactId>
-		    <version>${saucer4j.version}</version>
+			<groupId>com.github.saucer.saucer4j</groupId>
+			<artifactId>webkitgtk</artifactId>
+			<version>${saucer4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.saucer.saucer4j</groupId>
-		    <artifactId>webkit</artifactId>
-		    <version>${saucer4j.version}</version>
+			<groupId>com.github.saucer.saucer4j</groupId>
+			<artifactId>webkit</artifactId>
+			<version>${saucer4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -223,6 +223,12 @@
 		</dependency>
 
 		<!-- Utility packages -->
+		<dependency>
+			<groupId>com.github.Dansoftowner</groupId>
+			<artifactId>jSystemThemeDetector</artifactId>
+			<version>3.9.1</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>net.oneandone.reflections8</groupId>
 			<artifactId>reflections8</artifactId>

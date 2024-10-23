@@ -1,5 +1,7 @@
 package co.casterlabs.caffeinated.app.ui;
 
+import com.jthemedetecor.OsThemeDetector;
+
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.ui.ThemePreferences.Appearance;
 import co.casterlabs.saucer.bridge.JavascriptFunction;
@@ -26,29 +28,34 @@ public class ThemeManager {
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private Appearance appearance = Appearance.FOLLOW_SYSTEM;
 
-    // Calculated.
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private @Getter Appearance effectiveAppearance = Appearance.DARK;
+    private @Getter Appearance effectiveAppearance = Appearance.LIGHT; // Calculated.
+
+    private Appearance systemAppearance = Appearance.LIGHT;
+    private OsThemeDetector systemAppearanceDetector;
 
     public void init() {
+        this.systemAppearanceDetector = OsThemeDetector.getDetector();
+
         this.baseColor = this.preferenceFile.get().getBaseColor();
         this.primaryColor = this.preferenceFile.get().getPrimaryColor();
         this.appearance = this.preferenceFile.get().getAppearance();
 
-//        App.on(AppEvent.APPEARANCE_CHANGE, this::calculateEffectiveTheme);
+        this.systemAppearanceDetector.registerListener(isDark -> {
+            this.systemAppearance = isDark ? Appearance.DARK : Appearance.LIGHT;
+            this.calculateEffectiveTheme();
+        });
+
+        this.systemAppearance = this.systemAppearanceDetector.isDark() ? Appearance.DARK : Appearance.LIGHT;
         this.calculateEffectiveTheme();
     }
 
     private void calculateEffectiveTheme() {
-        // TODO fix
-//        if (this.appearance == Appearance.FOLLOW_SYSTEM) {
-//            App.setAppearance(Appearance.FOLLOW_SYSTEM);
-//            Appearance appearance = App.getAppearance();
-//            this.effectiveAppearance = appearance;
-//        } else {
-//            App.setAppearance(this.appearance);
-//            this.effectiveAppearance = this.appearance;
-//        }
+        if (this.appearance == Appearance.FOLLOW_SYSTEM) {
+            this.effectiveAppearance = this.systemAppearance;
+        } else {
+            this.effectiveAppearance = this.appearance;
+        }
     }
 
     @JavascriptFunction
