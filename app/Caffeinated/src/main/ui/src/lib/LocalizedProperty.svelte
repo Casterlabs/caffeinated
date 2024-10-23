@@ -23,7 +23,9 @@
 		const result = await t(key, opts, []);
 		console.debug('Localized:', key, result);
 		contentHash = hash;
-		self.parentElement.setAttribute(property, result);
+		if (self?.parentElement) {
+			self.parentElement.setAttribute(property, result);
+		}
 	}
 
 	// Rerender on change
