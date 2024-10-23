@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.NotificationType;
@@ -14,6 +16,7 @@ import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ActivityViewerPreferences;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
+import co.casterlabs.caffeinated.bootstrap.TrayHandler;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
@@ -48,8 +51,6 @@ public class AppUI {
     private UIPreferences preferences = this.preferenceFile.get();
 
     private @Getter boolean uiFinishedLoad = false;
-
-    private @Getter boolean uiVisible = true;
 
     @Getter
     @JavascriptValue(allowSet = false)
@@ -231,14 +232,14 @@ public class AppUI {
     }
 
     public void playAudio(@NonNull String audioUrl, float volume) {
-        if (!this.uiVisible) {
-            CaffeinatedApp.getInstance().notify(
-                "co.casterlabs.caffeinated.app.cannot_play_sounds_without_ui",
-                Collections.emptyMap(),
-                NotificationType.WARNING
-            );
-            return;
-        }
+//        if (!this.uiVisible) {
+//            CaffeinatedApp.getInstance().notify(
+//                "co.casterlabs.caffeinated.app.cannot_play_sounds_without_ui",
+//                Collections.emptyMap(),
+//                NotificationType.WARNING
+//            );
+//            return;
+//        }
 
         CaffeinatedApp.getInstance().getSaucer().bridge().executeJavaScript(
             "(() => {"
@@ -262,9 +263,16 @@ public class AppUI {
         if (CaffeinatedApp.getInstance().isDev()) {
             resource = new File("./src/main/resources/assets/logo/hardhat.png").toURI().toURL();
         } else {
-            String path = String.format("assets/logo/%s.png", this.getPreferences().getIcon());
+            String path;
+            if (this.getPreferences() == null || this.getPreferences().getIcon() == null) {
+                path = "assets/logo/casterlabs.png";
+            } else {
+                path = String.format("assets/logo/%s.png", this.getPreferences().getIcon());
+            }
             resource = AppUI.class.getClassLoader().getResource(path);
         }
+
+        TrayHandler.changeTrayIcon(ImageIO.read(resource));
 
         SaucerStash stash = SaucerStash.of(StreamUtil.toBytes(resource.openStream()));
         SaucerIcon icon = SaucerIcon.of(stash);

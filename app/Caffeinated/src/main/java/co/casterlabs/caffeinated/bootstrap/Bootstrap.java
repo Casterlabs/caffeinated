@@ -25,6 +25,7 @@ import co.casterlabs.saucer.Saucer;
 import co.casterlabs.saucer.SaucerWebview.SaucerWebviewListener;
 import co.casterlabs.saucer.SaucerWindow.SaucerWindowListener;
 import co.casterlabs.saucer.utils.SaucerApp;
+import co.casterlabs.saucer.utils.SaucerPreferences;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -91,6 +92,7 @@ public class Bootstrap implements Runnable {
     private static LocalServer localServer;
 
     private static @Getter BuildInfo buildInfo;
+
     private static @Getter Saucer saucer;
     private static @Getter boolean isDev;
 
@@ -241,8 +243,6 @@ public class Bootstrap implements Runnable {
             FastLogger.logException(e);
         }
 
-        String appUrl = (isDev ? this.devAddress : "app://authority") + "/$caffeinated-sdk-root$";
-
         // Setup the webview.
         logger.info("Initializing UI (this may take some time)");
 
@@ -250,13 +250,16 @@ public class Bootstrap implements Runnable {
 
         SaucerApp.dispatch(() -> {
             Saucer.registerCustomScheme("app");
-            saucer = Saucer.create();
+            saucer = Saucer.create(
+                SaucerPreferences.create()
+                    .hardwareAcceleration(true)
+            );
             saucer.window().setTitle("Casterlabs-Caffeinated");
             saucer.bridge().defineObject("Caffeinated", app);
-            if (isDev) {
-                saucer.webview().setDevtoolsVisible(true);
-            }
 
+            saucer.webview().setContextMenuAllowed(false);
+
+            String appUrl = (isDev ? this.devAddress : "app://authority") + "/$caffeinated-sdk-root$";
             saucer.webview().setSchemeHandler(new AppSchemeHandler());
             saucer.webview().setUrl(appUrl);
             logger.info("appAddress = %s", appUrl);
@@ -272,9 +275,7 @@ public class Bootstrap implements Runnable {
 //            ReflectionLib.setValue(CaffeinatedApp.getInstance().getUI(), "uiVisible", true);
 //        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {}
 //
-//        if (this.traySupported) {
-//            TrayHandler.updateShowCheckbox(true);
-//        }
+        TrayHandler.updateShowCheckbox(true);
 
         saucer.messages().onMessage((arr) -> {
             String type = arr.getString(0);
@@ -304,9 +305,9 @@ public class Bootstrap implements Runnable {
             public boolean shouldAvoidClosing() {
                 if (app.canCloseUI()) {
                     if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray() && traySupported) {
-                        saucer.webview().setDevtoolsVisible(false);
                         saucer.window().hide();
-                        saucer.webview().setUrl(appUrl + "/blank");
+                        CaffeinatedApp.getInstance().getUI().navigate("/blank");
+                        TrayHandler.updateShowCheckbox(false);
                         return true;
                     } else {
                         shutdown();
@@ -314,7 +315,6 @@ public class Bootstrap implements Runnable {
                     }
                 } else {
                     saucer.window().focus();
-                    saucer.webview().setDevtoolsVisible(false);
                     return true;
                 }
             }
@@ -366,6 +366,10 @@ public class Bootstrap implements Runnable {
     private static void shutdown(boolean force, boolean relaunch, boolean isReset) {
         if (CaffeinatedApp.getInstance().canCloseUI() || force) {
             logger.info("Shutting down.");
+
+            // Hide the window IMMEDIATELY.
+            saucer.window().hide();
+            CaffeinatedApp.getInstance().getUI().navigate("/blank");
 
             // Local Server
             try {

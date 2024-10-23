@@ -12,7 +12,7 @@
 	</parent>
 
 	<properties>
-		<saucer4j.version>385153e</saucer4j.version>
+		<saucer4j.version>7090d29</saucer4j.version>
 	</properties>
 	
 	<build>
