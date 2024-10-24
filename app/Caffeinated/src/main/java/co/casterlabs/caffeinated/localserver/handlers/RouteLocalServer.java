@@ -20,7 +20,7 @@ public class RouteLocalServer implements HttpProvider, RouteHelper {
         return HttpResponse
             .newFixedLengthResponse(StandardHttpStatus.OK, session.getUriParameters().get("specialCode"))
             .setMimeType("test/plain")
-            .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co");
+            .putHeader("Access-Control-Allow-Origin", "*");
     }
 
 }

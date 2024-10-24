@@ -1,18 +1,17 @@
-import EventHandler from "./eventHandler.mjs";
+import EventHandler from "./eventHandler";
 
-export default class Conn {
-    constructor(address) {
+export default class Conn extends EventHandler {
+    address: string;
+    connectionId: string | null;
+    ws: WebSocket;
+
+    constructor(address: string) {
+        super();
         this.address = address;
-
         this.connectionId = null;
-        this.widgetData = null;
-
-        for (const [key, value] of Object.entries(new EventHandler())) {
-            this[key] = value;
-        }
     }
 
-    send(type, payload) {
+    send(type: string, payload: any) {
         if (this.isAlive()) {
             this.ws.send(
                 JSON.stringify({
@@ -23,7 +22,7 @@ export default class Conn {
         }
     }
 
-    emit(type, data) {
+    emit(type: string, data: any) {
         this.send("EMISSION", {
             type: type,
             data: data
@@ -36,19 +35,23 @@ export default class Conn {
         try {
             this.ws = new WebSocket(this.address);
 
-            this.ws.onerror = () => {
+            this.ws.onerror = (e) => {
+                console.debug("[WidgetEnvironment/Conn]", "WS error:", e)
                 this.broadcast("close");
             };
 
             this.ws.onopen = () => {
+                console.debug("[WidgetEnvironment/Conn]", "WS open.");
                 this.broadcast("open");
             };
 
-            this.ws.onclose = () => {
+            this.ws.onclose = (e) => {
+                console.debug("[WidgetEnvironment/Conn]", "WS close:", e.code, e.reason);
                 this.broadcast("close");
             };
 
             this.ws.onmessage = async (raw) => {
+                console.debug("[WidgetEnvironment/Conn]", "Received WS message:", raw);
                 const payload = JSON.parse(raw.data);
 
                 switch (payload.type) {
@@ -67,14 +70,12 @@ export default class Conn {
                     case "INIT":
                         {
                             this.connectionId = payload.data.connectionId;
-                            this.widgetData = payload.data.widget;
                             this.broadcast("init", payload.data);
                             return;
                         }
 
                     case "UPDATE":
                         {
-                            this.widgetData = payload.data.widget;
                             this.broadcast("update");
                             return;
                         }
@@ -117,6 +118,7 @@ export default class Conn {
                 }
             };
         } catch (e) {
+            console.debug("[WidgetEnvironment/Conn]", "WS error:", e)
             this.broadcast("close");
         }
     }

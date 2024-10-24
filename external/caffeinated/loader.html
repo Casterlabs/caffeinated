@@ -5,26 +5,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Just A Caffeinated Widget</title>
-        <style data-from="casterlabs">
-            iframe {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                border: none;
-            }
-        </style>
     </head>
 
     <body></body>
 
     <footer>
         <script type="module">
-            import Conn from "./conn.mjs";
-
-            const customCSS = document.querySelector("style:not([data-from=casterlabs])")?.innerText || ''
-
             const queryParams = (() => {
                 let vars = {};
 
@@ -42,30 +28,6 @@
             if (queryParams.address) {
                 // Old style.
                 addresses.push(queryParams.address);
-            }
-
-            function connectToRealtime(address) {
-                console.debug("[widgets.casterlabs.co loader] Connecting to realtime on:", `ws://${address}:${port}`);
-                const conn = new Conn(`ws://${address}:${port}/api/plugin/${pluginId}/widget/${widgetId}/realtime/heartbeat?authorization=${authorization}`);
-
-                conn.on("init", () => {
-                    console.debug("[widgets.casterlabs.co loader] Successfully connected to realtime, loading iframe.");
-                    const sandboxFrame = document.createElement("iframe");
-                    sandboxFrame.src = `http://${address}:${port}/api/plugin/widget/loader/widget.html${location.search}&validAddress=${encodeURIComponent(address)}&customCSS=${encodeURIComponent(customCSS)}`;
-
-                    document.body.appendChild(sandboxFrame);
-                });
-
-                // We completely reset the widget everytime it loses connection.
-                conn.on("close", () => {
-                    console.debug("[widgets.casterlabs.co loader] Lost connection to Caffeinated, retrying in 3s.");
-                    setTimeout(() => {
-                        location.reload();
-                    }, 3000);
-                });
-
-                // Connect.
-                conn.connect();
             }
 
             function testAddress(address) {
@@ -91,9 +53,8 @@
                         console.debug("[widgets.casterlabs.co loader] Trying address:", `http://${address}:${port}`);
                         await testAddress(address);
                         // Success!
-                        console.debug("[widgets.casterlabs.co loader] Successfully tested address, connecting to that.");
-
-                        connectToRealtime(address);
+                        console.debug("[widgets.casterlabs.co loader] Test successful, connecting to that.");
+                        location.href = `http://${address}:${port}/api/plugin/widget/loader/widget.html${location.search}&validAddress=${encodeURIComponent(address)}&customCSS=`;
                         return;
                     } catch (e) {
                         console.debug("[widgets.casterlabs.co loader] Address failed:", e);
