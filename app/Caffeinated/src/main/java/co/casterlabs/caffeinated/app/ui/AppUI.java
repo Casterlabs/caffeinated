@@ -37,8 +37,6 @@ import co.casterlabs.saucer.utils.SaucerStash;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @JavascriptObject
 public class AppUI {
@@ -170,13 +168,18 @@ public class AppUI {
 
         AppAuth auth = CaffeinatedApp.getInstance().getAuth();
 
-        if (!auth.isSignedIn()) {
-            this.navigate("/signin");
-        } else if (auth.isAuthorized()) {
+//        if (!auth.isSignedIn()) {
+//            this.navigate("/signin");
+//        } else if (auth.isAuthorized()) {
+//            this.navigate("/dashboard");
+//        } else {
+//            // Otherwise AppAuth will automagically move us there :D
+//            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
+//        }
+        if (auth.isSignedIn()) {
             this.navigate("/dashboard");
         } else {
-            // Otherwise AppAuth will automagically move us there :D
-            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
+            this.navigate("/signin");
         }
     }
 

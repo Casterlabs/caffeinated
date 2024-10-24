@@ -11,7 +11,7 @@
 		window.saucer.messages.emit(['app:restart']);
 	}
 
-	onMount(() => setTimeout(Caffeinated.UI.onUILoaded, 1500));
+	onMount(() => setTimeout(Caffeinated.UI.onUILoaded, 2000));
 </script>
 
 <div class="mt-10 flex flex-col items-center justify-center">
