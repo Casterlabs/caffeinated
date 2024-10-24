@@ -260,7 +260,6 @@ public class Bootstrap implements Runnable {
             saucer.bridge().defineObject("Caffeinated", app);
 
             saucer.webview().setContextMenuAllowed(false);
-            saucer.webview().setDevtoolsVisible(true);
 
             String appUrl = (isDev ? this.devAddress : "app://authority") + "/$caffeinated-sdk-root$";
             saucer.webview().setSchemeHandler(new AppSchemeHandler());
