@@ -151,6 +151,8 @@ public class Bootstrap implements Runnable {
             }
         }
 
+        Runtime.getRuntime().addShutdownHook(new Thread(Bootstrap::shutdown));
+
         isDev = this.devAddress != null;
         ReflectionLib.setStaticValue(FileUtil.class, "isDev", isDev);
         buildInfo = Rson.DEFAULT.fromJson(FileUtil.loadResource("build_info.json"), BuildInfo.class);
@@ -258,6 +260,7 @@ public class Bootstrap implements Runnable {
             saucer.bridge().defineObject("Caffeinated", app);
 
             saucer.webview().setContextMenuAllowed(false);
+            saucer.webview().setDevtoolsVisible(true);
 
             String appUrl = (isDev ? this.devAddress : "app://authority") + "/$caffeinated-sdk-root$";
             saucer.webview().setSchemeHandler(new AppSchemeHandler());
@@ -378,14 +381,13 @@ public class Bootstrap implements Runnable {
                 e.printStackTrace();
             }
 
-            // UI
-            TrayHandler.destroy();
-            saucer.close();
-            SaucerApp.quit();
-
             // App
             CaffeinatedApp.getInstance().shutdown();
             InstanceManager.cleanShutdown();
+
+            // UI
+            TrayHandler.destroy();
+            saucer.close();
 
             // Exit.
             if (isReset) {

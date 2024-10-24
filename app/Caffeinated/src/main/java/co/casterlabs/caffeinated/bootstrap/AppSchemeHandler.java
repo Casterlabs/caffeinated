@@ -1,6 +1,6 @@
 package co.casterlabs.caffeinated.bootstrap;
 
-import java.io.IOException;
+import java.net.URI;
 
 import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.saucer.scheme.SaucerSchemeHandler;
@@ -17,7 +17,12 @@ public class AppSchemeHandler implements SaucerSchemeHandler {
     @SneakyThrows
     @Override
     public SaucerSchemeResponse handle(SaucerSchemeRequest request) throws Throwable {
-        String path = request.uri().getPath();
+        String path = URI.create(
+            request.url()
+                .replace('\\', '/')
+                .replace("%5c", "/")
+                .replace("%5C", "/")
+        ).getPath();
 
         if (path.startsWith("/$caffeinated-sdk-root$")) {
             path = path.substring("/$caffeinated-sdk-root$".length());
@@ -45,11 +50,11 @@ public class AppSchemeHandler implements SaucerSchemeHandler {
                 mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
             }
 
-            FastLogger.logStatic(LogLevel.DEBUG, "200 %s -> app%s (%s)", request.uri(), path, mimeType);
+            FastLogger.logStatic(LogLevel.DEBUG, "200 %s -> app%s (%s)", request.url(), path, mimeType);
 
             return SaucerSchemeResponse.success(SaucerStash.of(content), mimeType);
-        } catch (IOException e) {
-            FastLogger.logStatic(LogLevel.SEVERE, "404 %s -> app%s", request.uri(), path);
+        } catch (Exception e) {
+            FastLogger.logStatic(LogLevel.SEVERE, "404 %s -> app%s\n%s", request.url(), path, e);
 
             return SaucerSchemeResponse.error(SaucerRequestError.NOT_FOUND);
         }
