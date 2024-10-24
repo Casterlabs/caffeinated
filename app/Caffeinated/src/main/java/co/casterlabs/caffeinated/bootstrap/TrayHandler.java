@@ -42,7 +42,7 @@ public class TrayHandler {
             throw new IllegalStateException("Tray handler is already initialized.");
         }
 
-        if ((Platform.osDistribution == OSDistribution.MACOS) || !SystemTray.isSupported()) {
+        if ((Platform.osDistribution != OSDistribution.WINDOWS_NT) || !SystemTray.isSupported()) {
             // Note that calling SystemTray will cause an AWT thread lock on macOS. So we
             // always need to be diligent and check for platform for compat.
             return false;
