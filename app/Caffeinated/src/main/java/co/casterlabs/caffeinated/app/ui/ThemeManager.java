@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.app.ui;
 
 import com.jthemedetecor.OsThemeDetector;
 
+import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.ui.ThemePreferences.Appearance;
 import co.casterlabs.saucer.bridge.JavascriptFunction;
@@ -56,6 +57,8 @@ public class ThemeManager {
         } else {
             this.effectiveAppearance = this.appearance;
         }
+
+        CaffeinatedApp.getInstance().getSaucer().webview().setForceDarkAppearance(this.effectiveAppearance == Appearance.DARK);
     }
 
     @JavascriptFunction
