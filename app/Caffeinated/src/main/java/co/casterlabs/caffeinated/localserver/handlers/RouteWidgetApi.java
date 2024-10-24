@@ -124,7 +124,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                 int htmlStartIndex = content.indexOf("<html");
                 int htmlEndIndex = content.substring(htmlStartIndex).indexOf('>') + htmlStartIndex + 1;
 
-                String tagsToInject = String.format("<script type=module>\n%s\n</script>", FileUtil.loadResource("/widget-environment.js"));
+                String tagsToInject = String.format("<script>\n%s\n</script>", FileUtil.loadResource("widget-environment.js"));
                 if (CaffeinatedPlugin.isDevEnvironment()) {
                     // https://github.com/liriliri/chii
                     tagsToInject += "<script src=\"//chii.liriliri.io/playground/target.js\"></script>";

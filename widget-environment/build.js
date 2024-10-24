@@ -10,6 +10,6 @@ const sharedConfig = {
 build({
     ...sharedConfig,
     platform: 'browser',
-    format: 'esm',
+    format: 'iife',
     outfile: "../app/Caffeinated/src/main/resources/widget-environment.js",
 });

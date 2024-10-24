@@ -51,7 +51,7 @@ export default class Conn extends EventHandler {
             };
 
             this.ws.onmessage = async (raw) => {
-                console.debug("[WidgetEnvironment/Conn]", "Received WS message:", raw);
+                // console.debug("[WidgetEnvironment/Conn]", "Received WS message:", raw);
                 const payload = JSON.parse(raw.data);
 
                 switch (payload.type) {
