@@ -6,6 +6,7 @@
 	let viewer;
 
 	const userStates = st || window.svelte('Caffeinated.koi', 'userStates');
+	const supportedFeatures = st || window.svelte('Caffeinated.koi', 'features');
 
 	function doAction(action, data) {
 		switch (action) {
@@ -39,11 +40,6 @@
 			}
 		});
 
-		Caffeinated.koi.features.then((featuresByPlatform) => {
-			console.debug('Supported features:', featuresByPlatform);
-			viewer.supportedFeatures = featuresByPlatform;
-		});
-
 		// Kickstart.
 		Caffeinated.UI.activityPreferences.then(viewer.loadConfig);
 
@@ -59,4 +55,9 @@
 	});
 </script>
 
-<ActivityFeedViewer bind:this={viewer} {doAction} userStates={$userStates} />
+<ActivityFeedViewer
+	bind:this={viewer}
+	{doAction}
+	userStates={$userStates}
+	supportedFeatures={$supportedFeatures || {}}
+/>

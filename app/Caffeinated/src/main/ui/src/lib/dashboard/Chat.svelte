@@ -6,6 +6,7 @@
 	let chatViewer;
 
 	const userStates = st || window.svelte('Caffeinated.koi', 'userStates');
+	const supportedFeatures = st || window.svelte('Caffeinated.koi', 'features');
 
 	function doAction(action, data) {
 		switch (action) {
@@ -39,11 +40,6 @@
 			}
 		});
 
-		Caffeinated.koi.features.then((featuresByPlatform) => {
-			console.debug('Supported features:', featuresByPlatform);
-			chatViewer.supportedFeatures = featuresByPlatform;
-		});
-
 		// Kickstart.
 		Caffeinated.UI.chatPreferences.then(chatViewer.loadConfig);
 
@@ -59,4 +55,9 @@
 	});
 </script>
 
-<ChatViewer bind:this={chatViewer} {doAction} userStates={$userStates} />
+<ChatViewer
+	bind:this={chatViewer}
+	{doAction}
+	userStates={$userStates}
+	supportedFeatures={$supportedFeatures || {}}
+/>
