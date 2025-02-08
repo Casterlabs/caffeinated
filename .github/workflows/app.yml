@@ -142,72 +142,72 @@ jobs:
           name: Casterlabs-Caffeinated-gnulinux-x86_64.tar.gz
           path: dist/artifacts/Casterlabs-Caffeinated-gnulinux-x86_64.tar.gz
 
-  dist:
-    needs: [bundle_windows, bundle_macos, bundle_gnulinux]
-    if: startsWith(github.ref, 'refs/tags/1.2-')
-    runs-on: ubuntu-latest
-    environment: "Caffeinated Deploy"
-    steps:
-      - name: 📩 Grab the code
-        uses: actions/checkout@v3
+  # dist:
+  #   needs: [bundle_windows, bundle_macos, bundle_gnulinux]
+  #   if: startsWith(github.ref, 'refs/tags/1.2-')
+  #   runs-on: ubuntu-latest
+  #   environment: "Caffeinated Deploy"
+  #   steps:
+  #     - name: 📩 Grab the code
+  #       uses: actions/checkout@v3
 
-      - name: 🏗️ Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: 11
-          distribution: temurin
-          cache: maven
+  #     - name: 🏗️ Set up JDK 11
+  #       uses: actions/setup-java@v3
+  #       with:
+  #         java-version: 11
+  #         distribution: temurin
+  #         cache: maven
 
-      - name: 🏗️ Set deploy channel env
-        run: echo "DEPLOY_CHANNEL=${{ (github.event.release.prerelease && 'beta') || 'stable' }}" >> $GITHUB_ENV && echo $DEPLOY_CHANNEL  # Default value is in app/pom.xml
-        if: startsWith(github.ref, 'refs/tags/1.2-')
+  #     - name: 🏗️ Set deploy channel env
+  #       run: echo "DEPLOY_CHANNEL=${{ (github.event.release.prerelease && 'beta') || 'stable' }}" >> $GITHUB_ENV && echo $DEPLOY_CHANNEL  # Default value is in app/pom.xml
+  #       if: startsWith(github.ref, 'refs/tags/1.2-')
 
-      - name: 🔨 Compile the deploy helper.
-        run: cd deploy-helper && bash ./mvnw clean package
+  #     - name: 🔨 Compile the deploy helper.
+  #       run: cd deploy-helper && bash ./mvnw clean package
 
-      - name: 📩 Download the Windows x86_64 bundle
-        uses: actions/download-artifact@v4
-        with:
-          name: Casterlabs-Caffeinated-windows-x86_64.zip
-          path: ./
+  #     - name: 📩 Download the Windows x86_64 bundle
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: Casterlabs-Caffeinated-windows-x86_64.zip
+  #         path: ./
 
-      - name: 📩 Download the macOS aarch64 bundle
-        uses: actions/download-artifact@v4
-        with:
-          name: Casterlabs-Caffeinated-macos-aarch64.tar.gz
-          path: ./
-      - name: 📩 Download the macOS x86_64 bundle
-        uses: actions/download-artifact@v4
-        with:
-          name: Casterlabs-Caffeinated-macos-x86_64.tar.gz
-          path: ./
+  #     - name: 📩 Download the macOS aarch64 bundle
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: Casterlabs-Caffeinated-macos-aarch64.tar.gz
+  #         path: ./
+  #     - name: 📩 Download the macOS x86_64 bundle
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: Casterlabs-Caffeinated-macos-x86_64.tar.gz
+  #         path: ./
 
-      - name: 📩 Download the GNU/Linux aarch64 bundle
-        uses: actions/download-artifact@v4
-        with:
-          name: Casterlabs-Caffeinated-gnulinux-aarch64.tar.gz
-          path: ./
-      - name: 📩 Download the GNU/Linux arm bundle
-        uses: actions/download-artifact@v4
-        with:
-          name: Casterlabs-Caffeinated-gnulinux-arm.tar.gz
-          path: ./
-      - name: 📩 Download the GNU/Linux x86_64 bundle
-        uses: actions/download-artifact@v4
-        with:
-          name: Casterlabs-Caffeinated-gnulinux-x86_64.tar.gz
-          path: ./
+  #     - name: 📩 Download the GNU/Linux aarch64 bundle
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: Casterlabs-Caffeinated-gnulinux-aarch64.tar.gz
+  #         path: ./
+  #     - name: 📩 Download the GNU/Linux arm bundle
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: Casterlabs-Caffeinated-gnulinux-arm.tar.gz
+  #         path: ./
+  #     - name: 📩 Download the GNU/Linux x86_64 bundle
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: Casterlabs-Caffeinated-gnulinux-x86_64.tar.gz
+  #         path: ./
 
-      - name: 🆙 Deploy the app.
-        env:
-          BB_BUCKET_ID: ${{ secrets.BB_BUCKET_ID }}
-          BB_CLIENT_ID: ${{ secrets.BB_CLIENT_ID }}
-          BB_CLIENT_KEY: ${{ secrets.BB_CLIENT_KEY }}
-        run: >-
-          java -jar deploy-helper/target/deploy-helper.jar
-          Casterlabs-Caffeinated-windows-x86_64.zip
-          Casterlabs-Caffeinated-macos-aarch64.tar.gz
-          Casterlabs-Caffeinated-macos-x86_64.tar.gz
-          Casterlabs-Caffeinated-gnulinux-aarch64.tar.gz
-          Casterlabs-Caffeinated-gnulinux-arm.tar.gz
-          Casterlabs-Caffeinated-gnulinux-x86_64.tar.gz
+  #     - name: 🆙 Deploy the app.
+  #       env:
+  #         BB_BUCKET_ID: ${{ secrets.BB_BUCKET_ID }}
+  #         BB_CLIENT_ID: ${{ secrets.BB_CLIENT_ID }}
+  #         BB_CLIENT_KEY: ${{ secrets.BB_CLIENT_KEY }}
+  #       run: >-
+  #         java -jar deploy-helper/target/deploy-helper.jar
+  #         Casterlabs-Caffeinated-windows-x86_64.zip
+  #         Casterlabs-Caffeinated-macos-aarch64.tar.gz
+  #         Casterlabs-Caffeinated-macos-x86_64.tar.gz
+  #         Casterlabs-Caffeinated-gnulinux-aarch64.tar.gz
+  #         Casterlabs-Caffeinated-gnulinux-arm.tar.gz
+  #         Casterlabs-Caffeinated-gnulinux-x86_64.tar.gz
