@@ -172,7 +172,7 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
     @KoiEventHandler
     public void broadcastEvent(@NonNull KoiEvent e) {
         if (e.getType() == KoiEventType.CATCHUP) {
-            CatchupEvent catchUp = (CatchupEvent) e;
+            //CatchupEvent catchUp = (CatchupEvent) e;
 
             // Loop through the catchup events,
             // Convert them to an event,
@@ -180,19 +180,19 @@ public class GlobalKoi extends JavascriptObject implements Koi, KoiLifeCycleHand
             // Ensure that we're not spamming the user,
             // Broadcast that event.
             // (We need to do these in order)
-            for (JsonElement element : catchUp.getEvents()) {
-                KoiEvent cEvent = KoiEventType.get(element.getAsObject());
+            //for (JsonElement element : catchUp.getEvents()) {
+            //    KoiEvent cEvent = KoiEventType.get(element.getAsObject());
 
-                if ((cEvent != null) && !this.eventHistory.contains(e)) {
-                    if (KEPT_EVENTS.contains(cEvent.getType())) {
-                        if (catchUp.isFresh()) {
-                            this.eventHistory.add(cEvent);
-                        } else {
-                            this.broadcastEvent(cEvent);
-                        }
-                    }
-                }
-            }
+            //    if ((cEvent != null) && !this.eventHistory.contains(e)) {
+            //        if (KEPT_EVENTS.contains(cEvent.getType())) {
+            //            if (catchUp.isFresh()) {
+            //                this.eventHistory.add(cEvent);
+            //            } else {
+            //                this.broadcastEvent(cEvent);
+            //            }
+            //        }
+            //    }
+            //}
             return; // Don't further process.
         }
 
