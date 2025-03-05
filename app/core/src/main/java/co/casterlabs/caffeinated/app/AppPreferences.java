@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.app;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import co.casterlabs.caffeinated.util.Crypto;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
@@ -15,6 +16,7 @@ public class AppPreferences {
     private int conductorPort = 8092; // Caffeinated <1.2 was 8091.
     private String conductorKey = new String(Crypto.generateSecureRandomKey());
     private String developerApiKey = new String(Crypto.generateSecureRandomKey());
+    private String installationId = UUID.randomUUID().toString();
 
     private Set<String> oneTimeEvents = new HashSet<>();
 

@@ -184,6 +184,7 @@ public class CaffeinatedApp implements Caffeinated {
                         WebUtil.sendHttpRequest(
                             new Request.Builder()
                                 .url("https://api.status.casterlabs.co")
+                                .header("X-Installation-ID", this.appPreferences.get().getInstallationId())
                         ), JsonObject.class
                     );
 
