@@ -261,7 +261,7 @@
 <ul
 	bind:this={chatBox}
 	id="chatbox"
-	class="absolute flex px-1"
+	class="absolute flex px-1 break-words"
 	style:--animation-time={ANIMATION_TIME}
 	style:color={$settings['text_style.text_color']}
 	style:font-size="{$settings['text_style.font_size']}px"
