@@ -51,11 +51,17 @@
 				if (event.user_upid) {
 					// Clear by user.
 					for (const [key, { component: chatMessage }] of Object.entries(chatElements)) {
-						const koiEvent = chatMessage.koiEvent;
+						try {
+							const koiEvent = chatMessage.event;
+							const koiSender = koiEvent.sender || koiEvent.follower || koiEvent.subscriber //
+							|| koiEvent.host || koiEvent.viewer || koiEvent.gift_recipient || koiEvent.liker;
 
-						if (koiEvent.sender && koiEvent.sender.UPID == event.user_upid) {
-							chatMessage.remove();
-							delete chatElements[key];
+							if (koiSender && koiSender.UPID == event.user_upid) {
+								chatMessage.remove();
+								delete chatElements[key];
+							}
+						} catch (e) {
+							console.error('Error while clearing chat:', e);
 						}
 					}
 					return;
