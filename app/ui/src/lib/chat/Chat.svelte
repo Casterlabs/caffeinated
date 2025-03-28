@@ -786,7 +786,7 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<ul
-			class="h-fit break-words"
+			class="h-fit break-anywhere"
 			style="transform: scaleY(-1); font-size: {(textSize || 1) * 100}%;"
 			bind:this={chatBox}
 			on:click={(e) => {
