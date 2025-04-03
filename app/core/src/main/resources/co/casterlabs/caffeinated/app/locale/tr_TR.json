@@ -224,5 +224,11 @@
     "docks.channel_info.thumbnail": "Küçük Resim",
     "docks.channel_info.thumbnail.select_file": "Bir dosya seçin",
     "docks.channel_info.thumbnail.clear": "Temizle",
-    "docks.channel_info.update": "Güncelle"
+    "docks.channel_info.update": "Güncelle",
+    "status.OPERATIONAL": "Faaliyetteyiz.",
+    "status.MAJOR_OUTAGE": "Büyük bir kesinti var",
+    "status.MINOR_OUTAGE": "Büyük bir kesinti var",
+    "status.PARTIAL_OUTAGE": "Kısmi bir kesinti var",
+    "status.DEGRADED_PERFORMANCE": "Şu anda performansta düşüş yaşıyoruz",
+    "status.MAINTENANCE": "Şu anda bakım çalışması yapıyoruz, anlayışınız için teşekkür ederiz"
 }
