@@ -5,7 +5,7 @@ set -e -o pipefail
 APP_ID="co.casterlabs.caffeinated"
 APP_NAME="Casterlabs-Caffeinated"
 MAIN_CLASS="co.casterlabs.caffeinated.bootstrap.Bootstrap"
-VM_OPTIONS='--arg=-Xms1M --arg=-XX:+UseCompressedOops --arg=-XX:+UseSerialGC --arg=-XX:MaxHeapFreeRatio=1 --arg=-XX:MinHeapFreeRatio=1'
+VM_OPTIONS='--arg=-Xms1M --arg=-XX:+UseCompressedOops --arg=-XX:MaxHeapFreeRatio=2 --arg=-XX:MinHeapFreeRatio=1'
 SAUCER4J_VERSION="64fddc7"
 
 if [[ $@ == *"compile"* ]]; then

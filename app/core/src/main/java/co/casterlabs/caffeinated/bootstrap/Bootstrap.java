@@ -146,6 +146,21 @@ public class Bootstrap implements Runnable {
         System.setProperty("fastloggingframework.wrapsystem", "true");
         FastLoggingFramework.setColorEnabled(this.enableColor);
 
+        {
+            Thread gcThread = new Thread(() -> {
+                while (true) {
+                    System.gc();
+                    Thread.yield(); // Willingly yield to the OS if need be.
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ignored) {}
+                }
+            });
+            gcThread.setDaemon(true);
+            gcThread.setName("GC Thread");
+            gcThread.start();
+        }
+
         if (this.enableTraceLogging) {
             FastLoggingFramework.setDefaultLevel(LogLevel.TRACE);
         } else if (isDev || this.enableDebugLogging) {
