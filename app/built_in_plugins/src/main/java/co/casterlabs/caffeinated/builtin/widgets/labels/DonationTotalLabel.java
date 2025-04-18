@@ -11,9 +11,9 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsButton;
-import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCurrencyBuilder;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
@@ -78,13 +78,21 @@ public class DonationTotalLabel extends GenericLabel {
         this.updateText();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected WidgetSettingsLayout generateSettingsLayout() {
         WidgetSettingsLayout layout = super.generateSettingsLayout();
 
         layout.addSection(
             new WidgetSettingsSection("money", "Money")
-                .addItem(WidgetSettingsItem.asCurrency("currency", "Currency", "USD", false))
+                .addItem(
+                    new WidgetSettingsCurrencyBuilder()
+                        .withId("currency")
+                        .withName("Currency")
+                        .withDefaultValue(Currencies.baseCurrency)
+                        .withAddDefaultOption(false)
+                        .build()
+                )
         );
 
         return layout;

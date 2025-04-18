@@ -5,9 +5,9 @@ import org.jetbrains.annotations.Nullable;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails.WidgetDetailsCategory;
-import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsItem;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsLayout;
 import co.casterlabs.caffeinated.pluginsdk.widgets.settings.WidgetSettingsSection;
+import co.casterlabs.caffeinated.pluginsdk.widgets.settings.items.WidgetSettingsCurrencyBuilder;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.KoiIntegrationFeatures;
 import co.casterlabs.koi.api.listener.KoiEventHandler;
@@ -73,13 +73,21 @@ public class DonationGoal extends GenericGoal {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected WidgetSettingsLayout generateSettingsLayout() {
         WidgetSettingsLayout layout = super.generateSettingsLayout();
 
         layout.addSection(
             new WidgetSettingsSection("money", "Money")
-                .addItem(WidgetSettingsItem.asCurrency("currency", "Currency", Currencies.baseCurrency, false))
+                .addItem(
+                    new WidgetSettingsCurrencyBuilder()
+                        .withId("currency")
+                        .withName("Currency")
+                        .withDefaultValue(Currencies.baseCurrency)
+                        .withAddDefaultOption(false)
+                        .build()
+                )
         );
 
         return layout;
