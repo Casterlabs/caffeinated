@@ -41,10 +41,9 @@ import lombok.NonNull;
 
 public class CaffeinatedDefaultPlugin extends CaffeinatedPlugin {
 
-    @SuppressWarnings("unused")
     @Override
     public void onInit() {
-        CaffeinatedYoutubePlugin.init(this);
+//        CaffeinatedYoutubePlugin.init(this);
 
         // I spend way too long on this shit.
         this.getLogger().info(" _________________");

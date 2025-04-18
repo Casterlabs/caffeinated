@@ -18,7 +18,7 @@ public class WidgetSettingsFileBuilder {
     @Deprecated
     private @With String name;
 
-    private @With String[] allowedTypes;
+    private String[] allowedTypes;
 
     public WidgetSettingsFileBuilder() {
         this.id = null;
