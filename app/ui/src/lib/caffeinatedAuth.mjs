@@ -1,6 +1,6 @@
 export const SPECIAL_SIGNIN = {};
 
-export const PORTAL_SIGNIN = ["KICK", "NOICE", "LIVESPACE"];
+export const PORTAL_SIGNIN = [];
 
 // See also: appShim.mjs
 export async function openAuthPortal(platform, shouldGoBack) {
