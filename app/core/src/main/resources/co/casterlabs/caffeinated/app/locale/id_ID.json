@@ -3,6 +3,7 @@
     "copyright": "Hak Cipta © {year} Casterlabs. Seluruh Hak Cipta dilindungi undang-undang.",
     "unsupported_feature": "Tidak didukung",
     "unsupported_feature.item": "Tidak didukung oleh [co.casterlabs.caffeinated.app.platform.{item}].",
+    "sdk_documentation": "Mencari berkas pendukung dokumentasi? lihat ke <a class=\"text-link underline\" href=\"https://docs.casterlabs.co/sdk\" target=\"_blank\"> Caffeinated SDK Wiki</a>.",
     "platform.TWITCH": "Twitch",
     "platform.TROVO": "Trovo",
     "platform.YOUTUBE": "YouTube",
