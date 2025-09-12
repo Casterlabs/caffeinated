@@ -13,6 +13,7 @@
         "platform.DLIVE": "DLive",
         "platform.KICK": "Kick",
         "platform.TIKTOK": "TikTok",
+        "platform.LOCO": "Loco",
         "minimized_to_tray": "Caffeinated sistem tepsisine küçültüldü. Yeniden açmak için simgeye tıklayın.",
         "auth.logged_out": "{platform} platformundan çıkış yaptın, yeniden giriş yapmalısın.",
         "auth.lost_connection": "Casterlabs ile bağlantı kesildi, yeniden bağlanılıyor.",

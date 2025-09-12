@@ -13,6 +13,7 @@
         "platform.DLIVE": "DLive",
         "platform.KICK": "Kick",
         "platform.TIKTOK": "TikTok",
+        "platform.LOCO": "Loco",
         "ui.modal.close": "Close modal",
         "ui.sidebar.update_app": "Actualizar la aplicación",
         "ui.sidebar.update_app.description": "Pulsa aquí para reiniciar y descargar las últimas actualizaciones.",

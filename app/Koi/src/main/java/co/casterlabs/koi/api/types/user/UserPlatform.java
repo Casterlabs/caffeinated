@@ -11,6 +11,7 @@ public enum UserPlatform {
     DLIVE("DLive"),
     KICK("Kick"),
     TIKTOK("TikTok"),
+    LOCO("Loco"),
 
     // Coming up.
     X("𝕏"),
