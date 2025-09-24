@@ -262,6 +262,8 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
 
         System.gc();
+        System.gc();
+        System.gc();
     }
 
     @Override
