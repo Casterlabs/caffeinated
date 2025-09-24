@@ -60,7 +60,6 @@ import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.swetrix.Swetrix;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -75,8 +74,6 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @Getter
 public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
-    private static final String ANALYTICS_ID = "uC69hShzxhbQ";
-
     public static final String KOI_ID = "LmHG2ux992BxqQ7w9RJrfhkW";
     public static final String APP_DATA_DIR;
 
@@ -98,8 +95,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
     private @Getter(AccessLevel.NONE) LocaleProvider appLocale;
 
     private @JavascriptValue(allowSet = false) boolean isTraySupported;
-
-    private @Getter(AccessLevel.NONE) Swetrix analytics;
 
     private Connection preferencesConnection;
 
@@ -173,11 +168,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         Currencies.getCurrencies(); // Load the class.
 
         this.UI.updateIcon();
-
-        this.analytics = Swetrix.builder(ANALYTICS_ID)
-            .withDebugEnabled(isDev)
-            .withAnalyticsDisabled(isDev)
-            .build();
 
         this.reloadLanguage();
 
@@ -262,13 +252,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         }
 
         this.appPreferences.save();
-
-        try {
-            this.analytics.trackPageView("/", this.UI.getPreferences().getLanguage());
-            this.analytics.startHeartbeat();
-        } catch (Exception e) {
-            FastLogger.logStatic(e);
-        }
 
         Calendar calendar = Calendar.getInstance();
         int calendarMonth = calendar.get(Calendar.MONTH);
@@ -512,14 +495,6 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
         KoiEvent e = TestEvents.createTestEvent(type, randomAccount.getStreamer().getPlatform());
         if (e == null) return;
         this.koi.broadcastEvent(e);
-    }
-
-    public void track(String event, boolean unique) {
-        try {
-            this.analytics.track(event, unique);
-        } catch (Exception e) {
-            FastLogger.logStatic(e);
-        }
     }
 
 }

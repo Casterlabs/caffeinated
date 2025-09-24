@@ -160,7 +160,6 @@ public class AppUI extends JavascriptObject {
         this.uiFinishedLoad = true;
 
         if (CaffeinatedApp.getInstance().canDoOneTimeEvent("caffeinated.instance.first_time_setup")) {
-            CaffeinatedApp.getInstance().track("FRESH_INSTALL", true);
 //            this.navigate("/welcome/step1");
 //            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for first time experience. (ui-loaded)");
 //            return;
