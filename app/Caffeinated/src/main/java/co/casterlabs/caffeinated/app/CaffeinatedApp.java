@@ -190,11 +190,11 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
                         statusStates.add(state);
                     }
                     this.statusStates = statusStates;
-                } catch (IOException e) {
-                    FastLogger.logStatic(LogLevel.WARNING, "Error whilst polling status API. Retrying later.\n%s", e);
+                } catch (Throwable t) {
+                    FastLogger.logStatic(LogLevel.WARNING, "Error whilst polling status API. Retrying later.\n%s", t);
                 }
                 try {
-                    TimeUnit.MINUTES.sleep(2);
+                    TimeUnit.MINUTES.sleep(10);
                 } catch (InterruptedException ignored) {}
             }
         });
