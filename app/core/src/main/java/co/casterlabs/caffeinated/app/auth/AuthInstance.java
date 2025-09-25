@@ -23,6 +23,7 @@ import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.RoomId;
+import co.casterlabs.koi.api.types.Roomstate;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
@@ -161,6 +162,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
             // connect. (KOI)
             this.roomstate = RoomstateEvent.builder(RoomId.of(e.streamer.toSimpleProfile(), e.streamer.link))
                 .streamer(e.streamer.toSimpleProfile())
+                .roomstate(Roomstate.builder().build())
                 .timestamp(Instant.now())
                 .build();
             CaffeinatedApp.getInstance().getKoi().broadcastEvent(this.roomstate);
