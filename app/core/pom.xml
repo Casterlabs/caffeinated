@@ -149,14 +149,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Analytics -->
-		<dependency>
-			<groupId>co.casterlabs</groupId>
-			<artifactId>swetrix-java</artifactId>
-			<version>1.1.4</version>
-			<scope>compile</scope>
-		</dependency>
-
 		<!-- JavaScript -->
 		<dependency>
 			<groupId>org.openjdk.nashorn</groupId>

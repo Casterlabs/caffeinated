@@ -254,7 +254,6 @@ public class AppAuth {
             .get()
             .addToken("koi", tokenId, koiToken);
 
-        CaffeinatedApp.getInstance().track("AUTH__" + tokenId, true);
         this.startAuthInstance(tokenId);
 
         if (shouldNavigateBackwards) {
@@ -270,8 +269,6 @@ public class AppAuth {
         if (oauthLink == null) {
             throw new IllegalArgumentException("Type '" + type + "' does not have an oauth link associated with it.");
         }
-
-        CaffeinatedApp.getInstance().track("AUTH__" + type, true);
 
         AuthCallback callback = new AuthCallback(type, isKoi);
 
