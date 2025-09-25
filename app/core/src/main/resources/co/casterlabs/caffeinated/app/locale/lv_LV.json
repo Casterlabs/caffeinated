@@ -8,6 +8,7 @@
     "platform.DLIVE": "DLive",
     "platform.KICK": "Kick",
     "platform.TIKTOK": "TikTok",
+	"platform.LOCO": "Loco",
     "ui.modal.close": "Aizvērt dialoglogu",
     "ui.sidebar.update_app": "Atjaunot lietotni",
     "ui.sidebar.update_app.description": "Spiediet šeit, lai restartētu un lejupielādētu atjauninājumus.",

@@ -10,6 +10,7 @@
     "platform.DLIVE": "DLive",
     "platform.KICK": "Kick",
     "platform.TIKTOK": "TikTok",
+	"platform.LOCO": "Loco",
     "minimized_to_tray": "Caffeinated свернут в трей. Нажмите на значок, чтобы снова открыть.",
     "auth.logged_out": "Вы вышли из {platform}, возможно вам придется снова войти.",
     "auth.lost_connection": "Потеряно соединение с Casterlabs, переподключение.",

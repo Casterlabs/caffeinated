@@ -38,12 +38,8 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-@SuppressWarnings("deprecation")
 public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1Listener {
-    private static final SimpleProfile KOFI_STREAMER = SimpleProfile.builder()
-        .bothIds("kofi")
-        .platform(UserPlatform.CUSTOM_INTEGRATION)
-        .build();
+    private static final SimpleProfile KOFI_STREAMER = SimpleProfile.of(UserPlatform.CUSTOM_INTEGRATION, "kofi");
 
     private KinokoV1Connection connection = new KinokoV1Connection(this);
 
@@ -64,10 +60,10 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
         this.getLogger().debug("Ko-fi event: %s", json);
 
         User user = User.builder(
-            SimpleProfile.builder()
-                .bothIds(json.getString("from_name"))
-                .platform(UserPlatform.CUSTOM_INTEGRATION)
-                .build()
+            SimpleProfile.of(
+                UserPlatform.CUSTOM_INTEGRATION,
+                json.getString("from_name")
+            )
         )
             .username(json.getString("from_name"))
             .displayname(json.getString("from_name"))
@@ -86,8 +82,10 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
                 );
 
                 RichMessageEvent rich = RichMessageEvent.builder(
-                    MessageId.random(KOFI_STREAMER, user.toSimpleProfile()),
-                    RoomId.of(KOFI_STREAMER, json.getString("url"))
+                    MessageId.random(
+                        user.toSimpleProfile(),
+                        RoomId.of(KOFI_STREAMER, json.getString("url"))
+                    )
                 )
                     .appendDonation(donation)
                     .appendFragment(message)

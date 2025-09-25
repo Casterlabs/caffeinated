@@ -36,7 +36,6 @@ import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-@SuppressWarnings("deprecation")
 public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     private static ExecutionQueue reconnectQueue = new SyncExecutionQueue();
 

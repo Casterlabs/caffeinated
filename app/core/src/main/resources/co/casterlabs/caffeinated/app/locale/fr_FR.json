@@ -10,6 +10,7 @@
     "platform.DLIVE": "DLive",
     "platform.KICK": "Kick",
     "platform.TIKTOK": "TikTok",
+	"platform.LOCO": "Loco",
     "minimized_to_tray": "Caffeinated a été réduite dans la barre de tâches. Cliquez sur l'icône pour rouvrir.",
     "auth.logged_out": "Vous avez été déconnecté de {platform}, vous devrez peut-être vous reconnecter.",
     "auth.lost_connection": "Connexion perdue à Casterlabs, reconnexion.",

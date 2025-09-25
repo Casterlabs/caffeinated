@@ -10,6 +10,7 @@
     "platform.DLIVE": "DLive",
     "platform.KICK": "Kick",
     "platform.TIKTOK": "TikTok",
+	"platform.LOCO": "Loco",
     "minimized_to_tray": "Caffeinated has been minimized to the tray. Click the icon to reopen.",
     "auth.logged_out": "You have been logged out from {platform}, you may need to sign back in.",
     "auth.lost_connection": "Lost connection to Casterlabs, reconnecting.",

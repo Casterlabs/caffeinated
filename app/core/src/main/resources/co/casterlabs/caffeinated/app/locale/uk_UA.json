@@ -8,6 +8,7 @@
     "platform.DLIVE": "DLive",
     "platform.KICK": "Kick",
     "platform.TIKTOK": "TikTok",
+	"platform.LOCO": "Loco",
     "ui.modal.close": "Закрити вікно",
     "ui.sidebar.update_app": "Оновити додаток",
     "ui.sidebar.update_app.description": "Натисніть тут, щоб перезапустити і завантажити останні оновлення.",

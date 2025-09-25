@@ -4,6 +4,7 @@
     "unsupported_feature.item": "Não suportado por [co.casterlabs.caffeinated.app.platform.{item}].",
     "platform.TWITCH": "Twitch",
     "platform.TIKTOK": "TikTok",
+	"platform.LOCO": "Loco",
     "page.signin.disclaimer.terms_of_service": "Termos de Serviço",
     "page.signin.disclaimer.privacy_policy": "Política de Privacidade",
     "page.widgets.info.widget_features_not_supported.modal.title": "Widget não suportado",

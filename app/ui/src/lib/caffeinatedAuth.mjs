@@ -20,6 +20,7 @@ export const ALL_STREAMING_SERVICES = [
 	'DLIVE',
 	'KICK',
 	'TIKTOK',
+	'LOCO',
 	// 'NOICE',
 	// 'LIVESPACE',
 	// 'X',
@@ -51,6 +52,10 @@ export const STREAMING_SERVICES = {
 		name: 'TikTok (BETA)',
 		color: '#e5004e'
 	},
+	LOCO: {
+		name: 'Loco (BETA)',
+		color: '#ff5a12'
+	}
 	// NOICE: {
 	// 	name: 'Noice',
 	// 	color: 'linear-gradient(45deg, #5231f9 6%, #6c2cfc 32%, #bb12fc 68%, #cf0bf9 77%, #ef00f5 94%)'
@@ -76,6 +81,7 @@ export const STREAMING_SERVICE_NAMES = {
 	DLIVE: 'DLive',
 	KICK: 'Kick',
 	TIKTOK: 'TikTok',
+	LOCO: 'Loco'
 	// NOICE: 'Noice',
 	// LIVESPACE: 'LiveSpace',
 	// X: '𝕏',

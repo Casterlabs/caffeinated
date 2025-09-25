@@ -9,6 +9,7 @@
     "platform.DLIVE": "DLive",
     "platform.KICK": "Kick",
     "platform.TIKTOK": "TikTok",
+	"platform.LOCO": "Loco",
     "minimized_to_tray": "Caffeinated telah disembunyikan ke tray. Klik ikon Casterlab untuk membuka kembali.",
     "auth.logged_out": "Anda telah keluar dari {platform}, anda mungkin butuh untuk masuk kembali.",
     "auth.lost_connection": "Koneksi hilang ke Casterlabs, menghubungkan kembali.",

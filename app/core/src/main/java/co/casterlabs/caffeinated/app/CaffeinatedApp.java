@@ -51,7 +51,6 @@ import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.localization.LocaleProvider;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
-import co.casterlabs.koi.api.types.RoomId;
 import co.casterlabs.koi.api.types.events.PlatformMessageEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.events.rich.fragments.TextFragment;
@@ -358,8 +357,12 @@ public class CaffeinatedApp implements Caffeinated {
             case ERROR:
                 this.koi.broadcastEvent(
                     PlatformMessageEvent.of(
-                        UserPlatform.CASTERLABS_SYSTEM.systemProfile, Instant.now(), RoomId.of(UserPlatform.CASTERLABS_SYSTEM.systemProfile, ""), UserPlatform.CASTERLABS_SYSTEM.systemUser,
-                        Arrays.asList(TextFragment.of("🚨 " + localized)), Collections.emptyList(), null
+                        UserPlatform.CASTERLABS_SYSTEM,
+                        UserPlatform.CASTERLABS_SYSTEM.systemProfile,
+                        Instant.now(),
+                        Arrays.asList(TextFragment.of("🚨 " + localized)),
+                        Collections.emptyList(),
+                        null
                     )
                 );
                 break;
@@ -367,8 +370,12 @@ public class CaffeinatedApp implements Caffeinated {
             case WARNING:
                 this.koi.broadcastEvent(
                     PlatformMessageEvent.of(
-                        UserPlatform.CASTERLABS_SYSTEM.systemProfile, Instant.now(), RoomId.of(UserPlatform.CASTERLABS_SYSTEM.systemProfile, ""), UserPlatform.CASTERLABS_SYSTEM.systemUser,
-                        Arrays.asList(TextFragment.of("⚠️ " + localized)), Collections.emptyList(), null
+                        UserPlatform.CASTERLABS_SYSTEM,
+                        UserPlatform.CASTERLABS_SYSTEM.systemProfile,
+                        Instant.now(),
+                        Arrays.asList(TextFragment.of("⚠️ " + localized)),
+                        Collections.emptyList(),
+                        null
                     )
                 );
                 break;
@@ -377,8 +384,12 @@ public class CaffeinatedApp implements Caffeinated {
             case NONE:
                 this.koi.broadcastEvent(
                     PlatformMessageEvent.of(
-                        UserPlatform.CASTERLABS_SYSTEM.systemProfile, Instant.now(), RoomId.of(UserPlatform.CASTERLABS_SYSTEM.systemProfile, ""), UserPlatform.CASTERLABS_SYSTEM.systemUser,
-                        Arrays.asList(TextFragment.of("ℹ️ " + localized)), Collections.emptyList(), null
+                        UserPlatform.CASTERLABS_SYSTEM,
+                        UserPlatform.CASTERLABS_SYSTEM.systemProfile,
+                        Instant.now(),
+                        Arrays.asList(TextFragment.of("ℹ️ " + localized)),
+                        Collections.emptyList(),
+                        null
                     )
                 );
                 break;
