@@ -115,6 +115,13 @@ public class AppAuth {
             }
         }
 
+        if (this.isAuthorized != authorized) {
+            CaffeinatedApp
+                .getInstance()
+                .getUI()
+                .navigate(authorized ? "/dashboard" : "/signin");
+        }
+
         this.isAuthorized = authorized;
     }
 
