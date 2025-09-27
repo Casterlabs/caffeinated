@@ -114,6 +114,13 @@ public class AppAuth extends JavascriptObject {
             }
         }
 
+        if (this.isAuthorized != authorized) {
+            CaffeinatedApp
+                .getInstance()
+                .getUI()
+                .navigate(authorized ? "/dashboard" : "/signin");
+        }
+
         this.isAuthorized = authorized;
     }
 

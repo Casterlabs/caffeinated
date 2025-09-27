@@ -13,6 +13,7 @@ import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.RealtimeApiListener;
+import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ActivityViewerPreferences;
 import co.casterlabs.caffeinated.app.ui.UIPreferences.ChatViewerPreferences;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
@@ -159,16 +160,20 @@ public class AppUI extends JavascriptObject {
         this.uiFinishedLoad = true;
 
         if (CaffeinatedApp.getInstance().canDoOneTimeEvent("caffeinated.instance.first_time_setup")) {
-            this.navigate("/signin");
-            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for first time experience. (ui-loaded)");
-            return;
+//            this.navigate("/welcome/step1");
+//            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for first time experience. (ui-loaded)");
+//            return;
         }
 
-        boolean isLoggedOutEntirely = CaffeinatedApp.getInstance().getAuthPreferences().get().getAllTokenIdsByType("koi").isEmpty();
-        if (isLoggedOutEntirely) {
+        AppAuth auth = CaffeinatedApp.getInstance().getAuth();
+
+        if (!auth.isSignedIn()) {
             this.navigate("/signin");
-        } else {
+        } else if (auth.isAuthorized()) {
             this.navigate("/dashboard");
+        } else {
+            // Otherwise AppAuth will automagically move us there :D
+            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
         }
     }
 
