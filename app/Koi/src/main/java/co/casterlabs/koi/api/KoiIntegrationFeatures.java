@@ -4,6 +4,10 @@ public enum KoiIntegrationFeatures {
 
     /* ---- Misc ---- */
 
+    /**
+     * @deprecated Use {@link #STREAM_INFO}
+     */
+    UPDATE_STREAM_INFO,
     STREAM_INFO,
     PUBLISHING_INFO,
     UPDATE_ROOM_STATE,
