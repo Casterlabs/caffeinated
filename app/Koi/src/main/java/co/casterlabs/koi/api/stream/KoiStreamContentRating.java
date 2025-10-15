@@ -12,8 +12,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum KoiStreamContentRating {
     FAMILY_FRIENDLY("Family Friendly"),
-    PG("PG"),
-    MATURE("Mature");
+    TEEN("Teen"),
+    EIGHTEEN_PLUS("18+");
 
     public static final Map<KoiStreamContentRating, String> LANG;
 

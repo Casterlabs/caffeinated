@@ -4,8 +4,8 @@ public enum KoiIntegrationFeatures {
 
     /* ---- Misc ---- */
 
-    UPDATE_STREAM_INFO,
-    UPDATE_STREAM_THUMBNAIL,
+    STREAM_INFO,
+    PUBLISHING_INFO,
     UPDATE_ROOM_STATE,
     CHAT_BOT_LINKING,
     CHANNEL_POINTS,
