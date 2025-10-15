@@ -39,6 +39,10 @@ export default {
 		name: 'TikTok (BETA)',
 		color: '#e5004e'
 	},
+	LOCO: {
+		name: 'Loco (BETA)',
+		color: '#ff5a12'
+	},
 	CUSTOM_INTEGRATION: {
 		name: 'Custom Integration 🔧',
 		color: '#00aff1'
