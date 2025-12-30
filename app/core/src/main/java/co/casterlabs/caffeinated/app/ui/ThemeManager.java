@@ -58,7 +58,7 @@ public class ThemeManager {
             this.effectiveAppearance = this.appearance;
         }
 
-        CaffeinatedApp.getInstance().getSaucer().webview().setForceDarkAppearance(this.effectiveAppearance == Appearance.DARK);
+        CaffeinatedApp.getInstance().getSaucer().forceDarkEnabled(this.effectiveAppearance == Appearance.DARK);
     }
 
     @JavascriptFunction

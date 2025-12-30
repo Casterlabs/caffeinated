@@ -104,7 +104,7 @@ public class PluginsHandler implements CaffeinatedPlugins {
             @SuppressWarnings("deprecation")
             @Override
             public void onSettingsUpdate() {
-                CaffeinatedApp.getInstance().getSaucer().messages().emit(new Object[] {
+                CaffeinatedApp.getInstance().getSaucer().messages.emit(new Object[] {
                         "widgets:" + this.id,
                         this.widget.toJson()
                 });

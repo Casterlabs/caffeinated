@@ -8,14 +8,13 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import app.saucer.SaucerDesktop;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptGetter;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptSetter;
 import app.saucer.bridge.JavascriptValue;
-import app.saucer.utils.SaucerDesktop;
-import app.saucer.utils.SaucerIcon;
-import app.saucer.utils.SaucerStash;
+import app.saucer.webview.window.SaucerIcon;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.EmojisObj;
 import co.casterlabs.caffeinated.app.NotificationType;
@@ -211,19 +210,19 @@ public class AppUI {
                     )
             );
 
-            CaffeinatedApp.getInstance().getSaucer().bridge().executeJavaScript(line);
+            CaffeinatedApp.getInstance().getSaucer().bridge.executeJavaScript(line);
         }
     }
 
     public void goBack() {
         if (this.uiFinishedLoad) {
-            CaffeinatedApp.getInstance().getSaucer().webview().back();
+            CaffeinatedApp.getInstance().getSaucer().back();
         }
     }
 
     public void navigate(String path) {
         if (this.uiFinishedLoad) {
-            CaffeinatedApp.getInstance().getSaucer().messages().emit(new Object[] {
+            CaffeinatedApp.getInstance().getSaucer().messages.emit(new Object[] {
                     "goto",
                     JsonObject.singleton("path", "/$caffeinated-sdk-root$" + path)
             });
@@ -240,7 +239,7 @@ public class AppUI {
 //            return;
 //        }
 
-        CaffeinatedApp.getInstance().getSaucer().bridge().executeJavaScript(
+        CaffeinatedApp.getInstance().getSaucer().bridge.executeJavaScript(
             "(() => {"
                 + "let previousAudioPromise = window.currentAudioPromise;"
                 + "window.currentAudioPromise = new Promise(async (resolve) => {"
@@ -273,10 +272,8 @@ public class AppUI {
 
         TrayHandler.changeTrayIcon(ImageIO.read(resource));
 
-        SaucerStash stash = SaucerStash.of(StreamUtil.toBytes(resource.openStream()));
-        SaucerIcon icon = SaucerIcon.of(stash);
-
-        CaffeinatedApp.getInstance().getSaucer().window().setIcon(icon);
+        SaucerIcon icon = SaucerIcon.from(StreamUtil.toBytes(resource.openStream()));
+        CaffeinatedApp.getInstance().getSaucer().window.icon(icon);
     }
 
 }

@@ -20,7 +20,7 @@ import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import app.saucer.utils.SaucerApp;
+import app.saucer.SaucerApp;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.ui.AppUI;
@@ -76,20 +76,20 @@ public class TrayHandler {
         popup.add(itemExit);
 
         showCheckbox.addItemListener((ItemEvent e) -> {
-            if (Bootstrap.getSaucer().window().isVisible()) {
-                Bootstrap.getSaucer().window().hide();
+            if (Bootstrap.getSaucer().window.isVisible()) {
+                Bootstrap.getSaucer().window.hide();
                 CaffeinatedApp.getInstance().getUI().navigate("/blank");
                 updateShowCheckbox(false);
             } else {
                 CaffeinatedApp.getInstance().getUI().navigate("/");
-                Bootstrap.getSaucer().window().show();
-                Bootstrap.getSaucer().window().focus();
+                Bootstrap.getSaucer().window.show();
+                Bootstrap.getSaucer().window.focus();
                 updateShowCheckbox(true);
             }
         });
 
         itemDevTools.addActionListener((ActionEvent e) -> {
-            Bootstrap.getSaucer().webview().setDevtoolsVisible(true);
+            Bootstrap.getSaucer().devToolsVisible(true);
         });
 
         itemExit.addActionListener((ActionEvent e) -> {
@@ -121,9 +121,9 @@ public class TrayHandler {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (!e.isPopupTrigger()) {
-                    if (!Bootstrap.getSaucer().window().isVisible()) {
+                    if (!Bootstrap.getSaucer().window.isVisible()) {
                         CaffeinatedApp.getInstance().getUI().navigate("/");
-                        Bootstrap.getSaucer().window().show();
+                        Bootstrap.getSaucer().window.show();
                         updateShowCheckbox(true);
                     }
                 }

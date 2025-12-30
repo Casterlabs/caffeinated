@@ -13,19 +13,14 @@ import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
 
-import app.saucer.Saucer;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptGetter;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
-import app.saucer.utils.SaucerApp;
-import app.saucer.utils.SaucerSize;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.plugins.PluginContext.ContextType;
 import co.casterlabs.caffeinated.app.thirdparty.ThirdPartyServices;
 import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
-import co.casterlabs.caffeinated.bootstrap.AppSchemeHandler;
-import co.casterlabs.caffeinated.bootstrap.Bootstrap;
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
@@ -309,25 +304,25 @@ public class PluginIntegration {
 
     @JavascriptFunction
     public void openPopout(@NonNull String widgetId) {
-        SaucerApp.dispatch(() -> {
-            Saucer saucer = Saucer.create(Bootstrap.getPreferences());
-
-            saucer.window().setTitle("Casterlabs-Caffeinated");
-            saucer.bridge().defineObject("Caffeinated", CaffeinatedApp.getInstance());
-            saucer.webview().setContextMenuAllowed(false);
-
-            String appUrl = Bootstrap.getAppUrl() + "/popout/new-window?id=" + widgetId;
-            saucer.webview().setSchemeHandler(AppSchemeHandler.INSTANCE);
-            saucer.webview().setUrl(appUrl);
-
-            saucer.webview().setDevtoolsVisible(true);
-            saucer.window().setMinSize(new SaucerSize(200, 200));
-
-            saucer.window().setAlwaysOnTop(true);
-            // TODO icon.
-
-            saucer.window().show();
-        });
+//        SaucerApp.dispatch(() -> {
+//            Saucer saucer = Saucer.create(Bootstrap.getPreferences());
+//
+//            saucer.window().setTitle("Casterlabs-Caffeinated");
+//            saucer.bridge().defineObject("Caffeinated", CaffeinatedApp.getInstance());
+//            saucer.webview().setContextMenuAllowed(false);
+//
+//            String appUrl = Bootstrap.getAppUrl() + "/popout/new-window?id=" + widgetId;
+//            saucer.webview().setSchemeHandler(AppSchemeHandler.INSTANCE);
+//            saucer.webview().setUrl(appUrl);
+//
+//            saucer.webview().setDevtoolsVisible(true);
+//            saucer.window().setMinSize(new SaucerSize(200, 200));
+//
+//            saucer.window().setAlwaysOnTop(true);
+//            // TODO icon.
+//
+//            saucer.window().show();
+//        });
     }
 
     @JavascriptGetter("loadedPlugins")

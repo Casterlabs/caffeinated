@@ -7,14 +7,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
-import app.saucer.Saucer;
-import app.saucer.SaucerWebview.SaucerWebviewListener;
-import app.saucer.SaucerWindow.SaucerWindowListener;
-import app.saucer.utils.SaucerApp;
-import app.saucer.utils.SaucerDesktop;
-import app.saucer.utils.SaucerNavigation;
-import app.saucer.utils.SaucerNavigation.NavigationType;
-import app.saucer.utils.SaucerPreferences;
+import app.saucer.SaucerApp;
+import app.saucer.SaucerDesktop;
+import app.saucer.util.SaucerUrl;
+import app.saucer.webview.SaucerNavigation;
+import app.saucer.webview.SaucerNavigation.NavigationType;
+import app.saucer.webview.SaucerWebview;
+import app.saucer.webview.SaucerWebviewListener;
+import app.saucer.webview.window.SaucerWindow;
+import app.saucer.webview.window.SaucerWindowListener;
 import co.casterlabs.caffeinated.app.BuildInfo;
 import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.app.Resources;
@@ -24,7 +25,6 @@ import co.casterlabs.caffeinated.bootstrap.impl.macos.common.MacOSBootstrap;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.WindowsBootstrap;
 import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
-import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.json.Rson;
@@ -97,8 +97,7 @@ public class Bootstrap implements Runnable {
 
     private static @Getter BuildInfo buildInfo;
 
-    private static @Getter Saucer saucer;
-    private static @Getter SaucerPreferences preferences;
+    private static @Getter SaucerWebview saucer;
     private static @Getter String appUrl;
     private static @Getter boolean isDev;
 
@@ -108,7 +107,7 @@ public class Bootstrap implements Runnable {
         System.setProperty("saucer.java.help.dependencies", "https://casterlabs.co/caffeinated/dependencies");
         Bootstrap.class.getClassLoader().setDefaultAssertionStatus(true);
 
-        SaucerApp.initialize("co.casterlabs.caffeinated");
+        SaucerApp.initialize("co.casterlabs.caffeinated", false);
         System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 
         NativeBootstrap nb = null;
@@ -225,8 +224,6 @@ public class Bootstrap implements Runnable {
     }
 
     private void startApp() throws Exception {
-        CaffeinatedApp app = new CaffeinatedApp(buildInfo, isDev, new NativeSystemImpl());
-
         logger.info("Entry                        | Value", buildInfo.getVersionString());
         logger.info("-----------------------------+-------------------------");
         logger.info("buildInfo.versionString      | %s", buildInfo.getVersionString());
@@ -238,23 +235,10 @@ public class Bootstrap implements Runnable {
         logger.info("bootstrap.args               | %s", System.getProperty("sun.java.command"));
         logger.info("");
 
-        preferences = SaucerPreferences.create()
-            .hardwareAcceleration(true);
+        CaffeinatedApp app = new CaffeinatedApp(buildInfo, isDev, new NativeSystemImpl());
 
-        switch (Saucer.getBackend()) {
-            case WEBKITGTK:
-                break;
-
-            case WEBKIT:
-                break;
-
-            case WEBVIEW2:
-                preferences.addBrowserFlag("-msWebView2SimulateMemoryPressureWhenInactive=true");
-                break;
-
-            default:
-                break; // N/A
-        }
+        logger.info("Checking system tray support...");
+        boolean traySupported = TrayHandler.tryCreateTray();
 
         // Init and start the local server.
         try {
@@ -266,28 +250,51 @@ public class Bootstrap implements Runnable {
         }
 
         // Setup the webview.
+        SaucerWebview.registerCustomScheme("app");
+
+        SaucerWindow window = SaucerWindow.create();
+        saucer = window.createWebview((opts) -> {
+            opts.hardwareAcceleration(true);
+
+            switch (SaucerApp.backendType()) {
+                case WEBVIEW2:
+                    opts.appendBrowserFlag("-msWebView2SimulateMemoryPressureWhenInactive=true");
+                    break;
+                default:
+                    break; // N/A
+            }
+        });
+
+        logger.info("Starting app...");
+        try {
+            ReflectionLib.setValue(CaffeinatedApp.getInstance(), "saucer", saucer);
+            app.init(traySupported);
+
+            // If all of that succeeds, we write a file to let the updater know that
+            // everything's okay.
+            writeAppFile(".build_ok", null);
+            logger.info("Everything is running and everything is happy :D");
+        } catch (Throwable t) {
+            logger.severe("Unable to start the app: %s", t);
+            shutdown();
+        }
+
         logger.info("Initializing UI (this may take some time)");
         appUrl = (isDev ? this.devAddress : "app://authority") + "/$caffeinated-sdk-root$";
         logger.info("appAddress = %s", appUrl);
 
-        boolean traySupported = TrayHandler.tryCreateTray();
+        saucer.window.title("Casterlabs-Caffeinated");
+        saucer.bridge.defineObject("Caffeinated", app);
 
-        Saucer.registerCustomScheme("app");
-        saucer = Saucer.create(preferences); // LOCKS HERE?
+        saucer.contextMenuAllowed(false);
 
-        saucer.window().setTitle("Casterlabs-Caffeinated");
-        saucer.bridge().defineObject("Caffeinated", app);
+        saucer.addSchemeHandler("app", AppSchemeHandler.INSTANCE);
+        saucer.url(SaucerUrl.parse(appUrl));
 
-        saucer.webview().setContextMenuAllowed(false);
-
-        saucer.webview().setSchemeHandler(AppSchemeHandler.INSTANCE);
-        saucer.webview().setUrl(appUrl);
-
-        saucer.window().show();
-
+        saucer.window.show();
         TrayHandler.updateShowCheckbox(true);
 
-        saucer.messages().onMessage((arr) -> {
+        saucer.messages.onMessage((arr) -> {
             String type = arr.getString(0);
 
             if (arr.size() > 1) {
@@ -298,11 +305,11 @@ public class Bootstrap implements Runnable {
             }
         }, JsonArray.class);
 
-        saucer.webview().setListener(new SaucerWebviewListener() {
+        saucer.listener(new SaucerWebviewListener() {
             @Override
             public boolean onNavigate(SaucerNavigation navigation) {
-                if (navigation.getType() == NavigationType.NEW_WINDOW) {
-                    SaucerDesktop.open(navigation.getTargetUrl());
+                if (navigation.type() == NavigationType.NEW_WINDOW) {
+                    SaucerDesktop.open(navigation.targetUrl().toString());
                     return false;
                 }
                 return true;
@@ -314,11 +321,11 @@ public class Bootstrap implements Runnable {
                     newTitle = "Casterlabs-Caffeinated";
                 }
 
-                saucer.window().setTitle(newTitle);
+                saucer.window.title(newTitle);
             }
         });
 
-        saucer.window().setListener(new SaucerWindowListener() {
+        saucer.window.listener(new SaucerWindowListener() {
             @Override
             public void onClosed() {
                 shutdown();
@@ -328,7 +335,7 @@ public class Bootstrap implements Runnable {
             public boolean shouldAvoidClosing() {
                 if (app.canCloseUI()) {
                     if (CaffeinatedApp.getInstance().getUI().getPreferences().isCloseToTray() && traySupported) {
-                        saucer.window().hide();
+                        saucer.window.hide();
                         CaffeinatedApp.getInstance().getUI().navigate("/blank");
                         TrayHandler.updateShowCheckbox(false);
                         return true;
@@ -337,25 +344,9 @@ public class Bootstrap implements Runnable {
                         return false;
                     }
                 } else {
-                    saucer.window().focus();
+                    saucer.window.focus();
                     return true;
                 }
-            }
-        });
-
-        AsyncTask.create(() -> {
-            logger.info("Starting app...");
-            try {
-                ReflectionLib.setValue(CaffeinatedApp.getInstance(), "saucer", saucer);
-                app.init(traySupported);
-
-                // If all of that succeeds, we write a file to let the updater know that
-                // everything's okay.
-                writeAppFile(".build_ok", null);
-                logger.info("Everything is running and everything is happy :D");
-            } catch (Throwable t) {
-                logger.severe("Unable to start the app: %s", t);
-                shutdown();
             }
         });
 
@@ -400,7 +391,7 @@ public class Bootstrap implements Runnable {
 
     private static void shutdown(boolean force, boolean relaunch, boolean isReset) {
         if (!CaffeinatedApp.getInstance().canCloseUI() && !force) {
-            saucer.window().focus();
+            saucer.window.focus();
         }
 
         if (isShuttingDown) return;
@@ -409,7 +400,7 @@ public class Bootstrap implements Runnable {
         logger.info("Shutting down.");
 
         // Hide the window IMMEDIATELY.
-        saucer.window().hide();
+        saucer.window.hide();
         CaffeinatedApp.getInstance().getUI().navigate("/blank");
 
         // Local Server
@@ -424,7 +415,7 @@ public class Bootstrap implements Runnable {
 
         // UI
         TrayHandler.destroy();
-        saucer.close();
+        saucer.window.destroy();
         SaucerApp.quit();
 
         // Exit.

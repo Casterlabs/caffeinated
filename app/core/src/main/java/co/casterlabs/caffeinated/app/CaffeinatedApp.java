@@ -19,12 +19,12 @@ import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
 
-import app.saucer.Saucer;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptGetter;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptSetter;
 import app.saucer.bridge.JavascriptValue;
+import app.saucer.webview.SaucerWebview;
 import co.casterlabs.caffeinated.app.api.AppApi;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.auth.AuthPreferences;
@@ -90,7 +90,7 @@ public class CaffeinatedApp implements Caffeinated {
     private final @JavascriptValue(allowSet = false) BuildInfo buildInfo;
     private final @JavascriptValue(allowSet = false) boolean isDev;
 
-    private @Setter Saucer saucer;
+    private @Setter SaucerWebview saucer;
     private @JavascriptValue(allowSet = false) boolean isTraySupported;
 
     private @Getter(AccessLevel.NONE) LocaleProvider appLocale;

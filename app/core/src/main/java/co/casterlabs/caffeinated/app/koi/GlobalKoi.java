@@ -294,11 +294,11 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
         AsyncTask.create(() -> {
             JsonElement asJson = Rson.DEFAULT.toJson(e);
 
-            CaffeinatedApp.getInstance().getSaucer().messages().emit(new Object[] {
+            CaffeinatedApp.getInstance().getSaucer().messages.emit(new Object[] {
                     "koi:event:" + e.type().name().toLowerCase(),
                     asJson
             });
-            CaffeinatedApp.getInstance().getSaucer().messages().emit(new Object[] {
+            CaffeinatedApp.getInstance().getSaucer().messages.emit(new Object[] {
                     "koi:event",
                     asJson
             });
