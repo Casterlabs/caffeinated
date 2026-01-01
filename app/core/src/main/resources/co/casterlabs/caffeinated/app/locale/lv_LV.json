@@ -19,7 +19,6 @@
     "page.signin": "Lenākt",
     "page.signin.welcome": "Sveicināts Casterlabs",
     "page.signin.choose": "Izvēlies platformu.",
-    "page.signin.disclaimer": "Ienākot, Tu piekrīti mūsu %terms_of_service% un %privacy_policy%. Spied %here%, ja tiešām vēlies lasīt.",
     "page.signin.disclaimer.terms_of_service": "Pakalpojuma Noteikumi",
     "page.signin.disclaimer.privacy_policy": "Privātuma Politika",
     "page.signin.disclaimer.here": "šeit",
