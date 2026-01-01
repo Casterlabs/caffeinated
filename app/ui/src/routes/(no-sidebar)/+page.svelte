@@ -1,25 +1,30 @@
-<script>
-	import LoadingSpinner from '$lib/LoadingSpinner.svelte';
+<script lang="ts">
+	import { modify, storify } from '$lib/bridgeHelper';
+	import type { AppPreferences, Appearance, UIPreferences } from '../../app';
+
+	import LoadingSpinner from '$lib/layout/LoadingSpinner.svelte';
 
 	import { onMount } from 'svelte';
-	import { icon, iconColor } from '$lib/app.mjs';
 
-	const koiUrl = st || window.svelte('Caffeinated', 'koiUrl');
+	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<UIPreferences>();
+	const appPreferences = storify(AppConfig, 'appPreferences').readable<AppPreferences>();
+	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Appearance>();
 
-	function resetKoi() {
-		Caffeinated.koiUrl = 'wss://api.casterlabs.co/v2/koi';
-		window.saucer.messages.emit(['app:restart']);
+	async function resetKoi() {
+		await modify(AppConfig, 'appPreferences', 'koiUrl', 'wss://api.casterlabs.co/v2/koi');
+		// @ts-ignore
+		saucer.messages.emit(['app:restart']);
 	}
 
-	onMount(() => setTimeout(Caffeinated.UI.onUILoaded, 2000));
+	onMount(() => setTimeout(AppUI.onUILoaded, 2000));
 </script>
 
 <div class="mt-10 flex flex-col items-center justify-center">
 	<div class="w-64">
 		<img
-			src="/$caffeinated-sdk-root$/images/brand/wordmark/{$icon}/{$iconColor}.svg"
+			src="/$caffeinated-sdk-root$/images/brand/wordmark/{$uiPreferences?.icon || 'casterlabs'}/{$effectiveAppearance == 'DARK' ? 'white' : 'black'}.svg"
 			class="h-auto w-auto"
-			alt="Casterlabs Logo"
+			alt=""
 		/>
 	</div>
 
@@ -27,13 +32,10 @@
 		<LoadingSpinner />
 	</div>
 
-	{#if $koiUrl != 'wss://api.casterlabs.co/v2/koi'}
+	{#if $appPreferences?.koiUrl != 'wss://api.casterlabs.co/v2/koi'}
 		<br />
-		<!-- svelte-ignore a11y-missing-attribute -->
 		<small>
-			Having connection issues? Try <a class="text-link cursor-pointer" on:click={resetKoi}>
-				switching back to normal Koi.
-			</a>
+			Having connection issues? Try <button class="text-link cursor-pointer" onclick={resetKoi}> switching back to normal Koi. </button>
 		</small>
 	{/if}
 </div>

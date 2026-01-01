@@ -1,16 +1,14 @@
-<script>
-	import CSSIntermediate from '$lib/layout/CSSIntermediate.svelte';
-
+<script lang="ts">
 	import { goto } from '$app/navigation';
+	import * as appShim from '$lib/appShim';
+	import { storify } from '$lib/bridgeHelper';
+	import type { StatusState, UIPreferences } from '../app';
 	import { get } from 'svelte/store';
-	import { onMount } from 'svelte';
-	import hookIcons from '$lib/icons.mjs';
-	import * as appShim from '$lib/appShim.mjs';
-	import * as App from '$lib/app.mjs';
-	import * as Currencies from '$lib/currencies.mjs';
 
-	import { icon, statusStates } from '$lib/app.mjs';
-	import LocalizedText from '$lib/LocalizedText.svelte';
+	import CSSIntermediate from '$lib/layout/CSSIntermediate.svelte';
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
+
+	import { onMount } from 'svelte';
 
 	export const STATUS_COLORS = {
 		OPERATIONAL: ['green', 'white'],
@@ -21,28 +19,28 @@
 		MAINTENANCE: ['green', 'white']
 	};
 
+	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<UIPreferences>();
+	const statusStates = storify(App, 'statusStates').readable<StatusState[]>();
+
 	let hideStatusBanner = false;
 
 	onMount(() => {
-		appShim.init();
-
-		hookIcons('/$caffeinated-sdk-root$');
-
+		// @ts-ignore
 		window.debug_goto = goto;
+		// @ts-ignore
 		window.debug_get = get;
+		// @ts-ignore
 		window.debug_App = App;
-		window.debug_Currencies = Currencies;
+		// // @ts-ignore
+		// window.debug_Currencies = Currencies;
 	});
 </script>
 
 <svelte:head>
-	{#if $icon == 'handdrawn'}
+	{#if $uiPreferences?.icon == 'handdrawn'}
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap"
-			rel="stylesheet"
-		/>
+		<link rel="preconnect" href="https://fonts.gstatic.com" />
+		<link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet" />
 		<style id="silly-font-style">
 			* {
 				font-family: 'Reenie Beanie', cursive !important;
@@ -54,26 +52,16 @@
 {#await appShim.awaitPageLoad() then}
 	<CSSIntermediate>
 		<slot />
-		{#if $statusStates?.length > 0 && !hideStatusBanner}
-			{@const state = $statusStates[0]}
+		{#if $statusStates?.length || (0 > 0 && !hideStatusBanner)}
+			{@const state = $statusStates![0]}
 
-			<div
-				class="absolute top-0 inset-x-0 py-1 m-1 rounded-md drop-shadow-lg"
-				style:background={STATUS_COLORS[state.status][0]}
-				style:color={STATUS_COLORS[state.status][1]}
-			>
-				<a
-					class="block text-center underline"
-					href={state.activeIncidents[0].link || 'https://status.casterlabs.co'}
-					target="_blank"
-				>
+			<div class="absolute top-0 inset-x-0 py-1 m-1 rounded-md drop-shadow-lg" style:background={STATUS_COLORS[state.status][0]} style:color={STATUS_COLORS[state.status][1]}>
+				<a class="block text-center underline" href={state.activeIncidents[0].link || 'https://status.casterlabs.co'} target="_blank">
 					<LocalizedText key="co.casterlabs.caffeinated.app.status.{state.status}"></LocalizedText>
 				</a>
 
-				<button
-					class="absolute inset-y-0 right-1 flex items-center justify-center"
-					on:click={() => (hideStatusBanner = true)}
-				>
+				<button class="absolute inset-y-0 right-1 flex items-center justify-center" on:click={() => (hideStatusBanner = true)}>
+					<span class="sr-only">Dismiss</span>
 					<icon data-icon="icon/x-mark" />
 				</button>
 			</div>

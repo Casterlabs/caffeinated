@@ -18,6 +18,7 @@ import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.locale.AppLocale;
 import co.casterlabs.caffeinated.app.plugins.AppPlugins;
 import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
 import co.casterlabs.caffeinated.app.sdk.EmojisImpl;
@@ -63,7 +64,7 @@ public class AppUI {
     }
 
     public static void onUpdatePreferences() {
-        App.reloadLanguage();
+        AppLocale.onUpdatePreferences();
         updateEmojiProvider();
 
         JsonObject preferences = constructSDKPreferences();

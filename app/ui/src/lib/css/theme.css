@@ -1,0 +1,95 @@
+@import 'tailwindcss';
+
+@import './colors/base/amber.css';
+@import './colors/base/blue.css';
+@import './colors/base/bronze.css';
+@import './colors/base/brown.css';
+@import './colors/base/crimson.css';
+@import './colors/base/cyan.css';
+@import './colors/base/gold.css';
+@import './colors/base/grass.css';
+@import './colors/base/gray.css';
+@import './colors/base/green.css';
+@import './colors/base/indigo.css';
+@import './colors/base/lime.css';
+@import './colors/base/mauve.css';
+@import './colors/base/mint.css';
+@import './colors/base/olive.css';
+@import './colors/base/orange.css';
+@import './colors/base/pink.css';
+@import './colors/base/plum.css';
+@import './colors/base/purple.css';
+@import './colors/base/red.css';
+@import './colors/base/sage.css';
+@import './colors/base/sand.css';
+@import './colors/base/sky.css';
+@import './colors/base/slate.css';
+@import './colors/base/teal.css';
+@import './colors/base/tomato.css';
+@import './colors/base/violet.css';
+@import './colors/base/yellow.css';
+@import './colors/primary/amber.css';
+@import './colors/primary/blue.css';
+@import './colors/primary/bronze.css';
+@import './colors/primary/brown.css';
+@import './colors/primary/crimson.css';
+@import './colors/primary/cyan.css';
+@import './colors/primary/gold.css';
+@import './colors/primary/grass.css';
+@import './colors/primary/gray.css';
+@import './colors/primary/green.css';
+@import './colors/primary/indigo.css';
+@import './colors/primary/lime.css';
+@import './colors/primary/mauve.css';
+@import './colors/primary/mint.css';
+@import './colors/primary/olive.css';
+@import './colors/primary/orange.css';
+@import './colors/primary/pink.css';
+@import './colors/primary/plum.css';
+@import './colors/primary/purple.css';
+@import './colors/primary/red.css';
+@import './colors/primary/sage.css';
+@import './colors/primary/sand.css';
+@import './colors/primary/sky.css';
+@import './colors/primary/slate.css';
+@import './colors/primary/teal.css';
+@import './colors/primary/tomato.css';
+@import './colors/primary/violet.css';
+@import './colors/primary/yellow.css';
+
+@theme {
+	/* https://tailwindcss.com/docs/font-family */
+	/* --font-sans: "Inter"; */
+	/* --font-serif: "<default>"; */
+	/* --font-mono: "Andale Mono"; */
+	/* --font-fun: "Fredoka"; */
+}
+
+@theme inline {
+	/* https: //tailwindcss.com/docs/colors#customizing-your-colors */
+	--color-primary-1: var(--primary1);
+	--color-primary-2: var(--primary2);
+	--color-primary-3: var(--primary3);
+	--color-primary-4: var(--primary4);
+	--color-primary-5: var(--primary5);
+	--color-primary-6: var(--primary6);
+	--color-primary-7: var(--primary7);
+	--color-primary-8: var(--primary8);
+	--color-primary-9: var(--primary9);
+	--color-primary-10: var(--primary10);
+	--color-primary-11: var(--primary11);
+	--color-primary-12: var(--primary12);
+
+	--color-base-1: var(--base1);
+	--color-base-2: var(--base2);
+	--color-base-3: var(--base3);
+	--color-base-4: var(--base4);
+	--color-base-5: var(--base5);
+	--color-base-6: var(--base6);
+	--color-base-7: var(--base7);
+	--color-base-8: var(--base8);
+	--color-base-9: var(--base9);
+	--color-base-10: var(--base10);
+	--color-base-11: var(--base11);
+	--color-base-12: var(--base12);
+}

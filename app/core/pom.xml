@@ -159,6 +159,12 @@
 
 		<!-- Utility packages -->
 		<dependency>
+		    <groupId>com.github.glocale</groupId>
+		    <artifactId>java</artifactId>
+		    <version>aec7ced</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.github.Dansoftowner</groupId>
 			<artifactId>jSystemThemeDetector</artifactId>
 			<version>3.9.1</version>

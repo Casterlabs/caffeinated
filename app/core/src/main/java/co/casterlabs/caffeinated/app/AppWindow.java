@@ -17,6 +17,7 @@ import app.saucer.webview.window.SaucerWindowListener;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.locale.AppLocale;
 import co.casterlabs.caffeinated.app.music_integration.MusicImpl;
 import co.casterlabs.caffeinated.app.plugins.AppPlugins;
 import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
@@ -130,6 +131,7 @@ public class AppWindow {
         saucer.bridge.defineObject("AppAuth",         AppAuth.class);
         saucer.bridge.defineObject("AppChatbot",      AppChatbot.class);
         saucer.bridge.defineObject("AppConfig",       AppConfig.class);
+        saucer.bridge.defineObject("AppLocale",       AppLocale.class);
         saucer.bridge.defineObject("AppPlugins",      AppPlugins.class);
         saucer.bridge.defineObject("AppSounds",       AppSounds.class);
         saucer.bridge.defineObject("AppThemeManager", AppThemeManager.class);

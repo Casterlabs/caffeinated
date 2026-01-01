@@ -21,12 +21,11 @@ import co.casterlabs.caffeinated.app.api.AppApi;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.config.AppConfig;
-import co.casterlabs.caffeinated.app.locale._LocaleLoader;
 import co.casterlabs.caffeinated.app.music_integration.MusicImpl;
 import co.casterlabs.caffeinated.app.plugins.AppPlugins;
 import co.casterlabs.caffeinated.app.sdk.KoiImpl;
-import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.AppThemeManager;
+import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.bootstrap.BuildInfo;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
@@ -34,7 +33,6 @@ import co.casterlabs.caffeinated.pluginsdk.Locale;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
-import co.casterlabs.commons.localization.LocaleProvider;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.PlatformMessageEvent;
@@ -67,11 +65,13 @@ public class App {
     public static @JavascriptValue(allowSet = false) boolean isDev;
     public static @JavascriptValue(allowSet = false) boolean isTraySupported;
 
-    public static LocaleProvider appLocale;
     private static NativeSystem nativeSystem;
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private static JsonArray statusStates = JsonArray.EMPTY_ARRAY;
+
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private static boolean hasUpdate = false;
 
     // Event stuff
     private static Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
@@ -84,8 +84,6 @@ public class App {
         App.nativeSystem = nativeSystem;
 
         Currencies.getCurrencies(); // Load the class.
-
-        reloadLanguage();
 
         AsyncTask.create(() -> {
             while (true) {
@@ -106,6 +104,29 @@ public class App {
                         statusStates.add(state);
                     }
                     App.statusStates = statusStates;
+                } catch (Throwable t) {
+                    FastLogger.logStatic(LogLevel.WARNING, "Error whilst polling status API. Retrying later.\n%s", t);
+                }
+                try {
+                    TimeUnit.MINUTES.sleep(10);
+                } catch (InterruptedException ignored) {}
+            }
+        });
+
+        AsyncTask.create(() -> {
+            while (true) {
+                try {
+                    String commit = WebUtil.sendHttpRequest(
+                        new Request.Builder()
+                            .url(
+                                String.format(
+                                    "https://cdn.casterlabs.co/caffeinated/dist/%s/commit",
+                                    buildInfo.getBuildChannel()
+                                )
+                            )
+                    );
+
+                    hasUpdate = !buildInfo.getCommit().equals(commit);
                 } catch (Throwable t) {
                     FastLogger.logStatic(LogLevel.WARNING, "Error whilst polling status API. Retrying later.\n%s", t);
                 }
@@ -210,11 +231,6 @@ public class App {
         }
     }
 
-    public static void reloadLanguage() {
-        String locale = AppConfig.uiPreferences.get().getLanguage();
-        appLocale = _LocaleLoader.load(locale);
-    }
-
     /**
      * Sends a system notification, if that fails then it'll fallback on a UI-based
      * notification instead.
@@ -269,27 +285,6 @@ public class App {
                     )
                 );
                 break;
-        }
-    }
-
-    @JavascriptFunction
-    public static boolean hasUpdate() {
-        if (isDev) return false;
-
-        try {
-            String commit = WebUtil.sendHttpRequest(
-                new Request.Builder()
-                    .url(
-                        String.format(
-                            "https://cdn.casterlabs.co/caffeinated/dist/%s/commit",
-                            buildInfo.getBuildChannel()
-                        )
-                    )
-            );
-
-            return !buildInfo.getCommit().equals(commit);
-        } catch (Exception ignored) {
-            return false;
         }
     }
 

@@ -279,8 +279,10 @@ public class Bootstrap implements Runnable {
         );
 
         if (isDev) {
-            logger.info("Dev tools enabled, opening dev tools.");
-            AppWindow.openDevTools();
+            AsyncTask.create(() -> {
+                logger.info("Dev tools enabled, opening dev tools.");
+                AppWindow.openDevTools();
+            });
         }
 
         logger.info("Calling run() loop...");

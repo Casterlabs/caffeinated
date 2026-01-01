@@ -1,7 +1,7 @@
+@import 'tailwindcss';
 @import './colors/misc.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './theme.css';
+@import './clui.css';
 
 /* - */
 
@@ -26,6 +26,27 @@
 	background-color: var(--nqp);
 }
 
+a,
+button {
+	cursor: default;
+}
+
+/* ---------------- */
+/* break-anywhere   */
+/* ---------------- */
+
+@supports not (overflow-wrap: anywhere) {
+	.break-anywhere {
+		word-break: break-word;
+	}
+}
+
+@supports (overflow-wrap: anywhere) {
+	.break-anywhere {
+		overflow-wrap: anywhere;
+	}
+}
+
 /* Icons */
 
 icon {
@@ -35,28 +56,28 @@ icon {
 	pointer-events: none;
 }
 
-icon>svg {
+icon > svg {
 	width: 100%;
 	height: 100%;
 }
 
-icon>svg.icon-service * {
-	/* fill: currentColor !important; */
-}
+/* icon > svg.icon-service * {
+	fill: currentColor !important;
+} */
 
-icon>svg.icon-outline * {
+icon > svg.icon-outline * {
 	stroke: currentColor;
 }
 
-icon>svg.icon-solid * {
+icon > svg.icon-solid * {
 	fill: currentColor;
 }
 
-#css-intermediate.dark-theme icon>svg.icon-outline {
+#css-intermediate.dark-theme icon > svg.icon-outline {
 	display: none;
 }
 
-#css-intermediate:not(.dark-theme) icon>svg.icon-solid {
+#css-intermediate:not(.dark-theme) icon > svg.icon-solid {
 	display: none;
 }
 
