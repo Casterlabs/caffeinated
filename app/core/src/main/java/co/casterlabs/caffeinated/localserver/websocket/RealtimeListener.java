@@ -2,8 +2,10 @@ package co.casterlabs.caffeinated.localserver.websocket;
 
 import java.io.IOException;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.RealtimeApiListener;
+import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
+import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.commons.functional.tuples.Pair;
@@ -56,7 +58,7 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
 
         this.sendMessage(
             "APP",
-            CaffeinatedApp.getInstance().getUI().constructSDKPreferences()
+            AppUI.constructSDKPreferences()
         );
 
         this.sendMessage(
@@ -79,7 +81,7 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
             switch (type) {
 
                 case "READY": {
-                    CaffeinatedApp.getInstance().getApiListeners().add(this.appListener);
+                    App.apiListeners.add(this.appListener);
                     return;
                 }
 
@@ -128,7 +130,7 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
                 case "OPEN_LINK": {
                     JsonObject data = message.getObject("data");
                     String link = data.getString("link");
-                    CaffeinatedApp.getInstance().openLink(link);
+                    Caffeinated.getInstance().openLink(link);
                     return;
                 }
 
@@ -145,7 +147,7 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
                         JsonObject knownPlaceholders = data.getObject("knownPlaceholders");
                         JsonArray knownComponents = data.getArray("knownComponents");
 
-                        String value = CaffeinatedApp.getInstance().localize(key, knownPlaceholders, knownComponents);
+                        String value = CaffeinatedImpl.INSTANCE.localize(key, knownPlaceholders, knownComponents);
 
                         this.sendMessage(
                             "LOCALIZE",
@@ -178,7 +180,7 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
 
     @Override
     public void onClose(Websocket websocket) {
-        CaffeinatedApp.getInstance().getApiListeners().remove(this.appListener);
+        App.apiListeners.remove(this.appListener);
     }
 
     @SneakyThrows

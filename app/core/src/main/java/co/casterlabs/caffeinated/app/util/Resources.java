@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app;
+package co.casterlabs.caffeinated.app.util;
 
 import java.io.IOException;
 import java.io.InputStream;

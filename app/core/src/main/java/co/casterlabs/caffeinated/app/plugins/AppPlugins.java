@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.Nullable;
 
 import app.saucer.bridge.JavascriptFunction;
-import app.saucer.bridge.JavascriptGetter;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.plugins.PluginContext.ContextType;
-import co.casterlabs.caffeinated.app.thirdparty.ThirdPartyServices;
-import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
+import co.casterlabs.caffeinated.app.builtins.BuiltIns;
+import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.plugins._PluginContext.ContextType;
+import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
+import co.casterlabs.caffeinated.app.sdk.KoiImpl;
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
@@ -44,59 +44,49 @@ import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-@Getter
 @JavascriptObject
-public class PluginIntegration {
-    private static final File pluginsDir = new File(CaffeinatedApp.APP_DATA_DIR, "plugins");
+public class AppPlugins {
+    private static final File pluginsDir = new File(AppConfig.APP_DATA_DIR, "plugins");
     private static final String addressesStringList = String.join(",", InterfaceUtil.getLocalIpAddresses());
 
-    private PluginsHandler plugins = new PluginsHandler();
-    private Cache<WidgetSettingsDetails> preferenceData;
+    private static @Getter Cache<WidgetSettingsDetails> preferenceData;
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private Set<PluginContext> contexts = new HashSet<>();
+    private static Set<_PluginContext> contexts = new HashSet<>();
 
     // Pointers to forward values from PluginsHandler.
+    @Getter
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private final Collection<CaffeinatedPlugin> loadedPlugins = this.plugins.plugins.values();
+    private static final Collection<CaffeinatedPlugin> loadedPlugins = _PluginsHandler.plugins.values();
     @JavascriptValue(allowSet = false)
-    private final Collection<WidgetDetails> creatableWidgets = this.plugins.creatableWidgets;
+    private static final Collection<WidgetDetails> creatableWidgets = _PluginsHandler.creatableWidgets;
     @JavascriptValue(allowSet = false)
-    private final Collection<WidgetHandle> widgets = this.plugins.widgetHandles.values();
+    private static final Collection<WidgetHandle> widgets = _PluginsHandler.widgetHandles.values();
 
-    public PluginIntegration() {
+    static {
         pluginsDir.mkdir();
     }
 
     @SneakyThrows
-    public void init() {
-        this.preferenceData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "kv_plugins");
+    public static void init() {
+        preferenceData = new SQLBackedCache<>(-1, AppConfig.preferencesConnection, "kv_plugins");
 
         // Migrate from the old format to the new KV.
-        PluginImporter.importOldJson().forEach(this.preferenceData::submit);
+        _PluginImporter.importOldJson().forEach(preferenceData::submit);
 
         // Load the built-in widgets.
         {
             CaffeinatedPlugin defaultPlugin = new CaffeinatedDefaultPlugin();
-            PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(defaultPlugin), "Caffeinated");
+            _PluginContext ctx = _PluginsHandler.unsafe_loadPlugins(Arrays.asList(defaultPlugin), "Caffeinated");
             ctx.setPluginType(ContextType.INTERNAL);
-            this.contexts.add(ctx);
+            contexts.add(ctx);
         }
 
-        // Load the UI Docks
-        {
-            CaffeinatedPlugin uiDocksPlugin = new UIDocksPlugin();
-
-            PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(uiDocksPlugin), "Caffeinated");
+        // Load the built-ins
+        for (CaffeinatedPlugin service : BuiltIns.init()) {
+            _PluginContext ctx = _PluginsHandler.unsafe_loadPlugins(Arrays.asList(service), "Caffeinated");
             ctx.setPluginType(ContextType.INTERNAL);
-            this.contexts.add(ctx);
-        }
-
-        // Load the Third Party Services
-        for (CaffeinatedPlugin service : ThirdPartyServices.init()) {
-            PluginContext ctx = this.plugins.unsafe_loadPlugins(Arrays.asList(service), "Caffeinated");
-            ctx.setPluginType(ContextType.INTERNAL);
-            this.contexts.add(ctx);
+            contexts.add(ctx);
         }
 
         for (File file : pluginsDir.listFiles()) {
@@ -105,12 +95,12 @@ public class PluginIntegration {
             if (file.isFile() &&
                 fileName.endsWith(".jar") &&
                 !fileName.startsWith("__")) {
-                this.loadFile(file);
+                loadFile(file);
             }
         }
 
         // Load all widgets.
-        try (CacheIterator<WidgetSettingsDetails> it = this.preferenceData.enumerate()) {
+        try (CacheIterator<WidgetSettingsDetails> it = preferenceData.enumerate()) {
             while (it.hasNext()) {
                 WidgetSettingsDetails details = it.next();
 
@@ -119,7 +109,7 @@ public class PluginIntegration {
 
                     // Reconstruct the widget and ignore the applet and dock.
                     if (!id.contains("applet") && !id.contains("dock")) {
-                        this.plugins.createWidget(details.getNamespace(), id, details.getName(), details.getSettings());
+                        _PluginsHandler.createWidget(details.getNamespace(), id, details.getName(), details.getSettings());
                     }
                 } catch (AssertionError | SecurityException | NullPointerException | IllegalArgumentException e) {
                     if ("That widget is not of the expected type of WIDGET".equals(e.getMessage()) ||
@@ -141,26 +131,26 @@ public class PluginIntegration {
             }
         }
 
-        this.widgets.forEach(this::save);
+        widgets.forEach(AppPlugins::save);
     }
 
-    public void save(WidgetHandle handle) {
-        this.preferenceData.submit(WidgetSettingsDetails.from(handle.widget));
+    public static void save(WidgetHandle handle) {
+        preferenceData.submit(WidgetSettingsDetails.from(handle.widget));
     }
 
     @SneakyThrows
     @JavascriptFunction
-    public void openPluginsDir() {
+    public static void openPluginsDir() {
         Desktop.getDesktop().browse(pluginsDir.toURI());
     }
 
     @JavascriptFunction
-    public List<String> listFiles() throws Exception {
+    public static List<String> listFiles() throws Exception {
         return Arrays.asList(pluginsDir.listFiles())
             .parallelStream()
             .filter((file) -> {
                 // Remove the files that belong to already loaded contexts.
-                for (PluginContext ctx : this.contexts) {
+                for (_PluginContext ctx : contexts) {
                     if (ctx.getFile() != null && ctx.getFile().equals(file)) {
                         return false;
                     }
@@ -172,14 +162,14 @@ public class PluginIntegration {
     }
 
     @JavascriptFunction
-    public void load(@NonNull String file) throws Exception {
-        this.loadFile(new File(pluginsDir, file));
+    public static void load(@NonNull String file) throws Exception {
+        loadFile(new File(pluginsDir, file));
     }
 
-    private void loadFile(@NonNull File file) {
+    private static void loadFile(@NonNull File file) {
         try {
-            this.contexts.add(
-                this.plugins.loadPluginsFromFile(file)
+            contexts.add(
+                _PluginsHandler.loadPluginsFromFile(file)
             );
 
             System.gc();
@@ -191,10 +181,10 @@ public class PluginIntegration {
     }
 
     @JavascriptFunction
-    public void unload(@NonNull String ctxId) {
-        PluginContext ctx = null;
+    public static void unload(@NonNull String ctxId) {
+        _PluginContext ctx = null;
 
-        for (PluginContext c : this.contexts) {
+        for (_PluginContext c : contexts) {
             if (c.getId().equals(ctxId)) {
                 ctx = c;
                 break;
@@ -204,54 +194,54 @@ public class PluginIntegration {
         assert ctx != null;
         assert ctx.getPluginType() == ContextType.PLUGIN : "You cannot unload this plugin.";
 
-        this.contexts.remove(ctx);
+        contexts.remove(ctx);
 
         for (String id : ctx.getPluginIds()) {
-            this.plugins.unregisterPlugin(id);
+            _PluginsHandler.unregisterPlugin(id);
         }
     }
 
     @SneakyThrows
     @JavascriptFunction
-    public String createNewWidget(@NonNull String namespace, @NonNull String name) {
-        WidgetHandle handle = this.plugins.createWidget(namespace, UUID.randomUUID().toString(), name, null);
+    public static String createNewWidget(@NonNull String namespace, @NonNull String name) {
+        WidgetHandle handle = _PluginsHandler.createWidget(namespace, UUID.randomUUID().toString(), name, null);
 
         handle.onSettingsUpdate(new JsonObject());
 
-        this.save(handle);
+        save(handle);
 
         return handle.id;
     }
 
     @SneakyThrows
     @JavascriptFunction
-    public void renameWidget(@NonNull String widgetId, @NonNull String newName) {
-        WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+    public static void renameWidget(@NonNull String widgetId, @NonNull String newName) {
+        WidgetHandle handle = _PluginsHandler.getWidgetHandle(widgetId);
 
         handle.name = newName;
-        this.save(handle);
+        save(handle);
 
         handle.widget.onNameUpdate();
     }
 
     @SneakyThrows
     @JavascriptFunction
-    public void assignTag(@NonNull String widgetId, @Nullable String tagOrNull) {
-        WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+    public static void assignTag(@NonNull String widgetId, @Nullable String tagOrNull) {
+        WidgetHandle handle = _PluginsHandler.getWidgetHandle(widgetId);
 
         handle.tag = tagOrNull;
-        this.save(handle);
+        save(handle);
     }
 
     @JavascriptFunction
-    public void deleteWidget(@NonNull String widgetId) {
-        this.plugins.destroyWidget(widgetId);
-        this.preferenceData.remove(widgetId);
+    public static void deleteWidget(@NonNull String widgetId) {
+        _PluginsHandler.destroyWidget(widgetId);
+        preferenceData.remove(widgetId);
     }
 
     @JavascriptFunction
-    public void editWidgetSettingsItem(@NonNull String widgetId, @NonNull String key, @Nullable JsonElement value) {
-        WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+    public static void editWidgetSettingsItem(@NonNull String widgetId, @NonNull String key, @Nullable JsonElement value) {
+        WidgetHandle handle = _PluginsHandler.getWidgetHandle(widgetId);
 
         JsonObject settings = handle.settings;
 
@@ -264,16 +254,16 @@ public class PluginIntegration {
 
         handle.onSettingsUpdate(settings);
 
-        this.save(handle);
+        save(handle);
     }
 
     @SuppressWarnings("deprecation")
     @JavascriptFunction
-    public void fireTestEvent(@NonNull String widgetId, @NonNull KoiEventType type) {
-        WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+    public static void fireTestEvent(@NonNull String widgetId, @NonNull KoiEventType type) {
+        WidgetHandle handle = _PluginsHandler.getWidgetHandle(widgetId);
 
         // Pick a random account that we're signed-in to.
-        UserUpdateEvent[] userStates = CaffeinatedApp.getInstance().getKoi().getUserStates().values().toArray(new UserUpdateEvent[0]);
+        UserUpdateEvent[] userStates = KoiImpl.INSTANCE.getUserStates().values().toArray(new UserUpdateEvent[0]);
         UserUpdateEvent randomAccount = userStates[ThreadLocalRandom.current().nextInt(userStates.length)];
 
         KoiEvent event = TestEvents.createTestEvent(type, randomAccount.streamer.platform);
@@ -281,8 +271,8 @@ public class PluginIntegration {
     }
 
     @JavascriptFunction
-    public void clickWidgetSettingsButton(@NonNull String widgetId, @NonNull String buttonId) {
-        WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+    public static void clickWidgetSettingsButton(@NonNull String widgetId, @NonNull String buttonId) {
+        WidgetHandle handle = _PluginsHandler.getWidgetHandle(widgetId);
 
         for (WidgetSettingsButton b : handle.settingsLayout.getButtons()) {
             if (b.getId().equals(buttonId)) {
@@ -293,22 +283,22 @@ public class PluginIntegration {
     }
 
     @JavascriptFunction
-    public void copyWidgetUrl(@NonNull String widgetId) {
-        WidgetHandle handle = this.plugins.getWidgetHandle(widgetId);
+    public static void copyWidgetUrl(@NonNull String widgetId) {
+        WidgetHandle handle = _PluginsHandler.getWidgetHandle(widgetId);
         String url = handle.getUrl();
         url += "&addresses=";
         url += WebUtil.encodeURIComponent(addressesStringList);
 
-        CaffeinatedApp.getInstance().copyText(url, "Copied link to clipboard");
+        CaffeinatedImpl.INSTANCE.copyText(url, "Copied link to clipboard");
     }
 
     @JavascriptFunction
-    public void openPopout(@NonNull String widgetId) {
+    public static void openPopout(@NonNull String widgetId) {
 //        SaucerApp.dispatch(() -> {
 //            Saucer saucer = Saucer.create(Bootstrap.getPreferences());
 //
 //            saucer.window().setTitle("Casterlabs-Caffeinated");
-//            saucer.bridge().defineObject("Caffeinated", CaffeinatedApp.getInstance());
+//            saucer.bridge().defineObject("Caffeinated", CaffeinatedApp);
 //            saucer.webview().setContextMenuAllowed(false);
 //
 //            String appUrl = Bootstrap.getAppUrl() + "/popout/new-window?id=" + widgetId;
@@ -323,21 +313,6 @@ public class PluginIntegration {
 //
 //            saucer.window().show();
 //        });
-    }
-
-    @JavascriptGetter("loadedPlugins")
-    public List<CaffeinatedPlugin> getLoadedPlugins() {
-        return this.plugins.getPlugins();
-    }
-
-    @JavascriptGetter("creatableWidgets")
-    public List<WidgetDetails> getCreatableWidgets() {
-        return this.plugins.getCreatableWidgets();
-    }
-
-    @JavascriptGetter("widgets")
-    public List<WidgetHandle> getWidgetHandles() {
-        return this.plugins.getWidgetHandles();
     }
 
 }

@@ -11,11 +11,11 @@ import java.util.Map.Entry;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.RealtimeApiListener;
-import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
-import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider;
-import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider;
+import co.casterlabs.caffeinated.app.api.AppApi;
+import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.plugins.AppPlugins;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.music.Music;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
@@ -28,22 +28,22 @@ import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.yen.Cache;
 import co.casterlabs.yen.impl.SQLBackedCache;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-@Getter
 @JavascriptObject
-public class MusicIntegration implements Music {
-    private static InternalMusicProvider<?> systemPlaybackMusicProvider = null;
+public class MusicImpl implements Music {
+    public static final MusicImpl INSTANCE = new MusicImpl();
+
+    private static AbstractMusicProvider<?> systemPlaybackMusicProvider = null;
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private Map<String, InternalMusicProvider<?>> providers = new HashMap<>();
+    private Map<String, AbstractMusicProvider<?>> providers = new HashMap<>();
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private InternalMusicProvider<?> activePlayback;
+    private AbstractMusicProvider<?> activePlayback;
 
     private Cache<MusicProviderSettings> preferenceData;
 
@@ -53,9 +53,14 @@ public class MusicIntegration implements Music {
         return (Map<String, MusicProvider>) ((Object) this.providers); // Yucky cast
     }
 
+    @Override
+    public MusicProvider getActivePlayback() {
+        return this.activePlayback;
+    }
+
     @SneakyThrows
     public void init() {
-        this.preferenceData = new SQLBackedCache<>(-1, CaffeinatedApp.getInstance().getPreferencesConnection(), "kv_music");
+        this.preferenceData = new SQLBackedCache<>(-1, AppConfig.preferencesConnection, "kv_music");
 
         // Migrate.
         this.importOldJson();
@@ -66,8 +71,8 @@ public class MusicIntegration implements Music {
         if (systemPlaybackMusicProvider != null) this.providers.put(systemPlaybackMusicProvider.getServiceId(), systemPlaybackMusicProvider);
 
         // Load their settings and init.
-        for (Map.Entry<String, InternalMusicProvider<?>> entry : this.providers.entrySet()) {
-            InternalMusicProvider<?> provider = entry.getValue();
+        for (Map.Entry<String, AbstractMusicProvider<?>> entry : this.providers.entrySet()) {
+            AbstractMusicProvider<?> provider = entry.getValue();
             String providerId = entry.getKey();
 
             MusicProviderSettings settings = this.preferenceData.get(providerId);
@@ -83,7 +88,7 @@ public class MusicIntegration implements Music {
         this.updateBridgeData(); // Populate
     }
 
-    public void save(InternalMusicProvider<?> provider) {
+    public void save(AbstractMusicProvider<?> provider) {
         this.preferenceData.submit(MusicProviderSettings.from(provider));
         this.updateBridgeData();
     }
@@ -99,10 +104,10 @@ public class MusicIntegration implements Music {
     }
 
     public void updateBridgeData() {
-        InternalMusicProvider<?> pausedTrack = null;
-        InternalMusicProvider<?> playingTrack = null;
+        AbstractMusicProvider<?> pausedTrack = null;
+        AbstractMusicProvider<?> playingTrack = null;
 
-        for (InternalMusicProvider<?> provider : this.providers.values()) {
+        for (AbstractMusicProvider<?> provider : this.providers.values()) {
             if ((pausedTrack == null) && (provider.getPlaybackState() == MusicPlaybackState.PAUSED)) {
                 pausedTrack = provider;
             } else if ((playingTrack == null) && (provider.getPlaybackState() == MusicPlaybackState.PLAYING)) {
@@ -118,7 +123,7 @@ public class MusicIntegration implements Music {
             this.activePlayback = null;
         }
 
-        final File musicApiDir = new File(CaffeinatedApp.APP_DATA_DIR, "api/music");
+        final File musicApiDir = new File(AppConfig.APP_DATA_DIR, "api/music");
         musicApiDir.mkdirs();
 
         // Write some cute files for the end user to mess with :^)
@@ -150,7 +155,7 @@ public class MusicIntegration implements Music {
         AsyncTask.create(() -> {
             try {
                 // Send the events to the widget instances.
-                for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPluginIntegration().getLoadedPlugins()) {
+                for (CaffeinatedPlugin plugin : AppPlugins.getLoadedPlugins()) {
                     for (Widget widget : plugin.getWidgets()) {
                         for (WidgetInstance instance : widget.getWidgetInstances()) {
                             try {
@@ -160,7 +165,7 @@ public class MusicIntegration implements Music {
                     }
                 }
 
-                CaffeinatedApp.getInstance().getApi().musicApi.sendSong();
+                AppApi.musicApi.sendSong();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -170,7 +175,7 @@ public class MusicIntegration implements Music {
         AsyncTask.create(() -> {
             try {
                 // Send the events to the widget instances.
-                for (RealtimeApiListener listener : CaffeinatedApp.getInstance().getApiListeners().toArray(new RealtimeApiListener[0])) {
+                for (RealtimeApiListener listener : App.apiListeners.toArray(new RealtimeApiListener[0])) {
                     listener.onMusicUpdate(music);
                 }
             } catch (Exception e) {
@@ -180,7 +185,7 @@ public class MusicIntegration implements Music {
     }
 
     private void importOldJson() {
-        File oldJson = new File(CaffeinatedApp.APP_DATA_DIR, "preferences/music.json");
+        File oldJson = new File(AppConfig.APP_DATA_DIR, "preferences/music.json");
         if (!oldJson.exists()) return;
 
         try {
@@ -197,7 +202,7 @@ public class MusicIntegration implements Music {
         } finally {
             // Keep a backup of the file.
             FastLogger.logStatic(LogLevel.INFO, "Done!");
-            oldJson.renameTo(new File(CaffeinatedApp.APP_DATA_DIR, "preferences/old/music.json"));
+            oldJson.renameTo(new File(AppConfig.APP_DATA_DIR, "preferences/old/music.json"));
             oldJson.delete();
         }
     }

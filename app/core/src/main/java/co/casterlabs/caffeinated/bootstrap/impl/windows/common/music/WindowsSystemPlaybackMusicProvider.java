@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
+import co.casterlabs.caffeinated.app.music_integration.AbstractMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.PlaybackEvent;
 import co.casterlabs.caffeinated.bootstrap.impl.windows.common.music.events.PlaybackEvent.PlaybackEventType;
@@ -198,7 +198,7 @@ public class WindowsSystemPlaybackMusicProvider extends SystemPlaybackMusicProvi
                 List<String> artists = Arrays.asList(artistsString.split(", "));
 
                 // Use the better parsing for a more accurate result.
-                Pair<String, List<String>> betterResult = InternalMusicProvider.parseTitleForArtists(title, artists);
+                Pair<String, List<String>> betterResult = AbstractMusicProvider.parseTitleForArtists(title, artists);
 
                 title = betterResult.a();
                 artists = betterResult.b();

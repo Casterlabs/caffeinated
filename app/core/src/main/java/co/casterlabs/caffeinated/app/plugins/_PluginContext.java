@@ -17,14 +17,14 @@ import lombok.Setter;
 
 @Getter
 @JsonClass(exposeAll = true)
-public class PluginContext {
+class _PluginContext {
     private String id = UUID.randomUUID().toString();
     private List<String> pluginIds;
     private @Setter @Nullable File file;
     private boolean hasSucceeded;
     private @Setter ContextType pluginType = ContextType.PLUGIN;
 
-    public PluginContext(List<String> pluginIds, boolean hasSucceeded) {
+    _PluginContext(List<String> pluginIds, boolean hasSucceeded) {
         this.pluginIds = Collections.unmodifiableList(pluginIds);
         this.hasSucceeded = hasSucceeded;
     }
@@ -38,13 +38,13 @@ public class PluginContext {
         }
     }
 
-    public boolean wasCleanFailure() {
+    boolean wasCleanFailure() {
         // If it hasSucceeded then we always return true.
         // Otherwise we check to see if the pluginIds list is empty.
         return !this.hasSucceeded || this.pluginIds.isEmpty();
     }
 
-    public static enum ContextType {
+    static enum ContextType {
         PLUGIN,
         INTERNAL,
         STORE_ASSET

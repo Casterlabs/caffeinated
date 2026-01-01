@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.localserver.handlers.RouteLocalServer;
 import co.casterlabs.caffeinated.localserver.handlers.RouteMiscApi;
 import co.casterlabs.caffeinated.localserver.handlers.RoutePluginApi;
@@ -98,7 +98,7 @@ public class LocalServer implements Closeable, HttpProvider {
 
         @Override
         public @Nullable String getVersion() {
-            return CaffeinatedApp.getInstance().getBuildInfo().getVersionString();
+            return App.buildInfo.getVersionString();
         }
 
         @Override

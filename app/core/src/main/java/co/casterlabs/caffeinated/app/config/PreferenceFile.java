@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app;
+package co.casterlabs.caffeinated.app.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,11 +36,11 @@ public class PreferenceFile<T> {
      */
     @SuppressWarnings("deprecation")
     @SneakyThrows
-    public PreferenceFile(@NonNull String name, @NonNull Class<T> clazz) {
+    PreferenceFile(@NonNull String name, @NonNull Class<T> clazz) {
         this.name = name;
         this.clazz = clazz;
         this.logger = new FastLogger(String.format("PreferenceFile (%s)", this.name));
-        this.file = new File(CaffeinatedApp.APP_DATA_DIR, String.format("preferences/%s.json", this.name));
+        this.file = new File(AppConfig.APP_DATA_DIR, String.format("preferences/%s.json", this.name));
 
         this.data = clazz.newInstance();
 

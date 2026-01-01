@@ -1,6 +1,6 @@
 package co.casterlabs.caffeinated.localserver.handlers;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.plugins.CaffeinatedPluginsImpl;
 import co.casterlabs.caffeinated.localserver.RequestError;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
@@ -20,7 +20,7 @@ public class RoutePluginApi implements HttpProvider, RouteHelper {
                 String pluginId = session.getUriParameters().get("pluginId");
                 String resourceId = session.getUriParameters().get("resourceId");
 
-                CaffeinatedPlugin owningPlugin = CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPluginById(pluginId);
+                CaffeinatedPlugin owningPlugin = CaffeinatedPluginsImpl.INSTANCE.getPluginById(pluginId);
 
                 if (owningPlugin == null) {
                     return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);

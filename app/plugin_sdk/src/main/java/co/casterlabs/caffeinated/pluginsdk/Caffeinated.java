@@ -16,7 +16,7 @@ public interface Caffeinated {
 
     @SneakyThrows
     public static Caffeinated getInstance() {
-        return ReflectionLib.invokeStaticMethod(Class.forName("co.casterlabs.caffeinated.app.CaffeinatedApp"), "getInstance");
+        return ReflectionLib.getStaticValue(Class.forName("co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl"), "INSTANCE");
     }
 
     public Koi getKoi();

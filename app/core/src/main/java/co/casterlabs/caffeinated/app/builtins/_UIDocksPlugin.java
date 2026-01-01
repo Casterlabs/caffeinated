@@ -1,13 +1,10 @@
-package co.casterlabs.caffeinated.app.ui;
+package co.casterlabs.caffeinated.app.builtins;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -15,15 +12,11 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
-import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.commons.functional.tuples.Pair;
-import co.casterlabs.commons.io.streams.StreamUtil;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class UIDocksPlugin extends CaffeinatedPlugin {
+class _UIDocksPlugin extends CaffeinatedPlugin {
 
     public static final WidgetDetails STREAM_CHAT_DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.dock.stream_chat")
@@ -91,42 +84,7 @@ public class UIDocksPlugin extends CaffeinatedPlugin {
 
     @Override
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
-        return resolveUIFile(resource);
-    }
-
-    public static @Nullable Pair<String, String> resolveUIFile(String resource) {
-        if (resource.isEmpty()) {
-            resource = "/index.html";
-        } else {
-            // Append `index.html` to the end when required.
-            if (!resource.contains(".")) {
-                if (resource.endsWith("/")) {
-                    resource += "index.html";
-                } else {
-                    resource += ".html";
-                }
-            }
-        }
-
-        String mimeType = "application/octet-stream";
-
-        String[] split = resource.split("\\.");
-        if (split.length > 1) {
-            mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
-        }
-
-        resource = "co/casterlabs/caffeinated/app/ui/html" + resource; // Load from the app's actual resources.
-        FastLogger.logStatic(LogLevel.DEBUG, "Loading resource: %s", resource);
-
-        try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {
-            return new Pair<>(
-                StreamUtil.toString(in, StandardCharsets.UTF_8),
-                mimeType
-            );
-        } catch (Exception e) {
-            FastLogger.logStatic(LogLevel.DEBUG, "An error occurred whilst loading resource %s:\n%s", resource, e);
-            return new Pair<>("", "text/plain");
-        }
+        return BuiltIns.resolveUIFile(resource);
     }
 
     @AllArgsConstructor

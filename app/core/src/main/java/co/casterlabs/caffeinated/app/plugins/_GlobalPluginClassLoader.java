@@ -6,10 +6,10 @@ import java.net.URLClassLoader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GlobalPluginClassLoader extends ClassLoader {
-    public static final GlobalPluginClassLoader instance = new GlobalPluginClassLoader();
+class _GlobalPluginClassLoader extends ClassLoader {
+    public static final _GlobalPluginClassLoader instance = new _GlobalPluginClassLoader();
 
-    private static final ClassLoader parentClassLoader = GlobalPluginClassLoader.class.getClassLoader();
+    private static final ClassLoader parentClassLoader = _GlobalPluginClassLoader.class.getClassLoader();
 
     private static List<ChildClassLoader> children = new LinkedList<>();
 
@@ -38,7 +38,7 @@ public class GlobalPluginClassLoader extends ClassLoader {
     /**
      * Make sure to call {@link URLClassLoader#close()} on it when you're done!
      */
-    public static URLClassLoader create(URL url) {
+    static URLClassLoader create(URL url) {
         return new ChildClassLoader(url);
     }
 

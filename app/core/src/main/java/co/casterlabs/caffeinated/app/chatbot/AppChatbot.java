@@ -6,13 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import app.saucer.bridge.JavascriptObject;
-import app.saucer.bridge.JavascriptSetter;
 import app.saucer.bridge.JavascriptValue;
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.PreferenceFile;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Action;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Command;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences.Shout;
+import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
+import co.casterlabs.caffeinated.app.sdk.KoiImpl;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.FollowEvent;
@@ -24,7 +24,6 @@ import co.casterlabs.koi.api.types.user.User;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.JsonStringUtil;
 import lombok.Getter;
-import lombok.NonNull;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
@@ -32,45 +31,36 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 public class AppChatbot {
     public static final char SYMBOL = '!';
 
-    @JavascriptValue(allowSet = false, watchForMutate = false)
-    private PreferenceFile<ChatbotPreferences> preferences;
-
     @SuppressWarnings("deprecation")
     @JavascriptValue(allowSet = false)
-    private List<KoiEventType> supportedShoutEvents = Arrays.asList(
+    private static List<KoiEventType> supportedShoutEvents = Arrays.asList(
         KoiEventType.DONATION,
         KoiEventType.FOLLOW,
         KoiEventType.RAID,
         KoiEventType.SUBSCRIPTION
     );
 
-    private Thread timerThread = new Thread(this::doTimerLoop);
-    private int timerIndex;
+    private static Thread timerThread = new Thread(AppChatbot::doTimerLoop);
+    private static int timerIndex;
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private long nextMessageAt = -1;
+    private static long nextMessageAt = -1;
 
-    private @Getter Deque<String> recentReplies = new LinkedList<>();
+    private static @Getter Deque<String> recentReplies = new LinkedList<>();
 
-    @JavascriptSetter("preferences")
-    public void setPreferences(@NonNull ChatbotPreferences prefs) {
-        this.preferences.set(prefs);
-        this.timerThread.interrupt();
-    }
-
-    private void doTimerLoop() {
+    private static void doTimerLoop() {
         while (true) {
-            int timerIntervalSeconds = this.preferences.get().getTimerIntervalSeconds();
-            List<String> timerTexts = this.preferences.get().getTimers();
+            int timerIntervalSeconds = AppConfig.chatbotPreferences.get().timerIntervalSeconds;
+            List<String> timerTexts = AppConfig.chatbotPreferences.get().timers;
 
             try {
                 if (timerTexts.isEmpty() || timerIntervalSeconds < 1) {
-                    this.nextMessageAt = -1;
+                    nextMessageAt = -1;
                     Thread.sleep(Long.MAX_VALUE);  // Sleep forever (or until interrupted).
                 } else {
                     long millisToWait = timerIntervalSeconds * 1000;
 
-                    this.nextMessageAt = System.currentTimeMillis() + millisToWait;
+                    nextMessageAt = System.currentTimeMillis() + millisToWait;
                     Thread.sleep(millisToWait);
                 }
             } catch (InterruptedException e) {
@@ -81,20 +71,20 @@ public class AppChatbot {
             FastLogger.logStatic(LogLevel.DEBUG, "Doing chat bot tick!");
 
             // Increments the timer index, and check to make sure we're not overshooting.
-            this.timerIndex++;
+            timerIndex++;
             if (timerIndex >= timerTexts.size()) {
-                this.timerIndex = 0;
+                timerIndex = 0;
             }
 
-            String text = timerTexts.get(this.timerIndex);
+            String text = timerTexts.get(timerIndex);
             if (text.isEmpty()) continue;
 
-            for (StreamStatusEvent streamStatus : CaffeinatedApp.getInstance().getKoi().getStreamStates().values()) {
+            for (StreamStatusEvent streamStatus : KoiImpl.INSTANCE.getStreamStates().values()) {
                 if (!streamStatus.live) return;
-                CaffeinatedApp.getInstance().getKoi().sendChat(
+                KoiImpl.INSTANCE.sendChat(
                     streamStatus.streamer.platform,
                     text,
-                    this.preferences.get().getChatter(),
+                    AppConfig.chatbotPreferences.get().chatter,
                     null,
                     false
                 );
@@ -102,20 +92,19 @@ public class AppChatbot {
         }
     }
 
-    public void init() {
-        this.preferences = CaffeinatedApp.getInstance().getChatbotPreferences();
-        this.timerThread.start();
+    public static void init() {
+        timerThread.start();
     }
 
-    public boolean isChatBot(User sender) {
+    public static boolean isChatBot(User sender) {
         return sender.username.equalsIgnoreCase("Casterlabs"); // TODO
     }
 
-    public boolean shouldHideFromWidgets(KoiEvent e) {
+    public static boolean shouldHideFromWidgets(KoiEvent e) {
         switch (e.type()) {
             case RICH_MESSAGE: {
                 RichMessageEvent richMessage = (RichMessageEvent) e;
-                for (String chatbotToHide : this.preferences.get().getChatbots()) {
+                for (String chatbotToHide : AppConfig.chatbotPreferences.get().chatbots) {
                     if (richMessage.sender.username.equalsIgnoreCase(chatbotToHide) ||
                         richMessage.sender.displayname.equalsIgnoreCase(chatbotToHide)) {
                         return true;
@@ -123,34 +112,34 @@ public class AppChatbot {
                 }
 
                 // Check the replies for this specific message.
-                if (this.preferences.get().isHideFromChat()) {
-                    if (this.recentReplies.remove(richMessage.raw)) {
+                if (AppConfig.chatbotPreferences.get().hideFromChat) {
+                    if (recentReplies.remove(richMessage.raw)) {
                         return true;
                     }
                 }
 
                 // Check for !commands or "contains".
-                if (this.preferences.get().isHideFromChat()) {
-                    for (Command command : this.preferences.get().getCommands()) {
+                if (AppConfig.chatbotPreferences.get().hideFromChat) {
+                    for (Command command : AppConfig.chatbotPreferences.get().commands) {
                         // Not filled out, ignore.
-                        if (command.getTrigger().isBlank() || command.getResponse().isBlank()) {
+                        if (command.trigger.isBlank() || command.response.isBlank()) {
                             continue;
                         }
 
                         // Null means any, so we check if the event's platform matches the target.
                         UserPlatform platform = richMessage.sender.platform;
-                        if ((command.getPlatform() != null) && (command.getPlatform() != platform)) {
+                        if ((command.platform != null) && (command.platform != platform)) {
                             continue;
                         }
 
-                        switch (command.getTriggerType()) {
+                        switch (command.triggerType) {
                             case COMMAND:
-                                if (richMessage.raw.trim().startsWith(SYMBOL + command.getTrigger())) {
+                                if (richMessage.raw.trim().startsWith(SYMBOL + command.trigger)) {
                                     return true;
                                 }
 
                             case CONTAINS:
-                                if (richMessage.raw.contains(command.getTrigger())) {
+                                if (richMessage.raw.contains(command.trigger)) {
                                     return true;
                                 }
 
@@ -169,14 +158,14 @@ public class AppChatbot {
     }
 
     // Accessed from Koi.
-    public void processEventForShout(KoiEvent e) {
-        for (Shout shout : this.preferences.get().getShouts()) {
+    public static void processEventForShout(KoiEvent e) {
+        for (Shout shout : AppConfig.chatbotPreferences.get().shouts) {
             @SuppressWarnings("deprecation")
-            KoiEventType shoutType = shout.getEventType() == KoiEventType.DONATION ? //
-                KoiEventType.RICH_MESSAGE : shout.getEventType();
+            KoiEventType shoutType = shout.eventType == KoiEventType.DONATION ? //
+                KoiEventType.RICH_MESSAGE : shout.eventType;
 
             if (shoutType != e.type() ||
-                shout.getResponse().isBlank()) {
+                shout.response.isBlank()) {
                 continue;
             }
 
@@ -213,18 +202,18 @@ public class AppChatbot {
 
             // Null means any, so we check if the event's platform matches the target.
             UserPlatform platform = eventSender.platform;
-            if ((shout.getPlatform() != null) && (shout.getPlatform() != platform)) {
+            if ((shout.platform != null) && (shout.platform != platform)) {
                 continue;
             }
 
-            switch (shout.getResponseAction()) {
+            switch (shout.responseAction) {
                 case EXECUTE: {
-                    CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(e, shout.getResponse());
+                    CaffeinatedImpl.INSTANCE.getScriptingEngines().get("javascript").execute(e, shout.response);
                     break;
                 }
 
                 case REPLY_WITH: {
-                    String message = shout.getResponse()
+                    String message = shout.response
                         .replace("%username%", eventSender.displayname);
 
                     if (!message.contains(eventSender.displayname)) {
@@ -233,7 +222,7 @@ public class AppChatbot {
                         message = String.format("@%s %s", eventSender.displayname, message);
                     }
 
-                    CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(
+                    CaffeinatedImpl.INSTANCE.getScriptingEngines().get("javascript").execute(
                         e,
                         String.format(
                             "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",
@@ -252,48 +241,48 @@ public class AppChatbot {
      * @return true if the message should get hidden (assuming the user has the
      *         relevant option enabled)
      */
-    public void processEventForCommand(RichMessageEvent richMessage) {
-        for (Command command : this.preferences.get().getCommands()) {
+    public static void processEventForCommand(RichMessageEvent richMessage) {
+        for (Command command : AppConfig.chatbotPreferences.get().commands) {
             // Not filled out, ignore.
-            if (command.getTrigger().isBlank() || command.getResponse().isBlank()) {
+            if (command.trigger.isBlank() || command.response.isBlank()) {
                 continue;
             }
 
             // Null means any, so we check if the event's platform matches the target.
             UserPlatform platform = richMessage.sender.platform;
-            if ((command.getPlatform() != null) && (command.getPlatform() != platform)) {
+            if ((command.platform != null) && (command.platform != platform)) {
                 continue;
             }
 
-            switch (command.getTriggerType()) {
+            switch (command.triggerType) {
                 case COMMAND:
-                    if (!richMessage.raw.trim().startsWith(SYMBOL + command.getTrigger())) {
+                    if (!richMessage.raw.trim().startsWith(SYMBOL + command.trigger)) {
                         continue;
                     }
                     break;
 
                 case CONTAINS:
-                    if (!richMessage.raw.contains(command.getTrigger())) {
+                    if (!richMessage.raw.contains(command.trigger)) {
                         continue;
                     }
                     break;
 
                 case ALWAYS:
-                    if (this.isChatBot(richMessage.sender) || command.getResponseAction() != Action.EXECUTE) {
+                    if (isChatBot(richMessage.sender) || command.responseAction != Action.EXECUTE) {
                         // Prevent infinite loops / dumb behavior.
                         continue;
                     }
                     break;
             }
 
-            switch (command.getResponseAction()) {
+            switch (command.responseAction) {
                 case EXECUTE:
-                    CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(richMessage, command.getResponse());
+                    CaffeinatedImpl.INSTANCE.getScriptingEngines().get("javascript").execute(richMessage, command.response);
                     break;
 
                 case REPLY_WITH: {
-                    String message = command.getResponse();
-                    CaffeinatedApp.getInstance().getScriptingEngines().get("javascript").execute(
+                    String message = command.response;
+                    CaffeinatedImpl.INSTANCE.getScriptingEngines().get("javascript").execute(
                         richMessage,
                         String.format(
                             "Koi.sendChat(event.streamer.platform, `%s`, ChatBot.realChatter, event.id);",

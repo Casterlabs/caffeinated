@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.NonNull;
@@ -67,7 +67,7 @@ public class AuthPreferences {
         }
 
         tokenStore.put(id, token);
-        CaffeinatedApp.getInstance().getAuthPreferences().save();
+        AppConfig.authPreferences.save();
     }
 
     public void removeToken(@NonNull String type, @NonNull String id) {
@@ -77,7 +77,7 @@ public class AuthPreferences {
         if (tokenStore == null) return;
 
         tokenStore.remove(id);
-        CaffeinatedApp.getInstance().getAuthPreferences().save();
+        AppConfig.authPreferences.save();
     }
 
 }

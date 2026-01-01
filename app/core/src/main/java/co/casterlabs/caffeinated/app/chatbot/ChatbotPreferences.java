@@ -13,34 +13,31 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
 @JsonClass(exposeAll = true)
 public class ChatbotPreferences {
-    private List<String> timers = new ArrayList<>();
-    private List<Command> commands = new ArrayList<>();
-    private List<Shout> shouts = new ArrayList<>();
+    public List<String> timers = new ArrayList<>();
+    public List<Command> commands = new ArrayList<>();
+    public List<Shout> shouts = new ArrayList<>();
 
-    private int timerIntervalSeconds = 300;
+    public int timerIntervalSeconds = 300;
 
-    private List<String> chatbots = new ArrayList<>();
-    private boolean hideFromChat = false;
+    public List<String> chatbots = new ArrayList<>();
+    public boolean hideFromChat = false;
 
-    private KoiChatterType chatter = KoiChatterType.SYSTEM;
+    public KoiChatterType chatter = KoiChatterType.SYSTEM;
 
-    private Map<String, Object> store = new HashMap<>();
+    public Map<String, Object> store = new HashMap<>();
 
-    @Data
     @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class Command {
-        private @Nullable UserPlatform platform; // NULL = ANY
-        private TriggerType triggerType;
-        private String trigger; // Not used on ALWAYS.
-        private Action responseAction; // Must be EXECUTE on ALWAYS
-        private String response;
+        public @Nullable UserPlatform platform; // NULL = ANY
+        public TriggerType triggerType;
+        public String trigger; // Not used on ALWAYS.
+        public Action responseAction; // Must be EXECUTE on ALWAYS
+        public String response;
 
         @JsonDeserializationMethod("platform")
         private void $deserialize_platform(JsonElement e) {
@@ -74,14 +71,13 @@ public class ChatbotPreferences {
 
     }
 
-    @Data
     @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class Shout {
-        private @Nullable UserPlatform platform; // NULL = ANY
-        private KoiEventType eventType;
-        private Action responseAction;
-        private String response;
+        public @Nullable UserPlatform platform; // NULL = ANY
+        public KoiEventType eventType;
+        public Action responseAction;
+        public String response;
 
         @JsonDeserializationMethod("platform")
         private void $deserialize_platform(JsonElement e) {

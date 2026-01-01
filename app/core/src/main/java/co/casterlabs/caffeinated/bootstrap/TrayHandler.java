@@ -20,9 +20,10 @@ import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import app.saucer.SaucerApp;
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.AppWindow;
 import co.casterlabs.caffeinated.app.NotificationType;
+import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
@@ -53,11 +54,9 @@ public class TrayHandler {
         }
 
         // Need to do this somewhere, here is good.
-        SaucerApp.dispatch(() -> {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception ignored) {}
-        });
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
 
         tray = SystemTray.getSystemTray();
         PopupMenu popup = new PopupMenu();
@@ -76,20 +75,19 @@ public class TrayHandler {
         popup.add(itemExit);
 
         showCheckbox.addItemListener((ItemEvent e) -> {
-            if (Bootstrap.getSaucer().window.isVisible()) {
-                Bootstrap.getSaucer().window.hide();
-                CaffeinatedApp.getInstance().getUI().navigate("/blank");
+            if (AppWindow.isVisible()) {
+                AppWindow.hide();
+                AppUI.navigate("/blank");
                 updateShowCheckbox(false);
             } else {
-                CaffeinatedApp.getInstance().getUI().navigate("/");
-                Bootstrap.getSaucer().window.show();
-                Bootstrap.getSaucer().window.focus();
+                AppUI.navigate("/");
+                AppWindow.show();
                 updateShowCheckbox(true);
             }
         });
 
         itemDevTools.addActionListener((ActionEvent e) -> {
-            Bootstrap.getSaucer().devToolsVisible(true);
+            AppWindow.openDevTools();
         });
 
         itemExit.addActionListener((ActionEvent e) -> {
@@ -98,7 +96,7 @@ public class TrayHandler {
 
         // Setup the tray icon.
         URL resource;
-        if (CaffeinatedApp.getInstance().isDev()) {
+        if (App.isDev) {
             resource = new File("./src/main/resources/assets/logo/hardhat.png").toURI().toURL();
         } else {
             String path = "assets/logo/casterlabs.png";
@@ -121,9 +119,9 @@ public class TrayHandler {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (!e.isPopupTrigger()) {
-                    if (!Bootstrap.getSaucer().window.isVisible()) {
-                        CaffeinatedApp.getInstance().getUI().navigate("/");
-                        Bootstrap.getSaucer().window.show();
+                    if (!AppWindow.isVisible()) {
+                        AppUI.navigate("/");
+                        AppWindow.show();
                         updateShowCheckbox(true);
                     }
                 }
@@ -149,8 +147,8 @@ public class TrayHandler {
         if (showCheckbox != null) {
             showCheckbox.setState(newState);
 
-            if (!newState && CaffeinatedApp.getInstance().canDoOneTimeEvent("caffeinated.instance.closed_to_tray")) {
-                CaffeinatedApp.getInstance().notify("co.casterlabs.caffeinated.app.minimized_to_tray", Collections.emptyMap(), NotificationType.INFO);
+            if (!newState && AppConfig.canDoOneTimeEvent("caffeinated.instance.closed_to_tray")) {
+                App.notify("co.casterlabs.caffeinated.app.minimized_to_tray", Collections.emptyMap(), NotificationType.INFO);
             }
         }
     }

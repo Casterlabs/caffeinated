@@ -10,8 +10,10 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.NotificationType;
+import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.sdk.KoiImpl;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.async.queue.ExecutionQueue;
 import co.casterlabs.commons.async.queue.SyncExecutionQueue;
@@ -62,13 +64,11 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         this.tokenId = tokenId;
         this.logger = new FastLogger(String.format("AuthInstance (%d) ?", this.tokenId.hashCode()));
 
-        this.token = CaffeinatedApp
-            .getInstance()
-            .getAuthPreferences()
+        this.token = AppConfig.authPreferences
             .get()
             .getToken("koi", this.tokenId);
 
-        String koiUrl = CaffeinatedApp.getInstance().getKoiUrl();
+        String koiUrl = AppConfig.appPreferences.get().koiUrl;
 
         FastLogger koiLogger = new FastLogger("AuthInstance Koi (" + tokenId + ")");
 
@@ -82,7 +82,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
             koiUrl,
             koiLogger,
             this,
-            CaffeinatedApp.KOI_ID
+            App.KOI_ID
         );
 
         this.reconnect();
@@ -97,10 +97,10 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         this.close();
 
         this.logger.info("I have been invalidate()'d, goodbye.");
-        CaffeinatedApp.getInstance().getAuthPreferences().get().removeToken("koi", this.tokenId);
-        CaffeinatedApp.getInstance().getAuth().getAuthInstances().remove(this.tokenId);
-        CaffeinatedApp.getInstance().getAuth().checkAuth();
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+        AppConfig.authPreferences.get().removeToken("koi", this.tokenId);
+        AppAuth.getAuthInstances().remove(this.tokenId);
+        AppAuth.checkAuth();
+        AppAuth.updateBridgeData();
     }
 
     public void sendChat(@NonNull String message, @NonNull KoiChatterType chatter, @Nullable String replyTarget, boolean isUserGesture) {
@@ -128,26 +128,26 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     @Override
     public void onSupportedFeatures(List<KoiIntegrationFeatures> features) {
         this.features = Collections.unmodifiableList(features);
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+        AppAuth.updateBridgeData();
     }
 
 //    @Override
 //    public void onPlatformCategories(Map<String, String> categories) {
 //        this.streamCategories = Collections.unmodifiableMap(categories);
-//        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+//        CaffeinatedApp.getAuth().updateBridgeData();
 //    }
 //
 //    @Override
 //    public void onPlatformTags(Map<String, String> tags) {
 //        this.streamTags = Collections.unmodifiableMap(tags);
-//        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+//        CaffeinatedApp.getAuth().updateBridgeData();
 //    }
 //
 //    @Override
 //    public void onSupportedStreamConfigurationFeatures(List<KoiStreamConfigurationFeatures> streamConfigFeatures) {
 //        if (streamConfigFeatures != null) {
 //            this.streamConfigurationFeatures = Collections.unmodifiableList(streamConfigFeatures);
-//            CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+//            CaffeinatedApp.getAuth().updateBridgeData();
 //        }
 //    }
 
@@ -165,7 +165,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
                 .roomstate(Roomstate.builder().build())
                 .timestamp(Instant.now())
                 .build();
-            CaffeinatedApp.getInstance().getKoi().broadcastEvent(this.roomstate);
+            KoiImpl.INSTANCE.broadcastEvent(this.roomstate);
         }
 
         // TODO
@@ -181,31 +181,31 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
 //            }
 //        }
 
-        CaffeinatedApp.getInstance().getAuth().checkStatus();
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+        AppAuth.checkStatus();
+        AppAuth.updateBridgeData();
     }
 
     @KoiEventHandler
     public void onStreamStatus(StreamStatusEvent e) {
         this.streamData = e;
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+        AppAuth.updateBridgeData();
     }
 
     @KoiEventHandler
     public void onViewerList(ViewerListEvent e) {
         this.viewers = e.viewers;
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+        AppAuth.updateBridgeData();
     }
 
     @KoiEventHandler
     public void onRoomState(RoomstateEvent e) {
         this.roomstate = e;
-        CaffeinatedApp.getInstance().getAuth().updateBridgeData();
+        AppAuth.updateBridgeData();
     }
 
     @KoiEventHandler
     public void onEvent(KoiEvent e) {
-        KoiEventUtil.reflectInvoke(CaffeinatedApp.getInstance().getKoi(), e);
+        KoiEventUtil.reflectInvoke(KoiImpl.INSTANCE, e);
     }
 
     /* ---------------- */
@@ -235,7 +235,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     public void onError(String errorCode) {
         switch (errorCode) {
             case "USER_AUTH_INVALID": {
-                CaffeinatedApp.getInstance().notify(
+                App.notify(
                     "co.casterlabs.caffeinated.app.auth.logged_out",
                     Map.of("platform", this.tokenId),
                     NotificationType.WARNING
@@ -251,7 +251,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
     public void onClose(boolean remote) {
         if (this.disposed) return;
 
-        CaffeinatedApp.getInstance().getAuth().checkStatus();
+        AppAuth.checkStatus();
 
         try {
             Thread.sleep(5000);

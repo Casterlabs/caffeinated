@@ -8,22 +8,20 @@ import co.casterlabs.caffeinated.util.Crypto;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
-import lombok.Data;
 
-@Data
 @JsonClass(exposeAll = true)
 public class AppPreferences {
     private int conductorPort = 8092; // Caffeinated <1.2 was 8091.
-    private String conductorKey = new String(Crypto.generateSecureRandomKey());
-    private String developerApiKey = new String(Crypto.generateSecureRandomKey());
-    private String installationId = UUID.randomUUID().toString();
+    public String conductorKey = new String(Crypto.generateSecureRandomKey());
+    public String developerApiKey = new String(Crypto.generateSecureRandomKey());
+    public String installationId = UUID.randomUUID().toString();
 
-    private Set<String> oneTimeEvents = new HashSet<>();
+    public Set<String> oneTimeEvents = new HashSet<>();
 
-    private String koiUrl = "wss://api.casterlabs.co/v2/koi";
+    public String koiUrl = "wss://api.casterlabs.co/v2/koi";
 
-    public int getConductorPort() {
-        if (CaffeinatedApp.getInstance().isDev()) {
+    public int conductorPort() {
+        if (App.isDev) {
             // Assign a "random" port when in dev mode. We do this in a method so that when
             // save() is called we don't accidentally write this port to disk.
             return this.conductorPort + 1;

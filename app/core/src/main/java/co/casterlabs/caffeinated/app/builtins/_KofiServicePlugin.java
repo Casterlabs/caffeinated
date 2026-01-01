@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.thirdparty;
+package co.casterlabs.caffeinated.app.builtins;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -6,8 +6,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.ui.UIDocksPlugin;
+import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.sdk.KoiImpl;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
@@ -38,7 +38,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1Listener {
+class _KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1Listener {
     private static final SimpleProfile KOFI_STREAMER = SimpleProfile.of(UserPlatform.CUSTOM_INTEGRATION, "kofi");
 
     private KinokoV1Connection connection = new KinokoV1Connection(this);
@@ -91,12 +91,12 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
                     .appendFragment(message)
                     .build();
 
-                CaffeinatedApp.getInstance().getKoi().broadcastEvent(rich);
+                KoiImpl.INSTANCE.broadcastEvent(rich);
                 break;
             }
 
             case "Subscription": {
-                CaffeinatedApp.getInstance().getKoi().broadcastEvent(
+                KoiImpl.INSTANCE.broadcastEvent(
                     SubscriptionEvent.builder()
                         .timestamp(Instant.now())
                         .streamer(KOFI_STREAMER)
@@ -109,7 +109,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
             }
 
 //            case "Shop Order": {
-//                CaffeinatedApp.getInstance().notify(
+//                CaffeinatedApp.notify(
 //                    String.format("%s just made an order on your Ko-fi shop!", json.getString("from_name")),
 //                    Collections.emptyMap(),
 //                    NotificationType.INFO
@@ -175,7 +175,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
         @Override
         public void onNewInstance(@NonNull WidgetInstance instance) {
             instance.on("copyUrl", () -> {
-                CaffeinatedApp.getInstance().copyText(
+                Caffeinated.getInstance().copyText(
                     "https://api.casterlabs.co/v1/kinoko?channel=" + WebUtil.encodeURIComponent(getChannel()),
                     "Copied webhook URL to clipboard."
                 );
@@ -186,7 +186,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
 
     @Override
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
-        return UIDocksPlugin.resolveUIFile(resource);
+        return BuiltIns.resolveUIFile(resource);
     }
 
     private static String getRandomAvatar() {
@@ -196,7 +196,7 @@ public class KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1List
     private static String getChannel() {
         return String.format(
             "caffeinated_api:%s:kofi",
-            CaffeinatedApp.getInstance().getAppPreferences().get().getDeveloperApiKey()
+            AppConfig.appPreferences.get().developerApiKey
         );
     }
 

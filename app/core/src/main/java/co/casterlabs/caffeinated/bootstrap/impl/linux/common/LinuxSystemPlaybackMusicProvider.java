@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
+import co.casterlabs.caffeinated.app.music_integration.AbstractMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.SystemPlaybackMusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
@@ -65,7 +65,7 @@ public class LinuxSystemPlaybackMusicProvider extends SystemPlaybackMusicProvide
                 }
 
                 // Use the better parsing for a more accurate result.
-                Pair<String, List<String>> betterResult = InternalMusicProvider.parseTitleForArtists(title, artists);
+                Pair<String, List<String>> betterResult = AbstractMusicProvider.parseTitleForArtists(title, artists);
 
                 title = betterResult.a();
                 artists = betterResult.b();

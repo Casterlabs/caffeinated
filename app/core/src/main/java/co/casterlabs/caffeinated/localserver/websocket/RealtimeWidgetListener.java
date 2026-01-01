@@ -2,7 +2,8 @@ package co.casterlabs.caffeinated.localserver.websocket;
 
 import java.io.IOException;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
+import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -79,7 +80,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
         this.sendMessage(
             "APP",
-            CaffeinatedApp.getInstance().getUI().constructSDKPreferences()
+            AppUI.constructSDKPreferences()
         );
 
         this.sendMessage(
@@ -155,7 +156,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                 case "OPEN_LINK": {
                     JsonObject data = message.getObject("data");
                     String link = data.getString("link");
-                    CaffeinatedApp.getInstance().openLink(link);
+                    CaffeinatedImpl.INSTANCE.openLink(link);
                     return;
                 }
 
@@ -187,7 +188,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                         JsonObject knownPlaceholders = data.getObject("knownPlaceholders");
                         JsonArray knownComponents = data.getArray("knownComponents");
 
-                        String value = CaffeinatedApp.getInstance().localize(key, knownPlaceholders, knownComponents);
+                        String value = CaffeinatedImpl.INSTANCE.localize(key, knownPlaceholders, knownComponents);
 
                         this.sendMessage(
                             "LOCALIZE",

@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.koi;
+package co.casterlabs.caffeinated.app.sdk;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,9 +14,13 @@ import org.jetbrains.annotations.Nullable;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.AppWindow;
 import co.casterlabs.caffeinated.app.RealtimeApiListener;
+import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.auth.AuthInstance;
+import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
+import co.casterlabs.caffeinated.app.plugins.AppPlugins;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.koi.Koi;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -48,7 +52,9 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @SuppressWarnings("deprecation")
 @JavascriptObject
-public class GlobalKoi implements Koi, KoiLifeCycleHandler {
+public class KoiImpl implements Koi, KoiLifeCycleHandler {
+    public static final KoiImpl INSTANCE = new KoiImpl();
+
     private static final List<KoiEventType> KEPT_EVENTS = Arrays.asList(
         KoiEventType.FOLLOW,
         KoiEventType.SUBSCRIPTION,
@@ -102,7 +108,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
         // Diff the AuthInstances and check for signedout platforms.
         List<UserPlatform> validPlatforms = new LinkedList<>();
 
-        for (AuthInstance inst : CaffeinatedApp.getInstance().getAuth().getAuthInstances().values()) {
+        for (AuthInstance inst : AppAuth.getAuthInstances().values()) {
             if (inst.getUserData() != null) {
                 validPlatforms.add(inst.getUserData().platform);
             }
@@ -121,7 +127,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
     }
 
     private void updateBridgeData() {
-        for (AuthInstance auth : CaffeinatedApp.getInstance().getAuth().getAuthInstances().values()) {
+        for (AuthInstance auth : AppAuth.getAuthInstances().values()) {
             if (auth.getUserData() != null) {
                 this.features.put(auth.getUserData().platform, Collections.unmodifiableList(auth.getFeatures()));
             }
@@ -132,7 +138,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
 
         // Send update to the widget instances.
         AsyncTask.create(() -> {
-            for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPlugins()) {
+            for (CaffeinatedPlugin plugin : AppPlugins.getLoadedPlugins()) {
                 for (Widget widget : plugin.getWidgets()) {
                     for (WidgetInstance instance : widget.getWidgetInstances()) {
                         try {
@@ -159,7 +165,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
         AsyncTask.create(() -> {
             try {
                 // Send the events to the widget instances.
-                for (RealtimeApiListener listener : CaffeinatedApp.getInstance().getApiListeners().toArray(new RealtimeApiListener[0])) {
+                for (RealtimeApiListener listener : App.apiListeners.toArray(new RealtimeApiListener[0])) {
                     listener.onKoiStaticsUpdate(extendedStatics);
                 }
             } catch (Exception e) {
@@ -196,7 +202,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
             return; // Don't further process.
         }
 
-        for (CaffeinatedPlugin plugin : CaffeinatedApp.getInstance().getPluginIntegration().getLoadedPlugins()) {
+        for (CaffeinatedPlugin plugin : AppPlugins.getLoadedPlugins()) {
             try {
                 if (plugin.shouldCancel(e)) {
                     return;
@@ -209,11 +215,11 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
 
         try {
             // Process shout events.
-            CaffeinatedApp.getInstance().getChatbot().processEventForShout(e);
+            AppChatbot.processEventForShout(e);
 
             if (e.type() == KoiEventType.RICH_MESSAGE) {
                 RichMessageEvent richMessage = (RichMessageEvent) e;
-                CaffeinatedApp.getInstance().getChatbot().processEventForCommand(richMessage);
+                AppChatbot.processEventForCommand(richMessage);
             }
         } catch (Throwable t) {
             // Chat bot error.
@@ -294,14 +300,14 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
         AsyncTask.create(() -> {
             JsonElement asJson = Rson.DEFAULT.toJson(e);
 
-            CaffeinatedApp.getInstance().getSaucer().messages.emit(new Object[] {
-                    "koi:event:" + e.type().name().toLowerCase(),
-                    asJson
-            });
-            CaffeinatedApp.getInstance().getSaucer().messages.emit(new Object[] {
-                    "koi:event",
-                    asJson
-            });
+            AppWindow.emit(
+                "koi:event:" + e.type().name().toLowerCase(),
+                asJson
+            );
+            AppWindow.emit(
+                "koi:event",
+                asJson
+            );
 
             // These are used internally.
             for (KoiLifeCycleHandler listener : this.koiEventListeners) {
@@ -309,13 +315,13 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
             }
         });
 
-        if (CaffeinatedApp.getInstance().getChatbot().shouldHideFromWidgets(e)) {
+        if (AppChatbot.shouldHideFromWidgets(e)) {
             return;
         }
 
         // Notify the plugins
         AsyncTask.create(() -> {
-            for (CaffeinatedPlugin pl : CaffeinatedApp.getInstance().getPluginIntegration().getPlugins().getPlugins()) {
+            for (CaffeinatedPlugin pl : AppPlugins.getLoadedPlugins()) {
                 pl.fireKoiEventListeners(e);
             }
         });
@@ -324,7 +330,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
         AsyncTask.create(() -> {
             try {
                 // Send the events to the widget instances.
-                for (RealtimeApiListener listener : CaffeinatedApp.getInstance().getApiListeners().toArray(new RealtimeApiListener[0])) {
+                for (RealtimeApiListener listener : App.apiListeners.toArray(new RealtimeApiListener[0])) {
                     listener.onKoiEvent(e);
                 }
             } catch (Exception ex) {
@@ -348,7 +354,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
             return;
         }
 
-        AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
+        AuthInstance inst = AppAuth.getAuthInstance(platform);
 
         if (inst != null) {
             inst.sendChat(message, chatter, replyTarget, isUserGesture);
@@ -358,7 +364,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
     @JavascriptFunction
     @Override
     public void upvoteChat(@NonNull UserPlatform platform, @NonNull String messageId) {
-        AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
+        AuthInstance inst = AppAuth.getAuthInstance(platform);
 
         if (inst != null) {
             inst.upvoteChat(messageId);
@@ -368,7 +374,7 @@ public class GlobalKoi implements Koi, KoiLifeCycleHandler {
     @JavascriptFunction
     @Override
     public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId, boolean isUserGesture) {
-        AuthInstance inst = CaffeinatedApp.getInstance().getAuth().getAuthInstance(platform);
+        AuthInstance inst = AppAuth.getAuthInstance(platform);
 
         if (inst != null) {
             inst.deleteChat(messageId, isUserGesture);

@@ -1,13 +1,12 @@
-package co.casterlabs.caffeinated.app.music_integration.impl;
+package co.casterlabs.caffeinated.app.music_integration;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
-import co.casterlabs.caffeinated.app.music_integration.impl.PretzelMusicProvider.PretzelSettings;
+import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.music_integration.PretzelMusicProvider.PretzelSettings;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
@@ -18,7 +17,7 @@ import lombok.NonNull;
 import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings> {
+public class PretzelMusicProvider extends AbstractMusicProvider<PretzelSettings> {
     private static final String PRETZEL_ENDPOINT = "https://api.pretzel.tv/playing/twitch/%s/json";
     private static final long POLL_RATE = TimeUnit.SECONDS.toMillis(20);
 
@@ -27,7 +26,7 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
     private String channelId;
     private MusicTrack currentTrackCache;
 
-    public PretzelMusicProvider(@NonNull MusicIntegration musicIntegration) {
+    public PretzelMusicProvider(@NonNull MusicImpl musicIntegration) {
         super("Pretzel", "pretzel", PretzelSettings.class);
         musicIntegration.getProviders().put(this.getServiceId(), this);
     }
@@ -35,7 +34,7 @@ public class PretzelMusicProvider extends InternalMusicProvider<PretzelSettings>
     @SuppressWarnings("deprecation")
     @Override
     public void init() {
-        CaffeinatedApp.getInstance().onAppEvent("auth:platforms", (JsonObject data) -> {
+        App.onAppEvent("auth:platforms", (JsonObject data) -> {
             try {
                 if (data.containsKey("TWITCH")) {
                     JsonObject twitchUserData = data

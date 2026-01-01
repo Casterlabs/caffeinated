@@ -1,6 +1,5 @@
 package co.casterlabs.caffeinated.app.music_integration;
 
-import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -9,6 +8,7 @@ import lombok.Getter;
 
 @Getter
 @JsonClass(exposeAll = true)
+// NB: THIS CANNOT MOVE OR CHANGE NAME BECAUSE OF CACHE COMPATIBILITY.
 public class MusicProviderSettings implements Cacheable {
     private String serviceId;
     private JsonElement json;
@@ -18,7 +18,7 @@ public class MusicProviderSettings implements Cacheable {
         return this.serviceId;
     }
 
-    public static MusicProviderSettings from(InternalMusicProvider<?> provider) {
+    public static MusicProviderSettings from(AbstractMusicProvider<?> provider) {
         return from(
             provider.getServiceId(),
             Rson.DEFAULT.toJson(provider.getSettings())

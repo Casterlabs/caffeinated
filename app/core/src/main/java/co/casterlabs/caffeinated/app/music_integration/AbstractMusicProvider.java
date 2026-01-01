@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.music_integration.impl;
+package co.casterlabs.caffeinated.app.music_integration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicProvider;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
@@ -25,7 +24,7 @@ import lombok.ToString;
 @ToString
 @RequiredArgsConstructor
 @JsonClass(exposeAll = true)
-public abstract class InternalMusicProvider<T> implements MusicProvider {
+public abstract class AbstractMusicProvider<T> implements MusicProvider {
     private final String serviceName;
     private final String serviceId;
     private final Class<T> settingsClass;
@@ -45,7 +44,7 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
     protected void updateSettings(@NonNull Object settings) {
         this.settings = (T) settings;
         this.onSettingsUpdate();
-        CaffeinatedApp.getInstance().getMusic().save(this); // Auto updates bridge data.
+        MusicImpl.INSTANCE.save(this); // Auto updates bridge data.
     }
 
     @SuppressWarnings("deprecation")
@@ -68,7 +67,7 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
             this.isSignedIn = true;
             this.accountName = accountName;
             this.accountLink = accountLink;
-            CaffeinatedApp.getInstance().getMusic().updateBridgeData();
+            MusicImpl.INSTANCE.updateBridgeData();
         } else {
             this.isSignedIn = false;
             this.accountName = null;
@@ -80,34 +79,31 @@ public abstract class InternalMusicProvider<T> implements MusicProvider {
     protected void setPlaybackStateInactive() {
         this.playbackState = MusicPlaybackState.INACTIVE;
         this.currentTrack = null;
-        CaffeinatedApp.getInstance().getMusic().updateBridgeData();
+        MusicImpl.INSTANCE.updateBridgeData();
     }
 
     protected void setPlaying(@NonNull MusicTrack track) {
         this.playbackState = MusicPlaybackState.PLAYING;
         this.currentTrack = track;
-        CaffeinatedApp.getInstance().getMusic().updateBridgeData();
+        MusicImpl.INSTANCE.updateBridgeData();
     }
 
     protected void setPaused(@NonNull MusicTrack track) {
         this.playbackState = MusicPlaybackState.PAUSED;
         this.currentTrack = track;
-        CaffeinatedApp.getInstance().getMusic().updateBridgeData();
+        MusicImpl.INSTANCE.updateBridgeData();
     }
 
     protected void makePaused() {
         if (this.currentTrack != null) {
             this.playbackState = MusicPlaybackState.PAUSED;
-            CaffeinatedApp.getInstance().getMusic().updateBridgeData();
+            MusicImpl.INSTANCE.updateBridgeData();
         }
     }
 
     public abstract void signout();
 
-    public static Pair<String, List<String>> parseTitleForArtists(
-        @NonNull String title,
-        @NonNull List<String> prediscoveredArtists
-    ) {
+    public static Pair<String, List<String>> parseTitleForArtists(@NonNull String title, @NonNull List<String> prediscoveredArtists) {
         final boolean PARSE_FT = true;
         final boolean CLEANSE_TITLE = true;
         final String FT_REGEX = "(\\(ft.*\\))|(\\(feat.*\\))|(\\(avec.*\\))";

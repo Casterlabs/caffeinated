@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -35,7 +35,7 @@ public interface RouteHelper {
             return false;
         }
 
-        String conductorKey = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorKey();
+        String conductorKey = AppConfig.appPreferences.get().conductorKey;
 
         return auth.equals(conductorKey);
     }
@@ -50,7 +50,7 @@ public interface RouteHelper {
             return false;
         }
 
-        String conductorKey = CaffeinatedApp.getInstance().getAppPreferences().get().getConductorKey();
+        String conductorKey = AppConfig.appPreferences.get().conductorKey;
 
         return auth.equals(conductorKey);
     }

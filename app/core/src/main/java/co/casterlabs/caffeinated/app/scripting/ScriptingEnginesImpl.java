@@ -7,8 +7,18 @@ import co.casterlabs.caffeinated.pluginsdk.scripting.ScriptingEngines;
 import lombok.NonNull;
 
 public class ScriptingEnginesImpl implements ScriptingEngines {
+    public static final ScriptingEnginesImpl INSTANCE = new ScriptingEnginesImpl();
+
+//    AsyncTask.create(() -> {
+//        try {
+//            INSTANCE = new ScriptingEnginesImpl();
+//        } catch (Throwable t) {
+//            FastLogger.logException(t);
+//        }
+//    });
+
     private static final Map<String, ScriptingEngine> ENGINES = Map.of(
-        "javascript", new JavascriptEngineImpl()
+        "javascript", new _JavascriptEngine()
     );
 
     @Override

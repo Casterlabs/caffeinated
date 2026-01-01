@@ -1,6 +1,7 @@
 package co.casterlabs.caffeinated.app.api;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
 import co.casterlabs.rakurai.json.Rson;
@@ -14,7 +15,7 @@ public class MusicApi implements KinokoV1Listener {
         if (this.connection.isConnected()) {
             this.connection.send(
                 Rson.DEFAULT.toJson(
-                    CaffeinatedApp
+                    Caffeinated
                         .getInstance()
                         .getMusic()
                         .getActivePlayback()
@@ -46,7 +47,7 @@ public class MusicApi implements KinokoV1Listener {
             this.connection.connect(
                 String.format(
                     "caffeinated_api:%s:music",
-                    CaffeinatedApp.getInstance().getAppPreferences().get().getDeveloperApiKey()
+                    AppConfig.appPreferences.get().developerApiKey
                 ),
                 true,
                 false

@@ -1,13 +1,13 @@
-package co.casterlabs.caffeinated.app.music_integration.impl;
+package co.casterlabs.caffeinated.app.music_integration;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
-import co.casterlabs.caffeinated.app.music_integration.MusicIntegration;
-import co.casterlabs.caffeinated.app.music_integration.impl.SpotifyMusicProvider.SpotifySettings;
+import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.music_integration.SpotifyMusicProvider.SpotifySettings;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
@@ -21,7 +21,7 @@ import lombok.NonNull;
 import okhttp3.Request;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings> {
+public class SpotifyMusicProvider extends AbstractMusicProvider<SpotifySettings> {
     private static final long POLL_RATE = TimeUnit.SECONDS.toMillis(15);
 
     private FastLogger logger = new FastLogger();
@@ -29,7 +29,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
     private String refreshToken;
     private String accessToken;
 
-    public SpotifyMusicProvider(@NonNull MusicIntegration musicIntegration) {
+    public SpotifyMusicProvider(@NonNull MusicImpl musicIntegration) {
         super("Spotify", "spotify", SpotifySettings.class);
         musicIntegration.getProviders().put(this.getServiceId(), this);
     }
@@ -37,8 +37,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
     @SuppressWarnings("deprecation")
     @Override
     public void init() {
-        CaffeinatedApp
-            .getInstance()
+        App
             .onAppEvent("auth:completion", (JsonObject data) -> {
                 if (data.getString("type").equals("music") &&
                     data.getString("platform").equals("spotify")) {
@@ -132,7 +131,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
                 }
 
                 // Use the better parsing for a more accurate result.
-                Pair<String, List<String>> betterResult = InternalMusicProvider.parseTitleForArtists(title, artists);
+                Pair<String, List<String>> betterResult = AbstractMusicProvider.parseTitleForArtists(title, artists);
                 title = betterResult.a();
                 artists = betterResult.b();
 
@@ -155,9 +154,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
 
     @Override
     protected void onSettingsUpdate() {
-        this.refreshToken = CaffeinatedApp
-            .getInstance()
-            .getAuthPreferences()
+        this.refreshToken = AppConfig.authPreferences
             .get()
             .getToken("music", "spotify");
 
@@ -175,8 +172,8 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
         this.accessToken = null;
 
         this.setAccountData(false, null, null);
-        CaffeinatedApp.getInstance().getAuthPreferences().get().removeToken("music", "spotify");
-        CaffeinatedApp.getInstance().getAuthPreferences().save();
+        AppConfig.authPreferences.get().removeToken("music", "spotify");
+        AppConfig.authPreferences.save();
     }
 
     @JsonClass(exposeAll = true)
@@ -185,7 +182,7 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
     }
 
     private void completeOAuth() {
-        String code = CaffeinatedApp.getInstance().getAuthPreferences().get().getToken("music", "spotify");
+        String code = AppConfig.authPreferences.get().getToken("music", "spotify");
 
         try {
             JsonObject response = Rson.DEFAULT.fromJson(
@@ -198,15 +195,15 @@ public class SpotifyMusicProvider extends InternalMusicProvider<SpotifySettings>
             this.refreshToken = response.getString("refresh_token");
 
             // Update the auth file.
-            CaffeinatedApp.getInstance().getAuthPreferences().get().addToken("music", "spotify", this.refreshToken);
-            CaffeinatedApp.getInstance().getAuthPreferences().save();
+            AppConfig.authPreferences.get().addToken("music", "spotify", this.refreshToken);
+            AppConfig.authPreferences.save();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         this.logger.info("OAuth Completed, enabling now.");
 
-        CaffeinatedApp.getInstance().getAuthPreferences().save();
+        AppConfig.authPreferences.save();
         this.setAccountData(true, "?", "#");
         this.pollSpotify();
     }

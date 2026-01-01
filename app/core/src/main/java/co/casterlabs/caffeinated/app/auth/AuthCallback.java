@@ -3,7 +3,7 @@ package co.casterlabs.caffeinated.app.auth;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
 import co.casterlabs.caffeinated.util.Crypto;
@@ -35,7 +35,7 @@ public class AuthCallback {
         this.stateString = String.format("auth_redirect:%s:caffeinated_%s", new String(Crypto.generateSecureRandomKey()), this.type);
 
         if (isKoi) {
-            this.stateString += ':' + CaffeinatedApp.KOI_ID;
+            this.stateString += ':' + App.KOI_ID;
         }
     }
 

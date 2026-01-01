@@ -22,16 +22,16 @@ import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPluginImplementation;
 import lombok.NonNull;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
-public class PluginLoader {
+class _PluginLoader {
 
-    public static List<CaffeinatedPlugin> loadFile(@NonNull File file) throws IOException {
+    static List<CaffeinatedPlugin> loadFile(@NonNull File file) throws IOException {
         if (file.isFile()) {
             URLClassLoader classLoader = null;
 
             try {
                 URL url = file.toURI().toURL();
 
-                classLoader = GlobalPluginClassLoader.create(url);
+                classLoader = _GlobalPluginClassLoader.create(url);
 
                 List<Class<?>> types = new LinkedList<>();
 
@@ -77,7 +77,7 @@ public class PluginLoader {
         }
     }
 
-    public static List<CaffeinatedPlugin> loadFromClassLoader(@NonNull PluginsHandler pluginsInst, @NonNull ClassLoader classLoader) throws IOException {
+    static List<CaffeinatedPlugin> loadFromClassLoader(@NonNull ClassLoader classLoader) throws IOException {
         Reflections reflections = new Reflections(classLoader);
 
         Set<Class<?>> types = reflections.getTypesAnnotatedWith(CaffeinatedPluginImplementation.class, true);
@@ -89,7 +89,7 @@ public class PluginLoader {
         return loadFromClassCollection(types, classLoader);
     }
 
-    public static List<CaffeinatedPlugin> loadFromClassCollection(@NonNull Collection<Class<?>> types, @NonNull ClassLoader classLoader) throws IOException {
+    static List<CaffeinatedPlugin> loadFromClassCollection(@NonNull Collection<Class<?>> types, @NonNull ClassLoader classLoader) throws IOException {
         if (types.isEmpty()) {
             if (classLoader instanceof Closeable) {
                 ((Closeable) classLoader).close();

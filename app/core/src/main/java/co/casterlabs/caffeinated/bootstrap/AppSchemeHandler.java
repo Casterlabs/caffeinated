@@ -3,7 +3,7 @@ package co.casterlabs.caffeinated.bootstrap;
 import app.saucer.webview.scheme.SaucerSchemeHandler;
 import app.saucer.webview.scheme.SaucerSchemeRequest;
 import app.saucer.webview.scheme.SaucerSchemeResponse;
-import co.casterlabs.caffeinated.app.Resources;
+import co.casterlabs.caffeinated.app.util.Resources;
 import co.casterlabs.caffeinated.util.MimeTypes;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;

@@ -24,8 +24,13 @@ import javax.script.ScriptException;
 import org.jetbrains.annotations.Nullable;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.AppSounds;
 import co.casterlabs.caffeinated.app.NotificationType;
+import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
+import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
+import co.casterlabs.caffeinated.app.sdk.KoiImpl;
+import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.TTS;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;
@@ -46,7 +51,7 @@ import xyz.e3ndr.fastloggingframework.LogUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class JavascriptEngineImpl implements ScriptingEngine {
+class _JavascriptEngine implements ScriptingEngine {
     private static final Pattern QUOTE_PATTERN = Pattern.compile("([^\\\"]\\S*|\\\".+?\\\") *");
     private static Robot robot;
 
@@ -60,12 +65,12 @@ public class JavascriptEngineImpl implements ScriptingEngine {
         }
     }
 
-    public JavascriptEngineImpl() {
+    _JavascriptEngine() {
         try {
             System.setProperty("nashorn.args", "--language=es6");
             this.engine = new NashornScriptEngineFactory().getScriptEngine();
 
-            this.engine.put("store", CaffeinatedApp.getInstance().getChatbotPreferences().get().getStore());
+            this.engine.put("store", AppConfig.chatbotPreferences.get().store);
             this.engine.put("Koi", new KoiScriptHandle());
             this.engine.put("fetch", new FetchScriptHandle());
             this.engine.put("Plugins", new PluginsScriptHandle());
@@ -125,12 +130,12 @@ public class JavascriptEngineImpl implements ScriptingEngine {
 
             String[] script = {
                     "(() => {",
-                    String.format("const Music = %s;", CaffeinatedApp.getInstance().getMusic().toJson()),
+                    String.format("const Music = %s;", CaffeinatedImpl.INSTANCE.getMusic().toJson()),
                     String.format(
                         "const ChatBot = {"
                             + "realChatter: %s"
                             + "};",
-                        new JsonString(CaffeinatedApp.getInstance().getChatbotPreferences().get().getChatter().name())
+                        new JsonString(AppConfig.chatbotPreferences.get().chatter.name())
                     ),
                     String.format("const event = %s;", Rson.DEFAULT.toJson(event)), // Define the event.
                     String.format("const args = %s;", Rson.DEFAULT.toJson(args)),   // Define a list of arguments, only applicable for RichMessages.
@@ -142,17 +147,17 @@ public class JavascriptEngineImpl implements ScriptingEngine {
             };
 
             Object result = this.engine.eval(String.join("\n", script), this.engine.getContext());
-            CaffeinatedApp.getInstance().getChatbotPreferences().save(); // Save any changes to store.
+            AppConfig.chatbotPreferences.save(); // Save any changes to store.
             return result;
         } catch (ScriptException e) {
             String message = LogUtil.parseFormat("An error occurred whilst executing script command:\n%s", e);
             FastLogger.logStatic(LogLevel.WARNING, message);
-            CaffeinatedApp.getInstance().getUI().showToast(message, NotificationType.WARNING);
+            AppUI.showToast(message, NotificationType.WARNING);
             return null;
         }
     }
 
-    public static class KoiScriptHandle {
+    static class KoiScriptHandle {
 
         public void sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter) {
             this.sendChat(platform, message, chatter, null);
@@ -160,25 +165,25 @@ public class JavascriptEngineImpl implements ScriptingEngine {
 
         public void sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter, @Nullable String replyTarget) {
             UserPlatform enumP = platform == null ? null : UserPlatform.valueOf(platform);
-            CaffeinatedApp.getInstance().getKoi().sendChat(enumP, message, KoiChatterType.valueOf(chatter), replyTarget, false);
-            CaffeinatedApp.getInstance().getChatbot().getRecentReplies().add(message);
+            KoiImpl.INSTANCE.sendChat(enumP, message, KoiChatterType.valueOf(chatter), replyTarget, false);
+            AppChatbot.getRecentReplies().add(message);
 
-            while (CaffeinatedApp.getInstance().getChatbot().getRecentReplies().size() > 50) {
-                CaffeinatedApp.getInstance().getChatbot().getRecentReplies().removeFirst();
+            while (AppChatbot.getRecentReplies().size() > 50) {
+                AppChatbot.getRecentReplies().removeFirst();
             }
         }
 
         public void upvoteChat(@NonNull String platform, @NonNull String messageId) {
-            CaffeinatedApp.getInstance().getKoi().upvoteChat(UserPlatform.valueOf(platform), messageId);
+            KoiImpl.INSTANCE.upvoteChat(UserPlatform.valueOf(platform), messageId);
         }
 
         public void deleteChat(@NonNull String platform, @NonNull String messageId) {
-            CaffeinatedApp.getInstance().getKoi().deleteChat(UserPlatform.valueOf(platform), messageId, false);
+            KoiImpl.INSTANCE.deleteChat(UserPlatform.valueOf(platform), messageId, false);
         }
 
     }
 
-    public static class FetchScriptHandle {
+    static class FetchScriptHandle {
 
         @SneakyThrows
         public String asText(@NonNull String url) {
@@ -198,14 +203,14 @@ public class JavascriptEngineImpl implements ScriptingEngine {
         }
     }
 
-    public static class PluginsScriptHandle {
+    static class PluginsScriptHandle {
 
         public Object callServiceMethod(@NonNull String pluginId, @NonNull String serviceId, @NonNull String methodName, @Nullable Object[] args) {
-            return CaffeinatedApp.getInstance().getPlugins().callServiceMethod(pluginId, serviceId, methodName, args);
+            return CaffeinatedImpl.INSTANCE.getPlugins().callServiceMethod(pluginId, serviceId, methodName, args);
         }
     }
 
-    public static class SoundScriptHandle {
+    static class SoundScriptHandle {
 
         public void playAudio(@NonNull String audioUrl, Number volume) throws IOException {
             if (volume == null) volume = 1;
@@ -215,7 +220,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
 
             if (audioUrl.startsWith("data:")) {
                 FastLogger.logStatic(LogLevel.DEBUG, "Playing audio: ??? (data uri)");
-                CaffeinatedApp.getInstance().getUI().playAudio(
+                AppSounds.playUrl(
                     audioUrl,
                     volume.floatValue()
                 );
@@ -237,7 +242,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
             }
 
             FastLogger.logStatic(LogLevel.DEBUG, "Playing audio: %s", audioMime);
-            CaffeinatedApp.getInstance().getUI().playAudio(
+            AppSounds.playUrl(
                 "data:" + audioMime + ";base64," + Base64.getEncoder().encodeToString(audioBytes),
                 volume.floatValue()
             );
@@ -250,7 +255,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
         }
     }
 
-    public static class InputScriptHandle {
+    static class InputScriptHandle {
 
         @SneakyThrows
         public void keyPress(@NonNull String keyCode) {
@@ -335,7 +340,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
 
     }
 
-    public static class InternalScriptHandle {
+    static class InternalScriptHandle {
 
         @SneakyThrows
         public void sleep(Number milliseconds) {
@@ -344,7 +349,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
 
     }
 
-    public static class CurrenciesScriptHandle {
+    static class CurrenciesScriptHandle {
 
         public String formatCurrency(Number amount, @NonNull String currency) throws InterruptedException, Throwable {
             return Currencies.formatCurrency(amount.doubleValue(), currency).await();

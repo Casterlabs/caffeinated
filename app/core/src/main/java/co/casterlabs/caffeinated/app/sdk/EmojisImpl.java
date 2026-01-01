@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app;
+package co.casterlabs.caffeinated.app.sdk;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +11,9 @@ import co.casterlabs.emoji.generator.EmojiIndexGenerator;
 import lombok.Setter;
 
 @JavascriptObject
-public class EmojisObj implements Emojis {
+public class EmojisImpl implements Emojis {
+    public static final EmojisImpl INSTANCE = new EmojisImpl();
+
     private static EmojiIndex emojiIndex;
     private static @Setter String emojiProvider = "system"; // Gets set by AppUI.
 
@@ -40,7 +42,6 @@ public class EmojisObj implements Emojis {
     @Override
     public String matchAndReturnHTML(@Nullable String input, boolean escapeInput) {
         if (input == null || emojiIndex == null) return input;
-
         return emojiIndex.matchAllEmojisAndReturnHtml(input, emojiProvider, escapeInput);
     }
 

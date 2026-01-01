@@ -9,7 +9,7 @@
 //
 //    private void save_db() {
 //        this.debouncer.debounce(() -> {
-//            CaffeinatedApp.getInstance().getWindowPreferences().save();
+//            CaffeinatedApp.getWindowPreferences().save();
 //        });
 //    }
 //

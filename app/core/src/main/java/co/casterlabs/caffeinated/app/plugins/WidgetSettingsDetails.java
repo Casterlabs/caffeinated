@@ -11,7 +11,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @JsonClass(exposeAll = true)
-public class WidgetSettingsDetails implements Cacheable {
+//NB: THIS CANNOT MOVE OR CHANGE NAME BECAUSE OF CACHE COMPATIBILITY.
+class WidgetSettingsDetails implements Cacheable {
     private String id;
     private String namespace;
     private String name;
@@ -22,7 +23,7 @@ public class WidgetSettingsDetails implements Cacheable {
         return this.id;
     }
 
-    public static WidgetSettingsDetails from(@NonNull Widget widget) {
+    static WidgetSettingsDetails from(@NonNull Widget widget) {
         WidgetSettingsDetails details = new WidgetSettingsDetails();
 
         details.id = widget.getId();

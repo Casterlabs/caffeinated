@@ -1,10 +1,10 @@
 package co.casterlabs.caffeinated.bootstrap;
 
-import co.casterlabs.caffeinated.app.music_integration.impl.InternalMusicProvider;
+import co.casterlabs.caffeinated.app.music_integration.AbstractMusicProvider;
 import co.casterlabs.caffeinated.bootstrap.SystemPlaybackMusicProvider.SystemPlaybackSettings;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 
-public abstract class SystemPlaybackMusicProvider extends InternalMusicProvider<SystemPlaybackSettings> {
+public abstract class SystemPlaybackMusicProvider extends AbstractMusicProvider<SystemPlaybackSettings> {
 
     public SystemPlaybackMusicProvider() {
         super("System", "system", SystemPlaybackSettings.class);

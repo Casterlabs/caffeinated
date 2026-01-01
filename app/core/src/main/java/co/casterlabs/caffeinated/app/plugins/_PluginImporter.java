@@ -6,17 +6,17 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 
-import co.casterlabs.caffeinated.app.CaffeinatedApp;
+import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class PluginImporter {
+class _PluginImporter {
     private static final FastLogger logger = new FastLogger();
 
-    public static List<WidgetSettingsDetails> importOldJson() {
-        File oldJson = new File(CaffeinatedApp.APP_DATA_DIR, "preferences/plugins.json");
+    static List<WidgetSettingsDetails> importOldJson() {
+        File oldJson = new File(AppConfig.APP_DATA_DIR, "preferences/plugins.json");
         if (!oldJson.exists()) return Collections.emptyList();
 
         try {
@@ -32,7 +32,7 @@ public class PluginImporter {
         } finally {
             // Keep a backup of the file.
             logger.info("Done!");
-            oldJson.renameTo(new File(CaffeinatedApp.APP_DATA_DIR, "preferences/old/plugins.json"));
+            oldJson.renameTo(new File(AppConfig.APP_DATA_DIR, "preferences/old/plugins.json"));
             oldJson.delete();
         }
     }
