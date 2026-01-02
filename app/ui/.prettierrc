@@ -3,12 +3,8 @@
 	"singleQuote": true,
 	"trailingComma": "none",
 	"printWidth": 180,
-	"plugins": [
-		"prettier-plugin-svelte",
-		"prettier-plugin-tailwindcss",
-		"@trivago/prettier-plugin-sort-imports"
-	],
-	"importOrder": ["^(.*)((heroicons-svelte)|(\\.svelte))$", "^svelte$"],
+	"plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"],
+	"importOrder": ["^(.*)((@casterlabs\/heroicons-svelte)|(@casterlabs\/ui)|(\\.svelte))$", "^svelte$"],
 	"importOrderSeparation": true,
 	"importOrderSortSpecifiers": true,
 	"overrides": [

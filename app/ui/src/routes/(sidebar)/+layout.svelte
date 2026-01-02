@@ -70,7 +70,7 @@
 			style:width="var(--base-sidebar-width)"
 			style:transform="translateX(calc(var(--base-sidebar-width) * -1 * (1 - var(--sidebar-width-mul))))"
 		>
-			<div class="flex flex-1 flex-col divide-y divide-current text-base-6 overflow-y-auto" aria-label="Sidebar" role="listbox">
+			<nav class="flex flex-1 flex-col divide-y divide-current text-base-6 overflow-y-auto">
 				{#if hasUpdate}
 					<div class="space-y-1 px-2 py-4" role="listitem">
 						<button
@@ -130,7 +130,7 @@
 					{/each}
 				</div>
 			{/if} -->
-			</div>
+			</nav>
 		</div>
 	</div>
 

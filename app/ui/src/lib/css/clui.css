@@ -1,33 +1,33 @@
-:root {
-	--clui-radius: 4px;
+#css-intermediate {
+	--clui-radius: 6px;
 	--clui-padding: 6px;
 
 	/* https://www.radix-ui.com/colors/docs/palette-composition/scales */
-	--clui-color-base-1: var(--color-base-1); /* background-app */
-	--clui-color-base-2: var(--color-base-2); /* background-subtle */
-	--clui-color-base-3: var(--color-base-3); /* element-background */
-	--clui-color-base-4: var(--color-base-4); /* element-hovered */
-	--clui-color-base-5: var(--color-base-5); /* element-active  */
-	--clui-color-base-6: var(--color-base-6); /* border-subtle */
-	--clui-color-base-7: var(--color-base-7); /* border-element */
-	--clui-color-base-8: var(--color-base-8); /* border-hovered */
-	--clui-color-base-9: var(--color-base-9); /* solid */
-	--clui-color-base-10: var(--color-base-10); /* solid-hovered */
-	--clui-color-base-11: var(--color-base-11); /* text-low */
-	--clui-color-base-12: var(--color-base-12); /* text-high */
+	--clui-color-base-1: var(--base1); /* background-app */
+	--clui-color-base-2: var(--base2); /* background-subtle */
+	--clui-color-base-3: var(--base3); /* element-background */
+	--clui-color-base-4: var(--base4); /* element-hovered */
+	--clui-color-base-5: var(--base5); /* element-active  */
+	--clui-color-base-6: var(--base6); /* border-subtle */
+	--clui-color-base-7: var(--base7); /* border-element */
+	--clui-color-base-8: var(--base8); /* border-hovered */
+	--clui-color-base-9: var(--base9); /* solid */
+	--clui-color-base-10: var(--base10); /* solid-hovered */
+	--clui-color-base-11: var(--base11); /* text-low */
+	--clui-color-base-12: var(--base12); /* text-high */
 
-	--clui-color-accent-1: var(--color-primary-1); /* background-app */
-	--clui-color-accent-2: var(--color-primary-2); /* background-subtle */
-	--clui-color-accent-3: var(--color-primary-3); /* element-background */
-	--clui-color-accent-4: var(--color-primary-4); /* element-hovered */
-	--clui-color-accent-5: var(--color-primary-5); /* element-active  */
-	--clui-color-accent-6: var(--color-primary-6); /* border-subtle */
-	--clui-color-accent-7: var(--color-primary-7); /* border-element */
-	--clui-color-accent-8: var(--color-primary-8); /* border-hovered */
-	--clui-color-accent-9: var(--color-primary-9); /* solid */
-	--clui-color-accent-10: var(--color-primary-10); /* solid-hovered */
-	--clui-color-accent-11: var(--color-primary-11); /* text-low */
-	--clui-color-accent-12: var(--color-primary-12); /* text-high */
+	--clui-color-accent-1: var(--primary1); /* background-app */
+	--clui-color-accent-2: var(--primary2); /* background-subtle */
+	--clui-color-accent-3: var(--primary3); /* element-background */
+	--clui-color-accent-4: var(--primary4); /* element-hovered */
+	--clui-color-accent-5: var(--primary5); /* element-active  */
+	--clui-color-accent-6: var(--primary6); /* border-subtle */
+	--clui-color-accent-7: var(--primary7); /* border-element */
+	--clui-color-accent-8: var(--primary8); /* border-hovered */
+	--clui-color-accent-9: var(--primary9); /* solid */
+	--clui-color-accent-10: var(--primary10); /* solid-hovered */
+	--clui-color-accent-11: var(--primary11); /* text-low */
+	--clui-color-accent-12: var(--primary12); /* text-high */
 }
 
 div.w-full > select {
