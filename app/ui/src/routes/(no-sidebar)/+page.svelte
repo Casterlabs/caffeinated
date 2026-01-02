@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { modify, storify } from '$lib/bridgeHelper';
-	import type { AppPreferences, Appearance, UIPreferences } from '../../app';
 
 	import LoadingSpinner from '$lib/layout/LoadingSpinner.svelte';
 
 	import { onMount } from 'svelte';
 
-	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<UIPreferences>();
-	const appPreferences = storify(AppConfig, 'appPreferences').readable<AppPreferences>();
-	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Appearance>();
+	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<Awaited<typeof AppConfig.uiPreferences>>();
+	const appPreferences = storify(AppConfig, 'appPreferences').readable<Awaited<typeof AppConfig.appPreferences>>();
+	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Awaited<typeof AppThemeManager.effectiveAppearance>>();
 
 	async function resetKoi() {
 		await modify(AppConfig, 'appPreferences', 'koiUrl', 'wss://api.casterlabs.co/v2/koi');

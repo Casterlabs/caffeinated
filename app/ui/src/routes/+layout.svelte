@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import * as appShim from '$lib/appShim';
 	import { storify } from '$lib/bridgeHelper';
-	import type { StatusState, UIPreferences } from '../app';
 	import { get } from 'svelte/store';
 
 	import CSSIntermediate from '$lib/layout/CSSIntermediate.svelte';
@@ -19,7 +18,12 @@
 		MAINTENANCE: ['green', 'white']
 	};
 
-	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<UIPreferences>();
+	interface StatusState {
+		status: 'OPERATIONAL' | 'MAJOR_OUTAGE' | 'MINOR_OUTAGE' | 'PARTIAL_OUTAGE' | 'DEGRADED_PERFORMANCE' | 'MAINTENANCE';
+		activeIncidents: { link: string }[];
+	}
+
+	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<Awaited<typeof AppConfig.uiPreferences>>();
 	const statusStates = storify(App, 'statusStates').readable<StatusState[]>();
 
 	let hideStatusBanner = false;

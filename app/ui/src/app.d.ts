@@ -1,8 +1,5 @@
-// See https://svelte.dev/docs/kit/types#app.d.ts
-// for information about these interfaces
-
 // Auto-generated Saucer Bridge Definitions
-// Generated on 2026-01-01T06:44:19.359218700Z
+// Generated on 2026-01-02T03:44:22.052544600Z
 
 export declare type MutationListenerId = any;
 export declare interface MutationObject<M> {
@@ -10,8 +7,6 @@ export declare interface MutationObject<M> {
 	offMutate(id: MutationListenerId): void;
 }
 export declare type SaucerUrl = string;
-export declare type SaucerWindowDecoration = 'NONE' | 'PARTIAL' | 'FULL';
-export declare type SaucerBackendType = 'WEBKITGTK' | 'QT6' | 'WEBKIT' | 'WEBVIEW2' | 'CUSTOM';
 export declare interface SaucerColor {
 	r: number;
 	g: number;
@@ -41,24 +36,24 @@ export declare interface SaucerScreen {
 export declare interface saucer_webview_window extends MutationObject<never> {
 	backgroundColor: Promise<SaucerColor> | SaucerColor;
 	resizable: Promise<boolean> | boolean;
-	alwaysOnTop: Promise<boolean> | boolean;
 	maximized: Promise<boolean> | boolean;
+	alwaysOnTop: Promise<boolean> | boolean;
 	readonly screen: Promise<SaucerScreen>;
+	decorations: Promise<'NONE' | 'PARTIAL' | 'FULL'> | 'NONE' | 'PARTIAL' | 'FULL';
 	maxSize: Promise<SaucerSize> | SaucerSize;
-	decorations: Promise<SaucerWindowDecoration> | SaucerWindowDecoration;
 	readonly isVisible: Promise<boolean>;
-	title: Promise<string> | string;
 	minimized: Promise<boolean> | boolean;
+	title: Promise<string> | string;
 	readonly isFocused: Promise<boolean>;
-	size: Promise<SaucerSize> | SaucerSize;
 	fullscreen: Promise<boolean> | boolean;
+	size: Promise<SaucerSize> | SaucerSize;
 	minSize: Promise<SaucerSize> | SaucerSize;
 	position: Promise<SaucerPosition> | SaucerPosition;
 	clickThrough: Promise<boolean> | boolean;
 	hide(): Promise<void>;
 	show(): Promise<void>;
-	destroy(): Promise<void>;
 	focus(): Promise<void>;
+	destroy(): Promise<void>;
 }
 
 export declare interface saucer_webview extends MutationObject<never> {
@@ -78,128 +73,1234 @@ export declare interface saucer_webview extends MutationObject<never> {
 export declare interface saucer_window extends MutationObject<never> {
 	backgroundColor: Promise<SaucerColor> | SaucerColor;
 	resizable: Promise<boolean> | boolean;
-	alwaysOnTop: Promise<boolean> | boolean;
 	maximized: Promise<boolean> | boolean;
+	alwaysOnTop: Promise<boolean> | boolean;
 	readonly screen: Promise<SaucerScreen>;
+	decorations: Promise<'NONE' | 'PARTIAL' | 'FULL'> | 'NONE' | 'PARTIAL' | 'FULL';
 	maxSize: Promise<SaucerSize> | SaucerSize;
-	decorations: Promise<SaucerWindowDecoration> | SaucerWindowDecoration;
 	readonly isVisible: Promise<boolean>;
-	title: Promise<string> | string;
 	minimized: Promise<boolean> | boolean;
+	title: Promise<string> | string;
 	readonly isFocused: Promise<boolean>;
-	size: Promise<SaucerSize> | SaucerSize;
 	fullscreen: Promise<boolean> | boolean;
+	size: Promise<SaucerSize> | SaucerSize;
 	minSize: Promise<SaucerSize> | SaucerSize;
 	position: Promise<SaucerPosition> | SaucerPosition;
 	clickThrough: Promise<boolean> | boolean;
 	hide(): Promise<void>;
 	show(): Promise<void>;
-	destroy(): Promise<void>;
 	focus(): Promise<void>;
+	destroy(): Promise<void>;
 }
 export declare interface saucer_app extends MutationObject<never> {
 	readonly screens: Promise<SaucerScreen[]>;
-	readonly backendType: Promise<SaucerBackendType>;
+	readonly backendType: Promise<'WEBKITGTK' | 'QT6' | 'WEBKIT' | 'WEBVIEW2' | 'CUSTOM'>;
 	readonly systemTarget: Promise<string>;
 	readonly archTarget: Promise<string>;
 	readonly version: Promise<string>;
 }
-export declare interface App extends MutationObject<'statusStates' | 'hasUpdate'> {
+export declare interface App extends MutationObject<'hasUpdate' | 'statusStates'> {
 	readonly isTraySupported: Promise<boolean>;
 	readonly clientId: Promise<string>;
-	readonly buildInfo: Promise<BuildInfo>;
-	readonly isDev: Promise<boolean>;
-	readonly statusStates: Promise<StatusState[]>;
-	readonly LOCALES: Promise<Record<any, any>>;
 	readonly hasUpdate: Promise<boolean>;
-	globalTest(arg0: KoiEventType): Promise<void>;
-	notify(arg0: string, arg1: Record<any, any>, arg2: NotificationType): Promise<void>;
+	readonly buildInfo: Promise<{ versionString: string; author: string; isDev: boolean; commit: string; buildChannel: string; version: string }>;
+	readonly isDev: Promise<boolean>;
+	readonly statusStates: Promise<any[]>;
+	readonly LOCALES: Promise<Record<string, Record<string, any>>>;
+	globalTest(
+		arg0:
+			| 'FOLLOW'
+			| 'SUBSCRIPTION'
+			| 'USER_UPDATE'
+			| 'STREAM_STATUS'
+			| 'META'
+			| 'VIEWER_JOIN'
+			| 'VIEWER_LEAVE'
+			| 'VIEWER_LIST'
+			| 'VIEWER_COUNT'
+			| 'RAID'
+			| 'CHANNEL_POINTS'
+			| 'CATCHUP'
+			| 'CLEARCHAT'
+			| 'ROOMSTATE'
+			| 'PLATFORM_MESSAGE'
+			| 'RICH_MESSAGE'
+			| 'LIKE'
+			| 'CONNECTION_STATE'
+			| 'DONATION'
+			| 'CHAT'
+	): Promise<void>;
+	notify(arg0: string, arg0: Record<string, string>, arg0: 'ERROR' | 'WARNING' | 'INFO' | 'NONE'): Promise<void>;
 }
 export declare interface AppAuth extends MutationObject<'isAuthorized' | 'authInstances' | 'isKoiAlive'> {
 	readonly isAuthorized: Promise<boolean>;
-	readonly authInstances: Promise<Record<any, any>>;
+	readonly authInstances: Promise<
+		Record<
+			string,
+			{
+				viewers: {
+					image_link: string;
+					color: string;
+					roles: 'BROADCASTER' | 'SUBSCRIBER' | 'FOLLOWER' | 'MODERATOR' | 'STAFF' | 'VIP' | 'OG'[];
+					link: string;
+					bio: string;
+					platform:
+						| 'CAFFEINE'
+						| 'TWITCH'
+						| 'TROVO'
+						| 'GLIMESH'
+						| 'BRIME'
+						| 'YOUTUBE'
+						| 'DLIVE'
+						| 'TIKTOK'
+						| 'THETA'
+						| 'KICK'
+						| 'YOUNOW'
+						| 'LIVESPACE'
+						| 'NOICE'
+						| 'X'
+						| 'RUMBLE'
+						| 'LOCO'
+						| 'CASTERLABS_SYSTEM'
+						| 'CUSTOM_INTEGRATION';
+					badges: any;
+					UPID: string;
+					subscriber_count: number;
+					displayname: string;
+					followers_count: number;
+					pronouns: 'HE' | 'SHE' | 'IT' | 'THEY' | 'ANY' | 'ASK' | 'AVOID' | 'OTHER';
+					id: string;
+					channel_id: string;
+					username: string;
+				}[];
+				userData: {
+					image_link: string;
+					color: string;
+					roles: 'BROADCASTER' | 'SUBSCRIBER' | 'FOLLOWER' | 'MODERATOR' | 'STAFF' | 'VIP' | 'OG'[];
+					link: string;
+					bio: string;
+					platform:
+						| 'CAFFEINE'
+						| 'TWITCH'
+						| 'TROVO'
+						| 'GLIMESH'
+						| 'BRIME'
+						| 'YOUTUBE'
+						| 'DLIVE'
+						| 'TIKTOK'
+						| 'THETA'
+						| 'KICK'
+						| 'YOUNOW'
+						| 'LIVESPACE'
+						| 'NOICE'
+						| 'X'
+						| 'RUMBLE'
+						| 'LOCO'
+						| 'CASTERLABS_SYSTEM'
+						| 'CUSTOM_INTEGRATION';
+					badges: any;
+					UPID: string;
+					subscriber_count: number;
+					displayname: string;
+					followers_count: number;
+					pronouns: 'HE' | 'SHE' | 'IT' | 'THEY' | 'ANY' | 'ASK' | 'AVOID' | 'OTHER';
+					id: string;
+					channel_id: string;
+					username: string;
+				};
+				tokenId: string;
+				streamData: {
+					start_time: {};
+					streamer: {
+						UPID: string;
+						id: string;
+						channel_id: string;
+						extraMetadata: Record<string, any>;
+						platform:
+							| 'CAFFEINE'
+							| 'TWITCH'
+							| 'TROVO'
+							| 'GLIMESH'
+							| 'BRIME'
+							| 'YOUTUBE'
+							| 'DLIVE'
+							| 'TIKTOK'
+							| 'THETA'
+							| 'KICK'
+							| 'YOUNOW'
+							| 'LIVESPACE'
+							| 'NOICE'
+							| 'X'
+							| 'RUMBLE'
+							| 'LOCO'
+							| 'CASTERLABS_SYSTEM'
+							| 'CUSTOM_INTEGRATION';
+					};
+					is_live: boolean;
+					content_rating: 'FAMILY_FRIENDLY' | 'TEEN' | 'EIGHTEEN_PLUS';
+					language:
+						| 'AB'
+						| 'AA'
+						| 'AF'
+						| 'SQ'
+						| 'AM'
+						| 'AR'
+						| 'HY'
+						| 'AS'
+						| 'AY'
+						| 'AZ'
+						| 'BA'
+						| 'EU'
+						| 'BN'
+						| 'DZ'
+						| 'BH'
+						| 'BI'
+						| 'BR'
+						| 'BG'
+						| 'MY'
+						| 'BE'
+						| 'KM'
+						| 'CA'
+						| 'ZH'
+						| 'CO'
+						| 'HR'
+						| 'CS'
+						| 'DA'
+						| 'NL'
+						| 'EN'
+						| 'EO'
+						| 'ET'
+						| 'FO'
+						| 'FJ'
+						| 'FI'
+						| 'FR'
+						| 'FY'
+						| 'GD'
+						| 'GL'
+						| 'KA'
+						| 'DE'
+						| 'EL'
+						| 'KL'
+						| 'GN'
+						| 'GU'
+						| 'HA'
+						| 'IW'
+						| 'HI'
+						| 'HU'
+						| 'IS'
+						| 'IN'
+						| 'IA'
+						| 'IE'
+						| 'IK'
+						| 'GA'
+						| 'IT'
+						| 'JA'
+						| 'JW'
+						| 'KN'
+						| 'KS'
+						| 'KK'
+						| 'RW'
+						| 'KY'
+						| 'RN'
+						| 'KO'
+						| 'KU'
+						| 'LO'
+						| 'LA'
+						| 'LV'
+						| 'LN'
+						| 'LT'
+						| 'MK'
+						| 'MG'
+						| 'MS'
+						| 'ML'
+						| 'MT'
+						| 'MI'
+						| 'MR'
+						| 'MO'
+						| 'MN'
+						| 'NA'
+						| 'NE'
+						| 'NO'
+						| 'OC'
+						| 'OR'
+						| 'OM'
+						| 'PS'
+						| 'FA'
+						| 'PL'
+						| 'PT'
+						| 'PA'
+						| 'QU'
+						| 'RM'
+						| 'RO'
+						| 'RU'
+						| 'SM'
+						| 'SG'
+						| 'SA'
+						| 'SR'
+						| 'SH'
+						| 'ST'
+						| 'TN'
+						| 'SN'
+						| 'SD'
+						| 'SI'
+						| 'SS'
+						| 'SK'
+						| 'SL'
+						| 'SO'
+						| 'ES'
+						| 'SU'
+						| 'SW'
+						| 'SV'
+						| 'TL'
+						| 'TG'
+						| 'TA'
+						| 'TT'
+						| 'TE'
+						| 'TH'
+						| 'BO'
+						| 'TI'
+						| 'TO'
+						| 'TS'
+						| 'TR'
+						| 'TK'
+						| 'TW'
+						| 'UK'
+						| 'UR'
+						| 'UZ'
+						| 'VI'
+						| 'VO'
+						| 'CY'
+						| 'WO'
+						| 'XH'
+						| 'JI'
+						| 'YO'
+						| 'ZU'
+						| 'OTHER';
+					title: string;
+					category: string;
+					thumbnail_url: string;
+					tags: string[];
+					timestamp: {};
+				};
+				roomstate: {
+					room_id: string;
+					streamer: {
+						UPID: string;
+						id: string;
+						channel_id: string;
+						extraMetadata: Record<string, any>;
+						platform:
+							| 'CAFFEINE'
+							| 'TWITCH'
+							| 'TROVO'
+							| 'GLIMESH'
+							| 'BRIME'
+							| 'YOUTUBE'
+							| 'DLIVE'
+							| 'TIKTOK'
+							| 'THETA'
+							| 'KICK'
+							| 'YOUNOW'
+							| 'LIVESPACE'
+							| 'NOICE'
+							| 'X'
+							| 'RUMBLE'
+							| 'LOCO'
+							| 'CASTERLABS_SYSTEM'
+							| 'CUSTOM_INTEGRATION';
+					};
+					roomstate: { is_followers_only: boolean; is_r9k: boolean; is_subs_only: boolean; is_emote_only: boolean; is_slowmode: boolean };
+					timestamp: {};
+				};
+				token: string;
+			}
+		>
+	>;
 	readonly isKoiAlive: Promise<boolean>;
-	requestOAuthSignin(arg0: string, arg1: string, arg2: boolean, arg3: string): Promise<void>;
+	requestOAuthSignin(arg0: string, arg0: string, arg0: boolean, arg0: string): Promise<void>;
 	signout(arg0: string): Promise<void>;
 	cancelSignin(): Promise<void>;
-	getPortalUrl(arg0: string, arg1: string): Promise<string>;
-	loginPortal(arg0: string, arg1: string, arg2: boolean): Promise<void>;
+	loginPortal(arg0: string, arg0: string, arg0: boolean): Promise<void>;
+	getPortalUrl(arg0: string, arg0: string): Promise<string>;
 }
 export declare interface AppChatbot extends MutationObject<'nextMessageAt'> {
-	readonly supportedShoutEvents: Promise<any[]>;
+	readonly supportedShoutEvents: Promise<
+		| 'FOLLOW'
+		| 'SUBSCRIPTION'
+		| 'USER_UPDATE'
+		| 'STREAM_STATUS'
+		| 'META'
+		| 'VIEWER_JOIN'
+		| 'VIEWER_LEAVE'
+		| 'VIEWER_LIST'
+		| 'VIEWER_COUNT'
+		| 'RAID'
+		| 'CHANNEL_POINTS'
+		| 'CATCHUP'
+		| 'CLEARCHAT'
+		| 'ROOMSTATE'
+		| 'PLATFORM_MESSAGE'
+		| 'RICH_MESSAGE'
+		| 'LIKE'
+		| 'CONNECTION_STATE'
+		| 'DONATION'
+		| 'CHAT'[]
+	>;
 	readonly nextMessageAt: Promise<number>;
 }
-export declare interface AppConfig extends MutationObject<'chatbotPreferences' | 'uiPreferences' | 'appPreferences' | 'authPreferences' | 'themePreferences'> {
-	chatbotPreferences: Promise<ChatbotPreferences> | ChatbotPreferences;
-	uiPreferences: Promise<UIPreferences> | UIPreferences;
-	appPreferences: Promise<AppPreferences> | AppPreferences;
-	authPreferences: Promise<AuthPreferences> | AuthPreferences;
-	themePreferences: Promise<ThemePreferences> | ThemePreferences;
-	canDoOneTimeEvent(event: string): Promise<boolean>;
+export declare interface AppConfig extends MutationObject<'chatbotPreferences' | 'uiPreferences' | 'appPreferences' | 'themePreferences'> {
+	chatbotPreferences:
+		| Promise<{
+				timerIntervalSeconds: number;
+				shouts: {
+					eventType:
+						| 'FOLLOW'
+						| 'SUBSCRIPTION'
+						| 'USER_UPDATE'
+						| 'STREAM_STATUS'
+						| 'META'
+						| 'VIEWER_JOIN'
+						| 'VIEWER_LEAVE'
+						| 'VIEWER_LIST'
+						| 'VIEWER_COUNT'
+						| 'RAID'
+						| 'CHANNEL_POINTS'
+						| 'CATCHUP'
+						| 'CLEARCHAT'
+						| 'ROOMSTATE'
+						| 'PLATFORM_MESSAGE'
+						| 'RICH_MESSAGE'
+						| 'LIKE'
+						| 'CONNECTION_STATE'
+						| 'DONATION'
+						| 'CHAT';
+					text: any;
+					responseAction: 'REPLY_WITH' | 'EXECUTE';
+					response: string;
+					platform: any;
+				}[];
+				timers: string[];
+				chatbots: string[];
+				chatter: 'CLIENT' | 'SYSTEM';
+				store: Record<string, any>;
+				commands: { triggerType: 'COMMAND' | 'CONTAINS' | 'ALWAYS'; trigger: string; type: any; responseAction: 'REPLY_WITH' | 'EXECUTE'; response: string; platform: any }[];
+				hideFromChat: boolean;
+		  }>
+		| {
+				timerIntervalSeconds: number;
+				shouts: {
+					eventType:
+						| 'FOLLOW'
+						| 'SUBSCRIPTION'
+						| 'USER_UPDATE'
+						| 'STREAM_STATUS'
+						| 'META'
+						| 'VIEWER_JOIN'
+						| 'VIEWER_LEAVE'
+						| 'VIEWER_LIST'
+						| 'VIEWER_COUNT'
+						| 'RAID'
+						| 'CHANNEL_POINTS'
+						| 'CATCHUP'
+						| 'CLEARCHAT'
+						| 'ROOMSTATE'
+						| 'PLATFORM_MESSAGE'
+						| 'RICH_MESSAGE'
+						| 'LIKE'
+						| 'CONNECTION_STATE'
+						| 'DONATION'
+						| 'CHAT';
+					text: any;
+					responseAction: 'REPLY_WITH' | 'EXECUTE';
+					response: string;
+					platform: any;
+				}[];
+				timers: string[];
+				chatbots: string[];
+				chatter: 'CLIENT' | 'SYSTEM';
+				store: Record<string, any>;
+				commands: { triggerType: 'COMMAND' | 'CONTAINS' | 'ALWAYS'; trigger: string; type: any; responseAction: 'REPLY_WITH' | 'EXECUTE'; response: string; platform: any }[];
+				hideFromChat: boolean;
+		  };
+	uiPreferences:
+		| Promise<{
+				emojiProvider: string;
+				chatViewerPreferences: {
+					readMessagesAloud: boolean;
+					colorBy: string;
+					textSize: number;
+					showPlatform: boolean;
+					playDingOnMessage: boolean;
+					showPronouns: boolean;
+					showProfilePictures: boolean;
+					showViewers: boolean;
+					showBadges: boolean;
+					showActivities: boolean;
+					ttsVoice: string;
+					inputBoxPreferences: Record<string, any>;
+					ttsOrDingVolume: number;
+					showBadgesOnLeft: boolean;
+					showChatTimestamps: boolean;
+					showZebraStripes: boolean;
+				};
+				sidebarClosed: boolean;
+				icon: string;
+				mainDashboard: { h: number[]; contents: Record<string, string>; v: number[] };
+				language: string;
+				zoom: number;
+				enableStupidlyUnsafeSettings: boolean;
+				enableAlternateThemes: boolean;
+				activityViewerPreferences: {
+					colorBy: string;
+					textSize: number;
+					showTimestamps: boolean;
+					showPlatform: boolean;
+					showPronouns: boolean;
+					showProfilePictures: boolean;
+					showZebraStripes: boolean;
+				};
+				uiFont: string;
+				dockDashboard: { h: number[]; contents: Record<string, string>; v: number[] };
+				closeToTray: boolean;
+				theme: string;
+		  }>
+		| {
+				emojiProvider: string;
+				chatViewerPreferences: {
+					readMessagesAloud: boolean;
+					colorBy: string;
+					textSize: number;
+					showPlatform: boolean;
+					playDingOnMessage: boolean;
+					showPronouns: boolean;
+					showProfilePictures: boolean;
+					showViewers: boolean;
+					showBadges: boolean;
+					showActivities: boolean;
+					ttsVoice: string;
+					inputBoxPreferences: Record<string, any>;
+					ttsOrDingVolume: number;
+					showBadgesOnLeft: boolean;
+					showChatTimestamps: boolean;
+					showZebraStripes: boolean;
+				};
+				sidebarClosed: boolean;
+				icon: string;
+				mainDashboard: { h: number[]; contents: Record<string, string>; v: number[] };
+				language: string;
+				zoom: number;
+				enableStupidlyUnsafeSettings: boolean;
+				enableAlternateThemes: boolean;
+				activityViewerPreferences: {
+					colorBy: string;
+					textSize: number;
+					showTimestamps: boolean;
+					showPlatform: boolean;
+					showPronouns: boolean;
+					showProfilePictures: boolean;
+					showZebraStripes: boolean;
+				};
+				uiFont: string;
+				dockDashboard: { h: number[]; contents: Record<string, string>; v: number[] };
+				closeToTray: boolean;
+				theme: string;
+		  };
+	appPreferences:
+		| Promise<{ oneTimeEvents: string[]; conductorPort: number; conductorKey: string; developerApiKey: string; koiUrl: string; installationId: string; isNew: any }>
+		| { oneTimeEvents: string[]; conductorPort: number; conductorKey: string; developerApiKey: string; koiUrl: string; installationId: string; isNew: any };
+	themePreferences:
+		| Promise<{ primaryColor: string; appearance: 'FOLLOW_SYSTEM' | 'LIGHT' | 'DARK'; baseColor: string }>
+		| { primaryColor: string; appearance: 'FOLLOW_SYSTEM' | 'LIGHT' | 'DARK'; baseColor: string };
+	/** write-only */
+	authPreferences: { tokensMap: Record<string, Record<string, any>> };
+	canDoOneTimeEvent(arg0: string): Promise<boolean>;
+}
+export declare interface AppLocale extends MutationObject<'current' | 'fallback'> {
+	readonly current: Promise<Record<string, any>>;
+	readonly fallback: Promise<Record<string, any>>;
 }
 export declare interface AppPlugins extends MutationObject<'loadedPlugins' | 'contexts'> {
-	readonly loadedPlugins: Promise<any[]>;
-	readonly creatableWidgets: Promise<any[]>;
-	readonly contexts: Promise<any[]>;
-	readonly widgets: Promise<any[]>;
-	fireTestEvent(arg0: string, arg1: KoiEventType): Promise<void>;
-	assignTag(arg0: string, arg1: string): Promise<void>;
+	readonly loadedPlugins: Promise<{}[]>;
+	readonly creatableWidgets: Promise<
+		{
+			requiredFeatures:
+				| 'UPDATE_STREAM_INFO'
+				| 'STREAM_INFO'
+				| 'PUBLISHING_INFO'
+				| 'UPDATE_ROOM_STATE'
+				| 'CHAT_BOT_LINKING'
+				| 'CHANNEL_POINTS'
+				| 'HYPE_TRAIN'
+				| 'STREAM_KEY'
+				| 'ADVERTISEMENTS'
+				| 'DONATION_ALERT'
+				| 'FOLLOWER_ALERT'
+				| 'SUBSCRIPTION_ALERT'
+				| 'RAID_ALERT'
+				| 'FOLLOWER_COUNT'
+				| 'SUBSCRIBER_COUNT'
+				| 'CHAT'
+				| 'STREAM_STATUS'
+				| 'ROOMSTATE'
+				| 'VIEWERS_LIST'
+				| 'VIEWERS_COUNT'
+				| 'VIEWERS_PRESENCE'
+				| 'MESSAGE_UPVOTE'
+				| 'MESSAGE_REACTION'
+				| 'MESSAGE_DELETION'
+				| 'CHAT_SEND_MESSAGE'
+				| 'CHAT_SEND_COMMAND'[];
+			showDemo: boolean;
+			testEvents:
+				| 'FOLLOW'
+				| 'SUBSCRIPTION'
+				| 'USER_UPDATE'
+				| 'STREAM_STATUS'
+				| 'META'
+				| 'VIEWER_JOIN'
+				| 'VIEWER_LEAVE'
+				| 'VIEWER_LIST'
+				| 'VIEWER_COUNT'
+				| 'RAID'
+				| 'CHANNEL_POINTS'
+				| 'CATCHUP'
+				| 'CLEARCHAT'
+				| 'ROOMSTATE'
+				| 'PLATFORM_MESSAGE'
+				| 'RICH_MESSAGE'
+				| 'LIKE'
+				| 'CONNECTION_STATE'
+				| 'DONATION'
+				| 'CHAT'[];
+			namespace: string;
+			icon: string;
+			localeBase: string;
+			demoAspectRatio: number;
+			category: 'ALERTS' | 'LABELS' | 'INTERACTION' | 'GOALS' | 'OTHER';
+			type: 'WIDGET' | 'DOCK' | 'APPLET' | 'SETTINGS_APPLET';
+			friendlyName: string;
+		}[]
+	>;
+	readonly contexts: Promise<{ pluginIds: string[]; file: {}; pluginType: 'PLUGIN' | 'INTERNAL' | 'STORE_ASSET'; id: string; hasSucceeded: boolean }[]>;
+	readonly widgets: Promise<
+		{
+			settings: Record<string, any>;
+			settingsLayout: {
+				buttons: { iconTitle: string; icon: string; id: string; text: string }[];
+				sections: {
+					name: string;
+					id: string;
+					items: {
+						name: string;
+						id: string;
+						type: 'CHECKBOX' | 'COLOR' | 'NUMBER' | 'DROPDOWN' | 'TEXT' | 'TEXTAREA' | 'CODE' | 'PASSWORD' | 'CURRENCY' | 'FONT' | 'RANGE' | 'FILE' | 'PLATFORM_DROPDOWN';
+						extraData: Record<string, any>;
+					}[];
+				}[];
+				allowWidgetPreview: boolean;
+			};
+			namespace: string;
+			name: string;
+			details: {
+				requiredFeatures:
+					| 'UPDATE_STREAM_INFO'
+					| 'STREAM_INFO'
+					| 'PUBLISHING_INFO'
+					| 'UPDATE_ROOM_STATE'
+					| 'CHAT_BOT_LINKING'
+					| 'CHANNEL_POINTS'
+					| 'HYPE_TRAIN'
+					| 'STREAM_KEY'
+					| 'ADVERTISEMENTS'
+					| 'DONATION_ALERT'
+					| 'FOLLOWER_ALERT'
+					| 'SUBSCRIPTION_ALERT'
+					| 'RAID_ALERT'
+					| 'FOLLOWER_COUNT'
+					| 'SUBSCRIBER_COUNT'
+					| 'CHAT'
+					| 'STREAM_STATUS'
+					| 'ROOMSTATE'
+					| 'VIEWERS_LIST'
+					| 'VIEWERS_COUNT'
+					| 'VIEWERS_PRESENCE'
+					| 'MESSAGE_UPVOTE'
+					| 'MESSAGE_REACTION'
+					| 'MESSAGE_DELETION'
+					| 'CHAT_SEND_MESSAGE'
+					| 'CHAT_SEND_COMMAND'[];
+				showDemo: boolean;
+				testEvents:
+					| 'FOLLOW'
+					| 'SUBSCRIPTION'
+					| 'USER_UPDATE'
+					| 'STREAM_STATUS'
+					| 'META'
+					| 'VIEWER_JOIN'
+					| 'VIEWER_LEAVE'
+					| 'VIEWER_LIST'
+					| 'VIEWER_COUNT'
+					| 'RAID'
+					| 'CHANNEL_POINTS'
+					| 'CATCHUP'
+					| 'CLEARCHAT'
+					| 'ROOMSTATE'
+					| 'PLATFORM_MESSAGE'
+					| 'RICH_MESSAGE'
+					| 'LIKE'
+					| 'CONNECTION_STATE'
+					| 'DONATION'
+					| 'CHAT'[];
+				namespace: string;
+				icon: string;
+				localeBase: string;
+				demoAspectRatio: number;
+				category: 'ALERTS' | 'LABELS' | 'INTERACTION' | 'GOALS' | 'OTHER';
+				type: 'WIDGET' | 'DOCK' | 'APPLET' | 'SETTINGS_APPLET';
+				friendlyName: string;
+			};
+			id: string;
+			tag: string;
+		}[]
+	>;
+	fireTestEvent(
+		arg0: string,
+		arg0:
+			| 'FOLLOW'
+			| 'SUBSCRIPTION'
+			| 'USER_UPDATE'
+			| 'STREAM_STATUS'
+			| 'META'
+			| 'VIEWER_JOIN'
+			| 'VIEWER_LEAVE'
+			| 'VIEWER_LIST'
+			| 'VIEWER_COUNT'
+			| 'RAID'
+			| 'CHANNEL_POINTS'
+			| 'CATCHUP'
+			| 'CLEARCHAT'
+			| 'ROOMSTATE'
+			| 'PLATFORM_MESSAGE'
+			| 'RICH_MESSAGE'
+			| 'LIKE'
+			| 'CONNECTION_STATE'
+			| 'DONATION'
+			| 'CHAT'
+	): Promise<void>;
 	openPopout(arg0: string): Promise<void>;
+	assignTag(arg0: string, arg0: string): Promise<void>;
 	deleteWidget(arg0: string): Promise<void>;
-	clickWidgetSettingsButton(arg0: string, arg1: string): Promise<void>;
+	clickWidgetSettingsButton(arg0: string, arg0: string): Promise<void>;
 	openPluginsDir(): Promise<void>;
+	createNewWidget(arg0: string, arg0: string): Promise<string>;
 	load(arg0: string): Promise<void>;
-	createNewWidget(arg0: string, arg1: string): Promise<string>;
-	renameWidget(arg0: string, arg1: string): Promise<void>;
+	renameWidget(arg0: string, arg0: string): Promise<void>;
 	unload(arg0: string): Promise<void>;
-	listFiles(): Promise<any[]>;
-	editWidgetSettingsItem(arg0: string, arg1: string, arg2: JsonElement): Promise<void>;
+	editWidgetSettingsItem(arg0: string, arg0: string, arg0: any): Promise<void>;
 	copyWidgetUrl(arg0: string): Promise<void>;
+	listFiles(): Promise<string[]>;
 }
 export declare interface AppSounds extends MutationObject<never> {
-	playUrl(arg0: string, arg1: number): Promise<void>;
+	playUrl(arg0: string, arg0: number): Promise<void>;
 }
 export declare interface AppThemeManager extends MutationObject<'effectiveAppearance'> {
-	readonly effectiveAppearance: Promise<Appearance>;
+	readonly effectiveAppearance: Promise<'FOLLOW_SYSTEM' | 'LIGHT' | 'DARK'>;
 }
 export declare interface AppUI extends MutationObject<never> {
-	readonly fonts: Promise<any[]>;
-	showToast(arg0: string, arg1: NotificationType): Promise<void>;
+	readonly fonts: Promise<string[]>;
+	showToast(arg0: string, arg0: 'ERROR' | 'WARNING' | 'INFO' | 'NONE'): Promise<void>;
 	onUILoaded(): Promise<void>;
-	updateDashboard(arg0: DashboardConfig, arg1: boolean): Promise<void>;
+	updateDashboard(arg0: { h: number[]; contents: Record<string, string>; v: number[] }, arg0: boolean): Promise<void>;
 }
 export declare interface Caffeinated extends MutationObject<never> {
-	localize(arg0: string, arg1: JsonObject, arg2: JsonArray): Promise<string>;
-	copyText(arg0: string, arg1: string): Promise<void>;
+	localize(arg0: string, arg0: Record<string, any>, arg0: any[]): Promise<string>;
+	copyText(arg0: string, arg0: string): Promise<void>;
 	openLink(arg0: string): Promise<void>;
 	getLocale(): Promise<string>;
 	getMimeForPath(arg0: string): Promise<string>;
 }
 export declare interface Emojis extends MutationObject<never> {
-	matchAndReturnHTML(arg0: string, arg1: boolean): Promise<string>;
+	matchAndReturnHTML(arg0: string, arg0: boolean): Promise<string>;
 }
 export declare interface Koi extends MutationObject<'roomStates' | 'features' | 'viewers' | 'userStates' | 'connectionStates' | 'viewerCounts' | 'streamStates'> {
-	readonly roomStates: Promise<Record<any, any>>;
-	readonly features: Promise<Record<any, any>>;
-	readonly viewers: Promise<Record<any, any>>;
-	readonly userStates: Promise<Record<any, any>>;
-	readonly eventHistory: Promise<any[]>;
-	readonly connectionStates: Promise<Record<any, any>>;
-	readonly viewerCounts: Promise<Record<any, any>>;
-	readonly streamStates: Promise<Record<any, any>>;
-	sendChat(arg0: UserPlatform, arg1: string, arg2: KoiChatterType, arg3: string, arg4: boolean): Promise<void>;
-	deleteChat(arg0: UserPlatform, arg1: string, arg2: boolean): Promise<void>;
-	upvoteChat(arg0: UserPlatform, arg1: string): Promise<void>;
+	readonly roomStates: Promise<
+		Record<
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+			{
+				room_id: string;
+				streamer: {
+					UPID: string;
+					id: string;
+					channel_id: string;
+					extraMetadata: Record<string, any>;
+					platform:
+						| 'CAFFEINE'
+						| 'TWITCH'
+						| 'TROVO'
+						| 'GLIMESH'
+						| 'BRIME'
+						| 'YOUTUBE'
+						| 'DLIVE'
+						| 'TIKTOK'
+						| 'THETA'
+						| 'KICK'
+						| 'YOUNOW'
+						| 'LIVESPACE'
+						| 'NOICE'
+						| 'X'
+						| 'RUMBLE'
+						| 'LOCO'
+						| 'CASTERLABS_SYSTEM'
+						| 'CUSTOM_INTEGRATION';
+				};
+				roomstate: { is_followers_only: boolean; is_r9k: boolean; is_subs_only: boolean; is_emote_only: boolean; is_slowmode: boolean };
+				timestamp: {};
+			}
+		>
+	>;
+	readonly features: Promise<
+		Record<
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+			any
+		>
+	>;
+	readonly viewers: Promise<
+		Record<
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+			any
+		>
+	>;
+	readonly userStates: Promise<
+		Record<
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+			{ streamer: any; timestamp: {} }
+		>
+	>;
+	readonly eventHistory: Promise<
+		{
+			streamer: {
+				UPID: string;
+				id: string;
+				channel_id: string;
+				extraMetadata: Record<string, any>;
+				platform:
+					| 'CAFFEINE'
+					| 'TWITCH'
+					| 'TROVO'
+					| 'GLIMESH'
+					| 'BRIME'
+					| 'YOUTUBE'
+					| 'DLIVE'
+					| 'TIKTOK'
+					| 'THETA'
+					| 'KICK'
+					| 'YOUNOW'
+					| 'LIVESPACE'
+					| 'NOICE'
+					| 'X'
+					| 'RUMBLE'
+					| 'LOCO'
+					| 'CASTERLABS_SYSTEM'
+					| 'CUSTOM_INTEGRATION';
+			};
+			timestamp: {};
+		}[]
+	>;
+	readonly connectionStates: Promise<
+		Record<
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+			any
+		>
+	>;
+	readonly viewerCounts: Promise<
+		Record<
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+			number
+		>
+	>;
+	readonly streamStates: Promise<
+		Record<
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+			{
+				start_time: {};
+				streamer: {
+					UPID: string;
+					id: string;
+					channel_id: string;
+					extraMetadata: Record<string, any>;
+					platform:
+						| 'CAFFEINE'
+						| 'TWITCH'
+						| 'TROVO'
+						| 'GLIMESH'
+						| 'BRIME'
+						| 'YOUTUBE'
+						| 'DLIVE'
+						| 'TIKTOK'
+						| 'THETA'
+						| 'KICK'
+						| 'YOUNOW'
+						| 'LIVESPACE'
+						| 'NOICE'
+						| 'X'
+						| 'RUMBLE'
+						| 'LOCO'
+						| 'CASTERLABS_SYSTEM'
+						| 'CUSTOM_INTEGRATION';
+				};
+				is_live: boolean;
+				content_rating: 'FAMILY_FRIENDLY' | 'TEEN' | 'EIGHTEEN_PLUS';
+				language:
+					| 'AB'
+					| 'AA'
+					| 'AF'
+					| 'SQ'
+					| 'AM'
+					| 'AR'
+					| 'HY'
+					| 'AS'
+					| 'AY'
+					| 'AZ'
+					| 'BA'
+					| 'EU'
+					| 'BN'
+					| 'DZ'
+					| 'BH'
+					| 'BI'
+					| 'BR'
+					| 'BG'
+					| 'MY'
+					| 'BE'
+					| 'KM'
+					| 'CA'
+					| 'ZH'
+					| 'CO'
+					| 'HR'
+					| 'CS'
+					| 'DA'
+					| 'NL'
+					| 'EN'
+					| 'EO'
+					| 'ET'
+					| 'FO'
+					| 'FJ'
+					| 'FI'
+					| 'FR'
+					| 'FY'
+					| 'GD'
+					| 'GL'
+					| 'KA'
+					| 'DE'
+					| 'EL'
+					| 'KL'
+					| 'GN'
+					| 'GU'
+					| 'HA'
+					| 'IW'
+					| 'HI'
+					| 'HU'
+					| 'IS'
+					| 'IN'
+					| 'IA'
+					| 'IE'
+					| 'IK'
+					| 'GA'
+					| 'IT'
+					| 'JA'
+					| 'JW'
+					| 'KN'
+					| 'KS'
+					| 'KK'
+					| 'RW'
+					| 'KY'
+					| 'RN'
+					| 'KO'
+					| 'KU'
+					| 'LO'
+					| 'LA'
+					| 'LV'
+					| 'LN'
+					| 'LT'
+					| 'MK'
+					| 'MG'
+					| 'MS'
+					| 'ML'
+					| 'MT'
+					| 'MI'
+					| 'MR'
+					| 'MO'
+					| 'MN'
+					| 'NA'
+					| 'NE'
+					| 'NO'
+					| 'OC'
+					| 'OR'
+					| 'OM'
+					| 'PS'
+					| 'FA'
+					| 'PL'
+					| 'PT'
+					| 'PA'
+					| 'QU'
+					| 'RM'
+					| 'RO'
+					| 'RU'
+					| 'SM'
+					| 'SG'
+					| 'SA'
+					| 'SR'
+					| 'SH'
+					| 'ST'
+					| 'TN'
+					| 'SN'
+					| 'SD'
+					| 'SI'
+					| 'SS'
+					| 'SK'
+					| 'SL'
+					| 'SO'
+					| 'ES'
+					| 'SU'
+					| 'SW'
+					| 'SV'
+					| 'TL'
+					| 'TG'
+					| 'TA'
+					| 'TT'
+					| 'TE'
+					| 'TH'
+					| 'BO'
+					| 'TI'
+					| 'TO'
+					| 'TS'
+					| 'TR'
+					| 'TK'
+					| 'TW'
+					| 'UK'
+					| 'UR'
+					| 'UZ'
+					| 'VI'
+					| 'VO'
+					| 'CY'
+					| 'WO'
+					| 'XH'
+					| 'JI'
+					| 'YO'
+					| 'ZU'
+					| 'OTHER';
+				title: string;
+				category: string;
+				thumbnail_url: string;
+				tags: string[];
+				timestamp: {};
+			}
+		>
+	>;
+	sendChat(
+		arg0:
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+		arg0: string,
+		arg0: 'CLIENT' | 'SYSTEM',
+		arg0: string,
+		arg0: boolean
+	): Promise<void>;
+	deleteChat(
+		arg0:
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+		arg0: string,
+		arg0: boolean
+	): Promise<void>;
+	upvoteChat(
+		arg0:
+			| 'CAFFEINE'
+			| 'TWITCH'
+			| 'TROVO'
+			| 'GLIMESH'
+			| 'BRIME'
+			| 'YOUTUBE'
+			| 'DLIVE'
+			| 'TIKTOK'
+			| 'THETA'
+			| 'KICK'
+			| 'YOUNOW'
+			| 'LIVESPACE'
+			| 'NOICE'
+			| 'X'
+			| 'RUMBLE'
+			| 'LOCO'
+			| 'CASTERLABS_SYSTEM'
+			| 'CUSTOM_INTEGRATION',
+		arg0: string
+	): Promise<void>;
 }
 export declare interface Music extends MutationObject<'activePlayback' | 'providers'> {
-	readonly activePlayback: Promise<AbstractMusicProvider>;
-	readonly providers: Promise<Record<any, any>>;
+	readonly activePlayback: Promise<{
+		settings: any;
+		currentTrack: { link: string; title: string; artists: string[]; albumArtUrl: string; album: string };
+		accountName: string;
+		isSignedIn: boolean;
+		playbackState: 'PLAYING' | 'PAUSED' | 'INACTIVE';
+		settingsClass: {};
+		accountLink: string;
+		serviceName: string;
+		serviceId: string;
+	}>;
+	readonly providers: Promise<Record<string, any>>;
 	signoutMusicProvider(arg0: string): Promise<void>;
-	updateMusicProviderSettings(arg0: string, arg1: JsonObject): Promise<void>;
-}
-export declare interface AppLocale extends MutationObject<'current'> {
-	readonly fallback: Promise<any>;
-	readonly current: Promise<any>;
+	updateMusicProviderSettings(arg0: string, arg0: Record<string, any>): Promise<void>;
 }
 
 declare global {
@@ -217,45 +1318,20 @@ declare global {
 	const Koi: Koi;
 	const Music: Music;
 	const saucer: { window: saucer_window; webview: saucer_webview; app: saucer_app };
+	interface Window {
+		readonly App: App;
+		readonly AppAuth: AppAuth;
+		readonly AppChatbot: AppChatbot;
+		readonly AppConfig: AppConfig;
+		readonly AppLocale: AppLocale;
+		readonly AppPlugins: AppPlugins;
+		readonly AppSounds: AppSounds;
+		readonly AppThemeManager: AppThemeManager;
+		readonly AppUI: AppUI;
+		readonly Caffeinated: Caffeinated;
+		readonly Emojis: Emojis;
+		readonly Koi: Koi;
+		readonly Music: Music;
+		readonly saucer: { window: saucer_window; webview: saucer_webview; app: saucer_app };
+	}
 }
-
-export declare interface UIPreferences {
-	emojiProvider: string;
-	icon: string;
-	theme: string;
-	language: string;
-	closeToTray: boolean;
-	enableStupidlyUnsafeSettings: boolean;
-	enableAlternateThemes: boolean;
-	zoom: number;
-	uiFont: string;
-	sidebarClosed: boolean;
-
-	mainDashboard: any; // TODO
-	dockDashboard: any;
-	chatViewerPreferences: any;
-	activityViewerPreferences: any;
-}
-
-export declare interface ThemePreferences {
-	baseColor: string;
-	primaryColor: string;
-	appearance: Appearance;
-}
-
-export declare interface StatusState {
-	status: 'OPERATIONAL' | 'MAJOR_OUTAGE' | 'MINOR_OUTAGE' | 'PARTIAL_OUTAGE' | 'DEGRADED_PERFORMANCE' | 'MAINTENANCE';
-	activeIncidents: { link: string }[];
-}
-
-export declare type Appearance = 'LIGHT' | 'DARK' | 'SYSTEM';
-
-export declare interface AppPreferences {
-	conductorPort: number;
-	conductorKey: string;
-	developerApiKey: string;
-	installationId: string;
-	koiUrl: string;
-}
-
-export {};

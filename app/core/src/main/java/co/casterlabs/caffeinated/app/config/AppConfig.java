@@ -28,21 +28,20 @@ public class AppConfig {
     public static final String APP_DATA_DIR = AppDirsFactory.getInstance().getUserDataDir("casterlabs-caffeinated", null, null, true);
     public static final Connection preferencesConnection;
 
-    @JavascriptValue(allowSet = false, watchForMutate = true)
+    @JavascriptValue(allowSet = false, watchForMutate = true, typeToDocument = AppPreferences.class)
     public static final PreferenceFile<AppPreferences> appPreferences = new PreferenceFile<>("app", AppPreferences.class);
 
-    @JavascriptValue(allowSet = false, watchForMutate = true)
+    @JavascriptValue(allowSet = false, watchForMutate = true, typeToDocument = UIPreferences.class)
     public static final PreferenceFile<UIPreferences> uiPreferences = new PreferenceFile<>("ui", UIPreferences.class);
 
-//    public static final PreferenceFile<CaffeinatedWindowState> windowPreferences  = new PreferenceFile<>("window", CaffeinatedWindowState.class);
-    @JavascriptValue(allowSet = false, watchForMutate = true)
+    @JavascriptValue(allowSet = false, watchForMutate = true, typeToDocument = ChatbotPreferences.class)
     public static final PreferenceFile<ChatbotPreferences> chatbotPreferences = new PreferenceFile<>("chatbot", ChatbotPreferences.class);
 
-    @JavascriptValue(allowSet = false, watchForMutate = true)
-    public static final PreferenceFile<AuthPreferences> authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
-
-    @JavascriptValue(allowSet = false, watchForMutate = true)
+    @JavascriptValue(allowSet = false, watchForMutate = true, typeToDocument = ThemePreferences.class)
     public static final PreferenceFile<ThemePreferences> themePreferences = new PreferenceFile<>("theme", ThemePreferences.class);
+
+//    public static final PreferenceFile<CaffeinatedWindowState> windowPreferences  = new PreferenceFile<>("window", CaffeinatedWindowState.class);
+    public static final PreferenceFile<AuthPreferences> authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
 
     static {
         new File(APP_DATA_DIR, "preferences").mkdirs();

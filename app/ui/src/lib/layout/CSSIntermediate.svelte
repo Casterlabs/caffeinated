@@ -2,12 +2,11 @@
 	import { storify } from '$lib/bridgeHelper';
 	import createConsole from '$lib/console-helper';
 	import '$lib/css/app.css';
-	import type { Appearance, ThemePreferences } from '../../app';
 
 	const console = createConsole('CSSIntermediate');
 
-	const themePreferences = storify(AppConfig, 'themePreferences').readable<ThemePreferences>();
-	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Appearance>();
+	const themePreferences = storify(AppConfig, 'themePreferences').readable<Awaited<typeof AppConfig.themePreferences>>();
+	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Awaited<typeof AppThemeManager.effectiveAppearance>>();
 
 	let useLightTheme = $derived($effectiveAppearance == 'LIGHT');
 	$effect(() => {
