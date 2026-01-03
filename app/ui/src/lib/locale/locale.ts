@@ -23,7 +23,7 @@ export function lookup(key: string) {
 	try {
 		return glocale.lookup(key);
 	} catch (e) {
-		console.error(e);
+		console.warn(e);
 		return [
 			{
 				type: 'RAW',
@@ -39,7 +39,7 @@ export function render(key: string, args?: Record<string, string>) {
 	try {
 		return glocale.render(key, args);
 	} catch (e) {
-		console.error(e);
+		console.warn(e);
 		return key;
 	}
 }
