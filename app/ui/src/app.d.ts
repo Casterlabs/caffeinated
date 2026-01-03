@@ -1,5 +1,5 @@
 // Auto-generated Saucer Bridge Definitions
-// Generated on 2026-01-03T12:33:34.224580600Z
+// Generated on 2026-01-03T12:58:16.522346Z
 
 export declare type MutationListenerId = any;
 export declare interface MutationObject<M> {
@@ -36,24 +36,24 @@ export declare interface SaucerScreen {
 export declare interface saucer_webview_window extends MutationObject<never> {
 	backgroundColor: Promise<SaucerColor> | SaucerColor;
 	resizable: Promise<boolean> | boolean;
-	maximized: Promise<boolean> | boolean;
 	alwaysOnTop: Promise<boolean> | boolean;
+	maximized: Promise<boolean> | boolean;
 	readonly screen: Promise<SaucerScreen>;
-	decorations: Promise<'NONE' | 'PARTIAL' | 'FULL'> | 'NONE' | 'PARTIAL' | 'FULL';
 	maxSize: Promise<SaucerSize> | SaucerSize;
+	decorations: Promise<'NONE' | 'PARTIAL' | 'FULL'> | 'NONE' | 'PARTIAL' | 'FULL';
 	readonly isVisible: Promise<boolean>;
-	minimized: Promise<boolean> | boolean;
 	title: Promise<string> | string;
+	minimized: Promise<boolean> | boolean;
 	readonly isFocused: Promise<boolean>;
-	fullscreen: Promise<boolean> | boolean;
 	size: Promise<SaucerSize> | SaucerSize;
+	fullscreen: Promise<boolean> | boolean;
 	minSize: Promise<SaucerSize> | SaucerSize;
 	position: Promise<SaucerPosition> | SaucerPosition;
 	clickThrough: Promise<boolean> | boolean;
 	hide(): Promise<void>;
 	show(): Promise<void>;
-	focus(): Promise<void>;
 	destroy(): Promise<void>;
+	focus(): Promise<void>;
 }
 
 export declare interface saucer_webview extends MutationObject<never> {
@@ -73,24 +73,24 @@ export declare interface saucer_webview extends MutationObject<never> {
 export declare interface saucer_window extends MutationObject<never> {
 	backgroundColor: Promise<SaucerColor> | SaucerColor;
 	resizable: Promise<boolean> | boolean;
-	maximized: Promise<boolean> | boolean;
 	alwaysOnTop: Promise<boolean> | boolean;
+	maximized: Promise<boolean> | boolean;
 	readonly screen: Promise<SaucerScreen>;
-	decorations: Promise<'NONE' | 'PARTIAL' | 'FULL'> | 'NONE' | 'PARTIAL' | 'FULL';
 	maxSize: Promise<SaucerSize> | SaucerSize;
+	decorations: Promise<'NONE' | 'PARTIAL' | 'FULL'> | 'NONE' | 'PARTIAL' | 'FULL';
 	readonly isVisible: Promise<boolean>;
-	minimized: Promise<boolean> | boolean;
 	title: Promise<string> | string;
+	minimized: Promise<boolean> | boolean;
 	readonly isFocused: Promise<boolean>;
-	fullscreen: Promise<boolean> | boolean;
 	size: Promise<SaucerSize> | SaucerSize;
+	fullscreen: Promise<boolean> | boolean;
 	minSize: Promise<SaucerSize> | SaucerSize;
 	position: Promise<SaucerPosition> | SaucerPosition;
 	clickThrough: Promise<boolean> | boolean;
 	hide(): Promise<void>;
 	show(): Promise<void>;
-	focus(): Promise<void>;
 	destroy(): Promise<void>;
+	focus(): Promise<void>;
 }
 export declare interface saucer_app extends MutationObject<never> {
 	readonly screens: Promise<SaucerScreen[]>;
@@ -133,6 +133,46 @@ export declare interface App extends MutationObject<'hasUpdate' | 'statusStates'
 	notify(arg0: string, arg0: Record<string, string>, arg0: 'ERROR' | 'WARNING' | 'INFO' | 'NONE'): Promise<void>;
 }
 export declare interface AppAuth extends MutationObject<'isAuthorized' | 'authInstances' | 'isKoiAlive'> {
+	readonly ALL: Promise<
+		| 'CAFFEINE'
+		| 'TWITCH'
+		| 'TROVO'
+		| 'GLIMESH'
+		| 'BRIME'
+		| 'YOUTUBE'
+		| 'DLIVE'
+		| 'TIKTOK'
+		| 'THETA'
+		| 'KICK'
+		| 'YOUNOW'
+		| 'LIVESPACE'
+		| 'NOICE'
+		| 'X'
+		| 'RUMBLE'
+		| 'LOCO'
+		| 'CASTERLABS_SYSTEM'
+		| 'CUSTOM_INTEGRATION'[]
+	>;
+	readonly AUTHENTICATABLE: Promise<
+		| 'CAFFEINE'
+		| 'TWITCH'
+		| 'TROVO'
+		| 'GLIMESH'
+		| 'BRIME'
+		| 'YOUTUBE'
+		| 'DLIVE'
+		| 'TIKTOK'
+		| 'THETA'
+		| 'KICK'
+		| 'YOUNOW'
+		| 'LIVESPACE'
+		| 'NOICE'
+		| 'X'
+		| 'RUMBLE'
+		| 'LOCO'
+		| 'CASTERLABS_SYSTEM'
+		| 'CUSTOM_INTEGRATION'[]
+	>;
 	readonly isAuthorized: Promise<boolean>;
 	readonly authInstances: Promise<
 		Record<
@@ -417,7 +457,7 @@ export declare interface AppAuth extends MutationObject<'isAuthorized' | 'authIn
 		>
 	>;
 	readonly isKoiAlive: Promise<boolean>;
-	requestOAuthSignin(arg0: string, arg0: string, arg0: boolean, arg0: string): Promise<void>;
+	requestOAuthSignin(arg0: string, arg0: string, arg0: boolean, arg0: string | null): Promise<void>;
 	signout(arg0: string): Promise<void>;
 	cancelSignin(): Promise<void>;
 	loginPortal(arg0: string, arg0: string, arg0: boolean): Promise<void>;
@@ -788,18 +828,18 @@ export declare interface AppPlugins extends MutationObject<'loadedPlugins' | 'co
 			| 'DONATION'
 			| 'CHAT'
 	): Promise<void>;
-	openPopout(arg0: string): Promise<void>;
 	assignTag(arg0: string, arg0: string): Promise<void>;
+	openPopout(arg0: string): Promise<void>;
 	deleteWidget(arg0: string): Promise<void>;
-	clickWidgetSettingsButton(arg0: string, arg0: string): Promise<void>;
 	openPluginsDir(): Promise<void>;
-	createNewWidget(arg0: string, arg0: string): Promise<string>;
+	clickWidgetSettingsButton(arg0: string, arg0: string): Promise<void>;
 	load(arg0: string): Promise<void>;
+	createNewWidget(arg0: string, arg0: string): Promise<string>;
 	renameWidget(arg0: string, arg0: string): Promise<void>;
 	unload(arg0: string): Promise<void>;
-	editWidgetSettingsItem(arg0: string, arg0: string, arg0: any): Promise<void>;
-	copyWidgetUrl(arg0: string): Promise<void>;
 	listFiles(): Promise<string[]>;
+	copyWidgetUrl(arg0: string): Promise<void>;
+	editWidgetSettingsItem(arg0: string, arg0: string, arg0: any): Promise<void>;
 }
 export declare interface AppSounds extends MutationObject<never> {
 	playUrl(arg0: string, arg0: number): Promise<void>;

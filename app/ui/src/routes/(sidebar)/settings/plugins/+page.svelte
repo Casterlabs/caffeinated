@@ -35,7 +35,7 @@
 		<!-- Hide the internal plugins IF they don't have developer mode enabled. -->
 		{#if context.file || $uiPreferences?.enableStupidlyUnsafeSettings}
 			<li>
-				<Box>
+				<Box sides={['top', 'bottom', 'left', 'right']}>
 					<div class="h-6 flex flex-row items-center">
 						<p class="flex-1">
 							{#if context.file}
@@ -72,7 +72,7 @@
 
 	{#each files as file}
 		<li>
-			<Box>
+			<Box sides={['top', 'bottom', 'left', 'right']}>
 				<div class="h-6 flex flex-row items-center">
 					<p class="flex-1">
 						{file}

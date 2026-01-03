@@ -29,6 +29,20 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 public class AppAuth {
     private static FastLogger logger = new FastLogger();
 
+    @JavascriptValue(allowSet = false)
+    private static final UserPlatform[] AUTHENTICATABLE = {
+            UserPlatform.TWITCH,
+            UserPlatform.TROVO,
+            UserPlatform.YOUTUBE,
+            UserPlatform.DLIVE,
+            UserPlatform.TIKTOK,
+            UserPlatform.KICK,
+            UserPlatform.LOCO,
+    };
+
+    @JavascriptValue(allowSet = false)
+    private static final UserPlatform[] ALL = UserPlatform.values();
+
     @Getter
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private static Map<String, AuthInstance> authInstances = new HashMap<>();

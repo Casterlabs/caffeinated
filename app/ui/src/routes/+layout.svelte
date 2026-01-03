@@ -31,6 +31,7 @@
 
 	$effect(() => {
 		document.documentElement.style.fontSize = `${($uiPreferences?.zoom || 1) * 16}px`;
+		document.documentElement.style.fontFamily = $uiPreferences?.uiFont || '';
 	});
 
 	onMount(() => {
