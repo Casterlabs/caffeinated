@@ -1,8 +1,6 @@
 package co.casterlabs.caffeinated.app.sdk;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +10,7 @@ import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.locale.AppLocale;
 import co.casterlabs.caffeinated.app.music_integration.MusicImpl;
 import co.casterlabs.caffeinated.app.plugins.CaffeinatedPluginsImpl;
 import co.casterlabs.caffeinated.app.scripting.ScriptingEnginesImpl;
@@ -24,13 +23,9 @@ import co.casterlabs.caffeinated.pluginsdk.music.Music;
 import co.casterlabs.caffeinated.pluginsdk.scripting.ScriptingEngines;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.MimeTypes;
-import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.TypeToken;
-import co.casterlabs.rakurai.json.element.JsonArray;
-import co.casterlabs.rakurai.json.element.JsonElement;
-import co.casterlabs.rakurai.json.element.JsonObject;
+import glocale.part.ComponentPart;
+import glocale.part.Part;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 
 @JavascriptObject
 public class CaffeinatedImpl implements Caffeinated {
@@ -92,67 +87,32 @@ public class CaffeinatedImpl implements Caffeinated {
     }
 
     @Override
-    public @NonNull String localize(String key, @Nullable Map<String, String> knownPlaceholders, @Nullable List<String> knownComponents) {
-//        if (key == null) return "";
-//
-//        if (knownPlaceholders == null) knownPlaceholders = Collections.emptyMap();
-//        if (knownComponents == null) knownComponents = Collections.emptyList();
-//
-//        String value = App.appLocale.process(key, null, knownPlaceholders, knownComponents);
-//
-//        if (value == null) {
-//            // See if any of the plugins can localize the string.
-//            for (CaffeinatedPlugin plugin : AppPlugins.getLoadedPlugins()) {
-//                @Nullable
-//                Map<String, LocaleProvider> fullLang = plugin.getLang();
-//                if (fullLang == null) continue;
-//
-//                LocaleProvider lang = fullLang.get(this.getLocale().replace('-', '_').toUpperCase());
-//                if (lang == null) continue;
-//
-//                value = lang.process(key, null, knownPlaceholders, knownComponents);
-//                if (value != null) break; // We found one!
-//            }
-//        }
-//
-//        if (value == null) {
-////            FastLogger.logStatic(LogLevel.WARNING, "Could not find locale key: %s", key);
-//            return key;
-//        }
-//
-//        // Go over any supposed UI placeholders and see if regular ones will fit...
-//        for (Map.Entry<String, String> placeholder : knownPlaceholders.entrySet()) {
-//            if (knownComponents.contains(placeholder.getKey())) continue; // This UI will handle this...
-//
-//            value = value.replace('%' + placeholder.getKey() + '%', placeholder.getValue());
-//        }
-//
-//        return value;
-        return ""; // TODO
-    }
-
-    @SneakyThrows
-    @JavascriptFunction
-    public @NonNull String localize(String key, @Nullable JsonObject knownPlaceholders, @Nullable JsonArray knownComponents) { // for the JS Bridge
+    public @NonNull String localize(String key, @Nullable Map<String, String> knownPlaceholders, @Nullable Map<String, String> knownComponents) {
         if (key == null) return "";
 
-        Map<String, String> knownPlaceholders_map = new HashMap<>();
-        if (knownPlaceholders != null) {
-            for (Map.Entry<String, JsonElement> entry : knownPlaceholders.entrySet()) {
-                if (entry.getValue().isJsonString()) {
-                    knownPlaceholders_map.put(entry.getKey(), entry.getValue().getAsString());
-                } else {
-                    knownPlaceholders_map.put(entry.getKey(), entry.getValue().toString());
-                }
-            }
+        Part[] values;
+        try {
+            values = AppLocale.glocale.lookup(key);
+        } catch (IllegalArgumentException e) {
+            // Key not found, return the key itself.
+            return key;
         }
 
-        return this.localize(
-            key,
-            knownPlaceholders_map,
-            Rson.DEFAULT.fromJson(knownComponents, new TypeToken<List<String>>() {
-            })
-        );
+        StringBuilder buf = new StringBuilder();
+        for (Part value : values) {
+            if (value.type() == Part.Type.COMPONENT) {
+                ComponentPart componentPart = (ComponentPart) value;
+                String replacement = knownComponents.get(componentPart.name);
+                if (replacement != null) {
+                    buf.append(replacement);
+                }
+                continue; // Skip unknown components.
+            }
+            String rendered = value.render(AppLocale.glocale, knownPlaceholders);
+            buf.append(rendered);
+        }
+
+        return buf.toString();
     }
 
 }

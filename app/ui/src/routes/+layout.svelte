@@ -6,6 +6,7 @@
 
 	import CSSIntermediate from '$lib/layout/CSSIntermediate.svelte';
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
+	import { IconXMark } from '@casterlabs/heroicons-svelte';
 
 	import { onMount } from 'svelte';
 
@@ -26,7 +27,11 @@
 	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<Awaited<typeof AppConfig.uiPreferences>>();
 	const statusStates = storify(App, 'statusStates').readable<StatusState[]>();
 
-	let hideStatusBanner = false;
+	let hideStatusBanner = $state(false);
+
+	$effect(() => {
+		document.documentElement.style.fontSize = `${($uiPreferences?.zoom || 1) * 16}px`;
+	});
 
 	onMount(() => {
 		// @ts-ignore
@@ -54,9 +59,11 @@
 </svelte:head>
 
 {#await appShim.awaitPageLoad() then}
+	<!-- svelte-ignore slot_element_deprecated -->
 	<CSSIntermediate>
 		<slot />
-		{#if $statusStates?.length || (0 > 0 && !hideStatusBanner)}
+
+		{#if $statusStates && $statusStates.length && !hideStatusBanner}
 			{@const state = $statusStates![0]}
 
 			<div class="absolute top-0 inset-x-0 py-1 m-1 rounded-md drop-shadow-lg" style:background={STATUS_COLORS[state.status][0]} style:color={STATUS_COLORS[state.status][1]}>
@@ -64,9 +71,9 @@
 					<LocalizedText key="co.casterlabs.caffeinated.app.status.{state.status}"></LocalizedText>
 				</a>
 
-				<button class="absolute inset-y-0 right-1 flex items-center justify-center" on:click={() => (hideStatusBanner = true)}>
+				<button class="absolute inset-y-0 right-1 flex items-center justify-center" onclick={() => (hideStatusBanner = true)}>
 					<span class="sr-only">Dismiss</span>
-					<icon data-icon="icon/x-mark" />
+					<IconXMark theme="solid" />
 				</button>
 			</div>
 		{/if}

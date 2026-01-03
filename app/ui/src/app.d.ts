@@ -1,5 +1,5 @@
 // Auto-generated Saucer Bridge Definitions
-// Generated on 2026-01-02T03:44:22.052544600Z
+// Generated on 2026-01-03T12:33:34.224580600Z
 
 export declare type MutationListenerId = any;
 export declare interface MutationObject<M> {
@@ -617,6 +617,7 @@ export declare interface AppConfig extends MutationObject<'chatbotPreferences' |
 }
 export declare interface AppLocale extends MutationObject<'current' | 'fallback'> {
 	readonly current: Promise<Record<string, any>>;
+	readonly available: Promise<Record<string, string>>;
 	readonly fallback: Promise<Record<string, any>>;
 }
 export declare interface AppPlugins extends MutationObject<'loadedPlugins' | 'contexts'> {
@@ -813,7 +814,6 @@ export declare interface AppUI extends MutationObject<never> {
 	updateDashboard(arg0: { h: number[]; contents: Record<string, string>; v: number[] }, arg0: boolean): Promise<void>;
 }
 export declare interface Caffeinated extends MutationObject<never> {
-	localize(arg0: string, arg0: Record<string, any>, arg0: any[]): Promise<string>;
 	copyText(arg0: string, arg0: string): Promise<void>;
 	openLink(arg0: string): Promise<void>;
 	getLocale(): Promise<string>;

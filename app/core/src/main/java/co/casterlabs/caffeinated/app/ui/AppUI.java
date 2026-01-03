@@ -148,7 +148,7 @@ public class AppUI {
 
                 // Build the toastify options.
                 new JsonObject()
-                    .put("text", CaffeinatedImpl.INSTANCE.localize(message, Collections.emptyMap(), Collections.emptyList()))
+                    .put("text", CaffeinatedImpl.INSTANCE.localize(message, Collections.emptyMap(), Collections.emptyMap()))
                     .put("duration", TOAST_DURATION)
                     .put("close", true)
                     .put(

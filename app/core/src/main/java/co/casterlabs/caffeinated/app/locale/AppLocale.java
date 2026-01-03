@@ -10,6 +10,7 @@ import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import glocale.Glocale;
 import glocale.parser.RsonParser;
 import glocale.part.Part;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -23,12 +24,19 @@ public class AppLocale {
 
     @JavascriptValue(value = "current", allowSet = false, watchForMutate = true)
     private static JsonObject currentJson = fallbackJson;
-    private static Map<String, Part[]> current = fallback;
+
+    public static final Glocale glocale = new Glocale().use(fallback);
+
+    @JavascriptValue(value = "available", allowSet = false)
+    private static final Map<String, String> AVAILABLE_LOCALES = Map.of(
+        "en_US", "English"
+    );
 
     public static void onUpdatePreferences() {
+        // TODO
 //        String locale = AppConfig.uiPreferences.get().getLanguage();
 //        currentJson = loadJson(locale);
-//        current = RsonParser.parse(currentJson);
+//        glocale.use(RsonParser.parse(currentJson));
     }
 
     private static JsonObject loadJson(String locale) {

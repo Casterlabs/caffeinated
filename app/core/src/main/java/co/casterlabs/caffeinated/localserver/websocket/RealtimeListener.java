@@ -1,6 +1,7 @@
 package co.casterlabs.caffeinated.localserver.websocket;
 
 import java.io.IOException;
+import java.util.Map;
 
 import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.RealtimeApiListener;
@@ -13,7 +14,7 @@ import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.element.JsonArray;
+import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rhs.session.Websocket;
 import co.casterlabs.rhs.session.WebsocketListener;
@@ -145,9 +146,15 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
                     try {
                         String key = data.getString("key");
                         JsonObject knownPlaceholders = data.getObject("knownPlaceholders");
-                        JsonArray knownComponents = data.getArray("knownComponents");
+                        JsonObject knownComponents = data.getObject("knownComponents");
 
-                        String value = CaffeinatedImpl.INSTANCE.localize(key, knownPlaceholders, knownComponents);
+                        String value = CaffeinatedImpl.INSTANCE.localize(
+                            key,
+                            Rson.DEFAULT.fromJson(knownPlaceholders, new TypeToken<Map<String, String>>() {
+                            }),
+                            Rson.DEFAULT.fromJson(knownComponents, new TypeToken<Map<String, String>>() {
+                            })
+                        );
 
                         this.sendMessage(
                             "LOCALIZE",
