@@ -54,6 +54,7 @@
 		<style id="silly-font-style">
 			* {
 				font-family: 'Reenie Beanie', cursive !important;
+				font-size-adjust: ex-height 0.75;
 			}
 		</style>
 	{/if}
