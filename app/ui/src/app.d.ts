@@ -1279,7 +1279,7 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'CUSTOM_INTEGRATION',
 		arg0: string,
 		arg0: 'CLIENT' | 'SYSTEM',
-		arg0: string,
+		arg0: string | null,
 		arg0: boolean
 	): Promise<void>;
 	deleteChat(

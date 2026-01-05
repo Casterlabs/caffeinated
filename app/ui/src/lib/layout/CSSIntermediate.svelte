@@ -1,16 +1,13 @@
 <script lang="ts">
-	import { storify } from '$lib/bridgeHelper';
+	import { themeBaseColor, themeEffectiveAppearance, themePrimaryColor } from '$lib/appShim';
 	import createConsole from '$lib/console-helper';
 	import '$lib/css/app.css';
 
 	const console = createConsole('CSSIntermediate');
 
-	const themePreferences = storify(AppConfig, 'themePreferences').readable<Awaited<typeof AppConfig.themePreferences>>();
-	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Awaited<typeof AppThemeManager.effectiveAppearance>>();
-
-	let useLightTheme = $derived($effectiveAppearance == 'LIGHT');
+	let useLightTheme = $derived($themeEffectiveAppearance == 'LIGHT');
 	$effect(() => {
-		console.info('Switching to (effective) theme:', $effectiveAppearance);
+		console.info('Switching to (effective) theme:', $themeEffectiveAppearance);
 	});
 </script>
 
@@ -24,8 +21,8 @@
 	class="w-full h-full bg-base-1 text-base-12"
 	class:dark-theme={!useLightTheme}
 	data-theme-dark={!useLightTheme}
-	data-theme-base={$themePreferences?.baseColor || 'gray'}
-	data-theme-primary={$themePreferences?.primaryColor || 'gray'}
+	data-theme-base={$themeBaseColor}
+	data-theme-primary={$themePrimaryColor}
 >
 	<!-- svelte-ignore slot_element_deprecated -->
 	<slot />

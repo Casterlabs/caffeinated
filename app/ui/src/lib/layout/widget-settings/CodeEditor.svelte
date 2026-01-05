@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { storify } from '$lib/bridgeHelper';
+	import { themeEffectiveAppearance } from '$lib/appShim';
 
 	import { onMount } from 'svelte';
 
@@ -11,8 +11,6 @@
 	}
 
 	let { value = $bindable(''), language, typescriptTypings = null, onchange }: Props = $props();
-
-	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Awaited<typeof AppThemeManager.effectiveAppearance>>();
 
 	let container: HTMLDivElement;
 
@@ -38,7 +36,7 @@
 			automaticLayout: true,
 			lineNumbersMinChars: 2,
 			minimap: { enabled: false },
-			theme: $effectiveAppearance == 'DARK' ? 'vs-dark' : 'vs-light'
+			theme: $themeEffectiveAppearance == 'DARK' ? 'vs-dark' : 'vs-light'
 		});
 
 		// Ugly check loop. Thanks Monaco!

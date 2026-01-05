@@ -1,18 +1,18 @@
 <script lang="ts">
+	import { themeEffectiveAppearance } from '$lib/appShim';
 	import { modify, storify } from '$lib/bridgeHelper';
 
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { Input } from '@casterlabs/ui';
 
 	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<Awaited<typeof AppConfig.uiPreferences>>();
-	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Awaited<typeof AppThemeManager.effectiveAppearance>>();
 </script>
 
 <ul class="bg-base-2 shadow rounded-md border border-base-6">
 	<li class="py-4 flex flex-row space-x-8 border-b border-base-6">
 		<div class="flex-1 flex items-center">
 			<img
-				src="/$caffeinated-sdk-root$/images/brand/wordmark/{$uiPreferences?.icon || 'casterlabs'}/{$effectiveAppearance == 'DARK' ? 'white' : 'black'}.svg"
+				src="/$caffeinated-sdk-root$/images/brand/wordmark/{$uiPreferences?.icon || 'casterlabs'}/{$themeEffectiveAppearance == 'DARK' ? 'white' : 'black'}.svg"
 				class="h-auto w-full max-w-60"
 				alt="Casterlabs"
 			/>

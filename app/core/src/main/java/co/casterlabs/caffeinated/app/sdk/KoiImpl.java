@@ -300,10 +300,10 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
         AsyncTask.create(() -> {
             JsonElement asJson = Rson.DEFAULT.toJson(e);
 
-            AppWindow.emit(
-                "koi:event:" + e.type().name().toLowerCase(),
-                asJson
-            );
+//            AppWindow.emit(
+//                "koi:event:" + e.type().name().toLowerCase(),
+//                asJson
+//            );
             AppWindow.emit(
                 "koi:event",
                 asJson
