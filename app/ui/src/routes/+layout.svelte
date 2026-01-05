@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { awaitPageLoad } from '$lib/app-shim';
+	import { STATUS_COLORS, appStatusStates, awaitPageLoad, isInApp } from '$lib/app-shim';
 	import { storify } from '$lib/bridge-helper';
+	import { glocale } from '$lib/locale/locale';
 	import { get } from 'svelte/store';
 
 	import CSSIntermediate from '$lib/layout/CSSIntermediate.svelte';
@@ -10,29 +11,8 @@
 
 	import { onMount } from 'svelte';
 
-	export const STATUS_COLORS = {
-		OPERATIONAL: ['green', 'white'],
-		MAJOR_OUTAGE: ['red', 'white'],
-		MINOR_OUTAGE: ['orange', 'white'],
-		PARTIAL_OUTAGE: ['orange', 'white'],
-		DEGRADED_PERFORMANCE: ['yellow', 'black'],
-		MAINTENANCE: ['green', 'white']
-	};
-
-	interface StatusState {
-		status: 'OPERATIONAL' | 'MAJOR_OUTAGE' | 'MINOR_OUTAGE' | 'PARTIAL_OUTAGE' | 'DEGRADED_PERFORMANCE' | 'MAINTENANCE';
-		activeIncidents: { link: string }[];
-	}
-
-	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<Awaited<typeof AppConfig.uiPreferences>>();
-	const statusStates = storify(App, 'statusStates').readable<StatusState[]>();
-
+	let isHanddrawn = $state(false);
 	let hideStatusBanner = $state(false);
-
-	$effect(() => {
-		document.documentElement.style.fontSize = `${($uiPreferences?.zoom || 1) * 16}px`;
-		document.documentElement.style.fontFamily = $uiPreferences?.uiFont || '';
-	});
 
 	onMount(() => {
 		// @ts-ignore
@@ -41,13 +21,23 @@
 		window.debug_get = get;
 		// @ts-ignore
 		window.debug_App = App;
+		// @ts-ignore
+		window.debug_Glocale = glocale;
 		// // @ts-ignore
 		// window.debug_Currencies = Currencies;
+
+		if (isInApp) {
+			storify(AppConfig, 'uiPreferences')
+				.readable<Awaited<typeof AppConfig.uiPreferences>>()
+				.subscribe((prefs) => {
+					isHanddrawn = prefs?.icon === 'handdrawn';
+				});
+		}
 	});
 </script>
 
 <svelte:head>
-	{#if $uiPreferences?.icon == 'handdrawn'}
+	{#if isHanddrawn}
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" />
 		<link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet" />
@@ -65,8 +55,8 @@
 	<CSSIntermediate>
 		<slot />
 
-		{#if $statusStates && $statusStates.length && !hideStatusBanner}
-			{@const state = $statusStates![0]}
+		{#if $appStatusStates && $appStatusStates.length && !hideStatusBanner}
+			{@const state = $appStatusStates![0]}
 
 			<div class="absolute top-0 inset-x-0 py-1 m-1 rounded-md drop-shadow-lg" style:background={STATUS_COLORS[state.status][0]} style:color={STATUS_COLORS[state.status][1]}>
 				<a class="block text-center underline" href={state.activeIncidents[0].link || 'https://status.casterlabs.co'} target="_blank">

@@ -1,9 +1,11 @@
 {
   "type": "module",
   "scripts": {
-    "build": "node ./build.js"
+    "build": "node build.js",
+    "build:types": "dts-bundle-generator --inline-declare-global -o target/sdk.d.ts src/entry.ts"
   },
   "dependencies": {
+    "dts-bundle-generator": "^9.5.1",
     "esbuild": "^0.24.0"
   }
 }

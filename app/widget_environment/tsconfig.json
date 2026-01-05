@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM"],
+    "target": "es2017",
+    "declaration": true
+  }
+}

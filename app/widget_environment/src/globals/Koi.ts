@@ -6,88 +6,525 @@ let statics: any = {};
 let conn: Conn;
 
 const GLOBAL = {
-    get eventHistory() {
-        return statics.history;
-    },
+  get eventHistory() {
+    return statics.history as KoiEvent[];
+  },
 
-    get viewers() {
-        return statics.viewers;
-    },
+  get viewers() {
+    return statics.viewers as Record<UserPlatform, User>;
+  },
 
-    get viewerCounts() {
-        return statics.viewerCounts;
-    },
+  get viewerCounts() {
+    return statics.viewerCounts as Record<UserPlatform, number>;
+  },
 
-    get userStates() {
-        return statics.userStates;
-    },
+  get userStates() {
+    return statics.userStates as Record<UserPlatform, any>;
+  },
 
-    get streamStates() {
-        return statics.streamStates;
-    },
+  get streamStates() {
+    return statics.streamStates as Record<UserPlatform, any>;
+  },
 
-    get roomStates() {
-        return statics.roomStates;
-    },
+  get roomStates() {
+    return statics.roomStates as Record<UserPlatform, any>;
+  },
 
-    get features() {
-        return statics.features;
-    },
+  get features() {
+    return statics.features as Record<UserPlatform, KoiIntegrationFeature[]>;
+  },
 
-    upvoteChat(platform: string, messageId: any) {
-        conn.send("KOI", {
-            type: "UPVOTE",
-            platform: platform,
-            messageId: messageId
-        });
-    },
+  upvoteChat(platform: UserPlatform, messageId: MessageId) {
+    conn.send("KOI", {
+      type: "UPVOTE",
+      platform: platform,
+      messageId: messageId,
+    });
+  },
 
-    deleteChat(platform: string, messageId: any, isUserGesture = true) {
-        conn.send("KOI", {
-            type: "DELETE",
-            platform: platform,
-            messageId: messageId,
-            isUserGesture: isUserGesture
-        });
-    },
+  deleteChat(
+    platform: UserPlatform,
+    messageId: MessageId,
+    isUserGesture = true
+  ) {
+    conn.send("KOI", {
+      type: "DELETE",
+      platform: platform,
+      messageId: messageId,
+      isUserGesture: isUserGesture,
+    });
+  },
 
-    sendChat(platform: string, message: any, chatter = "CLIENT", replyTarget = null, isUserGesture = true) {
-        conn.send("KOI", {
-            type: "MESSAGE",
-            platform: platform,
-            message: message,
-            chatter: chatter,
-            replyTarget: replyTarget,
-            isUserGesture: isUserGesture
-        });
-    },
+  sendChat(
+    platform: UserPlatform,
+    message: MessageId,
+    chatter: "SYSTEM" | "CLIENT" | "PUPPET" = "CLIENT",
+    replyTarget: MessageId | null = null,
+    isUserGesture = true
+  ) {
+    conn.send("KOI", {
+      type: "MESSAGE",
+      platform: platform,
+      message: message,
+      chatter: chatter,
+      replyTarget: replyTarget,
+      isUserGesture: isUserGesture,
+    });
+  },
 
-    // test(event) {
-    //     if (this.isAlive()) {
-    //         this.ws.send(JSON.stringify({
-    //             type: "TEST",
-    //             eventType: event.toUpperCase()
-    //         }));
-    //     }
-    // }
+  // test(event) {
+  //     if (this.isAlive()) {
+  //         this.ws.send(JSON.stringify({
+  //             type: "TEST",
+  //             eventType: event.toUpperCase()
+  //         }));
+  //     }
+  // }
 };
 const eventsPrototype = Object.getPrototypeOf(events);
 for (const key of Object.getOwnPropertyNames(eventsPrototype)) {
-    if (GLOBAL[key]) continue;
-    GLOBAL[key] = function () {
-        return eventsPrototype[key].call(events, ...arguments);
-    };
+  if (GLOBAL[key]) continue;
+  GLOBAL[key] = function () {
+    return eventsPrototype[key].call(events, ...arguments);
+  };
 }
 export default GLOBAL;
 
 export function init(c: Conn) {
-    conn = c;
+  conn = c;
 
-    conn.on("koi_statics", (s: any) => {
-        statics = s;
-        events.broadcast("koi_statics", statics);
-    });
-    conn.on("koi", (event: any) => {
-        events.broadcast(event.event_type, event);
-    });
+  conn.on("koi_statics", (s: any) => {
+    statics = s;
+    events.broadcast("koi_statics", statics);
+  });
+  conn.on("koi", (event: any) => {
+    events.broadcast(event.event_type, event);
+  });
+}
+
+export declare type KoiIntegrationFeature = string;
+
+/* ------------------------ */
+/*           User           */
+/* ------------------------ */
+
+/**
+ * Unique Platform Identifier. Guaranteed to be unique to the user even if two different platforms have ID collisions.
+ */
+export declare type UPID = string;
+
+export declare type UserPlatform =
+  | "CAFFEINE"
+  | "TWITCH"
+  | "TROVO"
+  | "GLIMESH"
+  | "BRIME"
+  | "YOUTUBE"
+  | "DLIVE"
+  | "TIKTOK"
+  | "THETA"
+  | "KICK"
+  | "YOUNOW"
+  | "LIVESPACE"
+  | "NOICE"
+  | "X"
+  | "RUMBLE"
+  | "LOCO"
+  // Other
+  | "CASTERLABS_SYSTEM"
+  | "CUSTOM_INTEGRATION";
+
+export const PLATFORM_NAMES: Record<UserPlatform, string> = {
+  CAFFEINE: "Caffeine",
+  TWITCH: "Twitch",
+  TROVO: "Trovo",
+  GLIMESH: "Glimesh",
+  BRIME: "Brime",
+  YOUTUBE: "YouTube",
+  DLIVE: "Dlive",
+  TIKTOK: "TikTok",
+  THETA: "Theta",
+  KICK: "Kick",
+  YOUNOW: "YouNow",
+  LIVESPACE: "LiveSpace",
+  NOICE: "Noice",
+  X: "𝕏",
+  RUMBLE: "Rumble",
+  LOCO: "Loco",
+  // Other
+  CASTERLABS_SYSTEM: "Casterlabs System",
+  CUSTOM_INTEGRATION: "Custom Integration",
+};
+
+export declare type UserRole =
+  | "BROADCASTER"
+  | "SUBSCRIBER"
+  | "FOLLOWER"
+  | "MODERATOR"
+  | "STAFF"
+  | "VIP"
+  | "OG";
+
+export declare interface SimpleProfile {
+  UPID: UPID;
+  id: string;
+  channel_id: string;
+  platform: UserPlatform;
+}
+
+export declare interface User extends SimpleProfile {
+  color: string;
+  username: string;
+  displayname: string;
+  bio: string;
+  link: string;
+  image_link: string;
+  followers_count: number;
+  subscriber_count: number;
+
+  roles: UserRole[];
+
+  badges: string[];
+}
+
+/* ------------------------ */
+/*          Event           */
+/* ------------------------ */
+
+export declare type KoiEvent =
+  | CatchupEvent
+  | ChannelPointsEvent
+  | ClearChatEvent
+  | ConnectionStateEvent
+  | FollowEvent
+  | LikeEvent
+  | PlatformMessageEvent
+  | RaidEvent
+  | RichMessageEvent
+  | RoomstateEvent
+  | StreamStatusEvent
+  | SubscriptionEvent
+  | UserUpdateEvent
+  | ViewerCountEvent
+  | ViewerJoinLeaveEvent
+  | ViewerJoinLeaveEvent
+  | ViewerListEvent;
+
+export declare type KoiEventType =
+  | "FOLLOW"
+  | "SUBSCRIPTION"
+  | "USER_UPDATE"
+  | "STREAM_STATUS"
+  | "META"
+  | "VIEWER_JOIN"
+  | "VIEWER_LEAVE"
+  | "VIEWER_LIST"
+  | "VIEWER_COUNT"
+  | "RAID"
+  | "CHANNEL_POINTS"
+  | "CATCHUP"
+  | "CLEARCHAT"
+  | "ROOMSTATE"
+  | "PLATFORM_MESSAGE"
+  | "RICH_MESSAGE"
+  | "LIKE"
+  | "CONNECTION_STATE";
+
+declare interface AbstractKoiEvent {
+  streamer: SimpleProfile;
+  timestamp: string;
+  event_type: KoiEventType;
+}
+
+export declare interface CatchupEvent extends AbstractKoiEvent {
+  event_type: "CATCHUP";
+  events: KoiEvent[];
+}
+
+export declare type ChannelPointsRewardEventId = string;
+export declare type ChannelPointsRewardId = string;
+export declare interface ChannelPointsRewardRedemption {
+  id: ChannelPointsRewardId;
+  title: string;
+  cost: number;
+  background_color: string;
+  reward_image: string | null;
+  default_reward_image: string;
+  /**
+   * Null if disabled, see user_input.
+   */
+  prompt: string | null;
+  /**
+   * Null if disabled, see prompt.
+   */
+  user_input: string | null;
+}
+export declare interface ChannelPointsEvent extends AbstractKoiEvent {
+  event_type: "CHANNEL_POINTS";
+  sender: User;
+  id: ChannelPointsRewardEventId;
+  reward: ChannelPointsRewardRedemption;
+}
+
+export declare type ClearChatType = "ALL" | "USER";
+export declare interface ClearChatEvent extends AbstractKoiEvent {
+  event_type: "CLEARCHAT";
+  clear_type: ClearChatType;
+  /**
+   * `null` if clearType == 'ALL'.
+   */
+  user_upid: UPID | null;
+}
+
+export declare type ConnectionState = "CONNECTED" | "DISCONNECTED" | "WAITING";
+export declare interface ConnectionStateEvent extends AbstractKoiEvent {
+  event_type: "CONNECTION_STATE";
+  states: { [key: string]: ConnectionState };
+}
+
+export declare interface FollowEvent extends AbstractKoiEvent {
+  event_type: "FOLLOW";
+  follower: User;
+}
+
+export declare interface LikeEvent extends AbstractKoiEvent {
+  event_type: "LIKE";
+  /**
+   * May be `null` on platforms that do not tell us who liked.
+   */
+  liker: User | null;
+  total_likes: number;
+}
+
+export declare interface RaidEvent extends AbstractKoiEvent {
+  event_type: "RAID";
+  host: User;
+  /**
+   * May be 0 on platforms that do not expose this data.
+   */
+  viewers: number;
+}
+
+export declare interface RoomstateEvent extends AbstractKoiEvent {
+  event_type: "ROOMSTATE";
+  is_emote_only: boolean;
+  is_subs_only: boolean;
+  is_r9k: boolean;
+  is_followers_only: boolean;
+  is_slowmode: boolean;
+}
+
+export declare type ContentRating = "FAMILY_FRIENDLY" | "PG" | "MATURE";
+export declare interface StreamStatusEvent extends AbstractKoiEvent {
+  event_type: "STREAM_STATUS";
+  is_live: boolean;
+  title: string;
+  start_time: string;
+  tags: String[];
+  category: string;
+  contentRating: ContentRating;
+  thumbnail_url: string;
+  language: string;
+}
+
+export declare type SubscriptionType =
+  | "SUB"
+  | "RESUB"
+  | "SUBGIFT"
+  | "RESUBGIFT"
+  | "ANONSUBGIFT"
+  | "ANONRESUBGIFT";
+export declare type SubscriptionLevel =
+  | "UNKNOWN"
+  | "TWITCH_PRIME"
+  | "TIER_1"
+  | "TIER_2"
+  | "TIER_3"
+  | "TIER_4"
+  | "TIER_5";
+export declare interface SubscriptionEvent extends AbstractKoiEvent {
+  event_type: "SUBSCRIPTION";
+  /**
+   * The user who paid for the subscription.
+   */
+  subscriber: User;
+  sub_type: SubscriptionType;
+  sub_level: SubscriptionLevel;
+  /**
+   * Null if not SUBGIFT or RESUBGIFT.
+   */
+  gift_recipient: User;
+  /**
+   * Note that this is unknowable on some platforms, like TikTok. In that case, it
+   * will always be 1.
+   */
+  months_purchased: number;
+  /**
+   * Note that this is unknowable on some platforms, like TikTok. In that case, it
+   * will always be 1.
+   */
+  months_streak: number;
+}
+
+export declare interface UserUpdateEvent extends AbstractKoiEvent {
+  event_type: "USER_UPDATE";
+  streamer: User;
+}
+
+export declare interface ViewerListEvent extends AbstractKoiEvent {
+  event_type: "VIEWER_LIST";
+  viewers: User[];
+}
+
+export declare interface ViewerJoinLeaveEvent extends AbstractKoiEvent {
+  event_type: "VIEWER_JOIN" | "VIEWER_LEAVE";
+  viewer: User;
+}
+
+export declare interface ViewerCountEvent extends AbstractKoiEvent {
+  event_type: "VIEWER_COUNT";
+  count: number;
+}
+
+/* ------------------------ */
+/*     Message Events       */
+/* ------------------------ */
+
+/**
+ * For RP_ACTION, see Twitch's /me command.
+ */
+export declare type MessageAttribute =
+  | "HIGHLIGHTED"
+  | "RP_ACTION"
+  | "FIRST_TIME_CHATTER"
+  | "ANNOUNCEMENT";
+
+export declare type MessageId = string;
+export declare type MetaId = string;
+
+declare interface AbstractMessageMetaKoiEvent extends AbstractKoiEvent {
+  meta_id: MetaId;
+  is_visible: boolean;
+  upvotes: number;
+  attributes: MessageAttribute[];
+}
+
+export declare interface MessageMetaEvent extends AbstractMessageMetaKoiEvent {
+  event_type: "META";
+}
+
+declare interface AbstractRichMessageEvent extends AbstractMessageMetaKoiEvent {
+  sender: User;
+  fragments: ChatFragment[];
+  donations: Donation[];
+  attachments: Attachment[];
+  id: MessageId;
+  reply_target: MetaId | null;
+  raw: string;
+  html: string;
+}
+
+export declare interface RichMessageEvent extends AbstractRichMessageEvent {
+  event_type: "RICH_MESSAGE";
+}
+
+export declare interface PlatformMessageEvent extends AbstractRichMessageEvent {
+  event_type: "PLATFORM_MESSAGE";
+}
+
+/* ------------------------ */
+/*    Rich Message Stuff    */
+/* ------------------------ */
+
+export declare type DonationType =
+  | "CASTERLABS_TEST"
+  | "OTHER" // Never exclude other!
+  | "CAFFEINE_PROP"
+  | "TWITCH_BITS"
+  | "TROVO_SPELL"
+  | "YOUTUBE_SUPER_CHAT"
+  | "YOUTUBE_SUPER_STICKER"
+  | "DLIVE_SUPER_CHAT"
+  | "DLIVE_LEMON"
+  | "TIKTOK_COINS";
+export declare interface Donation {
+  type: DonationType;
+  name: string;
+  currency: string;
+  amount: number;
+  /**
+   * This is the amount of the item sent. For example, Caffeine props can be sent
+   * multiple times in a single message. For the true value of a donation,
+   * multiply count by the amount.
+   */
+  count: number;
+  image: string;
+}
+
+export declare type AttachmentType = "IMAGE" | "INTERACTIVE";
+export declare interface AttachmentContent {
+  src: string;
+  alt: string;
+}
+export declare interface Attachment {
+  type: AttachmentType;
+  content: AttachmentContent;
+  html: string;
+  donation: Donation | null;
+}
+
+export declare type ChatFragment =
+  | TextChatFragment
+  | EmoteChatFragment
+  | EmojiChatFragment
+  | MentionChatFragment
+  | LinkChatFragment;
+export declare type ChatFragmentType =
+  | "TEXT"
+  | "EMOTE"
+  | "EMOJI"
+  | "MENTION"
+  | "LINK";
+
+declare interface AbstractChatFragment {
+  type: ChatFragmentType;
+  raw: string;
+  html: string;
+}
+
+export declare interface TextChatFragment extends AbstractChatFragment {
+  type: "TEXT";
+  /**
+   * Same as raw.
+   */
+  text: string;
+}
+
+export declare interface EmoteChatFragment extends AbstractChatFragment {
+  type: "EMOTE";
+  emoteName: string;
+  imageLink: string;
+  /**
+   * Some emotes are purely for augmenting another emote. For instance, adding a
+   * rain effect on a Sad Pepe. This is already handled for you in the rendered
+   * html.
+   */
+  isZeroWidth: boolean;
+  provider: string | null;
+  donation: Donation | null;
+}
+
+export declare interface EmojiChatFragment extends AbstractChatFragment {
+  type: "EMOJI";
+  variation: any; // Not gonna document this yet. Kindof useless.
+}
+
+export declare interface MentionChatFragment extends AbstractChatFragment {
+  type: "MENTION";
+  mentioned: User;
+}
+
+export declare interface LinkChatFragment extends AbstractChatFragment {
+  type: "LINK";
+  url: string;
 }

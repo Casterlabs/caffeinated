@@ -19,11 +19,11 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 @JavascriptObject
 public class AppLocale {
     @JavascriptValue(value = "fallback", allowSet = false, watchForMutate = true)
-    private static final JsonObject fallbackJson = loadJson("en_US");
+    public static final JsonObject fallbackJson = loadJson("en_US");
     private static final Map<String, Part[]> fallback = RsonParser.parse(fallbackJson);
 
     @JavascriptValue(value = "current", allowSet = false, watchForMutate = true)
-    private static JsonObject currentJson = fallbackJson;
+    public static JsonObject currentJson = fallbackJson;
 
     public static final Glocale glocale = new Glocale().use(fallback);
 

@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.app.locale.AppLocale;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -13,6 +14,7 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.commons.functional.tuples.Pair;
+import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
@@ -105,6 +107,17 @@ class _UIDocksPlugin extends CaffeinatedPlugin {
 
             instance.on("savePreferences", (data) -> {
                 this.settings().set("preferences", data);
+            });
+
+            instance.on("ready", () -> {
+                try {
+                    instance.emit(
+                        "locale",
+                        new JsonObject()
+                            .put("current", AppLocale.currentJson)
+                            .put("fallback", AppLocale.fallbackJson)
+                    );
+                } catch (IOException ignored) {}
             });
         }
 
