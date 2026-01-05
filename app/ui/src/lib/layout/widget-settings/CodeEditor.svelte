@@ -1,14 +1,25 @@
-<!-- <script lang="ts">
+<script lang="ts">
+	import { storify } from '$lib/bridgeHelper';
+
 	import { onMount } from 'svelte';
 
-	export let value = '';
-	export let language = '';
+	interface Props {
+		value: string;
+		language: string;
+		typescriptTypings?: string | null;
+		onchange?: (value: string) => void;
+	}
 
-	export let typescriptTypings = null;
+	let { value = $bindable(''), language, typescriptTypings = null, onchange }: Props = $props();
 
-	let container;
+	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Awaited<typeof AppThemeManager.effectiveAppearance>>();
+
+	let container: HTMLDivElement;
 
 	onMount(() => {
+		// @ts-ignore
+		const monaco = window.monaco as any;
+
 		if (typescriptTypings != null) {
 			const compilerOptions = monaco.languages.typescript.javascriptDefaults.getCompilerOptions();
 			monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
@@ -18,10 +29,7 @@
 				lib: ['es7', 'es2022']
 			});
 
-			monaco.languages.typescript.javascriptDefaults.addExtraLib(
-				typescriptTypings,
-				'file:///lib.d.ts'
-			);
+			monaco.languages.typescript.javascriptDefaults.addExtraLib(typescriptTypings, 'file:///lib.d.ts');
 		}
 
 		const editor = monaco.editor.create(container, {
@@ -30,22 +38,20 @@
 			automaticLayout: true,
 			lineNumbersMinChars: 2,
 			minimap: { enabled: false },
-			theme: $appearance == 'DARK' ? 'vs-dark' : 'vs-light'
+			theme: $effectiveAppearance == 'DARK' ? 'vs-dark' : 'vs-light'
 		});
 
 		// Ugly check loop. Thanks Monaco!
-		const checkInterval = setInterval(() => {
+		const id = setInterval(() => {
 			const currValue = editor.getValue();
 
 			if (currValue != value) {
 				value = currValue;
-				dispatch('value', value);
+				onchange?.(value);
 			}
 		}, 500);
-
-		return () => clearInterval(checkInterval);
+		return () => clearInterval(id);
 	});
 </script>
 
-<div bind:this={container} class="h-full w-full"></div> -->
-TODO
+<div bind:this={container} class="h-full w-full"></div>
