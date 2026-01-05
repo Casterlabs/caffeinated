@@ -27,7 +27,7 @@ declare const GLOBAL$1: {
 };
 declare const GLOBAL$2: {
 	readonly eventHistory: KoiEvent[];
-	readonly viewers: Record<UserPlatform, User>;
+	readonly viewers: Record<UserPlatform, User[]>;
 	readonly viewerCounts: Record<UserPlatform, number>;
 	readonly userStates: Record<UserPlatform, any>;
 	readonly streamStates: Record<UserPlatform, any>;

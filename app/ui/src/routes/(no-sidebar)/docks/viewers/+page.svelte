@@ -1,39 +1,37 @@
 <script lang="ts">
 	import { Koi, copyText } from '$lib/app-shim';
-	import type { User, ViewerCountEvent, ViewerListEvent } from '$lib/koi';
+	import type { KoiStatics, User, UserPlatform } from '$lib/koi';
 
 	import { IconEye } from '@casterlabs/heroicons-svelte';
+
+	import { onMount } from 'svelte';
 
 	let viewersListByPlatform: Record<string, User[]> = {};
 	let viewersCountByPlatform: Record<string, number> = {};
 
-	let viewersList_computed: string[] = [];
-	let viewersCount_computed = 0;
+	let viewersList_computed: string[] = $state([]);
+	let viewersCount_computed = $state(0);
 
-	Koi.on('VIEWER_LIST', (e: ViewerListEvent) => {
-		console.log(e);
-		viewersListByPlatform[e.streamer.platform] = e.viewers;
+	Koi.on('koi_statics', (statics: KoiStatics) => {
+		console.log(statics);
+		const signedInPlatforms = Object.values(statics.userStates).map((state) => state.streamer.platform);
+
+		for (const platform of Object.keys(viewersListByPlatform)) {
+			if (!signedInPlatforms.includes(platform as UserPlatform)) {
+				delete viewersListByPlatform[platform];
+				delete viewersCountByPlatform[platform];
+			}
+		}
+
+		for (const [platform, viewers] of Object.entries(statics.viewers)) {
+			viewersListByPlatform[platform] = viewers;
+		}
+		for (const [platform, count] of Object.entries(statics.viewerCounts)) {
+			viewersCountByPlatform[platform] = count;
+		}
 
 		updateViewersList();
 	});
-
-	Koi.on('VIEWERS_COUNT', (e: ViewerCountEvent) => {
-		console.log(e);
-		viewersCountByPlatform[e.streamer.platform] = e.count;
-
-		updateViewersList();
-	});
-
-	// export function onAuthUpdate(signedInPlatforms) {
-	// 	for (const platform of Object.keys(viewersListByPlatform)) {
-	// 		if (!signedInPlatforms.includes(platform)) {
-	// 			delete viewersListByPlatform[platform];
-	// 			delete viewersCountByPlatform[platform];
-	// 		}
-	// 	}
-
-	// 	updateViewersList();
-	// }
 
 	function updateViewersList() {
 		const wholeList: string[] = [];
@@ -57,6 +55,11 @@
 		e.preventDefault();
 		copyText(viewersList_computed.join('\n'));
 	}
+
+	onMount(async () => {
+		const statics = await Koi.statics();
+		Koi.broadcast('koi_statics', statics);
+	});
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->

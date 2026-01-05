@@ -19,6 +19,16 @@ export const PLATFORM_COLORS: Record<UserPlatform, string> = {
 	CUSTOM_INTEGRATION: '#00aff1'
 };
 
+export declare interface KoiStatics {
+	history: KoiEvent[];
+	viewers: Record<UserPlatform, User[]>;
+	viewerCounts: Record<UserPlatform, number>;
+	userStates: Record<UserPlatform, UserUpdateEvent>;
+	streamStates: Record<UserPlatform, StreamStatusEvent>;
+	roomStates: Record<UserPlatform, RoomstateEvent>;
+	features: Record<UserPlatform, string[]>;
+}
+
 /* ------------------------ */
 /*         Actions          */
 /* ------------------------ */

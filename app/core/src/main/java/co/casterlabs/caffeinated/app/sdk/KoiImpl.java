@@ -136,6 +136,13 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
         JsonObject statics = this.toJson();
         JsonObject extendedStatics = this.toJsonExtended();
 
+        AsyncTask.create(() -> {
+            AppWindow.emit(
+                "koi:statics",
+                extendedStatics
+            );
+        });
+
         // Send update to the widget instances.
         AsyncTask.create(() -> {
             for (CaffeinatedPlugin plugin : AppPlugins.getLoadedPlugins()) {

@@ -1,7 +1,7 @@
 import { goto } from '$app/navigation';
 import { storify } from './bridge-helper';
 import EventHandler from './event-handler';
-import type { KoiEvent, MessageId, MessageMetaEvent, MetaId, RichMessageEvent, UPID, User, UserPlatform } from './koi';
+import type { KoiEvent, KoiStatics, MessageId, MessageMetaEvent, MetaId, RichMessageEvent, UPID, User, UserPlatform } from './koi';
 import { glocale, rerenderKey } from './locale/locale';
 import type { AppSDK } from './sdk';
 import { writable } from 'svelte/store';
@@ -82,6 +82,8 @@ abstract class AbstractKoi extends EventHandler {
 	public abstract authenticated(): Promise<User[]>;
 
 	public abstract history(): Promise<KoiEvent[]>;
+
+	public abstract statics(): Promise<KoiStatics>;
 }
 
 export let Koi: AbstractKoi;
@@ -162,6 +164,22 @@ if (isInApp) {
 			// @ts-ignore
 			return window.Koi.eventHistory;
 		}
+
+		public async statics(): Promise<KoiStatics> {
+			return {
+				// @ts-ignore
+				history: await window.Koi.eventHistory,
+				viewers: await window.Koi.viewers,
+				viewerCounts: await window.Koi.viewerCounts,
+				// @ts-ignore
+				userStates: await window.Koi.userStates,
+				// @ts-ignore
+				streamStates: await window.Koi.streamStates,
+				// @ts-ignore
+				roomStates: await window.Koi.roomStates,
+				features: await window.Koi.features
+			};
+		}
 	})();
 
 	// @ts-ignore
@@ -179,6 +197,9 @@ if (isInApp) {
 				return;
 			case 'koi:event':
 				Koi.broadcast(data.event_type, data as KoiEvent);
+				return;
+			case 'koi:statics':
+				Koi.broadcast('koi_statics', data);
 				return;
 		}
 	});
@@ -227,6 +248,19 @@ if (isInApp) {
 		public async history(): Promise<KoiEvent[]> {
 			// @ts-ignore
 			return SDK.Koi.eventHistory;
+		}
+
+		public async statics(): Promise<KoiStatics> {
+			return {
+				// @ts-ignore
+				history: SDK.Koi.eventHistory,
+				viewers: SDK.Koi.viewers,
+				viewerCounts: SDK.Koi.viewerCounts,
+				userStates: SDK.Koi.userStates,
+				streamStates: SDK.Koi.streamStates,
+				roomStates: SDK.Koi.roomStates,
+				features: SDK.Koi.features
+			};
 		}
 	})();
 
