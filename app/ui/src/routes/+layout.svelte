@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import * as appShim from '$lib/appShim';
-	import { storify } from '$lib/bridgeHelper';
+	import { awaitPageLoad } from '$lib/app-shim';
+	import { storify } from '$lib/bridge-helper';
 	import { get } from 'svelte/store';
 
 	import CSSIntermediate from '$lib/layout/CSSIntermediate.svelte';
@@ -59,7 +59,7 @@
 	{/if}
 </svelte:head>
 
-{#await appShim.awaitPageLoad() then}
+{#await awaitPageLoad() then}
 	<!-- svelte-ignore slot_element_deprecated -->
 	<CSSIntermediate>
 		<slot />

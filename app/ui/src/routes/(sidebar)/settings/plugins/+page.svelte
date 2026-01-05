@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { storify } from '$lib/bridgeHelper';
+	import { storify } from '$lib/bridge-helper';
 
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { Box, Button } from '@casterlabs/ui';

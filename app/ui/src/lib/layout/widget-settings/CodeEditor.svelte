@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { themeEffectiveAppearance } from '$lib/appShim';
+	import { themeEffectiveAppearance } from '$lib/app-shim';
 
 	import { onMount } from 'svelte';
 

@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation';
-import { storify } from './bridgeHelper';
+import { storify } from './bridge-helper';
 import EventHandler from './event-handler';
 import type { KoiEvent, MessageId, MessageMetaEvent, MetaId, RichMessageEvent, UPID, User, UserPlatform } from './koi';
 import { writable } from 'svelte/store';
@@ -59,7 +59,7 @@ export function awaitPageLoad() {
 }
 
 if (isInApp || true) {
-	// TEMPORARY: Force enable appShim in web for testing
+	// TEMPORARY: Force enable app-shim in web for testing
 	const themePreferences = storify(AppConfig, 'themePreferences').readable<Awaited<typeof AppConfig.themePreferences>>();
 	const effectiveAppearance = storify(AppThemeManager, 'effectiveAppearance').readable<Awaited<typeof AppThemeManager.effectiveAppearance>>();
 

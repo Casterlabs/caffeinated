@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { themeBaseColor, themeEffectiveAppearance, themePrimaryColor } from '$lib/appShim';
+	import { themeBaseColor, themeEffectiveAppearance, themePrimaryColor } from '$lib/app-shim';
 	import createConsole from '$lib/console-helper';
 	import '$lib/css/app.css';
 

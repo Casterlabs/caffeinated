@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { storify } from '$lib/bridgeHelper';
+	import { storify } from '$lib/bridge-helper';
 	import { render } from '$lib/locale/locale';
 
 	import Modal from '$lib/layout/Modal.svelte';

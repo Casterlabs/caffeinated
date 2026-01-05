@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { deepEqual } from '$lib/bridgeHelper';
+	import { deepEqual } from '$lib/bridge-helper';
 	import type { PageData } from './$types';
 
 	import WidgetPreview from '$lib/layout/WidgetPreview.svelte';

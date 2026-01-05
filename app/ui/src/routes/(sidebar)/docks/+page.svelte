@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { storify } from '$lib/bridgeHelper';
+	import { storify } from '$lib/bridge-helper';
 
 	import { ICONS, IconDocumentDuplicate } from '@casterlabs/heroicons-svelte';
 	import { Button } from '@casterlabs/ui';

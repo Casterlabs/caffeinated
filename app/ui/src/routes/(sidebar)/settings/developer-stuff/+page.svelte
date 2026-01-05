@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { modify, storify } from '$lib/bridgeHelper';
+	import { modify, storify } from '$lib/bridge-helper';
 
 	import { Input, Select } from '@casterlabs/ui';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { storify } from '$lib/bridgeHelper';
+	import { storify } from '$lib/bridge-helper';
 	import { render } from '$lib/locale/locale';
 	import { load } from '../+page';
 

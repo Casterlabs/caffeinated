@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { storify } from '$lib/bridgeHelper';
+	import { storify } from '$lib/bridge-helper';
 	import anime from 'animejs';
 
 	import Content from '$lib/layout/Content.svelte';

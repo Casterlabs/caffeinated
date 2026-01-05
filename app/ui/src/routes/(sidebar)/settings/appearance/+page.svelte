@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { modify, storify } from '$lib/bridgeHelper';
+	import { modify, storify } from '$lib/bridge-helper';
 
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { IconArrowPath } from '@casterlabs/heroicons-svelte';

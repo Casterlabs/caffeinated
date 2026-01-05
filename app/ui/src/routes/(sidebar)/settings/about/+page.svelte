@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { themeEffectiveAppearance } from '$lib/appShim';
-	import { modify, storify } from '$lib/bridgeHelper';
+	import { themeEffectiveAppearance } from '$lib/app-shim';
+	import { modify, storify } from '$lib/bridge-helper';
 
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { Input } from '@casterlabs/ui';

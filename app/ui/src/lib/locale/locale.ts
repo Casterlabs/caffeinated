@@ -1,4 +1,4 @@
-import { storify } from '$lib/bridgeHelper';
+import { storify } from '$lib/bridge-helper';
 import Glocale from '@glocale/typescript';
 import { writable } from 'svelte/store';
 
