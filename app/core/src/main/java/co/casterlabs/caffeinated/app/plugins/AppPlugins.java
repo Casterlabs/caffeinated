@@ -201,19 +201,19 @@ public class AppPlugins {
         }
     }
 
-    @SneakyThrows
     @JavascriptFunction
     public static String createNewWidget(@NonNull String namespace, @NonNull String name) {
         WidgetHandle handle = _PluginsHandler.createWidget(namespace, UUID.randomUUID().toString(), name, null);
 
-        handle.onSettingsUpdate(new JsonObject());
+        try {
+            handle.onSettingsUpdate(new JsonObject());
+        } catch (Throwable ignored) {} // Some widgets get mad. Whatever.
 
         save(handle);
 
         return handle.id;
     }
 
-    @SneakyThrows
     @JavascriptFunction
     public static void renameWidget(@NonNull String widgetId, @NonNull String newName) {
         WidgetHandle handle = _PluginsHandler.getWidgetHandle(widgetId);
@@ -224,7 +224,6 @@ public class AppPlugins {
         handle.widget.onNameUpdate();
     }
 
-    @SneakyThrows
     @JavascriptFunction
     public static void assignTag(@NonNull String widgetId, @Nullable String tagOrNull) {
         WidgetHandle handle = _PluginsHandler.getWidgetHandle(widgetId);

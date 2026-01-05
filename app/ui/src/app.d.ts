@@ -664,7 +664,7 @@ export declare interface AppPlugins extends MutationObject<'loadedPlugins' | 'co
 	readonly loadedPlugins: Promise<{}[]>;
 	readonly creatableWidgets: Promise<
 		{
-			requiredFeatures:
+			requiredFeatures: (
 				| 'UPDATE_STREAM_INFO'
 				| 'STREAM_INFO'
 				| 'PUBLISHING_INFO'
@@ -690,7 +690,8 @@ export declare interface AppPlugins extends MutationObject<'loadedPlugins' | 'co
 				| 'MESSAGE_REACTION'
 				| 'MESSAGE_DELETION'
 				| 'CHAT_SEND_MESSAGE'
-				| 'CHAT_SEND_COMMAND'[];
+				| 'CHAT_SEND_COMMAND'
+			)[];
 			showDemo: boolean;
 			testEvents:
 				| 'FOLLOW'
@@ -802,6 +803,7 @@ export declare interface AppPlugins extends MutationObject<'loadedPlugins' | 'co
 			};
 			id: string;
 			tag: string;
+			url: string;
 		}[]
 	>;
 	fireTestEvent(
