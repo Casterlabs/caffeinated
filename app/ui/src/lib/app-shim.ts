@@ -4,7 +4,7 @@ import EventHandler from './event-handler';
 import type { KoiEvent, MessageId, MessageMetaEvent, MetaId, RichMessageEvent, UPID, User, UserPlatform } from './koi';
 import { writable } from 'svelte/store';
 
-const isInApp = typeof saucer !== 'undefined';
+export const isInApp = typeof saucer !== 'undefined';
 
 export const themeBaseColor = writable<string>('gray');
 export const themePrimaryColor = writable<string>('gray');

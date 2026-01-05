@@ -47,16 +47,16 @@ class _UIDocksPlugin extends CaffeinatedPlugin {
         Function<WidgetDetails, Widget> factory = (details) -> {
             switch (details.getNamespace()) {
                 case "co.casterlabs.dock.stream_chat":
-                    return new DockBase("/popout/chat");
+                    return new DockBase("/docks/chat");
 
                 case "co.casterlabs.dock.viewers":
-                    return new DockBase("/popout/viewers");
+                    return new DockBase("/docks/viewers");
 
                 case "co.casterlabs.dock.channel_info":
-                    return new DockBase("/popout/channel-info");
+                    return new DockBase("/docks/channel-info");
 
                 case "co.casterlabs.dock.activity_feed":
-                    return new DockBase("/popout/activity-feed");
+                    return new DockBase("/docks/activity-feed");
 
                 default:
                     return null; // Shut up Mr. Compiley
