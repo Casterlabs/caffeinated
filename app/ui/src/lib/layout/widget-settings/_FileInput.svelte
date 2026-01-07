@@ -42,8 +42,6 @@
 		const file = fileInput!.files![0];
 		const result = await fileToBase64(file);
 
-		// console.log(result);
-
 		value = result;
 		AppPlugins.editWidgetSettingsItem(widget!.id, settingsKey, value);
 

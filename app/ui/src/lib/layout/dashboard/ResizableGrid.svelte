@@ -187,7 +187,6 @@
 				const newItemSize = 1 / newWidth;
 				const oldItemSize = 1 / width;
 				const scale = newItemSize / oldItemSize;
-				console.log(scale);
 
 				vlayout.forEach((value, idx) => {
 					vlayout[idx] = value * scale;
@@ -224,7 +223,6 @@
 				const newItemSize = 1 / newHeight;
 				const oldItemSize = 1 / height;
 				const scale = newItemSize / oldItemSize;
-				console.log(scale);
 
 				hlayout.forEach((value, idx) => {
 					hlayout[idx] = value * scale;

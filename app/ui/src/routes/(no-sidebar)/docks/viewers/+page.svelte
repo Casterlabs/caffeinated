@@ -13,7 +13,6 @@
 	let viewersCount_computed = $state(0);
 
 	Koi.on('koi_statics', (statics: KoiStatics) => {
-		console.log(statics);
 		const signedInPlatforms = Object.values(statics.userStates).map((state) => state.streamer.platform);
 
 		for (const platform of Object.keys(viewersListByPlatform)) {
