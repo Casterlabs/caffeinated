@@ -3,6 +3,7 @@
 	import { storify } from '$lib/bridge-helper';
 	import { render } from '$lib/locale/locale';
 
+	import ContextMenu from '$lib/layout/ContextMenu.svelte';
 	import Modal from '$lib/layout/Modal.svelte';
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import {
@@ -11,15 +12,26 @@
 		IconChartBar,
 		IconChatBubbleLeft,
 		IconChevronRight,
+		IconDocumentDuplicate,
 		IconEllipsisVertical,
 		IconExclamationTriangle,
+		IconPencilSquare,
 		IconPlus,
 		IconStar,
-		IconTag
+		IconTag,
+		IconTrash
 	} from '@casterlabs/heroicons-svelte';
 	import { Button } from '@casterlabs/ui';
 
 	import { onMount } from 'svelte';
+
+	const TAGS = {
+		// @ts-ignore
+		[null]: 'co.casterlabs.caffeinated.app.page.widgets.tag.none',
+		red: 'co.casterlabs.caffeinated.app.page.widgets.tag.red',
+		green: 'co.casterlabs.caffeinated.app.page.widgets.tag.green',
+		blue: 'co.casterlabs.caffeinated.app.page.widgets.tag.blue'
+	};
 
 	const CATEGORY_ICONS = {
 		ALERTS: IconBellAlert,
@@ -61,6 +73,9 @@
 	let showingCreateModal = $state(false);
 	let createModalCategory: string | null = $state(null);
 
+	let showContextMenuFor = $state<string | null>(null);
+	let contextMenu: ContextMenu;
+
 	onMount(() => {
 		AppPlugins.creatableWidgets.then((creatableWidgets) => {
 			for (const creatable of creatableWidgets) {
@@ -85,11 +100,53 @@
 	});
 </script>
 
+<ContextMenu
+	bind:this={contextMenu}
+	onclose={() => (showContextMenuFor = null)}
+	items={[
+		{
+			action: () => {
+				goto(`/$caffeinated-sdk-root$/widgets/${showContextMenuFor!}`);
+			},
+			label: 'co.casterlabs.caffeinated.app.page.widgets.edit_widget',
+			icon: IconPencilSquare
+		},
+		// { // TODO tags
+		// 	action: () => {
+		// 		console.debug('User selected:', widget.tag, tag);
+		// 		AppPlugins.assignTag(showContextMenuFor!, tag);
+		// 	},
+		// 	label: 'co.casterlabs.caffeinated.app.page.widgets.assign_tag',
+		// 	icon: IconTag
+		// },
+		{
+			action: () => {
+				AppPlugins.copyWidgetUrl(showContextMenuFor!);
+			},
+			label: 'co.casterlabs.caffeinated.app.page.widgets.copy_link',
+			icon: IconDocumentDuplicate
+		},
+		{
+			action: () => {
+				AppPlugins.deleteWidget(showContextMenuFor!);
+			},
+			label: 'co.casterlabs.caffeinated.app.page.widgets.delete',
+			icon: IconTrash
+		}
+	]}
+/>
+
 <div class="grid gap-4 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
 	{#each widgets as widget}
 		{@const WidgetIcon = (ICONS as any)[widget.details.icon] as (typeof ICONS)['academic-cap']}
 
-		<Button onclick={() => goto(`/$caffeinated-sdk-root$/widgets/${widget.id}`)}>
+		<Button
+			onclick={() => goto(`/$caffeinated-sdk-root$/widgets/${widget.id}`)}
+			oncontextmenu={(e) => {
+				showContextMenuFor = widget.id;
+				contextMenu.spawn(e);
+			}}
+		>
 			<div class="p-3 flex items-center justify-start space-x-4">
 				<WidgetIcon class="w-8 h-8" theme="solid" />
 
@@ -97,9 +154,9 @@
 
 				<Button
 					borderless
-					onclick={() => {
-						window.event!.stopPropagation();
-						alert('Widget options coming soon!');
+					onclick={(e) => {
+						showContextMenuFor = widget.id;
+						contextMenu.spawn(e);
 					}}
 				>
 					<IconEllipsisVertical theme="mini" />

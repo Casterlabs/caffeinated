@@ -58,10 +58,10 @@ public class AppPlugins {
     @Getter
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private static final Collection<CaffeinatedPlugin> loadedPlugins = _PluginsHandler.plugins.values();
+    @JavascriptValue(allowSet = false, watchForMutate = true)
+    private static final Collection<WidgetHandle> widgets = _PluginsHandler.widgetHandles.values();
     @JavascriptValue(allowSet = false)
     private static final Collection<WidgetDetails> creatableWidgets = _PluginsHandler.creatableWidgets;
-    @JavascriptValue(allowSet = false)
-    private static final Collection<WidgetHandle> widgets = _PluginsHandler.widgetHandles.values();
 
     static {
         pluginsDir.mkdir();
