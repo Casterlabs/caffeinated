@@ -33,6 +33,23 @@ export declare interface KoiStatics {
 /*         Actions          */
 /* ------------------------ */
 
+export const HAS_SENDING: UserPlatform[] = [
+	//
+	'DLIVE',
+	'KICK',
+	'TROVO',
+	'TWITCH',
+	'YOUTUBE'
+];
+
+export const HAS_DELETE: UserPlatform[] = [
+	//
+	'DLIVE',
+	'TROVO',
+	'TWITCH',
+	'YOUTUBE'
+];
+
 export const HAS_BAN: UserPlatform[] = [
 	//
 	'TROVO',

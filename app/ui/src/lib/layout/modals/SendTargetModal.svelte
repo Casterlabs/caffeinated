@@ -1,0 +1,60 @@
+<script lang="ts">
+	import { Koi } from '$lib/app-shim';
+	import { fire } from '$lib/dom';
+
+	import Modal from '../Modal.svelte';
+	import PlatformIcon from '../PlatformIcon.svelte';
+	import { Button } from '@casterlabs/ui';
+
+	interface Props {
+		onclose: () => void;
+	}
+
+	let { onclose }: Props = $props();
+</script>
+
+{#snippet title()}
+	<div class="flex items-center justify-center">Select an account to send messages to</div>
+{/snippet}
+
+<Modal {title} {onclose}>
+	<ul class="space-y-1">
+		{#await Koi.statics() then statics}
+			{#each Object.values(statics.userStates) as { streamer }}
+				{@const displaynameDiffers = streamer.displayname.toLowerCase() !== streamer.username.toLowerCase()}
+
+				<li>
+					<Button
+						class="w-full flex justify-center items-center"
+						style="padding: 0.5rem;"
+						onclick={() => {
+							fire('x-sendtarget', streamer);
+							onclose();
+						}}
+					>
+						<div class="flex-1">
+							<PlatformIcon platform={streamer.platform} color />
+							{streamer.displayname}
+							{#if displaynameDiffers}
+								<span class="text-sm text-base-7">({streamer.username})</span>
+							{/if}
+						</div>
+					</Button>
+				</li>
+			{/each}
+
+			<li>
+				<Button
+					class="w-full flex justify-center items-center"
+					style="padding: 0.5rem;"
+					onclick={() => {
+						fire('x-sendtarget', null);
+						onclose();
+					}}
+				>
+					Send to all chats
+				</Button>
+			</li>
+		{/await}
+	</ul>
+</Modal>
