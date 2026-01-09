@@ -168,7 +168,7 @@
 				}}
 			/>
 
-			<button class="absolute inset-y-2 right-2 z-50 flex items-center" onclick={() => uiEvents.broadcast('x-preferences-modal')} type="button">
+			<button class="absolute inset-y-2 right-2 flex items-center" onclick={() => uiEvents.broadcast('x-preferences-modal')} type="button">
 				<IconCog6Tooth theme="outline" />
 				<span class="sr-only">Open Settings</span>
 			</button>
