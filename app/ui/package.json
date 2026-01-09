@@ -33,7 +33,7 @@
 	},
 	"dependencies": {
 		"@casterlabs/heroicons-svelte": "^2.2.2",
-		"@casterlabs/ui": "^1.2.0",
+		"@casterlabs/ui": "^1.2.1",
 		"@glocale/typescript": "^1.0.0",
 		"@radix-ui/colors": "^0.1.8",
 		"animejs": "^3.2.2",
