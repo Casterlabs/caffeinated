@@ -56,10 +56,10 @@
 
 	const MINIMUM_DISTANCE = 12; /*px*/
 
-	let isDraggingSizer = false;
-	let isDraggingVerticalSizer = false;
-	let draggingWhich = 0; // either the x or y border depending on the above variable.
-	let lastFrameRequest = -1;
+	let isDraggingSizer = $state(false);
+	let isDraggingVerticalSizer = $state(false);
+	let draggingWhich = $state(0); // either the x or y border depending on the above variable.
+	let lastFrameRequest = $state(-1);
 
 	function onMouseMove(e: MouseEvent) {
 		if (!isDraggingSizer) return;
@@ -114,7 +114,7 @@
 	}
 
 	function onMouseDown(e: MouseEvent, isVertical: boolean, which: number) {
-		if (isResizingLocked) return;
+		if ($isResizingLocked) return;
 		isDraggingSizer = true;
 		isDraggingVerticalSizer = isVertical;
 		draggingWhich = which;
