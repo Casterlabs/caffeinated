@@ -35,19 +35,17 @@
 </script>
 
 <span class="username">
-	<img class="er-profile-picture inline-block rounded-full h-[20px] w-[20px] object-cover" alt="" src={user.image_link} />
+	<span class="space-x-0.5">
+		<PlatformIcon class="er-platform inline-block h-[1.2em] w-[1.2em]" platform={user.platform} color />
 
-	<span class="er-platform inline-block h-[20px] w-[20px]">
-		<PlatformIcon platform={user.platform} color />
-	</span>
+		<img class="er-profile-picture inline-block rounded-full h-[1.2em] w-[1.2em] object-cover" alt="" src={user.image_link} />
 
-	{#if showBadges && user.badges.length > 0}
-		<span class="er-badges space-x-1" aria-hidden="true">
+		{#if showBadges}
 			{#each user.badges as badge}
-				<img class="inline-block h-[1em] w-[1em] -translate-y-0.5 align-middle" alt="" src={badge} />
+				<img class="er-badges inline-block h-[1.2em] w-[1.2em]" alt="" src={badge} />
 			{/each}
-		</span>
-	{/if}
+		{/if}
+	</span>
 
 	<span class="name" style:--user-color={user.color} style:--contrast-color={contrastColor}>
 		{user.displayname}{#if usernameDiffersFromDisplayname}<span class="text-xs"> ({user.username})</span>{/if}</span

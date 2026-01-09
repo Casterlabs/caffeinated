@@ -95,9 +95,9 @@
 			class:text-base-11={isDeleted}
 		>
 			{#if isDeleted && !showAnyways}
-				<span class="text-xs">
+				<span class="text-xs text-base-11">
 					Message deleted by a moderator
-					<button class="text-primary-11" onclick={() => (showAnyways = true)}> Show </button>
+					<button class="text-primary-10" onclick={() => (showAnyways = true)}> Show </button>
 				</span>
 			{:else}
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -108,7 +108,7 @@
 						uiEvents.broadcast('x-event-modal', event);
 					}}
 				>
-					<span class="er-timestamp text-xs">
+					<span class="er-timestamp text-xs text-base-11 mr-0.5">
 						{new Date(event.timestamp || Date.now()).toLocaleTimeString()}
 					</span>
 
@@ -116,8 +116,8 @@
 				</div>
 
 				{#if isDeleted}
-					<span class="text-xs">
-						<button class="text-primary-11" onclick={() => (showAnyways = false)}> Hide </button>
+					<span class="text-xs text-base-11">
+						<button class="text-primary-10" onclick={() => (showAnyways = false)}> Hide </button>
 					</span>
 				{/if}
 			{/if}

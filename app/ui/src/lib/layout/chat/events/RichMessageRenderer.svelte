@@ -42,23 +42,29 @@
 	});
 </script>
 
-<span class="rich-message" class:text-xs={event.event_type == 'PLATFORM_MESSAGE'} class:italic={event.attributes.includes('RP_ACTION')}>
+<span
+	class="rich-message"
+	class:text-xs={event.event_type == 'PLATFORM_MESSAGE'}
+	class:text-base-11={event.event_type == 'PLATFORM_MESSAGE'}
+	class:platform-message={event.event_type == 'PLATFORM_MESSAGE'}
+	class:italic={event.attributes.includes('RP_ACTION')}
+>
 	{#if event.attributes.includes('FIRST_TIME_CHATTER')}
-		<span class="text-gray-200 mt-0.5 block text-sm">
-			<IconCake theme="mini" class="-translate-y-0.5" />
+		<span class="block text-base-11 mt-0.5 text-sm">
+			<IconCake theme="mini" class="inline-block -translate-y-0.5" />
 			First time chatter
 		</span>
 	{/if}
 
 	{#if event.attributes.includes('ANNOUNCEMENT')}
-		<span class="text-gray-200 mt-0.5 block text-sm">
-			<IconMegaphone theme="mini" class="-translate-y-0.5" />
+		<span class="block text-base-11 mt-0.5 text-sm">
+			<IconMegaphone theme="mini" class="inline-block -translate-y-0.5" />
 			Announcement
 		</span>
 	{/if}
 
 	{#if event.reply_target}
-		<span class="text-gray-200 mt-0.5 block text-sm">
+		<span class="text-base-11 mt-0.5 block text-sm">
 			{#if event.x_reply_target_data}
 				<!-- 
 					NB `!isDeleted`:
@@ -66,7 +72,7 @@
 					Because that means that the user has already consented to seeing potentially awful message content.
 				-->
 				{#if replyTargetDeleted && !showReplyTargetAnyways && !isDeleted}
-					<IconChatBubbleLeft theme="mini" class="-translate-y-0.5" />
+					<IconChatBubbleLeft theme="mini" class="inline-block -translate-y-0.5" />
 					Replying to a deleted message
 					<button class="link text-xs" onclick={() => (showReplyTargetAnyways = true)}> Show </button>
 				{:else}
@@ -77,7 +83,7 @@
 							uiEvents.broadcast('x-find-message', event.reply_target);
 						}}
 					>
-						<IconChatBubbleLeft theme="mini" class="-translate-y-0.5" />
+						<IconChatBubbleLeft theme="mini" class="inline-block -translate-y-0.5" />
 						Replying to
 						<UsernameRenderer user={event.x_reply_target_data.sender} showBadges={false} />
 						{@html event.x_reply_target_data.html}
@@ -119,6 +125,11 @@
 
 	.rich-message :global([data-rich-type='link']) {
 		color: var(--primary11);
+		text-decoration: underline;
+	}
+
+	.rich-message.platform-message :global([data-rich-type='link']) {
+		color: var(--primary10);
 		text-decoration: underline;
 	}
 
