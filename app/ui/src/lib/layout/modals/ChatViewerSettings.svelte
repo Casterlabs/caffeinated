@@ -73,11 +73,11 @@
 
 <Modal {title} {onclose}>
 	<ul class="divide-y divide-current text-base-6">
-		{@render prefsItemSelect('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by', 'colorBy', {
+		<!-- {@render prefsItemSelect('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by', 'colorBy', {
 			THEME: 'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.THEME',
 			USER: 'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.USER',
 			PLATFORM: 'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.PLATFORM'
-		})}
+		})} -->
 
 		<!-- {@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.play_ding_on_message', 'playDingOnMessage')} -->
 
