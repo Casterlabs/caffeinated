@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation';
-import { storify } from './bridge-helper';
+import { modify, storify } from './bridge-helper';
 import EventHandler from './event-handler';
 import type { KoiEvent, KoiStatics, MessageId, MessageMetaEvent, MetaId, RichMessageEvent, UPID, User, UserPlatform } from './koi';
 import { glocale, rerenderKey } from './locale/locale';
@@ -264,6 +264,16 @@ if (isInApp) {
 		}
 	})();
 
+	// @ts-ignore
+	SDK.Koi.eventHistory.forEach((e: KoiEvent) => {
+		Koi.broadcast(e.event_type, e);
+	});
+
+	// @ts-ignore
+	SDK.Koi.on('*', (_: never, e: KoiEvent) => {
+		Koi.broadcast(e.event_type, e);
+	});
+
 	SDK.Widget.emit('ready');
 }
 
@@ -300,3 +310,23 @@ Koi.intercept('META', (newMeta: MessageMetaEvent) => {
 
 	return newMeta;
 });
+
+export async function getDockPreferences<T>(name: 'chat' | 'activity'): Promise<T> {
+	if (isInApp) {
+		const ui = await AppConfig.uiPreferences;
+		// @ts-ignore
+		return ui[name + 'ViewerPreferences'];
+	} else {
+		const SDK = window as any as AppSDK;
+		return SDK.Widget.getSetting('preferences');
+	}
+}
+
+export function saveDockPreferences(name: 'chat' | 'activity', data: any) {
+	if (isInApp) {
+		modify(AppConfig, 'uiPreferences', name + 'ViewerPreferences', data);
+	} else {
+		const SDK = window as any as AppSDK;
+		SDK.Widget.emit('savePreferences', data);
+	}
+}

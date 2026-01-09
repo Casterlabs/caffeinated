@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { Koi } from '$lib/app-shim';
-	import { eventListener, fire } from '$lib/dom';
+	import type EventHandler from '$lib/event-handler';
 	import { type KoiStatics, type RichMessageEvent, type UPID, type User, type UserPlatform, type UserUpdateEvent } from '$lib/koi';
 
 	// import { openMenu } from '../menus/menu';
 
 	import PlatformIcon from '../PlatformIcon.svelte';
+	import { IconCog6Tooth } from '@casterlabs/heroicons-svelte';
 	import { IconArrowUturnLeft } from '@casterlabs/heroicons-svelte';
 
 	import { onMount } from 'svelte';
+
+	interface Props {
+		uiEvents: EventHandler;
+	}
+
+	let { uiEvents }: Props = $props();
 
 	// svelte-ignore non_reactive_update
 	let textInputElement: HTMLInputElement;
@@ -49,11 +56,17 @@
 		});
 	});
 
-	onMount(
-		eventListener('x-start-reply', (event: RichMessageEvent | null) => {
+	onMount(() =>
+		uiEvents.on('x-start-reply', (event: RichMessageEvent | null) => {
 			replyTarget = event;
 			textInputElement.focus();
 			textInputElement.click();
+		})
+	);
+
+	onMount(() =>
+		uiEvents.on('x-sendtarget', (st: User | null) => {
+			sendTarget = st;
 		})
 	);
 
@@ -62,17 +75,11 @@
 		Koi.broadcast('koi_statics', statics);
 	});
 
-	onMount(
-		eventListener('x-sendtarget', (st: User | null) => {
-			sendTarget = st;
-		})
-	);
-
 	function send(target: UserPlatform) {
 		Koi.sendChatMessage(target, textInput, replyTarget?.id || null);
 
 		if (replyTarget) {
-			fire('x-jump-bottom');
+			uiEvents.broadcast('x-jump-bottom');
 		}
 
 		textInput = '';
@@ -120,9 +127,9 @@
 			class="text-base-11 bg-base-3 border-base-7 hover:bg-base-5 active:bg-base-5 hover:border-base-8 active:border-base-6 focus:border-base-8 border-r-0 rounded-l-[var(--clui-radius)] flex h-full items-center justify-center border min-w-12 py-1 px-2 text-sm"
 			onclick={() => {
 				if (replyTarget) {
-					fire('x-reply-modal', replyTarget);
+					uiEvents.broadcast('x-reply-modal', replyTarget);
 				} else {
-					fire('x-sendtarget-modal');
+					uiEvents.broadcast('x-sendtarget-modal');
 				}
 			}}
 			type="button"
@@ -146,19 +153,26 @@
 			{/if}
 		</button>
 
-		<input
-			bind:this={textInputElement}
-			type="text"
-			class="text-base-11 bg-base-3 border-base-7 hover:bg-base-5 active:bg-base-5 hover:border-base-8 active:border-base-6 focus:border-base-8 h-full w-full flex-1 border px-3 py-1 text-sm focus:outline-none"
-			placeholder={replyTarget ? replyingTo : sendingAs}
-			autocomplete="off"
-			bind:value={textInput}
-			onkeydown={(e) => {
-				if (e.key === 'Escape') {
-					replyTarget = null;
-				}
-			}}
-		/>
+		<div class="flex-1 relative">
+			<input
+				bind:this={textInputElement}
+				type="text"
+				class="text-base-11 bg-base-3 border-base-7 hover:bg-base-5 active:bg-base-5 hover:border-base-8 active:border-base-6 focus:border-base-8 h-full w-full border px-3 py-1 text-sm focus:outline-none"
+				placeholder={replyTarget ? replyingTo : sendingAs}
+				autocomplete="off"
+				bind:value={textInput}
+				onkeydown={(e) => {
+					if (e.key === 'Escape') {
+						replyTarget = null;
+					}
+				}}
+			/>
+
+			<button class="absolute inset-y-2 right-2 z-50 flex items-center" onclick={() => uiEvents.broadcast('x-preferences-modal')} type="button">
+				<IconCog6Tooth theme="outline" />
+				<span class="sr-only">Open Settings</span>
+			</button>
+		</div>
 
 		<button
 			class="text-base-11 bg-base-3 border-base-7 border-l-0 rounded-r-[var(--clui-radius)] flex h-full items-center justify-center border px-3 py-1 text-sm"

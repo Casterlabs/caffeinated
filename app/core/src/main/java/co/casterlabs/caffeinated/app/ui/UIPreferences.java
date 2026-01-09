@@ -44,21 +44,24 @@ public class UIPreferences {
     @Data
     @JsonClass(exposeAll = true)
     public static class ChatViewerPreferences {
-        private boolean showChatTimestamps = true;
+        private boolean showTimestamps = true;
         private boolean showProfilePictures = false;
         private boolean showBadges = false;
-        private boolean showBadgesOnLeft = false;
+        private boolean showPlatform = false;
+        private boolean showPronouns = false;
+
+        private boolean showActivities = false;
         private boolean showViewers = false;
+
+        private boolean showZebraStripes = false;
+        private double textSize = 1;
+        private String colorBy = "THEME";
+
         private boolean playDingOnMessage = false;
         private boolean readMessagesAloud = false;
         private String ttsVoice = "Brian";
-        private boolean showPlatform = false;
-        private boolean showActivities = false;
-        private String colorBy = "THEME";
         private double ttsOrDingVolume = 1;
-        private double textSize = 1;
-        private boolean showPronouns = false;
-        private boolean showZebraStripes = false;
+
         private JsonObject inputBoxPreferences = new JsonObject();
 
     }
@@ -68,11 +71,13 @@ public class UIPreferences {
     public static class ActivityViewerPreferences {
         private boolean showTimestamps = true;
         private boolean showProfilePictures = false;
+        private boolean showBadges = false;
         private boolean showPlatform = false;
-        private String colorBy = "THEME";
-        private double textSize = 1;
         private boolean showPronouns = false;
+
         private boolean showZebraStripes = false;
+        private double textSize = 1;
+        private String colorBy = "THEME";
 
     }
 

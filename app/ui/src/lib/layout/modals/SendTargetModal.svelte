@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Koi } from '$lib/app-shim';
-	import { fire } from '$lib/dom';
+	import type EventHandler from '$lib/event-handler';
 
 	import Modal from '../Modal.svelte';
 	import PlatformIcon from '../PlatformIcon.svelte';
@@ -8,9 +8,10 @@
 
 	interface Props {
 		onclose: () => void;
+		uiEvents: EventHandler;
 	}
 
-	let { onclose }: Props = $props();
+	let { onclose, uiEvents }: Props = $props();
 </script>
 
 {#snippet title()}
@@ -28,7 +29,7 @@
 						class="w-full flex justify-center items-center"
 						style="padding: 0.5rem;"
 						onclick={() => {
-							fire('x-sendtarget', streamer);
+							uiEvents.broadcast('x-sendtarget', streamer);
 							onclose();
 						}}
 					>
@@ -48,7 +49,7 @@
 					class="w-full flex justify-center items-center"
 					style="padding: 0.5rem;"
 					onclick={() => {
-						fire('x-sendtarget', null);
+						uiEvents.broadcast('x-sendtarget', null);
 						onclose();
 					}}
 				>

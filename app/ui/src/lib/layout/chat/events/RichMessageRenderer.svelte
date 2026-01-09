@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Koi } from '$lib/app-shim';
-	import { fire } from '$lib/dom';
+	import type EventHandler from '$lib/event-handler';
 	import { type MessageMetaEvent, type PlatformMessageEvent, type RichMessageEvent } from '$lib/koi';
 
 	import UsernameRenderer from '../UsernameRenderer.svelte';
@@ -10,9 +10,10 @@
 
 	interface Props {
 		event: RichMessageEvent | PlatformMessageEvent;
+		uiEvents: EventHandler;
 	}
 
-	let { event }: Props = $props();
+	let { event, uiEvents }: Props = $props();
 
 	let isDeleted = $state(!event.is_visible);
 	let upvotes = $state(event.upvotes);
@@ -73,7 +74,7 @@
 						class="text-ellipsis overflow-hidden whitespace-nowrap max-w-full"
 						onclick={(e) => {
 							e.stopPropagation();
-							fire('x-find-message', event.reply_target);
+							uiEvents.broadcast('x-find-message', event.reply_target);
 						}}
 					>
 						<IconChatBubbleLeft theme="mini" class="-translate-y-0.5" />

@@ -6,7 +6,7 @@
 	import RichMessageRenderer from './events/RichMessageRenderer.svelte';
 	import SubscriptionRenderer from './events/SubscriptionRenderer.svelte';
 
-	const EVENT_COMPONENTS: { [key: string]: Component<any, any, any> } = {
+	const EVENT_COMPONENTS: Record<string, Component<any, any, any>> = {
 		CLEARCHAT: ClearchatRenderer,
 		CHANNEL_POINTS: ChannelPointsRenderer,
 		FOLLOW: FollowRenderer,
@@ -17,11 +17,14 @@
 	};
 
 	export const SUPPORTED_EVENTS = Object.keys(EVENT_COMPONENTS);
+
+	const ACTIVITY_EVENTS = ['CLEARCHAT', 'CHANNEL_POINTS', 'FOLLOW', 'RAID', 'SUBSCRIPTION'];
+	const VIEWER_EVENTS = ['VIEWER_JOIN', 'VIEWER_LEAVE'];
 </script>
 
 <script lang="ts">
 	import { Koi } from '$lib/app-shim';
-	import { fire } from '$lib/dom';
+	import type EventHandler from '$lib/event-handler';
 	import type { ClearChatEvent, KoiEvent, MessageMetaEvent, MetaId, User } from '$lib/koi';
 
 	import { LongPressListener } from '@casterlabs/ui';
@@ -32,13 +35,14 @@
 
 	interface Props {
 		event: KoiEvent;
+		uiEvents: EventHandler;
 	}
 
-	let { event }: Props = $props();
+	let { event, uiEvents }: Props = $props();
 
 	const EventRenderer = EVENT_COMPONENTS[event.event_type];
 
-	let isDeleted = $state(!(event as any).is_visible || event.x_cleared);
+	let isDeleted = $state((event as any).is_visible === false || event.x_cleared);
 	let showAnyways = $state(false);
 
 	// prettier-ignore
@@ -80,9 +84,12 @@
 {#if EventRenderer}
 	{@const doNotModerate = NO_MODERATE.includes(event.event_type)}
 
-	<LongPressListener onlongpress={() => fire('x-event-modal', event)}>
+	<LongPressListener onlongpress={() => uiEvents.broadcast('x-event-modal', event)}>
 		<div
 			class="event-renderer mt-0.5 py-1 break-anywhere relative px-2 will-change-transform"
+			class:er-chat-event={!ACTIVITY_EVENTS.includes(event.event_type) && !VIEWER_EVENTS.includes(event.event_type)}
+			class:er-activity-event={ACTIVITY_EVENTS.includes(event.event_type)}
+			class:er-viewer-event={VIEWER_EVENTS.includes(event.event_type)}
 			class:hover:bg-base-2={!doNotModerate}
 			class:active:bg-base-2={!doNotModerate}
 			class:text-base-11={isDeleted}
@@ -98,10 +105,14 @@
 					class="block w-full text-left"
 					oncontextmenu={(e) => {
 						e.preventDefault();
-						fire('x-event-modal', event);
+						uiEvents.broadcast('x-event-modal', event);
 					}}
 				>
-					<EventRenderer {event} />
+					<span class="er-timestamp text-xs">
+						{new Date(event.timestamp || Date.now()).toLocaleTimeString()}
+					</span>
+
+					<EventRenderer {event} {uiEvents} />
 				</div>
 
 				{#if isDeleted}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Koi } from '$lib/app-shim';
+	import type EventHandler from '$lib/event-handler';
 	import type { KoiEvent, MetaId } from '$lib/koi';
 	import { fade } from 'svelte/transition';
 
@@ -13,6 +14,12 @@
 
 	const HIGHLIGHT_FLASH_TIME = 750;
 	const HIGHLIGHT_ANIMATE_TIME = 500;
+
+	interface Props {
+		uiEvents: EventHandler;
+	}
+
+	let { uiEvents }: Props = $props();
 
 	let isAtBottom: boolean = $state(true);
 	let dynamicList: DynamicList;
@@ -31,6 +38,7 @@
 			}
 
 			dynamicList.addItem(e);
+			recomputeEvens();
 		}
 
 		Koi.history().then((e) => e.forEach(handle));
@@ -99,10 +107,54 @@
 			scrollContainer.removeEventListener('scroll', scrollListener);
 		};
 	});
+
+	export function recomputeEvens(invalidate = false) {
+		const children = scrollContainer.children!;
+		let endAtIdx = children.length;
+		let evenOddIdx = 0;
+
+		if (!invalidate) {
+			// First, crawl the list in reverse order to figure out if the previously touched element was even or odd.
+			// We bail out out once we find an element that we've already touched.
+			// We do all of this malarky so that we aren't traversing (and potentially recomputing layout) for hundreds of elements.
+			// NB: With InvertedScroller, the last element is at index 0.
+			for (let idx = 0; idx < children.length; idx++) {
+				const child = children.item(idx)!;
+
+				if (child.getAttribute('data-touched') == 'true') {
+					// We found it! Our evenOddIdx is now a sane value!
+					endAtIdx = idx;
+
+					if (!child.classList.contains('even-child')) {
+						evenOddIdx++;
+					}
+					break;
+				}
+			}
+		} // Otherwise, start at idx=0 and recompute the entire tree.
+
+		for (let idx = 0; idx < endAtIdx; idx++) {
+			const child = children.item(idx)!;
+			const isVisible = getComputedStyle(child.querySelector('.event-renderer')!).display != 'none';
+			if (!isVisible) continue;
+
+			evenOddIdx++;
+
+			const isEven = evenOddIdx % 2 == 0;
+			child.setAttribute('data-touched', 'true');
+
+			if (isEven && !child.classList.contains('even-child')) {
+				child.classList.add('even-child');
+			}
+			if (!isEven && child.classList.contains('even-child')) {
+				child.classList.remove('even-child');
+			}
+		}
+	}
 </script>
 
 {#snippet itemRenderer(event: KoiEvent)}
-	<EventRenderer {event} />
+	<EventRenderer {event} {uiEvents} />
 {/snippet}
 
 <div class="contents" style:--highlightanimatetime="{HIGHLIGHT_ANIMATE_TIME}ms">
@@ -133,5 +185,45 @@
 <style>
 	:global(.inverted-scroller) > :global(li) {
 		transition: background-color var(--highlightanimatetime);
+	}
+
+	/* ---- Preferences---- */
+
+	:global(.ZEBRA-STRIPES .even-child .event-renderer) {
+		background-color: var(--base2);
+	}
+
+	:global(.HIDE-TIMESTAMP .er-timestamp) {
+		display: none;
+	}
+
+	:global(.HIDE-PROFILEPICTURES .er-profile-picture) {
+		display: none;
+	}
+
+	:global(.HIDE-BADGES .er-badges) {
+		display: none;
+	}
+
+	:global(.HIDE-PLATFORM .er-platform) {
+		display: none;
+	}
+
+	:global(.HIDE-PRONOUNS .er-pronouns) {
+		display: none;
+	}
+
+	/* ---- Events ---- */
+
+	:global(.HIDE-CHAT .er-chat-event) {
+		display: none;
+	}
+
+	:global(.HIDE-ACTIVITIES .er-activity-event) {
+		display: none;
+	}
+
+	:global(.HIDE-VIEWERS .er-viewer-event) {
+		display: none;
 	}
 </style>

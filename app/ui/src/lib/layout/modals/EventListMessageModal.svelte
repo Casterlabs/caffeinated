@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Koi, openLink } from '$lib/app-shim';
-	import { fire } from '$lib/dom';
+	import type EventHandler from '$lib/event-handler';
 	import { type ClearChatEvent, HAS_BAN, HAS_DELETE, HAS_TIMEOUT, type KoiEvent, type MessageId, type MessageMetaEvent, type MetaId, type User } from '$lib/koi';
 
 	import Modal from '../Modal.svelte';
@@ -10,10 +10,11 @@
 
 	interface Props {
 		event: KoiEvent;
+		uiEvents: EventHandler;
 		onclose: () => void;
 	}
 
-	let { event: targetEvent, onclose }: Props = $props();
+	let { event: targetEvent, uiEvents, onclose }: Props = $props();
 
 	let eventId: MessageId | null = $derived((targetEvent as any).id || null);
 	let eventMetaId: MetaId | null = $derived((targetEvent as any).meta_id || null);
@@ -68,7 +69,7 @@
 	<div class="flex items-center justify-stretch w-full">
 		{#if targetEvent.event_type == 'RICH_MESSAGE' && !targetEvent.x_cleared && targetEvent.is_visible}
 			{@render actionButton('Reply', IconArrowUturnLeft, () => {
-				fire('x-start-reply', targetEvent);
+				uiEvents.broadcast('x-start-reply', targetEvent);
 				onclose();
 			})}
 		{/if}

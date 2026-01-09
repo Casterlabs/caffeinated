@@ -35,12 +35,14 @@
 </script>
 
 <span class="username">
-	<span class="inline-block h-[20px] w-[20px]">
+	<img class="er-profile-picture inline-block rounded-full h-[20px] w-[20px] object-cover" alt="" src={user.image_link} />
+
+	<span class="er-platform inline-block h-[20px] w-[20px]">
 		<PlatformIcon platform={user.platform} color />
 	</span>
 
 	{#if showBadges && user.badges.length > 0}
-		<span class="badges space-x-1" aria-hidden="true">
+		<span class="er-badges space-x-1" aria-hidden="true">
 			{#each user.badges as badge}
 				<img class="inline-block h-[1em] w-[1em] -translate-y-0.5 align-middle" alt="" src={badge} />
 			{/each}

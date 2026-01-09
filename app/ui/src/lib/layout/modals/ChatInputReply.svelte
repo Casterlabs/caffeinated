@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fire } from '$lib/dom';
+	import type EventHandler from '$lib/event-handler';
 	import { type RichMessageEvent } from '$lib/koi';
 
 	import Modal from '../Modal.svelte';
@@ -7,10 +7,11 @@
 
 	interface Props {
 		event: RichMessageEvent;
+		uiEvents: EventHandler;
 		onclose: () => void;
 	}
 
-	let { event: replyTarget, onclose }: Props = $props();
+	let { event: replyTarget, uiEvents, onclose }: Props = $props();
 </script>
 
 {#snippet actionButton(title: string, Icon: any, onclick: () => void)}
@@ -29,12 +30,12 @@
 <Modal {title} {onclose}>
 	<div class="flex items-center justify-stretch w-full">
 		{@render actionButton('Cancel Reply', IconXMark, () => {
-			fire('x-start-reply', null);
+			uiEvents.broadcast('x-start-reply', null);
 			onclose();
 		})}
 
 		{@render actionButton('Show Message', IconChatBubbleLeftEllipsis, () => {
-			fire('x-find-message', replyTarget.meta_id);
+			uiEvents.broadcast('x-find-message', replyTarget.meta_id);
 			onclose();
 		})}
 	</div>

@@ -566,22 +566,21 @@ export declare interface AppConfig extends MutationObject<'chatbotPreferences' |
 		| Promise<{
 				emojiProvider: string;
 				chatViewerPreferences: {
-					readMessagesAloud: boolean;
-					colorBy: string;
-					textSize: number;
-					showPlatform: boolean;
-					playDingOnMessage: boolean;
-					showPronouns: boolean;
+					showTimestamps: boolean;
 					showProfilePictures: boolean;
-					showViewers: boolean;
 					showBadges: boolean;
+					showPlatform: boolean;
+					showPronouns: boolean;
 					showActivities: boolean;
-					ttsVoice: string;
-					inputBoxPreferences: Record<string, any>;
-					ttsOrDingVolume: number;
-					showBadgesOnLeft: boolean;
-					showChatTimestamps: boolean;
+					showViewers: boolean;
 					showZebraStripes: boolean;
+					textSize: number;
+					colorBy: string;
+					playDingOnMessage: boolean;
+					readMessagesAloud: boolean;
+					ttsVoice: string;
+					ttsOrDingVolume: number;
+					inputBoxPreferences: Record<string, any>;
 				};
 				sidebarClosed: boolean;
 				icon: string;
@@ -591,13 +590,14 @@ export declare interface AppConfig extends MutationObject<'chatbotPreferences' |
 				enableStupidlyUnsafeSettings: boolean;
 				enableAlternateThemes: boolean;
 				activityViewerPreferences: {
-					colorBy: string;
-					textSize: number;
 					showTimestamps: boolean;
+					showProfilePictures: boolean;
+					showBadges: boolean;
 					showPlatform: boolean;
 					showPronouns: boolean;
-					showProfilePictures: boolean;
 					showZebraStripes: boolean;
+					textSize: number;
+					colorBy: string;
 				};
 				uiFont: string;
 				dockDashboard: { h: number[]; contents: Record<string, string>; v: number[] };
@@ -607,22 +607,21 @@ export declare interface AppConfig extends MutationObject<'chatbotPreferences' |
 		| {
 				emojiProvider: string;
 				chatViewerPreferences: {
-					readMessagesAloud: boolean;
-					colorBy: string;
-					textSize: number;
-					showPlatform: boolean;
-					playDingOnMessage: boolean;
-					showPronouns: boolean;
+					showTimestamps: boolean;
 					showProfilePictures: boolean;
-					showViewers: boolean;
 					showBadges: boolean;
+					showPlatform: boolean;
+					showPronouns: boolean;
 					showActivities: boolean;
-					ttsVoice: string;
-					inputBoxPreferences: Record<string, any>;
-					ttsOrDingVolume: number;
-					showBadgesOnLeft: boolean;
-					showChatTimestamps: boolean;
+					showViewers: boolean;
 					showZebraStripes: boolean;
+					textSize: number;
+					colorBy: string;
+					playDingOnMessage: boolean;
+					readMessagesAloud: boolean;
+					ttsVoice: string;
+					ttsOrDingVolume: number;
+					inputBoxPreferences: Record<string, any>;
 				};
 				sidebarClosed: boolean;
 				icon: string;
@@ -632,13 +631,14 @@ export declare interface AppConfig extends MutationObject<'chatbotPreferences' |
 				enableStupidlyUnsafeSettings: boolean;
 				enableAlternateThemes: boolean;
 				activityViewerPreferences: {
-					colorBy: string;
-					textSize: number;
 					showTimestamps: boolean;
+					showProfilePictures: boolean;
+					showBadges: boolean;
 					showPlatform: boolean;
 					showPronouns: boolean;
-					showProfilePictures: boolean;
 					showZebraStripes: boolean;
+					textSize: number;
+					colorBy: string;
 				};
 				uiFont: string;
 				dockDashboard: { h: number[]; contents: Record<string, string>; v: number[] };
