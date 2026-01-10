@@ -3,6 +3,7 @@
 	import type EventHandler from '$lib/event-handler';
 	import { type ClearChatEvent, HAS_BAN, HAS_DELETE, HAS_TIMEOUT, type KoiEvent, type MessageId, type MessageMetaEvent, type MetaId, type User } from '$lib/koi';
 
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import Modal from '../Modal.svelte';
 	import { IconArrowTopRightOnSquare, IconArrowUturnLeft, IconNoSymbol, IconShieldExclamation, IconTrash } from '@casterlabs/heroicons-svelte';
 
@@ -56,47 +57,56 @@
 {#snippet actionButton(title: string, Icon: any, onclick: () => void)}
 	<button class="basis-full flex-grow-1 hover:bg-base-2 active:bg-base-2 py-4 rounded-lg flex flex-col items-center justify-center space-y-2" ontouchend={onclick} {onclick}>
 		<Icon theme="outline" />
-		<span class="text-xs"> {title} </span>
+		<span class="text-xs">
+			<LocalizedText key={title} />
+		</span>
 	</button>
 {/snippet}
 
 {#snippet title()}
 	<div class="flex items-center justify-center">
-		{targetUser.username}'s message
+		<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.action.modal.title" args={{ name: targetUser.username }} />
 	</div>
 {/snippet}
 
 <Modal {title} {onclose}>
 	<div class="flex items-center justify-stretch w-full">
 		{#if targetEvent.event_type == 'RICH_MESSAGE' && !targetEvent.x_cleared && targetEvent.is_visible && showReply}
-			{@render actionButton('Reply', IconArrowUturnLeft, () => {
+			{@render actionButton('co.casterlabs.caffeinated.app.docks.chat.viewer.action.modal.reply', IconArrowUturnLeft, () => {
 				uiEvents.broadcast('x-start-reply', targetEvent);
 				onclose();
 			})}
 		{/if}
 
 		{#if HAS_DELETE.includes(targetEvent.streamer.platform) && eventId && !isDeleted}
-			{@render actionButton('Delete', IconTrash, () => {
+			{@render actionButton('co.casterlabs.caffeinated.app.docks.chat.viewer.action.modal.delete_message', IconTrash, () => {
 				if (!targetEvent) return;
 				Koi.deleteChat(targetEvent.streamer.UPID, eventId);
 			})}
 		{/if}
 
 		{#if HAS_BAN.includes(targetEvent.streamer.platform)}
-			{@render actionButton('Ban', IconNoSymbol, () => {
+			{@render actionButton('co.casterlabs.caffeinated.app.docks.chat.viewer.action.modal.ban', IconNoSymbol, () => {
 				if (!targetEvent) return;
 				Koi.banChatter(targetEvent.streamer.UPID, targetUser);
 			})}
 		{/if}
 
 		{#if HAS_TIMEOUT.includes(targetEvent.streamer.platform)}
-			{@render actionButton('Timeout', IconShieldExclamation, () => {
+			{@render actionButton('co.casterlabs.caffeinated.app.docks.chat.viewer.action.modal.timeout', IconShieldExclamation, () => {
 				if (!targetEvent) return;
 				Koi.timeoutChatter(targetEvent.streamer.UPID, targetUser);
 			})}
 		{/if}
 
-		{@render actionButton('Open', IconArrowTopRightOnSquare, () => {
+		<!-- {#if HAS_UPVOTE.includes(targetEvent.streamer.platform)}
+			{@render actionButton('co.casterlabs.caffeinated.app.docks.chat.viewer.action.modal.upvote', IconArrowUp, () => {
+				if (!targetEvent) return;
+				Koi.upvoteChatter(targetEvent.streamer.UPID, targetUser);
+			})}
+		{/if} -->
+
+		{@render actionButton('co.casterlabs.caffeinated.app.docks.chat.viewer.action.modal.open_link', IconArrowTopRightOnSquare, () => {
 			openLink(targetUser.link);
 		})}
 	</div>

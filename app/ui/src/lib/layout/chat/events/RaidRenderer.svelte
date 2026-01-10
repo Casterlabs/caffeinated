@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { RaidEvent } from '$lib/koi';
 
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import UsernameRenderer from '../UsernameRenderer.svelte';
 
 	interface Props {
@@ -10,17 +11,14 @@
 	let { event }: Props = $props();
 </script>
 
-<UsernameRenderer user={event.host} />
+{#snippet name()}
+	<UsernameRenderer user={event.host} />
+{/snippet}
 
-{#if event.viewers > 1}
-	is raiding with <b>{event.viewers}</b> viewers!
-{:else}
-	has raided the channel!
-{/if}
-
-<style>
-	b {
-		color: var(--color-accent-9);
-		font-weight: 600;
-	}
-</style>
+<LocalizedText
+	key={event.viewers > 1
+		? 'co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers'
+		: 'co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.no_viewers'}
+	components={{ name }}
+	args={{ viewers: event.viewers }}
+/>

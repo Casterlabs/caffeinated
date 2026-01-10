@@ -27,6 +27,7 @@
 	import type EventHandler from '$lib/event-handler';
 	import type { ClearChatEvent, KoiEvent, MessageMetaEvent, MetaId, User } from '$lib/koi';
 
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { LongPressListener } from '@casterlabs/ui';
 
 	import { type Component, onMount } from 'svelte';
@@ -96,8 +97,10 @@
 		>
 			{#if isDeleted && !showAnyways}
 				<span class="text-xs text-base-11">
-					Message deleted by a moderator
-					<button class="text-primary-10" onclick={() => (showAnyways = true)}> Show </button>
+					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted" />
+					<button class="text-primary-10" onclick={() => (showAnyways = true)}>
+						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.show" />
+					</button>
 				</span>
 			{:else}
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -117,7 +120,9 @@
 
 				{#if isDeleted}
 					<span class="text-xs text-base-11">
-						<button class="text-primary-10" onclick={() => (showAnyways = false)}> Hide </button>
+						<button class="text-primary-10" onclick={() => (showAnyways = false)}>
+							<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.hide" />
+						</button>
 					</span>
 				{/if}
 			{/if}

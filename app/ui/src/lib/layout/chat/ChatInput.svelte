@@ -2,7 +2,9 @@
 	import { Koi } from '$lib/app-shim';
 	import type EventHandler from '$lib/event-handler';
 	import { type KoiStatics, type RichMessageEvent, type UPID, type User, type UserPlatform, type UserUpdateEvent } from '$lib/koi';
+	import { render } from '$lib/locale/locale';
 
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	// import { openMenu } from '../menus/menu';
 
 	import PlatformIcon from '../PlatformIcon.svelte';
@@ -119,8 +121,14 @@
 </script>
 
 {#if true}
-	{@const sendingAs = sendTarget ? `Sending as ${sendTarget.username} on ${sendTarget.platform}` : 'Sending to all chats'}
-	{@const replyingTo = `Replying to ${replyTarget?.sender.username}`}
+	{@const placeholder = replyTarget
+		? render('co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.reply.placeholder', { name: replyTarget.sender.username })
+		: sendTarget
+			? render('co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.platform.placeholder', {
+					username: sendTarget.username,
+					platform: render(`co.casterlabs.caffeinated.app.platform.${sendTarget.platform}`)
+				})
+			: render('co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.all.placeholder')}
 
 	<form class="relative flex h-10 flex-row" autocomplete="off" onsubmit={submit}>
 		<button
@@ -133,22 +141,21 @@
 				}
 			}}
 			type="button"
+			title={placeholder}
 		>
 			{#if replyTarget}
 				<IconArrowUturnLeft theme="micro" />
-				<span class="sr-only"> Open reply menu </span>
+				<span class="sr-only">
+					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.reply_menu.open" />
+				</span>
 			{:else if sendTarget}
 				<span aria-hidden="true">
 					<PlatformIcon platform={sendTarget.platform} color />
 					{sendTarget.username}
 				</span>
-				<span class="sr-only">
-					{sendingAs}
-				</span>
 			{:else}
-				<span aria-hidden="true">ALL</span>
-				<span class="sr-only">
-					{sendingAs}
+				<span aria-hidden="true">
+					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.all" />
 				</span>
 			{/if}
 		</button>
@@ -158,7 +165,7 @@
 				bind:this={textInputElement}
 				type="text"
 				class="text-base-11 bg-base-3 border-base-7 hover:bg-base-5 active:bg-base-5 hover:border-base-8 active:border-base-6 focus:border-base-8 h-full w-full border px-3 py-1 text-sm focus:outline-none"
-				placeholder={replyTarget ? replyingTo : sendingAs}
+				{placeholder}
 				autocomplete="off"
 				bind:value={textInput}
 				onkeydown={(e) => {
@@ -168,9 +175,13 @@
 				}}
 			/>
 
-			<button class="absolute inset-y-2 right-2 flex items-center" onclick={() => uiEvents.broadcast('x-preferences-modal')} type="button">
+			<button
+				class="absolute inset-y-2 right-2 flex items-center"
+				onclick={() => uiEvents.broadcast('x-preferences-modal')}
+				type="button"
+				title={render('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.title')}
+			>
 				<IconCog6Tooth theme="outline" />
-				<span class="sr-only">Open Settings</span>
 			</button>
 		</div>
 
@@ -184,9 +195,9 @@
 			type="submit"
 		>
 			{#if replyTarget}
-				Reply
+				<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.reply" />
 			{:else}
-				Send
+				<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.send_message" />
 			{/if}
 		</button>
 	</form>

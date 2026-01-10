@@ -5,6 +5,7 @@
 	import { fade } from 'svelte/transition';
 
 	import EventRenderer, { SUPPORTED_EVENTS } from '$lib/layout/chat/EventRenderer.svelte';
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { IconPause } from '@casterlabs/heroicons-svelte';
 	import { DynamicList } from '@casterlabs/ui';
 
@@ -177,7 +178,7 @@
 		class="bg-gray-base border-gray-700 absolute inset-x-2 bottom-2 flex items-center justify-center rounded-md border p-1 opacity-90"
 		onclick={() => dynamicList.jumpToStart()}
 	>
-		Scrolling paused
+		<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.scrolling_paused" />
 		<IconPause theme="mini" />
 	</button>
 {/if}

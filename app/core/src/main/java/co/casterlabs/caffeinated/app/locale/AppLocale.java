@@ -8,7 +8,6 @@ import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
 import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.rakurai.json.Rson;
-import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import glocale.Glocale;
 import glocale.parser.RsonParser;
@@ -42,15 +41,7 @@ public class AppLocale {
     private static JsonObject loadJson(String locale) {
         try (InputStream in = AppLocale.class.getClassLoader().getResourceAsStream("co/casterlabs/caffeinated/app/locale/" + locale + ".json")) {
             String raw = StreamUtil.toString(in, StandardCharsets.UTF_8);
-            JsonObject json = Rson.DEFAULT.fromJson(raw, JsonObject.class);
-
-            JsonObject transformed = new JsonObject();
-            for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-                String newKey = "co.casterlabs.caffeinated.app." + entry.getKey();
-                transformed.put(newKey, entry.getValue());
-            }
-
-            return transformed;
+            return Rson.DEFAULT.fromJson(raw, JsonObject.class);
         } catch (Throwable t) {
             if (fallbackJson == null) {
                 FastLogger.logStatic(LogLevel.FATAL, "Could not load app locale. Crashing!\n%s", t);

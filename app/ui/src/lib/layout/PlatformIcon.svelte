@@ -10,10 +10,17 @@
 	let { class: className, style, platform, color = false }: Props = $props();
 
 	let src = $derived(`/$caffeinated-sdk-root$/images/services/${platform.toLowerCase()}/${color ? 'logo.png' : 'icon.svg'}`);
+
+	const REQUIRES_PIXEL = ['KICK'];
 </script>
 
 {#if color}
-	<img style="display: inline; width: auto; height: 1em; vertical-align: middle; {style}" class={className} {src} alt="" />
+	<img
+		style="display: inline; width: auto; height: 1em; vertical-align: middle; {REQUIRES_PIXEL.includes(platform.toUpperCase()) ? 'image-rendering: pixelated;' : ''} {style}"
+		class={className}
+		{src}
+		alt=""
+	/>
 {:else}
 	{#await fetch(src).then((res) => res.text()) then svgText}
 		{@html svgText.replace('<svg', `<svg style="width: 1em; height: 1em; ${style}" class="${className}" `)}

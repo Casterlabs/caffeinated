@@ -2,6 +2,7 @@
 	import { Koi } from '$lib/app-shim';
 	import type EventHandler from '$lib/event-handler';
 
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import Modal from '../Modal.svelte';
 	import PlatformIcon from '../PlatformIcon.svelte';
 	import { Button } from '@casterlabs/ui';
@@ -15,7 +16,9 @@
 </script>
 
 {#snippet title()}
-	<div class="flex items-center justify-center">Select an account to send messages to</div>
+	<div class="flex items-center justify-center">
+		<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.send.modal.title" />
+	</div>
 {/snippet}
 
 <Modal {title} {onclose}>
@@ -35,6 +38,9 @@
 					>
 						<div class="flex-1">
 							<PlatformIcon platform={streamer.platform} color />
+							<span class="sr-only">
+								<LocalizedText key="co.casterlabs.caffeinated.app.platform.{streamer.platform}" />
+							</span>
 							{streamer.displayname}
 							{#if displaynameDiffers}
 								<span class="text-sm text-base-7">({streamer.username})</span>
@@ -53,7 +59,7 @@
 						onclose();
 					}}
 				>
-					Send to all chats
+					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.send.modal.all" />
 				</Button>
 			</li>
 		{/await}

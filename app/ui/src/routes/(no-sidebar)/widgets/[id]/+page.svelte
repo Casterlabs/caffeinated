@@ -65,7 +65,7 @@
 		<div class="fixed left-2.5 top-2.5">
 			<Button onclick={() => goto('/$caffeinated-sdk-root$/widgets')}>
 				<span class="sr-only">
-					<LocalizedText key="co.casterlabs.caffeinated.app.ui.navigation.back" />
+					<LocalizedText key="co.casterlabs.caffeinated.app.ui.navigation.go_back" />
 				</span>
 				<IconArrowLeft class="w-5 h-5" theme="outline" />
 			</Button>

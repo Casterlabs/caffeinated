@@ -3,6 +3,7 @@
 	import type EventHandler from '$lib/event-handler';
 	import { type MessageMetaEvent, type PlatformMessageEvent, type RichMessageEvent } from '$lib/koi';
 
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import UsernameRenderer from '../UsernameRenderer.svelte';
 	import { IconCake, IconChatBubbleLeft, IconMegaphone } from '@casterlabs/heroicons-svelte';
 
@@ -52,14 +53,14 @@
 	{#if event.attributes.includes('FIRST_TIME_CHATTER')}
 		<span class="block text-base-11 mt-0.5 text-sm">
 			<IconCake theme="mini" class="inline-block -translate-y-0.5" />
-			First time chatter
+			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter" />
 		</span>
 	{/if}
 
 	{#if event.attributes.includes('ANNOUNCEMENT')}
 		<span class="block text-base-11 mt-0.5 text-sm">
 			<IconMegaphone theme="mini" class="inline-block -translate-y-0.5" />
-			Announcement
+			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement" />
 		</span>
 	{/if}
 
@@ -73,9 +74,19 @@
 				-->
 				{#if replyTargetDeleted && !showReplyTargetAnyways && !isDeleted}
 					<IconChatBubbleLeft theme="mini" class="inline-block -translate-y-0.5" />
-					Replying to a deleted message
-					<button class="link text-xs" onclick={() => (showReplyTargetAnyways = true)}> Show </button>
+					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_deleted" />
+					<button class="link text-xs" onclick={() => (showReplyTargetAnyways = true)}>
+						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.show" />
+					</button>
 				{:else}
+					{#snippet other()}
+						<UsernameRenderer user={event.x_reply_target_data!.sender} showBadges={false} />
+					{/snippet}
+
+					{#snippet message()}
+						{@html event.x_reply_target_data!.html}
+					{/snippet}
+
 					<button
 						class="text-ellipsis overflow-hidden whitespace-nowrap max-w-full"
 						onclick={(e) => {
@@ -84,16 +95,16 @@
 						}}
 					>
 						<IconChatBubbleLeft theme="mini" class="inline-block -translate-y-0.5" />
-						Replying to
-						<UsernameRenderer user={event.x_reply_target_data.sender} showBadges={false} />
-						{@html event.x_reply_target_data.html}
+						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to" components={{ other, message }} />
 					</button>
 					{#if showReplyTargetAnyways && !isDeleted}
-						<button class="link text-xs" onclick={() => (showReplyTargetAnyways = false)}> Hide </button>
+						<button class="link text-xs" onclick={() => (showReplyTargetAnyways = false)}>
+							<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.hide" />
+						</button>
 					{/if}
 				{/if}
 			{:else if event.reply_target}
-				Replying to another message.
+				<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown" />
 			{/if}
 		</span>
 	{/if}

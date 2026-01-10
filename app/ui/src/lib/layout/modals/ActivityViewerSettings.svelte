@@ -67,7 +67,7 @@
 
 {#snippet title()}
 	<div class="flex items-center justify-center">
-		<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.title" />
+		<LocalizedText key="co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title" />
 	</div>
 {/snippet}
 
