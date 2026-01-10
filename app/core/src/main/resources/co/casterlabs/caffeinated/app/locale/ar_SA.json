@@ -1,6 +1,9 @@
 {
-    "platform.CAFFEINE": "كافيين",
-    "platform.GLIMESH": "Glimesh",
-    "platform.BRIME": "Brime",
-    "platform.THETA": "Theta"
+    "co.casterlabs.caffeinated.app.love": "صنع مع ♥️ بواسطة كاسترالابس",
+    "co.casterlabs.caffeinated.app.unsupported_feature": "غير مدعوم",
+    "co.casterlabs.caffeinated.app.platform.CAFFEINE": "كافيين",
+    "co.casterlabs.caffeinated.app.platform.TWITCH": "تويتش",
+    "co.casterlabs.caffeinated.app.platform.TROVO": "تروڤو",
+    "co.casterlabs.caffeinated.app.platform.GLIMESH": "Glimesh",
+    "co.casterlabs.caffeinated.app.platform.BRIME": "Brime"
 }
