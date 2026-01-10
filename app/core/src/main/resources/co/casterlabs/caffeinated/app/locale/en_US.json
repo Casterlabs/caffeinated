@@ -269,7 +269,7 @@
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Chat was cleared.",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> joined.",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_LEAVE": "<name> left.",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.no_viewers": "name> just raided the channel!",
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.no_viewers": "<name> just raided the channel!",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers": "<name> just raided the channel with <viewers> viewers!",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW": "<name> just followed!"
 }
