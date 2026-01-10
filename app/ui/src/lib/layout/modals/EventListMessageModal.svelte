@@ -12,9 +12,10 @@
 		event: KoiEvent;
 		uiEvents: EventHandler;
 		onclose: () => void;
+		showReply?: boolean;
 	}
 
-	let { event: targetEvent, uiEvents, onclose }: Props = $props();
+	let { event: targetEvent, uiEvents, onclose, showReply = true }: Props = $props();
 
 	let eventId: MessageId | null = $derived((targetEvent as any).id || null);
 	let eventMetaId: MetaId | null = $derived((targetEvent as any).meta_id || null);
@@ -67,7 +68,7 @@
 
 <Modal {title} {onclose}>
 	<div class="flex items-center justify-stretch w-full">
-		{#if targetEvent.event_type == 'RICH_MESSAGE' && !targetEvent.x_cleared && targetEvent.is_visible}
+		{#if targetEvent.event_type == 'RICH_MESSAGE' && !targetEvent.x_cleared && targetEvent.is_visible && showReply}
 			{@render actionButton('Reply', IconArrowUturnLeft, () => {
 				uiEvents.broadcast('x-start-reply', targetEvent);
 				onclose();
