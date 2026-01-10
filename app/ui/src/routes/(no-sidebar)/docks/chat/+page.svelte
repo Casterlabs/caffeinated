@@ -47,6 +47,9 @@
 	class:HIDE-ACTIVITIES={!prefs?.showActivities}
 	class:HIDE-VIEWERS={!prefs?.showViewers}
 	class:ZEBRA-STRIPES={prefs?.showZebraStripes}
+	class:USERNAME-THEME={prefs?.colorBy == 'THEME'}
+	class:USERNAME-USER={prefs?.colorBy == 'USER'}
+	class:USERNAME-PLATFORM={prefs?.colorBy == 'PLATFORM'}
 >
 	<div class="flex-1 pb-1 overflow-hidden">
 		<EventListRenderer bind:this={eventListRenderer} {uiEvents} />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { HSL, adjustTextColor } from '$lib/contrast-ratio';
-	import type { User } from '$lib/koi';
+	import { PLATFORM_COLORS, type User } from '$lib/koi';
 
 	import PlatformIcon from '../PlatformIcon.svelte';
 
@@ -47,16 +47,7 @@
 		{/if}
 	</span>
 
-	<span class="name" style:--user-color={user.color} style:--contrast-color={contrastColor}>
+	<span class="er-name font-semibold" style:--user-color={user.color} style:--contrast-color={contrastColor} style:--platform-color={PLATFORM_COLORS[user.platform]}>
 		{user.displayname}{#if usernameDiffersFromDisplayname}<span class="text-xs"> ({user.username})</span>{/if}</span
 	>:
 </span>
-
-<style>
-	.username > .name {
-		color: var(--contrast-color);
-		/* color: var(--user-color); */
-		/* color: var(--color-accent-9); */
-		font-weight: 600;
-	}
-</style>

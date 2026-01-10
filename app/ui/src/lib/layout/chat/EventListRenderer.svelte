@@ -189,6 +189,18 @@
 
 	/* ---- Preferences---- */
 
+	:global(.USERNAME-THEME .username > .er-name) {
+		color: var(--primary11);
+	}
+
+	:global(.USERNAME-USER .username > .er-name) {
+		color: var(--contrast-color);
+	}
+
+	:global(.USERNAME-PLATFORM .username > .er-name) {
+		color: var(--platform-color);
+	}
+
 	:global(.ZEBRA-STRIPES .even-child .event-renderer) {
 		background-color: var(--base2);
 	}
