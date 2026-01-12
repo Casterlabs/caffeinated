@@ -201,9 +201,6 @@
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown": "Başka bir mesaja yanıt veriliyor",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter": "İlk kez sohbette",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement": "Duyuru",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS": "<name> az önce <reward> kullandı!",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Sohbet temizlendi.",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> katıldı.",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers": "<name> az önce <viewers> izleyici ile kanala baskın düzenledi!",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW": "<name> az önce takip etti!"
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> katıldı."
 }
