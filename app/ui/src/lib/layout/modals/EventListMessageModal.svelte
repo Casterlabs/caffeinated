@@ -20,7 +20,9 @@
 
 	let eventId: MessageId | null = $derived((targetEvent as any).id || null);
 	let eventMetaId: MetaId | null = $derived((targetEvent as any).meta_id || null);
-	let targetUser: User = $derived((targetEvent as any)?.sender || (targetEvent as any)?.follower || (targetEvent as any)?.subscriber || (targetEvent as any)?.host);
+	let targetUser: User = $derived(
+		(targetEvent as any)?.sender || (targetEvent as any)?.follower || (targetEvent as any)?.subscriber || (targetEvent as any)?.host || (targetEvent as any)?.viewer
+	);
 
 	let isDeleted = $state(false);
 

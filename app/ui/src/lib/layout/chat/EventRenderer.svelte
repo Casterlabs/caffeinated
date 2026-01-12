@@ -13,7 +13,9 @@
 		RAID: RaidRenderer,
 		RICH_MESSAGE: RichMessageRenderer,
 		PLATFORM_MESSAGE: RichMessageRenderer,
-		SUBSCRIPTION: SubscriptionRenderer
+		SUBSCRIPTION: SubscriptionRenderer,
+		VIEWER_JOIN: ViewerJoinRenderer,
+		VIEWER_LEAVE: ViewerLeaveRenderer
 	};
 
 	export const SUPPORTED_EVENTS = Object.keys(EVENT_COMPONENTS);
@@ -28,6 +30,8 @@
 	import type { ClearChatEvent, KoiEvent, MessageMetaEvent, MetaId, User } from '$lib/koi';
 
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
+	import ViewerJoinRenderer from './events/ViewerJoinRenderer.svelte';
+	import ViewerLeaveRenderer from './events/ViewerLeaveRenderer.svelte';
 	import { LongPressListener } from '@casterlabs/ui';
 
 	import { type Component, onMount } from 'svelte';

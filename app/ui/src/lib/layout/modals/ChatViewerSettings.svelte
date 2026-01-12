@@ -122,7 +122,7 @@
 
 		{@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_badges', 'showBadges')}
 
-		<!-- {@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_viewers', 'showViewers')} -->
+		{@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_viewers', 'showViewers')}
 
 		{@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_platform', 'showPlatform')}
 
