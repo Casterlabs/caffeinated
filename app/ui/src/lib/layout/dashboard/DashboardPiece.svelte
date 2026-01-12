@@ -3,6 +3,7 @@
 	import { fade } from 'svelte/transition';
 
 	import ResizableGrid from '$lib/layout/dashboard/ResizableGrid.svelte';
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { Select } from '@casterlabs/ui';
 
 	import { type Component, onMount } from 'svelte';
@@ -49,28 +50,30 @@
 	onMount(doMount);
 </script>
 
-{#if component}
-	{@const TypedComponent = component as Component<any, any, any>}
+<div class="flex-1 h-full w-full relative">
+	{#if component}
+		{@const TypedComponent = component as Component<any, any, any>}
 
-	<div class="flex-1 h-full w-full relative">
 		<TypedComponent {...componentProps || {}} />
+	{/if}
 
-		{#if !$isResizingLocked}
-			<div class="absolute inset-x-1 top-1 h-fit opacity-90" transition:fade={{ duration: 100 }}>
-				<Select
-					class="w-full"
-					value={current || null}
-					onchange={(e) => {
-						const current = (e.target as HTMLSelectElement).value;
-						doMount();
-						onPieceUpdate(location, current);
-					}}
-				>
-					{#each Object.entries(componentChoices) as [key, name]}
-						<option value={key}>{name}</option>
-					{/each}
-				</Select>
-			</div>
-		{/if}
-	</div>
-{/if}
+	{#if !$isResizingLocked}
+		<div class="absolute inset-x-1 top-1 h-fit opacity-90" transition:fade={{ duration: 100 }}>
+			<Select
+				class="w-full"
+				value={current || null}
+				onchange={(e) => {
+					const current = (e.target as HTMLSelectElement).value;
+					doMount();
+					onPieceUpdate(location, current);
+				}}
+			>
+				{#each Object.entries(componentChoices) as [key, name]}
+					<option value={key}>
+						<LocalizedText key={name} />
+					</option>
+				{/each}
+			</Select>
+		</div>
+	{/if}
+</div>

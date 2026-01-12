@@ -93,6 +93,8 @@
 			}
 		}
 
+		console.log(contents);
+
 		layoutElement.updateLayout(currentLayout);
 	});
 </script>
