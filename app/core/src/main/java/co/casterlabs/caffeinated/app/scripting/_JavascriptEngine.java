@@ -157,7 +157,7 @@ class _JavascriptEngine implements ScriptingEngine {
         }
     }
 
-    static class KoiScriptHandle {
+    public static class KoiScriptHandle {
 
         public void sendChat(@Nullable String platform, @NonNull String message, @NonNull String chatter) {
             this.sendChat(platform, message, chatter, null);
@@ -183,7 +183,7 @@ class _JavascriptEngine implements ScriptingEngine {
 
     }
 
-    static class FetchScriptHandle {
+    public static class FetchScriptHandle {
 
         @SneakyThrows
         public String asText(@NonNull String url) {
@@ -203,14 +203,14 @@ class _JavascriptEngine implements ScriptingEngine {
         }
     }
 
-    static class PluginsScriptHandle {
+    public static class PluginsScriptHandle {
 
         public Object callServiceMethod(@NonNull String pluginId, @NonNull String serviceId, @NonNull String methodName, @Nullable Object[] args) {
             return CaffeinatedImpl.INSTANCE.getPlugins().callServiceMethod(pluginId, serviceId, methodName, args);
         }
     }
 
-    static class SoundScriptHandle {
+    public static class SoundScriptHandle {
 
         public void playAudio(@NonNull String audioUrl, Number volume) throws IOException {
             if (volume == null) volume = 1;
@@ -255,7 +255,7 @@ class _JavascriptEngine implements ScriptingEngine {
         }
     }
 
-    static class InputScriptHandle {
+    public static class InputScriptHandle {
 
         @SneakyThrows
         public void keyPress(@NonNull String keyCode) {
@@ -340,7 +340,7 @@ class _JavascriptEngine implements ScriptingEngine {
 
     }
 
-    static class InternalScriptHandle {
+    public static class InternalScriptHandle {
 
         @SneakyThrows
         public void sleep(Number milliseconds) {
@@ -349,7 +349,7 @@ class _JavascriptEngine implements ScriptingEngine {
 
     }
 
-    static class CurrenciesScriptHandle {
+    public static class CurrenciesScriptHandle {
 
         public String formatCurrency(Number amount, @NonNull String currency) throws InterruptedException, Throwable {
             return Currencies.formatCurrency(amount.doubleValue(), currency).await();
