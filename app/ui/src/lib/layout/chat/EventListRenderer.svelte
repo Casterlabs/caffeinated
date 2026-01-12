@@ -18,9 +18,10 @@
 
 	interface Props {
 		uiEvents: EventHandler;
+		useCatchups?: boolean;
 	}
 
-	let { uiEvents }: Props = $props();
+	let { uiEvents, useCatchups = false }: Props = $props();
 
 	let isAtBottom: boolean = $state(true);
 	let dynamicList: DynamicList;
@@ -32,6 +33,13 @@
 	onMount(() => {
 		function handle(e: KoiEvent) {
 			if (!e.event_type) return; // ?
+
+			if (e.event_type == 'CATCHUP' && useCatchups) {
+				for (const catchupEvent of e.events) {
+					handle(catchupEvent);
+				}
+			}
+
 			const canRenderEvent = SUPPORTED_EVENTS.includes(e.event_type.toUpperCase());
 			const isUserClear = e.event_type == 'CLEARCHAT' && e.clear_type == 'USER';
 			if (!canRenderEvent || isUserClear) {

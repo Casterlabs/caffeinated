@@ -265,11 +265,11 @@
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_deleted": "Replying to a deleted message",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter": "First time chatter",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement": "Announcement",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS": "<name> just redeemed <reward>!",
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS": "<name> redeemed <reward>!",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Chat was cleared.",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> joined.",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_LEAVE": "<name> left.",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.no_viewers": "<name> just raided the channel!",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers": "<name> just raided the channel with <viewers> viewers!",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW": "<name> just followed!"
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.no_viewers": "<name> raided the channel!",
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers": "<name> raided the channel with <viewers> viewers!",
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW": "<name> followed!"
 }

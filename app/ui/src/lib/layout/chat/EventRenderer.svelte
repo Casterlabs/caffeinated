@@ -54,6 +54,8 @@
 	let eventUser: User = $derived((event as any).sender || (event as any).follower || (event as any).subscriber || (event as any).host);
 	let eventMetaId: MetaId = $derived((event as any).meta_id || null);
 
+	let timestamp = $state(getTimestamp());
+
 	onMount(() => {
 		if (event.event_type == 'PLATFORM_MESSAGE') return; // Don't allow platform messages to be cleared.
 
@@ -83,6 +85,31 @@
 				isDeleted = !newMeta.is_visible;
 			}
 		});
+	});
+
+	function getTimestamp() {
+		const timestamp = new Date(event.timestamp || Date.now());
+		const now = new Date();
+		if (
+			//
+			timestamp.getDate() === now.getDate() &&
+			timestamp.getMonth() === now.getMonth() &&
+			timestamp.getFullYear() === now.getFullYear()
+		) {
+			return timestamp.toLocaleTimeString();
+		} else {
+			return timestamp.toLocaleString();
+		}
+	}
+
+	onMount(() => {
+		const id = setInterval(
+			() => {
+				timestamp = getTimestamp();
+			},
+			2 /*m*/ * 60 * 1000
+		);
+		return () => clearInterval(id);
 	});
 </script>
 
@@ -116,7 +143,7 @@
 					}}
 				>
 					<span class="er-timestamp text-xs text-base-11 mr-0.5">
-						{new Date(event.timestamp || Date.now()).toLocaleTimeString()}
+						{timestamp}
 					</span>
 
 					<EventRenderer {event} {uiEvents} />

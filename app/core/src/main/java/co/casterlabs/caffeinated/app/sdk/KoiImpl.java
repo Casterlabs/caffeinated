@@ -67,6 +67,7 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
         KoiEventType.PLATFORM_MESSAGE,
         KoiEventType.RICH_MESSAGE,
         KoiEventType.LIKE,
+        KoiEventType.CATCHUP,
 
         // Deprecated
         KoiEventType.CHAT,
@@ -184,31 +185,6 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
     @Override
     @KoiEventHandler
     public void broadcastEvent(@NonNull KoiEvent e) {
-        if (e.type() == KoiEventType.CATCHUP) {
-//            CatchupEvent catchUp = (CatchupEvent) e;
-//
-//            // Loop through the catchup events,
-//            // Convert them to an event,
-//            // Check to make sure that conversion succeeded,
-//            // Ensure that we're not spamming the user,
-//            // Broadcast that event.
-//            // (We need to do these in order)
-//            for (JsonElement element : catchUp.events) {
-//                KoiEvent cEvent = KoiEventType.get(element.getAsObject());
-//
-//                if ((cEvent != null) && !this.eventHistory.contains(e)) {
-//                    if (KEPT_EVENTS.contains(cEvent.type())) {
-//                        if (catchUp.isFresh()) {
-//                            this.eventHistory.add(cEvent);
-//                        } else {
-//                            this.broadcastEvent(cEvent);
-//                        }
-//                    }
-//                }
-//            }
-            return; // Don't further process.
-        }
-
         for (CaffeinatedPlugin plugin : AppPlugins.getLoadedPlugins()) {
             try {
                 if (plugin.shouldCancel(e)) {

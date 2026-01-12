@@ -43,7 +43,7 @@
 	class:USERNAME-PLATFORM={prefs?.colorBy == 'PLATFORM'}
 >
 	<div class="flex-1 pb-1 overflow-hidden">
-		<EventListRenderer bind:this={eventListRenderer} {uiEvents} />
+		<EventListRenderer bind:this={eventListRenderer} {uiEvents} useCatchups />
 	</div>
 
 	<button

@@ -10,9 +10,10 @@
 	interface Props {
 		user: User;
 		showBadges?: boolean;
+		showColon?: boolean;
 	}
 
-	let { user, showBadges = true }: Props = $props();
+	let { user, showBadges = true, showColon = false }: Props = $props();
 
 	let contrastColor = $derived(
 		(() => {
@@ -59,6 +60,6 @@
 	</span>
 
 	<span class="er-name font-semibold" style:--user-color={user.color} style:--contrast-color={contrastColor} style:--platform-color={PLATFORM_COLORS[user.platform]}>
-		{user.displayname}{#if usernameDiffersFromDisplayname}<span class="text-xs"> ({user.username})</span>{/if}</span
-	>:
+		{user.displayname.trim()}{#if usernameDiffersFromDisplayname}<span class="text-xs"> ({user.username.trim()})</span>{/if}</span
+	>{#if showColon}:{/if}
 </span>

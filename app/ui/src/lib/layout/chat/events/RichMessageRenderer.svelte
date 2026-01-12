@@ -110,7 +110,7 @@
 	{/if}
 
 	{#if event.event_type != 'PLATFORM_MESSAGE'}
-		<UsernameRenderer user={event.sender} />
+		<UsernameRenderer user={event.sender} showColon />
 	{/if}
 
 	<span
