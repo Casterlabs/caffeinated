@@ -1,8 +1,7 @@
-package co.casterlabs.caffeinated.app.sdk;
+package co.casterlabs.caffeinated.app.koi;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,8 +32,11 @@ import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
+import co.casterlabs.koi.api.types.RoomId;
+import co.casterlabs.koi.api.types.events.CatchupEvent;
 import co.casterlabs.koi.api.types.events.ConnectionStateEvent;
 import co.casterlabs.koi.api.types.events.ConnectionStateEvent.ConnectionState;
+import co.casterlabs.koi.api.types.events.MessageMetaEvent;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -55,31 +57,9 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 public class KoiImpl implements Koi, KoiLifeCycleHandler {
     public static final KoiImpl INSTANCE = new KoiImpl();
 
-    private static final List<KoiEventType> KEPT_EVENTS = Arrays.asList(
-        KoiEventType.FOLLOW,
-        KoiEventType.SUBSCRIPTION,
-        KoiEventType.META,
-        KoiEventType.VIEWER_JOIN,
-        KoiEventType.VIEWER_LEAVE,
-        KoiEventType.RAID,
-        KoiEventType.CHANNEL_POINTS,
-        KoiEventType.CLEARCHAT,
-        KoiEventType.PLATFORM_MESSAGE,
-        KoiEventType.RICH_MESSAGE,
-        KoiEventType.LIKE,
-        KoiEventType.CATCHUP,
-
-        // Deprecated
-        KoiEventType.CHAT,
-        KoiEventType.DONATION
-    );
-
     private List<KoiLifeCycleHandler> koiEventListeners = new LinkedList<>();
 
     // Definition hell, accessors for the UI.
-    @JavascriptValue(allowSet = false)
-    private List<KoiEvent> eventHistory = new LinkedList<>();
-
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, List<User>> viewers = new ConcurrentHashMap<>();
 
@@ -101,9 +81,6 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private Map<UserPlatform, Map<String, ConnectionState>> connectionStates = new ConcurrentHashMap<>();
 
-    /**
-     * @deprecated Should <b>only</b> be called from AppAuth.
-     */
     @Deprecated
     public void updateFromAuth() {
         // Diff the AuthInstances and check for signedout platforms.
@@ -209,12 +186,21 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
             FastLogger.logStatic(LogLevel.SEVERE, t);
         }
 
-        // Add it to the local event history.
-        if (KEPT_EVENTS.contains(e.type())) {
-            this.eventHistory.add(e);
-        }
-
         switch (e.type()) {
+            case CATCHUP: {
+                CatchupEvent catchup = (CatchupEvent) e;
+                for (JsonElement oldEventJson : catchup.events) {
+                    KoiEvent old = KoiEventType.get((JsonObject) oldEventJson);
+                    if (old == null) continue;
+                    KoiHistory.storeEvent(old, oldEventJson);
+                }
+                return;
+            }
+
+            case META:
+                KoiHistory.handleMetaEvent((MessageMetaEvent) e);
+                break;
+
             case VIEWER_COUNT: {
                 this.viewerCounts.put(
                     e.streamer.platform,
@@ -283,6 +269,8 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
         AsyncTask.create(() -> {
             JsonElement asJson = Rson.DEFAULT.toJson(e);
 
+            KoiHistory.storeEvent(e, asJson);
+
 //            AppWindow.emit(
 //                "koi:event:" + e.type().name().toLowerCase(),
 //                asJson
@@ -298,17 +286,6 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
             }
         });
 
-        if (AppChatbot.shouldHideFromWidgets(e)) {
-            return;
-        }
-
-        // Notify the plugins
-        AsyncTask.create(() -> {
-            for (CaffeinatedPlugin pl : AppPlugins.getLoadedPlugins()) {
-                pl.fireKoiEventListeners(e);
-            }
-        });
-
         // Notify the local api.
         AsyncTask.create(() -> {
             try {
@@ -318,6 +295,15 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+            }
+        });
+
+        boolean hideFromWidgets = AppChatbot.shouldHideFromWidgets(e);
+
+        // Notify the plugins
+        AsyncTask.create(() -> {
+            for (CaffeinatedPlugin pl : AppPlugins.getLoadedPlugins()) {
+                pl.fireKoiEventListeners(e, hideFromWidgets);
             }
         });
     }
@@ -357,6 +343,19 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
     @JavascriptFunction
     @Override
     public void deleteChat(@NonNull UserPlatform platform, @NonNull String messageId, boolean isUserGesture) {
+        KoiHistory.optimisticallyDelete(platform, messageId);
+
+        try {
+            String trueId = KoiHistory.getTrueId(messageId);
+            this.broadcastEvent(
+                MessageMetaEvent
+                    .builder(trueId, RoomId.of(UserPlatform.CASTERLABS_SYSTEM.systemProfile, ""))
+                    .visible(false)
+                    .streamer(UserPlatform.CASTERLABS_SYSTEM.systemProfile)
+                    .build()
+            );
+        } catch (Throwable ignored) {}
+
         AuthInstance inst = AppAuth.getAuthInstance(platform);
 
         if (inst != null) {
@@ -366,9 +365,10 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
 
     // These all have to be unmodifiable as they're exposed in the plugin SDK.
 
+    @JavascriptFunction
     @Override
-    public List<KoiEvent> getEventHistory() {
-        return Collections.unmodifiableList(this.eventHistory);
+    public List<KoiEvent> getEventHistory(long beforeTimestamp) {
+        return KoiHistory.getHistoryAtOrBeforeTimestamp(beforeTimestamp);
     }
 
     @Override

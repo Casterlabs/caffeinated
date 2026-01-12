@@ -187,10 +187,10 @@
 
 		<button
 			class="text-base-11 bg-base-3 border-base-7 border-l-0 rounded-r-[var(--clui-radius)] flex h-full items-center justify-center border px-3 py-1 text-sm"
-			class:hover:border-gray-400={textInput.length > 0}
-			class:active:border-gray-400={textInput.length > 0}
-			class:focus:border-gray-400={textInput.length > 0}
-			class:text-gray-100={textInput.length > 0}
+			class:hover:border-base-8={textInput.length > 0}
+			class:active:border-base-8={textInput.length > 0}
+			class:focus:border-base-8={textInput.length > 0}
+			class:text-base-12={textInput.length > 0}
 			disabled={textInput.length == 0}
 			type="submit"
 		>

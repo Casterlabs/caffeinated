@@ -21,7 +21,11 @@ import lombok.NonNull;
 
 public interface Koi {
 
-    public List<KoiEvent> getEventHistory();
+    default List<KoiEvent> getEventHistory() {
+        return this.getEventHistory(System.currentTimeMillis());
+    }
+
+    public List<KoiEvent> getEventHistory(long beforeTimestamp);
 
     public Map<UserPlatform, List<User>> getViewers();
 
@@ -53,8 +57,9 @@ public interface Koi {
      */
     @Deprecated
     default JsonObject toJson() {
-        int previous = Math.min(35, this.getEventHistory().size());
-        List<KoiEvent> history = this.getEventHistory().subList(this.getEventHistory().size() - previous, this.getEventHistory().size());
+        final int MAX_EVENTS = 35;
+        List<KoiEvent> history = this.getEventHistory();
+        history = history.subList(Math.max(0, history.size() - MAX_EVENTS), history.size());
 
         return new JsonObject()
             .put("history", Rson.DEFAULT.toJson(history))
@@ -74,8 +79,9 @@ public interface Koi {
      */
     @Deprecated
     default JsonObject toJsonExtended() {
-        int previous = Math.min(200, this.getEventHistory().size());
-        List<KoiEvent> history = this.getEventHistory().subList(this.getEventHistory().size() - previous, this.getEventHistory().size());
+        final int MAX_EVENTS = 200;
+        List<KoiEvent> history = this.getEventHistory();
+        history = history.subList(Math.max(0, history.size() - MAX_EVENTS), history.size());
 
         return new JsonObject()
             .put("history", Rson.DEFAULT.toJson(history))

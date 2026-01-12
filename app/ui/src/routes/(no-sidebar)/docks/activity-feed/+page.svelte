@@ -42,7 +42,7 @@
 	class:USERNAME-USER={prefs?.colorBy == 'USER'}
 	class:USERNAME-PLATFORM={prefs?.colorBy == 'PLATFORM'}
 >
-	<div class="flex-1 pb-1 overflow-hidden">
+	<div class="flex-1 pb-1 overflow-hidden relative">
 		<EventListRenderer bind:this={eventListRenderer} {uiEvents} useCatchups />
 	</div>
 

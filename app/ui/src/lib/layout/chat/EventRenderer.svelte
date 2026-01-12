@@ -128,6 +128,10 @@
 		>
 			{#if isDeleted && !showAnyways}
 				<span class="text-xs text-base-11">
+					<span class="er-timestamp text-xs text-base-11 mr-0.5">
+						{timestamp}
+					</span>
+
 					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted" />
 					<button class="text-primary-10" onclick={() => (showAnyways = true)}>
 						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.show" />

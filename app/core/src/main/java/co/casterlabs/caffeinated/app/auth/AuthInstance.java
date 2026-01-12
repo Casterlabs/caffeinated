@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.config.AppConfig;
-import co.casterlabs.caffeinated.app.sdk.KoiImpl;
+import co.casterlabs.caffeinated.app.koi.KoiImpl;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.async.queue.ExecutionQueue;
 import co.casterlabs.commons.async.queue.SyncExecutionQueue;

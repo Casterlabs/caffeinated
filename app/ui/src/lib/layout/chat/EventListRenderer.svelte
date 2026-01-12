@@ -23,7 +23,7 @@
 
 	let { uiEvents, useCatchups = false }: Props = $props();
 
-	let isAtBottom: boolean = $state(true);
+	let isAtStart = $state(true);
 	let dynamicList: DynamicList;
 	// svelte-ignore non_reactive_update
 	let scrollContainer: HTMLElement = {} as HTMLElement;
@@ -67,7 +67,7 @@
 			scrollAnimationTimeout = undefined;
 
 			// Change the background color, letting CSS transition/animate it.
-			scrollAnimationTarget.style.backgroundColor = 'var(--color-accent-5)';
+			scrollAnimationTarget.style.backgroundColor = 'var(--primary5) !important';
 
 			// Wait a bit, and then remove the background color, again letting CSS handle it.
 			setTimeout(() => {
@@ -86,10 +86,9 @@
 			scrollAnimationTimeout = setTimeout(animateHighlight, 100);
 		}
 
-		function startHighlight(e: CustomEvent) {
+		function startHighlight(id: MetaId) {
 			if (scrollAnimationTarget) return;
 
-			const id = e.detail as MetaId;
 			const targetElement = scrollContainer.querySelector(`[data-clui-list-item-id="${id}"]`) as HTMLDivElement;
 			if (!targetElement) return; // Element may have been removed from the DOM at this point.
 
@@ -105,14 +104,13 @@
 		}
 
 		// @ts-ignore
-		window.addEventListener('x-find-message', startHighlight);
-		window.addEventListener('x-jump-bottom', jumpToBottom);
+		const id1 = uiEvents.on('x-find-message', startHighlight);
+		const id2 = uiEvents.on('x-jump-bottom', jumpToBottom);
 		scrollContainer.addEventListener('scroll', scrollListener);
 
 		return () => {
-			// @ts-ignore
-			window.removeEventListener('x-find-message', startHighlight);
-			window.removeEventListener('x-jump-bottom', jumpToBottom);
+			id1();
+			id2();
 			scrollContainer.removeEventListener('scroll', scrollListener);
 		};
 	});
@@ -170,6 +168,7 @@
 	<DynamicList
 		bind:this={dynamicList}
 		bind:scrollContainer
+		bind:isAtStart
 		inverted
 		bleed={DYNAMIC_LIST_BLEED}
 		{itemRenderer}
@@ -179,15 +178,15 @@
 	/>
 </div>
 
-{#if !isAtBottom}
+{#if !isAtStart}
 	<button
 		in:fade
 		out:fade
-		class="bg-gray-base border-gray-700 absolute inset-x-2 bottom-2 flex items-center justify-center rounded-md border p-1 opacity-90"
+		class="bg-base-2 border-base-7 absolute inset-x-2 bottom-2 flex items-center justify-center rounded-md border p-1 opacity-90"
 		onclick={() => dynamicList.jumpToStart()}
 	>
 		<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.scrolling_paused" />
-		<IconPause theme="mini" />
+		<IconPause theme="micro" />
 	</button>
 {/if}
 

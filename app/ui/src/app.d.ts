@@ -986,36 +986,6 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			{ streamer: any; timestamp: {} }
 		>
 	>;
-	readonly eventHistory: Promise<
-		{
-			streamer: {
-				UPID: string;
-				id: string;
-				channel_id: string;
-				extraMetadata: Record<string, any>;
-				platform:
-					| 'CAFFEINE'
-					| 'TWITCH'
-					| 'TROVO'
-					| 'GLIMESH'
-					| 'BRIME'
-					| 'YOUTUBE'
-					| 'DLIVE'
-					| 'TIKTOK'
-					| 'THETA'
-					| 'KICK'
-					| 'YOUNOW'
-					| 'LIVESPACE'
-					| 'NOICE'
-					| 'X'
-					| 'RUMBLE'
-					| 'LOCO'
-					| 'CASTERLABS_SYSTEM'
-					| 'CUSTOM_INTEGRATION';
-			};
-			timestamp: {};
-		}[]
-	>;
 	readonly connectionStates: Promise<
 		Record<
 			| 'CAFFEINE'
@@ -1282,6 +1252,36 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 		arg0: string | null,
 		arg0: boolean
 	): Promise<void>;
+	getEventHistory(beforeTimestamp: number): Promise<
+		{
+			streamer: {
+				UPID: string;
+				id: string;
+				channel_id: string;
+				extraMetadata: Record<string, any>;
+				platform:
+					| 'CAFFEINE'
+					| 'TWITCH'
+					| 'TROVO'
+					| 'GLIMESH'
+					| 'BRIME'
+					| 'YOUTUBE'
+					| 'DLIVE'
+					| 'TIKTOK'
+					| 'THETA'
+					| 'KICK'
+					| 'YOUNOW'
+					| 'LIVESPACE'
+					| 'NOICE'
+					| 'X'
+					| 'RUMBLE'
+					| 'LOCO'
+					| 'CASTERLABS_SYSTEM'
+					| 'CUSTOM_INTEGRATION';
+			};
+			timestamp: {};
+		}[]
+	>;
 	deleteChat(
 		arg0:
 			| 'CAFFEINE'

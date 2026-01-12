@@ -9,6 +9,8 @@
 
 	import { onMount } from 'svelte';
 
+	const IS_HISTORICAL_AFTER = 24 /*h*/ * 60 * 60 * 1000;
+
 	interface Props {
 		event: KoiEvent;
 		uiEvents: EventHandler;

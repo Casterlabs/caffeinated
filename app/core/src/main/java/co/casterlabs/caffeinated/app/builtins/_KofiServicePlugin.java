@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.config.AppConfig;
-import co.casterlabs.caffeinated.app.sdk.KoiImpl;
+import co.casterlabs.caffeinated.app.koi.KoiImpl;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;

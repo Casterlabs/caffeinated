@@ -162,13 +162,13 @@ if (isInApp) {
 
 		public history(): Promise<KoiEvent[]> {
 			// @ts-ignore
-			return window.Koi.eventHistory;
+			return window.Koi.getEventHistory(Date.now());
 		}
 
 		public async statics(): Promise<KoiStatics> {
 			return {
 				// @ts-ignore
-				history: await window.Koi.eventHistory,
+				history: await window.Koi.getEventHistory(Date.now()),
 				viewers: await window.Koi.viewers,
 				viewerCounts: await window.Koi.viewerCounts,
 				// @ts-ignore
@@ -183,7 +183,7 @@ if (isInApp) {
 	})();
 
 	// @ts-ignore
-	window.Koi.eventHistory.then((events: KoiEvent[]) => {
+	window.Koi.getEventHistory(Date.now()).then((events: KoiEvent[]) => {
 		events.forEach((e) => {
 			Koi.broadcast(e.event_type, e);
 		});

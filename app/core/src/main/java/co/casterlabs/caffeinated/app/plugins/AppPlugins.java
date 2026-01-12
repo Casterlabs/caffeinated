@@ -18,9 +18,9 @@ import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
 import co.casterlabs.caffeinated.app.builtins.BuiltIns;
 import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.koi.KoiImpl;
 import co.casterlabs.caffeinated.app.plugins._PluginContext.ContextType;
 import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
-import co.casterlabs.caffeinated.app.sdk.KoiImpl;
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
@@ -266,7 +266,7 @@ public class AppPlugins {
         UserUpdateEvent randomAccount = userStates[ThreadLocalRandom.current().nextInt(userStates.length)];
 
         KoiEvent event = TestEvents.createTestEvent(type, randomAccount.streamer.platform);
-        handle.widget.fireKoiEventListeners(event);
+        handle.widget.fireKoiEventListeners(event, false);
     }
 
     @JavascriptFunction

@@ -159,7 +159,7 @@ public abstract class Widget {
      *             {@link Promise#then(java.util.function.Consumer)}
      */
     @Deprecated
-    public final Promise<Void> fireKoiEventListeners(@NonNull KoiEvent event) {
+    public final Promise<Void> fireKoiEventListeners(@NonNull KoiEvent event, boolean hideFromWidgets) {
         return new Promise<Void>(() -> {
             for (KoiEventListener listener : new ArrayList<>($handle.koiListeners)) {
                 try {
@@ -171,6 +171,10 @@ public abstract class Widget {
             }
 
             for (WidgetInstance widgetInstance : this.getWidgetInstances()) {
+                if (hideFromWidgets && (widgetInstance.getInstanceMode() == WidgetInstanceMode.WIDGET || widgetInstance.getInstanceMode() == WidgetInstanceMode.WIDGET_ALT)) {
+                    continue;
+                }
+
                 try {
                     widgetInstance.onKoiEvent(event);
                 } catch (Throwable t) {
