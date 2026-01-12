@@ -202,9 +202,6 @@
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown": "Ответ на другое сообщение",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter": "Первое сообщение в чате",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement": "Оповещение",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS": "<name> выкупил <reward>!",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Чат очищен.",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> присоединился(лась).",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers": "<name> совершил(а) рейд на канал с <viewers> зрителями!",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW": "<name> подписался(лась)!"
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> присоединился(лась)."
 }
