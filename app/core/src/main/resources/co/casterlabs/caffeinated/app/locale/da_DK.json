@@ -195,7 +195,5 @@
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown": "Besvarelse af en anden besked",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter": "Første gang chatter",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement": "Annoncering",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS": "<name> har netop indløst <reward>!",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Chatten blev ryddet.",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW": "<name> har lige followed!"
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Chatten blev ryddet."
 }
