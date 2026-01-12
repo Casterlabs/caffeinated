@@ -201,9 +201,6 @@
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown": "Auf eine andere Nachricht antworten",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter": "Erstmaliger Chatter",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement": "Ankündigung",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS": "<name> hat <reward> eingelöst!",
     "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Chatverlauf wurde geleert.",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> ist beigetreten.",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers": "<name> hat den Kanal mit <viewers> Zuschauern geraided!",
-    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW": "<name> ist gefolgt!"
+    "co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> ist beigetreten."
 }
