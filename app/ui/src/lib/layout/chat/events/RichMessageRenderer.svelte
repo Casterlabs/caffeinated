@@ -104,6 +104,7 @@
 					{/if}
 				{/if}
 			{:else if event.reply_target}
+				<IconChatBubbleLeft theme="mini" class="inline-block -translate-y-0.5" />
 				<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_unknown" />
 			{/if}
 		</span>
