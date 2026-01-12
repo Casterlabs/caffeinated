@@ -9,6 +9,7 @@ import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
@@ -159,35 +160,53 @@ public class KoiHistory {
     }
 
     private static byte[] compress(String input) {
-        Deflater d = new Deflater();
-        d.setLevel(5);
-        d.setInput(input.getBytes(StandardCharsets.UTF_8));
-        d.finish();
+        Deflater deflater = new Deflater();
+        try {
+            deflater.setLevel(5);
+            deflater.setInput(input.getBytes(StandardCharsets.UTF_8));
+            deflater.finish();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        while (!d.finished()) {
-            int compressedSize = d.deflate(buffer);
-            outputStream.write(buffer, 0, compressedSize);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            while (!deflater.finished()) {
+                int count = deflater.deflate(buffer);
+                outputStream.write(buffer, 0, count);
+            }
+
+            return outputStream.toByteArray();
+        } finally {
+            deflater.end();
         }
-
-        return outputStream.toByteArray();
     }
 
     @SneakyThrows
     private static String decompress(byte[] input) {
         Inflater inflater = new Inflater();
-        inflater.setInput(input);
+        try {
+            inflater.setInput(input);
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        while (!inflater.finished()) {
-            int decompressedSize = inflater.inflate(buffer);
-            outputStream.write(buffer, 0, decompressedSize);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+
+                if (count == 0) {
+                    if (inflater.needsInput()) {
+                        throw new DataFormatException("Unexpected end of compressed data");
+                    }
+                    if (inflater.needsDictionary()) {
+                        throw new DataFormatException("Compressed data requires a dictionary");
+                    }
+                }
+
+                outputStream.write(buffer, 0, count);
+            }
+
+            byte[] bytes = outputStream.toByteArray();
+            return new String(bytes, StandardCharsets.UTF_8);
+        } finally {
+            inflater.end();
         }
-
-        byte[] bytes = outputStream.toByteArray();
-        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     private static String getEventId(KoiEvent event) {
