@@ -66,14 +66,15 @@
 			clearTimeout(scrollAnimationTimeout);
 			scrollAnimationTimeout = undefined;
 
+			const backgroundColorTarget = scrollAnimationTarget.querySelector('.event-renderer') as HTMLDivElement;
+			scrollAnimationTarget = null;
+
 			// Change the background color, letting CSS transition/animate it.
-			scrollAnimationTarget.style.backgroundColor = 'var(--primary5) !important';
+			backgroundColorTarget.style.backgroundColor = 'var(--primary5) !important';
 
 			// Wait a bit, and then remove the background color, again letting CSS handle it.
 			setTimeout(() => {
-				if (!scrollAnimationTarget) return; // So typescript will shut up.
-				scrollAnimationTarget.style.backgroundColor = '';
-				scrollAnimationTarget = null;
+				backgroundColorTarget.style.backgroundColor = '';
 			}, HIGHLIGHT_FLASH_TIME);
 		}
 
@@ -191,7 +192,7 @@
 {/if}
 
 <style>
-	:global(.inverted-scroller) > :global(li) {
+	:global(.inverted-scroller) > :global(li .event-renderer) {
 		transition: background-color var(--highlightanimatetime);
 	}
 
