@@ -117,9 +117,10 @@
 
     "co.casterlabs.caffeinated.app.page.chat_bot": "Chat Bot",
     "co.casterlabs.caffeinated.app.page.chat_bot.platform.ANY": "Any Platform",
-    "co.casterlabs.caffeinated.app.page.chat_bot.remove": "Remove",
+	"co.casterlabs.caffeinated.app.page.chat_bot.remove": "Remove",
 
     "co.casterlabs.caffeinated.app.page.chat_bot.commands": "Commands",
+	"co.casterlabs.caffeinated.app.page.chat_bot.commands.add": "Create another command",
     "co.casterlabs.caffeinated.app.page.chat_bot.commands.trigger_type.COMMAND": "runs",
     "co.casterlabs.caffeinated.app.page.chat_bot.commands.trigger_type.CONTAINS": "says the words",
     "co.casterlabs.caffeinated.app.page.chat_bot.commands.trigger_type.ALWAYS": "sends a message",
@@ -128,11 +129,11 @@
     "co.casterlabs.caffeinated.app.page.chat_bot.commands.format.COMMAND": "When someone from <platform> <trigger_type> !<trigger>, <response_action>: <response>",
     "co.casterlabs.caffeinated.app.page.chat_bot.commands.format.CONTAINS": "When someone from <platform> <trigger_type> \"<trigger>\", <response_action>: <response>",
     "co.casterlabs.caffeinated.app.page.chat_bot.commands.format.ALWAYS": "When someone from <platform> <trigger_type>, <response_action>: <response>",
-    "co.casterlabs.caffeinated.app.page.chat_bot.commands.add": "Create another command",
     "co.casterlabs.caffeinated.app.page.chat_bot.commands.examples": "Examples:",
     "co.casterlabs.caffeinated.app.page.chat_bot.commands.examples.add": "Add",
 
     "co.casterlabs.caffeinated.app.page.chat_bot.shouts": "Shouts",
+	"co.casterlabs.caffeinated.app.page.chat_bot.shouts.add": "Add another shout",
     "co.casterlabs.caffeinated.app.page.chat_bot.shouts.format": "When someone from <platform> <action>, <response_action>: <response>",
     "co.casterlabs.caffeinated.app.page.chat_bot.shouts.response_action.REPLY_WITH": "say",
     "co.casterlabs.caffeinated.app.page.chat_bot.shouts.response_action.EXECUTE": "execute",
@@ -141,7 +142,8 @@
     "co.casterlabs.caffeinated.app.page.chat_bot.shouts.RAID": "Raids",
     "co.casterlabs.caffeinated.app.page.chat_bot.shouts.SUBSCRIPTION": "Subscribes",
 
-    "co.casterlabs.caffeinated.app.page.chat_bot.timers": "Timers",
+	"co.casterlabs.caffeinated.app.page.chat_bot.timers": "Timers",
+	"co.casterlabs.caffeinated.app.page.chat_bot.timers.add": "Add another timer message",
     "co.casterlabs.caffeinated.app.page.chat_bot.timers.format": "Every <seconds> seconds, send one of the following:",
     "co.casterlabs.caffeinated.app.page.chat_bot.timers.format.disclaimer": "(The message will only be sent to the platforms you are currently live on.)",
     "co.casterlabs.caffeinated.app.page.chat_bot.timers.next.seconds": "Next message in: {seconds} seconds.",

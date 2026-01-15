@@ -13,6 +13,7 @@ import app.saucer.bridge.JavascriptSetter;
 import app.saucer.bridge.JavascriptValue;
 import co.casterlabs.caffeinated.app.AppPreferences;
 import co.casterlabs.caffeinated.app.auth.AuthPreferences;
+import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.chatbot.ChatbotPreferences;
 import co.casterlabs.caffeinated.app.ui.AppThemeManager;
 import co.casterlabs.caffeinated.app.ui.AppUI;
@@ -101,6 +102,7 @@ public class AppConfig {
     @JavascriptSetter("chatbotPreferences")
     static void setChatbotPreferences(@NonNull ChatbotPreferences prefs) {
         chatbotPreferences.set(prefs);
+        AppChatbot.onUpdatePreferences();
     }
 
     @JavascriptSetter("authPreferences")

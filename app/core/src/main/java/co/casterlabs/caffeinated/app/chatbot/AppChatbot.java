@@ -54,7 +54,7 @@ public class AppChatbot {
             List<String> timerTexts = AppConfig.chatbotPreferences.get().timers;
 
             try {
-                if (timerTexts.isEmpty() || timerIntervalSeconds < 1) {
+                if (timerTexts.isEmpty() || timerIntervalSeconds < 1 || timerTexts.stream().allMatch(String::isEmpty)) {
                     nextMessageAt = -1;
                     Thread.sleep(Long.MAX_VALUE);  // Sleep forever (or until interrupted).
                 } else {
@@ -70,26 +70,34 @@ public class AppChatbot {
 
             FastLogger.logStatic(LogLevel.DEBUG, "Doing chat bot tick!");
 
-            // Increments the timer index, and check to make sure we're not overshooting.
-            timerIndex++;
-            if (timerIndex >= timerTexts.size()) {
-                timerIndex = 0;
-            }
+            try {
+                // Increments the timer index, and check to make sure we're not overshooting.
+                timerIndex++;
+                if (timerIndex >= timerTexts.size()) {
+                    timerIndex = 0;
+                }
 
-            String text = timerTexts.get(timerIndex);
-            if (text.isEmpty()) continue;
+                String text = timerTexts.get(timerIndex);
+                if (text.isEmpty()) continue;
 
-            for (StreamStatusEvent streamStatus : KoiImpl.INSTANCE.getStreamStates().values()) {
-                if (!streamStatus.live) return;
-                KoiImpl.INSTANCE.sendChat(
-                    streamStatus.streamer.platform,
-                    text,
-                    AppConfig.chatbotPreferences.get().chatter,
-                    null,
-                    false
-                );
+                for (StreamStatusEvent streamStatus : KoiImpl.INSTANCE.getStreamStates().values()) {
+                    if (!streamStatus.live) continue;
+                    KoiImpl.INSTANCE.sendChat(
+                        streamStatus.streamer.platform,
+                        text,
+                        AppConfig.chatbotPreferences.get().chatter,
+                        null,
+                        false
+                    );
+                }
+            } catch (Exception e) {
+                FastLogger.logStatic(LogLevel.SEVERE, "An error occurred while processing the chat bot timer:\n%s", e);
             }
         }
+    }
+
+    public static void onUpdatePreferences() {
+        timerThread.interrupt();
     }
 
     public static void init() {
