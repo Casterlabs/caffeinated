@@ -222,7 +222,7 @@
 									{:else}
 										<a
 											class="px-1.5 py-1 inline-flex items-center rounded bg-success text-white text-xs font-base"
-											href="/$caffeinated-sdk-root$/signin/oauth?type=music&platform={provider.serviceId}"
+											href="/$caffeinated-sdk-root$/signin/music/{provider.serviceId}"
 										>
 											<LocalizedText key="co.casterlabs.caffeinated.app.page.settings.accounts.connect" />
 										</a>

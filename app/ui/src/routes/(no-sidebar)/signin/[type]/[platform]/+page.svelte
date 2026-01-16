@@ -10,7 +10,7 @@
 
 	onMount(() => {
 		const dontGoBack = location.search.includes('?dontGoBack') || location.search.includes('&dontGoBack');
-		AppAuth.requestOAuthSignin('koi', data.platform.toLowerCase(), !dontGoBack, null);
+		AppAuth.requestOAuthSignin(data.type, data.platform.toLowerCase(), !dontGoBack, null);
 	});
 
 	function cancelAuth() {
