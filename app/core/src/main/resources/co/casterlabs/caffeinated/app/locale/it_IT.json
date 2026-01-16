@@ -10,6 +10,5 @@
     "co.casterlabs.caffeinated.app.platform.THETA": "Theta",
     "co.casterlabs.caffeinated.app.platform.KICK": "Kick",
     "co.casterlabs.caffeinated.app.platform.YOUNOW": "YouNow",
-    "co.casterlabs.caffeinated.app.auth.logged_out": "È stato effettuata la disconnessione dalla {platform}, potrebbe essere necessario effettuare nuovamente l'accesso.",
-    "co.casterlabs.caffeinated.app.page.signin.kick.looking_for_oauth.modal.content": "Sfortunatamente, non siamo in grado di accettare i login di Google o Apple per Kick e sarà necessario utilizzare il nome utente e la password. Se non hai una password, puoi crearne una uscendo da Kick, cliccando su Log In, cliccando su \"Password dimenticata?\" e inserisci la tua email GMail o iCloud. Dopo aver cliccato su \"Reimposta password\", riceverai un'email che ti permette di creare una password per il tuo account. Una volta fatto, è possibile accedere a Casterlabs con quella nuova password mentre è ancora in grado di accedere a Kick con Google/Apple."
+    "co.casterlabs.caffeinated.app.auth.logged_out": "È stato effettuata la disconnessione dalla {platform}, potrebbe essere necessario effettuare nuovamente l'accesso."
 }
