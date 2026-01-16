@@ -1,10 +1,14 @@
 <script lang="ts">
+	import { modify, storify } from '$lib/bridge-helper';
 	import { PLATFORM_COLORS, type UserPlatform } from '$lib/koi';
 
 	import PlatformIcon from '$lib/layout/PlatformIcon.svelte';
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
+	import { Select } from '@casterlabs/ui';
 
 	import { onDestroy } from 'svelte';
+
+	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<Awaited<typeof AppConfig.uiPreferences>>();
 
 	// DOOT!
 	const ACTIVATE_AT = 5;
@@ -132,27 +136,51 @@
 		{/await}
 	</div>
 
-	<span class="absolute inset-x-0 bottom-2 text-xs text-base-11">
-		{#snippet terms_of_service()}
-			<a class="text-primary-11" href="https://casterlabs.co/terms-of-service" target="_blank">
-				<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.terms_of_service" />
-			</a>
-		{/snippet}
+	<div class="absolute inset-x-0 bottom-2">
+		{#await AppLocale.available then locales}
+			<label>
+				<p class="text-sm font-medium text-base-11">
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.settings.appearance.language" />
+				</p>
 
-		{#snippet privacy_policy()}
-			<a class="text-primary-11" href="https://casterlabs.com/privacy-policy" target="_blank">
-				<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.privacy_policy" />
-			</a>
-		{/snippet}
+				<div class="mt-2">
+					<Select
+						class="w-full"
+						onchange={(e) => {
+							const value = parseFloat((e.target as HTMLSelectElement).value);
+							modify(AppConfig, 'uiPreferences', 'language', value);
+						}}
+					>
+						{#each Object.entries(locales) as [k, v]}
+							<option value={k} selected={k === $uiPreferences?.language}>{v}</option>
+						{/each}
+					</Select>
+				</div>
+			</label>
+		{/await}
 
-		{#snippet here()}
-			<button class="text-primary-11" onclick={doDoot}>
-				<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.here" />
-			</button>
-		{/snippet}
+		<p class="mt-6 text-xs text-base-11">
+			{#snippet terms_of_service()}
+				<a class="text-primary-11" href="https://casterlabs.co/terms-of-service" target="_blank">
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.terms_of_service" />
+				</a>
+			{/snippet}
 
-		<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer" components={{ terms_of_service, privacy_policy, here }} />
-	</span>
+			{#snippet privacy_policy()}
+				<a class="text-primary-11" href="https://casterlabs.com/privacy-policy" target="_blank">
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.privacy_policy" />
+				</a>
+			{/snippet}
+
+			{#snippet here()}
+				<button class="text-primary-11" onclick={doDoot}>
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.here" />
+				</button>
+			{/snippet}
+
+			<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer" components={{ terms_of_service, privacy_policy, here }} />
+		</p>
+	</div>
 </div>
 
 <style>
