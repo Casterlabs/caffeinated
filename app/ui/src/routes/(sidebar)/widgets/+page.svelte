@@ -160,7 +160,9 @@
 					}}
 				>
 					<IconEllipsisVertical theme="mini" />
-					<span class="sr-only">Widget Options</span>
+					<span class="sr-only">
+						<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.open_context_menu" />
+					</span>
 				</Button>
 			</div>
 		</Button>
@@ -175,7 +177,9 @@
 	>
 		<div class="p-3 flex items-center justify-center">
 			<IconPlus />
-			<span class="sr-only">Add New Widget</span>
+			<span class="sr-only">
+				<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.create" />
+			</span>
 		</div>
 	</Button>
 </div>

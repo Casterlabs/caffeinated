@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { IconLockClosed, IconLockOpen } from '@casterlabs/heroicons-svelte';
 	import { Input } from '@casterlabs/ui';
 
@@ -245,10 +246,14 @@
 
 		<button onclick={() => isResizingLocked.set(!$isResizingLocked)} class="relative ml-1.5 translate-y-1 w-6 h-6 text-base-12">
 			{#if $isResizingLocked}
-				<span class="sr-only">Unlock layout</span>
+				<span class="sr-only">
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.dashboard.layout.unlock" />
+				</span>
 				<IconLockClosed />
 			{:else}
-				<span class="sr-only">Lock layout</span>
+				<span class="sr-only">
+					<LocalizedText key="co.casterlabs.caffeinated.app.page.dashboard.layout.lock" />
+				</span>
 				<IconLockOpen />
 			{/if}
 		</button>

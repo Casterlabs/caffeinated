@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { storify } from '$lib/bridge-helper';
 
+	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { ICONS, IconDocumentDuplicate } from '@casterlabs/heroicons-svelte';
 	import { Button } from '@casterlabs/ui';
 
@@ -16,11 +17,15 @@
 			<div class="p-3 flex items-center justify-start space-x-4">
 				<WidgetIcon class="w-8 h-8" theme="solid" />
 
-				<span class="w-full whitespace-nowrap text-ellipsis overflow-hidden text-sm font-medium text-left">{dock.details.friendlyName}</span>
+				<span class="w-full whitespace-nowrap text-ellipsis overflow-hidden text-sm font-medium text-left">
+					<LocalizedText key={dock.details.friendlyName} />
+				</span>
 
 				<Button borderless>
 					<IconDocumentDuplicate theme="mini" />
-					<span class="sr-only">Copy Dock URL</span>
+					<span class="sr-only">
+						<LocalizedText key="co.casterlabs.caffeinated.app.page.widgets.copy_link" />
+					</span>
 				</Button>
 			</div>
 		</Button>

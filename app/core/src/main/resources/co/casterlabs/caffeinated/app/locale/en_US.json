@@ -57,6 +57,8 @@
 
 
     "co.casterlabs.caffeinated.app.page.dashboard": "Dashboard",
+    "co.casterlabs.caffeinated.app.page.dashboard.layout.lock": "Lock layout",
+    "co.casterlabs.caffeinated.app.page.dashboard.layout.unlock": "Unlock layout",
     "co.casterlabs.caffeinated.app.page.dashboard.customize.welcomewagon.welcome": "Welcome!",
     "co.casterlabs.caffeinated.app.page.dashboard.customize.welcomewagon.getstarted": "Get started by unlocking your dashboard.",
     "co.casterlabs.caffeinated.app.page.dashboard.customize.welcomewagon.next": "Next, change this panel to something else.",
