@@ -13,8 +13,8 @@
 		componentChoices: Record<string, string>;
 		grid: ResizableGrid;
 		location: string;
-		onPieceUpdate: (location: string, value: string) => void;
-		current: string;
+		onPieceUpdate: (location: string, value: string | null) => void;
+		current: string | null;
 	}
 
 	let { components, componentChoices, grid, location, onPieceUpdate, current }: Props = $props();
@@ -61,15 +61,15 @@
 		<div class="absolute inset-x-1 top-1 h-fit opacity-90" transition:fade={{ duration: 100 }}>
 			<Select
 				class="w-full"
-				value={current || null}
 				onchange={(e) => {
-					const current = (e.target as HTMLSelectElement).value;
-					doMount();
+					current = (e.target as HTMLSelectElement).value;
+					if (current == 'null') current = null;
 					onPieceUpdate(location, current);
+					doMount();
 				}}
 			>
 				{#each Object.entries(componentChoices) as [key, name]}
-					<option value={key}>
+					<option value={key} selected={key == current}>
 						<LocalizedText key={name} />
 					</option>
 				{/each}

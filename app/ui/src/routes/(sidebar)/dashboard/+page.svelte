@@ -18,21 +18,23 @@
 	}
 
 	const components: Record<string, Component<any, any, any>> = {
+		// @ts-ignore
+		[null]: '', // Ensure null is always present.
+
 		welcomewagon: component_WelcomeWagon,
 		'co.casterlabs.dock.stream_chat.dock': component_Chat,
 		'co.casterlabs.dock.viewers.dock': component_Viewers,
 		// 'co.casterlabs.dock.channel_info.dock': component_ChannelInfo,
 		'co.casterlabs.dock.activity_feed.dock': component_ActivityFeed
 	};
-	// @ts-ignore
-	components[null] = ''; // Ensure null is always present.
 
 	const componentChoices: Record<string, string> = {
+		// @ts-ignore
+		[null]: 'co.casterlabs.caffeinated.app.page.dashboard.customize.options.none'
+
 		// welcomewagon: 'WelcomeWagon',
 		// 'co.casterlabs.dock.channel_info.dock': 'Channel Info' // Temporary.
 	};
-	// @ts-ignore
-	componentChoices[null] = 'co.casterlabs.caffeinated.app.page.dashboard.customize.options.none';
 
 	let layoutElement: ResizableGrid;
 	let currentLayout: AppLayout;
@@ -52,9 +54,10 @@
 		save();
 	}
 
-	function onPieceUpdate(location: string, value: string) {
+	function onPieceUpdate(location: string, value: string | null) {
 		if (!currentLayout) return;
 		console.debug('Piece update:', location, value);
+		// @ts-ignore
 		currentLayout.contents[location] = value;
 		save();
 	}
