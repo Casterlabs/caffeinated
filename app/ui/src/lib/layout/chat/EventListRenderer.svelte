@@ -165,7 +165,7 @@
 	<EventRenderer {event} {uiEvents} />
 {/snippet}
 
-<div class="contents" style:--highlightanimatetime="{HIGHLIGHT_ANIMATE_TIME}ms">
+<div class="contents select-auto" style:--highlightanimatetime="{HIGHLIGHT_ANIMATE_TIME}ms">
 	<DynamicList
 		bind:this={dynamicList}
 		bind:scrollContainer
