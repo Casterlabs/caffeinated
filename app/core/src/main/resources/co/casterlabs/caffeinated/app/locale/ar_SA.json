@@ -29,11 +29,5 @@
     "co.casterlabs.caffeinated.app.page.signin.choose": "اختر منصة للبدء بها.",
     "co.casterlabs.caffeinated.app.page.signin.disclaimer.terms_of_service": "شروط الخدمة",
     "co.casterlabs.caffeinated.app.page.signin.disclaimer.privacy_policy": "سياسة الخصوصية",
-    "co.casterlabs.caffeinated.app.page.signin.disclaimer.here": "هنا",
-    "co.casterlabs.caffeinated.app.page.signin.kick.looking_for_oauth": "هل ترغب في تسجيل الدخول باستخدام Google أو Apple؟",
-    "co.casterlabs.caffeinated.app.page.signin.kick.looking_for_oauth.modal.title": "كيفية إنشاء كلمة مرور الحساب على كيك",
-    "co.casterlabs.caffeinated.app.page.signin.kick.looking_for_oauth.modal.content": "لسوء الحظ، نحن غير قادرين على قبول تسجيلات الدخول في Google أو Apple لكيك وسوف تحتاج إلى استخدام اسم المستخدم وكلمة المرور الخاصة بك. إذا لم يكن لديك كلمة مرور، فيمكنك إنشاء واحدة من خلال تسجيل الخروج من الكيك، انقر فوق تسجيل الدخول، انقر فوق \"نسيت كلمة المرور؟ وإدخال بريدك الإلكتروني أو البريد الإلكتروني iCloud الخاص بك. بعد النقر فوق \"إعادة تعيين كلمة المرور\"، سوف تتلقى رسالة بريد إلكتروني تسمح لك بإنشاء كلمة مرور للحساب الخاص بك. بمجرد الانتهاء من ذلك، يمكنك تسجيل الدخول إلى كاستيرلابس باستخدام كلمة المرور الجديدة هذه بينما لا تزال قادرة على تسجيل الدخول إلى Kick باستخدام جوجل/Apple.",
-    "co.casterlabs.caffeinated.app.page.signin.kick.keeps_saying_incorrect": "هل تواصل الحصول على \"اسم المستخدم أو كلمة المرور غير صحيحة؟\"",
-    "co.casterlabs.caffeinated.app.page.signin.kick.keeps_saying_incorrect.modal.title": "إصلاح مشكلة تسجيل الدخول في كيك",
-    "co.casterlabs.caffeinated.app.page.signin.kick.keeps_saying_incorrect.modal.content": "إذا استمرت في الحصول على \"اسم المستخدم أو كلمة المرور غير صحيحة\" على الرغم من أنك تعلم أنه صحيح، ثم ليس لديك تسجيل دخول للجوال حتى الآن. لإنشاء واحدة ، ببساطة قم بإعادة تعيين كلمة المرور الخاصة بك وإعادة استخدام كلمة المرور الحالية. هذا سيحل مشكلة تسجيل الدخول مع كاستيرلابس و تطبيق كيك الجوال الرسمي."
+    "co.casterlabs.caffeinated.app.page.signin.disclaimer.here": "هنا"
 }
