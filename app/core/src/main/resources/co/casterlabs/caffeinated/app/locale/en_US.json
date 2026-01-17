@@ -53,6 +53,8 @@
 	"co.casterlabs.caffeinated.app.ui.modal.close": "Close modal",
 	"co.casterlabs.caffeinated.app.ui.sidebar.update_app": "Update the app",
 	"co.casterlabs.caffeinated.app.ui.sidebar.update_app.description": "Click here to restart and download the latest updates.",
+	"co.casterlabs.caffeinated.app.ui.sidebar.expand_sidebar": "Expand sidebar",
+	"co.casterlabs.caffeinated.app.ui.sidebar.collapse_sidebar": "Collapse sidebar",
 	"co.casterlabs.caffeinated.app.ui.navigation.go_back": "Go back",
 	"co.casterlabs.caffeinated.app.ui.navigation.want_to_go_back": "Want to go back?",
 
