@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { deepEqual } from '$lib/bridge-helper';
-	import type { PageData } from './$types';
 
 	import WidgetPreview from '$lib/layout/WidgetPreview.svelte';
 	import WidgetSettingsLayout from '$lib/layout/widget-settings/WidgetSettingsLayout.svelte';
@@ -10,8 +9,6 @@
 	import { Button } from '@casterlabs/ui';
 
 	import { onMount } from 'svelte';
-
-	let { data }: { data: PageData } = $props();
 
 	let widget: null | Awaited<typeof AppPlugins.widgets>[0] = $state(null);
 	let settingsLayout: null | Awaited<typeof AppPlugins.widgets>[0]['settingsLayout'] = $state(null);
@@ -25,10 +22,12 @@
 	}
 
 	onMount(async () => {
+		const id = new URLSearchParams(location.search).get('id');
+
 		widget = await AppPlugins.widgets.then((widgets) => {
 			// Filter for a widget object with a matching id.
 			// This'll return `undefined` if there's no matching result.
-			return widgets.filter((w) => w.id == data.widgetId)[0];
+			return widgets.filter((w) => w.id == id)[0];
 		});
 
 		// If the widget is `undefined`, go back.
@@ -43,9 +42,11 @@
 	});
 
 	onMount(() => {
+		const id = new URLSearchParams(location.search).get('id');
+
 		// @ts-ignore
 		const eventListener = window.saucer.messages.onMessage(([type, newWidget]) => {
-			if (type != `widgets:${data.widgetId}`) return;
+			if (type != `widgets:${id}`) return;
 
 			widget = newWidget;
 			if (!deepEqual(newWidget.settingsLayout, settingsLayout)) {

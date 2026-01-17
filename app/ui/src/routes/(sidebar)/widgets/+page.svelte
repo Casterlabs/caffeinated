@@ -89,7 +89,7 @@
 							creatable.namespace,
 							`${render(creatable.friendlyName)} ${render('co.casterlabs.caffeinated.app.page.widgets.create.new')}`
 						);
-						goto(`/$caffeinated-sdk-root$/widgets/${id}`);
+						goto(`/$caffeinated-sdk-root$/widgets/editor?id=${id}`);
 					}
 				});
 			}
@@ -106,7 +106,7 @@
 	items={[
 		{
 			action: () => {
-				goto(`/$caffeinated-sdk-root$/widgets/${showContextMenuFor!}`);
+				goto(`/$caffeinated-sdk-root$/widgets/editor?id=${showContextMenuFor!}`);
 			},
 			label: 'co.casterlabs.caffeinated.app.page.widgets.edit_widget',
 			icon: IconPencilSquare
@@ -141,7 +141,7 @@
 		{@const WidgetIcon = (ICONS as any)[widget.details.icon] as (typeof ICONS)['academic-cap']}
 
 		<Button
-			onclick={() => goto(`/$caffeinated-sdk-root$/widgets/${widget.id}`)}
+			onclick={() => goto(`/$caffeinated-sdk-root$/widgets/editor?id=${widget.id}`)}
 			oncontextmenu={(e) => {
 				showContextMenuFor = widget.id;
 				contextMenu.spawn(e);

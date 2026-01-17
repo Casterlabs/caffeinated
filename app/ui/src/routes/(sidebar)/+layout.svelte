@@ -115,8 +115,8 @@
 				{#if applets.length > 0}
 					<div class="space-y-1 px-2 py-4" role="listitem">
 						{#each applets as applet}
-							{@const href = `/$caffeinated-sdk-root$/applet/${applet.id}`}
-							{@const isSelected = page.url.pathname == href}
+							{@const href = `/$caffeinated-sdk-root$/applet?id=${applet.id}`}
+							{@const isSelected = page.url.pathname + page.url.search == href}
 
 							<a
 								{href}

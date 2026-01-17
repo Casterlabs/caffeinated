@@ -122,7 +122,7 @@
 		{#await AppAuth.AUTHENTICATABLE then AUTHENTICATABLE_PLATFORMS}
 			{#each AUTHENTICATABLE_PLATFORMS as platform}
 				<a
-					href="/$caffeinated-sdk-root$/signin/koi/{platform}?dontGoBack"
+					href="/$caffeinated-sdk-root$/signin/do?dontGoBack&type=koi&platform={platform}"
 					class="signin-icon w-10 h-10 p-1 m-1 border border-base-6 rounded flex items-center justify-center transition"
 					style="--color: {PLATFORM_COLORS[platform as UserPlatform]};"
 				>

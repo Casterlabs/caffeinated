@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
 	import LoadingSpinner from '$lib/layout/LoadingSpinner.svelte';
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 
 	import { onMount } from 'svelte';
 
-	let { data }: { data: PageData } = $props();
-
 	onMount(() => {
-		const dontGoBack = location.search.includes('?dontGoBack') || location.search.includes('&dontGoBack');
-		AppAuth.requestOAuthSignin(data.type, data.platform.toLowerCase(), !dontGoBack, null);
+		const searchParams = new URLSearchParams(location.search);
+		const dontGoBack = !!searchParams.get('dontGoBack');
+		const type = searchParams.get('type') || 'koi';
+		const platform = searchParams.get('platform')!;
+
+		AppAuth.requestOAuthSignin(type, platform.toLowerCase(), !dontGoBack, null);
 	});
 
 	function cancelAuth() {

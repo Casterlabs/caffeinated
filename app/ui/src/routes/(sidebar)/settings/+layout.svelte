@@ -35,9 +35,11 @@
 				</a>
 			{/each}
 			{#each settingsApplets as applet}
-				{@const isSelected = page.url.pathname == `/$caffeinated-sdk-root$/settings/applet/${applet.id}`}
+				{@const href = `/$caffeinated-sdk-root$/settings/applet?id=${applet.id}`}
+				{@const isSelected = page.url.pathname + page.url.search == href}
+
 				<a
-					href={`/$caffeinated-sdk-root$/settings/applet/${applet.id}`}
+					{href}
 					class="border-current whitespace-nowrap pb-4 font-medium text-sm"
 					aria-current={isSelected ? 'page' : undefined}
 					class:border-b-2={isSelected}

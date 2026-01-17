@@ -107,7 +107,7 @@
 <ul class="divide-y divide-current text-base-6 max-w-sm mx-auto">
 	{#if $uiPreferences?.enableAlternateThemes}
 		<li class="py-4">
-			{#snippet child()}
+			{#snippet prefsBaseColor()}
 				<Select
 					class="w-full"
 					onchange={(e) => {
@@ -122,11 +122,11 @@
 					{/each}
 				</Select>
 			{/snippet}
-			{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.base_color', child)}
+			{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.base_color', prefsBaseColor)}
 		</li>
 
 		<li class="py-4">
-			{#snippet child()}
+			{#snippet prefsPrimaryColor()}
 				<Select
 					class="w-full"
 					onchange={(e) => {
@@ -141,11 +141,11 @@
 					{/each}
 				</Select>
 			{/snippet}
-			{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.primary_color', child)}
+			{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.primary_color', prefsPrimaryColor)}
 		</li>
 	{:else}
 		<li class="py-4">
-			{#snippet child()}
+			{#snippet prefsTheme()}
 				<Select
 					class="w-full"
 					onchange={(e) => {
@@ -161,12 +161,12 @@
 					{/each}
 				</Select>
 			{/snippet}
-			{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.theme', child)}
+			{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.theme', prefsTheme)}
 		</li>
 	{/if}
 
 	<li class="py-4">
-		{#snippet child()}
+		{#snippet prefsAppearance()}
 			<Select
 				class="w-full"
 				onchange={(e) => {
@@ -181,11 +181,11 @@
 				{/each}
 			</Select>
 		{/snippet}
-		{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.appearance', child)}
+		{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.appearance', prefsAppearance)}
 	</li>
 
 	<li class="py-4">
-		{#snippet child()}
+		{#snippet prefsIcon()}
 			<Select
 				class="w-full"
 				onchange={(e) => {
@@ -200,11 +200,11 @@
 				{/each}
 			</Select>
 		{/snippet}
-		{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.icon', child)}
+		{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.icon', prefsIcon)}
 	</li>
 
 	<li class="py-4">
-		{#snippet child()}
+		{#snippet prefsEmojiProvider()}
 			<Select
 				class="w-full"
 				onchange={(e) => {
@@ -219,12 +219,12 @@
 				{/each}
 			</Select>
 		{/snippet}
-		{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.emojis', child)}
+		{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.emojis', prefsEmojiProvider)}
 	</li>
 
 	<li class="py-4">
 		{#await AppLocale.available then locales}
-			{#snippet child()}
+			{#snippet prefsLocale()}
 				<Select
 					class="w-full"
 					onchange={(e) => {
@@ -237,12 +237,12 @@
 					{/each}
 				</Select>
 			{/snippet}
-			{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.language', child)}
+			{@render item('co.casterlabs.caffeinated.app.page.settings.appearance.language', prefsLocale)}
 		{/await}
 	</li>
 
 	<li class="py-4">
-		{#snippet child()}
+		{#snippet prefsZoom()}
 			{#if $uiPreferences?.zoom !== 1}
 				<Button
 					onclick={() => {
@@ -267,11 +267,11 @@
 				}}
 			/>
 		{/snippet}
-		{@render itemWithDesc('co.casterlabs.caffeinated.app.page.settings.appearance.zoom', 'co.casterlabs.caffeinated.app.page.settings.appearance.zoom.description', child)}
+		{@render itemWithDesc('co.casterlabs.caffeinated.app.page.settings.appearance.zoom', 'co.casterlabs.caffeinated.app.page.settings.appearance.zoom.description', prefsZoom)}
 	</li>
 
 	<li class="py-4">
-		{#snippet child()}
+		{#snippet prefsCloseToTray()}
 			<Input
 				type="checkbox"
 				checked={$uiPreferences?.closeToTray}
@@ -284,7 +284,7 @@
 		{@render itemWithDesc(
 			'co.casterlabs.caffeinated.app.page.settings.appearance.close_to_tray',
 			'co.casterlabs.caffeinated.app.page.settings.appearance.close_to_tray.description',
-			child
+			prefsCloseToTray
 		)}
 	</li>
 </ul>
