@@ -43,7 +43,7 @@
 							</span>
 							{streamer.displayname}
 							{#if displaynameDiffers}
-								<span class="text-sm text-base-7">({streamer.username})</span>
+								<span class="text-sm text-base-11">({streamer.username})</span>
 							{/if}
 						</div>
 					</Button>
