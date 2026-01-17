@@ -118,6 +118,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.saucer.saucer4j</groupId>
+			<artifactId>native</artifactId>
+			<version>${saucer4j.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.saucer.saucer4j</groupId>
 			<artifactId>webview2</artifactId>
 			<version>${saucer4j.version}</version>
 			<scope>provided</scope>
