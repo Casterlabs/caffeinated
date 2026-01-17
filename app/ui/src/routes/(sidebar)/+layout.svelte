@@ -130,6 +130,10 @@
 					{/each}
 				</div>
 			{/if} -->
+
+				<a href="https://docs.casterlabs.co/caffeinated" target="_blank" class="text-primary-11 absolute inset-x-3 bottom-3 text-xs text-center underline">
+					<LocalizedText key="co.casterlabs.caffeinated.app.documentation" />
+				</a>
 			</nav>
 		</div>
 	</div>

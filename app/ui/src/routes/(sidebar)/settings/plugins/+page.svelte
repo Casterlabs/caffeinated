@@ -95,9 +95,7 @@
 </ul>
 
 <div class="mt-6 flex flex-row items-center">
-	<div class="flex-1">
-		<LocalizedText key="co.casterlabs.caffeinated.app.sdk_documentation" />
-	</div>
+	<div class="flex-1"></div>
 
 	<Button
 		onclick={() => {
