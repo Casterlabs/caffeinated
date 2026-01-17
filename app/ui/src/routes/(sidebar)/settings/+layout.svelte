@@ -14,26 +14,43 @@
 	];
 
 	const uiPreferences = storify(AppConfig, 'uiPreferences').readable<Awaited<typeof AppConfig.uiPreferences>>();
+	const allWidgets = storify(AppPlugins, 'widgets').readable<Awaited<typeof AppPlugins.widgets>>();
+	let settingsApplets = $derived(($allWidgets || []).filter((w) => w.details.type == 'SETTINGS_APPLET'));
 </script>
 
-<div class="border-b border-base-8 -mx-4 px-4">
-	<nav class="-mb-px flex space-x-4 w-full overflow-auto">
-		{#each tabs as [name, href]}
-			{@const isSelected = page.url.pathname == href}
-			<a
-				{href}
-				class="border-current whitespace-nowrap pb-4 font-medium text-sm"
-				class:hidden={name == 'Developer Stuff' && !$uiPreferences?.enableStupidlyUnsafeSettings}
-				aria-current={isSelected ? 'page' : undefined}
-				class:border-b-2={isSelected}
-				class:text-primary-11={isSelected}
-			>
-				<LocalizedText key={name} />
-			</a>
-		{/each}
-	</nav>
-</div>
+<div class="h-full flex flex-col space-y-4">
+	<div class="border-b border-base-8 -mx-6 px-6">
+		<nav class="-mb-px flex space-x-4 w-full overflow-auto">
+			{#each tabs as [name, href]}
+				{@const isSelected = page.url.pathname == href}
+				<a
+					{href}
+					class="border-current whitespace-nowrap pb-4 font-medium text-sm"
+					class:hidden={name == 'Developer Stuff' && !$uiPreferences?.enableStupidlyUnsafeSettings}
+					aria-current={isSelected ? 'page' : undefined}
+					class:border-b-2={isSelected}
+					class:text-primary-11={isSelected}
+				>
+					<LocalizedText key={name} />
+				</a>
+			{/each}
+			{#each settingsApplets as applet}
+				{@const isSelected = page.url.pathname == `/$caffeinated-sdk-root$/settings/applet/${applet.id}`}
+				<a
+					href={`/$caffeinated-sdk-root$/settings/applet/${applet.id}`}
+					class="border-current whitespace-nowrap pb-4 font-medium text-sm"
+					aria-current={isSelected ? 'page' : undefined}
+					class:border-b-2={isSelected}
+					class:text-primary-11={isSelected}
+				>
+					<LocalizedText key={applet.details.friendlyName} />
+				</a>
+			{/each}
+		</nav>
+	</div>
 
-<div class="mt-6">
-	<slot />
+	<div class="flex-1">
+		<!-- svelte-ignore slot_element_deprecated -->
+		<slot />
+	</div>
 </div>

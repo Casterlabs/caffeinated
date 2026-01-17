@@ -40,6 +40,8 @@
 	];
 
 	const hasUpdate = storify(App, 'hasUpdate').readable<boolean>();
+	const allWidgets = storify(AppPlugins, 'widgets').readable<Awaited<typeof AppPlugins.widgets>>();
+	let applets = $derived(($allWidgets || []).filter((w) => w.details.type == 'APPLET'));
 
 	let isOnDashboard = $derived(page.url.pathname == '/$caffeinated-sdk-root$/dashboard');
 	let sidebarVisible = $state(true);
@@ -110,26 +112,26 @@
 					</div>
 				{/each}
 
-				<!-- {#if applets.length > 0}
-				<div class="space-y-1 px-2 py-4" role="listitem">
-					{#each applets as applet}
-						{@const href = `/$caffeinated-sdk-root$/applet?id=${applet.id}`}
-						{@const isSelected = $page.url.pathname == href}
+				{#if applets.length > 0}
+					<div class="space-y-1 px-2 py-4" role="listitem">
+						{#each applets as applet}
+							{@const href = `/$caffeinated-sdk-root$/applet/${applet.id}`}
+							{@const isSelected = page.url.pathname == href}
 
-						<a
-							{href}
-							class="group flex items-center px-3 py-2 text-sm leading-6 border-current transition font-medium rounded-md"
-							aria-current={isSelected ? 'page' : undefined}
-							class:hover:bg-base-4={!isSelected}
-							class:bg-base-5={isSelected}
-						>
-							<span class="text-base-12">
-								<LocalizedText key={applet.details.friendlyName} />
-							</span>
-						</a>
-					{/each}
-				</div>
-			{/if} -->
+							<a
+								{href}
+								class="group flex items-center px-3 py-2 text-sm leading-6 border-current transition font-medium rounded-md"
+								aria-current={isSelected ? 'page' : undefined}
+								class:hover:bg-base-4={!isSelected}
+								class:bg-base-5={isSelected}
+							>
+								<span class="text-base-12">
+									<LocalizedText key={applet.details.friendlyName} />
+								</span>
+							</a>
+						{/each}
+					</div>
+				{/if}
 
 				<a href="https://docs.casterlabs.co/caffeinated" target="_blank" class="text-primary-11 absolute inset-x-3 bottom-3 text-xs text-center underline">
 					<LocalizedText key="co.casterlabs.caffeinated.app.documentation" />

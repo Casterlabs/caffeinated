@@ -183,7 +183,7 @@
 		</div>
 
 		{#if widget.details.showDemo}
-			<!-- <WidgetPreview {widget} mode="DEMO" ariaHidden={true} /> -->
+			<WidgetPreview {widget} mode="DEMO" ariaHidden={true} />
 		{/if}
 
 		{#if widget.details.testEvents.length > 0}
