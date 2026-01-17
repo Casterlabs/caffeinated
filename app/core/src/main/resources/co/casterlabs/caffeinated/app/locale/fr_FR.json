@@ -208,7 +208,11 @@
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_deleted": "Répondre à un message supprimé",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter": "Premier chat",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement": "Annonce",
+	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS": "<name> a racheté <reward>!",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Le chat a été effacé.",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> à rejoint.",
-	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_LEAVE": "<name> restant."
+	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_LEAVE": "<name> restant.",
+	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.no_viewers": "<name> vient de lancer un raid sur le canal !",
+	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RAID.viewers": "<name> vient de raid avec <viewers> viewers!",
+	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.FOLLOW": "<name> a suivi !"
 }
