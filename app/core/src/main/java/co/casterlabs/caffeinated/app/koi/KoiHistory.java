@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +37,10 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class KoiHistory {
     private static final FastLogger LOGGER = new FastLogger();
-    private static final int MAX_HISTORY_CHUNK = 500;
+    private static final int MAX_HISTORY_CHUNK = 250;
+
+    private static final Object IN_MEMORY_HISTORY_LOCK = new Object();
+    private static List<KoiEvent> IN_MEMORY_HISTORY;
 
     static {
         try {
@@ -49,7 +53,23 @@ public class KoiHistory {
         }
     }
 
+    private static void checkInMemoryHistory() {
+        synchronized (IN_MEMORY_HISTORY_LOCK) {
+            if (IN_MEMORY_HISTORY == null) {
+                LOGGER.info("Loading historical Koi events into memory...");
+                IN_MEMORY_HISTORY = new LinkedList<>(getHistoryAtOrBeforeTimestamp(System.currentTimeMillis()));
+            }
+        }
+    }
+
     static List<KoiEvent> getHistoryAtOrBeforeTimestamp(long beforeOrAt) {
+        if (beforeOrAt == -1) {
+            checkInMemoryHistory();
+            synchronized (IN_MEMORY_HISTORY_LOCK) {
+                return new ArrayList<>(IN_MEMORY_HISTORY);
+            }
+        }
+
         List<byte[]> history = new LinkedList<>();
 
         try (PreparedStatement ps = AppConfig.preferencesConnection.prepareStatement("SELECT data FROM koi_historical WHERE timestamp <= ?1 ORDER BY timestamp DESC LIMIT ?2;")) {
@@ -81,6 +101,15 @@ public class KoiHistory {
 
     static void storeEvent(KoiEvent event, JsonElement eventJson) {
         if (event.streamer.platform == UserPlatform.CASTERLABS_SYSTEM) return; // Don't store test events.
+
+        // Save a copy in memory.
+        checkInMemoryHistory();
+        synchronized (IN_MEMORY_HISTORY_LOCK) {
+            IN_MEMORY_HISTORY.add(event);
+            while (IN_MEMORY_HISTORY.size() > MAX_HISTORY_CHUNK) {
+                IN_MEMORY_HISTORY.remove(0);
+            }
+        }
 
         String eventId = getEventId(event);
         if (eventId == null) return;

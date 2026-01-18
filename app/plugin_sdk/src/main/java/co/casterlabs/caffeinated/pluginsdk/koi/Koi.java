@@ -22,9 +22,14 @@ import lombok.NonNull;
 public interface Koi {
 
     default List<KoiEvent> getEventHistory() {
-        return this.getEventHistory(System.currentTimeMillis());
+        return this.getEventHistory(-1);
     }
 
+    /**
+     * @param beforeTimestamp A timestamp in milliseconds. Events returned will be
+     *                        before this timestamp. Use -1 to get the most recent
+     *                        events cached in memory.
+     */
     public List<KoiEvent> getEventHistory(long beforeTimestamp);
 
     public Map<UserPlatform, List<User>> getViewers();
