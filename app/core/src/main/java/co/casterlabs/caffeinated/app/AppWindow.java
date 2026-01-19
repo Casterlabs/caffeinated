@@ -39,11 +39,6 @@ public class AppWindow {
     private static SaucerIcon icon;
     private static boolean forceDarkEnabled = false;
 
-    static {
-        SaucerWebview.registerCustomScheme("app");
-        System.setProperty("saucer.generate_typescript_definitions", "true");
-    }
-
     public static void init(String appUrl, boolean traySupported, Consumer<JsonArray> messageHandler) {
         AppWindow.appUrl = appUrl;
         AppWindow.traySupported = traySupported;
