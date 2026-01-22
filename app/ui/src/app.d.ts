@@ -1344,8 +1344,12 @@ export declare interface Music extends MutationObject<'activePlayback' | 'provid
 	signoutMusicProvider(arg0: string): Promise<void>;
 	updateMusicProviderSettings(arg0: string, arg0: Record<string, any>): Promise<void>;
 }
+export declare interface LogBridge extends MutationObject<never> {
+	log(arg0: string, arg0: string): Promise<void>;
+}
 
 declare global {
+	const LogBridge: LogBridge;
 	const App: App;
 	const AppAuth: AppAuth;
 	const AppChatbot: AppChatbot;
@@ -1361,6 +1365,7 @@ declare global {
 	const Music: Music;
 	const saucer: { window: saucer_window; webview: saucer_webview; app: saucer_app };
 	interface Window {
+		readonly LogBridge: LogBridge;
 		readonly App: App;
 		readonly AppAuth: AppAuth;
 		readonly AppChatbot: AppChatbot;
