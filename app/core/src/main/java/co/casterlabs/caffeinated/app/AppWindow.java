@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 
 import app.saucer.SaucerApp;
 import app.saucer.SaucerDesktop;
+import app.saucer.bridge.JavascriptFunction;
+import app.saucer.bridge.JavascriptObject;
 import app.saucer.util.SaucerUrl;
 import app.saucer.webview.SaucerNavigation;
 import app.saucer.webview.SaucerNavigation.NavigationType;
@@ -29,6 +31,7 @@ import co.casterlabs.caffeinated.bootstrap.AppSchemeHandler;
 import co.casterlabs.caffeinated.bootstrap.Bootstrap;
 import co.casterlabs.caffeinated.bootstrap.TrayHandler;
 import co.casterlabs.rakurai.json.element.JsonArray;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class AppWindow {
     private static @Nullable SaucerWebview saucer;
@@ -123,6 +126,8 @@ public class AppWindow {
         saucer.addSchemeHandler("app", AppSchemeHandler.INSTANCE);
 
         // @formatter:off
+        saucer.bridge.defineObject("LogBridge", LogBridge.class);
+
         saucer.bridge.defineObject("App",             App.class);
         saucer.bridge.defineObject("AppAuth",         AppAuth.class);
         saucer.bridge.defineObject("AppChatbot",      AppChatbot.class);
@@ -193,6 +198,34 @@ public class AppWindow {
         if (saucer != null) {
             saucer.forceDarkEnabled(enabled);
         }
+    }
+
+    @JavascriptObject
+    public static class LogBridge {
+        private static final FastLogger LOGGER = new FastLogger("AppWindow");
+
+        @JavascriptFunction
+        public static void log(String level, String message) {
+            switch (level) {
+                case "trace":
+                    LOGGER.trace(message);
+                    break;
+                case "debug":
+                    LOGGER.debug(message);
+                    break;
+                case "info":
+                case "log":
+                    LOGGER.info(message);
+                    break;
+                case "warn":
+                    LOGGER.warn(message);
+                    break;
+                case "error":
+                    LOGGER.severe(message);
+                    break;
+            }
+        }
+
     }
 
 }

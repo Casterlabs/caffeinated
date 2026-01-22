@@ -98,6 +98,64 @@ export function awaitPageLoad() {
 }
 
 if (isInApp) {
+	function remap(data: any[]) {
+		return data
+			.map((item) => {
+				if (Array.isArray(item) || typeof item === 'object') {
+					try {
+						return JSON.stringify(item);
+					} catch {
+						return String(item);
+					}
+				} else {
+					return String(item);
+				}
+			})
+			.join(' ');
+	}
+
+	const originalConsole = window.console;
+	window.console = {
+		...originalConsole,
+
+		debug(...data: any[]): void {
+			originalConsole.debug(...data);
+			LogBridge.log('debug', remap(data));
+		},
+		error(...data: any[]): void {
+			originalConsole.error(...data);
+			LogBridge.log('error', remap(data));
+		},
+		info(...data: any[]): void {
+			originalConsole.info(...data);
+			LogBridge.log('info', remap(data));
+		},
+		log(...data: any[]): void {
+			originalConsole.log(...data);
+			LogBridge.log('log', remap(data));
+		},
+		trace(...data: any[]): void {
+			originalConsole.trace(...data);
+			LogBridge.log('trace', remap(data));
+		},
+		warn(...data: any[]): void {
+			originalConsole.warn(...data);
+			LogBridge.log('warn', remap(data));
+		}
+	};
+
+	window.addEventListener('error', (e) => {
+		const { filename, lineno, colno, message, error } = e;
+		const formatted = `Uncaught error in ${filename} @ ${lineno}:${colno} ${message} ${error}`;
+		LogBridge.log('error', formatted);
+	});
+
+	window.addEventListener('unhandledrejection', (e) => {
+		const { reason } = e;
+		const formatted = `Unhandled Promise rejection: ${reason}`;
+		LogBridge.log('error', formatted);
+	});
+
 	storify(AppConfig, 'uiPreferences')
 		.readable<Awaited<typeof AppConfig.uiPreferences>>()
 		.subscribe((uiPreferences) => {
