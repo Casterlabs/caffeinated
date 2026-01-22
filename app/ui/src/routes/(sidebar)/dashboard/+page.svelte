@@ -74,7 +74,7 @@
 		});
 
 		currentLayout = (await AppConfig.uiPreferences).mainDashboard;
-		console.log('Loaded layout:', currentLayout);
+		console.debug('Loaded layout:', currentLayout);
 
 		// Fill all slots with DashboardPiece.
 		for (let x = 0; x < MAX; x++) {
@@ -96,7 +96,7 @@
 			}
 		}
 
-		console.log(contents);
+		console.debug(contents);
 
 		layoutElement.updateLayout(currentLayout);
 	});

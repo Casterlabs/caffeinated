@@ -50,7 +50,7 @@
 
 			widget = newWidget;
 			if (!deepEqual(newWidget.settingsLayout, settingsLayout)) {
-				console.log('Updating settings layout UI for widget settings because the layout changed.');
+				console.debug('Updating settings layout UI for widget settings because the layout changed.');
 				settingsLayout = newWidget.settingsLayout; // Re-render the UI.
 			}
 		});
