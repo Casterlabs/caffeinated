@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 
 import app.saucer.SaucerApp;
+import app.saucer.webview.SaucerWebview;
 import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.AppWindow;
 import co.casterlabs.caffeinated.app.config.AppConfig;
@@ -96,10 +97,13 @@ public class Bootstrap implements Runnable {
     private static volatile boolean isShuttingDown = false;
 
     public static void main(String[] args) throws Exception {
-        System.setProperty("saucer.java.help.dependencies", "https://casterlabs.co/caffeinated/dependencies");
         Bootstrap.class.getClassLoader().setDefaultAssertionStatus(true);
 
+        System.setProperty("saucer.java.help.dependencies", "https://casterlabs.co/caffeinated/dependencies");
+        System.setProperty("saucer.generate_typescript_definitions", "true");
+        SaucerWebview.registerCustomScheme("app");
         SaucerApp.initialize("co.casterlabs.caffeinated", false);
+
         System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 
         NativeBootstrap nb = null;
