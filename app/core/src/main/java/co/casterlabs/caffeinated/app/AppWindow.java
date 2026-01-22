@@ -80,8 +80,9 @@ public class AppWindow {
         saucer.listener(new SaucerWebviewListener() {
             @Override
             public boolean onNavigate(SaucerNavigation navigation) {
-                if (navigation.type() == NavigationType.NEW_WINDOW) {
-                    SaucerDesktop.open(navigation.targetUrl().toString());
+            	String url = navigation.targetUrl().toString();
+                if (navigation.type() == NavigationType.NEW_WINDOW && !url.startsWith("app://")) {
+                    SaucerDesktop.open(url);
                     return false;
                 }
                 return true;
