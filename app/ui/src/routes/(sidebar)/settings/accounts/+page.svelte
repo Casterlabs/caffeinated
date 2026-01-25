@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { storify } from '$lib/bridge-helper';
-	import { render } from '$lib/locale/locale';
+	import { renderStore } from '$lib/locale/locale';
 	import { load } from '../+page';
 
 	import LoadingSpinner from '$lib/layout/LoadingSpinner.svelte';
@@ -8,6 +8,8 @@
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import { IconInformationCircle, IconXMark } from '@casterlabs/heroicons-svelte';
 	import { Box, Button, Input } from '@casterlabs/ui';
+
+	const lc_musicServicesEnable = renderStore('co.casterlabs.caffeinated.app.page.settings.accounts.music_services.enable');
 
 	const activePlayback = storify(Music, 'activePlayback').readable<Awaited<typeof Music.activePlayback>>();
 	const musicProviders = storify(Music, 'providers').readable<Awaited<typeof Music.providers>>();
@@ -200,7 +202,7 @@
 								{#if MUSIC_SERVICES_WITH_ENABLE.includes(provider.serviceId)}
 									<Input
 										type="checkbox"
-										title={render('co.casterlabs.caffeinated.app.page.settings.accounts.music_services.enable')}
+										title={$lc_musicServicesEnable}
 										checked={provider.settings?.enabled}
 										onchange={(e) => {
 											const checked = (e.target as HTMLInputElement).checked;

@@ -2,7 +2,7 @@
 	import { getDockPreferences, saveDockPreferences } from '$lib/app-shim';
 	import EventHandler from '$lib/event-handler';
 	import type { KoiEvent } from '$lib/koi';
-	import { render } from '$lib/locale/locale';
+	import { renderStore } from '$lib/locale/locale';
 
 	import EventListRenderer from '$lib/layout/chat/EventListRenderer.svelte';
 	import ActivityViewerSettings from '$lib/layout/modals/ActivityViewerSettings.svelte';
@@ -12,6 +12,8 @@
 	import { onMount } from 'svelte';
 
 	type PrefsType = Awaited<(typeof AppConfig)['uiPreferences']>['activityViewerPreferences'];
+
+	const lc_viewerPreferencesTitle = renderStore('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.title');
 
 	const uiEvents = new EventHandler();
 
@@ -46,11 +48,7 @@
 		<EventListRenderer bind:this={eventListRenderer} {uiEvents} useCatchups />
 	</div>
 
-	<button
-		class="absolute top-2 right-2 flex items-center"
-		onclick={() => uiEvents.broadcast('x-preferences-modal')}
-		title={render('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.title')}
-	>
+	<button class="absolute top-2 right-2 flex items-center" onclick={() => uiEvents.broadcast('x-preferences-modal')} title={$lc_viewerPreferencesTitle}>
 		<IconCog6Tooth theme="outline" />
 	</button>
 </div>
