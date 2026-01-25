@@ -143,7 +143,10 @@
 
 		for (let idx = 0; idx < endAtIdx; idx++) {
 			const child = children.item(idx)!;
-			const isVisible = getComputedStyle(child.querySelector('.event-renderer')!).display != 'none';
+			const eventRenderer = child.querySelector('.event-renderer');
+			if (!eventRenderer) continue;
+
+			const isVisible = getComputedStyle(eventRenderer).display != 'none';
 			if (!isVisible) continue;
 
 			evenOddIdx++;
