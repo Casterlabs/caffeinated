@@ -33,7 +33,6 @@ import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.RoomId;
-import co.casterlabs.koi.api.types.events.CatchupEvent;
 import co.casterlabs.koi.api.types.events.ConnectionStateEvent;
 import co.casterlabs.koi.api.types.events.ConnectionStateEvent.ConnectionState;
 import co.casterlabs.koi.api.types.events.MessageMetaEvent;
@@ -188,12 +187,12 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
 
         switch (e.type()) {
             case CATCHUP: {
-                CatchupEvent catchup = (CatchupEvent) e;
-                for (JsonElement oldEventJson : catchup.events) {
-                    KoiEvent old = KoiEventType.get((JsonObject) oldEventJson);
-                    if (old == null) continue;
-                    KoiHistory.storeEvent(old, oldEventJson);
-                }
+//                CatchupEvent catchup = (CatchupEvent) e;
+//                for (JsonElement oldEventJson : catchup.events) {
+//                    KoiEvent old = KoiEventType.get((JsonObject) oldEventJson);
+//                    if (old == null) continue;
+//                    KoiHistory.storeEvent(old, oldEventJson);
+//                }
                 return;
             }
 
