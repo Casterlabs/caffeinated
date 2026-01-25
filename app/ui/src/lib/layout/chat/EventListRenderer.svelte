@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Koi } from '$lib/app-shim';
 	import type EventHandler from '$lib/event-handler';
+	import { hashCode } from '$lib/hash';
 	import type { KoiEvent, MetaId } from '$lib/koi';
 	import { fade } from 'svelte/transition';
 
@@ -180,7 +181,7 @@
 		bleed={DYNAMIC_LIST_BLEED}
 		{itemRenderer}
 		itemIdGenerator={(event) => {
-			return (event as any).meta_id || event; // Either meta_id or identity.
+			return (event as any).meta_id || /*(event as any).UEID ||*/ 'hc:' + hashCode(event);
 		}}
 	/>
 </div>
