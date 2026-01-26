@@ -109,16 +109,14 @@ class _UIDocksPlugin extends CaffeinatedPlugin {
                 this.settings().set("preferences", data);
             });
 
-            instance.on("ready", () -> {
-                try {
-                    instance.emit(
-                        "locale",
-                        new JsonObject()
-                            .put("current", AppLocale.currentJson)
-                            .put("fallback", AppLocale.fallbackJson)
-                    );
-                } catch (IOException ignored) {}
-            });
+            try {
+                instance.emit(
+                    "locale",
+                    new JsonObject()
+                        .put("current", AppLocale.currentJson)
+                        .put("fallback", AppLocale.fallbackJson)
+                );
+            } catch (IOException ignored) {}
         }
 
         @Override
