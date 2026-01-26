@@ -246,15 +246,16 @@
 
 		Widget.on('init', () => {
 			Widget.broadcast('update');
+
+			Koi.eventHistory.forEach((event) => {
+				onEvent({
+					...event,
+					x_is_catchup: true
+				});
+			});
 		});
 
 		Koi.on('*', (_, event) => onEvent(event));
-		Koi.eventHistory.forEach((event) => {
-			onEvent({
-				...event,
-				x_is_catchup: true
-			});
-		});
 	});
 </script>
 
