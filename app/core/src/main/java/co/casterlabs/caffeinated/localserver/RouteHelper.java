@@ -87,6 +87,7 @@ public interface RouteHelper {
             response.putHeader("Access-Control-Allow-Origin", protocol + "://" + referer);
             response.putHeader("Access-Control-Allow-Methods", LocalServer.ALLOWED_METHODS);
             response.putHeader("Access-Control-Allow-Headers", "Authorization, *");
+            response.putHeader("Access-Control-Allow-Private-Network", "true");
             FastLogger.logStatic(LogLevel.DEBUG, "Set CORS headers for %s", referer);
         }
 
