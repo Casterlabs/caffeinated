@@ -13,9 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
-import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.AppWindow;
-import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.auth.AuthInstance;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
@@ -147,14 +146,10 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
 
         // Send update to the local api.
         AsyncTask.create(() -> {
-            try {
-                // Send the events to the widget instances.
-                for (RealtimeApiListener listener : App.apiListeners.toArray(new RealtimeApiListener[0])) {
-                    listener.onKoiStaticsUpdate(extendedStatics);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            AppEventBus.bus.post(
+                AppEventBus.KOI_STATICS,
+                extendedStatics
+            );
         });
     }
 
@@ -287,14 +282,10 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
 
         // Notify the local api.
         AsyncTask.create(() -> {
-            try {
-                // Send the events to the widget instances.
-                for (RealtimeApiListener listener : App.apiListeners.toArray(new RealtimeApiListener[0])) {
-                    listener.onKoiEvent(e);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            AppEventBus.bus.post(
+                AppEventBus.KOI_EVENT,
+                e
+            );
         });
 
         boolean hideFromWidgets = AppChatbot.shouldHideFromWidgets(e);

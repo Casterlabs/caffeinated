@@ -13,9 +13,9 @@ import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
 import app.saucer.webview.window.SaucerIcon;
 import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.AppWindow;
 import co.casterlabs.caffeinated.app.NotificationType;
-import co.casterlabs.caffeinated.app.RealtimeApiListener;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.locale.AppLocale;
@@ -89,14 +89,7 @@ public class AppUI {
 
         // Broadcast to the local api.
         AsyncTask.create(() -> {
-            try {
-                // Send the events to the widget instances.
-                for (RealtimeApiListener listener : App.apiListeners.toArray(new RealtimeApiListener[0])) {
-                    listener.onAppearanceUpdate(preferences);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            AppEventBus.bus.post(AppEventBus.APPEARANCE_UPDATE, preferences);
         });
 
         updateIcon();

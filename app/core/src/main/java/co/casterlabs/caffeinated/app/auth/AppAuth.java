@@ -11,6 +11,7 @@ import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
 import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.koi.KoiImpl;
@@ -147,8 +148,8 @@ public class AppAuth {
                 );
             }
         });
-        App.emitAppEvent(
-            "auth:platforms",
+        AppEventBus.bus.post(
+            AppEventBus.AUTH_PLATFORMS,
             platforms
         );
 
@@ -165,7 +166,6 @@ public class AppAuth {
         authInstances.put(tokenId, new AuthInstance(tokenId));
     }
 
-    @SuppressWarnings("deprecation")
     @JavascriptFunction
     public static void requestOAuthSignin(@NonNull String type, @NonNull String platform, boolean shouldNavigateBackwards, @Nullable String tokenId) {
         try {
@@ -191,8 +191,8 @@ public class AppAuth {
                         .get()
                         .addToken(type, $tokenId_ptr, token);
 
-                    App.emitAppEvent(
-                        "auth:completion",
+                    AppEventBus.bus.post(
+                        AppEventBus.AUTH_COMPLETION,
                         new JsonObject()
                             .put("type", type)
                             .put("platform", platform)

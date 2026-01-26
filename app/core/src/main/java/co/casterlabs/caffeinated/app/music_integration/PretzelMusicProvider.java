@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.music_integration.PretzelMusicProvider.PretzelSettings;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
 import co.casterlabs.caffeinated.util.WebUtil;
@@ -31,10 +31,9 @@ public class PretzelMusicProvider extends AbstractMusicProvider<PretzelSettings>
         musicIntegration.getProviders().put(this.getServiceId(), this);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void init() {
-        App.onAppEvent("auth:platforms", (JsonObject data) -> {
+        AppEventBus.bus.subscribe(AppEventBus.AUTH_PLATFORMS, (JsonObject data) -> {
             try {
                 if (data.containsKey("TWITCH")) {
                     JsonObject twitchUserData = data

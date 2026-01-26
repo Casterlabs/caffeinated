@@ -1,14 +1,16 @@
 package co.casterlabs.caffeinated.localserver.websocket;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-import co.casterlabs.caffeinated.app.App;
-import co.casterlabs.caffeinated.app.RealtimeApiListener;
+import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
+import co.casterlabs.caffeinated.util.EventBus;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.KoiChatterType;
 import co.casterlabs.koi.api.types.KoiEvent;
@@ -18,14 +20,13 @@ import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rhs.session.Websocket;
 import co.casterlabs.rhs.session.WebsocketListener;
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class RealtimeListener implements WebsocketListener, RouteHelper {
     private String connectionId;
 
-    private AppListener appListener;
+    private List<EventBus<?, ?>.Subscription> eventBusSubscriptions = new LinkedList<>();
     private RealtimeConnection connInstance;
     private Websocket websocket;
 
@@ -39,10 +40,9 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
     public void onOpen(Websocket websocket) {
         this.websocket = websocket;
 
-        this.appListener = new AppListener();
         this.connInstance = new ConnectionWrapper();
 
-        Pair<RealtimeConnection, AppListener> connPair = new Pair<>(this.connInstance, this.appListener);
+        Pair<RealtimeConnection, Object> connPair = new Pair<>(this.connInstance, null);
         websocket.setAttachment(connPair);
 
         JsonObject statics = Caffeinated.getInstance().getKoi().toJsonExtended();
@@ -80,9 +80,35 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
             String type = message.getString("type").toUpperCase();
 
             switch (type) {
-
                 case "READY": {
-                    App.apiListeners.add(this.appListener);
+                    this.eventBusSubscriptions.add(
+                        AppEventBus.bus.subscribe(
+                            AppEventBus.KOI_EVENT, (KoiEvent event) -> {
+                                sendMessage("KOI", Rson.DEFAULT.toJson(event).getAsObject());
+                            }
+                        )
+                    );
+                    this.eventBusSubscriptions.add(
+                        AppEventBus.bus.subscribe(
+                            AppEventBus.KOI_STATICS, (JsonObject statics) -> {
+                                sendMessage("KOI_STATICS", statics);
+                            }
+                        )
+                    );
+                    this.eventBusSubscriptions.add(
+                        AppEventBus.bus.subscribe(
+                            AppEventBus.MUSIC_UPDATE, (JsonObject music) -> {
+                                sendMessage("MUSIC", music);
+                            }
+                        )
+                    );
+                    this.eventBusSubscriptions.add(
+                        AppEventBus.bus.subscribe(
+                            AppEventBus.APPEARANCE_UPDATE, (JsonObject preferences) -> {
+                                sendMessage("APPEARANCE", preferences);
+                            }
+                        )
+                    );
                     return;
                 }
 
@@ -187,7 +213,9 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
 
     @Override
     public void onClose(Websocket websocket) {
-        App.apiListeners.remove(this.appListener);
+        for (EventBus<?, ?>.Subscription subscription : this.eventBusSubscriptions) {
+            subscription.revoke();
+        }
     }
 
     @SneakyThrows
@@ -214,39 +242,6 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
         @Override
         public void close() throws IOException {
             websocket.close();
-        }
-
-    }
-
-    private class AppListener implements RealtimeApiListener {
-
-        @Override
-        public void onKoiEvent(@NonNull KoiEvent event) throws IOException {
-            sendMessage("KOI", Rson.DEFAULT.toJson(event).getAsObject());
-        }
-
-        @Override
-        public void onKoiStaticsUpdate(@NonNull JsonObject statics) throws IOException {
-            sendMessage(
-                "KOI_STATICS",
-                statics
-            );
-        }
-
-        @Override
-        public void onMusicUpdate(@NonNull JsonObject music) throws IOException {
-            sendMessage(
-                "MUSIC",
-                music
-            );
-        }
-
-        @Override
-        public void onAppearanceUpdate(@NonNull JsonObject preferences) throws IOException {
-            sendMessage(
-                "APPEARANCE",
-                preferences
-            );
         }
 
     }

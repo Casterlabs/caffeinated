@@ -1,17 +1,13 @@
 package co.casterlabs.caffeinated.app;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptGetter;
@@ -72,10 +68,6 @@ public class App {
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private static boolean hasUpdate = false;
-
-    // Event stuff
-    private static Map<String, List<Consumer<JsonObject>>> appEventListeners = new HashMap<>();
-    public static List<RealtimeApiListener> apiListeners = new ArrayList<>();
 
     @SneakyThrows
     public static void init(@NonNull BuildInfo buildInfo, boolean isDev, NativeSystem nativeSystem, boolean traySupported) {
@@ -205,30 +197,6 @@ public class App {
 
     public static void shutdown() {
         AppAuth.shutdown();
-    }
-
-    /**
-     * Word of caution, you're not supposed to be able to unsubscribe to an event.
-     * You have been warned.
-     * 
-     * If u throw err, i kil.
-     */
-    @Deprecated
-    public static void onAppEvent(@NonNull String type, @NonNull Consumer<JsonObject> handler) {
-        if (!appEventListeners.containsKey(type)) {
-            appEventListeners.put(type, new LinkedList<>());
-        }
-
-        appEventListeners.get(type).add(handler);
-    }
-
-    @Deprecated
-    public static void emitAppEvent(@NonNull String type, @NonNull JsonObject data) {
-        if (appEventListeners.containsKey(type)) {
-            appEventListeners
-                .get(type)
-                .forEach((c) -> c.accept(data));
-        }
     }
 
     /**

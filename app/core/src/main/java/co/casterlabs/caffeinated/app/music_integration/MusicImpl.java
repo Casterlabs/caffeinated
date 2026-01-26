@@ -11,8 +11,7 @@ import java.util.Map.Entry;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
-import co.casterlabs.caffeinated.app.App;
-import co.casterlabs.caffeinated.app.RealtimeApiListener;
+import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.api.AppApi;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.plugins.AppPlugins;
@@ -173,14 +172,7 @@ public class MusicImpl implements Music {
 
         // Broadcast to the local api.
         AsyncTask.create(() -> {
-            try {
-                // Send the events to the widget instances.
-                for (RealtimeApiListener listener : App.apiListeners.toArray(new RealtimeApiListener[0])) {
-                    listener.onMusicUpdate(music);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            AppEventBus.bus.post(AppEventBus.MUSIC_UPDATE, music);
         });
     }
 

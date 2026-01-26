@@ -102,7 +102,6 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
             String type = message.getString("type").toUpperCase();
 
             switch (type) {
-
                 case "READY": {
                     this.handle.widgetInstances.add(this.wInstance);
                     this.handle.widget.onNewInstance(this.wInstance);

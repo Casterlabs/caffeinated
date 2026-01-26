@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.music_integration.SpotifyMusicProvider.SpotifySettings;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicTrack;
@@ -34,17 +34,15 @@ public class SpotifyMusicProvider extends AbstractMusicProvider<SpotifySettings>
         musicIntegration.getProviders().put(this.getServiceId(), this);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void init() {
-        App
-            .onAppEvent("auth:completion", (JsonObject data) -> {
-                if (data.getString("type").equals("music") &&
-                    data.getString("platform").equals("spotify")) {
-                    this.logger.info("Completing OAuth.");
-                    this.completeOAuth();
-                }
-            });
+        AppEventBus.bus.subscribe(AppEventBus.AUTH_COMPLETION, (JsonObject data) -> {
+            if (data.getString("type").equals("music") &&
+                data.getString("platform").equals("spotify")) {
+                this.logger.info("Completing OAuth.");
+                this.completeOAuth();
+            }
+        });
 
         AsyncTask.create(() -> {
             while (true) {
