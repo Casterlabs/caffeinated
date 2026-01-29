@@ -101,7 +101,9 @@ if (isInApp) {
 	function remap(data: any[]) {
 		return data
 			.map((item) => {
-				if (Array.isArray(item) || typeof item === 'object') {
+				if (item instanceof Error) {
+					return String(item);
+				} else if (Array.isArray(item) || typeof item === 'object') {
 					try {
 						return JSON.stringify(item);
 					} catch {

@@ -81,8 +81,7 @@ export default class EventHandler {
 				try {
 					(callback as EventHandlerCallbackWildcard)(type, data);
 				} catch (e) {
-					console.error('A listener produced an exception: ');
-					console.error(e);
+					console.error('A listener produced an exception:', e);
 				}
 			});
 		}
@@ -94,8 +93,7 @@ export default class EventHandler {
 				try {
 					(callback as EventHandlerCallback)(data);
 				} catch (e) {
-					console.error('A listener produced an exception: ');
-					console.error(e);
+					console.error('A listener produced an exception:', e);
 				}
 			});
 		}
