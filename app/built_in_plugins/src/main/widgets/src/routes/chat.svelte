@@ -10,6 +10,7 @@
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import changeFont from '$lib/changeFont.mjs';
+	import { animate } from '$lib/animate.mjs';
 
 	const MAX_EVENTS_DISPLAY = 100;
 	const ANIMATION_TIME = 250;
@@ -53,8 +54,14 @@
 					for (const [key, { component: chatMessage }] of Object.entries(chatElements)) {
 						try {
 							const koiEvent = chatMessage.event;
-							const koiSender = koiEvent.sender || koiEvent.follower || koiEvent.subscriber //
-							|| koiEvent.host || koiEvent.viewer || koiEvent.gift_recipient || koiEvent.liker;
+							const koiSender =
+								koiEvent.sender ||
+								koiEvent.follower ||
+								koiEvent.subscriber || //
+								koiEvent.host ||
+								koiEvent.viewer ||
+								koiEvent.gift_recipient ||
+								koiEvent.liker;
 
 							if (koiSender && koiSender.UPID == event.user_upid) {
 								chatMessage.remove();
@@ -134,10 +141,6 @@
 
 				if (event.x_is_catchup) return; // No need to animate :)
 
-				const FRAME_RATE = 60; // fps, keep it even.
-				const FRAME_INTERVAL = 1000 / FRAME_RATE;
-				const TOTAL_FRAME_COUNT = ANIMATION_TIME / FRAME_INTERVAL;
-
 				switch ($settings['message_style.message_style']) {
 					case 'Text (Top-down)':
 					case 'Text (Bottom-up)': {
@@ -145,26 +148,7 @@
 
 						const direction = $settings['message_style.slide_direction'];
 
-						switch (direction) {
-							case 'From the left': {
-								card.offsetX = '-100%';
-								break;
-							}
-
-							case 'From the right': {
-								card.offsetX = '100%';
-								break;
-							}
-						}
-
-						let currentFrame = 0;
-						let animTaskId = setInterval(() => {
-							currentFrame++;
-							if (currentFrame >= TOTAL_FRAME_COUNT) {
-								clearInterval(animTaskId);
-							}
-
-							const progress = currentFrame / TOTAL_FRAME_COUNT;
+						animate(ANIMATION_TIME, (progress) => {
 							switch (direction) {
 								case 'From the left': {
 									card.offsetX = `-${(1 - progress) * 100}%`;
@@ -176,33 +160,14 @@
 									break;
 								}
 							}
-						}, FRAME_INTERVAL);
+						});
 						break;
 					}
 
 					case 'Text (Sideways)': {
 						const direction = $settings['text_style.text_align'];
 
-						switch (direction) {
-							case 'Left': {
-								card.offsetX = '-100%';
-								break;
-							}
-
-							case 'Right': {
-								card.offsetX = '100%';
-								break;
-							}
-						}
-
-						let currentFrame = 0;
-						let animTaskId = setInterval(() => {
-							currentFrame++;
-							if (currentFrame >= TOTAL_FRAME_COUNT) {
-								clearInterval(animTaskId);
-							}
-
-							const progress = currentFrame / TOTAL_FRAME_COUNT;
+						animate(ANIMATION_TIME, (progress) => {
 							switch (direction) {
 								case 'Left': {
 									card.offsetX = `-${(1 - progress) * 100}%`;
@@ -214,7 +179,7 @@
 									break;
 								}
 							}
-						}, FRAME_INTERVAL);
+						});
 						break;
 					}
 				}
