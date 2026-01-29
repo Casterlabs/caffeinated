@@ -167,7 +167,7 @@
 			{/snippet}
 
 			{#snippet privacy_policy()}
-				<a class="text-primary-11" href="https://casterlabs.com/privacy-policy" target="_blank">
+				<a class="text-primary-11" href="https://casterlabs.co/privacy-policy" target="_blank">
 					<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.disclaimer.privacy_policy" />
 				</a>
 			{/snippet}
