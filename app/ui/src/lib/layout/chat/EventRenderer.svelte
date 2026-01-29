@@ -127,8 +127,8 @@
 			class:text-base-11={isDeleted}
 		>
 			{#if isDeleted && !showAnyways}
-				<span class="text-xs text-base-11">
-					<span class="er-timestamp text-xs text-base-11 mr-0.5">
+				<span class="text-[0.75rem] text-base-11">
+					<span class="er-timestamp text-[0.75rem] text-base-11 mr-0.5">
 						{timestamp}
 					</span>
 
@@ -146,7 +146,7 @@
 						uiEvents.broadcast('x-event-modal', event);
 					}}
 				>
-					<span class="er-timestamp text-xs text-base-11 mr-0.5">
+					<span class="er-timestamp text-[0.75rem] text-base-11 mr-0.5">
 						{timestamp}
 					</span>
 
@@ -154,7 +154,7 @@
 				</div>
 
 				{#if isDeleted}
-					<span class="text-xs text-base-11">
+					<span class="text-[0.75rem] text-base-11">
 						<button class="text-primary-10" onclick={() => (showAnyways = false)}>
 							<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.hide" />
 						</button>

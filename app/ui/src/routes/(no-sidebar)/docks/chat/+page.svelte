@@ -51,7 +51,7 @@
 	class:USERNAME-USER={prefs?.colorBy == 'USER'}
 	class:USERNAME-PLATFORM={prefs?.colorBy == 'PLATFORM'}
 >
-	<div class="flex-1 pb-1 overflow-hidden relative">
+	<div class="flex-1 pb-1 overflow-hidden relative" style:font-size="{prefs?.textSize ?? 1}em">
 		<EventListRenderer bind:this={eventListRenderer} {uiEvents} />
 	</div>
 

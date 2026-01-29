@@ -60,6 +60,6 @@
 	</span>
 
 	<span class="er-name font-semibold" style:--user-color={user.color} style:--contrast-color={contrastColor} style:--platform-color={PLATFORM_COLORS[user.platform]}>
-		{user.displayname.trim()}{#if usernameDiffersFromDisplayname}<span class="text-xs"> ({user.username.trim()})</span>{/if}</span
+		{user.displayname.trim()}{#if usernameDiffersFromDisplayname}<span class="text-[0.75rem]"> ({user.username.trim()})</span>{/if}</span
 	>{#if showColon}:{/if}
 </span>

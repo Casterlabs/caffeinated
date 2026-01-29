@@ -106,15 +106,20 @@
 			</li>
 		{/if} -->
 
-		<!-- <li class="py-2">
-			<div class="w-full">
-				<label class="block text-sm font-medium text-base-12">
-					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.text_size" />
-				</label>
-
-				<RangeInput min={0.1} max={2} step={0.01} bind:value={textSize} on:value={savePreferences} />
-			</div>
-		</li> -->
+		{#snippet textSizeControl()}
+			<Input
+				type="range"
+				min={0.1}
+				max={2}
+				step={0.01}
+				value={initialPrefs.textSize as number}
+				onchange={(e) => {
+					const value = (e.target as HTMLInputElement).valueAsNumber;
+					onupdate({ ...initialPrefs, textSize: value } as PrefsType);
+				}}
+			/>
+		{/snippet}
+		{@render prefsItem('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.text_size', textSizeControl)}
 
 		{@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.show_chat_timestamps', 'showTimestamps')}
 
