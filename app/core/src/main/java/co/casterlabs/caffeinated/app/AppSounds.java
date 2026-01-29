@@ -40,10 +40,10 @@ public class AppSounds {
     }
 
     @JavascriptFunction
-    public static void playUrl(@NonNull String audioUrl, float volume) {
+    public static void playUrl(@NonNull String audioUrl, float volume, float rate) {
         if (audioUrl.startsWith("file://")) {
             File file = new File(audioUrl.substring("file://".length()));
-            playFile(file, volume);
+            playFile(file, volume, rate);
             return;
         }
 
@@ -56,21 +56,22 @@ public class AppSounds {
                 + "  audio.addEventListener('ended', resolve);"
                 + "  audio.addEventListener('error', resolve);"
                 + "  audio.volume = " + new JsonNumber(volume) + ";"
+                + "  audio.playbackRate = " + new JsonNumber(rate) + ";"
                 + "  audio.play();"
                 + "});"
                 + "})();"
         );
     }
 
-    public static void playBytes(@NonNull byte[] bytes, float volume) {
+    public static void playBytes(@NonNull byte[] bytes, float volume, float rate) {
         String audioUrl = "data:audio/wav;base64," + Base64.getEncoder().encodeToString(bytes);
-        playUrl(audioUrl, volume);
+        playUrl(audioUrl, volume, rate);
     }
 
     @SneakyThrows
-    public static void playFile(@NonNull File file, float volume) {
+    public static void playFile(@NonNull File file, float volume, float rate) {
         byte[] fileBytes = Files.readAllBytes(file.toPath());
-        playBytes(fileBytes, volume);
+        playBytes(fileBytes, volume, rate);
     }
 
 }

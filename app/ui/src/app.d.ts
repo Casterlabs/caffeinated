@@ -844,7 +844,7 @@ export declare interface AppPlugins extends MutationObject<'loadedPlugins' | 'co
 	editWidgetSettingsItem(arg0: string, arg0: string, arg0: any): Promise<void>;
 }
 export declare interface AppSounds extends MutationObject<never> {
-	playUrl(arg0: string, arg0: number): Promise<void>;
+	playUrl(url: string, volume: number, rate: number): Promise<void>;
 }
 export declare interface AppThemeManager extends MutationObject<'effectiveAppearance'> {
 	readonly effectiveAppearance: Promise<'FOLLOW_SYSTEM' | 'LIGHT' | 'DARK'>;
