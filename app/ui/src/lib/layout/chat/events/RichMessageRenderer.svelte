@@ -45,27 +45,26 @@
 
 <span
 	class="rich-message"
-	class:text-xs={event.event_type == 'PLATFORM_MESSAGE'}
 	class:text-base-11={event.event_type == 'PLATFORM_MESSAGE'}
 	class:platform-message={event.event_type == 'PLATFORM_MESSAGE'}
 	class:italic={event.attributes.includes('RP_ACTION')}
 >
 	{#if event.attributes.includes('FIRST_TIME_CHATTER')}
-		<span class="block text-base-11 mt-0.5 text-sm">
+		<span class="block text-base-11 mt-0.5 text-[0.875rem]">
 			<IconCake theme="mini" class="inline-block -translate-y-0.5" />
 			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.first_time_chatter" />
 		</span>
 	{/if}
 
 	{#if event.attributes.includes('ANNOUNCEMENT')}
-		<span class="block text-base-11 mt-0.5 text-sm">
+		<span class="block text-base-11 mt-0.5 text-[0.875rem]">
 			<IconMegaphone theme="mini" class="inline-block -translate-y-0.5" />
 			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement" />
 		</span>
 	{/if}
 
 	{#if event.reply_target}
-		<span class="text-base-11 mt-0.5 block text-sm">
+		<span class="text-base-11 mt-0.5 block text-[0.875rem]">
 			{#if event.x_reply_target_data}
 				<!-- 
 					NB `!isDeleted`:
@@ -75,7 +74,7 @@
 				{#if replyTargetDeleted && !showReplyTargetAnyways && !isDeleted}
 					<IconChatBubbleLeft theme="mini" class="inline-block -translate-y-0.5" />
 					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to_deleted" />
-					<button class="link text-xs" onclick={() => (showReplyTargetAnyways = true)}>
+					<button class="link text-[0.75rem]" onclick={() => (showReplyTargetAnyways = true)}>
 						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.show" />
 					</button>
 				{:else}
@@ -98,7 +97,7 @@
 						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.replying_to" components={{ other, message }} />
 					</button>
 					{#if showReplyTargetAnyways && !isDeleted}
-						<button class="link text-xs" onclick={() => (showReplyTargetAnyways = false)}>
+						<button class="link text-[0.75rem]" onclick={() => (showReplyTargetAnyways = false)}>
 							<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.hide" />
 						</button>
 					{/if}
@@ -143,6 +142,10 @@
 	.rich-message.platform-message :global([data-rich-type='link']) {
 		color: var(--primary10);
 		text-decoration: underline;
+	}
+
+	.rich-message.platform-message {
+		font-size: 0.75rem;
 	}
 
 	/* Upvotes */
