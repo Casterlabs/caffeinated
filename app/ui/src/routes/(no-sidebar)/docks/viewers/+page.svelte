@@ -65,10 +65,10 @@
 <div class="relative overflow-y-auto overflow-x-hidden h-full p-1" oncontextmenu={copyViewersList} ondblclick={copyViewersList}>
 	<span class="absolute top-1 right-1 text-right">
 		<IconEye class="inline-block h-4 w-4 -translate-y-px" />
-		<span class="select-auto">{viewersCount_computed}</span>
+		<span class="select-text cursor-default">{viewersCount_computed}</span>
 	</span>
 
-	<ul class="select-auto">
+	<ul class="select-text cursor-default">
 		{#each viewersList_computed as viewer}
 			<li>
 				{viewer}

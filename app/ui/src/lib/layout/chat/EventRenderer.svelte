@@ -118,7 +118,7 @@
 
 	<!-- <LongPressListener onlongpress={() => uiEvents.broadcast('x-event-modal', event)}> -->
 	<div
-		class="event-renderer mt-0.5 py-1 break-anywhere relative px-2 will-change-transform"
+		class="event-renderer mt-0.5 py-1 break-anywhere relative px-2 will-change-transform select-text cursor-default"
 		class:er-chat-event={!ACTIVITY_EVENTS.includes(event.event_type) && !VIEWER_EVENTS.includes(event.event_type)}
 		class:er-activity-event={ACTIVITY_EVENTS.includes(event.event_type)}
 		class:er-viewer-event={VIEWER_EVENTS.includes(event.event_type)}
