@@ -116,51 +116,51 @@
 {#if EventRenderer}
 	{@const doNotModerate = NO_MODERATE.includes(event.event_type)}
 
-	<LongPressListener onlongpress={() => uiEvents.broadcast('x-event-modal', event)}>
-		<div
-			class="event-renderer mt-0.5 py-1 break-anywhere relative px-2 will-change-transform"
-			class:er-chat-event={!ACTIVITY_EVENTS.includes(event.event_type) && !VIEWER_EVENTS.includes(event.event_type)}
-			class:er-activity-event={ACTIVITY_EVENTS.includes(event.event_type)}
-			class:er-viewer-event={VIEWER_EVENTS.includes(event.event_type)}
-			class:hover:bg-base-2={!doNotModerate}
-			class:active:bg-base-2={!doNotModerate}
-			class:text-base-11={isDeleted}
-		>
-			{#if isDeleted && !showAnyways}
-				<span class="text-[0.75rem] text-base-11">
-					<span class="er-timestamp text-[0.75rem] text-base-11 mr-0.5">
-						{timestamp}
-					</span>
+	<!-- <LongPressListener onlongpress={() => uiEvents.broadcast('x-event-modal', event)}> -->
+	<div
+		class="event-renderer mt-0.5 py-1 break-anywhere relative px-2 will-change-transform"
+		class:er-chat-event={!ACTIVITY_EVENTS.includes(event.event_type) && !VIEWER_EVENTS.includes(event.event_type)}
+		class:er-activity-event={ACTIVITY_EVENTS.includes(event.event_type)}
+		class:er-viewer-event={VIEWER_EVENTS.includes(event.event_type)}
+		class:hover:bg-base-2={!doNotModerate}
+		class:active:bg-base-2={!doNotModerate}
+		class:text-base-11={isDeleted}
+	>
+		{#if isDeleted && !showAnyways}
+			<span class="text-[0.75rem] text-base-11">
+				<span class="er-timestamp text-[0.75rem] text-base-11 mr-0.5">
+					{timestamp}
+				</span>
 
-					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted" />
-					<button class="text-primary-10" onclick={() => (showAnyways = true)}>
-						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.show" />
+				<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted" />
+				<button class="text-primary-10" onclick={() => (showAnyways = true)}>
+					<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.show" />
+				</button>
+			</span>
+		{:else}
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				class="block w-full text-left"
+				oncontextmenu={(e) => {
+					e.preventDefault();
+					uiEvents.broadcast('x-event-modal', event);
+				}}
+			>
+				<span class="er-timestamp text-[0.75rem] text-base-11 mr-0.5">
+					{timestamp}
+				</span>
+
+				<EventRenderer {event} {uiEvents} />
+			</div>
+
+			{#if isDeleted}
+				<span class="text-[0.75rem] text-base-11">
+					<button class="text-primary-10" onclick={() => (showAnyways = false)}>
+						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.hide" />
 					</button>
 				</span>
-			{:else}
-				<!-- svelte-ignore a11y_no_static_element_interactions -->
-				<div
-					class="block w-full text-left"
-					oncontextmenu={(e) => {
-						e.preventDefault();
-						uiEvents.broadcast('x-event-modal', event);
-					}}
-				>
-					<span class="er-timestamp text-[0.75rem] text-base-11 mr-0.5">
-						{timestamp}
-					</span>
-
-					<EventRenderer {event} {uiEvents} />
-				</div>
-
-				{#if isDeleted}
-					<span class="text-[0.75rem] text-base-11">
-						<button class="text-primary-10" onclick={() => (showAnyways = false)}>
-							<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.hide" />
-						</button>
-					</span>
-				{/if}
 			{/if}
-		</div>
-	</LongPressListener>
+		{/if}
+	</div>
+	<!-- </LongPressListener> -->
 {/if}
