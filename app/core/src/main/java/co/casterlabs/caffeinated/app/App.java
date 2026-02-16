@@ -1,7 +1,12 @@
 package co.casterlabs.caffeinated.app;
 
+import java.io.File;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +14,8 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+import app.saucer.SaucerApp;
+import app.saucer.SaucerFilePicker;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptGetter;
 import app.saucer.bridge.JavascriptObject;
@@ -27,6 +34,7 @@ import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.Locale;
 import co.casterlabs.caffeinated.pluginsdk.koi.TestEvents;
+import co.casterlabs.caffeinated.util.MimeTypes;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.types.KoiEvent;
@@ -275,6 +283,36 @@ public class App {
         KoiEvent e = TestEvents.createTestEvent(type, randomAccount.streamer.platform);
         if (e == null) return;
         KoiImpl.INSTANCE.broadcastEvent(e);
+    }
+
+    @JavascriptFunction
+    public static String pickFile(String... filter) {
+        return SaucerApp.dispatch(() -> {
+            return pickFile_unsafe(filter);
+        });
+    }
+
+    @SneakyThrows
+    private static String pickFile_unsafe(String... filter) {
+        SaucerFilePicker picker = SaucerFilePicker.create();
+
+        picker.initial(new File(System.getProperty("user.home")));
+
+        if (filter != null && filter.length > 0) {
+            picker.filter(filter);
+        }
+
+        File result = picker.pickFile();
+        if (result == null) {
+            return null;
+        }
+
+        byte[] fileBytes = Files.readAllBytes(result.toPath());
+        String mime = MimeTypes.getMimeForFile(result);
+        String filename = result.getName();
+        String base64 = Base64.getEncoder().encodeToString(fileBytes);
+
+        return "data:" + mime + ";filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8).replace("+", "%20") + ";base64," + base64;
     }
 
 }

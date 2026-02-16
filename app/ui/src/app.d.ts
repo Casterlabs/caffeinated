@@ -131,6 +131,7 @@ export declare interface App extends MutationObject<'hasUpdate' | 'statusStates'
 			| 'CHAT'
 	): Promise<void>;
 	notify(arg0: string, arg0: Record<string, string>, arg0: 'ERROR' | 'WARNING' | 'INFO' | 'NONE'): Promise<void>;
+	pickFile(filters: string[]): Promise<string>;
 }
 export declare interface AppAuth extends MutationObject<'isAuthorized' | 'authInstances' | 'isKoiAlive'> {
 	readonly ALL: Promise<
