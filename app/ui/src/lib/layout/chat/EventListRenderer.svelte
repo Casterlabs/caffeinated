@@ -222,36 +222,36 @@
 	}
 
 	:global(.HIDE-TIMESTAMP .er-timestamp) {
-		display: none;
+		display: none !important;
 	}
 
 	:global(.HIDE-PROFILEPICTURES .er-profile-picture) {
-		display: none;
+		display: none !important;
 	}
 
 	:global(.HIDE-BADGES .er-badges) {
-		display: none;
+		display: none !important;
 	}
 
 	:global(.HIDE-PLATFORM .er-platform) {
-		display: none;
+		display: none !important;
 	}
 
 	:global(.HIDE-PRONOUNS .er-pronouns) {
-		display: none;
+		display: none !important;
 	}
 
 	/* ---- Events ---- */
 
 	:global(.HIDE-CHAT .er-chat-event) {
-		display: none;
+		display: none !important;
 	}
 
 	:global(.HIDE-ACTIVITIES .er-activity-event) {
-		display: none;
+		display: none !important;
 	}
 
 	:global(.HIDE-VIEWERS .er-viewer-event) {
-		display: none;
+		display: none !important;
 	}
 </style>
