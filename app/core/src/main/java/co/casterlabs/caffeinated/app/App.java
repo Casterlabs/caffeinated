@@ -306,6 +306,11 @@ public class App {
         if (result == null) {
             return null;
         }
+        
+        if (result.getPath().startsWith("file:")) {
+        	// macOS hack
+        	result = new File(result.getPath().substring("file:".length()));
+        }
 
         byte[] fileBytes = Files.readAllBytes(result.toPath());
         String mime = MimeTypes.getMimeForFile(result);
