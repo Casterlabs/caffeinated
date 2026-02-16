@@ -88,13 +88,10 @@ abstract class AbstractKoi extends EventHandler {
 
 export let Koi: AbstractKoi;
 
+let appPromise: Promise<void>;
+
 export function awaitPageLoad() {
-	if (isInApp) {
-		return Promise.resolve();
-	} else {
-		const SDK = window as any as AppSDK;
-		return new Promise((resolve) => SDK.Widget.on('init', resolve));
-	}
+	return appPromise;
 }
 
 if (isInApp) {
@@ -115,6 +112,8 @@ if (isInApp) {
 			})
 			.join(' ');
 	}
+
+	appPromise = Promise.resolve();
 
 	const originalConsole = window.console;
 	window.console = {
@@ -266,14 +265,16 @@ if (isInApp) {
 } else {
 	// We're a dock!
 	const SDK = window as any as AppSDK;
+
+	appPromise = new Promise((resolve) => SDK.Widget.on('ready', resolve));
+
 	SDK.App.on('theme', ([baseColor, primaryColor]) => {
 		themeBaseColor.set(baseColor);
 		themePrimaryColor.set(primaryColor);
 	});
-	// SDK.App.on('emojiProvider', App.emojiProvider.set);
-	// SDK.App.on('language', App.currentLocale.set);
 	SDK.App.on('appearance', themeEffectiveAppearance.set);
 	SDK.App.on('zoom', (zoom) => (document.documentElement.style.fontSize = `${zoom * 100}%`));
+	// SDK.App.on('emojiProvider', App.emojiProvider.set);
 
 	SDK.Widget.on('locale', ({ current, fallback }: any) => {
 		glocale.use({
@@ -334,7 +335,7 @@ if (isInApp) {
 		Koi.broadcast(e.event_type, e);
 	});
 
-	SDK.Widget.emit('ready');
+	SDK.Widget.emit('init');
 }
 
 // We have to keep track of everything in an ordered array so that we can maintain
