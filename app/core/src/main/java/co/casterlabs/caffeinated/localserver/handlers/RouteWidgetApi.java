@@ -10,6 +10,7 @@ import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.localserver.websocket.RealtimeHeartbeatListener;
 import co.casterlabs.caffeinated.localserver.websocket.RealtimeWidgetListener;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.caffeinated.pluginsdk.PluginResource;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.util.WebUtil;
@@ -85,7 +86,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                 return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
             }
 
-            Pair<String, String> response;
+            PluginResource response;
 
             boolean isInternalPlugin = "co.casterlabs.uidocks".equals(pluginId) || pluginId.startsWith("co.casterlabs.thirdparty");
             boolean isDefaultWidgetPlugin = "co.casterlabs.defaultwidgets".equals(pluginId);
@@ -104,43 +105,47 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                         .url(url)
                 );
 
-                response = new Pair<>(new String(result.a(), StandardCharsets.UTF_8), result.b());
+                response = PluginResource.of(result.a(), result.b());
             } else {
-                response = plugin.getResource(resource);
+                response = plugin.resolveResource(resource);
             }
 
             if (response == null) {
                 return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);
             }
 
-            String content = response.a()
-                .replace(BASE_URL_REPLACE, trueBaseUrl)
-                .replace(ESCAPED_BASE_URL_REPLACE, BASE_URL_REPLACE);
+            byte[] data = response.data;
+            String mime = response.mimeType;
 
-            String mime = response.b();
-            if (mime == null) {
-                mime = "application/octet-stream";
-            }
+            if (mime.startsWith("text/") || mime.startsWith("application/javascript") || mime.startsWith("application/json")) {
+                String textContent = new String(response.data);
 
-            if (session.getQueryParameters().containsKey("authorization")) {
-                // Inject the environment.
-                int htmlStartIndex = content.toLowerCase().indexOf("<html");
-                if (htmlStartIndex != -1) {
-                    int htmlEndIndex = content.substring(htmlStartIndex).indexOf('>') + htmlStartIndex + 1;
+                textContent = textContent
+                    .replace(BASE_URL_REPLACE, trueBaseUrl)
+                    .replace(ESCAPED_BASE_URL_REPLACE, BASE_URL_REPLACE);
 
-                    String tagsToInject = String.format("<script>\n%s\n</script>", Resources.string("widget-environment.js"));
-                    if (CaffeinatedPlugin.isDevEnvironment()) {
-                        // https://github.com/liriliri/chii
-                        tagsToInject += "<script src=\"https://chii.liriliri.io/playground/target.js\"></script>";
+                if (session.getQueryParameters().containsKey("authorization")) {
+                    // Inject the environment.
+                    int htmlStartIndex = textContent.toLowerCase().indexOf("<html");
+                    if (htmlStartIndex != -1) {
+                        int htmlEndIndex = textContent.substring(htmlStartIndex).indexOf('>') + htmlStartIndex + 1;
+
+                        String tagsToInject = String.format("<script>\n%s\n</script>", Resources.string("widget-environment.js"));
+                        if (CaffeinatedPlugin.isDevEnvironment()) {
+                            // https://github.com/liriliri/chii
+                            tagsToInject += "<script src=\"https://chii.liriliri.io/playground/target.js\"></script>";
+                        }
+
+                        textContent = textContent.substring(0, htmlEndIndex) +
+                            tagsToInject +
+                            textContent.substring(htmlEndIndex);
                     }
-
-                    content = content.substring(0, htmlEndIndex) +
-                        tagsToInject +
-                        content.substring(htmlEndIndex);
                 }
+
+                data = textContent.getBytes(StandardCharsets.UTF_8);
             }
 
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
+            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, data)
                 .setMimeType(mime)
                 .putHeader("Access-Control-Allow-Origin", "*")
                 .putHeader("Cross-Origin-Resource-Policy", "cross-origin");

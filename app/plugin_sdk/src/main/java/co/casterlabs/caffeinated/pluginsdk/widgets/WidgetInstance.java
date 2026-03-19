@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.pluginsdk.widgets;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -10,7 +11,7 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.commons.functional.tuples.Pair;
+import co.casterlabs.caffeinated.pluginsdk.PluginResource;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
@@ -48,13 +49,13 @@ public abstract class WidgetInstance implements Closeable {
                 case "resource_poll": {
                     String resourceId = message.getAsString();
 
-                    String content = null;
+                    byte[] content = null;
                     String mime = null;
 
                     try {
-                        Pair<String, String> result = this.widget.getPlugin().getResource(resourceId);
-                        content = result.a();
-                        mime = result.b();
+                        PluginResource result = this.widget.getPlugin().resolveResource(resourceId);
+                        content = result.data;
+                        mime = result.mimeType;
                     } catch (Throwable t) {
                         this.logger.severe("An error occured whilst getting a resource:\n%s", t);
                     }
@@ -62,7 +63,8 @@ public abstract class WidgetInstance implements Closeable {
                     try {
                         this.emit0(
                             "__internal:resource_poll:" + resourceId,
-                            new JsonObject().put("content", content)
+                            new JsonObject()
+                                .put("content", Base64.getEncoder().encodeToString(content))
                                 .put("mime", mime)
                         );
                     } catch (IOException ignored) {}

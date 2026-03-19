@@ -1,10 +1,12 @@
 package co.casterlabs.caffeinated.localserver.handlers;
 
+import org.jetbrains.annotations.Nullable;
+
 import co.casterlabs.caffeinated.app.plugins.CaffeinatedPluginsImpl;
 import co.casterlabs.caffeinated.localserver.RequestError;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
-import co.casterlabs.commons.functional.tuples.Pair;
+import co.casterlabs.caffeinated.pluginsdk.PluginResource;
 import co.casterlabs.rhs.protocol.StandardHttpStatus;
 import co.casterlabs.rhs.server.HttpResponse;
 import co.casterlabs.sora.api.http.HttpProvider;
@@ -26,20 +28,15 @@ public class RoutePluginApi implements HttpProvider, RouteHelper {
                     return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
                 }
 
-                Pair<String, String> response = owningPlugin.getResource(resourceId);
+                @Nullable
+                PluginResource response = owningPlugin.resolveResource(resourceId);
 
                 if (response == null) {
                     return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);
                 }
 
-                String content = response.a();
-                String mime = response.b();
-                if (mime == null) {
-                    mime = "application/octet-stream";
-                }
-
-                return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
-                    .setMimeType(mime);
+                return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, response.data)
+                    .setMimeType(response.mimeType);
 
             } else {
                 return newErrorResponse(StandardHttpStatus.UNAUTHORIZED, RequestError.UNAUTHORIZED);

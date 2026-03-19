@@ -270,15 +270,9 @@ public abstract class CaffeinatedPlugin implements Closeable {
     }
 
     /**
-     * @return               A pair of strings, with A being the content and B being
-     *                       the content type (nullable)
-     * 
-     * @implNote             By default, this will read resources directly from your
-     *                       jar. You can override this if you need to serve content
-     *                       from a custom location.
-     * 
-     * @throws   IOException
+     * @deprecated Use {@link #resolveResource(String)} instead. Slated for removal.
      */
+    @Deprecated
     public @Nullable Pair<String, String> getResource(String resource) throws IOException {
         InputStream in = this.classLoader.getResourceAsStream(resource);
 
@@ -286,6 +280,27 @@ public abstract class CaffeinatedPlugin implements Closeable {
         String mime = Caffeinated.getInstance().getMimeForPath(resource);
 
         return new Pair<>(content, mime);
+    }
+
+    /**
+     * @implNote             By default, this will read resources directly from your
+     *                       jar. You can override this if you need to serve content
+     *                       from a custom location.
+     * 
+     * @throws   IOException
+     */
+    public @Nullable PluginResource resolveResource(String resource) throws IOException {
+        Pair<String, String> legacy = this.getResource(resource);
+        if (legacy != null) {
+            return PluginResource.of(legacy.a().getBytes(StandardCharsets.UTF_8), legacy.b());
+        }
+
+        try (InputStream in = this.classLoader.getResourceAsStream(resource)) {
+            byte[] content = StreamUtil.toBytes(in);
+            String mime = Caffeinated.getInstance().getMimeForPath(resource);
+
+            return PluginResource.of(content, mime);
+        }
     }
 
     /**
