@@ -12,7 +12,7 @@ public class RouteLocalServer implements HttpProvider, RouteHelper {
     @HttpEndpoint(uri = "/")
     public HttpResponse onIndexRequest(SoraHttpSession session) {
         return HttpResponse.newFixedLengthResponse(StandardHttpStatus.TEMPORARY_REDIRECT)
-            .putHeader("Location", "https://casterlabs.github.io/caffeinated-sdk/");
+            .putHeader("Location", "https://docs.casterlabs.co/caffeinated/sdk/");
     }
 
     @HttpEndpoint(uri = "/api/test/:specialCode")
