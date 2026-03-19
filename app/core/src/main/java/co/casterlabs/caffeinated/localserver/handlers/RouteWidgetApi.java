@@ -124,18 +124,20 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
 
             if (session.getQueryParameters().containsKey("authorization")) {
                 // Inject the environment.
-                int htmlStartIndex = content.indexOf("<html");
-                int htmlEndIndex = content.substring(htmlStartIndex).indexOf('>') + htmlStartIndex + 1;
+                int htmlStartIndex = content.toLowerCase().indexOf("<html");
+                if (htmlStartIndex != -1) {
+                    int htmlEndIndex = content.substring(htmlStartIndex).indexOf('>') + htmlStartIndex + 1;
 
-                String tagsToInject = String.format("<script>\n%s\n</script>", Resources.string("widget-environment.js"));
-                if (CaffeinatedPlugin.isDevEnvironment()) {
-                    // https://github.com/liriliri/chii
-                    tagsToInject += "<script src=\"https://chii.liriliri.io/playground/target.js\"></script>";
+                    String tagsToInject = String.format("<script>\n%s\n</script>", Resources.string("widget-environment.js"));
+                    if (CaffeinatedPlugin.isDevEnvironment()) {
+                        // https://github.com/liriliri/chii
+                        tagsToInject += "<script src=\"https://chii.liriliri.io/playground/target.js\"></script>";
+                    }
+
+                    content = content.substring(0, htmlEndIndex) +
+                        tagsToInject +
+                        content.substring(htmlEndIndex);
                 }
-
-                content = content.substring(0, htmlEndIndex) +
-                    tagsToInject +
-                    content.substring(htmlEndIndex);
             }
 
             return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
