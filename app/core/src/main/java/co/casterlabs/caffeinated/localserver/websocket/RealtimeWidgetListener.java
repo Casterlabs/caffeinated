@@ -1,6 +1,8 @@
 package co.casterlabs.caffeinated.localserver.websocket;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
@@ -34,6 +36,14 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
     private WidgetInstanceProvider wInstance;
     private RealtimeConnection connInstance;
     private Websocket websocket;
+
+    /**
+     * Sometimes, a widget initializes and starts emitting before READY is sent.
+     * This is a buffer to hold those emissions until the widget is ready to receive
+     * them. Once READY is received, all pending emissions will be sent and this
+     * buffer will be NULL.
+     */
+    private List<String> pendingEmissions = new LinkedList<>();
 
     @SneakyThrows
     public RealtimeWidgetListener(Widget widget, WidgetInstanceMode mode, String connectionId) {
@@ -105,6 +115,13 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                 case "READY": {
                     this.handle.widgetInstances.add(this.wInstance);
                     this.handle.widget.onNewInstance(this.wInstance);
+
+                    List<String> pending = this.pendingEmissions;
+                    this.pendingEmissions = null;
+                    for (String p : pending) {
+                        this.onText(websocket, p.toString());
+                    }
+
                     return;
                 }
 
@@ -161,6 +178,11 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
                 }
 
                 case "EMISSION": {
+                    if (this.pendingEmissions != null) {
+                        this.pendingEmissions.add(raw);
+                        return;
+                    }
+
                     JsonObject data = message.getObject("data");
                     String emissionType = data.getString("type");
                     JsonElement emissionPayload = data.get("data");
