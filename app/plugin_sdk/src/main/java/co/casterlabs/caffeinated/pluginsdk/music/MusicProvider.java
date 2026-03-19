@@ -41,6 +41,7 @@ public interface MusicProvider {
 
 class Serializer implements JsonSerializer<MusicProvider> {
 
+    @SuppressWarnings("deprecation")
     public JsonElement serialize(@NonNull MusicProvider value, @NonNull Rson rson) {
         return value.toJson();
     }
