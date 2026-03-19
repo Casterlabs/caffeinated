@@ -127,7 +127,6 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
                 case "KOI": {
                     JsonObject data = message.getObject("data");
-                    FastLogger.logStatic(data);
 
                     String koiType = data.getString("type");
                     UserPlatform platform = null;
