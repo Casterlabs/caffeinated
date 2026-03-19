@@ -86,11 +86,14 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
             }
 
             Pair<String, String> response;
-            if (CaffeinatedPlugin.isDevEnvironment() &&
-                ("co.casterlabs.uidocks".equals(pluginId) || "co.casterlabs.defaultwidgets".equals(pluginId))) {
+
+            boolean isInternalPlugin = "co.casterlabs.uidocks".equals(pluginId) || pluginId.startsWith("co.casterlabs.thirdparty");
+            boolean isDefaultWidgetPlugin = "co.casterlabs.defaultwidgets".equals(pluginId);
+
+            if (CaffeinatedPlugin.isDevEnvironment() && (isInternalPlugin || isDefaultWidgetPlugin)) {
                 // Avoid CORS issues.
                 String url;
-                if ("co.casterlabs.uidocks".equals(pluginId)) {
+                if (isInternalPlugin) {
                     url = "http://localhost:3000/$caffeinated-sdk-root$" + resource;
                 } else {
                     url = "http://localhost:3002/$caffeinated-sdk-root$" + resource;
