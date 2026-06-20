@@ -44,6 +44,12 @@ class _UIDocksPlugin extends CaffeinatedPlugin {
         .withType(WidgetType.DOCK)
         .withFriendlyName("Activity Feed");
 
+    public static final WidgetDetails STATUS_DETAILS = new WidgetDetails()
+        .withNamespace("co.casterlabs.dock.status")
+        .withIcon("chart-bar")
+        .withType(WidgetType.DOCK)
+        .withFriendlyName("Status");
+
     @Override
     public void onInit() {
         Function<WidgetDetails, Widget> factory = (details) -> {
@@ -60,6 +66,9 @@ class _UIDocksPlugin extends CaffeinatedPlugin {
                 case "co.casterlabs.dock.activity_feed":
                     return new DockBase("/docks/activity-feed");
 
+                case "co.casterlabs.dock.status":
+                    return new DockBase("/docks/status");
+
                 default:
                     return null; // Shut up Mr. Compiley
             }
@@ -69,6 +78,7 @@ class _UIDocksPlugin extends CaffeinatedPlugin {
         Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, VIEWERS_DETAILS, factory);
 //        Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, CHANNEL_INFO_DETAILS, factory);
         Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, ACTIVITY_FEED_DETAILS, factory);
+        Caffeinated.getInstance().getPlugins().registerWidgetFactory(this, STATUS_DETAILS, factory);
     }
 
     @Override

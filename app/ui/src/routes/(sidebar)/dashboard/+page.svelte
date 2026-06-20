@@ -5,6 +5,7 @@
 	import component_ActivityFeed from '../../(no-sidebar)/docks/activity-feed/+page.svelte';
 	import component_ChannelInfo from '../../(no-sidebar)/docks/channel-info/+page.svelte';
 	import component_Chat from '../../(no-sidebar)/docks/chat/+page.svelte';
+	import StatusBar from '../../(no-sidebar)/docks/status/+page.svelte';
 	import component_Viewers from '../../(no-sidebar)/docks/viewers/+page.svelte';
 
 	import { type Component, onMount } from 'svelte';
@@ -102,6 +103,12 @@
 	});
 </script>
 
-<div class="fixed inset-0 left-[var(--actual-sidebar-width)]">
-	<ResizableGrid bind:this={layoutElement} maxSize={MAX} {contents} onupdate={onLayoutUpdate} />
+<div class="fixed inset-0 left-[var(--actual-sidebar-width)] flex flex-col">
+	<div class="bg-base-2">
+		<StatusBar />
+	</div>
+
+	<div class="flex-1 overflow-hidden">
+		<ResizableGrid bind:this={layoutElement} maxSize={MAX} {contents} onupdate={onLayoutUpdate} />
+	</div>
 </div>

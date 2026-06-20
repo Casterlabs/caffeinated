@@ -202,6 +202,16 @@
 	"co.casterlabs.caffeinated.app.docks.activity_feed": "Activity Feed",
 	"co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title": "Feed Preferences",
 
+	
+	"co.casterlabs.caffeinated.app.docks.status": "Status",
+	"co.casterlabs.caffeinated.app.docks.status.live": "LIVE",
+	"co.casterlabs.caffeinated.app.docks.status.offline": "OFFLINE",
+	"co.casterlabs.caffeinated.app.docks.status.viewers": "Viewers",
+	"co.casterlabs.caffeinated.app.docks.status.followers": "Viewers",
+	"co.casterlabs.caffeinated.app.docks.status.subscribers": "Subscribers",
+	"co.casterlabs.caffeinated.app.docks.status.disconnected": "Disconnected: {items}",
+	"co.casterlabs.caffeinated.app.docks.status.healthy": "All connections are healthy.",
+
 
 	"co.casterlabs.caffeinated.app.docks.chat.viewer": "Chat",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.deleted": "Message deleted by a moderator",
