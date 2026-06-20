@@ -33,9 +33,7 @@ public class AppAuth {
     @JavascriptValue(allowSet = false)
     private static final UserPlatform[] AUTHENTICATABLE = {
             UserPlatform.TWITCH,
-            UserPlatform.TROVO,
             UserPlatform.YOUTUBE,
-            UserPlatform.DLIVE,
             UserPlatform.TIKTOK,
             UserPlatform.KICK,
             UserPlatform.LOCO,
