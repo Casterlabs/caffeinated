@@ -73,7 +73,8 @@ public interface Koi {
             .put("userStates", Rson.DEFAULT.toJson(this.getUserStates()))
             .put("streamStates", Rson.DEFAULT.toJson(this.getStreamStates()))
             .put("roomStates", Rson.DEFAULT.toJson(this.getRoomStates()))
-            .put("features", Rson.DEFAULT.toJson(this.getFeatures()));
+            .put("features", Rson.DEFAULT.toJson(this.getFeatures()))
+            .put("connectionStates", Rson.DEFAULT.toJson(this.getConnectionStates()));
     }
 
     /**
@@ -95,7 +96,8 @@ public interface Koi {
             .put("userStates", Rson.DEFAULT.toJson(this.getUserStates()))
             .put("streamStates", Rson.DEFAULT.toJson(this.getStreamStates()))
             .put("roomStates", Rson.DEFAULT.toJson(this.getRoomStates()))
-            .put("features", Rson.DEFAULT.toJson(this.getFeatures()));
+            .put("features", Rson.DEFAULT.toJson(this.getFeatures()))
+            .put("connectionStates", Rson.DEFAULT.toJson(this.getConnectionStates()));
     }
 
     default List<UserPlatform> getSignedInPlatforms() {

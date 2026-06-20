@@ -246,12 +246,17 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @SneakyThrows
     @Override
     public void onClose(boolean remote) {
         if (this.disposed) return;
 
         AppAuth.checkStatus();
+
+        if (this.userData != null) {
+            KoiImpl.INSTANCE.disconnectionFromAuth(this.userData.platform);
+        }
 
         try {
             Thread.sleep(5000);

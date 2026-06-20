@@ -236,7 +236,8 @@ if (isInApp) {
 				streamStates: await window.Koi.streamStates,
 				// @ts-ignore
 				roomStates: await window.Koi.roomStates,
-				features: await window.Koi.features
+				features: await window.Koi.features,
+				connectionStates: await window.Koi.connectionStates
 			};
 		}
 	})();
@@ -320,7 +321,9 @@ if (isInApp) {
 				userStates: SDK.Koi.userStates,
 				streamStates: SDK.Koi.streamStates,
 				roomStates: SDK.Koi.roomStates,
-				features: SDK.Koi.features
+				features: SDK.Koi.features,
+				// @ts-ignore
+				connectionStates: {} // TODO.
 			};
 		}
 	})();

@@ -27,6 +27,7 @@ export declare interface KoiStatics {
 	streamStates: Record<UserPlatform, StreamStatusEvent>;
 	roomStates: Record<UserPlatform, RoomstateEvent>;
 	features: Record<UserPlatform, string[]>;
+	connectionStates: Record<UserPlatform, Record<string, ConnectionState>>;
 }
 
 /* ------------------------ */

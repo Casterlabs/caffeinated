@@ -77,7 +77,7 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
     private Map<UserPlatform, List<KoiIntegrationFeatures>> features = new ConcurrentHashMap<>();
 
     @JavascriptValue(allowSet = false, watchForMutate = true)
-    private Map<UserPlatform, Map<String, ConnectionState>> connectionStates = new ConcurrentHashMap<>();
+    private Map<UserPlatform, Map<String, ConnectionState>> connectionStates = new ConcurrentHashMap<>(); // Empty conn state map means not connected.
 
     @Deprecated
     public void updateFromAuth() {
@@ -93,12 +93,21 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
         for (UserPlatform key : new ArrayList<>(this.userStates.keySet())) {
             if (!validPlatforms.contains(key)) {
                 this.viewers.remove(key);
+                this.viewerCounts.remove(key);
                 this.userStates.remove(key);
                 this.streamStates.remove(key);
+                this.roomStates.remove(key);
                 this.features.remove(key);
+                this.connectionStates.remove(key);
             }
         }
 
+        this.updateBridgeData();
+    }
+
+    @Deprecated
+    public void disconnectionFromAuth(UserPlatform platform) {
+        this.connectionStates.put(platform, Collections.emptyMap());
         this.updateBridgeData();
     }
 
@@ -245,6 +254,7 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
                     e.streamer.platform,
                     ((ConnectionStateEvent) e).states
                 );
+                this.updateBridgeData();
                 break;
             }
 
