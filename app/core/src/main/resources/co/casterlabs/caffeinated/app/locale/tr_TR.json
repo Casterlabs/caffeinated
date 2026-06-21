@@ -157,6 +157,7 @@
 	"co.casterlabs.caffeinated.app.page.settings.about.translated_by": "{names} tarafından çevrildi",
 	"co.casterlabs.caffeinated.app.docks.activity_feed": "Etkinlik Akışı",
 	"co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title": "Akış Tercihleri",
+	"co.casterlabs.caffeinated.app.docks.status": "Durum",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer": "Sohbet",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.user_history.title": "<user> için mesaj geçmişi gösteriliyor",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.send_message": "Gönder",
