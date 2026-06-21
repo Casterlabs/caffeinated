@@ -152,6 +152,7 @@
 	"co.casterlabs.caffeinated.app.page.settings.about.translated_by": "Traduit par : {names}",
 	"co.casterlabs.caffeinated.app.docks.activity_feed": "Fil d’activité",
 	"co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title": "Préférences du fil",
+	"co.casterlabs.caffeinated.app.docks.status": "Statut",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer": "Chat",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.deleted": "Message supprimé par un modérateur",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.deleted.show": "Afficher",
