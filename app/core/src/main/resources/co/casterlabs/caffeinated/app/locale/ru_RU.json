@@ -157,6 +157,7 @@
 	"co.casterlabs.caffeinated.app.page.settings.about.translated_by": "Переведено: {names}",
 	"co.casterlabs.caffeinated.app.docks.activity_feed": "Лента активности",
 	"co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title": "Параметры ленты",
+	"co.casterlabs.caffeinated.app.docks.status": "Статус",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer": "Чат",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.user_history.title": "Показана история сообщений для: <user>",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.scrolling_paused": "Scrolling paused",
