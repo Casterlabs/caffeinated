@@ -157,6 +157,7 @@
 	"co.casterlabs.caffeinated.app.page.settings.about.translated_by": "Diterjemahkan oleh: {names}",
 	"co.casterlabs.caffeinated.app.docks.activity_feed": "Aktifitas beranda",
 	"co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title": "Preferensi beranda",
+	"co.casterlabs.caffeinated.app.docks.status": "Status",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer": "Percakapan",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.user_history.title": "Menunjukan riwayat pesan dari pengguna: <user>",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.scrolling_paused": "Penggeseran dihentikan sementara",
