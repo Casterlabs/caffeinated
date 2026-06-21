@@ -156,6 +156,7 @@
 	"co.casterlabs.caffeinated.app.page.settings.about.translated_by": "Übersetzt von: {names}",
 	"co.casterlabs.caffeinated.app.docks.activity_feed": "Aktivitäts Feed",
 	"co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title": "Feed Einstellungen",
+	"co.casterlabs.caffeinated.app.docks.status": "Status",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer": "Chat",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.user_history.title": "Nachrichtenverlauf für: <user>",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.scrolling_paused": "Scrolling paused",
