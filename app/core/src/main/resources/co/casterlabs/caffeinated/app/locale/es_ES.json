@@ -155,6 +155,7 @@
 	"co.casterlabs.caffeinated.app.page.settings.about.translated_by": "Translated by: {names}",
 	"co.casterlabs.caffeinated.app.docks.activity_feed": "Activity Feed",
 	"co.casterlabs.caffeinated.app.docks.activity_feed.preferences.title": "Feed Preferences",
+	"co.casterlabs.caffeinated.app.docks.status": "Estado",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer": "Chat",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.user_history.title": "Mostrando historial de mensajes de: <user>",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.send_message": "Send",
