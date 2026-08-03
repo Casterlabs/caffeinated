@@ -1,39 +1,36 @@
-package co.casterlabs.caffeinated.window.saucer;
+package co.casterlabs.caffeinated.window.jcef;
 
 import java.io.File;
 
-import app.saucer.SaucerApp;
+import javax.swing.JFrame;
+
+import org.cef.CefClient;
+import org.cef.browser.CefBrowser;
+
 import app.saucer.bridge.JavascriptObject;
-import app.saucer.util.SaucerUrl;
-import app.saucer.webview.SaucerWebview;
-import app.saucer.webview.window.SaucerWindow;
 import co.casterlabs.caffeinated.window.AppSounds;
 import co.casterlabs.rakurai.json.element.JsonNumber;
 import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.NonNull;
 
 @JavascriptObject
-public class _SaucerAppSounds extends AppSounds {
-    private final SaucerWebview saucer;
+public class _JcefAppSounds extends AppSounds {
+    private final CefClient client;
+    private final CefBrowser browser;
 
     {
-        SaucerWindow window = SaucerWindow.create();
-        this.saucer = window.createWebview((opts) -> {
-            opts.hardwareAcceleration(true);
+        this.client = _CefUtil.createCefClient();
+        this.browser = this.client.createBrowser("data:text/html;charset=utf-8,I'm an audio player!", _CefUtil.ENABLE_OSR, false);
 
-            switch (SaucerApp.backendType()) {
-                case WEBVIEW2:
-                    opts.appendBrowserFlag("-msWebView2SimulateMemoryPressureWhenInactive=true");
-                    break;
-                default:
-                    break; // N/A
-            }
-        });
+        // Trick the browser into thinking it has been painted
+        // so that it can play audio.
+        JFrame testFrame = new JFrame("Casterlabs-Caffeinated - Audio Player");
+        testFrame.add(this.browser.getUIComponent());
+        testFrame.setSize(100, 100);
+        testFrame.setUndecorated(true);
+        testFrame.addNotify(); // Bad form, but it works.
 
-        this.saucer.window.title("Casterlabs-Caffeinated - Audio Player");
-        this.saucer.contextMenuAllowed(false);
-
-        this.saucer.url(SaucerUrl.parse("data:text/html;charset=utf-8,I'm an audio player!"));
+        this.browser.getUIComponent().paint(testFrame.getGraphics());
     }
 
     @Override
@@ -44,7 +41,7 @@ public class _SaucerAppSounds extends AppSounds {
             return;
         }
 
-        this.saucer.bridge.executeJavaScript(
+        this.browser.executeJavaScript(
             "(() => {"
                 + "let previousAudioPromise = window.currentAudioPromise;"
                 + "window.currentAudioPromise = new Promise(async (resolve) => {"
@@ -56,7 +53,9 @@ public class _SaucerAppSounds extends AppSounds {
                 + "  audio.playbackRate = " + new JsonNumber(rate) + ";"
                 + "  audio.play();"
                 + "});"
-                + "})();"
+                + "})();",
+            "inline",
+            0
         );
     }
 

@@ -7,8 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
-import app.saucer.SaucerApp;
-import app.saucer.webview.SaucerWebview;
 import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.ui.AppUI;
@@ -101,8 +99,6 @@ public class Bootstrap implements Runnable {
 
         System.setProperty("saucer.java.help.dependencies", "https://casterlabs.co/caffeinated/dependencies");
         System.setProperty("saucer.generate_typescript_definitions", "true");
-        SaucerWebview.registerCustomScheme("app");
-        SaucerApp.initialize("co.casterlabs.caffeinated", false);
 
         System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 
@@ -226,10 +222,10 @@ public class Bootstrap implements Runnable {
         logger.info("BuildInfo.author             | %s", buildInfo.getAuthor());
         logger.info("BuildInfo.isDev              | %b", isDev);
         logger.info("Bootstrap.args               | %s", System.getProperty("sun.java.command"));
-        logger.info("SaucerApp.archTarget()       | %s", SaucerApp.archTarget());
-        logger.info("SaucerApp.systemTarget()     | %s", SaucerApp.systemTarget());
-        logger.info("SaucerApp.backendType()      | %s", SaucerApp.backendType());
-        logger.info("SaucerApp.version()          | %s", SaucerApp.version());
+//        logger.info("SaucerApp.archTarget()       | %s", SaucerApp.archTarget());
+//        logger.info("SaucerApp.systemTarget()     | %s", SaucerApp.systemTarget());
+//        logger.info("SaucerApp.backendType()      | %s", SaucerApp.backendType());
+//        logger.info("SaucerApp.version()          | %s", SaucerApp.version());
         logger.info("");
 
         logger.info("Checking system tray support...");
@@ -251,12 +247,12 @@ public class Bootstrap implements Runnable {
 
                 // If all of that succeeds, we write a file to let the updater know that
                 // everything's okay.
-                SaucerApp.dispatch(() -> {
-                    try {
-                        writeAppFile(".build_ok", null);
-                    } catch (IOException ignored) {}
-                    logger.info("Everything is running and everything is happy :D");
-                });
+//                SaucerApp.dispatch(() -> {
+                try {
+                    writeAppFile(".build_ok", null);
+                } catch (IOException ignored) {}
+                logger.info("Everything is running and everything is happy :D");
+//                });
             } catch (Throwable t) {
                 logger.severe("Unable to start the app: %s", t);
                 shutdown();
@@ -290,7 +286,7 @@ public class Bootstrap implements Runnable {
         }
 
         logger.info("Calling run() loop...");
-        SaucerApp.run();
+        AppWindow.INSTANCE.run();
         logger.info("run() loop exited.");
     }
 
@@ -354,7 +350,6 @@ public class Bootstrap implements Runnable {
 
         // UI
         TrayHandler.destroy();
-        SaucerApp.quit();
 
         // Exit.
         if (isReset) {

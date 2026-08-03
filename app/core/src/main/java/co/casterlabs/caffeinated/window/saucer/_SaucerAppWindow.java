@@ -28,7 +28,6 @@ import co.casterlabs.caffeinated.app.ui.AppThemeManager;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.bootstrap.Bootstrap;
 import co.casterlabs.caffeinated.bootstrap.TrayHandler;
-import co.casterlabs.caffeinated.window.AppSchemeHandler;
 import co.casterlabs.caffeinated.window.AppSounds;
 import co.casterlabs.caffeinated.window.AppWindow;
 import co.casterlabs.rakurai.json.element.JsonArray;
@@ -43,10 +42,29 @@ public class _SaucerAppWindow extends AppWindow {
     private boolean forceDarkEnabled = false;
 
     @Override
+    public void run() {
+        SaucerApp.run();
+    }
+
+    @Override
+    public void quit() {
+        SaucerApp.quit();
+    }
+
+    @Override
+    public void open(String url) {
+        SaucerDesktop.open(url);
+    }
+
+    @Override
     public void init(String appUrl, boolean traySupported, Consumer<JsonArray> messageHandler) {
         this.appUrl = appUrl;
         this.traySupported = traySupported;
         this.messageHandler = messageHandler;
+
+        SaucerWebview.registerCustomScheme("app");
+        SaucerApp.initialize("co.casterlabs.caffeinated", false);
+
         show();
     }
 
@@ -126,7 +144,7 @@ public class _SaucerAppWindow extends AppWindow {
 
         this.saucer.window.title("Casterlabs-Caffeinated");
         this.saucer.contextMenuAllowed(false);
-        this.saucer.addSchemeHandler("app", AppSchemeHandler.INSTANCE);
+        this.saucer.addSchemeHandler("app", _SchemeHandler.INSTANCE);
 
         // @formatter:off
         this.saucer.bridge.defineObject("LogBridge", LogBridge.class);
@@ -137,7 +155,7 @@ public class _SaucerAppWindow extends AppWindow {
         this.saucer.bridge.defineObject("AppConfig",       AppConfig.class);
         this.saucer.bridge.defineObject("AppLocale",       AppLocale.class);
         this.saucer.bridge.defineObject("AppPlugins",      AppPlugins.class);
-        this.saucer.bridge.defineObject("AppSounds",       AppSounds.class);
+        this.saucer.bridge.defineObject("AppSounds",       AppSounds.INSTANCE);
         this.saucer.bridge.defineObject("AppThemeManager", AppThemeManager.class);
         this.saucer.bridge.defineObject("AppUI",           AppUI.class);
 
@@ -195,13 +213,13 @@ public class _SaucerAppWindow extends AppWindow {
 
     @Override
     public synchronized void setIcon(byte[] iconBytes) {
-        SaucerIcon icon = SaucerIcon.from(iconBytes);
-
-        this.icon = icon;
-
-        if (this.saucer != null) {
-            this.saucer.window.icon(icon);
-        }
+//        SaucerIcon icon = SaucerIcon.from(iconBytes);
+//
+//        this.icon = icon;
+//
+//        if (this.saucer != null) {
+//            this.saucer.window.icon(icon);
+//        }
     }
 
     @Override

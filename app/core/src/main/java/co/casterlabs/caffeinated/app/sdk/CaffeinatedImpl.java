@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import app.saucer.SaucerDesktop;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
 import co.casterlabs.caffeinated.app.NotificationType;
@@ -24,6 +23,7 @@ import co.casterlabs.caffeinated.pluginsdk.music.Music;
 import co.casterlabs.caffeinated.pluginsdk.scripting.ScriptingEngines;
 import co.casterlabs.caffeinated.util.ClipboardUtil;
 import co.casterlabs.caffeinated.util.MimeTypes;
+import co.casterlabs.caffeinated.window.AppWindow;
 import glocale.part.ComponentPart;
 import glocale.part.Part;
 import lombok.NonNull;
@@ -72,7 +72,7 @@ public class CaffeinatedImpl implements Caffeinated {
     @JavascriptFunction
     public void openLink(String url) {
         if (url.startsWith("#")) return; // Not a real link.
-        SaucerDesktop.open(url);
+        AppWindow.INSTANCE.open(url);
     }
 
     @Override

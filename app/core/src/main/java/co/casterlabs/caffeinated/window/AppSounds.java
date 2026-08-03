@@ -2,15 +2,52 @@ package co.casterlabs.caffeinated.window;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import app.saucer.bridge.JavascriptFunction;
-import co.casterlabs.caffeinated.window.saucer._SaucerAppSounds;
+import app.saucer.bridge.JavascriptObject;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
+@SuppressWarnings("deprecation")
+@JavascriptObject
 public abstract class AppSounds {
-    public static final AppSounds INSTANCE = new _SaucerAppSounds();
+    public static final AppSounds INSTANCE;
+
+    static {
+        List<Throwable> errors = new ArrayList<>();
+
+        AppSounds instance = null;
+
+        try {
+            Class<?> clazz = Class.forName("co.casterlabs.caffeinated.window.jcef._JcefAppSounds");
+            instance = (AppSounds) clazz.newInstance();
+            FastLogger.logStatic("Using JCEF for the AppSounds.");
+        } catch (Throwable t) {
+            errors.add(t);
+        }
+
+        if (instance == null) {
+            try {
+                Class<?> clazz = Class.forName("co.casterlabs.caffeinated.window.saucer._SaucerAppSounds");
+                instance = (AppSounds) clazz.newInstance();
+                FastLogger.logStatic("Using Saucer for the AppSounds.");
+            } catch (Throwable t) {
+                errors.add(t);
+            }
+        }
+
+        if (instance == null) {
+            RuntimeException e = new RuntimeException("Failed to initialize AppSounds.");
+            errors.forEach(e::addSuppressed);
+            throw e;
+        }
+
+        INSTANCE = instance;
+    }
 
     @JavascriptFunction
     public abstract void playUrl(@NonNull String audioUrl, float volume, float rate);

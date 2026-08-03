@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.window;
+package co.casterlabs.caffeinated.window.saucer;
 
 import app.saucer.webview.scheme.SaucerSchemeHandler;
 import app.saucer.webview.scheme.SaucerSchemeRequest;
@@ -9,8 +9,8 @@ import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class AppSchemeHandler implements SaucerSchemeHandler {
-    public static final AppSchemeHandler INSTANCE = new AppSchemeHandler();
+class _SchemeHandler implements SaucerSchemeHandler {
+    public static final _SchemeHandler INSTANCE = new _SchemeHandler();
 
     @SneakyThrows
     @Override

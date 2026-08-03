@@ -13,6 +13,8 @@
 
 	<properties>
 		<saucer4j.version>bde6d22</saucer4j.version>
+		<cef.version>146.0.10</cef.version>
+		<cef.natives.version>jcef-d3de827+cef-146.0.10+g8219561+chromium-146.0.7680.179</cef.natives.version>
 	</properties>
 
 	<build>
@@ -141,6 +143,20 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- JCEF -->
+		<dependency>
+			<groupId>me.friwi</groupId>
+			<artifactId>jcefmaven</artifactId>
+			<version>${cef.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>me.friwi</groupId>
+			<artifactId>jcef-natives-windows-amd64</artifactId>
+			<version>${cef.natives.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- JNA -->
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
@@ -165,9 +181,9 @@
 
 		<!-- Utility packages -->
 		<dependency>
-		    <groupId>com.github.glocale</groupId>
-		    <artifactId>java</artifactId>
-		    <version>aec7ced</version>
+			<groupId>com.github.glocale</groupId>
+			<artifactId>java</artifactId>
+			<version>aec7ced</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
