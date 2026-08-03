@@ -122,7 +122,7 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
         JsonObject extendedStatics = this.toJsonExtended();
 
         AsyncTask.create(() -> {
-            AppWindow.emit(
+            AppWindow.INSTANCE.emit(
                 "koi:statics",
                 extendedStatics
             );
@@ -279,7 +279,7 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
 //                "koi:event:" + e.type().name().toLowerCase(),
 //                asJson
 //            );
-            AppWindow.emit(
+            AppWindow.INSTANCE.emit(
                 "koi:event",
                 asJson
             );

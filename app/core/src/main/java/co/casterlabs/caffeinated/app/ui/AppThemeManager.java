@@ -36,7 +36,7 @@ public class AppThemeManager {
             effectiveAppearance = AppConfig.themePreferences.get().getAppearance();
         }
 
-        AppWindow.forceDarkEnabled(effectiveAppearance == Appearance.DARK);
+        AppWindow.INSTANCE.forceDarkEnabled(effectiveAppearance == Appearance.DARK);
     }
 
     public static void onUpdatePreferences() {

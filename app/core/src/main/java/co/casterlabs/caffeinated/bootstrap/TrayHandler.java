@@ -75,19 +75,19 @@ public class TrayHandler {
         popup.add(itemExit);
 
         showCheckbox.addItemListener((ItemEvent e) -> {
-            if (AppWindow.isVisible()) {
-                AppWindow.hide();
+            if (AppWindow.INSTANCE.isVisible()) {
+                AppWindow.INSTANCE.hide();
                 AppUI.navigate("/blank");
                 updateShowCheckbox(false);
             } else {
                 AppUI.navigate("/");
-                AppWindow.show();
+                AppWindow.INSTANCE.show();
                 updateShowCheckbox(true);
             }
         });
 
         itemDevTools.addActionListener((ActionEvent e) -> {
-            AppWindow.openDevTools();
+            AppWindow.INSTANCE.openDevTools();
         });
 
         itemExit.addActionListener((ActionEvent e) -> {
@@ -119,9 +119,9 @@ public class TrayHandler {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (!e.isPopupTrigger()) {
-                    if (!AppWindow.isVisible()) {
+                    if (!AppWindow.INSTANCE.isVisible()) {
                         AppUI.navigate("/");
-                        AppWindow.show();
+                        AppWindow.INSTANCE.show();
                         updateShowCheckbox(true);
                     }
                 }

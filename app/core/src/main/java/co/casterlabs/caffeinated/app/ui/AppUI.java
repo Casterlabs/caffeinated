@@ -11,7 +11,6 @@ import javax.imageio.ImageIO;
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
-import app.saucer.webview.window.SaucerIcon;
 import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.NotificationType;
@@ -150,19 +149,19 @@ public class AppUI {
                     )
             );
 
-            AppWindow.executeJavaScript(line);
+            AppWindow.INSTANCE.executeJavaScript(line);
         }
     }
 
     public static void goBack() {
-        if (uiFinishedLoad && AppWindow.isVisible()) {
-            AppWindow.back();
+        if (uiFinishedLoad && AppWindow.INSTANCE.isVisible()) {
+            AppWindow.INSTANCE.back();
         }
     }
 
     public static void navigate(String path) {
         if (uiFinishedLoad) {
-            AppWindow.emit(
+            AppWindow.INSTANCE.emit(
                 "goto",
                 JsonObject.singleton("path", "/$caffeinated-sdk-root$" + path)
             );
@@ -187,8 +186,8 @@ public class AppUI {
 
         TrayHandler.changeTrayIcon(ImageIO.read(resource));
 
-        SaucerIcon icon = SaucerIcon.from(StreamUtil.toBytes(resource.openStream()));
-        AppWindow.setIcon(icon);
+        byte[] icon = StreamUtil.toBytes(resource.openStream());
+        AppWindow.INSTANCE.setIcon(icon);
     }
 
 }

@@ -220,7 +220,7 @@ class _JavascriptEngine implements ScriptingEngine {
 
             if (audioUrl.startsWith("data:")) {
                 FastLogger.logStatic(LogLevel.DEBUG, "Playing audio: ??? (data uri)");
-                AppSounds.playUrl(
+                AppSounds.INSTANCE.playUrl(
                     audioUrl,
                     volume.floatValue(),
                     1
@@ -243,7 +243,7 @@ class _JavascriptEngine implements ScriptingEngine {
             }
 
             FastLogger.logStatic(LogLevel.DEBUG, "Playing audio: %s", audioMime);
-            AppSounds.playUrl(
+            AppSounds.INSTANCE.playUrl(
                 "data:" + audioMime + ";base64," + Base64.getEncoder().encodeToString(audioBytes),
                 volume.floatValue(),
                 1

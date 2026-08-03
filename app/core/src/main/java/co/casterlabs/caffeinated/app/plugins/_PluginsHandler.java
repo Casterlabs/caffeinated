@@ -93,7 +93,7 @@ class _PluginsHandler {
             @SuppressWarnings("deprecation")
             @Override
             public void onSettingsUpdate() {
-                AppWindow.emit(
+                AppWindow.INSTANCE.emit(
                     "widgets:" + this.id,
                     this.widget.toJson()
                 );

@@ -267,7 +267,7 @@ public class Bootstrap implements Runnable {
         String appUrl = (isDev ? this.devAddress : "app://authority") + "/$caffeinated-sdk-root$";
         logger.info("appAddress = %s", appUrl);
 
-        AppWindow.init(
+        AppWindow.INSTANCE.init(
             appUrl,
             traySupported,
             (arr) -> {
@@ -285,7 +285,7 @@ public class Bootstrap implements Runnable {
         if (isDev) {
             AsyncTask.create(() -> {
                 logger.info("Dev tools enabled, opening dev tools.");
-                AppWindow.openDevTools();
+                AppWindow.INSTANCE.openDevTools();
             });
         }
 
@@ -330,7 +330,7 @@ public class Bootstrap implements Runnable {
 
     private static void shutdown(boolean force, boolean relaunch, boolean isReset) {
         if (!App.canCloseUI() && !force) {
-            AppWindow.show();
+            AppWindow.INSTANCE.show();
         }
 
         if (isShuttingDown) return;
@@ -339,7 +339,7 @@ public class Bootstrap implements Runnable {
         logger.info("Shutting down.");
 
         // Hide the window IMMEDIATELY.
-        AppWindow.hide();
+        AppWindow.INSTANCE.hide();
         AppUI.navigate("/blank");
 
         // Local Server
