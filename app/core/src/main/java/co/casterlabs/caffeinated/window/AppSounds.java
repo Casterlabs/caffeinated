@@ -1,11 +1,11 @@
-package co.casterlabs.caffeinated.app.window;
+package co.casterlabs.caffeinated.window;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Base64;
 
 import app.saucer.bridge.JavascriptFunction;
-import co.casterlabs.caffeinated.app.window.saucer._SaucerAppSounds;
+import co.casterlabs.caffeinated.window.saucer._SaucerAppSounds;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 

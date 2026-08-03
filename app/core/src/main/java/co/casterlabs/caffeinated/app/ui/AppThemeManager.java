@@ -6,7 +6,7 @@ import app.saucer.bridge.JavascriptObject;
 import app.saucer.bridge.JavascriptValue;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.ui.ThemePreferences.Appearance;
-import co.casterlabs.caffeinated.app.window.AppWindow;
+import co.casterlabs.caffeinated.window.AppWindow;
 import lombok.Getter;
 
 @JavascriptObject

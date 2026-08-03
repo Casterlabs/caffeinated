@@ -24,7 +24,7 @@ import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.ui.AppUI;
-import co.casterlabs.caffeinated.app.window.AppWindow;
+import co.casterlabs.caffeinated.window.AppWindow;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.commons.platform.Platform;
 import lombok.NonNull;

@@ -1,10 +1,10 @@
-package co.casterlabs.caffeinated.app.window;
+package co.casterlabs.caffeinated.window;
 
 import java.util.function.Consumer;
 
 import app.saucer.bridge.JavascriptFunction;
 import app.saucer.bridge.JavascriptObject;
-import co.casterlabs.caffeinated.app.window.saucer._SaucerAppWindow;
+import co.casterlabs.caffeinated.window.saucer._SaucerAppWindow;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 

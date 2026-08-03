@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.bootstrap;
+package co.casterlabs.caffeinated.window;
 
 import app.saucer.webview.scheme.SaucerSchemeHandler;
 import app.saucer.webview.scheme.SaucerSchemeRequest;

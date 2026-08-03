@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.window.saucer;
+package co.casterlabs.caffeinated.window.saucer;
 
 import java.io.File;
 
@@ -8,7 +8,7 @@ import app.saucer.bridge.JavascriptObject;
 import app.saucer.util.SaucerUrl;
 import app.saucer.webview.SaucerWebview;
 import app.saucer.webview.window.SaucerWindow;
-import co.casterlabs.caffeinated.app.window.AppSounds;
+import co.casterlabs.caffeinated.window.AppSounds;
 import co.casterlabs.rakurai.json.element.JsonNumber;
 import co.casterlabs.rakurai.json.element.JsonString;
 import lombok.NonNull;

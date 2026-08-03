@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app.window.saucer;
+package co.casterlabs.caffeinated.window.saucer;
 
 import java.util.function.Consumer;
 
@@ -26,11 +26,11 @@ import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
 import co.casterlabs.caffeinated.app.sdk.EmojisImpl;
 import co.casterlabs.caffeinated.app.ui.AppThemeManager;
 import co.casterlabs.caffeinated.app.ui.AppUI;
-import co.casterlabs.caffeinated.app.window.AppSounds;
-import co.casterlabs.caffeinated.app.window.AppWindow;
-import co.casterlabs.caffeinated.bootstrap.AppSchemeHandler;
 import co.casterlabs.caffeinated.bootstrap.Bootstrap;
 import co.casterlabs.caffeinated.bootstrap.TrayHandler;
+import co.casterlabs.caffeinated.window.AppSchemeHandler;
+import co.casterlabs.caffeinated.window.AppSounds;
+import co.casterlabs.caffeinated.window.AppWindow;
 import co.casterlabs.rakurai.json.element.JsonArray;
 
 public class _SaucerAppWindow extends AppWindow {

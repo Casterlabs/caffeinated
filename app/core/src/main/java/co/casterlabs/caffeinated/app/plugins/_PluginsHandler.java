@@ -14,10 +14,10 @@ import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.app.config.AppConfig;
-import co.casterlabs.caffeinated.app.window.AppWindow;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
+import co.casterlabs.caffeinated.window.AppWindow;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.commons.async.AsyncTask;
