@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app;
+package co.casterlabs.caffeinated.app.window;
 
 import java.util.function.Consumer;
 
@@ -16,6 +16,7 @@ import app.saucer.webview.SaucerWebviewListener;
 import app.saucer.webview.window.SaucerIcon;
 import app.saucer.webview.window.SaucerWindow;
 import app.saucer.webview.window.SaucerWindowListener;
+import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.config.AppConfig;
@@ -83,7 +84,7 @@ public class AppWindow {
         saucer.listener(new SaucerWebviewListener() {
             @Override
             public boolean onNavigate(SaucerNavigation navigation) {
-            	String url = navigation.targetUrl().toString();
+                String url = navigation.targetUrl().toString();
                 if (navigation.type() == NavigationType.NEW_WINDOW && !url.startsWith("app://")) {
                     SaucerDesktop.open(url);
                     return false;

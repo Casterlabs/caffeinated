@@ -24,13 +24,13 @@ import javax.script.ScriptException;
 import org.jetbrains.annotations.Nullable;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
-import co.casterlabs.caffeinated.app.AppSounds;
 import co.casterlabs.caffeinated.app.NotificationType;
 import co.casterlabs.caffeinated.app.chatbot.AppChatbot;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.koi.KoiImpl;
 import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
 import co.casterlabs.caffeinated.app.ui.AppUI;
+import co.casterlabs.caffeinated.app.window.AppSounds;
 import co.casterlabs.caffeinated.pluginsdk.Currencies;
 import co.casterlabs.caffeinated.pluginsdk.TTS;
 import co.casterlabs.caffeinated.pluginsdk.music.MusicPlaybackState;

@@ -13,8 +13,8 @@ import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
-import co.casterlabs.caffeinated.app.AppWindow;
 import co.casterlabs.caffeinated.app.config.AppConfig;
+import co.casterlabs.caffeinated.app.window.AppWindow;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;

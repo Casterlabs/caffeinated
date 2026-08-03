@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.app;
+package co.casterlabs.caffeinated.app.window;
 
 import java.io.File;
 import java.nio.file.Files;
