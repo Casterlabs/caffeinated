@@ -128,7 +128,7 @@
 			? render('co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.reply.placeholder', { name: replyTarget.sender.username })
 			: sendTarget
 				? render('co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.platform.placeholder', {
-						username: sendTarget.username,
+						name: sendTarget.username,
 						platform: render(`co.casterlabs.caffeinated.app.platform.${sendTarget.platform}`)
 					})
 				: render('co.casterlabs.caffeinated.app.docks.chat.viewer.send_message.all.placeholder')}
