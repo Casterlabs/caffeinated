@@ -217,10 +217,6 @@
 		color: var(--platform-color);
 	}
 
-	:global(.ZEBRA-STRIPES .even-child .event-renderer) {
-		background-color: var(--base2);
-	}
-
 	:global(.HIDE-TIMESTAMP .er-timestamp) {
 		display: none !important;
 	}

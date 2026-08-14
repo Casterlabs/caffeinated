@@ -50,6 +50,8 @@
 	let isDeleted = $state((event as any).is_visible === false || event.x_cleared);
 	let showAnyways = $state(false);
 
+	let isHighlighted = $state(['FOLLOW', 'SUBSCRIPTION', 'RAID', 'CHANNEL_POINTS'].includes(event.event_type) || (event as any).attributes?.length > 0);
+
 	// prettier-ignore
 	let eventUser: User = $derived((event as any).sender || (event as any).follower || (event as any).subscriber || (event as any).host);
 	let eventMetaId: MetaId = $derived((event as any).meta_id || null);
@@ -119,11 +121,11 @@
 	<!-- <LongPressListener onlongpress={() => uiEvents.broadcast('x-event-modal', event)}> -->
 	<div
 		class="event-renderer mt-0.5 py-1 break-anywhere relative px-2 will-change-transform select-text cursor-default"
+		class:er-highlighted={isHighlighted}
+		class:er-donotmoderate={doNotModerate}
 		class:er-chat-event={!ACTIVITY_EVENTS.includes(event.event_type) && !VIEWER_EVENTS.includes(event.event_type)}
 		class:er-activity-event={ACTIVITY_EVENTS.includes(event.event_type)}
 		class:er-viewer-event={VIEWER_EVENTS.includes(event.event_type)}
-		class:hover:bg-base-2={!doNotModerate}
-		class:active:bg-base-2={!doNotModerate}
 		class:text-base-11={isDeleted}
 	>
 		{#if isDeleted && !showAnyways}

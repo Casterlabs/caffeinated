@@ -38,7 +38,7 @@
 </script>
 
 <div
-	class="h-full max-h-full flex flex-col event-renderer"
+	class="h-full max-h-full flex flex-col event-renderer chat-renderer"
 	class:HIDE-TIMESTAMP={!prefs?.showTimestamps}
 	class:HIDE-PROFILEPICTURES={!prefs?.showProfilePictures}
 	class:HIDE-BADGES={!prefs?.showBadges}
@@ -83,3 +83,31 @@
 		onclose={() => (preferencesModal = false)}
 	/>
 {/if}
+
+<style>
+	/* ---- Regular---- */
+
+	:global(.chat-renderer.ZEBRA-STRIPES .even-child .event-renderer) {
+		background-color: var(--base2);
+	}
+
+	:global(.chat-renderer .event-renderer:not(.er-donotmoderate):active),
+	:global(.chat-renderer .event-renderer:not(.er-donotmoderate):hover) {
+		background-color: var(--base2);
+	}
+
+	/* ---- Highlighted ---- */
+
+	:global(.chat-renderer .event-renderer.er-highlighted) {
+		background-color: var(--primary3);
+	}
+
+	:global(.chat-renderer.ZEBRA-STRIPES .even-child .event-renderer.er-highlighted) {
+		background-color: var(--primary4);
+	}
+
+	:global(.chat-renderer .event-renderer.er-highlighted:not(.er-donotmoderate):active),
+	:global(.chat-renderer .event-renderer.er-highlighted:not(.er-donotmoderate):hover) {
+		background-color: var(--primary5);
+	}
+</style>

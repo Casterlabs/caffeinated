@@ -33,7 +33,7 @@
 </script>
 
 <div
-	class="h-full max-h-full flex flex-col event-renderer HIDE-VIEWERS HIDE-CHAT relative"
+	class="activity-renderer h-full max-h-full flex flex-col event-renderer HIDE-VIEWERS HIDE-CHAT relative"
 	class:HIDE-TIMESTAMP={!prefs?.showTimestamps}
 	class:HIDE-PROFILEPICTURES={!prefs?.showProfilePictures}
 	class:HIDE-BADGES={!prefs?.showBadges}
@@ -68,3 +68,16 @@
 		onclose={() => (preferencesModal = false)}
 	/>
 {/if}
+
+<style>
+	/* ---- Regular---- */
+
+	:global(.activity-renderer.ZEBRA-STRIPES .even-child .event-renderer) {
+		background-color: var(--base2);
+	}
+
+	:global(.activity-renderer .event-renderer:not(.er-donotmoderate):active),
+	:global(.activity-renderer .event-renderer:not(.er-donotmoderate):hover) {
+		background-color: var(--base3);
+	}
+</style>
