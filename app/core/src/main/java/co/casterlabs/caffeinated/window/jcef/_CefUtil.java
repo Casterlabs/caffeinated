@@ -29,7 +29,7 @@ class _CefUtil {
 
             builder.addJcefArgs(
                 "--disable-http-cache",
-                // "--disable-web-security",
+                "--disable-web-security", // Gross workaround for CORS issues between custom schemes and localhost.
                 "--autoplay-policy=no-user-gesture-required"
             );
             builder.setInstallDir(bundleDirectory);
@@ -52,7 +52,7 @@ class _CefUtil {
                         true,   // standard
                         false,  // local
                         false,  // display isolated
-                        false,  // secure
+                        true,   // secure
                         true,   // CORS enabled
                         false,  // CSP bypass
                         true    // fetch enabled?
