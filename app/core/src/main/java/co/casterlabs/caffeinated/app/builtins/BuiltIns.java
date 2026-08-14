@@ -1,7 +1,6 @@
 package co.casterlabs.caffeinated.app.builtins;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,13 +8,14 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.builtin.CaffeinatedDefaultPlugin;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.caffeinated.pluginsdk.PluginResource;
 import co.casterlabs.caffeinated.util.MimeTypes;
-import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.commons.io.streams.StreamUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class BuiltIns {
+    private static final PluginResource RESOURCE_NOT_FOUND = PluginResource.of("Not found.".getBytes(), "text/plain");
 
     public static List<CaffeinatedPlugin> init() {
         return Arrays.asList(
@@ -24,7 +24,7 @@ public class BuiltIns {
         );
     }
 
-    static @Nullable Pair<String, String> resolveUIFile(String resource) {
+    static @Nullable PluginResource resolveUIFile(String resource) {
         if (resource.isEmpty()) {
             resource = "/index.html";
         } else {
@@ -49,13 +49,15 @@ public class BuiltIns {
         FastLogger.logStatic(LogLevel.DEBUG, "Loading resource: %s", resource);
 
         try (InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream(resource)) {
-            return new Pair<>(
-                StreamUtil.toString(in, StandardCharsets.UTF_8),
+            byte[] data = StreamUtil.toBytes(in);
+
+            return PluginResource.of(
+                data,
                 mimeType
             );
         } catch (Exception e) {
             FastLogger.logStatic(LogLevel.DEBUG, "An error occurred whilst loading resource %s:\n%s", resource, e);
-            return new Pair<>("", "text/plain");
+            return RESOURCE_NOT_FOUND;
         }
     }
 

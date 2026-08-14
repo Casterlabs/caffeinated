@@ -10,6 +10,7 @@ import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.koi.KoiImpl;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.CaffeinatedPlugin;
+import co.casterlabs.caffeinated.pluginsdk.PluginResource;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Connection;
 import co.casterlabs.caffeinated.pluginsdk.kinoko.KinokoV1Listener;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
@@ -17,7 +18,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetDetails;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
-import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.emoji.generator.WebUtil;
 import co.casterlabs.koi.api.types.MessageId;
 import co.casterlabs.koi.api.types.RoomId;
@@ -185,7 +185,7 @@ class _KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1Listener {
     }
 
     @Override
-    public @Nullable Pair<String, String> getResource(String resource) throws IOException {
+    public @Nullable PluginResource resolveResource(String resource) throws IOException {
         return BuiltIns.resolveUIFile(resource);
     }
 
