@@ -2,7 +2,7 @@ package co.casterlabs.caffeinated.localserver.websocket;
 
 import java.io.IOException;
 
-import co.casterlabs.caffeinated.localserver.RouteHelper;
+import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstance;
@@ -13,13 +13,13 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rakurai.json.serialization.JsonParseException;
-import co.casterlabs.rhs.session.Websocket;
-import co.casterlabs.rhs.session.WebsocketListener;
+import co.casterlabs.rhs.protocol.websocket.Websocket;
+import co.casterlabs.rhs.protocol.websocket.WebsocketListener;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
-public class RealtimeHeartbeatListener implements WebsocketListener, RouteHelper {
+public class RealtimeHeartbeatListener implements WebsocketListener {
     private WidgetHandle handle;
     private String connectionId;
 
@@ -35,6 +35,7 @@ public class RealtimeHeartbeatListener implements WebsocketListener, RouteHelper
 
     @Override
     public void onOpen(Websocket websocket) {
+        LocalServer.websockets.add(websocket);
         this.websocket = websocket;
 
         this.connInstance = new ConnectionWrapper();
@@ -42,7 +43,7 @@ public class RealtimeHeartbeatListener implements WebsocketListener, RouteHelper
 
         Pair<RealtimeConnection, WidgetInstance> connPair = new Pair<>(this.connInstance, this.wInstance);
 
-        websocket.setAttachment(connPair);
+        websocket.attachment(connPair);
         this.handle.widgetInstances.add(this.wInstance);
 
         this.sendMessage("INIT", new JsonObject());
@@ -70,6 +71,7 @@ public class RealtimeHeartbeatListener implements WebsocketListener, RouteHelper
 
     @Override
     public void onClose(Websocket websocket) {
+        LocalServer.websockets.remove(websocket);
         try {
             this.wInstance.onClose();
         } finally {
@@ -128,7 +130,7 @@ public class RealtimeHeartbeatListener implements WebsocketListener, RouteHelper
 
         @Override
         public @NonNull String getRemoteIpAddress() {
-            return websocket.getSession().getRemoteIpAddress();
+            return websocket.session().remoteNetworkAddress();
         }
 
         @Override

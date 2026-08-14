@@ -2,28 +2,33 @@ package co.casterlabs.caffeinated.localserver.handlers;
 
 import java.util.UUID;
 
-import co.casterlabs.caffeinated.localserver.RequestError;
 import co.casterlabs.caffeinated.localserver.RouteHelper;
 import co.casterlabs.caffeinated.localserver.websocket.RealtimeListener;
-import co.casterlabs.rhs.protocol.StandardHttpStatus;
-import co.casterlabs.rhs.session.WebsocketListener;
-import co.casterlabs.sora.api.websockets.SoraWebsocketSession;
-import co.casterlabs.sora.api.websockets.WebsocketProvider;
-import co.casterlabs.sora.api.websockets.annotations.WebsocketEndpoint;
+import co.casterlabs.rhs.HttpStatus.StandardHttpStatus;
+import co.casterlabs.rhs.protocol.api.endpoints.EndpointData;
+import co.casterlabs.rhs.protocol.api.endpoints.EndpointProvider;
+import co.casterlabs.rhs.protocol.api.endpoints.WebsocketEndpoint;
+import co.casterlabs.rhs.protocol.websocket.WebsocketResponse;
+import co.casterlabs.rhs.protocol.websocket.WebsocketSession;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class RouteMiscApi implements WebsocketProvider, RouteHelper {
+public class RouteMiscApi implements EndpointProvider {
 
-    @WebsocketEndpoint(uri = "/api/realtime")
-    public WebsocketListener onWidgetRealtimeConnection(SoraWebsocketSession session) {
+    @WebsocketEndpoint(path = "/api/realtime")
+    public WebsocketResponse onWidgetRealtimeConnection(WebsocketSession session, EndpointData<Void> data) {
         try {
-            if (!authorize(session)) {
-                return newWebsocketErrorResponse(StandardHttpStatus.UNAUTHORIZED, RequestError.UNAUTHORIZED);
+            if (!RouteHelper.authorize(session)) {
+                return WebsocketResponse.reject(StandardHttpStatus.UNAUTHORIZED);
             }
 
-            return new RealtimeListener(UUID.randomUUID().toString());
+            return WebsocketResponse.accept(
+                new RealtimeListener(UUID.randomUUID().toString()),
+                session.firstProtocol()
+            );
         } catch (Exception e) {
-            e.printStackTrace();
-            return newWebsocketErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
+            FastLogger.logStatic(LogLevel.SEVERE, "Failed to handle websocket connection.", e);
+            return WebsocketResponse.reject(StandardHttpStatus.INTERNAL_ERROR);
         }
     }
 

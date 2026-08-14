@@ -15,37 +15,42 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.util.WebUtil;
 import co.casterlabs.commons.functional.tuples.Pair;
-import co.casterlabs.rhs.protocol.StandardHttpStatus;
-import co.casterlabs.rhs.server.HttpResponse;
-import co.casterlabs.rhs.session.WebsocketListener;
-import co.casterlabs.sora.api.http.HttpProvider;
-import co.casterlabs.sora.api.http.SoraHttpSession;
-import co.casterlabs.sora.api.http.annotations.HttpEndpoint;
-import co.casterlabs.sora.api.websockets.SoraWebsocketSession;
-import co.casterlabs.sora.api.websockets.WebsocketProvider;
-import co.casterlabs.sora.api.websockets.annotations.WebsocketEndpoint;
+import co.casterlabs.rhs.HttpMethod;
+import co.casterlabs.rhs.HttpStatus.StandardHttpStatus;
+import co.casterlabs.rhs.protocol.api.endpoints.EndpointData;
+import co.casterlabs.rhs.protocol.api.endpoints.EndpointProvider;
+import co.casterlabs.rhs.protocol.api.endpoints.HttpEndpoint;
+import co.casterlabs.rhs.protocol.api.endpoints.WebsocketEndpoint;
+import co.casterlabs.rhs.protocol.http.HttpResponse;
+import co.casterlabs.rhs.protocol.http.HttpSession;
+import co.casterlabs.rhs.protocol.websocket.WebsocketResponse;
+import co.casterlabs.rhs.protocol.websocket.WebsocketSession;
 import okhttp3.Request;
+import xyz.e3ndr.fastloggingframework.logging.FastLogger;
+import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
-public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHelper {
+public class RouteWidgetApi implements EndpointProvider {
     private static final String BASE_URL_REPLACE = "/$caffeinated-sdk-root$";
     private static final String ESCAPED_BASE_URL_REPLACE = "/$\\caffeinated-sdk-root$";
 
-    @HttpEndpoint(uri = "/api/plugin/widget/loader.*")
-    public HttpResponse onGetWidgetLoaderRequest(SoraHttpSession session) {
+    @HttpEndpoint(path = "/api/plugin/widget/loader.*", allowedMethods = {
+            HttpMethod.GET
+    })
+    public HttpResponse onGetWidgetLoaderRequest(HttpSession session, EndpointData<Void> data) {
         try {
-            String authorization = session.getQueryParameters().get("authorization");
-            String pluginId = session.getQueryParameters().get("pluginId");
-            String widgetId = session.getQueryParameters().get("widgetId");
+            String authorization = session.uri().query.getSingle("authorization");
+            String pluginId = session.uri().query.getSingle("pluginId");
+            String widgetId = session.uri().query.getSingle("widgetId");
             WidgetInstanceMode mode = WidgetInstanceMode.valueOf(
                 session
-                    .getQueryParameters()
-                    .getOrDefault("mode", "WIDGET")
-                    .toUpperCase()
+                    .uri().query
+                        .getSingleOrDefault("mode", "WIDGET")
+                        .toUpperCase()
             );
 
             CaffeinatedPlugin plugin = CaffeinatedPluginsImpl.INSTANCE.getPluginById(pluginId);
             if (plugin == null) {
-                return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
+                return RouteHelper.newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
             }
 
             Widget widget = null;
@@ -55,25 +60,27 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                 }
             }
             if (widget == null) {
-                return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.WIDGET_NOT_FOUND);
+                return RouteHelper.newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.WIDGET_NOT_FOUND);
             }
 
             return HttpResponse.newFixedLengthResponse(StandardHttpStatus.TEMPORARY_REDIRECT)
-                .putHeader("Location", String.format("/api/plugin/%s/%s/html%s%s", pluginId, authorization, widget.getWidgetBasePath(mode), session.getQueryString()))
-                .putHeader("Access-Control-Allow-Origin", "*")
-                .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
+                .header("Location", String.format("/api/plugin/%s/%s/html%s?%s", pluginId, authorization, widget.getWidgetBasePath(mode), session.uri().query.raw))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Cross-Origin-Resource-Policy", "cross-origin");
         } catch (Exception e) {
             e.printStackTrace();
-            return newErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
+            return RouteHelper.newErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
         }
     }
 
-    @HttpEndpoint(uri = "/api/plugin/:pluginId/:authorization/html.*")
-    public HttpResponse onGetWidgetHtmlRequest(SoraHttpSession session) {
+    @HttpEndpoint(path = "/api/plugin/:pluginId/:authorization/html.*", allowedMethods = {
+            HttpMethod.GET
+    })
+    public HttpResponse onGetWidgetHtmlRequest(HttpSession session, EndpointData<Void> data) {
         try {
-            String pluginId = session.getUriParameters().get("pluginId");
+            String pluginId = data.uriParameters().get("pluginId");
 
-            String[] urlParts = session.getUri().split("/html", 2);
+            String[] urlParts = session.uri().path.split("/html", 2);
             String trueBaseUrl = urlParts[0].concat("/html");
             String resource = urlParts[1];
 
@@ -83,7 +90,7 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
 
             CaffeinatedPlugin plugin = CaffeinatedPluginsImpl.INSTANCE.getPluginById(pluginId);
             if (plugin == null) {
-                return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
+                return RouteHelper.newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
             }
 
             PluginResource response;
@@ -111,30 +118,26 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
             }
 
             if (response == null) {
-                return newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);
+                return RouteHelper.newErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.RESOURCE_NOT_FOUND);
             }
 
-            byte[] data = response.data;
-            String mime = response.mimeType;
+            byte[] responseData = response.data;
+            String responseMime = response.mimeType;
 
-            if (mime.startsWith("text/") || mime.startsWith("application/javascript") || mime.startsWith("application/json")) {
-                String textContent = new String(response.data);
+            if (responseMime.startsWith("text/") || responseMime.startsWith("application/javascript") || responseMime.startsWith("application/json")) {
+                String textContent = new String(response.data, StandardCharsets.UTF_8);
 
                 textContent = textContent
                     .replace(BASE_URL_REPLACE, trueBaseUrl)
                     .replace(ESCAPED_BASE_URL_REPLACE, BASE_URL_REPLACE);
 
-                if (session.getQueryParameters().containsKey("authorization")) {
+                if (session.uri().query.containsKey("authorization")) {
                     // Inject the environment.
                     int htmlStartIndex = textContent.toLowerCase().indexOf("<html");
                     if (htmlStartIndex != -1) {
                         int htmlEndIndex = textContent.substring(htmlStartIndex).indexOf('>') + htmlStartIndex + 1;
 
                         String tagsToInject = String.format("<script>\n%s\n</script>", Resources.string("widget-environment.js"));
-                        if (CaffeinatedPlugin.isDevEnvironment()) {
-                            // https://github.com/liriliri/chii
-                            tagsToInject += "<script src=\"https://chii.liriliri.io/playground/target.js\"></script>";
-                        }
 
                         textContent = textContent.substring(0, htmlEndIndex) +
                             tagsToInject +
@@ -142,33 +145,33 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                     }
                 }
 
-                data = textContent.getBytes(StandardCharsets.UTF_8);
+                responseData = textContent.getBytes(StandardCharsets.UTF_8);
             }
 
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, data)
-                .setMimeType(mime)
-                .putHeader("Access-Control-Allow-Origin", "*")
-                .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
+            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, responseData)
+                .mime(responseMime)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Cross-Origin-Resource-Policy", "cross-origin");
         } catch (Exception e) {
             e.printStackTrace();
-            return newErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
+            return RouteHelper.newErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
         }
     }
 
-    @WebsocketEndpoint(uri = "/api/plugin/:pluginId/widget/:widgetId/realtime/heartbeat")
-    public WebsocketListener onWidgetRealtimeConnectionHeartBeat(SoraWebsocketSession session) {
+    @WebsocketEndpoint(path = "/api/plugin/:pluginId/widget/:widgetId/realtime/heartbeat")
+    public WebsocketResponse onWidgetRealtimeConnectionHeartBeat(WebsocketSession session, EndpointData<Void> data) {
         try {
-            if (!authorize(session)) {
-                return newWebsocketErrorResponse(StandardHttpStatus.UNAUTHORIZED, RequestError.UNAUTHORIZED);
+            if (!RouteHelper.authorize(session)) {
+                return WebsocketResponse.reject(StandardHttpStatus.UNAUTHORIZED);
             }
 
-            String pluginId = session.getUriParameters().get("pluginId");
-            String widgetId = session.getUriParameters().get("widgetId");
+            String pluginId = data.uriParameters().get("pluginId");
+            String widgetId = data.uriParameters().get("widgetId");
 
             CaffeinatedPlugin owningPlugin = CaffeinatedPluginsImpl.INSTANCE.getPluginById(pluginId);
 
             if (owningPlugin == null) {
-                return newWebsocketErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
+                return WebsocketResponse.reject(StandardHttpStatus.NOT_FOUND);
             }
 
             Widget widget = null;
@@ -180,36 +183,39 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
             }
 
             if (widget == null) {
-                return newWebsocketErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.WIDGET_NOT_FOUND);
+                return WebsocketResponse.reject(StandardHttpStatus.NOT_FOUND);
             } else {
                 // Connect.
-                return new RealtimeHeartbeatListener(widget, UUID.randomUUID().toString());
+                return WebsocketResponse.accept(
+                    new RealtimeHeartbeatListener(widget, UUID.randomUUID().toString()),
+                    session.firstProtocol()
+                );
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return newWebsocketErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
+            FastLogger.logStatic(LogLevel.SEVERE, "Failed to handle websocket connection.", e);
+            return WebsocketResponse.reject(StandardHttpStatus.INTERNAL_ERROR);
         }
     }
 
-    @WebsocketEndpoint(uri = "/api/plugin/:pluginId/widget/:widgetId/realtime")
-    public WebsocketListener onWidgetRealtimeConnection(SoraWebsocketSession session) {
+    @WebsocketEndpoint(path = "/api/plugin/:pluginId/widget/:widgetId/realtime")
+    public WebsocketResponse onWidgetRealtimeConnection(WebsocketSession session, EndpointData<Void> data) {
         try {
-            if (!authorize(session)) {
-                return newWebsocketErrorResponse(StandardHttpStatus.UNAUTHORIZED, RequestError.UNAUTHORIZED);
+            if (!RouteHelper.authorize(session)) {
+                return WebsocketResponse.reject(StandardHttpStatus.UNAUTHORIZED);
             }
 
-            String pluginId = session.getUriParameters().get("pluginId");
-            String widgetId = session.getUriParameters().get("widgetId");
+            String pluginId = data.uriParameters().get("pluginId");
+            String widgetId = data.uriParameters().get("widgetId");
             WidgetInstanceMode mode = WidgetInstanceMode.valueOf(
                 session
-                    .getQueryParameters()
-                    .getOrDefault("mode", "WIDGET")
-                    .toUpperCase()
+                    .uri().query
+                        .getSingleOrDefault("mode", "WIDGET")
+                        .toUpperCase()
             );
 
             CaffeinatedPlugin owningPlugin = CaffeinatedPluginsImpl.INSTANCE.getPluginById(pluginId);
             if (owningPlugin == null) {
-                return newWebsocketErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.PLUGIN_NOT_FOUND);
+                return WebsocketResponse.reject(StandardHttpStatus.NOT_FOUND);
             }
 
             Widget widget = null;
@@ -220,14 +226,17 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
             }
 
             if (widget == null) {
-                return newWebsocketErrorResponse(StandardHttpStatus.NOT_FOUND, RequestError.WIDGET_NOT_FOUND);
+                return WebsocketResponse.reject(StandardHttpStatus.NOT_FOUND);
             } else {
                 // Connect.
-                return new RealtimeWidgetListener(widget, mode, UUID.randomUUID().toString());
+                return WebsocketResponse.accept(
+                    new RealtimeWidgetListener(widget, mode, UUID.randomUUID().toString()),
+                    session.firstProtocol()
+                );
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return newWebsocketErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
+            FastLogger.logStatic(LogLevel.SEVERE, "Failed to handle websocket connection.", e);
+            return WebsocketResponse.reject(StandardHttpStatus.INTERNAL_ERROR);
         }
     }
 

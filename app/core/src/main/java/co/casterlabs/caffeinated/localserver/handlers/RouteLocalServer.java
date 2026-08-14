@@ -1,26 +1,44 @@
 package co.casterlabs.caffeinated.localserver.handlers;
 
 import co.casterlabs.caffeinated.localserver.RouteHelper;
-import co.casterlabs.rhs.protocol.StandardHttpStatus;
-import co.casterlabs.rhs.server.HttpResponse;
-import co.casterlabs.sora.api.http.HttpProvider;
-import co.casterlabs.sora.api.http.SoraHttpSession;
-import co.casterlabs.sora.api.http.annotations.HttpEndpoint;
+import co.casterlabs.rhs.HttpMethod;
+import co.casterlabs.rhs.HttpStatus.StandardHttpStatus;
+import co.casterlabs.rhs.protocol.api.endpoints.EndpointData;
+import co.casterlabs.rhs.protocol.api.endpoints.EndpointProvider;
+import co.casterlabs.rhs.protocol.api.endpoints.HttpEndpoint;
+import co.casterlabs.rhs.protocol.http.HttpResponse;
+import co.casterlabs.rhs.protocol.http.HttpSession;
 
-public class RouteLocalServer implements HttpProvider, RouteHelper {
+public class RouteLocalServer implements EndpointProvider {
 
-    @HttpEndpoint(uri = "/")
-    public HttpResponse onIndexRequest(SoraHttpSession session) {
+    @HttpEndpoint(path = "/", allowedMethods = {
+            HttpMethod.GET
+    })
+    public HttpResponse onIndexRequest(HttpSession session, EndpointData<Void> data) {
         return HttpResponse.newFixedLengthResponse(StandardHttpStatus.TEMPORARY_REDIRECT)
-            .putHeader("Location", "https://docs.casterlabs.co/caffeinated/sdk/");
+            .header("Location", "https://docs.casterlabs.co/caffeinated/sdk/");
     }
 
-    @HttpEndpoint(uri = "/api/test/:specialCode")
-    public HttpResponse onWidgetRealtimeConnectionTest(SoraHttpSession session) {
-        return HttpResponse
-            .newFixedLengthResponse(StandardHttpStatus.OK, session.getUriParameters().get("specialCode"))
-            .setMimeType("test/plain")
-            .putHeader("Access-Control-Allow-Origin", "*");
+    @HttpEndpoint(path = "/api/test/:specialCode", allowedMethods = {
+            HttpMethod.GET
+    })
+    public HttpResponse onWidgetRealtimeConnectionTest(HttpSession session, EndpointData<Void> data) {
+        return RouteHelper.addCors(
+            HttpResponse
+                .newFixedLengthResponse(StandardHttpStatus.OK, data.uriParameters().get("specialCode"))
+                .mime("text/plain")
+        );
+    }
+
+    @HttpEndpoint(path = ".*", allowedMethods = {
+            HttpMethod.OPTIONS
+    })
+    public HttpResponse onOptions(HttpSession session, EndpointData<Void> data) {
+        return RouteHelper.addCors(
+            HttpResponse
+                .newFixedLengthResponse(StandardHttpStatus.NO_CONTENT, "")
+                .mime("text/plain")
+        );
     }
 
 }

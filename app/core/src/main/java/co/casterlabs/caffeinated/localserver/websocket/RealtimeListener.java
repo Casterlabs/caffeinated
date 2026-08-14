@@ -8,7 +8,7 @@ import java.util.Map;
 import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
 import co.casterlabs.caffeinated.app.ui.AppUI;
-import co.casterlabs.caffeinated.localserver.RouteHelper;
+import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.util.EventBus;
 import co.casterlabs.commons.functional.tuples.Pair;
@@ -18,12 +18,12 @@ import co.casterlabs.koi.api.types.user.UserPlatform;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.rhs.session.Websocket;
-import co.casterlabs.rhs.session.WebsocketListener;
+import co.casterlabs.rhs.protocol.websocket.Websocket;
+import co.casterlabs.rhs.protocol.websocket.WebsocketListener;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class RealtimeListener implements WebsocketListener, RouteHelper {
+public class RealtimeListener implements WebsocketListener {
     private String connectionId;
 
     private List<EventBus<?, ?>.Subscription> eventBusSubscriptions = new LinkedList<>();
@@ -38,12 +38,13 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
     @SuppressWarnings("deprecation")
     @Override
     public void onOpen(Websocket websocket) {
+        LocalServer.websockets.add(websocket);
         this.websocket = websocket;
 
         this.connInstance = new ConnectionWrapper();
 
         Pair<RealtimeConnection, Object> connPair = new Pair<>(this.connInstance, null);
-        websocket.setAttachment(connPair);
+        websocket.attachment(connPair);
 
         JsonObject statics = Caffeinated.getInstance().getKoi().toJsonExtended();
 
@@ -213,6 +214,7 @@ public class RealtimeListener implements WebsocketListener, RouteHelper {
 
     @Override
     public void onClose(Websocket websocket) {
+        LocalServer.websockets.remove(websocket);
         for (EventBus<?, ?>.Subscription subscription : this.eventBusSubscriptions) {
             subscription.revoke();
         }

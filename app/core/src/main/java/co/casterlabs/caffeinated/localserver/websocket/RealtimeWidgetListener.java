@@ -7,7 +7,7 @@ import java.util.Map;
 
 import co.casterlabs.caffeinated.app.sdk.CaffeinatedImpl;
 import co.casterlabs.caffeinated.app.ui.AppUI;
-import co.casterlabs.caffeinated.localserver.RouteHelper;
+import co.casterlabs.caffeinated.localserver.LocalServer;
 import co.casterlabs.caffeinated.pluginsdk.Caffeinated;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget;
 import co.casterlabs.caffeinated.pluginsdk.widgets.Widget.WidgetHandle;
@@ -21,14 +21,14 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
-import co.casterlabs.rhs.session.Websocket;
-import co.casterlabs.rhs.session.WebsocketListener;
+import co.casterlabs.rhs.protocol.websocket.Websocket;
+import co.casterlabs.rhs.protocol.websocket.WebsocketListener;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
 
-public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
+public class RealtimeWidgetListener implements WebsocketListener {
     private WidgetHandle handle;
     private WidgetInstanceMode mode;
     private String connectionId;
@@ -55,13 +55,14 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
     @SuppressWarnings("deprecation")
     @Override
     public void onOpen(Websocket websocket) {
+        LocalServer.websockets.add(websocket);
         this.websocket = websocket;
 
         this.connInstance = new ConnectionWrapper();
         this.wInstance = new WidgetInstanceProvider();
 
         Pair<RealtimeConnection, WidgetInstance> connPair = new Pair<>(this.connInstance, this.wInstance);
-        websocket.setAttachment(connPair);
+        websocket.attachment(connPair);
 
         JsonObject statics = null;
 
@@ -248,6 +249,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
     @Override
     public void onClose(Websocket websocket) {
+        LocalServer.websockets.remove(websocket);
         try {
             this.wInstance.onClose();
         } finally {
@@ -320,7 +322,7 @@ public class RealtimeWidgetListener implements WebsocketListener, RouteHelper {
 
         @Override
         public @NonNull String getRemoteIpAddress() {
-            return websocket.getSession().getRemoteIpAddress();
+            return websocket.session().remoteNetworkAddress();
         }
 
         @Override

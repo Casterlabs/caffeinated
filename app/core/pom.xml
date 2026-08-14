@@ -179,6 +179,26 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- LocalServer -->
+		<dependency>
+			<groupId>co.casterlabs.rakurai-http-server</groupId>
+			<artifactId>core</artifactId>
+			<version>5e187c4</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>co.casterlabs.rakurai-http-server.proto</groupId>
+			<artifactId>http</artifactId>
+			<version>5e187c4</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>co.casterlabs.rakurai-http-server.proto</groupId>
+			<artifactId>api-framework</artifactId>
+			<version>5e187c4</version>
+			<scope>compile</scope>
+		</dependency>
+
 		<!-- Utility packages -->
 		<dependency>
 			<groupId>com.github.glocale</groupId>
@@ -244,12 +264,6 @@
 			<groupId>com.github.e3ndr</groupId>
 			<artifactId>ConsoleUtil</artifactId>
 			<version>1.5.4</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>co.casterlabs.Sora</groupId>
-			<artifactId>Sora-Framework</artifactId>
-			<version>2.13.2</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
