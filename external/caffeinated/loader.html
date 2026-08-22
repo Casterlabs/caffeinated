@@ -11,10 +11,16 @@
 
     <footer>
         <script type="module">
+            // Jank fix for some busted logic in Caffeinated.
+            const search = location.search.replace(
+                "%D9%A8%D9%A0%D9%A9%D9%A2",
+                "8092",
+            );
+
             const queryParams = (() => {
                 let vars = {};
 
-                location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
+                search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
                     vars[key] = decodeURIComponent(value);
                 });
 
@@ -54,7 +60,7 @@
                         await testAddress(address);
                         // Success!
                         console.debug("[widgets.casterlabs.co loader] Test successful, connecting to that.");
-                        location.href = `http://${address}:${port}/api/plugin/widget/loader/widget.html${location.search}&validAddress=${encodeURIComponent(address)}&customCSS=`;
+                        location.href = `http://${address}:${port}/api/plugin/widget/loader/widget.html${search}&validAddress=${encodeURIComponent(address)}&customCSS=`;
                         return;
                     } catch (e) {
                         console.debug("[widgets.casterlabs.co loader] Address failed:", e);
