@@ -5,6 +5,17 @@ export default class Conn extends EventHandler {
     connectionId: string | null;
     ws: WebSocket;
 
+    /**
+     * Messages that were sent before the WebSocket was open are buffered here so
+     * that they are not silently dropped. They are flushed once the socket
+     * opens (see #connect). This is the client-side counterpart to the server's
+     * `pendingEmissions` buffer in RealtimeWidgetListener: without it, any
+     * emission fired before `onopen` — most notably the single, unretried
+     * `init` emission that drives the dock's `init -> ready` handshake — is
+     * lost, leaving the dock as a black window until a refresh re-runs the race.
+     */
+    private pendingSends: { type: string; payload: any }[] = [];
+
     constructor(address: string) {
         super();
         this.address = address;
@@ -19,6 +30,8 @@ export default class Conn extends EventHandler {
                     data: payload
                 })
             );
+        } else {
+            this.pendingSends.push({ type, payload });
         }
     }
 
@@ -42,11 +55,13 @@ export default class Conn extends EventHandler {
 
             this.ws.onopen = () => {
                 console.debug("[WidgetEnvironment/Conn]", "WS open.");
+                this.flushPending();
                 this.broadcast("open");
             };
 
             this.ws.onclose = (e) => {
                 console.debug("[WidgetEnvironment/Conn]", "WS close:", e.code, e.reason);
+                this.pendingSends = [];
                 this.broadcast("close");
             };
 
@@ -119,7 +134,36 @@ export default class Conn extends EventHandler {
             };
         } catch (e) {
             console.debug("[WidgetEnvironment/Conn]", "WS error:", e)
+            this.pendingSends = [];
             this.broadcast("close");
+        }
+    }
+
+    /**
+     * Drains any messages that were queued before the socket opened, delivering
+     * them in arrival order. Called from `ws.onopen`; also safe to call from
+     * `onmessage`/`onerror` paths if a buffered send was pending when the
+     * socket became usable.
+     */
+    private flushPending() {
+        if (!this.ws || this.pendingSends.length === 0) {
+            return;
+        }
+
+        const pending = this.pendingSends;
+        this.pendingSends = [];
+
+        for (const { type, payload } of pending) {
+            try {
+                this.ws.send(
+                    JSON.stringify({
+                        type: type,
+                        data: payload
+                    })
+                );
+            } catch (e) {
+                console.debug("[WidgetEnvironment/Conn]", "Failed to flush a pending send:", e);
+            }
         }
     }
 
