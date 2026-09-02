@@ -234,9 +234,12 @@ public class Bootstrap implements Runnable {
         AsyncTask.create(() -> {
             logger.info("Starting app...");
             try {
-                App.init(buildInfo, isDev, new NativeSystemImpl(), traySupported);
-
-                // Init and start the local server.
+                // Start the local server (conductor) BEFORE App.init() so the
+                // conductor is reachable while plugins are still loading. The
+                // /api/test endpoint acts as a readiness gate and answers
+                // NOT_READY (503) until App.init() completes, keeping
+                // dock/widget loaders from being redirected to plugin endpoints
+                // that would 404 (PLUGIN_NOT_FOUND) before the app is serving.
                 try {
                     localServer = new LocalServer(AppConfig.appPreferences.get().conductorPort());
                     localServer.start();
@@ -244,6 +247,8 @@ public class Bootstrap implements Runnable {
                     FastLogger.logStatic(LogLevel.SEVERE, "Unable to start LocalServer (conductor):");
                     FastLogger.logException(e);
                 }
+
+                App.init(buildInfo, isDev, new NativeSystemImpl(), traySupported);
 
                 // If all of that succeeds, we write a file to let the updater know that
                 // everything's okay.
