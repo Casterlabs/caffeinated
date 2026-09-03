@@ -109,7 +109,7 @@
 	});
 </script>
 
-<div class="h-full w-fit mx-auto pt-10 relative">
+<div class="h-full w-72 mx-auto pt-10 relative">
 	<h1 class="font-medium text-2xl text-center">
 		<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.welcome" />
 	</h1>
@@ -117,18 +117,18 @@
 		<LocalizedText key="co.casterlabs.caffeinated.app.page.signin.choose" />
 	</h2>
 
-	<div class="mt-8 w-64 mx-auto flex flex-wrap justify-center">
+	<div class="mt-6 w-fit mx-auto space-y-2">
 		<!-- Loop over all of the "official" platforms -->
 		{#await AppAuth.AUTHENTICATABLE then AUTHENTICATABLE_PLATFORMS}
 			{#each AUTHENTICATABLE_PLATFORMS as platform}
 				<a
 					href="/$caffeinated-sdk-root$/signin/do?dontGoBack&type=koi&platform={platform}"
-					class="signin-icon w-10 h-10 p-1 m-1 border border-base-6 rounded flex items-center justify-center transition"
+					class="signin-icon w-full h-10 py-1 px-2 border border-base-6 rounded flex items-center justify-left transition space-x-2"
 					style="--color: {PLATFORM_COLORS[platform as UserPlatform]};"
 				>
 					<PlatformIcon class="text-lg" {platform} />
 
-					<span class="sr-only">
+					<span>
 						<LocalizedText key="co.casterlabs.caffeinated.app.platform.{platform}" />
 					</span>
 				</a>
