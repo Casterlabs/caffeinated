@@ -148,9 +148,17 @@
 		text-decoration: underline;
 	}
 
+	.rich-message :global([data-rich-type='link']):hover {
+		color: var(--primary10);
+	}
+
 	.rich-message.platform-message :global([data-rich-type='link']) {
 		color: var(--primary10);
 		text-decoration: underline;
+	}
+
+	.rich-message.platform-message :global([data-rich-type='link']):hover {
+		color: var(--primary11);
 	}
 
 	.rich-message.platform-message {
