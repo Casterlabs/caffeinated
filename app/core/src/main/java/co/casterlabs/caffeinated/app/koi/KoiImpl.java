@@ -31,7 +31,6 @@ import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.KoiEventType;
-import co.casterlabs.koi.api.types.RoomId;
 import co.casterlabs.koi.api.types.events.ConnectionStateEvent;
 import co.casterlabs.koi.api.types.events.ConnectionStateEvent.ConnectionState;
 import co.casterlabs.koi.api.types.events.MessageMetaEvent;
@@ -349,7 +348,7 @@ public class KoiImpl implements Koi, KoiLifeCycleHandler {
             String trueId = KoiHistory.getTrueId(messageId);
             this.broadcastEvent(
                 MessageMetaEvent
-                    .builder(trueId, RoomId.of(UserPlatform.CASTERLABS_SYSTEM.systemProfile, ""))
+                    .builder(trueId)
                     .visible(false)
                     .streamer(UserPlatform.CASTERLABS_SYSTEM.systemProfile)
                     .build()

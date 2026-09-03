@@ -20,7 +20,6 @@ import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetInstanceMode;
 import co.casterlabs.caffeinated.pluginsdk.widgets.WidgetType;
 import co.casterlabs.emoji.generator.WebUtil;
 import co.casterlabs.koi.api.types.MessageId;
-import co.casterlabs.koi.api.types.RoomId;
 import co.casterlabs.koi.api.types.events.RichMessageEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.events.SubscriptionEvent.SubscriptionLevel;
@@ -82,10 +81,7 @@ class _KofiServicePlugin extends CaffeinatedPlugin implements KinokoV1Listener {
                 );
 
                 RichMessageEvent rich = RichMessageEvent.builder(
-                    MessageId.random(
-                        user.toSimpleProfile(),
-                        RoomId.of(KOFI_STREAMER, json.getString("url"))
-                    )
+                    MessageId.random(user.toSimpleProfile())
                 )
                     .appendDonation(donation)
                     .appendFragment(message)

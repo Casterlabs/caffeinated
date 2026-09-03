@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>co.casterlabs</groupId>
 			<artifactId>koi-sdk</artifactId>
-			<version>06de090</version>
+			<version>2740755</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

@@ -24,7 +24,6 @@ import co.casterlabs.koi.api.listener.KoiEventHandler;
 import co.casterlabs.koi.api.listener.KoiEventUtil;
 import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.KoiEvent;
-import co.casterlabs.koi.api.types.RoomId;
 import co.casterlabs.koi.api.types.Roomstate;
 import co.casterlabs.koi.api.types.events.RoomstateEvent;
 import co.casterlabs.koi.api.types.events.StreamStatusEvent;
@@ -160,7 +159,7 @@ public class AuthInstance implements KoiLifeCycleHandler, Closeable {
         if (this.roomstate == null) {
             // TODO get rid of this by broadcasting roomstates across all platforms on
             // connect. (KOI)
-            this.roomstate = RoomstateEvent.builder(RoomId.of(e.streamer.toSimpleProfile(), e.streamer.link))
+            this.roomstate = RoomstateEvent.builder()
                 .streamer(e.streamer.toSimpleProfile())
                 .roomstate(Roomstate.builder().build())
                 .timestamp(Instant.now())
