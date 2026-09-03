@@ -22,7 +22,7 @@
 	let replyTargetDeleted = $state(!event.x_reply_target_data?.is_visible || false);
 	let showReplyTargetAnyways = $state(false);
 
-	let watchStreakDays = $state(event.milestones.find((m) => m.type == 'WATCH_STREAK_DAYS'));
+	let watchStreakDays = $state((event.milestones || []).find((m) => m.type == 'WATCH_STREAK_DAYS'));
 
 	onMount(() => {
 		if (event.event_type == 'PLATFORM_MESSAGE') return; // Platform messages don't have META events.
