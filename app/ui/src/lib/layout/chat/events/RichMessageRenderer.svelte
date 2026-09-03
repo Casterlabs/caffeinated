@@ -5,7 +5,7 @@
 
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import UsernameRenderer from '../UsernameRenderer.svelte';
-	import { IconCake, IconChatBubbleLeft, IconMegaphone } from '@casterlabs/heroicons-svelte';
+	import { IconCake, IconChatBubbleLeft, IconFire, IconMegaphone } from '@casterlabs/heroicons-svelte';
 
 	import { onMount } from 'svelte';
 
@@ -21,6 +21,8 @@
 
 	let replyTargetDeleted = $state(!event.x_reply_target_data?.is_visible || false);
 	let showReplyTargetAnyways = $state(false);
+
+	let watchStreakDays = $state(event.milestones.find((m) => m.type == 'WATCH_STREAK_DAYS'));
 
 	onMount(() => {
 		if (event.event_type == 'PLATFORM_MESSAGE') return; // Platform messages don't have META events.
@@ -60,6 +62,13 @@
 		<span class="block text-base-11 mt-0.5 text-[0.875rem]">
 			<IconMegaphone theme="mini" class="inline-block -translate-y-0.5" />
 			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement" />
+		</span>
+	{/if}
+
+	{#if watchStreakDays}
+		<span class="block text-base-11 mt-0.5 text-[0.875rem]">
+			<IconFire theme="mini" class="inline-block -translate-y-0.5" style="color: #f3a716;" />
+			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.watch_streak" args={{ amount: watchStreakDays.amount }} />
 		</span>
 	{/if}
 
@@ -110,7 +119,7 @@
 	{/if}
 
 	{#if event.event_type != 'PLATFORM_MESSAGE'}
-		<UsernameRenderer user={event.sender} showColon />
+		<UsernameRenderer user={event.sender} showColon={event.raw.length > 0} />
 	{/if}
 
 	<span

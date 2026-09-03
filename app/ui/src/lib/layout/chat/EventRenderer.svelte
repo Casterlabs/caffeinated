@@ -50,7 +50,9 @@
 	let isDeleted = $state((event as any).is_visible === false || event.x_cleared);
 	let showAnyways = $state(false);
 
-	let isHighlighted = $state(['FOLLOW', 'SUBSCRIPTION', 'RAID', 'CHANNEL_POINTS'].includes(event.event_type) || (event as any).attributes?.length > 0);
+	let isHighlighted = $state(
+		['FOLLOW', 'SUBSCRIPTION', 'RAID', 'CHANNEL_POINTS'].includes(event.event_type) || (event as any).attributes?.length > 0 || (event as any).milestones?.length > 0
+	);
 
 	// prettier-ignore
 	let eventUser: User = $derived((event as any).sender || (event as any).follower || (event as any).subscriber || (event as any).host);
