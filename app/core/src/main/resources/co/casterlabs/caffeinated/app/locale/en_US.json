@@ -207,7 +207,7 @@
 	"co.casterlabs.caffeinated.app.docks.status.live": "LIVE",
 	"co.casterlabs.caffeinated.app.docks.status.offline": "OFFLINE",
 	"co.casterlabs.caffeinated.app.docks.status.viewers": "Viewers",
-	"co.casterlabs.caffeinated.app.docks.status.followers": "Viewers",
+	"co.casterlabs.caffeinated.app.docks.status.followers": "Followers",
 	"co.casterlabs.caffeinated.app.docks.status.subscribers": "Subscribers",
 	"co.casterlabs.caffeinated.app.docks.status.disconnected": "Disconnected: {items}",
 	"co.casterlabs.caffeinated.app.docks.status.healthy": "All connections are healthy.",
