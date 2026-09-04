@@ -27,7 +27,7 @@
 <script lang="ts">
 	import { Koi } from '$lib/app-shim';
 	import type EventHandler from '$lib/event-handler';
-	import type { ClearChatEvent, KoiEvent, MessageMetaEvent, MetaId, User } from '$lib/koi';
+	import type { ClearChatEvent, KoiEvent, MessageAttribute, MessageMetaEvent, MetaId, User } from '$lib/koi';
 
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import ViewerJoinRenderer from './events/ViewerJoinRenderer.svelte';
@@ -51,7 +51,12 @@
 	let showAnyways = $state(false);
 
 	let isHighlighted = $state(
-		['FOLLOW', 'SUBSCRIPTION', 'RAID', 'CHANNEL_POINTS'].includes(event.event_type) || (event as any).attributes?.length > 0 || (event as any).milestones?.length > 0
+		// is highlighted if it's a notable event
+		['FOLLOW', 'SUBSCRIPTION', 'RAID', 'CHANNEL_POINTS'].includes(event.event_type) ||
+			// or if it has a non-RP_ACTION attribute
+			((event as any).attributes?.length > 0 && (event as any).attributes.some((attr: MessageAttribute) => attr != 'RP_ACTION')) ||
+			// or if it has milestones
+			(event as any).milestones?.length > 0
 	);
 
 	// prettier-ignore
