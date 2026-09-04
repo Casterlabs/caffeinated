@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Koi } from '$lib/app-shim';
+	import { HSL, adjustTextColor } from '$lib/contrast-ratio';
 	import type EventHandler from '$lib/event-handler';
 	import { type MessageMetaEvent, type PlatformMessageEvent, type RichMessageEvent } from '$lib/koi';
 
@@ -23,6 +24,26 @@
 	let showReplyTargetAnyways = $state(false);
 
 	let watchStreakDays = $state((event.milestones || []).find((m) => m.type == 'WATCH_STREAK_DAYS'));
+
+	let usernameContrastColor = $derived(
+		(() => {
+			try {
+				const MIN_RATIO = 8; // Arbitrary. Needs to be high enough to remain readable even with abhorrent colors like #0000ff
+
+				const pageBackground = getComputedStyle(document.getElementById('css-intermediate')!).getPropertyValue('--base1');
+
+				const usernameColor = HSL.from(event.sender.color);
+				const backgroundColor = HSL.from(pageBackground);
+
+				const contrastColor = adjustTextColor(backgroundColor, usernameColor, MIN_RATIO);
+
+				return contrastColor.toCss();
+			} catch (e) {
+				console.warn('An error occurred whilst calculating contrast color, defaulting to nqp.', e);
+				return 'var(--primary11)';
+			}
+		})()
+	);
 
 	onMount(() => {
 		if (event.event_type == 'PLATFORM_MESSAGE') return; // Platform messages don't have META events.
@@ -50,6 +71,7 @@
 	class:text-base-11={event.event_type == 'PLATFORM_MESSAGE'}
 	class:platform-message={event.event_type == 'PLATFORM_MESSAGE'}
 	class:italic={event.attributes.includes('RP_ACTION')}
+	style:color={event.attributes.includes('RP_ACTION') ? usernameContrastColor : undefined}
 >
 	{#if event.attributes.includes('FIRST_TIME_CHATTER')}
 		<span class="block text-base-11 mt-0.5 text-[0.875rem]">
@@ -119,17 +141,10 @@
 	{/if}
 
 	{#if event.event_type != 'PLATFORM_MESSAGE'}
-		<UsernameRenderer user={event.sender} showColon={event.raw.length > 0} />
+		<UsernameRenderer user={event.sender} showColon={event.raw.length > 0 && !event.attributes.includes('RP_ACTION')} />
 	{/if}
 
-	<span
-		class="message-contents"
-		class:font-bold={event.attributes.includes('RP_ACTION')}
-		class:upvote-1={upvotes > 0}
-		class:upvote-2={upvotes > 10}
-		class:upvote-3={upvotes > 100}
-		class:upvote-4={upvotes > 1000}
-	>
+	<span class="message-contents" class:upvote-1={upvotes > 0} class:upvote-2={upvotes > 10} class:upvote-3={upvotes > 100} class:upvote-4={upvotes > 1000}>
 		{#if event.event_type == 'PLATFORM_MESSAGE'}
 			{@html event.html.replace(/\n/g, '<br />')}
 		{:else}
