@@ -14,8 +14,8 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^4.0.0",
+		"@sveltejs/kit": "^2.65.0",
+		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@tailwindcss/postcss": "^4.0.7",
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
 		"@types/animejs": "^3.1.13",
@@ -29,7 +29,7 @@
 		"svelte-preprocess": "^6.0.3",
 		"tailwindcss": "^4.0.7",
 		"typescript": "^5.0.0",
-		"vite": "^5.4.11"
+		"vite": "^8.0.16"
 	},
 	"dependencies": {
 		"@casterlabs/heroicons-svelte": "^2.2.2",
