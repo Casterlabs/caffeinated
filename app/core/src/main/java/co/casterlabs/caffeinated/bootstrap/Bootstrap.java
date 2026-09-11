@@ -87,6 +87,7 @@ public class Bootstrap implements Runnable {
     private static FastLogger logger = new FastLogger();
 
     private static @Getter Bootstrap instance;
+    private static @Getter NativeBootstrap nativeBootstrap;
     private static LocalServer localServer;
 
     private static @Getter BuildInfo buildInfo;
@@ -103,28 +104,27 @@ public class Bootstrap implements Runnable {
 
         System.out.println(" > System.out.println(\"Hello World!\");\nHello World!\n\n");
 
-        NativeBootstrap nb = null;
         switch (Platform.osDistribution) {
             case LINUX:
-                nb = new LinuxBootstrap();
+                nativeBootstrap = new LinuxBootstrap();
                 break;
 
             case MACOS:
-                nb = new MacOSBootstrap();
+                nativeBootstrap = new MacOSBootstrap();
                 break;
 
             case WINDOWS_NT:
-                nb = new WindowsBootstrap();
+                nativeBootstrap = new WindowsBootstrap();
                 break;
 
             default:
                 break;
         }
 
-        assert nb != null : "Unsupported platform: " + Platform.osDistribution;
+        assert nativeBootstrap != null : "Unsupported platform: " + Platform.osDistribution;
 
         try {
-            nb.init();
+            nativeBootstrap.init();
         } catch (Exception e) {
             e.printStackTrace();
         }

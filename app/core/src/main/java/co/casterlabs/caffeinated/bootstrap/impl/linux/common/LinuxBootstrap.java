@@ -1,5 +1,7 @@
 package co.casterlabs.caffeinated.bootstrap.impl.linux.common;
 
+import java.awt.Window;
+
 import co.casterlabs.caffeinated.app.music_integration.MusicImpl;
 import co.casterlabs.caffeinated.bootstrap.impl.NativeBootstrap;
 import xyz.e3ndr.reflectionlib.ReflectionLib;
@@ -11,7 +13,9 @@ public class LinuxBootstrap implements NativeBootstrap {
         if (LinuxSystemPlaybackMusicProvider.isPlayerCtlInstalled()) {
             ReflectionLib.setStaticValue(MusicImpl.class, "systemPlaybackMusicProvider", new LinuxSystemPlaybackMusicProvider());
         }
-
     }
+
+    @Override
+    public void setDarkAppearance(Window window, boolean dark) {}
 
 }

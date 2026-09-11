@@ -261,8 +261,7 @@ public class _JcefAppWindow extends AppWindow {
 
     @Override
     public synchronized void forceDarkEnabled(boolean enabled) {
-        // TODO
-
+        Bootstrap.getNativeBootstrap().setDarkAppearance(this.frame, enabled);
     }
 
 }
