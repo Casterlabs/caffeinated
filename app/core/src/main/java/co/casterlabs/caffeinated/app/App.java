@@ -63,15 +63,6 @@ public class App {
 
     private static NativeSystem nativeSystem;
 
-    /**
-     * Whether {@link #init} has finished bootstrapping the app (plugins loaded,
-     * Koi/UI/auth ready). The local server's {@code /test} endpoint consults
-     * this flag as a readiness gate so that dock/widget loaders are never
-     * redirected to plugin endpoints before the plugins that provide them are
-     * registered. Set once, at the end of {@link #init}.
-     */
-    private static volatile boolean ready = false;
-
     @JavascriptValue(allowSet = false, watchForMutate = true)
     private static JsonArray statusStates = JsonArray.EMPTY_ARRAY;
 
@@ -83,8 +74,6 @@ public class App {
         App.buildInfo = buildInfo;
         App.isDev = isDev;
         App.nativeSystem = nativeSystem;
-
-        Currencies.getCurrencies(); // Load the class.
 
         AsyncTask.create(() -> {
             while (true) {
@@ -139,40 +128,51 @@ public class App {
 
         isTraySupported = traySupported;
 
-        AppUI.updateIcon();
-
         try {
-            AppChatbot.init();
-        } catch (Throwable t) {
-            FastLogger.logException(t);
-        }
-
-        try {
-            AppUI.init();
-        } catch (Throwable t) {
-            FastLogger.logException(t);
-        }
-        try {
+            StartupProgress.increment("Initializing Theme Manager");
             AppThemeManager.init();
         } catch (Throwable t) {
             FastLogger.logException(t);
         }
         try {
+            StartupProgress.increment("Initializing UI");
+            AppUI.updateIcon();
+            AppUI.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            StartupProgress.increment("Initializing Currencies");
+            Currencies.getCurrencies(); // Load the class.
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            StartupProgress.increment("Initializing Auth");
             AppAuth.init();
         } catch (Throwable t) {
             FastLogger.logException(t);
         }
         try {
+            StartupProgress.increment("Initializing ChatBot");
+            AppChatbot.init();
+        } catch (Throwable t) {
+            FastLogger.logException(t);
+        }
+        try {
+            StartupProgress.increment("Initializing API");
             AppApi.init();
         } catch (Throwable t) {
             FastLogger.logException(t);
         }
         try {
+            StartupProgress.increment("Initializing Plugins");
             AppPlugins.init();
         } catch (Throwable t) {
             FastLogger.logException(t);
         }
         try {
+            StartupProgress.increment("Initializing Music Integration");
             MusicImpl.INSTANCE.init();
         } catch (Throwable t) {
             FastLogger.logException(t);
@@ -192,7 +192,7 @@ public class App {
         System.gc();
         System.gc();
 
-        App.ready = true;
+        FastLogger.logStatic("App is ready!");
     }
 
     public static String getLocale() {
@@ -204,17 +204,6 @@ public class App {
         // Maybe during plugin installs?
         // TODO
         return true;
-    }
-
-    /**
-     * @return {@code true} once {@link #init} has completed (plugins loaded and
-     *         all core subsystems initialized). Used by the local server's
-     *         {@code /test} endpoint as a readiness gate so docks aren't
-     *         redirected to widget endpoints before the app is actually serving
-     *         them. Not exposed to JavaScript (no {@code @JavascriptGetter}).
-     */
-    public static boolean isReady() {
-        return ready;
     }
 
     public static void shutdown() {

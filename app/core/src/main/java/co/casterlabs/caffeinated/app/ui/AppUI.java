@@ -14,6 +14,7 @@ import app.saucer.bridge.JavascriptValue;
 import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.AppEventBus;
 import co.casterlabs.caffeinated.app.NotificationType;
+import co.casterlabs.caffeinated.app.StartupProgress;
 import co.casterlabs.caffeinated.app.auth.AppAuth;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.locale.AppLocale;
@@ -32,8 +33,6 @@ import co.casterlabs.rakurai.json.element.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import xyz.e3ndr.fastloggingframework.logging.FastLogger;
-import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 @JavascriptObject
 public class AppUI {
@@ -107,6 +106,10 @@ public class AppUI {
 
     @JavascriptFunction
     public static void onUILoaded() {
+        if (!StartupProgress.isFinished()) {
+            return; // Not quite ready yet.
+        }
+
         uiFinishedLoad = true;
 
         if (AppConfig.canDoOneTimeEvent("caffeinated.instance.first_time_setup")) {
@@ -117,11 +120,8 @@ public class AppUI {
 
         if (!AppAuth.isSignedIn()) {
             navigate("/signin");
-        } else if (AppAuth.isAuthorized()) {
-            navigate("/dashboard");
         } else {
-            // Otherwise AppAuth will automagically move us there :D
-            FastLogger.logStatic(LogLevel.DEBUG, "Waiting for auth to navigate us. (ui-loaded)");
+            navigate("/dashboard");
         }
     }
 

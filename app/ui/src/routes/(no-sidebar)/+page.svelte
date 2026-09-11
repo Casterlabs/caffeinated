@@ -15,7 +15,20 @@
 		saucer.messages.emit(['app:restart']);
 	}
 
-	onMount(() => setTimeout(AppUI.onUILoaded, 2000));
+	let startupProgress = $state(0);
+	let startupStep = $state('');
+
+	// @ts-ignore
+	window.__handleStartupProgress = function (progress: number, step: string) {
+		startupProgress = progress;
+		startupStep = step;
+
+		if (progress == 1) {
+			AppUI.onUILoaded();
+		}
+	};
+
+	onMount(() => AppUI.onUILoaded());
 </script>
 
 <div class="mt-10 flex flex-col items-center justify-center">
@@ -27,9 +40,20 @@
 		/>
 	</div>
 
-	<div class="mt-8 mb-16 w-16">
+	<div class="mt-8 w-16">
 		<LoadingSpinner />
 	</div>
+
+	{#if startupProgress > 0}
+		<div class="mt-32 mb-16 text-center text-xs text-base-11">
+			<div class="bg-base-9 rounded-sm overflow-hidden w-48 h-1">
+				<div class="bg-base-11 h-full" style:width="{startupProgress * 100}%"></div>
+			</div>
+			<span class="mt-2 block">
+				{startupStep}
+			</span>
+		</div>
+	{/if}
 
 	{#if $appPreferences?.koiUrl != 'wss://api.casterlabs.co/v2/koi'}
 		<br />

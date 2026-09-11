@@ -123,10 +123,6 @@ public class AppAuth {
             }
         }
 
-        if (isAuthorized != authorized) {
-            AppUI.navigate(authorized ? "/dashboard" : "/signin");
-        }
-
         isAuthorized = authorized;
     }
 

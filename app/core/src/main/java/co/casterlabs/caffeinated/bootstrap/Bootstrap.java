@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 
 import co.casterlabs.caffeinated.app.App;
+import co.casterlabs.caffeinated.app.StartupProgress;
 import co.casterlabs.caffeinated.app.config.AppConfig;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.util.Resources;
@@ -228,43 +229,10 @@ public class Bootstrap implements Runnable {
 //        logger.info("SaucerApp.version()          | %s", SaucerApp.version());
         logger.info("");
 
-        logger.info("Checking system tray support...");
+        StartupProgress.increment("Checking system tray support");
         boolean traySupported = TrayHandler.tryCreateTray();
 
-        AsyncTask.create(() -> {
-            logger.info("Starting app...");
-            try {
-                // Start the local server (conductor) BEFORE App.init() so the
-                // conductor is reachable while plugins are still loading. The
-                // /api/test endpoint acts as a readiness gate and answers
-                // NOT_READY (503) until App.init() completes, keeping
-                // dock/widget loaders from being redirected to plugin endpoints
-                // that would 404 (PLUGIN_NOT_FOUND) before the app is serving.
-                try {
-                    localServer = new LocalServer(AppConfig.appPreferences.get().conductorPort());
-                    localServer.start();
-                } catch (Exception e) {
-                    FastLogger.logStatic(LogLevel.SEVERE, "Unable to start LocalServer (conductor):");
-                    FastLogger.logException(e);
-                }
-
-                App.init(buildInfo, isDev, new NativeSystemImpl(), traySupported);
-
-                // If all of that succeeds, we write a file to let the updater know that
-                // everything's okay.
-//                SaucerApp.dispatch(() -> {
-                try {
-                    writeAppFile(".build_ok", null);
-                } catch (IOException ignored) {}
-                logger.info("Everything is running and everything is happy :D");
-//                });
-            } catch (Throwable t) {
-                logger.severe("Unable to start the app: %s", t);
-                shutdown();
-            }
-        });
-
-        logger.info("Initializing UI (this may take some time)");
+        StartupProgress.increment("Initializing UI (this may take some time)");
         String appUrl = (isDev ? this.devAddress : "app://authority") + "/$caffeinated-sdk-root$";
         logger.info("appAddress = %s", appUrl);
 
@@ -282,13 +250,43 @@ public class Bootstrap implements Runnable {
                 }
             }
         );
+        StartupProgress.uiInitialized = true;
 
-        if (isDev) {
-            AsyncTask.create(() -> {
-                logger.info("Dev tools enabled, opening dev tools.");
-                AppWindow.INSTANCE.openDevTools();
-            });
-        }
+        AsyncTask.create(() -> {
+            try {
+                StartupProgress.increment("Initializing App");
+                App.init(buildInfo, isDev, new NativeSystemImpl(), traySupported);
+
+                try {
+                    StartupProgress.increment("Initializing LocalServer");
+                    FastLogger.logStatic("Initializing LocalServer (conductor) on port %d", AppConfig.appPreferences.get().conductorPort());
+                    localServer = new LocalServer(AppConfig.appPreferences.get().conductorPort());
+                    localServer.start();
+                } catch (Exception e) {
+                    FastLogger.logStatic(LogLevel.SEVERE, "Unable to start LocalServer (conductor):");
+                    FastLogger.logException(e);
+                }
+
+                if (isDev) {
+                    AsyncTask.create(() -> {
+                        logger.info("Dev tools enabled, opening dev tools.");
+                        AppWindow.INSTANCE.openDevTools();
+                    });
+                }
+
+                // If all of that succeeds, we write a file to let the updater know that
+                // everything's okay.
+//                SaucerApp.dispatch(() -> {
+                try {
+                    writeAppFile(".build_ok", null);
+                } catch (IOException ignored) {}
+                logger.info("Everything is running and everything is happy :D");
+//                });
+            } catch (Throwable t) {
+                logger.severe("Unable to start the app: %s", t);
+                shutdown();
+            }
+        });
 
         logger.info("Calling run() loop...");
         AppWindow.INSTANCE.run();
