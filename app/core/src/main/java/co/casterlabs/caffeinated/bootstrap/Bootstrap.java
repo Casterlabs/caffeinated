@@ -144,7 +144,7 @@ public class Bootstrap implements Runnable {
                     System.gc();
                     Thread.yield(); // Willingly yield to the OS if need be.
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(30_000);
                     } catch (InterruptedException ignored) {}
                 }
             });
@@ -398,9 +398,11 @@ public class Bootstrap implements Runnable {
         }
 
         if (restartWithConsole) {
-            ConsoleUtil.startConsoleWindow(command);
+            ConsoleUtil.startConsoleWindow('"' + command + '"');
         } else {
-            Runtime.getRuntime().exec(command);
+            Runtime.getRuntime().exec(new String[] {
+                    command
+            });
         }
 
         FastLogger.logStatic("Relaunching with command: %s", command);
