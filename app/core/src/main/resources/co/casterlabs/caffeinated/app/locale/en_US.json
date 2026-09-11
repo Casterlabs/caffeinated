@@ -278,6 +278,7 @@
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.announcement": "Announcement",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.RICH_MESSAGE.watch_streak": "{amount} day watch streak",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS": "<name> redeemed <reward>!",
+	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS.prompt.no_input": "No input provided",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CLEAR_CHAT": "Chat was cleared.",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_JOIN": "<name> joined.",
 	"co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.VIEWER_LEAVE": "<name> left.",

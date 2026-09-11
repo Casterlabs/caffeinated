@@ -21,3 +21,15 @@
 {/snippet}
 
 <LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS" components={{ name, reward }} />
+
+{#if event.reward.prompt}
+	<br />
+	<strong>{event.reward.prompt}</strong>:
+	{#if event.reward.user_input}
+		{event.reward.user_input}
+	{:else}
+		<i class="opacity-90">
+			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.event_format.CHANNEL_POINTS.prompt.no_input" />
+		</i>
+	{/if}
+{/if}
