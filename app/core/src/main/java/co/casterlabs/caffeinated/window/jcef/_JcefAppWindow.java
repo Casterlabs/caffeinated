@@ -2,8 +2,11 @@ package co.casterlabs.caffeinated.window.jcef;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URI;
@@ -37,6 +40,7 @@ import co.casterlabs.caffeinated.bootstrap.Bootstrap;
 import co.casterlabs.caffeinated.bootstrap.TrayHandler;
 import co.casterlabs.caffeinated.window.AppSounds;
 import co.casterlabs.caffeinated.window.AppWindow;
+import co.casterlabs.caffeinated.window.WindowState;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.json.element.JsonArray;
 import lombok.SneakyThrows;
@@ -113,8 +117,11 @@ public class _JcefAppWindow extends AppWindow {
         this.traySupported = traySupported;
 
         this.frame = new Frame("Casterlabs-Caffeinated");
-        this.frame.setSize(800, 600);
         this.frame.setBackground(Color.BLACK);
+
+        this.frame.setSize(AppConfig.windowPreferences.get().getWidth(), AppConfig.windowPreferences.get().getHeight());
+        this.frame.setLocation(AppConfig.windowPreferences.get().getX(), AppConfig.windowPreferences.get().getY());
+        this.frame.setMinimumSize(new Dimension(WindowState.MIN_WIDTH, WindowState.MIN_HEIGHT));
 
         this.frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -129,6 +136,24 @@ public class _JcefAppWindow extends AppWindow {
                 }
 
                 hide();
+            }
+        });
+
+        this.frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (!isMaximized()) {
+                    AppConfig.windowPreferences.get().setWidth(frame.getWidth());
+                    AppConfig.windowPreferences.get().setHeight(frame.getHeight());
+                }
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                if (!isMaximized()) {
+                    AppConfig.windowPreferences.get().setX(frame.getX());
+                    AppConfig.windowPreferences.get().setY(frame.getY());
+                }
             }
         });
 
@@ -188,6 +213,10 @@ public class _JcefAppWindow extends AppWindow {
         this.client.addMessageRouter(this.router);
 
         show();
+    }
+
+    private boolean isMaximized() {
+        return (this.frame.getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH;
     }
 
     @Override

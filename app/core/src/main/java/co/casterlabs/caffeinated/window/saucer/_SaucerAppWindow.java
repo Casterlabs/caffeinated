@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import app.saucer.SaucerApp;
 import app.saucer.SaucerDesktop;
+import app.saucer.util.SaucerSize;
 import app.saucer.util.SaucerUrl;
 import app.saucer.webview.SaucerNavigation;
 import app.saucer.webview.SaucerNavigation.NavigationType;
@@ -30,6 +31,7 @@ import co.casterlabs.caffeinated.bootstrap.Bootstrap;
 import co.casterlabs.caffeinated.bootstrap.TrayHandler;
 import co.casterlabs.caffeinated.window.AppSounds;
 import co.casterlabs.caffeinated.window.AppWindow;
+import co.casterlabs.caffeinated.window.WindowState;
 import co.casterlabs.rakurai.json.element.JsonArray;
 
 public class _SaucerAppWindow extends AppWindow {
@@ -166,6 +168,7 @@ public class _SaucerAppWindow extends AppWindow {
         // @formatter:on
 
         this.saucer.url(SaucerUrl.parse(appUrl)); // Refresh the URL to ensure it's up to date.
+        this.saucer.window.minSize(new SaucerSize(WindowState.MIN_WIDTH, WindowState.MIN_HEIGHT));
         this.saucer.window.show();
         this.saucer.window.focus();
 

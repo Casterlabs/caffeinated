@@ -19,6 +19,7 @@ import co.casterlabs.caffeinated.app.ui.AppThemeManager;
 import co.casterlabs.caffeinated.app.ui.AppUI;
 import co.casterlabs.caffeinated.app.ui.ThemePreferences;
 import co.casterlabs.caffeinated.app.ui.UIPreferences;
+import co.casterlabs.caffeinated.window.WindowState;
 import lombok.NonNull;
 import net.harawata.appdirs.AppDirsFactory;
 import xyz.e3ndr.fastloggingframework.loggerimpl.FileLogHandler;
@@ -41,7 +42,7 @@ public class AppConfig {
     @JavascriptValue(allowSet = false, watchForMutate = true, typeToDocument = ThemePreferences.class)
     public static final PreferenceFile<ThemePreferences> themePreferences = new PreferenceFile<>("theme", ThemePreferences.class);
 
-//    public static final PreferenceFile<CaffeinatedWindowState> windowPreferences  = new PreferenceFile<>("window", CaffeinatedWindowState.class);
+    public static final PreferenceFile<WindowState> windowPreferences = new PreferenceFile<>("window", WindowState.class);
     public static final PreferenceFile<AuthPreferences> authPreferences = new PreferenceFile<>("auth", AuthPreferences.class);
 
     static {
