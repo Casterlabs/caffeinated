@@ -16,7 +16,7 @@
 {/snippet}
 
 {#snippet reward()}
-	<img alt="" class="h-4" src={event.reward.reward_image || event.reward.default_reward_image} />
+	<img alt="" class="h-4 inline-block" src={event.reward.reward_image || event.reward.default_reward_image} />
 	{event.reward.title}
 {/snippet}
 
