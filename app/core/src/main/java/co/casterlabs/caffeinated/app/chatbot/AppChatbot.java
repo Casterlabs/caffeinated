@@ -145,11 +145,13 @@ public class AppChatbot {
                                 if (richMessage.raw.trim().startsWith(SYMBOL + command.trigger)) {
                                     return true;
                                 }
+                                continue;
 
                             case CONTAINS:
                                 if (richMessage.raw.contains(command.trigger)) {
                                     return true;
                                 }
+                                continue;
 
                             case ALWAYS:
                                 continue;
