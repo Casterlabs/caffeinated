@@ -36,7 +36,7 @@
                 addresses.push(queryParams.address);
             }
 
-            function testAddress(address) {
+            function testSpecialCode(address) {
                 return new Promise((resolve, reject) => {
                     const specialCode = Math.random().toString(28);
 
@@ -45,9 +45,21 @@
                         .then((result) => {
                             if (result == specialCode) {
                                 resolve();
-                            } else {
-                                throw "Invalid response: " + result;
                             }
+                            throw "Invalid response: " + result;
+                        })
+                        .catch(reject);
+                });
+            }
+
+            function testOK(url) {
+                return new Promise((resolve, reject) => {
+                    fetch(url)
+                        .then((response) => {
+                            if (response.ok) {
+                                resolve();
+                            }
+                            throw "Not OK: " + response;
                         })
                         .catch(reject);
                 });
@@ -57,16 +69,19 @@
                 for (const address of addresses) {
                     try {
                         console.debug("[widgets.casterlabs.co loader] Trying address:", `http://${address}:${port}`);
-                        await testAddress(address);
+                        await testSpecialCode(address);
                         // Success!
-                        console.debug("[widgets.casterlabs.co loader] Test successful, connecting to that.");
-                        location.href = `http://${address}:${port}/api/plugin/widget/loader/widget.html${search}&validAddress=${encodeURIComponent(address)}&customCSS=`;
+                        console.debug("[widgets.casterlabs.co loader] Special code test successful, testing HTML endpoint...");
+                        const widgetUrl = `http://${address}:${port}/api/plugin/widget/loader/widget.html${search}&validAddress=${encodeURIComponent(address)}&customCSS=`;
+                        await testOK(widgetUrl);
+                        console.debug("[widgets.casterlabs.co loader] HTML test successful! Redirecting...");
+                        location.href = widgetUrl;
                         return;
                     } catch (e) {
                         console.debug("[widgets.casterlabs.co loader] Address failed:", e);
                     }
                 }
-				
+                
                 console.debug("[widgets.casterlabs.co loader] Couldn't connect to Caffeinated, retrying in 3s.");
                 setTimeout(() => {
                     location.reload();
