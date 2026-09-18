@@ -190,10 +190,12 @@
 	<button
 		in:fade
 		out:fade
-		class="bg-base-2 border-base-7 absolute inset-x-2 bottom-2 flex items-center justify-center rounded-md border p-1 opacity-90"
+		class="bg-base-3 border-base-7 absolute inset-x-2 bottom-2 flex items-center justify-center rounded-md border p-1 opacity-90 space-x-1 text-sm"
 		onclick={() => dynamicList.jumpToStart()}
 	>
-		<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.scrolling_paused" />
+		<span>
+			<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.scrolling_paused" />
+		</span>
 		<IconPause theme="micro" />
 	</button>
 {/if}

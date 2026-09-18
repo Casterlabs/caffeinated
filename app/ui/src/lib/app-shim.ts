@@ -47,6 +47,23 @@ export const openLink = (link: string) => {
 	}
 };
 
+// TTS
+export const SUPPORTED_TTS_VOICES: string[] = [];
+
+async function loadTTSVoices() {
+	try {
+		const response = await (await fetch('https://api.casterlabs.co/v3/tts/voices')).json();
+		for (const voice of response.data.voices) {
+			SUPPORTED_TTS_VOICES.push(voice);
+		}
+		console.debug('[App]', 'Loaded TTS voices from api:', SUPPORTED_TTS_VOICES);
+	} catch (ignored) {
+		setTimeout(loadTTSVoices, 5000); // Retry if an error occurs.
+	}
+}
+
+loadTTSVoices();
+
 abstract class AbstractKoi extends EventHandler {
 	public banChatter(target: UPID, user: User): void {
 		const platform = target.split(';').pop();

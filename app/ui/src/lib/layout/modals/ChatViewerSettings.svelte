@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { SUPPORTED_TTS_VOICES } from '$lib/app-shim';
+
 	import LocalizedText from '$lib/locale/LocalizedText.svelte';
 	import Modal from '../Modal.svelte';
 	import { Input, Select } from '@casterlabs/ui';
@@ -79,32 +81,39 @@
 			PLATFORM: 'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.color_users_by.PLATFORM'
 		})}
 
-		<!-- {@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.play_ding_on_message', 'playDingOnMessage')} -->
+		{@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.play_ding_on_message', 'playDingOnMessage')}
 
-		<!-- {@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.read_messages_out_loud', 'readMessagesAloud')} -->
+		{@render prefsItemSwitch('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.read_messages_out_loud', 'readMessagesAloud')}
 
-		<!-- {#if initialPrefs.readMessagesAloud}
-			<li class="py-2">
-				<SelectMenu
-					title="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.tts_voice"
-					options={SUPPORTED_TTS_VOICES.reduce((arr, v) => ({ ...arr, [v]: v }), {})}
-					bind:value={ttsVoice}
-					on:value={savePreferences}
-				/>
-			</li>
+		{#if initialPrefs.readMessagesAloud}
+			{@render prefsItemSelect(
+				'co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.tts_voice',
+				'ttsVoice',
+				SUPPORTED_TTS_VOICES.reduce((arr, v) => ({ ...arr, [v]: v }), {})
+			)}
 		{/if}
 
 		{#if initialPrefs.readMessagesAloud || initialPrefs.playDingOnMessage}
-			<li class="py-2">
-				<div class="w-full">
-					<label class="block text-sm font-medium text-base-12">
-						<LocalizedText key="co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.tts_or_ding_volume" />
-					</label>
+			{#snippet volumeControl()}
+				<Input
+					type="range"
+					min={0.1}
+					max={1}
+					step={0.01}
+					value={initialPrefs.ttsOrDingVolume as number}
+					onchange={(e) => {
+						const value = (e.target as HTMLInputElement).valueAsNumber;
 
-					<RangeInput min={0} max={1} step={0.01} bind:value={ttsOrDingVolume} on:value={savePreferences} />
-				</div>
-			</li>
-		{/if} -->
+						const audio = new Audio('/$caffeinated-sdk-root$/sounds/dink.mp3');
+						audio.volume = value;
+						audio.play();
+
+						onupdate({ ...initialPrefs, ttsOrDingVolume: value } as PrefsType);
+					}}
+				/>
+			{/snippet}
+			{@render prefsItem('co.casterlabs.caffeinated.app.docks.chat.viewer.preferences.tts_or_ding_volume', volumeControl)}
+		{/if}
 
 		{#snippet textSizeControl()}
 			<Input
