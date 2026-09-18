@@ -11,7 +11,7 @@ const GLOBAL = {
   },
 
   get viewers() {
-    return statics.viewers as Record<UserPlatform, User>;
+    return statics.viewers as Record<UserPlatform, User[]>;
   },
 
   get viewerCounts() {
@@ -45,7 +45,7 @@ const GLOBAL = {
   deleteChat(
     platform: UserPlatform,
     messageId: MessageId,
-    isUserGesture = true
+    isUserGesture = true,
   ) {
     conn.send("KOI", {
       type: "DELETE",
@@ -60,7 +60,7 @@ const GLOBAL = {
     message: MessageId,
     chatter: "SYSTEM" | "CLIENT" | "PUPPET" = "CLIENT",
     replyTarget: MessageId | null = null,
-    isUserGesture = true
+    isUserGesture = true,
   ) {
     conn.send("KOI", {
       type: "MESSAGE",
@@ -82,9 +82,10 @@ const GLOBAL = {
   // }
 };
 const eventsPrototype = Object.getPrototypeOf(events);
+const GLOBAL_DYNAMIC = GLOBAL as Record<string, any>;
 for (const key of Object.getOwnPropertyNames(eventsPrototype)) {
-  if (GLOBAL[key]) continue;
-  GLOBAL[key] = function () {
+  if (GLOBAL_DYNAMIC[key]) continue;
+  GLOBAL_DYNAMIC[key] = function () {
     return eventsPrototype[key].call(events, ...arguments);
   };
 }
@@ -127,10 +128,10 @@ export declare type UserPlatform =
   | "YOUNOW"
   | "LIVESPACE"
   | "NOICE"
+  | "LOCO"
+  | "FOURTHWALL"
   | "X"
   | "RUMBLE"
-  | "LOCO"
-  // Other
   | "CASTERLABS_SYSTEM"
   | "CUSTOM_INTEGRATION";
 
@@ -148,9 +149,10 @@ export const PLATFORM_NAMES: Record<UserPlatform, string> = {
   YOUNOW: "YouNow",
   LIVESPACE: "LiveSpace",
   NOICE: "Noice",
+  LOCO: "Loco",
+  FOURTHWALL: "Fourthwall",
   X: "𝕏",
   RUMBLE: "Rumble",
-  LOCO: "Loco",
   // Other
   CASTERLABS_SYSTEM: "Casterlabs System",
   CUSTOM_INTEGRATION: "Custom Integration",
@@ -188,6 +190,86 @@ export declare interface User extends SimpleProfile {
 }
 
 /* ------------------------ */
+/*   Publishing & Stream    */
+/* ------------------------ */
+
+export declare interface PublishingInfo {
+  protocol: "RTMP" | "WHIP" | "SRT";
+  url: string;
+  key: string;
+  name: string;
+  id: string;
+}
+
+export declare type StreamConfigurationFeature =
+  | "TITLE"
+  | "DESCRIPTION"
+  | "CATEGORY"
+  | "LANGUAGE"
+  | "FREEFORM_TAGS"
+  | "FIXED_TAGS"
+  | "THUMBNAIL"
+  | "CONTENT_RATING"
+  | "CLASSIFICATIONS"
+  | "PRIVACY"
+  | "PUBLISHING_BINDING"
+  | "CREATION"
+  | "DELETION";
+
+export declare interface StreamConfiguration {
+  title: string | null;
+  description: string | null;
+  category: string | null;
+  language: StreamLanguage | null;
+  tags: string[] | null;
+  classifications: StreamConfigurationClassification[] | null;
+  privacy: StreamPrivacy | null;
+  content_rating: StreamContentRating | null;
+  thumbnail_url: string | null;
+  publishing_id: string | null;
+
+  category_name: string | null; // Doesn't need to be sent to koi.
+}
+
+export declare enum StreamPrivacy {
+  PUBLIC = "PUBLIC",
+  UNLISTED = "UNLISTED",
+  PRIVATE = "PRIVATE",
+}
+
+export declare enum StreamContentRating {
+  FAMILY_FRIENDLY = "FAMILY_FRIENDLY",
+  TEEN = "TEEN",
+  EIGHTEEN_PLUS = "EIGHTEEN_PLUS",
+}
+
+export declare enum StreamConfigurationClassification {
+  GAMBLING = "GAMBLING",
+  POLITICS = "POLITICS",
+  PROFANITY = "PROFANITY",
+  SEXUAL = "SEXUAL",
+  VIOLENCE = "VIOLENCE",
+  PAID_ADVERTISEMENT = "PAID_ADVERTISEMENT",
+
+  /**
+   * Only use if the platform DOES NOT make a distinction between DRUGS and
+   * DRINKING.
+   */
+  INTOXICATION = "INTOXICATION",
+
+  /**
+   * Only use if the platform makes the distinction between DRUGS and DRINKING.
+   */
+  DRUGS = "DRUGS",
+  /**
+   * Only use if the platform makes the distinction between DRUGS and DRINKING.
+   */
+  DRINKING = "DRINKING",
+}
+
+export declare type StreamLanguage = string; // TODO
+
+/* ------------------------ */
 /*          Event           */
 /* ------------------------ */
 
@@ -208,7 +290,8 @@ export declare type KoiEvent =
   | ViewerCountEvent
   | ViewerJoinLeaveEvent
   | ViewerJoinLeaveEvent
-  | ViewerListEvent;
+  | ViewerListEvent
+  | PurchaseEvent;
 
 export declare type KoiEventType =
   | "FOLLOW"
@@ -228,6 +311,7 @@ export declare type KoiEventType =
   | "PLATFORM_MESSAGE"
   | "RICH_MESSAGE"
   | "LIKE"
+  | "PURCHASE"
   | "CONNECTION_STATE";
 
 declare interface AbstractKoiEvent {
@@ -314,15 +398,17 @@ export declare interface RoomstateEvent extends AbstractKoiEvent {
   is_slowmode: boolean;
 }
 
-export declare type ContentRating = "FAMILY_FRIENDLY" | "PG" | "MATURE";
 export declare interface StreamStatusEvent extends AbstractKoiEvent {
   event_type: "STREAM_STATUS";
+  streams: Record<string, StreamConfiguration>;
+
+  // deprecated
   is_live: boolean;
   title: string;
   start_time: string;
   tags: String[];
   category: string;
-  contentRating: ContentRating;
+  contentRating: StreamContentRating;
   thumbnail_url: string;
   language: string;
 }
@@ -364,6 +450,11 @@ export declare interface SubscriptionEvent extends AbstractKoiEvent {
    * will always be 1.
    */
   months_streak: number;
+  /**
+   * Note that this is unknowable on some platforms, like TikTok. In that case, it
+   * will always be 1.
+   */
+  months_cumulative: number;
 }
 
 export declare interface UserUpdateEvent extends AbstractKoiEvent {
@@ -384,6 +475,15 @@ export declare interface ViewerJoinLeaveEvent extends AbstractKoiEvent {
 export declare interface ViewerCountEvent extends AbstractKoiEvent {
   event_type: "VIEWER_COUNT";
   count: number;
+}
+
+export declare interface PurchaseEvent extends AbstractKoiEvent {
+  event_type: "PURCHASE";
+  purchaser: User;
+  products: ProductInfo[];
+  note: string | null;
+  currency: string;
+  total_amount: number;
 }
 
 /* ------------------------ */
@@ -418,6 +518,7 @@ declare interface AbstractRichMessageEvent extends AbstractMessageMetaKoiEvent {
   fragments: ChatFragment[];
   donations: Donation[];
   attachments: Attachment[];
+  milestones: Milestone[];
   id: MessageId;
   reply_target: MetaId | null;
   raw: string;
@@ -431,10 +532,6 @@ export declare interface RichMessageEvent extends AbstractRichMessageEvent {
 export declare interface PlatformMessageEvent extends AbstractRichMessageEvent {
   event_type: "PLATFORM_MESSAGE";
 }
-
-/* ------------------------ */
-/*    Rich Message Stuff    */
-/* ------------------------ */
 
 export declare type DonationType =
   | "CASTERLABS_TEST"
@@ -471,6 +568,19 @@ export declare interface Attachment {
   content: AttachmentContent;
   html: string;
   donation: Donation | null;
+}
+
+export declare type MilestoneType = "WATCH_STREAK_DAYS";
+export declare interface Milestone {
+  type: MilestoneType;
+
+  /**
+   * Context dependent.
+   *
+   * @implSpec <code>WATCH_STREAK_DAYS</code>: this is the number of days in the
+   *           streak.
+   */
+  amount: number;
 }
 
 export declare type ChatFragment =
@@ -527,4 +637,13 @@ export declare interface MentionChatFragment extends AbstractChatFragment {
 export declare interface LinkChatFragment extends AbstractChatFragment {
   type: "LINK";
   url: string;
+}
+
+/* ------------------------ */
+/*           Misc           */
+/* ------------------------ */
+
+export declare interface ProductInfo {
+  name: string;
+  image: string | null;
 }

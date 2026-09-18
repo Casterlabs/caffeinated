@@ -56,9 +56,10 @@ export declare type UserPlatform =
 	| 'YOUNOW'
 	| 'LIVESPACE'
 	| 'NOICE'
+	| 'LOCO'
+	| 'FOURTHWALL'
 	| 'X'
 	| 'RUMBLE'
-	| 'LOCO'
 	| 'CASTERLABS_SYSTEM'
 	| 'CUSTOM_INTEGRATION';
 export declare type UserRole = 'BROADCASTER' | 'SUBSCRIBER' | 'FOLLOWER' | 'MODERATOR' | 'STAFF' | 'VIP' | 'OG';
@@ -80,6 +81,51 @@ export declare interface User extends SimpleProfile {
 	roles: UserRole[];
 	badges: string[];
 }
+export declare interface StreamConfiguration {
+	title: string | null;
+	description: string | null;
+	category: string | null;
+	language: StreamLanguage | null;
+	tags: string[] | null;
+	classifications: StreamConfigurationClassification[] | null;
+	privacy: StreamPrivacy | null;
+	content_rating: StreamContentRating | null;
+	thumbnail_url: string | null;
+	publishing_id: string | null;
+	category_name: string | null;
+}
+declare enum StreamPrivacy {
+	PUBLIC = 'PUBLIC',
+	UNLISTED = 'UNLISTED',
+	PRIVATE = 'PRIVATE'
+}
+declare enum StreamContentRating {
+	FAMILY_FRIENDLY = 'FAMILY_FRIENDLY',
+	TEEN = 'TEEN',
+	EIGHTEEN_PLUS = 'EIGHTEEN_PLUS'
+}
+declare enum StreamConfigurationClassification {
+	GAMBLING = 'GAMBLING',
+	POLITICS = 'POLITICS',
+	PROFANITY = 'PROFANITY',
+	SEXUAL = 'SEXUAL',
+	VIOLENCE = 'VIOLENCE',
+	PAID_ADVERTISEMENT = 'PAID_ADVERTISEMENT',
+	/**
+	 * Only use if the platform DOES NOT make a distinction between DRUGS and
+	 * DRINKING.
+	 */
+	INTOXICATION = 'INTOXICATION',
+	/**
+	 * Only use if the platform makes the distinction between DRUGS and DRINKING.
+	 */
+	DRUGS = 'DRUGS',
+	/**
+	 * Only use if the platform makes the distinction between DRUGS and DRINKING.
+	 */
+	DRINKING = 'DRINKING'
+}
+export declare type StreamLanguage = string;
 export declare type KoiEvent =
 	| CatchupEvent
 	| ChannelPointsEvent
@@ -97,7 +143,8 @@ export declare type KoiEvent =
 	| ViewerCountEvent
 	| ViewerJoinLeaveEvent
 	| ViewerJoinLeaveEvent
-	| ViewerListEvent;
+	| ViewerListEvent
+	| PurchaseEvent;
 export declare type KoiEventType =
 	| 'FOLLOW'
 	| 'SUBSCRIPTION'
@@ -116,6 +163,7 @@ export declare type KoiEventType =
 	| 'PLATFORM_MESSAGE'
 	| 'RICH_MESSAGE'
 	| 'LIKE'
+	| 'PURCHASE'
 	| 'CONNECTION_STATE';
 export declare interface AbstractKoiEvent {
 	streamer: SimpleProfile;
@@ -194,15 +242,15 @@ export declare interface RoomstateEvent extends AbstractKoiEvent {
 	is_followers_only: boolean;
 	is_slowmode: boolean;
 }
-export declare type ContentRating = 'FAMILY_FRIENDLY' | 'PG' | 'MATURE';
 export declare interface StreamStatusEvent extends AbstractKoiEvent {
 	event_type: 'STREAM_STATUS';
+	streams: Record<string, StreamConfiguration>;
 	is_live: boolean;
 	title: string;
 	start_time: string;
 	tags: String[];
 	category: string;
-	contentRating: ContentRating;
+	contentRating: StreamContentRating;
 	thumbnail_url: string;
 	language: string;
 }
@@ -230,6 +278,11 @@ export declare interface SubscriptionEvent extends AbstractKoiEvent {
 	 * will always be 1.
 	 */
 	months_streak: number;
+	/**
+	 * Note that this is unknowable on some platforms, like TikTok. In that case, it
+	 * will always be 1.
+	 */
+	months_cumulative: number;
 }
 export declare interface UserUpdateEvent extends AbstractKoiEvent {
 	event_type: 'USER_UPDATE';
@@ -246,6 +299,14 @@ export declare interface ViewerJoinLeaveEvent extends AbstractKoiEvent {
 export declare interface ViewerCountEvent extends AbstractKoiEvent {
 	event_type: 'VIEWER_COUNT';
 	count: number;
+}
+export declare interface PurchaseEvent extends AbstractKoiEvent {
+	event_type: 'PURCHASE';
+	purchaser: User;
+	products: ProductInfo[];
+	note: string | null;
+	currency: string;
+	total_amount: number;
 }
 /**
  * For RP_ACTION, see Twitch's /me command.
@@ -264,6 +325,7 @@ export declare interface AbstractRichMessageEvent extends AbstractMessageMetaKoi
 	fragments: ChatFragment[];
 	donations: Donation[];
 	attachments: Attachment[];
+	milestones: Milestone[];
 	id: MessageId;
 	reply_target: MetaId | null;
 	raw: string;
@@ -310,6 +372,17 @@ export declare interface Attachment {
 	html: string;
 	donation: Donation | null;
 }
+export declare type MilestoneType = 'WATCH_STREAK_DAYS';
+export declare interface Milestone {
+	type: MilestoneType;
+	/**
+	 * Context dependent.
+	 *
+	 * @implSpec <code>WATCH_STREAK_DAYS</code>: this is the number of days in the
+	 *           streak.
+	 */
+	amount: number;
+}
 export declare type ChatFragment = TextChatFragment | EmoteChatFragment | EmojiChatFragment | MentionChatFragment | LinkChatFragment;
 export declare type ChatFragmentType = 'TEXT' | 'EMOTE' | 'EMOJI' | 'MENTION' | 'LINK';
 export declare interface AbstractChatFragment {
@@ -348,6 +421,10 @@ export declare interface MentionChatFragment extends AbstractChatFragment {
 export declare interface LinkChatFragment extends AbstractChatFragment {
 	type: 'LINK';
 	url: string;
+}
+export declare interface ProductInfo {
+	name: string;
+	image: string | null;
 }
 declare const GLOBAL$3: {
 	readonly providers: any;

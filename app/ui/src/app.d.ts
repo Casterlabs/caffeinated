@@ -881,9 +881,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 			{
@@ -933,9 +934,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 			any
@@ -956,9 +958,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 			any
@@ -979,9 +982,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 			{ streamer: any; timestamp: {} }
@@ -1002,9 +1006,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 			any
@@ -1025,9 +1030,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 			number
@@ -1048,9 +1054,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 			{
@@ -1243,9 +1250,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 		arg0: string,
@@ -1298,9 +1306,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 		arg0: string,
@@ -1321,9 +1330,10 @@ export declare interface Koi extends MutationObject<'roomStates' | 'features' | 
 			| 'YOUNOW'
 			| 'LIVESPACE'
 			| 'NOICE'
+			| 'LOCO'
+			| 'FOURTHWALL'
 			| 'X'
 			| 'RUMBLE'
-			| 'LOCO'
 			| 'CASTERLABS_SYSTEM'
 			| 'CUSTOM_INTEGRATION',
 		arg0: string
