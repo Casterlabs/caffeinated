@@ -56,7 +56,6 @@ export default class Conn extends EventHandler {
 
 			this.ws.onopen = () => {
 				console.debug('[WidgetEnvironment/Conn]', 'WS open.');
-				this.flushPending();
 				this.broadcast('open');
 			};
 
@@ -84,6 +83,7 @@ export default class Conn extends EventHandler {
 					case 'INIT': {
 						this.connectionId = payload.data.connectionId;
 						this.broadcast('init', payload.data);
+						this.flushPending();
 						return;
 					}
 
