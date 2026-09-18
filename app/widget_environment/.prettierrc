@@ -1,0 +1,9 @@
+{
+  "useTabs": true,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 180,
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "overrides": []
+}
