@@ -30,7 +30,8 @@ class _CefUtil {
             builder.addJcefArgs(
                 "--disable-http-cache",
                 "--disable-web-security", // Gross workaround for CORS issues between custom schemes and localhost.
-                "--autoplay-policy=no-user-gesture-required"
+                "--autoplay-policy=no-user-gesture-required",
+                "--js-flags=--expose-gc"
             );
             builder.setInstallDir(bundleDirectory);
             builder.setProgressHandler(new IProgressHandler() {
