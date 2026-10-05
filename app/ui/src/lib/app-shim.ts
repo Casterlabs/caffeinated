@@ -345,15 +345,15 @@ if (isInApp) {
 		}
 	})();
 
-	// @ts-ignore
-	SDK.Koi.eventHistory.forEach((e: KoiEvent) => {
-		Koi.broadcast(e.event_type, e);
+	SDK.Widget.on('ready', () => {
+		// @ts-ignore
+		SDK.Koi.eventHistory.forEach((e: KoiEvent) => {
+			Koi.broadcast(e.event_type, e);
+		});
 	});
 
 	// @ts-ignore
-	SDK.Koi.on('*', (_: never, e: KoiEvent) => {
-		Koi.broadcast(e.event_type, e);
-	});
+	SDK.Koi.on('*', Koi.broadcast); // Proxy to internal Koi event handling
 
 	SDK.Widget.emit('init');
 }
