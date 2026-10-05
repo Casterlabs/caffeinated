@@ -73,7 +73,7 @@
 			style:transform="translateX(calc(var(--base-sidebar-width) * -1 * (1 - var(--sidebar-width-mul))))"
 		>
 			<nav class="flex flex-1 flex-col divide-y divide-current text-base-6 overflow-y-auto">
-				{#if hasUpdate}
+				{#if $hasUpdate}
 					<div class="space-y-1 px-2 py-4" role="listitem">
 						<button
 							class="group flex flex-col items-center px-3 py-2 border-current font-medium rounded-md bg-primary-10 hover:bg-primary-11 text-base-1 hover:text-base-3 transition"

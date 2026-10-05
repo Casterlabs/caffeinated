@@ -221,7 +221,8 @@ public class Bootstrap implements Runnable {
         logger.info("-----------------------------+-------------------------");
         logger.info("BuildInfo.versionString      | %s", buildInfo.getVersionString());
         logger.info("BuildInfo.author             | %s", buildInfo.getAuthor());
-        logger.info("BuildInfo.isDev              | %b", isDev);
+        logger.info("BuildInfo.isDev              | %b", buildInfo.isDev());
+        logger.info("Bootstrap.isDev              | %b", isDev);
         logger.info("Bootstrap.args               | %s", System.getProperty("sun.java.command"));
 //        logger.info("SaucerApp.archTarget()       | %s", SaucerApp.archTarget());
 //        logger.info("SaucerApp.systemTarget()     | %s", SaucerApp.systemTarget());

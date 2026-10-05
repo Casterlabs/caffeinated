@@ -104,7 +104,7 @@ public class App {
         });
 
         AsyncTask.create(() -> {
-            while (true) {
+            while (!buildInfo.isDev()) {
                 try {
                     String commit = WebUtil.sendHttpRequest(
                         new Request.Builder()
