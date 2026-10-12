@@ -64,7 +64,7 @@ for (const init of inits) {
 // Navigate back to widgets.casterlabs.co when we disconnect. This effectively resets the widget.
 conn.on('close', () => {
 	setTimeout(() => {
-		location.href = `https://widgets.casterlabs.co/caffeinated/loader.html${location.search}`;
+		location.href = `https://widgets.casterlabs.co/caffeinated/loader.html?${query.toString()}`;
 	}, 2500);
 });
 
