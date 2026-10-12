@@ -5,7 +5,7 @@ set -e -o pipefail
 APP_ID="co.casterlabs.caffeinated"
 APP_NAME="Casterlabs-Caffeinated"
 MAIN_CLASS="co.casterlabs.caffeinated.bootstrap.Bootstrap"
-VM_OPTIONS='--arg=-Xms1M --arg=-XX:+UseCompressedOops --arg=-XX:MaxHeapFreeRatio=2 --arg=-XX:MinHeapFreeRatio=1'
+VM_OPTIONS='--arg=-Xms1M --arg=-XX:+UseCompressedOops --arg=-XX:+UseSerialGC --arg=-XX:MinHeapFreeRatio=1 --arg=-XX:MaxHeapFreeRatio=5 --arg=-XX:-ShrinkHeapInSteps'
 SAUCER4J_VERSION="1a278f1"
 JCEF_VERSION="146.0.10"
 JCEF_NATIVES_VERSION="jcef-d3de827+cef-146.0.10+g8219561+chromium-146.0.7680.179"

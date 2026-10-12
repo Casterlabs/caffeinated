@@ -27,6 +27,8 @@ public class StartupProgress {
         if (uiInitialized) {
             AppWindow.INSTANCE.executeJavaScript(String.format("window.__handleStartupProgress(%f, '%s');", progress, name));
         }
+
+        App.gc(); // Jank hack. Basically try to free memory in-between startup steps.
     }
 
 }

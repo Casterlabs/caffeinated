@@ -6,6 +6,7 @@ import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 
 import co.casterlabs.caffeinated.app.App;
 import co.casterlabs.caffeinated.app.StartupProgress;
@@ -141,13 +142,13 @@ public class Bootstrap implements Runnable {
         {
             Thread gcThread = new Thread(() -> {
                 while (true) {
-                    System.gc();
-                    Thread.yield(); // Willingly yield to the OS if need be.
                     try {
-                        Thread.sleep(30_000);
+                        TimeUnit.SECONDS.sleep(5);
                     } catch (InterruptedException ignored) {}
+                    App.gc();
                 }
             });
+            gcThread.setPriority(Thread.MIN_PRIORITY);
             gcThread.setDaemon(true);
             gcThread.setName("GC Thread");
             gcThread.start();

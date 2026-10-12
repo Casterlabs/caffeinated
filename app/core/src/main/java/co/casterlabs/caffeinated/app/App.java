@@ -188,11 +188,8 @@ public class App {
             notify("Boo! 👻", Collections.emptyMap(), NotificationType.WARNING);
         }
 
-        System.gc();
-        System.gc();
-        System.gc();
-
         FastLogger.logStatic("App is ready!");
+        App.gc();
     }
 
     public static String getLocale() {
@@ -208,6 +205,19 @@ public class App {
 
     public static void shutdown() {
         AppAuth.shutdown();
+    }
+
+    @JavascriptFunction
+    public static void gc() {
+        // Dumb hack. From what I understand, gc() is a "pressure" signal that allows
+        // the JVM to ignore it more willingly. However, if the JVM senses a lot of
+        // pressure signals then it's more likely to do a full GC. We're basically
+        // tricking the JVM into thinking that it's actually out of memory.
+        // Or at least, that's how I understand it.
+        System.gc();
+        System.gc();
+        System.gc();
+        System.gc();
     }
 
     /**
