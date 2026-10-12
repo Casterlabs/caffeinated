@@ -353,7 +353,9 @@ if (isInApp) {
 	});
 
 	// @ts-ignore
-	SDK.Koi.on('*', Koi.broadcast); // Proxy to internal Koi event handling
+	SDK.Koi.on('*', (t: string, e: any) => {
+		Koi.broadcast(t, e); // Proxy to internal Koi event handling
+	});
 
 	SDK.Widget.emit('init');
 }
