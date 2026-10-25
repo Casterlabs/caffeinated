@@ -4,23 +4,27 @@ export const PORTAL_SIGNIN = [];
 
 // See also: appShim.mjs
 export async function openAuthPortal(platform, shouldGoBack) {
-	const portalLink = await Caffeinated.auth.getPortalUrl(platform, JSON.stringify({ shouldGoBack }));
+	const portalLink = await Caffeinated.auth.getPortalUrl(
+		platform,
+		JSON.stringify({ shouldGoBack })
+	);
 
-	const frame = document.createElement("iframe");
+	const frame = document.createElement('iframe');
 	frame.src = portalLink;
-	frame.id = "koi-auth-portal";
-	frame.style = "position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100vw; height: 100vh; z-index: 10000;"
+	frame.id = 'koi-auth-portal';
+	frame.style =
+		'position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100vw; height: 100vh; z-index: 10000;';
 	document.body.insertBefore(frame, document.body.firstChild);
 }
 
 export const ALL_STREAMING_SERVICES = [
 	'TWITCH',
-	'TROVO',
+	// 'TROVO',
 	'YOUTUBE',
-	'DLIVE',
+	// 'DLIVE',
 	'KICK',
 	'TIKTOK',
-	'LOCO',
+	'LOCO'
 	// 'NOICE',
 	// 'LIVESPACE',
 	// 'X',
@@ -32,18 +36,18 @@ export const STREAMING_SERVICES = {
 		name: 'Twitch',
 		color: '#8838ff'
 	},
-	TROVO: {
-		name: 'Trovo',
-		color: '#149b53'
-	},
+	// TROVO: {
+	// 	name: 'Trovo',
+	// 	color: '#149b53'
+	// },
 	YOUTUBE: {
 		name: 'YouTube',
 		color: '#ff0000'
 	},
-	DLIVE: {
-		name: 'DLive',
-		color: '#ccc121'
-	},
+	// DLIVE: {
+	// 	name: 'DLive',
+	// 	color: '#ccc121'
+	// },
 	KICK: {
 		name: 'Kick (BETA)',
 		color: '#53fc18'
@@ -55,7 +59,7 @@ export const STREAMING_SERVICES = {
 	LOCO: {
 		name: 'Loco (BETA)',
 		color: '#ff5a12'
-	},
+	}
 	// NOICE: {
 	// 	name: 'Noice',
 	// 	color: 'linear-gradient(45deg, #5231f9 6%, #6c2cfc 32%, #bb12fc 68%, #cf0bf9 77%, #ef00f5 94%)'
@@ -76,12 +80,12 @@ export const STREAMING_SERVICES = {
 
 export const STREAMING_SERVICE_NAMES = {
 	TWITCH: 'Twitch',
-	TROVO: 'Trovo',
+	// TROVO: 'Trovo',
 	YOUTUBE: 'YouTube',
-	DLIVE: 'DLive',
+	// DLIVE: 'DLive',
 	KICK: 'Kick',
 	TIKTOK: 'TikTok',
-	LOCO: 'Loco',
+	LOCO: 'Loco'
 	// NOICE: 'Noice',
 	// LIVESPACE: 'LiveSpace',
 	// X: '𝕏',
