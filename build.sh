@@ -25,14 +25,6 @@ if [[ $@ != *"nopackage"* ]]; then
     echo "Completing packaging of application."
     echo ""
 
-    java -jar ProjectBuilder.jar $VM_OPTIONS -os MACOS -arch X86 -archWord 64 -wi WEBKIT -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -cp app/Caffeinated/target/Caffeinated.jar -i icon.icns -id co.casterlabs.caffeinated
-    cd dist/macOS-x86_64
-    zip -r ../artifacts/macOS-amd64.zip *
-    rm -rf ./jre
-    zip -r ../artifacts/macOS-amd64-nojre.zip *
-    cd -
-    echo ""
-
     java -jar ProjectBuilder.jar $VM_OPTIONS -os WINDOWS_NT -arch X86 -archWord 64 -wi CHROMIUM_EMBEDDED_FRAMEWORK -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -res app/WMC-JsonConsoleWrapper.exe -cp app/Caffeinated/target/Caffeinated.jar -i icon.ico
     cd dist/Windows-x86_64
     zip -r ../artifacts/Windows-amd64.zip *
@@ -40,13 +32,4 @@ if [[ $@ != *"nopackage"* ]]; then
     zip -r ../artifacts/Windows-amd64-nojre.zip *
     cd -
     echo ""
-
-    java -jar ProjectBuilder.jar $VM_OPTIONS -os LINUX -arch X86 -archWord 64 -wi CHROMIUM_EMBEDDED_FRAMEWORK -v 1.2 -n "Casterlabs-Caffeinated" -jv JAVA11 -kv $KAIMEN_VERSION -cp app/Caffeinated/target/Caffeinated.jar
-    cd dist/Linux-x86_64
-    zip -r ../artifacts/Linux-amd64.zip *
-    rm -rf ./jre
-    zip -r ../artifacts/Linux-amd64-nojre.zip *
-    cd -
-    echo ""
-
 fi
