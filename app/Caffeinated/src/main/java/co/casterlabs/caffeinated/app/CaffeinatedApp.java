@@ -403,7 +403,7 @@ public class CaffeinatedApp extends JavascriptObject implements Caffeinated {
                 new Request.Builder()
                     .url(
                         String.format(
-                            "https://cdn.casterlabs.co/dist/%s/commit",
+                            "https://cdn.casterlabs.co/caffeinated/dist/%s/commit",
                             this.buildInfo.getBuildChannel()
                         )
                     )
