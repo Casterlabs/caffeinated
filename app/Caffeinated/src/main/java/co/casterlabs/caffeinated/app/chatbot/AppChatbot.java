@@ -87,7 +87,7 @@ public class AppChatbot extends JavascriptObject {
             if (text.isEmpty()) continue;
 
             for (StreamStatusEvent streamStatus : CaffeinatedApp.getInstance().getKoi().getStreamStates().values()) {
-                if (!streamStatus.isLive()) return;
+                if (!streamStatus.isLive()) continue;
                 CaffeinatedApp.getInstance().getKoi().sendChat(
                     streamStatus.getStreamer().getPlatform(),
                     text,
