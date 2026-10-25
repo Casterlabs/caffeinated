@@ -51,6 +51,12 @@ public class Donation {
 
         TIKTOK_COINS,
 
+        KICK_KICKS,
+
+        FOURTHWALL_DONATION,
+
+        LOCO_DIAMONDS,
+
         ;
     }
 }

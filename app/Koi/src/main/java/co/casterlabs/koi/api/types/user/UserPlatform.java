@@ -6,15 +6,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserPlatform {
     TWITCH("Twitch"),
-    TROVO("Trovo"),
     YOUTUBE("YouTube"),
-    DLIVE("DLive"),
     KICK("Kick"),
     TIKTOK("TikTok"),
     LOCO("Loco"),
+    FOURTHWALL("FourthWall"),
+    X("𝕏"),
 
     // Coming up.
-    X("𝕏"),
     RUMBLE("Rumble"),
 
     // Graveyard. R.I.P.
@@ -24,6 +23,8 @@ public enum UserPlatform {
     THETA("Theta"),
     YOUNOW("YouNow"),
     LIVESPACE("LiveSpace"),
+    TROVO("Trovo"),
+    DLIVE("DLive"),
 
     // Other.
     CASTERLABS_SYSTEM("System"),
