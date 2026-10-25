@@ -9,7 +9,6 @@ public class ThirdPartyServices {
 
     public static List<CaffeinatedPlugin> init() {
         return Arrays.asList(
-            new StreamlabsServicePlugin(),
             new KofiServicePlugin()
         );
     }
