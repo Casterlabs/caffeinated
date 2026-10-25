@@ -333,19 +333,23 @@
 			case 'CLEARCHAT': {
 				if (event.user_upid) {
 					// Clear by user.
-					for (const { component: chatMessage } of Object.values(chatElements)) {
+					for (const chatElement of Object.values(chatElements)) {
 						try {
- 							const koiEvent = chatMessage.event;
- 							const koiSender = koiEvent.sender || koiEvent.follower || koiEvent.subscriber //
- 							|| koiEvent.host || koiEvent.viewer || koiEvent.gift_recipient || koiEvent.liker;
+							const koiSender =
+								chatElement.event.sender ||
+								chatElement.event.follower ||
+								chatElement.event.subscriber || //
+								chatElement.event.host ||
+								chatElement.event.viewer ||
+								chatElement.event.gift_recipient ||
+								chatElement.event.liker;
 
 							if (koiSender && koiSender.UPID == event.user_upid) {
- 								chatMessage.remove();
- 								delete chatElements[key];
- 							}
- 						} catch (e) {
- 							console.error('Error while clearing chat:', e);
- 						}
+								chatElement.component.isDeleted = true;
+							}
+						} catch (e) {
+							console.error('Error while clearing chat:', e);
+						}
 					}
 					break; // Do not fallthrough
 				} else {
