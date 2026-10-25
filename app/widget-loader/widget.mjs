@@ -4,6 +4,8 @@ import App from "./app.mjs";
 import { setLocaleProvider } from "./app.mjs";
 import EventHandler from "./eventHandler.mjs";
 
+const query = new URLSearchParams(location.search);
+
 const queryParams = (() => {
     let vars = {};
 
@@ -277,7 +279,7 @@ export function init({ initHandler, disconnectHandler }) {
     conn.on("close", () => {
         if (!disconnectHandler || disconnectHandler()) {
             setTimeout(() => {
-                location.reload();
+		        location.href = `https://widgets.casterlabs.co/caffeinated/loader.html?${query.toString()}`;
             }, 2500);
         }
     });
