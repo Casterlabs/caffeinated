@@ -109,7 +109,7 @@
         "page.chat_bot.commands.examples.sound.description": "Mainkan suara notifikasi di aplikasi discord, untuk menunjukan cara mengatur suara notifikasi. caranya: !sound",
         "page.chat_bot.commands.examples.sound.code": "Sound.playAudio(\"https://www.myinstants.com/media/sounds/discord-notification.mp3\" /* bisa berupa alamat website atau Data URI */, .75 /* volume, 0-1 */);",
         "page.chat_bot.commands.examples.tts.description": "Gunakan fitur ubah teks menjadi suara untuk memutar teks yang telah ditentukan, untuk menunjukan cara menggunakan fitur ubah teks menjadi suara, gunakan: !tts <message>",
-        "page.chat_bot.commands.examples.tts.code": "Sound.playTTS(rawArgs, \"Brian\", .5 /* volume, 0-1 */);",
+        "page.chat_bot.commands.examples.tts.code": "Sound.playTTS(rawArgs, \"Google Translate English\", .5 /* volume, 0-1 */);",
         "page.chat_bot.shouts": "Teriakan",
         "page.chat_bot.shouts.format": "Ketika seseorang dari %platform% %action%, %response_action%: %response%",
         "page.chat_bot.shouts.response_action.REPLY_WITH": "katakan sesuatu",

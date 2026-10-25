@@ -244,7 +244,7 @@ public class JavascriptEngineImpl implements ScriptingEngine {
         }
 
         public void playTTS(@NonNull String text, String defaultVoice, Number volume) throws IOException {
-            if (defaultVoice == null) defaultVoice = "Brian";
+            if (defaultVoice == null) defaultVoice = "Google Translate English";
             if (volume == null) volume = 1;
             playAudio(TTS.getSpeechAsUrl(defaultVoice, text), volume.floatValue());
         }

@@ -221,7 +221,7 @@ public abstract class GenericAlert extends Widget {
                         new WidgetSettingsDropdownBuilder()
                             .withId("voice")
                             .withName("Default Voice")
-                            .withDefaultValue("Brian")
+                            .withDefaultValue("Google Translate English")
                             .withOptionsList(TTS.getVoicesAsArray())
                             .build()
                     );

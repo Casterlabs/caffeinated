@@ -109,7 +109,7 @@
         "page.chat_bot.commands.examples.sound.description": "Plays the Discord notification sound, to show you how to play sounds. Usage: !sound",
         "page.chat_bot.commands.examples.sound.code": "Sound.playAudio(\"https://www.myinstants.com/media/sounds/discord-notification.mp3\" /* Can be a URL or Data URI */, .75 /* volume, 0-1 */);",
         "page.chat_bot.commands.examples.tts.description": "Uses TTS to play the specified text, to show you how to use TTS. Usage: !tts <message>",
-        "page.chat_bot.commands.examples.tts.code": "Sound.playTTS(rawArgs, \"Brian\", .5 /* volume, 0-1 */);",
+        "page.chat_bot.commands.examples.tts.code": "Sound.playTTS(rawArgs, \"Google Translate English\", .5 /* volume, 0-1 */);",
         "page.chat_bot.shouts": "Shouts",
         "page.chat_bot.shouts.format": "When someone from %platform% %action%, %response_action%: %response%",
         "page.chat_bot.shouts.response_action.REPLY_WITH": "say",

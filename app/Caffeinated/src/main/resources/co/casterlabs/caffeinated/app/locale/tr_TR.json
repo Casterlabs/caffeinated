@@ -109,7 +109,7 @@
         "page.chat_bot.commands.examples.sound.description": "Seslerin nasıl çalınacağını göstermek için Discord bildirim sesini çalar. Kullanım: !sound",
         "page.chat_bot.commands.examples.sound.code": "Sound.playAudio(\"https://www.myinstants.com/media/sounds/discord-notification.mp3\" /* Bir URL veya Veri URI'si olabilir */, .75 /* ses seviyesi, 0-1 */);",
         "page.chat_bot.commands.examples.tts.description": "TTS'nin nasıl kullanılacağını size göstermek amacıyla belirtilen metni oynatmak için TTS'yi kullanır. Kullanım: !tts <message>",
-        "page.chat_bot.commands.examples.tts.code": "Sound.playTTS(rawArgs, \"Brian\", .5 /* ses seviyesi, 0-1 */);",
+        "page.chat_bot.commands.examples.tts.code": "Sound.playTTS(rawArgs, \"Google Translate English\", .5 /* ses seviyesi, 0-1 */);",
         "page.chat_bot.shouts": "Seslenmeler",
         "page.chat_bot.shouts.format": "%platform% %action%, %response_action%: %response%'den birisi olduğunda",
         "page.chat_bot.shouts.response_action.REPLY_WITH": "söyle",

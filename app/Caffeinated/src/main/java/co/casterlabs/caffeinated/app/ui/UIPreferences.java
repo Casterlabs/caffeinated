@@ -50,7 +50,7 @@ public class UIPreferences {
         private boolean showViewers = false;
         private boolean playDingOnMessage = false;
         private boolean readMessagesAloud = false;
-        private String ttsVoice = "Brian";
+        private String ttsVoice = "Google Translate English";
         private boolean showPlatform = false;
         private boolean showActivities = false;
         private String colorBy = "THEME";

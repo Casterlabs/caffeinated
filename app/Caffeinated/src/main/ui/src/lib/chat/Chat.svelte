@@ -47,7 +47,7 @@
 	let showViewers = false;
 	let playDingOnMessage = false;
 	let readMessagesAloud = false;
-	let ttsVoice = 'Brian';
+	let ttsVoice = 'Google Translate English';
 	let showPlatform = false;
 	let showActivities = false;
 	let showPronouns = false;
