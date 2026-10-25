@@ -45,18 +45,18 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                     url = "http://localhost:3002/$caffeinated-sdk-root$/loader" + resource + session.getQueryString();
                 }
 
-                return HttpResponse.newFixedLengthResponse(
-                    StandardHttpStatus.OK,
-                    "<!DOCTYPE html>\r\n"
-                        + "<html>\r\n"
-                        + "<head>\r\n"
-                        + "<meta http-equiv=\"refresh\" content=\"0; url='" + url + "'\" />\r\n"
-                        + "</head>\r\n"
-                        + "</html>"
-                )
-                    .setMimeType("text/html")
-                    .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co")
-                    .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
+                return this.addCors(
+                    HttpResponse.newFixedLengthResponse(
+                        StandardHttpStatus.OK,
+                        "<!DOCTYPE html>\r\n"
+                            + "<html>\r\n"
+                            + "<head>\r\n"
+                            + "<meta http-equiv=\"refresh\" content=\"0; url='" + url + "'\" />\r\n"
+                            + "</head>\r\n"
+                            + "</html>"
+                    )
+                        .setMimeType("text/html")
+                );
             }
 
             InputStream in = CaffeinatedDefaultPlugin.class.getClassLoader().getResourceAsStream("co/casterlabs/caffeinated/app/ui/html/loader" + resource);
@@ -64,10 +64,10 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
             String content = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
             String mime = MimeTypes.getMimeForFile(new File(resource));
 
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
-                .setMimeType(mime)
-                .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co")
-                .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
+            return this.addCors(
+                HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
+                    .setMimeType(mime)
+            );
         } catch (Exception e) {
             e.printStackTrace();
             return newErrorResponse(StandardHttpStatus.INTERNAL_ERROR, RequestError.INTERNAL_ERROR);
@@ -106,11 +106,10 @@ public class RouteWidgetApi implements HttpProvider, WebsocketProvider, RouteHel
                     mime = "application/octet-stream";
                 }
 
-                return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
-                    .setMimeType(mime)
-//                    .putHeader("Content-Security-Policy", "frame-ancestors 'self' casterlabs.co widgets.casterlabs.co;")
-                    .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co")
-                    .putHeader("Cross-Origin-Resource-Policy", "cross-origin");
+                return this.addCors(
+                    HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
+                        .setMimeType(mime)
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -17,10 +17,11 @@ public class RouteLocalServer implements HttpProvider, RouteHelper {
 
     @HttpEndpoint(uri = "/api/test/:specialCode")
     public HttpResponse onWidgetRealtimeConnectionTest(SoraHttpSession session) {
-        return HttpResponse
-            .newFixedLengthResponse(StandardHttpStatus.OK, session.getUriParameters().get("specialCode"))
-            .setMimeType("test/plain")
-            .putHeader("Access-Control-Allow-Origin", "https://widgets.casterlabs.co");
+        return this.addCors(
+            HttpResponse
+                .newFixedLengthResponse(StandardHttpStatus.OK, session.getUriParameters().get("specialCode"))
+                .setMimeType("test/plain")
+        );
     }
 
 }

@@ -38,9 +38,10 @@ public class RoutePluginApi implements HttpProvider, RouteHelper {
                     mime = "application/octet-stream";
                 }
 
-                return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
-                    .setMimeType(mime);
-
+                return this.addCors(
+                    HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, content)
+                        .setMimeType(mime)
+                );
             } else {
                 return newErrorResponse(StandardHttpStatus.UNAUTHORIZED, RequestError.UNAUTHORIZED);
             }

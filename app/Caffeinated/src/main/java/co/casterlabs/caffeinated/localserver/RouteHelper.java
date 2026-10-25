@@ -8,11 +8,9 @@ import co.casterlabs.caffeinated.app.CaffeinatedApp;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.rakurai.io.http.HttpStatus;
 import co.casterlabs.rakurai.io.http.server.HttpResponse;
-import co.casterlabs.rakurai.io.http.server.HttpSession;
 import co.casterlabs.rakurai.io.http.server.websocket.Websocket;
 import co.casterlabs.rakurai.io.http.server.websocket.WebsocketListener;
 import co.casterlabs.rakurai.json.element.JsonArray;
-import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.sora.api.http.SoraHttpSession;
 import co.casterlabs.sora.api.websockets.SoraWebsocketSession;
@@ -55,42 +53,20 @@ public interface RouteHelper {
         return auth.equals(conductorKey);
     }
 
-    default HttpResponse newResponse(HttpStatus status, JsonElement jsonElement) {
-        JsonObject body = new JsonObject();
-
-        body.put("errors", new JsonArray());
-        body.put("data", jsonElement);
-
-        HttpResponse response = HttpResponse.newFixedLengthResponse(status, body.toString());
-
-        response.setMimeType("application/json");
-
-        return response;
-    }
-
     default HttpResponse newErrorResponse(HttpStatus status, RequestError error) {
         HttpResponse response = HttpResponse.newFixedLengthResponse(status, "{\"data\":null,\"errors\":[\"" + error + "\"]}");
-
         response.setMimeType("application/json");
-
-        return response;
+        return this.addCors(response);
     }
 
-    default HttpResponse addCors(HttpSession session, HttpResponse response) {
-        String originHeader = session.getHeader("Origin");
-
-        if (originHeader != null) {
-            String[] split = originHeader.split("://");
-            String protocol = split[0];
-            String referer = split[1].split("/")[0]; // Strip protocol and uri
-
-            response.putHeader("Access-Control-Allow-Origin", protocol + "://" + referer);
-            response.putHeader("Access-Control-Allow-Methods", LocalServer.ALLOWED_METHODS);
-            response.putHeader("Access-Control-Allow-Headers", "Authorization, *");
-            FastLogger.logStatic(LogLevel.DEBUG, "Set CORS headers for %s", referer);
-        }
-
-        return response;
+    default HttpResponse addCors(HttpResponse response) {
+        return response
+            .putHeader("Access-Control-Allow-Origin", "*")
+            .putHeader("Access-Control-Allow-Methods", "GET, OPTIONS")
+            .putHeader("Access-Control-Allow-Headers", "Authorization, *")
+            .putHeader("Access-Control-Allow-Private-Network", "true")
+            .putHeader("Cross-Origin-Resource-Policy", "cross-origin")
+            .putHeader("Permissions-Policy", "unload=(self)");
     }
 
     default WebsocketListener newWebsocketErrorResponse(HttpStatus status, RequestError error) {
