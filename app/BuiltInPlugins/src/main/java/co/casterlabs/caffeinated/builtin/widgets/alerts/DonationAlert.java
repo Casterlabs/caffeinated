@@ -17,6 +17,7 @@ import co.casterlabs.koi.api.types.events.rich.Donation;
 import co.casterlabs.koi.api.types.events.rich.LinkFragment;
 
 public class DonationAlert extends GenericAlert implements KoiEventListener {
+    @SuppressWarnings("deprecation")
     public static final WidgetDetails DETAILS = new WidgetDetails()
         .withNamespace("co.casterlabs.donation_alert")
         .withIcon("currency-dollar")
